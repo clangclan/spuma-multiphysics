@@ -1,0 +1,27 @@
+{
+  "delta_t_s": 3e-08,
+  "formula": "alpha_i*(sum_j(alpha_j*dgdt_j)-dgdt_i)",
+  "results": [
+    {
+      "candidate": "fp64/1",
+      "max_abs_dt_source_difference": 8.141837599850986e-13,
+      "relative_l2": 1.0962250804279957e-09
+    },
+    {
+      "candidate": "fp32/1",
+      "max_abs_dt_source_difference": 1.5969265871262905e-12,
+      "relative_l2": 1.1784114888425105e-09
+    },
+    {
+      "candidate": "ds/1",
+      "max_abs_dt_source_difference": 7.642565594778716e-13,
+      "relative_l2": 1.110565812176758e-09
+    },
+    {
+      "candidate": "ts/1",
+      "max_abs_dt_source_difference": 1.876510571037215e-12,
+      "relative_l2": 1.19215667567799e-09
+    }
+  ],
+  "scope": "First repeat final-state instantaneous compressibility source component; not sequential phase transport replay or raw dgdt equivalence"
+}

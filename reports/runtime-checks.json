@@ -1,0 +1,176 @@
+{
+  "scope": "Selected kernel memcheck and independent Nsight traces; not a full runtime or long-time physical certification.",
+  "profiles": [
+    {
+      "trace": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/profile-device2.sqlite",
+      "window": "startup plus 2 steps",
+      "transfers": [
+        {
+          "label": "Host-to-Device",
+          "count": 6364,
+          "bytes": 579378672,
+          "sum_duration_s": 0.076959923
+        },
+        {
+          "label": "Device-to-Host",
+          "count": 1962,
+          "bytes": 15620,
+          "sum_duration_s": 0.001524
+        },
+        {
+          "label": "Device-to-Device",
+          "count": 16399,
+          "bytes": 28133609856,
+          "sum_duration_s": 0.771618616
+        },
+        {
+          "label": "Unified Host-to-Device",
+          "count": 1208016,
+          "bytes": 19333607424,
+          "sum_duration_s": 1.626025666
+        },
+        {
+          "label": "Unified Device-to-Host",
+          "count": 1239349,
+          "bytes": 19741270016,
+          "sum_duration_s": 1.29867444
+        }
+      ],
+      "kernel_count": 69188,
+      "kernel_sum_duration_s": 6.416796868,
+      "first_kernel_ns": 739241371,
+      "last_kernel_ns": 32419836354,
+      "device_synchronization_count": 68804,
+      "device_synchronization_sum_duration_s": 6.971996249
+    },
+    {
+      "trace": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/profile-gpu-steady12.sqlite",
+      "window": "delay 20s, capture 10s during a 12-step run",
+      "transfers": [
+        {
+          "label": "Host-to-Device",
+          "count": 15811,
+          "bytes": 247428,
+          "sum_duration_s": 0.034653108
+        },
+        {
+          "label": "Device-to-Host",
+          "count": 5271,
+          "bytes": 42148,
+          "sum_duration_s": 0.003903811
+        },
+        {
+          "label": "Device-to-Device",
+          "count": 42485,
+          "bytes": 73037189568,
+          "sum_duration_s": 0.161812743
+        },
+        {
+          "label": "Unified Host-to-Device",
+          "count": 10983,
+          "bytes": 182484992,
+          "sum_duration_s": 0.015176856
+        },
+        {
+          "label": "Unified Device-to-Host",
+          "count": 13986,
+          "bytes": 182484992,
+          "sum_duration_s": 0.012019112
+        }
+      ],
+      "kernel_count": 264296,
+      "kernel_sum_duration_s": 6.632776273,
+      "first_kernel_ns": 9247573,
+      "last_kernel_ns": 9999997206,
+      "device_synchronization_count": 263241,
+      "device_synchronization_sum_duration_s": 8.170021873
+    }
+  ],
+  "memcheck": [
+    {
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/memcheck-mixed1/stdout.log",
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "97",
+        "--kernel-name",
+        "kns=pintle",
+        "--kernel-name",
+        "kns=multiphaseMixtureThermo",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+        "-case",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/memcheck-mixed1",
+        "-noFunctionObjects",
+        "-pool",
+        "fixedSizeMemoryPool",
+        "-poolSize",
+        "10"
+      ],
+      "return_code": 97,
+      "completed_steps": 1,
+      "end_marker": true,
+      "error_summary": 106,
+      "printed_duplicate_registration_diagnostics": 100,
+      "oracle_and_temperature_audit": [
+        "PINTLE_LIMITER_VERIFY phase=ipa maxAbs=1.0992167810789301e-15 scaled=4.4803578106203486e-08",
+        "PINTLE_LIMITER_VERIFY phase=n2o maxAbs=1.4779250615803286e-14 scaled=1.5514821322300791e-08",
+        "PINTLE_LIMITER_VERIFY phase=air maxAbs=1.6711435656523656e-14 scaled=1.7543172180384608e-08",
+        "PINTLE_SUM_VERIFY phaseIndex=0 scaled=0",
+        "PINTLE_SUM_VERIFY phaseIndex=1 scaled=0",
+        "PINTLE_SUM_VERIFY phaseIndex=2 scaled=0",
+        "PINTLE_EXPLICIT_VERIFY phase=ipa maxAbs=2.2204460492503131e-16",
+        "PINTLE_EXPLICIT_VERIFY phase=n2o maxAbs=3.3306690738754696e-16",
+        "PINTLE_EXPLICIT_VERIFY phase=air maxAbs=2.2204460492503131e-16",
+        "PINTLE_T_AUDIT backwardError=2.3462019926366783e-17 maxResidualOverDiagK=4.0132164013008721e-10 maxIncrementK=0.11533949767921936",
+        "PINTLE_T_AUDIT backwardError=2.3198982060916992e-17 maxResidualOverDiagK=9.4594766089942782e-13 maxIncrementK=0.046040539311706319"
+      ]
+    },
+    {
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/memcheck-mixed-explicit1/stdout.log",
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "97",
+        "--report-api-errors",
+        "explicit",
+        "--print-limit",
+        "0",
+        "--kernel-name",
+        "kns=pintle",
+        "--kernel-name",
+        "kns=multiphaseMixtureThermo",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+        "-case",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/memcheck-mixed-explicit1",
+        "-noFunctionObjects",
+        "-pool",
+        "fixedSizeMemoryPool",
+        "-poolSize",
+        "10"
+      ],
+      "return_code": 0,
+      "completed_steps": 1,
+      "end_marker": true,
+      "error_summary": 0,
+      "printed_duplicate_registration_diagnostics": 0,
+      "oracle_and_temperature_audit": [
+        "PINTLE_LIMITER_VERIFY phase=ipa maxAbs=1.0992167810789301e-15 scaled=4.4803578106203486e-08",
+        "PINTLE_LIMITER_VERIFY phase=n2o maxAbs=1.4779250615803286e-14 scaled=1.5514821322300791e-08",
+        "PINTLE_LIMITER_VERIFY phase=air maxAbs=1.6711435656523656e-14 scaled=1.7543172180384608e-08",
+        "PINTLE_SUM_VERIFY phaseIndex=0 scaled=0",
+        "PINTLE_SUM_VERIFY phaseIndex=1 scaled=0",
+        "PINTLE_SUM_VERIFY phaseIndex=2 scaled=0",
+        "PINTLE_EXPLICIT_VERIFY phase=ipa maxAbs=2.2204460492503131e-16",
+        "PINTLE_EXPLICIT_VERIFY phase=n2o maxAbs=3.3306690738754696e-16",
+        "PINTLE_EXPLICIT_VERIFY phase=air maxAbs=3.3306690738754696e-16",
+        "PINTLE_T_AUDIT backwardError=2.3462015382320311e-17 maxResidualOverDiagK=4.0132163957818569e-10 maxIncrementK=0.11533949767921936",
+        "PINTLE_T_AUDIT backwardError=2.3198911838277882e-17 maxResidualOverDiagK=9.4594766089942782e-13 maxIncrementK=0.046040539311706319"
+      ]
+    }
+  ],
+  "unresolved": "Extended CUDA logging reports duplicate template-kernel registrations. The explicit-API rerun excludes those internal logs; it does not resolve their cause. Filtered memcheck does not cover every SPUMA kernel, uninitialized reads, or general races."
+}

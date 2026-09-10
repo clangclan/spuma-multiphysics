@@ -1,0 +1,12 @@
+{
+  "tracked_original_files_checked": 306,
+  "changed_original_files": [],
+  "executable_sha256": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+  "library_sha256": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08",
+  "benchmarked_executable_sha256": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+  "benchmarked_library_sha256": "69e3716b4fa1b11c9c07aca0ad3c51288d0e5b642577d8a33edd84a56b275675",
+  "executable_matches_benchmark": true,
+  "library_matches_benchmark": false,
+  "rebuild_note": "The final library was rebuilt after removing trailing whitespace from one blank line. It has a different byte hash; all core C++ expressions are unchanged. Final build repeated the 24511-point thermo check and a 4-step GPU run with first-solve oracle. Full performance and sanitizer records refer to the benchmarked build.",
+  "final_build_check": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/reports/final-build-check.json"
+}

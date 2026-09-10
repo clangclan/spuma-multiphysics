@@ -1,0 +1,81 @@
+{
+  "check_pass": true,
+  "command": [
+    "compute-sanitizer",
+    "--tool",
+    "memcheck",
+    "--error-exitcode",
+    "97",
+    "--report-api-errors",
+    "explicit",
+    "--print-limit",
+    "0",
+    "--kernel-name",
+    "kns=irPack",
+    "--kernel-name",
+    "kns=irStart",
+    "--kernel-name",
+    "kns=irJacobi",
+    "--kernel-name",
+    "kns=irAccumulate",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+    "-case",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-fallback-memcheck1",
+    "-noFunctionObjects",
+    "-pool",
+    "fixedSizeMemoryPool",
+    "-poolSize",
+    "10"
+  ],
+  "return_code": 0,
+  "completed_ok": true,
+  "refinement": [
+    {
+      "fallback": 1.0,
+      "finalResidual": 1.0986342004323638e-16,
+      "innerSweeps": 5.0,
+      "invalidPacked": 0.0,
+      "outer": 1.0
+    },
+    {
+      "fallback": 1.0,
+      "finalResidual": 1.083502577681823e-16,
+      "innerSweeps": 5.0,
+      "invalidPacked": 0.0,
+      "outer": 1.0
+    }
+  ],
+  "audit": [
+    {
+      "backwardError": 2.343288943409018e-17,
+      "maxIncrementK": 0.11533949767921921,
+      "maxResidualOverDiagK": 3.804565736417362e-14
+    },
+    {
+      "backwardError": 2.3199144663998496e-17,
+      "maxIncrementK": 0.04604053931175148,
+      "maxResidualOverDiagK": 3.7868414109396746e-14
+    }
+  ],
+  "protected_sha256_before": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/controlDict": "6f22e1f24d2bdde212107c4dde08aa6de746af5de612b818fb24b527248bc1f4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/fvSolution": "7d51958c182baad6823594c7829e7f4cec92d78077cb4048ffb2508f003657a6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleIrKernels.so": "e5ecd729bd704ef533c3b02852df7456534adacc3bf713edf483a388a1f36e2c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMixedTemperature.so": "e54b52ea039e9d662ba50d720903e42ad5775af354439448d0d880268182aa68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "protected_sha256_after": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/controlDict": "6f22e1f24d2bdde212107c4dde08aa6de746af5de612b818fb24b527248bc1f4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/fvSolution": "7d51958c182baad6823594c7829e7f4cec92d78077cb4048ffb2508f003657a6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleIrKernels.so": "e5ecd729bd704ef533c3b02852df7456534adacc3bf713edf483a388a1f36e2c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMixedTemperature.so": "e54b52ea039e9d662ba50d720903e42ad5775af354439448d0d880268182aa68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "protected_unchanged": true,
+  "scope": "One-step FP32 inner-kernel memcheck and explicit CUDA API checks. Capped inner work then fixed-count FP64 fallback; no timing claim. Extended duplicate-registration diagnostic remains outside this mode.",
+  "raw_run": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-fallback-memcheck1/run.json",
+  "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-fallback-memcheck1/stdout.log",
+  "sanitizer_error_summary": "0 errors"
+}

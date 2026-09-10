@@ -1,0 +1,314 @@
+{
+  "benchmark": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/validated-v2/benchmark.json",
+  "comparison_screens": [
+    {
+      "candidate": "device-gpu/repeat-01",
+      "max_scaled": {
+        "T": 2.06573288507521e-10,
+        "U": 8.31301411676741e-10,
+        "alpha.air": 2.432851052021951e-08,
+        "alpha.ipa": 3.323286090237062e-10,
+        "alpha.n2o": 2.4328510650484198e-08,
+        "p": 2.9798087374371506e-10,
+        "rho": 6.608420110932963e-10
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.0,
+        "dgdt.ipa": 0.8536228499463764,
+        "dgdt.n2o": 0.006778243639488496
+      },
+      "screen_pass": true
+    },
+    {
+      "candidate": "device-mixed/repeat-01",
+      "max_scaled": {
+        "T": 2.0184786199303098e-10,
+        "U": 8.180347654289178e-10,
+        "alpha.air": 2.960012044241053e-08,
+        "alpha.ipa": 1.2066008190685645e-09,
+        "alpha.n2o": 2.960012041031129e-08,
+        "p": 4.186902209089593e-10,
+        "rho": 1.1701383634998967e-09
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.000198151980267,
+        "dgdt.ipa": 0.8546539715797883,
+        "dgdt.n2o": 0.006548557665422712
+      },
+      "screen_pass": true
+    },
+    {
+      "candidate": "device-gpu/repeat-02",
+      "max_scaled": {
+        "T": 1.8639472834788394e-10,
+        "U": 7.027973721762184e-10,
+        "alpha.air": 2.1618784745268027e-08,
+        "alpha.ipa": 4.070734859663752e-10,
+        "alpha.n2o": 2.1618784762367184e-08,
+        "p": 1.1369653978197047e-10,
+        "rho": 5.859988090608182e-10
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.43445769700892406,
+        "dgdt.ipa": 0.8536228499460226,
+        "dgdt.n2o": 0.006778243411614487
+      },
+      "screen_pass": true
+    },
+    {
+      "candidate": "device-mixed/repeat-02",
+      "max_scaled": {
+        "T": 1.9473246179900123e-10,
+        "U": 8.113935757390652e-10,
+        "alpha.air": 2.9696995727905135e-08,
+        "alpha.ipa": 1.206596933287979e-09,
+        "alpha.n2o": 2.9696995640371367e-08,
+        "p": 4.1866053040000646e-10,
+        "rho": 1.1701344170464238e-09
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.0101021882312433,
+        "dgdt.ipa": 0.8546539715805026,
+        "dgdt.n2o": 0.006592149892018648
+      },
+      "screen_pass": true
+    },
+    {
+      "candidate": "device-gpu/repeat-03",
+      "max_scaled": {
+        "T": 1.6752793626926656e-10,
+        "U": 6.480100947978019e-10,
+        "alpha.air": 2.132462094107443e-08,
+        "alpha.ipa": 4.4541426095963484e-10,
+        "alpha.n2o": 2.1324620957940922e-08,
+        "p": 9.503920561878127e-11,
+        "rho": 5.785887031940691e-10
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.0,
+        "dgdt.ipa": 0.8546539715740145,
+        "dgdt.n2o": 0.0067782451300134544
+      },
+      "screen_pass": true
+    },
+    {
+      "candidate": "device-mixed/repeat-03",
+      "max_scaled": {
+        "T": 1.9476221607696328e-10,
+        "U": 8.115458400404427e-10,
+        "alpha.air": 2.984758038364186e-08,
+        "alpha.ipa": 1.2065953234645935e-09,
+        "alpha.n2o": 2.984758035173834e-08,
+        "p": 4.18715369848665e-10,
+        "rho": 1.1701329553969894e-09
+      },
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.999882069430687,
+        "dgdt.ipa": 0.8539626735798187,
+        "dgdt.n2o": 0.006592149892055203
+      },
+      "screen_pass": true
+    }
+  ],
+  "effective_source_diagnostics": [
+    {
+      "acceptance_pass": null,
+      "candidate": "device-gpu/repeat-01",
+      "max_abs_dt_times_source_difference": 2.1805751725878505e-12,
+      "max_abs_source_difference_per_s": 7.26858390862617e-05,
+      "rel_l2": 1.2926157839015943e-09,
+      "source_formula": "alpha_i*(sum_j(alpha_j*dgdt_j)-dgdt_i)"
+    },
+    {
+      "acceptance_pass": null,
+      "candidate": "device-mixed/repeat-01",
+      "max_abs_dt_times_source_difference": 2.9698740473804717e-12,
+      "max_abs_source_difference_per_s": 9.899580157934906e-05,
+      "rel_l2": 5.2263009399091186e-09,
+      "source_formula": "alpha_i*(sum_j(alpha_j*dgdt_j)-dgdt_i)"
+    }
+  ],
+  "engineering_thresholds": {
+    "alpha_roundoff_allowance": 1e-08,
+    "alpha_sum_max_abs_error": 1e-09,
+    "max_step_relative_mass_imbalance": 1e-06,
+    "state_max_scaled": {
+      "T": 1e-06,
+      "U": 1e-06,
+      "alpha.air": 1e-06,
+      "alpha.ipa": 1e-06,
+      "alpha.n2o": 1e-06,
+      "p": 1e-05,
+      "rho": 1e-06
+    }
+  },
+  "run_definition": {
+    "delta_t": "3E-8",
+    "end_s": "0.00004536",
+    "repeats": 3,
+    "start_s": "4.5e-05",
+    "steps": 12
+  },
+  "scope": "Main-agent engineering screen of this short SPUMA benchmark. Thresholds are not user-supplied. Raw dgdt equivalence, Foundation14 equivalence and long-time physical validity are not asserted.",
+  "screen_pass": true,
+  "state_screens": [
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "native-reference",
+      "first_step_relative_mass_imbalance": -5.051145646898643e-08,
+      "max_step_relative_mass_imbalance": 5.051145646898643e-08,
+      "reasons": [],
+      "repeat": 1,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-gpu",
+      "first_step_relative_mass_imbalance": -5.0511456190504315e-08,
+      "max_step_relative_mass_imbalance": 5.0511456190504315e-08,
+      "reasons": [],
+      "repeat": 1,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-mixed",
+      "first_step_relative_mass_imbalance": -5.051145632974535e-08,
+      "max_step_relative_mass_imbalance": 5.051145632974535e-08,
+      "reasons": [],
+      "repeat": 1,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "native-reference",
+      "first_step_relative_mass_imbalance": -5.051145646898642e-08,
+      "max_step_relative_mass_imbalance": 5.051145646898642e-08,
+      "reasons": [],
+      "repeat": 2,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-gpu",
+      "first_step_relative_mass_imbalance": -5.051145632974537e-08,
+      "max_step_relative_mass_imbalance": 5.051145632974537e-08,
+      "reasons": [],
+      "repeat": 2,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-mixed",
+      "first_step_relative_mass_imbalance": -5.05114564689864e-08,
+      "max_step_relative_mass_imbalance": 5.05114564689864e-08,
+      "reasons": [],
+      "repeat": 2,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "native-reference",
+      "first_step_relative_mass_imbalance": -5.051145619050431e-08,
+      "max_step_relative_mass_imbalance": 5.051145619050431e-08,
+      "reasons": [],
+      "repeat": 3,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-gpu",
+      "first_step_relative_mass_imbalance": -5.051145632974536e-08,
+      "max_step_relative_mass_imbalance": 5.051145632974536e-08,
+      "reasons": [],
+      "repeat": 3,
+      "screen_pass": true
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "configuration": "device-mixed",
+      "first_step_relative_mass_imbalance": -5.05114561905043e-08,
+      "max_step_relative_mass_imbalance": 5.05114561905043e-08,
+      "reasons": [],
+      "repeat": 3,
+      "screen_pass": true
+    }
+  ],
+  "timing": [
+    {
+      "completed_ok_runs": 3,
+      "configuration": "native-reference",
+      "configuration_comparison_available": true,
+      "max_gpu_memory_mib": 9546.0,
+      "max_mean_measured_wall_s_per_step": 24.77462702355519,
+      "median_gpu_utilization_percent": 35.908018867924525,
+      "median_mean_measured_wall_s_per_step": 23.62378016511179,
+      "median_peak_rss_mib": 5567.0390625,
+      "median_total_elapsed_s": 290.6740818499966,
+      "min_mean_measured_wall_s_per_step": 23.554069682333242,
+      "mode": "reference",
+      "reference_basis": "native-reference",
+      "runs": 3,
+      "speedup_interpretation": "Whole-step wall-time ratio for the selected limiter AND thermo configuration within the same SPUMA application. See reference_basis and thermo selections; reference MULES runs on the host, while other operators already use SPUMA GPU paths. This is not a Foundation v14 CPU/GPU ratio.",
+      "stage_median_s": {
+        "alpha": 15.712839505666667,
+        "energy": 6.833181376777778,
+        "momentum": 0.442823974,
+        "pressure": 0.7095684144444444,
+        "turbulence": 0.015239681888888888
+      },
+      "thermo": "native",
+      "whole_step_speedup_vs_spuma_stock_limiter_path": 1.0
+    },
+    {
+      "completed_ok_runs": 3,
+      "configuration": "device-gpu",
+      "configuration_comparison_available": true,
+      "max_gpu_memory_mib": 9719.0,
+      "max_mean_measured_wall_s_per_step": 1.960797303333594,
+      "median_gpu_utilization_percent": 83.45454545454545,
+      "median_mean_measured_wall_s_per_step": 1.8629305338892865,
+      "median_peak_rss_mib": 5385.64453125,
+      "median_total_elapsed_s": 36.86407246199815,
+      "min_mean_measured_wall_s_per_step": 1.8620492613335955,
+      "mode": "gpu",
+      "reference_basis": "native-reference",
+      "runs": 3,
+      "speedup_interpretation": "Whole-step wall-time ratio for the selected limiter AND thermo configuration within the same SPUMA application. See reference_basis and thermo selections; reference MULES runs on the host, while other operators already use SPUMA GPU paths. This is not a Foundation v14 CPU/GPU ratio.",
+      "stage_median_s": {
+        "alpha": 0.6167906412222222,
+        "energy": 0.1513226761111111,
+        "momentum": 0.37131352566666664,
+        "pressure": 0.6950680716666666,
+        "turbulence": 0.015518165777777778
+      },
+      "thermo": "device",
+      "whole_step_speedup_vs_spuma_stock_limiter_path": 12.680977489692992
+    },
+    {
+      "completed_ok_runs": 3,
+      "configuration": "device-mixed",
+      "configuration_comparison_available": true,
+      "max_gpu_memory_mib": 9731.0,
+      "max_mean_measured_wall_s_per_step": 1.9688760113333248,
+      "median_gpu_utilization_percent": 83.48484848484848,
+      "median_mean_measured_wall_s_per_step": 1.8696654923332972,
+      "median_peak_rss_mib": 5423.6484375,
+      "median_total_elapsed_s": 36.86443248799333,
+      "min_mean_measured_wall_s_per_step": 1.8673862671114168,
+      "mode": "mixed",
+      "reference_basis": "native-reference",
+      "runs": 3,
+      "speedup_interpretation": "Whole-step wall-time ratio for the selected limiter AND thermo configuration within the same SPUMA application. See reference_basis and thermo selections; reference MULES runs on the host, while other operators already use SPUMA GPU paths. This is not a Foundation v14 CPU/GPU ratio.",
+      "stage_median_s": {
+        "alpha": 0.6197340607777778,
+        "energy": 0.1515137148888889,
+        "momentum": 0.37146582633333336,
+        "pressure": 0.6981788767777778,
+        "turbulence": 0.015374624111111112
+      },
+      "thermo": "device",
+      "whole_step_speedup_vs_spuma_stock_limiter_path": 12.635297737473822
+    }
+  ]
+}

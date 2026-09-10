@@ -1,0 +1,4603 @@
+{
+  "all_selected_precisions_exercised_without_fallback": true,
+  "benchmark": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/benchmark.json",
+  "benchmark_runtime_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/controlDict": "6f22e1f24d2bdde212107c4dde08aa6de746af5de612b818fb24b527248bc1f4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/fvSolution": "7d51958c182baad6823594c7829e7f4cec92d78077cb4048ffb2508f003657a6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleIrKernels.so": "e5ecd729bd704ef533c3b02852df7456534adacc3bf713edf483a388a1f36e2c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMixedTemperature.so": "e54b52ea039e9d662ba50d720903e42ad5775af354439448d0d880268182aa68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "comparison_screens": [
+    {
+      "candidate": "fp64/1",
+      "max_scaled": {
+        "T": 5.56415317292723e-11,
+        "U": 3.129141801329772e-10,
+        "alpha.air": 1.3177690150869547e-08,
+        "alpha.ipa": 4.3472858639390957e-10,
+        "alpha.n2o": 1.3177690216803457e-08,
+        "p": 8.702702592268596e-11,
+        "rho": 4.6457727018018377e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.1400528633343702,
+        "dgdt.ipa": 0.8546539715754597,
+        "dgdt.n2o": 0.006592149918583434
+      }
+    },
+    {
+      "candidate": "fp32/1",
+      "max_scaled": {
+        "T": 1.5120917672248434e-10,
+        "U": 5.96243371659158e-10,
+        "alpha.air": 1.7797334480952194e-08,
+        "alpha.ipa": 3.838668826643578e-10,
+        "alpha.n2o": 1.7797334495028813e-08,
+        "p": 2.719580225756e-10,
+        "rho": 4.833163284827585e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.43445769700902814,
+        "dgdt.ipa": 0.8546539715794057,
+        "dgdt.n2o": 0.00659214991860782
+      }
+    },
+    {
+      "candidate": "ds/1",
+      "max_scaled": {
+        "T": 6.85435370217558e-11,
+        "U": 3.7007841300140575e-10,
+        "alpha.air": 1.4413629112177124e-08,
+        "alpha.ipa": 4.316054180038296e-10,
+        "alpha.n2o": 1.4413629179088588e-08,
+        "p": 4.524230671093911e-10,
+        "rho": 4.290312348798411e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.1400528633343702,
+        "dgdt.ipa": 0.8539626735812669,
+        "dgdt.n2o": 0.006466842402296548
+      }
+    },
+    {
+      "candidate": "ts/1",
+      "max_scaled": {
+        "T": 1.7386336160458073e-10,
+        "U": 6.906636673305817e-10,
+        "alpha.air": 2.121849422263409e-08,
+        "alpha.ipa": 4.5206482994299696e-10,
+        "alpha.n2o": 2.1218494294927794e-08,
+        "p": 1.6799616616591378e-10,
+        "rho": 5.76025819669938e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.010102188231365,
+        "dgdt.ipa": 0.8539626735793981,
+        "dgdt.n2o": 0.006448917376987293
+      }
+    },
+    {
+      "candidate": "fp64/2",
+      "max_scaled": {
+        "T": 7.50186182744408e-11,
+        "U": 3.7420927887791615e-10,
+        "alpha.air": 1.537478654283968e-08,
+        "alpha.ipa": 4.5206427483148476e-10,
+        "alpha.n2o": 1.537478649948906e-08,
+        "p": 1.243682624291598e-10,
+        "rho": 5.671589243531997e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.0920679469460618,
+        "dgdt.ipa": 0.8536024300924374,
+        "dgdt.n2o": 0.0065921499185957475
+      }
+    },
+    {
+      "candidate": "fp32/2",
+      "max_scaled": {
+        "T": 1.0734087961364465e-10,
+        "U": 3.0306026813041274e-10,
+        "alpha.air": 1.496814226935199e-08,
+        "alpha.ipa": 2.8653179824284607e-10,
+        "alpha.n2o": 1.4968142336702043e-08,
+        "p": 4.2596558776433003e-10,
+        "rho": 5.522430476642226e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.09173678768350643,
+        "dgdt.ipa": 0.8536228499437782,
+        "dgdt.n2o": 0.006466842402335511
+      }
+    },
+    {
+      "candidate": "ds/2",
+      "max_scaled": {
+        "T": 7.070407597990042e-11,
+        "U": 3.398379917375141e-10,
+        "alpha.air": 1.4268189174421297e-08,
+        "alpha.ipa": 3.9205483298082693e-10,
+        "alpha.n2o": 1.4268189241217727e-08,
+        "p": 1.6325249708733145e-10,
+        "rho": 5.107209398924888e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 1.0101021882313328,
+        "dgdt.ipa": 0.853602430091877,
+        "dgdt.n2o": 0.006592149918595755
+      }
+    },
+    {
+      "candidate": "ts/2",
+      "max_scaled": {
+        "T": 1.6759570034739976e-11,
+        "U": 9.072479320329456e-11,
+        "alpha.air": 1.492728506287738e-08,
+        "alpha.ipa": 4.2923087299913617e-10,
+        "alpha.n2o": 1.4927285185706266e-08,
+        "p": 2.8012013082646476e-10,
+        "rho": 5.259764125569211e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.11286911463265697,
+        "dgdt.ipa": 0.853602430095808,
+        "dgdt.n2o": 0.0073144635443233635
+      }
+    },
+    {
+      "candidate": "fp32/3",
+      "max_scaled": {
+        "T": 1.5603745328449632e-10,
+        "U": 6.533349401524124e-10,
+        "alpha.air": 1.885624066507329e-08,
+        "alpha.ipa": 3.8211911406811756e-10,
+        "alpha.n2o": 1.8856240679987443e-08,
+        "p": 5.491842654778209e-10,
+        "rho": 5.120167377925922e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.4344576970089735,
+        "dgdt.ipa": 0.8536024300923163,
+        "dgdt.n2o": 0.006561220570802842
+      }
+    },
+    {
+      "candidate": "ds/3",
+      "max_scaled": {
+        "T": 6.232059317654094e-11,
+        "U": 2.904889161389425e-10,
+        "alpha.air": 1.193009678990364e-08,
+        "alpha.ipa": 3.919220503071027e-10,
+        "alpha.n2o": 1.1930096688317326e-08,
+        "p": 3.9907779473310747e-10,
+        "rho": 4.2116441837670857e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.14005286333428063,
+        "dgdt.ipa": 0.8536228499463248,
+        "dgdt.n2o": 0.006592149918559197
+      }
+    },
+    {
+      "candidate": "ts/3",
+      "max_scaled": {
+        "T": 2.3960449281643296e-11,
+        "U": 9.365482839042468e-11,
+        "alpha.air": 1.359899047849372e-08,
+        "alpha.ipa": 4.821361087386417e-10,
+        "alpha.n2o": 1.35989903782274e-08,
+        "p": 5.701307776200043e-10,
+        "rho": 4.844373222458217e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.14005286333436381,
+        "dgdt.ipa": 0.8544893938812828,
+        "dgdt.n2o": 0.006561220570802842
+      }
+    },
+    {
+      "candidate": "fp64/3",
+      "max_scaled": {
+        "T": 1.694894827441623e-10,
+        "U": 6.961365403949248e-10,
+        "alpha.air": 1.9149324777376292e-08,
+        "alpha.ipa": 4.3528181052699296e-10,
+        "alpha.n2o": 1.9149324903544556e-08,
+        "p": 4.0985198653643426e-10,
+        "rho": 5.20287873935195e-10
+      },
+      "pass": true,
+      "raw_dgdt_max_scaled": {
+        "dgdt.air": 0.4344576970089564,
+        "dgdt.ipa": 0.8536024300923163,
+        "dgdt.n2o": 0.006592149918559197
+      }
+    }
+  ],
+  "current_precision_source_sha256_captured_after_runs": {
+    "src/precisionLab/floatExpansion.cuh": "ae27b04f98b9718bf0929f552eec28bf5e5ca0aba8f57a1579e083adca8b71ee",
+    "src/precisionLab/precisionLab.cu": "56b1528e60621a43844afd4e15e76943eade7eb424cc6dd2a2c1188a223b336d",
+    "src/precisionProbe/Make/files": "b2b0ce0b6247303f71d5d0cc64e03bad00b8414816304856226b8780954e1f9d",
+    "src/precisionProbe/Make/linux64NvidiaDPInt32Opt/options": "548660d8e3d776538392934e83d7ec173e45f97b0e2973682d77149be16a3e12",
+    "src/precisionProbe/Make/options": "cad186b3c473865f42f4d864bb828e03e148bd602c657609f7499f860302a955",
+    "src/precisionProbe/pintlePrecisionProbe.C": "226e92d40fed342988071a8d76e37bdee34f2742ca798ccc8aeb7a967eac1a03",
+    "src/precisionSolver/Make/files": "65e428596e4369142700415abb937885152aff06df76081f47b40be635df8cbe",
+    "src/precisionSolver/Make/linux64NvidiaDPInt32Opt/options": "0deb90ef186a037b0cf231b8ab6677ef19cb2051ff8e5f9b6249074c6b944608",
+    "src/precisionSolver/Make/options": "c5502795686eea6c0a0e5bca50f469cb9606833de011fbaabfab476595601b8a",
+    "src/precisionSolver/pintleIrKernels.cu": "0939eb9ff5d38787baf0f681d83cf24a4db2389e0963953a0cadb62b7bdcc241",
+    "src/precisionSolver/pintleIrKernels.h": "4c74f7376c5ffbfb7e140f618c28afa413270906d9df761ec85e954f18060ea1",
+    "src/precisionSolver/pintleMixedTemperature.C": "1a04427f295dac341d7970fc3ddebb745b4573067da75591ca37d532268f7bea"
+  },
+  "engineering_screen_pass": true,
+  "engineering_thresholds": {
+    "alpha_roundoff": 1e-08,
+    "alpha_sum": 1e-09,
+    "state_max_scaled": {
+      "T": 1e-06,
+      "U": 1e-06,
+      "alpha.air": 1e-06,
+      "alpha.ipa": 1e-06,
+      "alpha.n2o": 1e-06,
+      "p": 1e-05,
+      "rho": 1e-06
+    },
+    "step_mass_imbalance_relative": 1e-06
+  },
+  "input_report_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-pressure-snapshot1/precision-lab-v2.json": "3d06c128120518627a1825a30f7c9607ff1919e400952a54da8ed36aa682486a",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/benchmark.json": "eaf6463b705ba09311967912ae2b91f665ce68c2dc9bff4a0e175f2bfd334c3e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/benchmark.json": "460af50fc90cf1207c63f93366015e470b08a5f217b7e38a55b53b0dcc0749ca"
+  },
+  "lab": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-pressure-snapshot1/precision-lab-v2.json",
+  "lab_data": {
+    "compute_capability": "12.0",
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "nonzeros": 21419851,
+    "rows": 3094455,
+    "runs": [
+      {
+        "Ax_error_vs_original": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5502023540356907e-16
+        },
+        "Ax_error_vs_packed": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5502023540356907e-16
+        },
+        "Ax_error_vs_quad_sample": {
+          "max_abs": 1.4542524106379904e-16,
+          "max_error_over_row_scale": 2.706305611933179e-16,
+          "max_scaled": 1.4542524106379904e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5425156430304825e-16
+        },
+        "SPUMA_Ax_error_vs_extended_reference": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5501778637771528e-16
+        },
+        "SPUMA_residual_error_vs_extended_reference": {
+          "max_abs": 1.0143219543370247e-19,
+          "max_error_over_row_scale": 1.5809728813767524e-16,
+          "max_scaled": 1.0143219543370247e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.089383137555156e-07
+        },
+        "SPUMA_residual_error_vs_quad_sample": {
+          "max_abs": 9.080241217998824e-21,
+          "max_error_over_row_scale": 1.3475572052486703e-16,
+          "max_scaled": 9.080241217998824e-21,
+          "nonfinite": 0,
+          "rel_l2": 5.7814859534804384e-08
+        },
+        "bytes_per_number": 8,
+        "input_conversion_effect_on_Ax": {
+          "max_abs": 0,
+          "max_error_over_row_scale": 0,
+          "max_scaled": 0,
+          "nonfinite": 0,
+          "rel_l2": 0
+        },
+        "max_componentwise_extended_reference_residual": 1.2189614234730832e-05,
+        "max_componentwise_residual": 1.21896142347553e-05,
+        "mode": "fp64",
+        "nonzero_coefficients_converted_to_zero": 0,
+        "nonzero_x_converted_to_zero": 0,
+        "packing": {
+          "max_ms": 0.6704192161560059,
+          "median_ms": 0.6293888092041016,
+          "min_ms": 0.5529407858848572
+        },
+        "quad_reference_sample_rows": 32768,
+        "range_example_1e_minus_60": 1e-60,
+        "recurrence": {
+          "max_ms": 1.8574506044387817,
+          "median_ms": 1.7279893159866333,
+          "min_ms": 1.5413227081298828
+        },
+        "recurrence_mathematical_madds": 536870912,
+        "residual": {
+          "max_ms": 0.47240638732910156,
+          "median_ms": 0.44041118025779724,
+          "min_ms": 0.42842239141464233
+        },
+        "residual_error_vs_original": {
+          "max_abs": 1.0065920017920298e-19,
+          "max_error_over_row_scale": 1.4532008980588973e-16,
+          "max_scaled": 1.0065920017920298e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.076330749469129e-07
+        },
+        "residual_error_vs_packed": {
+          "max_abs": 1.0065920017920298e-19,
+          "max_error_over_row_scale": 1.4532008980588973e-16,
+          "max_scaled": 1.0065920017920298e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.076330749469129e-07
+        },
+        "residual_error_vs_quad_sample": {
+          "max_abs": 8.858314420100531e-21,
+          "max_error_over_row_scale": 1.3908475974914572e-16,
+          "max_scaled": 8.858314420100531e-21,
+          "nonfinite": 0,
+          "rel_l2": 5.482307394397626e-08
+        },
+        "spmv": {
+          "max_ms": 0.4339695870876312,
+          "median_ms": 0.42880478501319885,
+          "min_ms": 0.39905601739883423
+        },
+        "unit": {
+          "add_max_relative_to_original_inputs": 1.1030256582775915e-16,
+          "add_max_relative_to_packed_inputs": 1.1030256582775915e-16,
+          "arithmetic_screen_failures": 0,
+          "cases": 32768,
+          "mul_max_relative_to_original_inputs": 1.1078110958897408e-16,
+          "mul_max_relative_to_packed_inputs": 1.1078110958897408e-16,
+          "nonzero_sums_lost_by_input_conversion": 0,
+          "normalization_failures": 0,
+          "reference": "113-bit binary arithmetic"
+        }
+      },
+      {
+        "Ax_error_vs_original": {
+          "max_abs": 1.7377093394074978e-07,
+          "max_error_over_row_scale": 3.2599870262199036e-07,
+          "max_scaled": 1.7377093394074978e-07,
+          "nonfinite": 0,
+          "rel_l2": 1.0923461483980275e-07
+        },
+        "Ax_error_vs_packed": {
+          "max_abs": 1.6243312562277262e-07,
+          "max_error_over_row_scale": 3.0472868514313157e-07,
+          "max_scaled": 1.6243312562277262e-07,
+          "nonfinite": 0,
+          "rel_l2": 1.046154211361407e-07
+        },
+        "Ax_error_vs_quad_sample": {
+          "max_abs": 1.1927128876429013e-07,
+          "max_error_over_row_scale": 2.571429999581062e-07,
+          "max_scaled": 1.1927128876429013e-07,
+          "nonfinite": 0,
+          "rel_l2": 1.1053326931615868e-07
+        },
+        "SPUMA_Ax_error_vs_extended_reference": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5501778637771528e-16
+        },
+        "SPUMA_residual_error_vs_extended_reference": {
+          "max_abs": 1.0143219543370247e-19,
+          "max_error_over_row_scale": 1.5809728813767524e-16,
+          "max_scaled": 1.0143219543370247e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.089383137555156e-07
+        },
+        "SPUMA_residual_error_vs_quad_sample": {
+          "max_abs": 9.080241217998824e-21,
+          "max_error_over_row_scale": 1.3475572052486703e-16,
+          "max_scaled": 9.080241217998824e-21,
+          "nonfinite": 0,
+          "rel_l2": 5.7814859534804384e-08
+        },
+        "bytes_per_number": 4,
+        "input_conversion_effect_on_Ax": {
+          "max_abs": 1.4995865595449336e-08,
+          "max_error_over_row_scale": 8.155447999689149e-08,
+          "max_scaled": 1.4995865595449336e-08,
+          "nonfinite": 0,
+          "rel_l2": 3.133850721779336e-08
+        },
+        "max_componentwise_extended_reference_residual": 1.2189614234730832e-05,
+        "max_componentwise_residual": 1.2191699878425619e-05,
+        "mode": "fp32",
+        "nonzero_coefficients_converted_to_zero": 0,
+        "nonzero_x_converted_to_zero": 0,
+        "packing": {
+          "max_ms": 0.39253759384155273,
+          "median_ms": 0.38630399107933044,
+          "min_ms": 0.3845439851284027
+        },
+        "quad_reference_sample_rows": 32768,
+        "range_example_1e_minus_60": 0,
+        "recurrence": {
+          "max_ms": 0.10328533500432968,
+          "median_ms": 0.039050664752721786,
+          "min_ms": 0.03863466903567314
+        },
+        "recurrence_mathematical_madds": 536870912,
+        "residual": {
+          "max_ms": 0.32263678312301636,
+          "median_ms": 0.31017279624938965,
+          "min_ms": 0.2714783847332001
+        },
+        "residual_error_vs_original": {
+          "max_abs": 2.982502420837037e-08,
+          "max_error_over_row_scale": 1.2206357778837576e-07,
+          "max_scaled": 2.982502420837037e-08,
+          "nonfinite": 0,
+          "rel_l2": 234881.53126576386
+        },
+        "residual_error_vs_packed": {
+          "max_abs": 5.4382618200343735e-12,
+          "max_error_over_row_scale": 7.78315878374928e-08,
+          "max_scaled": 5.4382618200343735e-12,
+          "nonfinite": 0,
+          "rel_l2": 0.00012669059137185022
+        },
+        "residual_error_vs_quad_sample": {
+          "max_abs": 2.9825024208375834e-08,
+          "max_error_over_row_scale": 1.1113544263967016e-07,
+          "max_scaled": 2.9825024208375834e-08,
+          "nonfinite": 0,
+          "rel_l2": 231962.69184268103
+        },
+        "spmv": {
+          "max_ms": 0.3064431846141815,
+          "median_ms": 0.2919600009918213,
+          "min_ms": 0.23153278231620789
+        },
+        "unit": {
+          "add_max_relative_to_original_inputs": 523.998080411494,
+          "add_max_relative_to_packed_inputs": 5.940711344340798e-08,
+          "arithmetic_screen_failures": 0,
+          "cases": 32768,
+          "mul_max_relative_to_original_inputs": 1.7101445520305424e-07,
+          "mul_max_relative_to_packed_inputs": 5.904903763754973e-08,
+          "nonzero_sums_lost_by_input_conversion": 24557,
+          "normalization_failures": 0,
+          "reference": "113-bit binary arithmetic"
+        }
+      },
+      {
+        "Ax_error_vs_original": {
+          "max_abs": 6.1827442037615254e-15,
+          "max_error_over_row_scale": 1.151675272453536e-14,
+          "max_scaled": 6.1827442037615254e-15,
+          "nonfinite": 0,
+          "rel_l2": 3.67082790913293e-15
+        },
+        "Ax_error_vs_packed": {
+          "max_abs": 6.015858384361694e-15,
+          "max_error_over_row_scale": 1.1210780011082587e-14,
+          "max_scaled": 6.015858384361694e-15,
+          "nonfinite": 0,
+          "rel_l2": 3.599513424821672e-15
+        },
+        "Ax_error_vs_quad_sample": {
+          "max_abs": 4.14525872875394e-15,
+          "max_error_over_row_scale": 9.98221830090919e-15,
+          "max_scaled": 4.14525872875394e-15,
+          "nonfinite": 0,
+          "rel_l2": 3.661393428792138e-15
+        },
+        "SPUMA_Ax_error_vs_extended_reference": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5501778637771528e-16
+        },
+        "SPUMA_residual_error_vs_extended_reference": {
+          "max_abs": 1.0143219543370247e-19,
+          "max_error_over_row_scale": 1.5809728813767524e-16,
+          "max_scaled": 1.0143219543370247e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.089383137555156e-07
+        },
+        "SPUMA_residual_error_vs_quad_sample": {
+          "max_abs": 9.080241217998824e-21,
+          "max_error_over_row_scale": 1.3475572052486703e-16,
+          "max_scaled": 9.080241217998824e-21,
+          "nonfinite": 0,
+          "rel_l2": 5.7814859534804384e-08
+        },
+        "bytes_per_number": 8,
+        "input_conversion_effect_on_Ax": {
+          "max_abs": 4.450649918052996e-16,
+          "max_error_over_row_scale": 2.119727489485429e-15,
+          "max_scaled": 4.450649918052996e-16,
+          "nonfinite": 0,
+          "rel_l2": 7.113556064682093e-16
+        },
+        "max_componentwise_extended_reference_residual": 1.2189614234730832e-05,
+        "max_componentwise_residual": 1.218961423609449e-05,
+        "mode": "ds",
+        "nonzero_coefficients_converted_to_zero": 0,
+        "nonzero_x_converted_to_zero": 0,
+        "packing": {
+          "max_ms": 0.7023168206214905,
+          "median_ms": 0.5496575832366943,
+          "min_ms": 0.5357120037078857
+        },
+        "quad_reference_sample_rows": 32768,
+        "range_example_1e_minus_60": 0,
+        "recurrence": {
+          "max_ms": 0.5959786772727966,
+          "median_ms": 0.5937386751174927,
+          "min_ms": 0.5934613347053528
+        },
+        "recurrence_mathematical_madds": 536870912,
+        "residual": {
+          "max_ms": 0.47399839758872986,
+          "median_ms": 0.4297904074192047,
+          "min_ms": 0.4168799817562103
+        },
+        "residual_error_vs_original": {
+          "max_abs": 2.5791814430714544e-15,
+          "max_error_over_row_scale": 8.44179058928349e-15,
+          "max_scaled": 2.5791814430714544e-15,
+          "nonfinite": 0,
+          "rel_l2": 0.009848933707742112
+        },
+        "residual_error_vs_packed": {
+          "max_abs": 1.7724808166336148e-15,
+          "max_error_over_row_scale": 8.549910739160418e-15,
+          "max_scaled": 1.7724808166336148e-15,
+          "nonfinite": 0,
+          "rel_l2": 0.008275440657281273
+        },
+        "residual_error_vs_quad_sample": {
+          "max_abs": 2.076625676086391e-15,
+          "max_error_over_row_scale": 7.151772682787291e-15,
+          "max_scaled": 2.076625676086391e-15,
+          "nonfinite": 0,
+          "rel_l2": 0.009810243900313004
+        },
+        "spmv": {
+          "max_ms": 0.43911680579185486,
+          "median_ms": 0.40331679582595825,
+          "min_ms": 0.3899616003036499
+        },
+        "unit": {
+          "add_max_relative_to_original_inputs": 15,
+          "add_max_relative_to_packed_inputs": 5.13940515197603e-15,
+          "arithmetic_screen_failures": 0,
+          "cases": 32768,
+          "mul_max_relative_to_original_inputs": 1.4315360405535233e-14,
+          "mul_max_relative_to_packed_inputs": 1.291193183082315e-14,
+          "nonzero_sums_lost_by_input_conversion": 6672,
+          "normalization_failures": 0,
+          "reference": "113-bit binary arithmetic"
+        }
+      },
+      {
+        "Ax_error_vs_original": {
+          "max_abs": 1.0842021724855044e-19,
+          "max_error_over_row_scale": 2.0551847192155737e-19,
+          "max_scaled": 1.0842021724855044e-19,
+          "nonfinite": 0,
+          "rel_l2": 8.055054693737034e-20
+        },
+        "Ax_error_vs_packed": {
+          "max_abs": 1.0842021724855044e-19,
+          "max_error_over_row_scale": 2.0551847192155737e-19,
+          "max_scaled": 1.0842021724855044e-19,
+          "nonfinite": 0,
+          "rel_l2": 8.055054693737034e-20
+        },
+        "Ax_error_vs_quad_sample": {
+          "max_abs": 7.113226432694201e-23,
+          "max_error_over_row_scale": 2.9939344443199765e-22,
+          "max_scaled": 7.113226432694201e-23,
+          "nonfinite": 0,
+          "rel_l2": 6.146586581489105e-23
+        },
+        "SPUMA_Ax_error_vs_extended_reference": {
+          "max_abs": 1.937198231688475e-16,
+          "max_error_over_row_scale": 4.239064486007998e-16,
+          "max_scaled": 1.937198231688475e-16,
+          "nonfinite": 0,
+          "rel_l2": 1.5501778637771528e-16
+        },
+        "SPUMA_residual_error_vs_extended_reference": {
+          "max_abs": 1.0143219543370247e-19,
+          "max_error_over_row_scale": 1.5809728813767524e-16,
+          "max_scaled": 1.0143219543370247e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.089383137555156e-07
+        },
+        "SPUMA_residual_error_vs_quad_sample": {
+          "max_abs": 9.080241217998824e-21,
+          "max_error_over_row_scale": 1.3475572052486703e-16,
+          "max_scaled": 9.080241217998824e-21,
+          "nonfinite": 0,
+          "rel_l2": 5.7814859534804384e-08
+        },
+        "bytes_per_number": 12,
+        "input_conversion_effect_on_Ax": {
+          "max_abs": 0,
+          "max_error_over_row_scale": 0,
+          "max_scaled": 0,
+          "nonfinite": 0,
+          "rel_l2": 0
+        },
+        "max_componentwise_extended_reference_residual": 1.2189614234730832e-05,
+        "max_componentwise_residual": 1.2189614234730832e-05,
+        "mode": "ts",
+        "nonzero_coefficients_converted_to_zero": 0,
+        "nonzero_x_converted_to_zero": 0,
+        "packing": {
+          "max_ms": 0.7994111776351929,
+          "median_ms": 0.7563263773918152,
+          "min_ms": 0.7254335880279541
+        },
+        "quad_reference_sample_rows": 32768,
+        "range_example_1e_minus_60": 0,
+        "recurrence": {
+          "max_ms": 6.177824020385742,
+          "median_ms": 6.057216167449951,
+          "min_ms": 5.90330696105957
+        },
+        "recurrence_mathematical_madds": 536870912,
+        "residual": {
+          "max_ms": 0.6765135526657104,
+          "median_ms": 0.6629616022109985,
+          "min_ms": 0.6387728452682495
+        },
+        "residual_error_vs_original": {
+          "max_abs": 1.0270766345912595e-19,
+          "max_error_over_row_scale": 1.9799807304072143e-19,
+          "max_scaled": 1.0270766345912595e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.008549644777121e-07
+        },
+        "residual_error_vs_packed": {
+          "max_abs": 1.0270766345912595e-19,
+          "max_error_over_row_scale": 1.9799807304072143e-19,
+          "max_scaled": 1.0270766345912595e-19,
+          "nonfinite": 0,
+          "rel_l2": 4.008549644777121e-07
+        },
+        "residual_error_vs_quad_sample": {
+          "max_abs": 4.571985976751096e-23,
+          "max_error_over_row_scale": 2.6593541891931946e-22,
+          "max_scaled": 4.571985976751096e-23,
+          "nonfinite": 0,
+          "rel_l2": 1.9514381352189933e-10
+        },
+        "spmv": {
+          "max_ms": 0.6222879886627197,
+          "median_ms": 0.6069167852401733,
+          "min_ms": 0.5648127794265747
+        },
+        "unit": {
+          "add_max_relative_to_original_inputs": 1.3524264295599146e-22,
+          "add_max_relative_to_packed_inputs": 1.3524264295599146e-22,
+          "arithmetic_screen_failures": 0,
+          "cases": 32768,
+          "mul_max_relative_to_original_inputs": 7.550303586420194e-22,
+          "mul_max_relative_to_packed_inputs": 7.550303586420194e-22,
+          "nonzero_sums_lost_by_input_conversion": 0,
+          "normalization_failures": 0,
+          "reference": "113-bit binary arithmetic"
+        }
+      }
+    ],
+    "scope": "Standalone actual-matrix kernels; not a complete solver speedup. CUDA events, 5 rounds, median. Matrix packing timed separately. CSR reference uses at least 64 mantissa bits; scalar units use 113 bits.",
+    "snapshot": "benchmarks/precision-pressure-snapshot1/pressure.csr"
+  },
+  "paired_timing": [
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.7738520173256018,
+      "precision": "baseline",
+      "repeat": 1,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9641766414946742
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0,
+      "precision": "fp64",
+      "repeat": 1,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.098840858129755,
+      "precision": "fp32",
+      "repeat": 1,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0648595259111913
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0581118816372248,
+      "precision": "ds",
+      "repeat": 1,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0609184355793881
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0186638635941472,
+      "precision": "ts",
+      "repeat": 1,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0574117437472574
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0,
+      "precision": "fp64",
+      "repeat": 2,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0389487423126755,
+      "precision": "fp32",
+      "repeat": 2,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0090377602127094
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.9940776838599481,
+      "precision": "ds",
+      "repeat": 2,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0028058383959455
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.9544650760795793,
+      "precision": "ts",
+      "repeat": 2,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9987238148279554
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.7923691577767326,
+      "precision": "baseline",
+      "repeat": 2,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9860454374232389
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0552251178747964,
+      "precision": "fp32",
+      "repeat": 3,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0107113492565374
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.016411597086118,
+      "precision": "ds",
+      "repeat": 3,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0124241962908351
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.9624053466041433,
+      "precision": "ts",
+      "repeat": 3,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9985172519361024
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.7901674823369869,
+      "precision": "baseline",
+      "repeat": 3,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9822661783331142
+    },
+    {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0,
+      "precision": "fp64",
+      "repeat": 3,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0
+    }
+  ],
+  "paired_timing_medians": {
+    "baseline": {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.7901674823369869,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9822661783331142
+    },
+    "ds": {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.016411597086118,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0124241962908351
+    },
+    "fp32": {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0552251178747964,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0107113492565374
+    },
+    "fp64": {
+      "energy_speedup_vs_same_repeat_ir_fp64": 1.0,
+      "wall_speedup_vs_same_repeat_ir_fp64": 1.0
+    },
+    "ts": {
+      "energy_speedup_vs_same_repeat_ir_fp64": 0.9624053466041433,
+      "wall_speedup_vs_same_repeat_ir_fp64": 0.9987238148279554
+    }
+  },
+  "pilot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/benchmark.json",
+  "pilot_T_audit": [
+    {
+      "fallback_count": 0,
+      "max_backward_error": 2.3941484805987633e-17,
+      "max_residual_over_diag_K": 5.434999087608969e-10,
+      "precision": "baseline"
+    },
+    {
+      "fallback_count": 0.0,
+      "max_backward_error": 2.3867350478022283e-17,
+      "max_residual_over_diag_K": 4.131784547795735e-14,
+      "precision": "fp64"
+    },
+    {
+      "fallback_count": 0.0,
+      "max_backward_error": 2.386559002278748e-17,
+      "max_residual_over_diag_K": 3.968456949771321e-14,
+      "precision": "fp32"
+    },
+    {
+      "fallback_count": 0.0,
+      "max_backward_error": 2.3868671674565536e-17,
+      "max_residual_over_diag_K": 4.0964606337657737e-14,
+      "precision": "ds"
+    },
+    {
+      "fallback_count": 0.0,
+      "max_backward_error": 2.3866802268242902e-17,
+      "max_residual_over_diag_K": 3.968456949771321e-14,
+      "precision": "ts"
+    }
+  ],
+  "pilot_runtime_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/controlDict": "6f22e1f24d2bdde212107c4dde08aa6de746af5de612b818fb24b527248bc1f4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/fvSolution": "7d51958c182baad6823594c7829e7f4cec92d78077cb4048ffb2508f003657a6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleIrKernels.so": "e5ecd729bd704ef533c3b02852df7456534adacc3bf713edf483a388a1f36e2c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMixedTemperature.so": "159396d4c5bacacbe1411bbdb68baeda2983c3d13c90372604c52a02fb30dcb4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "run_definition": {
+    "baseline": "same device thermo/GPU limiter, FP64 multicolor temperature increment",
+    "diagnostics": false,
+    "ir_control": "fp64 uses exactly the same inner Jacobi/refinement algorithm as fp32/ds/ts",
+    "precision": [
+      "baseline",
+      "fp64",
+      "fp32",
+      "ds",
+      "ts"
+    ],
+    "repeats": 3,
+    "steps": 12,
+    "sweeps": 6,
+    "timing_policy": "drop first two and last write step; rotate mode order per repeat"
+  },
+  "same_algorithm_precision_comparisons": [
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "fp32/1",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-01/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.41770846225285,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 7.087445811365185e-08,
+          "max_abs": 5.220493903834722e-08,
+          "max_scaled": 1.579554862777481e-10,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622527,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018587,
+          "rel_l2": 1.3324637228526554e-13
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.73600115806136,
+              273.7957461726313,
+              148.37211390679232
+            ],
+            "component_min": [
+              -273.78225749174425,
+              -273.7805151824523,
+              -66.6344116298047
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461726313,
+            "min": -273.78225749174425,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.7212003109976866e-07,
+          "max_abs": 1.7573887589605874e-07,
+          "max_scaled": 6.418612354388645e-10,
+          "max_scaled_denominator": 273.79574617230077,
+          "reference_health": {
+            "component_max": [
+              273.7360011580804,
+              273.79574617230077,
+              148.3721139067922
+            ],
+            "component_min": [
+              -273.78225749173623,
+              -273.7805151827249,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617230077,
+            "min": -273.78225749173623,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632294,
+          "rel_l2": 5.258728362673211e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.578708614209984e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.1540965574941853e-07,
+          "max_abs": 1.9204571544140236e-08,
+          "max_scaled": 1.920457152895054e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142098263e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656401461,
+          "rel_l2": 9.674266791221435e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937929073e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.866405373957228e-09,
+          "max_abs": 4.4047832048477176e-10,
+          "max_scaled": 4.4047832041523306e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937745259e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246065,
+          "rel_l2": 1.6231621176216981e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635776e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.1539456285137367e-07,
+          "max_abs": 1.9204571599651388e-08,
+          "max_scaled": 1.9204571599651348e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633344327,
+          "rel_l2": 2.0192349094024832e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217043,
+            "min": -250107.94992176938,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 154327.16225437407,
+          "max_abs": 108661.32392663405,
+          "max_scaled": 0.43445769700893233,
+          "max_scaled_denominator": 250107.9499217619,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217037,
+            "min": -250107.9499217619,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407387.620436946,
+          "rel_l2": 0.018356137390314997
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131515,
+            "min": -12817.490989706757,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 95447.19606148665,
+          "max_abs": 10941.041456492923,
+          "max_scaled": 0.8536024300918068,
+          "max_scaled_denominator": 12817.490989706052,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.84325213129,
+            "min": -12817.490989706052,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 715000.7735824883,
+          "rel_l2": 0.13349243747423037
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697394,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 15479.569461097206,
+          "max_abs": 2203.699959993426,
+          "max_scaled": 0.0065612205708232615,
+          "max_scaled_denominator": 335867.3795837532,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697892,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.95042679,
+          "rel_l2": 0.0015480996885754341
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.346267368,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.7556952858827855,
+          "max_abs": 0.0009644664824008942,
+          "max_scaled": 2.3515973067261543e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.032943,
+          "rel_l2": 1.6219644554886678e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.3478117921100524e-06,
+          "max_abs": 4.5481801436153546e-07,
+          "max_scaled": 5.847506243910388e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.28336823,
+          "rel_l2": 3.735145301448778e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/1",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-01/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ds/1",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-01/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622529,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 4.8459973144368084e-08,
+          "max_abs": 1.8802438717102632e-08,
+          "max_scaled": 5.6890179463401426e-11,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622527,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018587,
+          "rel_l2": 9.110638436450591e-14
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.736001158424,
+              273.7957461727254,
+              148.37211390679232
+            ],
+            "component_min": [
+              -273.7822574915064,
+              -273.78051518279494,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461727254,
+            "min": -273.7822574915064,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.010854232813116e-07,
+          "max_abs": 7.904094445621013e-08,
+          "max_scaled": 2.886858015919259e-10,
+          "max_scaled_denominator": 273.79574617230077,
+          "reference_health": {
+            "component_max": [
+              273.7360011580804,
+              273.79574617230077,
+              148.3721139067922
+            ],
+            "component_min": [
+              -273.78225749173623,
+              -273.7805151827249,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617230077,
+            "min": -273.78225749173623,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632294,
+          "rel_l2": 3.885982279422429e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086141783785e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0768898443801896e-07,
+          "max_abs": 1.1161473023602042e-08,
+          "max_scaled": 1.1161473014773967e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142098263e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656401461,
+          "rel_l2": 9.027078013221938e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937231394e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.9506775840633375e-09,
+          "max_abs": 5.217551946046228e-10,
+          "max_scaled": 5.217551945222529e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937745259e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246065,
+          "rel_l2": 1.6964513724219405e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635779e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0767131567650883e-07,
+          "max_abs": 1.1161473079113193e-08,
+          "max_scaled": 1.1161473079113172e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633344327,
+          "rel_l2": 1.884089457796437e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217515,
+            "min": -250107.94992177308,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 100319.12683108383,
+          "max_abs": 22402.395531467915,
+          "max_scaled": 0.08957090543693542,
+          "max_scaled_denominator": 250107.9499217619,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217037,
+            "min": -250107.9499217619,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407387.620436946,
+          "rel_l2": 0.0119322590274326
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131348,
+            "min": -12817.490989695352,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 98645.20215929145,
+          "max_abs": 10954.5195799681,
+          "max_scaled": 0.8546539715741454,
+          "max_scaled_denominator": 12817.490989706052,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.84325213129,
+            "min": -12817.490989706052,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 715000.7735824883,
+          "rel_l2": 0.13796516843615825
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476698407,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 14681.366263707816,
+          "max_abs": 2214.088118977911,
+          "max_scaled": 0.006592149918583557,
+          "max_scaled_denominator": 335867.3795837532,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697892,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.95042679,
+          "rel_l2": 0.0014682720083286451
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.346267368,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.2943058893762496,
+          "max_abs": 0.001707976683974266,
+          "max_scaled": 4.164450961516616e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.032943,
+          "rel_l2": 2.777995557621549e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.1908696559338817e-06,
+          "max_abs": 3.935742824978661e-07,
+          "max_scaled": 5.060107563196507e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.28336823,
+          "rel_l2": 3.5600453499164702e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/1",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-01/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ts/1",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-01/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.41770846225285,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 7.784592798026905e-08,
+          "max_abs": 5.969224048385513e-08,
+          "max_scaled": 1.8060967115984447e-10,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622527,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018587,
+          "rel_l2": 1.4635297082508362e-13
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.73600115791675,
+              273.7957461724854,
+              148.37211390679226
+            ],
+            "component_min": [
+              -273.78225749165773,
+              -273.7805151827623,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461724854,
+            "min": -273.78225749165773,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.8798143065612047e-07,
+          "max_abs": 2.0159075120318448e-07,
+          "max_scaled": 7.362815311101386e-10,
+          "max_scaled_denominator": 273.79574617230077,
+          "reference_health": {
+            "component_max": [
+              273.7360011580804,
+              273.79574617230077,
+              148.3721139067922
+            ],
+            "component_min": [
+              -273.78225749173623,
+              -273.7805151827249,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617230077,
+            "min": -273.78225749173623,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632294,
+          "rel_l2": 5.565250419802104e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099132e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.1295813826371007e-07,
+          "max_abs": 2.2625731288528073e-08,
+          "max_scaled": 2.2625731270632437e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142098263e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656401461,
+          "rel_l2": 9.468767224949593e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937063954e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.895509452401972e-09,
+          "max_abs": 4.537180076091829e-10,
+          "max_scaled": 4.537180075375541e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937745259e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246065,
+          "rel_l2": 1.6484731450431617e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635776e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.1294223318033112e-07,
+          "max_abs": 2.2625731399550375e-08,
+          "max_scaled": 2.262573139955033e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633344327,
+          "rel_l2": 1.9763227516822752e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217034,
+            "min": -252634.58751004733,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 275338.62691974797,
+          "max_abs": 252634.58751004733,
+          "max_scaled": 1.010102188231425,
+          "max_scaled_denominator": 250107.9499217619,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217037,
+            "min": -250107.9499217619,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407387.620436946,
+          "rel_l2": 0.03274960538877095
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131332,
+            "min": -12817.490989697106,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 96927.25405954193,
+          "max_abs": 10954.5195799681,
+          "max_scaled": 0.8546539715741454,
+          "max_scaled_denominator": 12817.490989706052,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.84325213129,
+            "min": -12817.490989706052,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 715000.7735824883,
+          "rel_l2": 0.13556244642070953
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697886,
+            "min": -335867.37958374707,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 15615.741186770962,
+          "max_abs": 2214.088118977911,
+          "max_scaled": 0.006592149918583557,
+          "max_scaled_denominator": 335867.3795837532,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697892,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.95042679,
+          "rel_l2": 0.0015617181168294057
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.346267368,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.37721247144829534,
+          "max_abs": 0.000540515873581171,
+          "max_scaled": 1.3179054904967405e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.032943,
+          "rel_l2": 8.096189460034135e-11
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.43775257601321,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.299268557971646e-06,
+          "max_abs": 4.776859867661187e-07,
+          "max_scaled": 6.141515291922889e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.28336823,
+          "rel_l2": 3.680985735688088e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/1",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-01/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "fp32/2",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-02/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.41770846225296,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 5.684972262695992e-08,
+          "max_abs": 3.5497237149684224e-08,
+          "max_scaled": 1.0740331200035111e-10,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622531,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018583,
+          "rel_l2": 1.0687939642965524e-13
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.73600115818203,
+              273.79574617189576,
+              148.37211390679224
+            ],
+            "component_min": [
+              -273.78225749141205,
+              -273.78051518256797,
+              -66.6344116298046
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617189576,
+            "min": -273.78225749141205,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.1079947909159298e-07,
+          "max_abs": 7.316825190173404e-08,
+          "max_scaled": 2.6723662775885756e-10,
+          "max_scaled_denominator": 273.7957461720323,
+          "reference_health": {
+            "component_max": [
+              273.73600115826974,
+              273.7957461720323,
+              148.37211390679235
+            ],
+            "component_min": [
+              -273.78225749180723,
+              -273.7805151827199,
+              -66.63441162980466
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461720323,
+            "min": -273.78225749180723,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632883,
+          "rel_l2": 4.073706720727016e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142097658e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0462959682437568e-07,
+          "max_abs": 1.032535024148018e-08,
+          "max_scaled": 1.032535023331343e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099886e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402137,
+          "rel_l2": 8.770623457491666e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415936700919e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.8124709153975148e-09,
+          "max_abs": 3.736541631660373e-10,
+          "max_scaled": 3.736541631070482e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937752975e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246079,
+          "rel_l2": 1.5762567822695219e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635778e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0461389714463343e-07,
+          "max_abs": 1.032535024148018e-08,
+          "max_scaled": 1.032535024148016e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633343144,
+          "rel_l2": 1.8305891361207552e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217037,
+            "min": -250107.9499217919,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 107856.93393366614,
+          "max_abs": 23026.925464193555,
+          "max_scaled": 0.09206794694608887,
+          "max_scaled_denominator": 250107.94992178067,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386214677,
+            "min": -250107.94992178067,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407442.659286885,
+          "rel_l2": 0.012828744518944422
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252140787,
+            "min": -12817.490989685708,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 93516.89363831388,
+          "max_abs": 10941.303187726659,
+          "max_scaled": 0.8536228499415467,
+          "max_scaled_denominator": 12817.490989698652,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131218,
+            "min": -12817.490989698652,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714967.8651139361,
+          "rel_l2": 0.13079873684030704
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476696873,
+            "min": -335867.37958375295,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 15073.743909645744,
+          "max_abs": 2214.0881189820047,
+          "max_scaled": 0.0065921499185958654,
+          "max_scaled_denominator": 335867.37958374707,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476698913,
+            "min": -335867.37958374707,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.520832628,
+          "rel_l2": 0.0015075134559403383
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0782307130054545,
+          "max_abs": 0.0013338341377675533,
+          "max_scaled": 3.252202977738931e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673663,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.642525,
+          "rel_l2": 2.3142289276547093e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013207,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.092526748853603e-06,
+          "max_abs": 2.953354396595387e-07,
+          "max_scaled": 3.797069977277542e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682273,
+          "rel_l2": 3.4503244127427096e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/2",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-02/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ds/2",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-02/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.41770846225296,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.6262771004822114e-08,
+          "max_abs": 4.880405413132394e-09,
+          "max_scaled": 1.4766549381422037e-11,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622531,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018583,
+          "rel_l2": 6.817523285547556e-14
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.73600115809137,
+              273.79574617227263,
+              148.37211390679232
+            ],
+            "component_min": [
+              -273.7822574915735,
+              -273.78051518243325,
+              -66.63441162980463
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617227263,
+            "min": -273.7822574915735,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 1.554093841940923e-07,
+          "max_abs": 2.0584025151038077e-08,
+          "max_scaled": 7.518022262517055e-11,
+          "max_scaled_denominator": 273.7957461720323,
+          "reference_health": {
+            "component_max": [
+              273.73600115826974,
+              273.7957461720323,
+              148.37211390679235
+            ],
+            "component_min": [
+              -273.78225749180723,
+              -273.7805151827199,
+              -66.63441162980466
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461720323,
+            "min": -273.78225749180723,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632883,
+          "rel_l2": 3.0032913533929577e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086140352835e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0491205320127896e-07,
+          "max_abs": 1.2671928062424342e-08,
+          "max_scaled": 1.2671928052401585e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099886e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402137,
+          "rel_l2": 8.794300491525777e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937039017e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.647015729609427e-09,
+          "max_abs": 3.156568340045851e-10,
+          "max_scaled": 3.156568339547521e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937752975e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246079,
+          "rel_l2": 1.4323648960358948e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635772e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0489912418728788e-07,
+          "max_abs": 1.2671928062424342e-08,
+          "max_scaled": 1.2671928062424318e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633343144,
+          "rel_l2": 1.8355801893160037e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217512,
+            "min": -252634.58751004707,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 291991.12882496195,
+          "max_abs": 252634.58751004707,
+          "max_scaled": 1.0101021882313481,
+          "max_scaled_denominator": 250107.94992178067,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386214677,
+            "min": -250107.94992178067,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407442.659286885,
+          "rel_l2": 0.034730076749608006
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131361,
+            "min": -12817.49098970053,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 94258.26041282929,
+          "max_abs": 7896.727697426131,
+          "max_scaled": 0.6160899745334472,
+          "max_scaled_denominator": 12817.490989698652,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131218,
+            "min": -12817.490989698652,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714967.8651139361,
+          "rel_l2": 0.13183566005139047
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.2047669739,
+            "min": -335867.379583753,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 14528.516021391977,
+          "max_abs": 2172.0014118339673,
+          "max_scaled": 0.006466842402277379,
+          "max_scaled_denominator": 335867.37958374707,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476698913,
+            "min": -335867.37958374707,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.520832628,
+          "rel_l2": 0.0014529856370372634
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.4281252335111236,
+          "max_abs": 0.0007900833152234554,
+          "max_scaled": 1.9264099168523125e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673663,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.642525,
+          "rel_l2": 9.18894062374346e-11
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013207,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.0353872240590048e-06,
+          "max_abs": 3.605264708994582e-07,
+          "max_scaled": 4.635218313942515e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682273,
+          "rel_l2": 3.3865739868476373e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/2",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-02/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ts/2",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-02/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.5041202972231,
+            "min": 258.417708462253,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 4.842112642863045e-08,
+          "max_abs": 2.5454198748775525e-08,
+          "max_scaled": 7.701628265900139e-11,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622531,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018583,
+          "rel_l2": 9.103335122838046e-14
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.73600115787514,
+              273.7957461724049,
+              148.3721139067923
+            ],
+            "component_min": [
+              -273.78225749167194,
+              -273.78051518281063,
+              -66.63441162980462
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461724049,
+            "min": -273.78225749167194,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.0394452187123673e-07,
+          "max_abs": 1.037695938066463e-07,
+          "max_scaled": 3.7900367429903543e-10,
+          "max_scaled_denominator": 273.7957461720323,
+          "reference_health": {
+            "component_max": [
+              273.73600115826974,
+              273.7957461720323,
+              148.37211390679235
+            ],
+            "component_min": [
+              -273.78225749180723,
+              -273.7805151827199,
+              -66.63441162980466
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461720323,
+            "min": -273.78225749180723,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.35621632883,
+          "rel_l2": 3.9412344517290085e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.578708614209868e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0881221994341856e-07,
+          "max_abs": 1.4499512313026486e-08,
+          "max_scaled": 1.4499512301558216e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099886e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402137,
+          "rel_l2": 9.121233739430343e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415936788082e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.8038256538644741e-09,
+          "max_abs": 3.705612483528853e-10,
+          "max_scaled": 3.705612482943845e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937752975e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.8576474246079,
+          "rel_l2": 1.568738232862642e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.087972675295789e-07,
+          "max_abs": 1.4499512257515335e-08,
+          "max_scaled": 1.4499512257515305e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635771e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633343144,
+          "rel_l2": 1.903791957046764e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386217512,
+            "min": -250107.94992178443,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 105368.18839570845,
+          "max_abs": 28229.462870260715,
+          "max_scaled": 0.11286911463265867,
+          "max_scaled_denominator": 250107.94992178067,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386214677,
+            "min": -250107.94992178067,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407442.659286885,
+          "rel_l2": 0.012532727568390663
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131048,
+            "min": -12817.490989690825,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 96186.35258858012,
+          "max_abs": 9650.95298741203,
+          "max_scaled": 0.7529518058696861,
+          "max_scaled_denominator": 12817.490989698652,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131218,
+            "min": -12817.490989698652,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714967.8651139361,
+          "rel_l2": 0.13453241366764368
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476698404,
+            "min": -335867.379583753,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 14985.893959117879,
+          "max_abs": 2456.6888822962396,
+          "max_scaled": 0.0073144610987256505,
+          "max_scaled_denominator": 335867.37958374707,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476698913,
+            "min": -335867.37958374707,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.520832628,
+          "rel_l2": 0.001498727650415295
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.7211479317351448,
+          "max_abs": 0.001017178874462843,
+          "max_scaled": 2.480122581026404e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673663,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.642525,
+          "rel_l2": 1.547814753011393e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.1850020786466086e-06,
+          "max_abs": 3.928764087390846e-07,
+          "max_scaled": 5.051135136790608e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013203,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682273,
+          "rel_l2": 3.5534989085104565e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/2",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-02/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "fp32/3",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-03/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.5041202972231,
+            "min": 258.41770846225256,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 4.833056557496656e-08,
+          "max_abs": 2.048375336016761e-08,
+          "max_scaled": 6.197730104467844e-11,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.417708462253,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018584,
+          "rel_l2": 9.086309376831746e-14
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.7360011580296,
+              273.7957461723856,
+              148.37211390679235
+            ],
+            "component_min": [
+              -273.7822574917921,
+              -273.7805151828828,
+              -66.63441162980466
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461723856,
+            "min": -273.7822574917921,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.1210638945804425e-07,
+          "max_abs": 9.129263389695552e-08,
+          "max_scaled": 3.33433353780656e-10,
+          "max_scaled_denominator": 273.7957461718451,
+          "reference_health": {
+            "component_max": [
+              273.73600115833676,
+              273.7957461718451,
+              148.37211390679238
+            ],
+            "component_min": [
+              -273.7822574912777,
+              -273.7805151827373,
+              -66.63441162980467
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461718451,
+            "min": -273.7822574912777,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.356216325636,
+          "rel_l2": 4.098962805638594e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099607e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0925308823425533e-07,
+          "max_abs": 1.5096016325877315e-08,
+          "max_scaled": 1.5096016313937244e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142100592e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402362,
+          "rel_l2": 9.158189724071567e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415935879417e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.9094646356827807e-09,
+          "max_abs": 4.5335862841611174e-10,
+          "max_scaled": 4.5335862834453963e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415935410996e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.857647424606,
+          "rel_l2": 1.6606095893343882e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.00927174363578e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0923640081134756e-07,
+          "max_abs": 1.5096016325877315e-08,
+          "max_scaled": 1.5096016325877285e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635774e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633342092,
+          "rel_l2": 1.91147614277058e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386216572,
+            "min": -250107.9499217768,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 114912.17637696228,
+          "max_abs": 35028.33452924797,
+          "max_scaled": 0.1400528633344277,
+          "max_scaled_denominator": 250107.94992177308,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386218004,
+            "min": -250107.94992177308,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407423.21179337,
+          "rel_l2": 0.013667942422093272
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.8432521311615,
+            "min": -12817.490989696535,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 95216.7780277428,
+          "max_abs": 8375.29037936867,
+          "max_scaled": 0.6534266640873122,
+          "max_scaled_denominator": 12817.49098969972,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131573,
+            "min": -12817.49098969972,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714987.105009093,
+          "rel_l2": 0.13317272068358751
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.2047669942,
+            "min": -335867.379583753,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 15110.000577512381,
+          "max_abs": 2214.088118998371,
+          "max_scaled": 0.006592149918644601,
+          "max_scaled_denominator": 335867.3795837467,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697414,
+            "min": -335867.3795837467,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.608444437,
+          "rel_l2": 0.0015111394439774784
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.650116686848132,
+          "max_abs": 0.000889624934643507,
+          "max_scaled": 2.1691159189858879e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673675,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.390944,
+          "rel_l2": 1.3953589199314655e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.2455864435955742e-06,
+          "max_abs": 4.330754919124047e-07,
+          "max_scaled": 5.567966885826408e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682271,
+          "rel_l2": 3.621092734009758e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/3",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-03/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ds/3",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-03/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.4177084622527,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 7.488682941036248e-08,
+          "max_abs": 5.856088591826847e-08,
+          "max_scaled": 1.7718655327384283e-10,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.417708462253,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018584,
+          "rel_l2": 1.4078976568505568e-13
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.7360011580288,
+              273.7957461726162,
+              148.3721139067923
+            ],
+            "component_min": [
+              -273.7822574916115,
+              -273.78051518232917,
+              -66.63441162980462
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461726162,
+            "min": -273.7822574916115,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.767490512328764e-07,
+          "max_abs": 1.97298447801586e-07,
+          "max_scaled": 7.206045037593596e-10,
+          "max_scaled_denominator": 273.7957461718451,
+          "reference_health": {
+            "component_max": [
+              273.73600115833676,
+              273.7957461718451,
+              148.37211390679238
+            ],
+            "component_min": [
+              -273.7822574912777,
+              -273.7805151827373,
+              -66.63441162980467
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461718451,
+            "min": -273.7822574912777,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.356216325636,
+          "rel_l2": 5.348184325789569e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142099646e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0590298888887924e-07,
+          "max_abs": 2.0963479563373966e-08,
+          "max_scaled": 2.0963479546793074e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142100592e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402362,
+          "rel_l2": 8.877366125441039e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415937259349e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.922780663164523e-09,
+          "max_abs": 3.7412861697561084e-10,
+          "max_scaled": 3.7412861691654683e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415935410996e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.857647424606,
+          "rel_l2": 1.6721901771676444e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635783e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.058855325059399e-07,
+          "max_abs": 2.0963479618885117e-08,
+          "max_scaled": 2.0963479618885074e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635774e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633342092,
+          "rel_l2": 1.8528408822184267e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386216572,
+            "min": -250107.9499217919,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 151475.85594969822,
+          "max_abs": 108661.32392665149,
+          "max_scaled": 0.4344576970089826,
+          "max_scaled_denominator": 250107.94992177308,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386218004,
+            "min": -250107.94992177308,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407423.21179337,
+          "rel_l2": 0.01801691816075323
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252140503,
+            "min": -12817.490989685535,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 91601.26509937232,
+          "max_abs": 10941.303187777155,
+          "max_scaled": 0.8536228499454153,
+          "max_scaled_denominator": 12817.49098969972,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131573,
+            "min": -12817.49098969972,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714987.105009093,
+          "rel_l2": 0.12811596804701444
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697903,
+            "min": -335867.3795837532,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 14774.480073068517,
+          "max_abs": 2149.4776166288348,
+          "max_scaled": 0.00639978082805411,
+          "max_scaled_denominator": 335867.3795837467,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697414,
+            "min": -335867.3795837467,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.608444437,
+          "rel_l2": 0.0014775842984348024
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.16275992202484035,
+          "max_abs": 0.00040294486097991467,
+          "max_scaled": 9.824748367415464e-11,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673675,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.390944,
+          "rel_l2": 3.4933499416199977e-11
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.437752576013214,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.1305280786832514e-06,
+          "max_abs": 4.4280687916398165e-07,
+          "max_scaled": 5.693081428167893e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682271,
+          "rel_l2": 3.4927224020491985e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/3",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-03/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    },
+    {
+      "acceptance": {
+        "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+        "pass": null,
+        "thresholds_supplied": false
+      },
+      "candidate": "ts/3",
+      "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-03/4.536e-05",
+      "field_errors": {},
+      "fields": {
+        "T": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.5041202972231,
+            "min": 258.41770846225296,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 6.983949809653301e-08,
+          "max_abs": 4.809794518223498e-08,
+          "max_scaled": 1.4552903346251901e-10,
+          "max_scaled_denominator": 330.50412029722304,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 330.50412029722304,
+            "min": 258.417708462253,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 531905.3487018584,
+          "rel_l2": 1.3130061253751217e-13
+        },
+        "U": {
+          "candidate_health": {
+            "component_max": [
+              273.7360011581025,
+              273.79574617223255,
+              148.3721139067922
+            ],
+            "component_min": [
+              -273.78225749186856,
+              -273.78051518254705,
+              -66.6344116298046
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.79574617223255,
+            "min": -273.78225749186856,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "components": 3,
+          "entries": 3094455,
+          "error_l2": 2.6899801344668725e-07,
+          "max_abs": 1.6532015933989896e-07,
+          "max_scaled": 6.038083558688214e-10,
+          "max_scaled_denominator": 273.7957461718451,
+          "reference_health": {
+            "component_max": [
+              273.73600115833676,
+              273.7957461718451,
+              148.37211390679238
+            ],
+            "component_min": [
+              -273.7822574912777,
+              -273.7805151827373,
+              -66.63441162980467
+            ],
+            "components": 3,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 9283365,
+            "max": 273.7957461718451,
+            "min": -273.7822574912777,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 9283365
+          },
+          "reference_l2": 51746.356216325636,
+          "rel_l2": 5.198395271004998e-12
+        },
+        "alpha.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086140353615e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0779256310365012e-07,
+          "max_abs": 1.7014999742492876e-08,
+          "max_scaled": 1.7014999729035e-08,
+          "max_scaled_denominator": 1.0000000007909418,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000007909418,
+            "min": -1.5787086142100592e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1192.9550656402362,
+          "rel_l2": 9.035760541894335e-11
+        },
+        "alpha.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415935936417e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 2.0174633969847232e-09,
+          "max_abs": 5.310479833653403e-10,
+          "max_scaled": 5.310479832815033e-10,
+          "max_scaled_denominator": 1.0000000001578708,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.0000000001578708,
+            "min": -7.909415935410996e-10,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 1149.857647424606,
+          "rel_l2": 1.754533182001561e-12
+        },
+        "alpha.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.00927174363577e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 1.0777368180098026e-07,
+          "max_abs": 1.7014999742492876e-08,
+          "max_scaled": 1.7014999742492843e-08,
+          "max_scaled_denominator": 1.000000000000002,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 1.000000000000002,
+            "min": -7.009271743635774e-33,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 571.4766633342092,
+          "rel_l2": 1.8858807142217876e-10
+        },
+        "dgdt.air": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386216572,
+            "min": -250107.9499217919,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 150266.44927811678,
+          "max_abs": 108661.32392665149,
+          "max_scaled": 0.4344576970089826,
+          "max_scaled_denominator": 250107.94992177308,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 196020.58386218004,
+            "min": -250107.94992177308,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 8407423.21179337,
+          "rel_l2": 0.017873068298421453
+        },
+        "dgdt.ipa": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.8432521312325,
+            "min": -12817.490989685488,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 95933.61252844165,
+          "max_abs": 10952.410106864874,
+          "max_scaled": 0.8544893938810922,
+          "max_scaled_denominator": 12817.49098969972,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 7784.843252131573,
+            "min": -12817.49098969972,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 714987.105009093,
+          "rel_l2": 0.134175304500382
+        },
+        "dgdt.n2o": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697903,
+            "min": -335867.37958374684,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 15036.525921185721,
+          "max_abs": 2214.088118977911,
+          "max_scaled": 0.006592149918583683,
+          "max_scaled_denominator": 335867.3795837467,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 243942.20476697414,
+            "min": -335867.3795837467,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 9999077.608444437,
+          "rel_l2": 0.0015037913005582684
+        },
+        "p": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673677,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 0.5301485951682552,
+          "max_abs": 0.0007329210638999939,
+          "max_scaled": 1.787034833620772e-10,
+          "max_scaled_denominator": 4101325.000000126,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 4101325.000000126,
+            "min": 1646057.3462673675,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 4659135922.390944,
+          "rel_l2": 1.1378689181838618e-10
+        },
+        "rho": {
+          "candidate_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "components": 1,
+          "entries": 3094455,
+          "error_l2": 3.1961596034680857e-06,
+          "max_abs": 4.007093821201124e-07,
+          "max_scaled": 5.151842143346278e-10,
+          "max_scaled_denominator": 777.7982534609251,
+          "reference_health": {
+            "components": 1,
+            "entries": 3094455,
+            "finite": true,
+            "finite_values": 3094455,
+            "max": 777.7982534609251,
+            "min": 19.4377525760132,
+            "nonfinite_values": 0,
+            "uniform": false,
+            "values": 3094455
+          },
+          "reference_l2": 896300.2833682271,
+          "rel_l2": 3.565947331241674e-12
+        }
+      },
+      "metric_definitions": {
+        "max_abs": "max(abs(candidate-reference))",
+        "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+        "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+      },
+      "missing_core_from_both": [],
+      "missing_from_candidate": [],
+      "missing_from_reference": [],
+      "reference": "fp64/3",
+      "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-03/4.536e-05",
+      "selected_fields": [
+        "T",
+        "U",
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o",
+        "dgdt.air",
+        "dgdt.ipa",
+        "dgdt.n2o",
+        "p",
+        "rho"
+      ]
+    }
+  ],
+  "scope": "Main-authored short-run engineering screen, not user acceptance or physical-model validation. Raw dgdt remains separate.",
+  "source_hash_scope": "Source hashes captured after execution, not a pre-build manifest. Pilot used the earlier wrapper before maxIter chunk cap and fixed-nSweeps fallback audit; neither path was triggered in the pilot. Full runtime hashes identify the later tested wrapper.",
+  "state_screens": [
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0,
+      "max_refinement_residual": null,
+      "max_step_mass_imbalance_relative": 5.051145591202221e-08,
+      "outer_counts": [],
+      "pass": true,
+      "precision": "baseline",
+      "reasons": [],
+      "repeat": 1,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": []
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.23913342221053e-16,
+      "max_step_mass_imbalance_relative": 5.051145619050433e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp64",
+      "reasons": [],
+      "repeat": 1,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 4.364657894992219e-15,
+      "max_step_mass_imbalance_relative": 5.051145632974536e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp32",
+      "reasons": [],
+      "repeat": 1,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.2388019203070775e-16,
+      "max_step_mass_imbalance_relative": 5.051145632974537e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ds",
+      "reasons": [],
+      "repeat": 1,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.239413721401167e-16,
+      "max_step_mass_imbalance_relative": 5.051145619050432e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ts",
+      "reasons": [],
+      "repeat": 1,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.238699704846998e-16,
+      "max_step_mass_imbalance_relative": 5.051145646898642e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp64",
+      "reasons": [],
+      "repeat": 2,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 4.3646270160079684e-15,
+      "max_step_mass_imbalance_relative": 5.0511456190504315e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp32",
+      "reasons": [],
+      "repeat": 2,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.238350365701334e-16,
+      "max_step_mass_imbalance_relative": 5.051145632974536e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ds",
+      "reasons": [],
+      "repeat": 2,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.2398065061313003e-16,
+      "max_step_mass_imbalance_relative": 5.051145632974536e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ts",
+      "reasons": [],
+      "repeat": 2,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0,
+      "max_refinement_residual": null,
+      "max_step_mass_imbalance_relative": 5.051145660822747e-08,
+      "outer_counts": [],
+      "pass": true,
+      "precision": "baseline",
+      "reasons": [],
+      "repeat": 2,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": []
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 4.356901902082842e-15,
+      "max_step_mass_imbalance_relative": 5.0511456190504315e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp32",
+      "reasons": [],
+      "repeat": 3,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.239442328721265e-16,
+      "max_step_mass_imbalance_relative": 5.051145646898642e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ds",
+      "reasons": [],
+      "repeat": 3,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.2401910178117037e-16,
+      "max_step_mass_imbalance_relative": 5.051145646898642e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "ts",
+      "reasons": [],
+      "repeat": 3,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0,
+      "max_refinement_residual": null,
+      "max_step_mass_imbalance_relative": 5.051145660822747e-08,
+      "outer_counts": [],
+      "pass": true,
+      "precision": "baseline",
+      "reasons": [],
+      "repeat": 3,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": []
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "fallback_count": 0.0,
+      "max_refinement_residual": 3.2384481181127125e-16,
+      "max_step_mass_imbalance_relative": 5.051145619050431e-08,
+      "outer_counts": [
+        2.0
+      ],
+      "pass": true,
+      "precision": "fp64",
+      "reasons": [],
+      "repeat": 3,
+      "selected_precision_exercised_without_fallback": true,
+      "sweep_counts": [
+        12.0
+      ]
+    }
+  ],
+  "stdout_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/baseline/repeat-01/stdout.log": "e79a04fbc5611156f406f937589b92a7ea1d2a2ddbff990a91b5fb2c9bd33f07",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/baseline/repeat-02/stdout.log": "b087b9f256126f2c17ffae0028bbb73655e28c57d7e1486ad907bcc09bf44277",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/baseline/repeat-03/stdout.log": "d808fe6432763a7ae7f84cffa4ddfac5be49abb7b7eafc8c2feec777d036ba20",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-01/stdout.log": "6ae73fe52f8cb6d88486b0b319acd25a5564071b112299b913a249fe47a48aa7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-02/stdout.log": "5029a22837b49184f28edc2e61af0c817b91fdb985e29d95a20fa73bf88b65d9",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ds/repeat-03/stdout.log": "979f3d5b7c492b0f65c0b9a92ef60d7cc07b63abe11083909b9b6f09f4cecaf2",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-01/stdout.log": "1aeb9729693cdf9a2952c1f2f18ea93589635c8fed9f3c0659b75c34927ddcca",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-02/stdout.log": "85ff9db06654e24b952dd725b1665b69d141859703c51f9d807e4d20110241d3",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp32/repeat-03/stdout.log": "a2fbbe3610df4edeb96b770197128a22b14cfa3bacd23f6779ce907cb400e9c5",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-01/stdout.log": "1988f180e8e67ab67a28aa4dd29b37c45bf0f6a5437d96c1e0d1c41042f96047",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-02/stdout.log": "240eaa2bc618a61ba7091f2b38cf914053cb36319c9793e96e5f964d5cbcd655",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/fp64/repeat-03/stdout.log": "67926289f1969e94cbf29db7d0304370d95b8130d0c874205e51c76faa35c4d8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-01/stdout.log": "f6b2849be4d9971cce657d324f2ee5e13b5f536e8b425e357a86ee0abf0add37",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-02/stdout.log": "2b304b70f133a6806d5594cb73cc0801e026a5682e8f2d6e8c708ae1ec5c478c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-full12/runs/ts/repeat-03/stdout.log": "daf91f007885b60d9afb680530b008d114e987350de7f40cbcc3b7024b3a3a06",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/runs/baseline/repeat-01/stdout.log": "bdbd9828a51f245c60001f8b51cc590587c48824014b6caafc6a4dc9e6863217",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/runs/ds/repeat-01/stdout.log": "eae3b61546568ad1e3fa06b16d83f91a9dcad4815b263352fc8d087ce6f52439",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/runs/fp32/repeat-01/stdout.log": "9c140c847490e9f97d387eb22cc7d24e2ec69efae9b88674a0cb3ffdae01bcb1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/runs/fp64/repeat-01/stdout.log": "b96d6ed9fcf1f6f3b93593f6162a28903c40f674e202270ef85871c2e37e4f6b",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-pilot4/runs/ts/repeat-01/stdout.log": "9ee8f193e3de9ad1173cd345ccc4cb15d04015037e4357d979ffacf6018e1a18"
+  },
+  "timing": [
+    {
+      "fallback_count": 0,
+      "precision": "baseline",
+      "stages_median_mean_s": {
+        "alpha": 0.6867443037777777,
+        "energy": 0.16879643322222224,
+        "momentum": 0.407362615,
+        "pressure": 0.7772074683333333,
+        "turbulence": 0.017164729222222223
+      },
+      "wall_max_s": 2.20682781877824,
+      "wall_median_s": 2.0721211342218644,
+      "wall_min_s": 2.038259136444443
+    },
+    {
+      "fallback_count": 0.0,
+      "precision": "fp64",
+      "stages_median_mean_s": {
+        "alpha": 0.6818558523333333,
+        "energy": 0.13337745266666667,
+        "momentum": 0.4082187992222222,
+        "pressure": 0.780330857111111,
+        "turbulence": 0.017295961
+      },
+      "wall_max_s": 2.127771834666621,
+      "wall_median_s": 2.035374507555389,
+      "wall_min_s": 2.009816121777274
+    },
+    {
+      "fallback_count": 0.0,
+      "precision": "fp32",
+      "stages_median_mean_s": {
+        "alpha": 0.6717141165555556,
+        "energy": 0.1263971548888889,
+        "momentum": 0.40460678355555557,
+        "pressure": 0.7637288352222222,
+        "turbulence": 0.016718154555555555
+      },
+      "wall_max_s": 2.0138039501115497,
+      "wall_median_s": 1.9981713858885795,
+      "wall_min_s": 1.991814579222086
+    },
+    {
+      "fallback_count": 0.0,
+      "precision": "ds",
+      "stages_median_mean_s": {
+        "alpha": 0.6723351821111111,
+        "energy": 0.13145976933333334,
+        "momentum": 0.4036152152222222,
+        "pressure": 0.7697324873333333,
+        "turbulence": 0.017035939555555556
+      },
+      "wall_max_s": 2.0103969413337635,
+      "wall_median_s": 2.0055941751116837,
+      "wall_min_s": 2.0041926810000508
+    },
+    {
+      "fallback_count": 0.0,
+      "precision": "ts",
+      "stages_median_mean_s": {
+        "alpha": 0.671689471,
+        "energy": 0.13745427355555556,
+        "momentum": 0.4060219855555556,
+        "pressure": 0.7672482172222223,
+        "turbulence": 0.01681123522222222
+      },
+      "wall_max_s": 2.038396936666686,
+      "wall_median_s": 2.0123842967772765,
+      "wall_min_s": 2.012245321889673
+    }
+  ]
+}

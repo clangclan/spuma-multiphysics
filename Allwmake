@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail
+cd -- "$(dirname -- "$0")"
+source ./env.sh
+mkdir -p bin lib logs
+wmake -j2 libso src/coldFoam/multiphaseMixtureThermo 2>&1 | tee logs/build-thermo.log
+wmake -j1 src/coldFoam 2>&1 | tee logs/build-solver.log
+wmake -j1 src/thermoCheck 2>&1 | tee logs/build-thermo-check.log

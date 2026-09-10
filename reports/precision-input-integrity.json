@@ -1,0 +1,211 @@
+{
+  "all_match": true,
+  "coverage": "Post-run equality of initial time, mesh and constant files across all 15 copied cases; changed thermo dictionaries checked against per-run configuration hashes. Control/fvSolution and runtime hashes recorded before/after in benchmark. This is a post-run audit, not a signed pre-execution snapshot.",
+  "runs": [
+    {
+      "input_mismatches": [],
+      "precision": "baseline",
+      "repeat": 1,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp64",
+      "repeat": 1,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp32",
+      "repeat": 1,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ds",
+      "repeat": 1,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ts",
+      "repeat": 1,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp64",
+      "repeat": 2,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp32",
+      "repeat": 2,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ds",
+      "repeat": 2,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ts",
+      "repeat": 2,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "baseline",
+      "repeat": 2,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp32",
+      "repeat": 3,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ds",
+      "repeat": 3,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "ts",
+      "repeat": 3,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "baseline",
+      "repeat": 3,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    },
+    {
+      "input_mismatches": [],
+      "precision": "fp64",
+      "repeat": 3,
+      "thermo_matches_run_manifest": true,
+      "thermo_sha256": {
+        "air": "868e580bd9a83d2695927bcc842ba891d82590b7cd3781100d52c9afe531cd64",
+        "ipa": "ecb2ebe2f007b03097b280a29ef6022d33d7231724af1996a99b6c8d54d0a45c",
+        "n2o": "8191668a2faeb5492e243788015dd7ca95220a0a5b1212253305b08b47deac6e"
+      }
+    }
+  ],
+  "source_case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us",
+  "source_manifest": {
+    "4.5e-05/T": "96687a133182655f073206ec0c0450a090208b25cc9f91641aa7d93b1d4b2a91",
+    "4.5e-05/U": "5d5185cf4e4ad18acd2db6e9d926ceea21469af6bf561c74acd0bbce763a2559",
+    "4.5e-05/alpha.air": "0019fe7763b89e8cf64f9975cd1cdb3921505049daa9ac0adcbefd22075769a7",
+    "4.5e-05/alpha.ipa": "b4fbb647ff1ee6b1d6802bc94208bdbcb65699caed0777657ee9d8716bf69eda",
+    "4.5e-05/alpha.n2o": "dcbef9ea7895e0471d3ffe08514549f45b195781087513968c92ab07747e9d72",
+    "4.5e-05/dgdt.air": "fba2d125f2e9db1bc2df8e5cf2da70bcc8cbfe046033a95ce35828e9b4da4ec4",
+    "4.5e-05/dgdt.ipa": "b7eaa23537e5f5d974cc82d80f6716f72898b0306d212b6424b607f33f438dd5",
+    "4.5e-05/dgdt.n2o": "6f7dae84c2e6c55168c0cc42a09d81cd4b03ee5d36d79d8445502bb77de53bb9",
+    "4.5e-05/nut": "4a6e3f3044f7135e11c14fff850d301a57cab571629f47b78dff1352dc564f01",
+    "4.5e-05/p": "79c14c7c6ad7165a56760cbb69fd228680c7fd9ddee9f73e666ef633d4450bd0",
+    "4.5e-05/p_rgh": "5b990d0dd6eec430a79d03fc802d4c607e358408cb94a34cefc58d643c648719",
+    "4.5e-05/phi": "d13a940544bb84ae7cfdf50a47e20aea948116dc0a8fe9eb076cbacfa5beb8c0",
+    "4.5e-05/rho": "0cbe7d354e57dd76934b7d76b31e0438ea473ee8437e7549c4b1bc19115e3dcf",
+    "4.5e-05/rhoPhi": "c3dc1b85090b24c55f22f78143efa4209ef549b5e9af69ea355a5697961fc67e",
+    "4.5e-05/uniform/pintle_checkpoint.json": "e3b837c9a326f2af25e570cdfe61da54d7d987129e46e487e8d64d5fb19fe66b",
+    "4.5e-05/uniform/time": "a5e75ed53d1f63e82f008b6f827392dcebd435450acae74193be600cc9993c25",
+    "4.5e-05/vDot.air": "9c2823a895adcfa99780d028966c7b72374bb86e3baeeeeb0c4603859c9f0456",
+    "4.5e-05/vDot.ipa": "a2504c2b7c426a2fef38323114bc442c238c5b8abedd2ddf4c4697c87987d957",
+    "4.5e-05/vDot.n2o": "75779d835bd6432b10d7a4ce27748d9843a5411b15b65b1d9e8563084e452339",
+    "constant/g": "d5d58dd7a6077ec6d0fcbbe984e8bd966a8bdeaefc7af9309eb109a83da0c083",
+    "constant/momentumTransport": "ec49bf0f1da59b67dc6a944fdc88199d0bd0cf1c89c973cfff4253ec22eb6be8",
+    "constant/phaseProperties": "89710c7d40e8a9fc6147d91a9ed01a9048c706b33658307dfbdbefb0375f5f8f",
+    "constant/physicalProperties.air": "f10e76667474b7016df772a87646ce2a7b81d9e544204ddc15dde7f1178ed413",
+    "constant/physicalProperties.ipa": "7b6ecc49dd595140563e29187e7e08526e0f8a1b11e40ed652a8a7f6e2877b9f",
+    "constant/physicalProperties.n2o": "41fb1500aa6628f9fee8e2d854f3725fddc691681345460bc9ba3657d713f64a",
+    "constant/polyMesh/boundary": "5086b544475e2904c2b755479d73eb08e0d0bdbd453634b243f2c2b75792ed55",
+    "constant/polyMesh/cellLevel": "c8b78dad85f3e4bb95e20a6b222521ce587be8709d7fc17dcfb362660a589aba",
+    "constant/polyMesh/cellProc": "b0b3ba8d77839b2b462257035659f6de456aee45cb47fd80762b04579cb11e12",
+    "constant/polyMesh/faces": "17a8436c7ac2d57f3b2aac3945ccb4ad0eea47f8276092ef4cfbf6c7c8f29a40",
+    "constant/polyMesh/level0Edge": "ba1f8293a61aec517d5cffb185c5a2a21cc573a475d2616ae9dfc8e22446db70",
+    "constant/polyMesh/neighbour": "ef60631acbe76978598631e712938175b8396d0360cd03d2ddb01470f32828ae",
+    "constant/polyMesh/owner": "a677be5a9b9195c5ea96b9c572af6d2ba0627f502a53eaedcaa854ae27761942",
+    "constant/polyMesh/pointLevel": "00a4ccaa5f4caae5ee31f1feb6a6947977e175fd5aef444b793c8bdd6003f3d1",
+    "constant/polyMesh/points": "5db6b67c5284996daed839e04ffa57920c5980ad25e23578b8a1a9aa0613d922",
+    "constant/thermophysicalProperties": "7e1f04795990303c9462e77ce2d72534545773120ec487df08b4a085fc98ca17",
+    "constant/turbulenceProperties": "69b0132fd632d9fc8daf25f2369bda5780b65cff850f3497cb8bf02a59dbf359"
+  },
+  "source_total_bytes": 957215431
+}

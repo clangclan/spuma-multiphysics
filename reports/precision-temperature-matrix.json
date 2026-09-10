@@ -1,0 +1,15 @@
+{
+  "all_positive_diagonal": true,
+  "diagonal_max": 9.253383293920919,
+  "diagonal_min": 3.8307462832032077e-05,
+  "formula": "sum(abs(offdiagonal entries in row))/abs(diagonal entry)",
+  "max_offdiag_over_diag": 0.11746961899274555,
+  "median_offdiag_over_diag": 3.26068573510385e-05,
+  "method": "FP64 NumPy reduceat over CSR, subtracting the leading diagonal magnitude. Checked that the first column index of every row equals its row index.",
+  "nonzeros": 21419851,
+  "rows": 3094455,
+  "scope": "First captured temperature matrix at the 45 us restart, not a bound on all subsequent timesteps",
+  "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/precision-temperature-snapshot1/temperature.csr",
+  "snapshot_sha256": "6df4d49faa5360eea40a3236f20f0bf4057c871933aa1207b3f95e36c002fa84",
+  "worst_row": 2370166
+}

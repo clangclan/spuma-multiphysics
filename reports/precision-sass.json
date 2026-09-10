@@ -1,0 +1,40 @@
+{
+  "scope": "Static SASS instruction counts in inner Jacobi kernels, not dynamic execution counts or the whole solver FP64 fraction",
+  "kernels": [
+    {
+      "name": "_ZN51_GLOBAL__N__491c75bf_18_pintleIrKernels_cu_e70f1f558irJacobiIN15pintlePrecision2TSEEEv14PintleIrMatrixPKT_S6_S6_S6_S6_PS4_",
+      "static_fp64_instructions": {},
+      "static_fp32_instructions": {
+        "FMUL": 9,
+        "FADD": 195,
+        "FFMA": 18,
+        "FSETP": 26
+      }
+    },
+    {
+      "name": "_ZN51_GLOBAL__N__491c75bf_18_pintleIrKernels_cu_e70f1f558irJacobiIN15pintlePrecision2DSEEEv14PintleIrMatrixPKT_S6_S6_S6_S6_PS4_",
+      "static_fp64_instructions": {},
+      "static_fp32_instructions": {
+        "FMUL": 30,
+        "FFMA": 45,
+        "FADD": 340
+      }
+    },
+    {
+      "name": "_ZN51_GLOBAL__N__491c75bf_18_pintleIrKernels_cu_e70f1f558irJacobiIfEEv14PintleIrMatrixPKT_S4_S4_S4_S4_PS2_",
+      "static_fp64_instructions": {},
+      "static_fp32_instructions": {
+        "FFMA": 44,
+        "FMUL": 1
+      }
+    },
+    {
+      "name": "_ZN51_GLOBAL__N__491c75bf_18_pintleIrKernels_cu_e70f1f558irJacobiIdEEv14PintleIrMatrixPKT_S4_S4_S4_S4_PS2_",
+      "static_fp64_instructions": {
+        "DFMA": 44,
+        "DMUL": 1
+      },
+      "static_fp32_instructions": {}
+    }
+  ]
+}

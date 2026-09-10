@@ -1,0 +1,525 @@
+{
+  "run": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/final-build-check4/run.json",
+  "field_health": {
+    "fields": {
+      "T": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": 258.3991835019336,
+        "max": 330.6352212250526,
+        "uniform": false
+      },
+      "U": {
+        "entries": 3094455,
+        "components": 3,
+        "values": 9283365,
+        "finite": true,
+        "finite_values": 9283365,
+        "nonfinite_values": 0,
+        "min": -274.22588314789374,
+        "max": 274.24072875134783,
+        "uniform": false,
+        "component_min": [
+          -274.22588314789374,
+          -274.2240491286419,
+          -65.87235702008302
+        ],
+        "component_max": [
+          274.1802815370221,
+          274.24072875134783,
+          148.70431792832017
+        ]
+      },
+      "alpha.air": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -1.7108123220025288e-10,
+        "max": 1.0000000001329803,
+        "uniform": false
+      },
+      "alpha.ipa": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -1.3298029837440887e-10,
+        "max": 1.0000000001710814,
+        "uniform": false
+      },
+      "alpha.n2o": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -7.02985688334816e-33,
+        "max": 1.0000000000000018,
+        "uniform": false
+      },
+      "dgdt.air": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -342096.27698034333,
+        "max": 206811.61362037834,
+        "uniform": false
+      },
+      "dgdt.ipa": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -8535.47482162393,
+        "max": 6775.832127232469,
+        "uniform": false
+      },
+      "dgdt.n2o": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": -436082.41477052093,
+        "max": 258028.39015977757,
+        "uniform": false
+      },
+      "p": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": 1659597.707738071,
+        "max": 4101325.0000001146,
+        "uniform": false
+      },
+      "rho": {
+        "entries": 3094455,
+        "components": 1,
+        "values": 3094455,
+        "finite": true,
+        "finite_values": 3094455,
+        "nonfinite_values": 0,
+        "min": 19.665995002510307,
+        "max": 777.7979403953383,
+        "uniform": false
+      }
+    },
+    "field_errors": {},
+    "missing_core_fields": [],
+    "missing_phase_fields": [],
+    "alpha_sum": {
+      "fields": [
+        "alpha.air",
+        "alpha.ipa",
+        "alpha.n2o"
+      ],
+      "complete": true,
+      "entries": 3094455,
+      "components": 1,
+      "values": 3094455,
+      "finite": true,
+      "finite_values": 3094455,
+      "nonfinite_values": 0,
+      "min": 0.9999999999996084,
+      "max": 1.0000000000000002,
+      "max_abs_error_from_one": 3.915756607852927e-13
+    }
+  },
+  "comparison": {
+    "reference": "benchmarked-build/gpu4",
+    "candidate": "final-build/gpu4",
+    "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/multicolor-pilot4/runs/device-gpu/repeat-01/4.512e-05",
+    "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/final-build-check4/4.512e-05",
+    "selected_fields": [
+      "T",
+      "U",
+      "alpha.air",
+      "alpha.ipa",
+      "alpha.n2o",
+      "dgdt.air",
+      "dgdt.ipa",
+      "dgdt.n2o",
+      "p",
+      "rho"
+    ],
+    "missing_from_reference": [],
+    "missing_from_candidate": [],
+    "missing_core_from_both": [],
+    "fields": {
+      "T": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 258.3991835019335,
+          "max": 330.6352212250526,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 258.3991835019336,
+          "max": 330.6352212250526,
+          "uniform": false
+        },
+        "rel_l2": 2.4707062567254174e-14,
+        "max_abs": 2.270667209813837e-09,
+        "max_scaled": 6.867590214377881e-12,
+        "max_scaled_denominator": 330.6352212250526,
+        "reference_l2": 531905.9841408965,
+        "error_l2": 1.3141834430066036e-08
+      },
+      "U": {
+        "entries": 3094455,
+        "components": 3,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 3,
+          "values": 9283365,
+          "finite": true,
+          "finite_values": 9283365,
+          "nonfinite_values": 0,
+          "min": -274.22588314790426,
+          "max": 274.2407287513482,
+          "uniform": false,
+          "component_min": [
+            -274.22588314790426,
+            -274.224049128577,
+            -65.87235702008302
+          ],
+          "component_max": [
+            274.18028153706234,
+            274.2407287513482,
+            148.70431792832017
+          ]
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 3,
+          "values": 9283365,
+          "finite": true,
+          "finite_values": 9283365,
+          "nonfinite_values": 0,
+          "min": -274.22588314789374,
+          "max": 274.24072875134783,
+          "uniform": false,
+          "component_min": [
+            -274.22588314789374,
+            -274.2240491286419,
+            -65.87235702008302
+          ],
+          "component_max": [
+            274.1802815370221,
+            274.24072875134783,
+            148.70431792832017
+          ]
+        },
+        "rel_l2": 1.1091939290121875e-12,
+        "max_abs": 8.400604656344512e-09,
+        "max_scaled": 3.0632228460715886e-11,
+        "max_scaled_denominator": 274.2407287513482,
+        "reference_l2": 51790.19262744963,
+        "error_l2": 5.744536724473888e-08
+      },
+      "alpha.air": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -1.7108123220441577e-10,
+          "max": 1.0000000001329803,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -1.7108123220025288e-10,
+          "max": 1.0000000001329803,
+          "uniform": false
+        },
+        "rel_l2": 4.3155728354676835e-11,
+        "max_abs": 7.813663160938233e-09,
+        "max_scaled": 7.81366315989917e-09,
+        "max_scaled_denominator": 1.0000000001329803,
+        "reference_l2": 1193.0455967159105,
+        "error_l2": 5.1486751686615164e-08
+      },
+      "alpha.ipa": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -1.3298029843765161e-10,
+          "max": 1.0000000001710814,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -1.3298029837440887e-10,
+          "max": 1.0000000001710814,
+          "uniform": false
+        },
+        "rel_l2": 5.224426655978448e-13,
+        "max_abs": 2.1044122000546395e-10,
+        "max_scaled": 2.1044121996946138e-10,
+        "max_scaled_denominator": 1.0000000001710814,
+        "reference_l2": 1149.7869256543904,
+        "error_l2": 6.006977463084307e-10
+      },
+      "alpha.n2o": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -7.02985688334816e-33,
+          "max": 1.0000000000000018,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -7.02985688334816e-33,
+          "max": 1.0000000000000018,
+          "uniform": false
+        },
+        "rel_l2": 9.008201302012963e-11,
+        "max_abs": 7.813663160938233e-09,
+        "max_scaled": 7.81366316093822e-09,
+        "max_scaled_denominator": 1.0000000000000018,
+        "reference_l2": 571.515285689892,
+        "error_l2": 5.148324740671996e-08
+      },
+      "dgdt.air": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -342096.276980355,
+          "max": 206811.61362038317,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -342096.27698034333,
+          "max": 206811.61362037834,
+          "uniform": false
+        },
+        "rel_l2": 0.02062010934312422,
+        "max_abs": 145884.02657677702,
+        "max_scaled": 0.4264414329921353,
+        "max_scaled_denominator": 342096.276980355,
+        "reference_l2": 9260623.375957027,
+        "error_l2": 190955.06659772605
+      },
+      "dgdt.ipa": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -8535.47482162393,
+          "max": 6775.832127232547,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -8535.47482162393,
+          "max": 6775.832127232469,
+          "uniform": false
+        },
+        "rel_l2": 0.1168497776319643,
+        "max_abs": 5493.918540574394,
+        "max_scaled": 0.6436570495944759,
+        "max_scaled_denominator": 8535.47482162393,
+        "reference_l2": 673996.7812336016,
+        "error_l2": 78756.37401180604
+      },
+      "dgdt.n2o": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -436082.414770521,
+          "max": 258028.39015978278,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": -436082.41477052093,
+          "max": 258028.39015977757,
+          "uniform": false
+        },
+        "rel_l2": 0.0016541649385963717,
+        "max_abs": 3237.292306000908,
+        "max_scaled": 0.007423579113375768,
+        "max_scaled_denominator": 436082.414770521,
+        "reference_l2": 11028021.94615154,
+        "error_l2": 18242.1672453952
+      },
+      "p": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 1659597.7077380707,
+          "max": 4101325.0000001146,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 1659597.707738071,
+          "max": 4101325.0000001146,
+          "uniform": false
+        },
+        "rel_l2": 9.284950830982871e-12,
+        "max_abs": 0.00011134892702102661,
+        "max_scaled": 2.714950095908603e-11,
+        "max_scaled_denominator": 4101325.0000001146,
+        "reference_l2": 4659599348.240542,
+        "error_l2": 0.04326415084049327
+      },
+      "rho": {
+        "entries": 3094455,
+        "components": 1,
+        "reference_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 19.665995002510307,
+          "max": 777.7979403953383,
+          "uniform": false
+        },
+        "candidate_health": {
+          "entries": 3094455,
+          "components": 1,
+          "values": 3094455,
+          "finite": true,
+          "finite_values": 3094455,
+          "nonfinite_values": 0,
+          "min": 19.665995002510307,
+          "max": 777.7979403953383,
+          "uniform": false
+        },
+        "rel_l2": 1.5022182945592656e-12,
+        "max_abs": 1.9427207575972716e-07,
+        "max_scaled": 2.497719081911978e-10,
+        "max_scaled_denominator": 777.7979403953383,
+        "reference_l2": 896245.3809673412,
+        "error_l2": 1.3463562077033787e-06
+      }
+    },
+    "field_errors": {},
+    "metric_definitions": {
+      "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio",
+      "max_abs": "max(abs(candidate-reference))",
+      "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention"
+    },
+    "acceptance": {
+      "thresholds_supplied": false,
+      "pass": null,
+      "note": "Metrics only; no numerical acceptance thresholds were supplied."
+    }
+  },
+  "core_changes_since_benchmark_snapshot": [
+    "src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.C"
+  ],
+  "core_change_scope": "Trailing whitespace removed from one blank line; no C++ expressions or line counts changed."
+}

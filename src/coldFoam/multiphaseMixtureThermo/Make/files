@@ -1,0 +1,8 @@
+phaseModel/phaseModel.C
+alphaContactAngle/alphaContactAngleFvPatchScalarField.C
+multiphaseMixtureThermo.C
+pintleLimiter.C
+pintleThermos.C
+pintleTemperatureIncrement.C
+
+LIB = $(PINTLE_GPU_ROOT)/lib/libpintleMultiphaseThermo
