@@ -1,0 +1,12 @@
+bin/
+lib/
+logs/
+cases/
+benchmarks/
+**/Make/linux*/
+**/lnInclude/
+**/__pycache__/
+*.nsys-rep
+*.sqlite
+*.qdstrm
+research/
