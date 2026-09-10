@@ -1,0 +1,10 @@
+{
+  "input_sha256": {
+    "benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/p": "85f137fd63fce41dc8d637f85afbf6b812454ae762ac5d46a10fd13862323cc8",
+    "benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/p": "6c9294dea1a09d0351baeb0a6103bf2bf6920d12e7cdfd838e63e6e0487730fc",
+    "benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/p": "a2eaa996b93c17aca3af4901dea3c2002290ff80691c84e6a1875a777db39f8e",
+    "benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/p": "225c7c636af3aed2eceb12d6b9250b58ba400f6204616568299a32dde496b8fb"
+  },
+  "plot_tool_sha256": "bfd8c640e87da3be9db111c5e5168ad3c8d22de1b690eb36c2c77acb7d5a4ba1",
+  "scope": "PR wave error uses the linear small-amplitude solution; Sod plots pointwise Euler reference against finite-volume cell values."
+}

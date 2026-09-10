@@ -1,0 +1,3273 @@
+{
+  "canonical_runs": [
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": false,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": false,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.955295057179281,
+          "leftgoing_characteristic_ratio": 0.03322475227439855,
+          "phase_speed_relative_error": 0.03457691982298589,
+          "propagation_speed_measured": 240.45225801209102,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20001792564381907,
+        "eos_density_relative_error": 9.042773196910048e-10,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.08947710833856308,
+            "max_abs": 0.0020114559606554394
+          },
+          "U": {
+            "l1_normalized": 0.019201637569398362,
+            "max_abs": 0.001206516313988222
+          },
+          "p": {
+            "l1_normalized": 0.04419221911752538,
+            "max_abs": 13.838543153833598
+          },
+          "rho": {
+            "l1_normalized": 0.007390654628266171,
+            "max_abs": 7.559469022311305e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/T": "90d103593be6ecc34916a33d5494a478fce307445cae446d4c7e4e7daf43347b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/U": "6a90a4f03b127cfab2092db17f375451245025900f65fd24911a4ec66e054db1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/alpha.air": "cf3e1410bc0ac742c1d00bd5bef4a153c5c0b653e643fcc428f572808ab654a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/alpha.ipa": "8b41470caeca26e303d8d81e4b536495e4cbbca82289ea8e5fa348d59e4a3f11",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/alpha.n2o": "7123d2a84e220f3be727c59692407d026f8f85ca1555ca8ea010d3cd47617665",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/dgdt.air": "df924211a4a2bff4ee369aba4a6d77993f060f9455031e76a53912a44483d14e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/dgdt.ipa": "ef0c5cb195cdbfa918f931bf119f76aabd7280d027fc7f4346769ed067abff14",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/dgdt.n2o": "9e75dfc8495d33f208edfdf0401af69d3b6433dfe851efa6f296e432fd2f05c3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/p": "a78caa109fecadcd11717e707e55eeffa995344c97142a1875c0dc41e7d37f48",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527/rho": "6ffed54e632fec901a988ee78d70cb8ebff2f577bfa0df705a1aa516bdfcb3a2"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base/0.0010037575527",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 8.18601273238919e-05,
+        "min_T": 299.99404996449044,
+        "min_p": 1999808.9678103726,
+        "min_rho": 40.22615288384657,
+        "periodic_energy_drift": -1.1862288928909948e-11,
+        "periodic_mass_drift": 3.892441924335799e-13
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-n2o-m0-n80-base",
+      "delta_t": "1.0037575527035269e-05",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m0-n80-base",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": false,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": false,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9613155494000336,
+          "leftgoing_characteristic_ratio": 0.03334170812412557,
+          "phase_speed_relative_error": 0.03419970685721551,
+          "propagation_speed_measured": 240.54620823063593,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2000180354169918,
+        "eos_density_relative_error": 4.5487436040048124e-10,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.08859817446255645,
+            "max_abs": 0.00199472732782624
+          },
+          "U": {
+            "l1_normalized": 0.019118150672305153,
+            "max_abs": 0.0012001891145631358
+          },
+          "p": {
+            "l1_normalized": 0.04160280671498913,
+            "max_abs": 13.072490899357945
+          },
+          "rho": {
+            "l1_normalized": 0.009362892672912636,
+            "max_abs": 9.50757584519124e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/T": "99652abc6cd4160577f7eb0e9a2ecfd8bd08392f3be4a48b8f37ff39d0541cb2",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/U": "cab848dfe1215be29e8397e3804bee8b4636e7d94b581e2698da47f81636e43d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/alpha.air": "cf3e1410bc0ac742c1d00bd5bef4a153c5c0b653e643fcc428f572808ab654a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/alpha.ipa": "8b41470caeca26e303d8d81e4b536495e4cbbca82289ea8e5fa348d59e4a3f11",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/alpha.n2o": "7123d2a84e220f3be727c59692407d026f8f85ca1555ca8ea010d3cd47617665",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/dgdt.air": "9149540d55ccad6a88f74cace6249368f2afff7bf1e590363fd98d2c2cb4e280",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/dgdt.ipa": "f72b09093c6829d818b00ce87da64932949268024f1478f65a365adcf4a08340",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/dgdt.n2o": "796597f453c92bc8370d952899371c3505387156396f24614233f27c18618243",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/p": "225c7c636af3aed2eceb12d6b9250b58ba400f6204616568299a32dde496b8fb",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527/rho": "024185c5fe49ce218558f522aa8cc743cd0e33e79ff822b6d66bdf650cad7fc5"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base/0.0010037575527",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 8.238132962258445e-05,
+        "min_T": 299.9940233282933,
+        "min_p": 1999807.7377230609,
+        "min_rho": 40.22612883678389,
+        "periodic_energy_drift": -1.524080861514676e-11,
+        "periodic_mass_drift": 9.703349235223868e-14
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-n2o-m0-n160-base",
+      "delta_t": "5.0187877635176344e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m0-n160-base",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9625517680333868,
+          "leftgoing_characteristic_ratio": 0.0036196712343559475,
+          "phase_speed_relative_error": 0.005190989136333867,
+          "propagation_speed_measured": 725.3776513499105,
+          "sound_speed_reference": 347.22034625959066
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2000077963412485,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.023971540850605745,
+            "max_abs": 0.000645187902307498
+          },
+          "U": {
+            "l1_normalized": 0.012628513222812098,
+            "max_abs": 0.0009835564243871886
+          },
+          "p": {
+            "l1_normalized": 0.02437406740267761,
+            "max_abs": 7.663628798909485
+          },
+          "rho": {
+            "l1_normalized": 0.011062994024588584,
+            "max_abs": 5.76558985869724e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/T": "fdee57e6ae077454436469f3681137531fd5d34b7ce717c51c2bdaff6c705966",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/U": "bd439755d3c82635e2b28c2b2d003cf424ab1654b55545edb42c2e1f33a59bb8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/alpha.air": "8f27dc034f8d52b16bec6b32ff45065245136be7e3ab303342822bef28ee59ac",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/alpha.ipa": "09a88c38583bb933836a8efc6e56269dac72f807ff01339aaa371291f723b8a9",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/alpha.n2o": "247a44b3c04160fde9f2a53e95d4318c0e84f4d55a4af6814f1dcdd4477294bf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/dgdt.air": "8ca67e50ef50133cadf6e90d0776954108e50136ab5eb5312681fd78fd8ee2e4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/dgdt.ipa": "61394759bf67993b7386f0877684ee0e50a0512dbb3b76a7bc23795c9656480d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/dgdt.n2o": "880abadee260be9ee1419056797f060ba56ac95276d37ba37441ef3b8c01725a",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/p": "b42ff9d1aef08af2974c22813c2691062afc8e1fc26f62b67ac3d4c0c678a3ed",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246/rho": "27a9efee912cdae8daaa0c3250153ab94bfc59b4265462ded048233fbf1147bf"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base/0.000342858995246",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000539320488048,
+        "min_T": 299.9920069098672,
+        "min_p": 1999807.5857823652,
+        "min_rho": 23.222953657989567,
+        "periodic_energy_drift": 9.203748874142548e-13,
+        "periodic_mass_drift": 9.388045896230324e-13
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-air-m1.1-n80-base",
+      "delta_t": "3.4285899524625224e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-air-m1.1-n80-base",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9810320848638266,
+          "leftgoing_characteristic_ratio": 0.0017833823125223294,
+          "phase_speed_relative_error": 0.002184108421631268,
+          "propagation_speed_measured": 727.5701566920432,
+          "sound_speed_reference": 347.22034625959066
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20000797861098676,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.012173794406560051,
+            "max_abs": 0.0003278953046788047
+          },
+          "U": {
+            "l1_normalized": 0.006396147787121188,
+            "max_abs": 0.0004986966951037175
+          },
+          "p": {
+            "l1_normalized": 0.01226636258664803,
+            "max_abs": 3.8597093948628753
+          },
+          "rho": {
+            "l1_normalized": 0.005472334712714806,
+            "max_abs": 2.855983703398124e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/T": "e2d50e91f5dfb6d01c3ac7b24d3839ed237e9cf7204e84ffb30fcab5a875d2a5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/U": "6a612160f6184f4146fe8d0724bbc5fd302527489e875db95ac94611ab80a153",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/alpha.air": "8f27dc034f8d52b16bec6b32ff45065245136be7e3ab303342822bef28ee59ac",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/alpha.ipa": "09a88c38583bb933836a8efc6e56269dac72f807ff01339aaa371291f723b8a9",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/alpha.n2o": "247a44b3c04160fde9f2a53e95d4318c0e84f4d55a4af6814f1dcdd4477294bf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/dgdt.air": "d05c2fc2ab481af2268e9bce50fb214e64f2c12e92f556ef02df4b3f013a672c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/dgdt.ipa": "c095a1bd9dcf5ce123a51553c1545b6fae3fbf360c89f6d4e23ef38d08a455bc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/dgdt.n2o": "54d5744ebcc153234586767f6acba2947f4f9a6d441e5622d6c6048f45309642",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/p": "92724986716e2cc54af05b7f81049fcf780bd608b8ee92c307a46d60178f28ba",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246/rho": "88eeabe395bd585b592ba2289150324c0f791ec5a4cb49948ddc7103de2df330"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base/0.000342858995246",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000548119281752,
+        "min_T": 299.9917213678588,
+        "min_p": 1999803.8228887587,
+        "min_rho": 23.222933299973604,
+        "periodic_energy_drift": 2.4136248555350903e-13,
+        "periodic_mass_drift": 2.3514523661560816e-13
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-air-m1.1-n160-base",
+      "delta_t": "1.7142949762312612e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-air-m1.1-n160-base",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": false,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9519334221867504,
+          "leftgoing_characteristic_ratio": 0.023385213377290503,
+          "phase_speed_relative_error": 0.03169683477921002,
+          "propagation_speed_measured": 506.45612615486374,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2000083190282314,
+        "eos_density_relative_error": 8.826817055052061e-10,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.05102316229699015,
+            "max_abs": 0.001147369056639036
+          },
+          "U": {
+            "l1_normalized": 0.008223850009821888,
+            "max_abs": 0.0005151738312179077
+          },
+          "p": {
+            "l1_normalized": 0.04350669343085611,
+            "max_abs": 13.670720427995548
+          },
+          "rho": {
+            "l1_normalized": 0.00903978250078914,
+            "max_abs": 9.152534048695316e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/T": "37501253c17740392eca7fc5d7287bee1512b816b23415045fa04824f9db79ee",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/U": "e38bd3776b8090cb243e6e6c23b38c2aaee559ea29264f2735097b1a023741c3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/alpha.air": "100ee3086eb07e37f21a2acd4fa9f17e2490f2698cb1690f4c349c152d8721a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/alpha.ipa": "b2e7effa42611396071c7e85549ecb4b662419e5b2ee66beb3cc746053407206",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/alpha.n2o": "d96e2fd854c2746eb0275e441aa8e0495ff673174ce4778dea5ea7e5ba330c94",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/dgdt.air": "c2f60b6a8691decca7dede332cc59eaa5c749ce87b0ba58872e931f907fd8142",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/dgdt.ipa": "14eea26c7453bf7278f78ec7fb6fd6db0b39459150ceba44f18ddb021a393789",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/dgdt.n2o": "633b6492e93d9fa3790b600f2891800a3bf461cc2433282af1fa3a226c096079",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/p": "a7e03e42aaf7ff49616d8f1c5243c46a16c3d8f4abfbb63470290998d45fcb61",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002/rho": "f9aba7d20f0512825ea3f05973b710881dacebd65c8d0b19c0680f4d63f05fad"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base/0.000477979787002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000680882409442,
+        "min_T": 299.99358503767473,
+        "min_p": 1999809.627095598,
+        "min_rho": 40.226282526568106,
+        "periodic_energy_drift": 7.905676113750815e-12,
+        "periodic_mass_drift": 1.5556445021047693e-12
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-n2o-m1.1-n80-base",
+      "delta_t": "4.7797978700167946e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m1.1-n80-base",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": false,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.968592712835093,
+          "leftgoing_characteristic_ratio": 0.022653494011800092,
+          "phase_speed_relative_error": 0.028591554932145467,
+          "propagation_speed_measured": 508.0802951738842,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20000850787597932,
+        "eos_density_relative_error": 4.483335924732046e-10,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.04862354306209783,
+            "max_abs": 0.001094648831667655
+          },
+          "U": {
+            "l1_normalized": 0.0028397422466156642,
+            "max_abs": 0.00017878371454571607
+          },
+          "p": {
+            "l1_normalized": 0.03451719988365221,
+            "max_abs": 10.848648219602183
+          },
+          "rho": {
+            "l1_normalized": 0.003820718920767618,
+            "max_abs": 3.879308158616368e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/T": "78fd555f3232196f8aa43e0c843740f255c9dae8036f33b81050ae4bd9f81d62",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/U": "a903eabc1eda58c0ac4046c365cabdd84079f10fa011398ae57b16fd97d8e0d4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/alpha.air": "100ee3086eb07e37f21a2acd4fa9f17e2490f2698cb1690f4c349c152d8721a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/alpha.ipa": "b2e7effa42611396071c7e85549ecb4b662419e5b2ee66beb3cc746053407206",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/alpha.n2o": "d96e2fd854c2746eb0275e441aa8e0495ff673174ce4778dea5ea7e5ba330c94",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/dgdt.air": "59ffe142a6645531b84a2e175944fc8cf1d02f21f3bcba400d961d1e8a45b3e3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/dgdt.ipa": "ede4539244e57e233cf221f79e5184df95ad5f22028ed92fc5b173bd2ceab5f4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/dgdt.n2o": "92a177585a8b3453a9f07a6f19f24ec87bec9ea7f42e1c758a0ee89a5025e02c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/p": "4184c7700a442cf8fe0a7ba98f46cb4359b1a6df47fe1cad8f7f8f74fee9d5dc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002/rho": "90961547fb08b7f305edc7824cd49da1d076d4bba27f38c59f404747579105bc"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base/0.000477979787002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000692359060051,
+        "min_T": 299.99337063938566,
+        "min_p": 1999806.3037835937,
+        "min_rho": 40.22624437288562,
+        "periodic_energy_drift": 2.8068658508573208e-12,
+        "periodic_mass_drift": 3.89910326248355e-13
+      },
+      "case": "benchmarks/gas-final-waves/acoustic-n2o-m1.1-n160-base",
+      "delta_t": "2.3898989350083973e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m1.1-n160-base",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 3.753659412137718e-15,
+          "energyResidualMax": 5.962431044936118e-10,
+          "massResidualMax": 9.273397451969577e-16
+        },
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9874642480172472,
+          "leftgoing_characteristic_ratio": 0.0006422296894428992,
+          "phase_speed_relative_error": 0.0002888300772028304,
+          "propagation_speed_measured": 248.9921911995005,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20001795708200604,
+        "eos_density_relative_error": 1.2212453270876722e-15,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.0036438935439645622,
+            "max_abs": 8.270860752190856e-05
+          },
+          "U": {
+            "l1_normalized": 0.004226517750736379,
+            "max_abs": 0.0002673218674651423
+          },
+          "p": {
+            "l1_normalized": 0.008029900688983616,
+            "max_abs": 2.5134732213336974
+          },
+          "rho": {
+            "l1_normalized": 0.004181285128836254,
+            "max_abs": 4.211276160503985e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/T": "9696abf997d4483525e6c5df8fdbf2a0bd6c07b4b58e17f2e2aca684623a3fdc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/U": "8ad7c86d123e6b58dfba3cb6f6a00d47a763ad6203ac32093a007ab28541d8f3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/alpha.air": "cf3e1410bc0ac742c1d00bd5bef4a153c5c0b653e643fcc428f572808ab654a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/alpha.ipa": "8b41470caeca26e303d8d81e4b536495e4cbbca82289ea8e5fa348d59e4a3f11",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/alpha.n2o": "7123d2a84e220f3be727c59692407d026f8f85ca1555ca8ea010d3cd47617665",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/dgdt.air": "91e4a7e0e885e623cdef2e5c44c0ca34adf7f71c771606c89a8b0a0208e76a3e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/dgdt.ipa": "e19773c71a6285af94cd832c9c4b24ba2f120c1dc1b5aedb0ea607ab70c27fd8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/dgdt.n2o": "e5580df711f4b70cf396c6154238e593bf1adcf4e93d5b47e2a66c49fc9c3c3d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/e": "99e5fbac4f5c01e2478949c74e89483c064135ffce6ae4f3cb1b4331bfc67d54",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/gasSoundSpeed": "9fdb9a7cd281488f356c62737909ae128fe3f183db01eea8f953232fb57abd4c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/p": "87631aa2aa079da8a0b671d95fb19707efae4c68c7265ca59363796e057282b6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/phi": "3ddff0f04c6a4d7dc6ab43329770b38b81a900e9f986049cd3a1cbf7d7eb90e5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/rho": "f857388699c40f8edd340218ea451fb408d8234c8ce59b6cbf15bfdf0422d2a0",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527/rhoPhi": "bd3d5ae7b309bec625060fa1b49162d4670b9a0216fd8f98fb1925f2356241c1"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new/0.0010037575527",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 7.901502115578184e-05,
+        "min_T": 299.99291967927763,
+        "min_p": 1999802.6619729912,
+        "min_rho": 40.22625662892099,
+        "periodic_energy_drift": 3.8835601401387976e-13,
+        "periodic_mass_drift": -3.3306690738754696e-16
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-n2o-m0-n80-new",
+      "delta_t": "1.0037575527035269e-05",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m0-n80-new",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 9.750576821183143e-16,
+          "energyResidualMax": 2.989251210352584e-10,
+          "massResidualMax": 1.0486782095202097e-15
+        },
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9939499317805413,
+          "leftgoing_characteristic_ratio": 0.00028874096989093585,
+          "phase_speed_relative_error": 0.00011154835998198636,
+          "propagation_speed_measured": 249.09191110599247,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2000180897414502,
+        "eos_density_relative_error": 1.4432899320127035e-15,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.001615234033701484,
+            "max_abs": 3.7283937899701414e-05
+          },
+          "U": {
+            "l1_normalized": 0.0020833218580882168,
+            "max_abs": 0.000132013918885978
+          },
+          "p": {
+            "l1_normalized": 0.0038536618359066776,
+            "max_abs": 1.2142004750203341
+          },
+          "rho": {
+            "l1_normalized": 0.0020872488930764694,
+            "max_abs": 2.1110144423630572e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/T": "d7994c980679da697e9ed1686e774bee2f9264746fa0ca3609cc184e2100b438",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/U": "867ce07d64faba1edd650a90285f5f74aa5107668482079543f86a98d6241be6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/alpha.air": "cf3e1410bc0ac742c1d00bd5bef4a153c5c0b653e643fcc428f572808ab654a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/alpha.ipa": "8b41470caeca26e303d8d81e4b536495e4cbbca82289ea8e5fa348d59e4a3f11",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/alpha.n2o": "7123d2a84e220f3be727c59692407d026f8f85ca1555ca8ea010d3cd47617665",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/dgdt.air": "91e4a7e0e885e623cdef2e5c44c0ca34adf7f71c771606c89a8b0a0208e76a3e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/dgdt.ipa": "e19773c71a6285af94cd832c9c4b24ba2f120c1dc1b5aedb0ea607ab70c27fd8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/dgdt.n2o": "e5580df711f4b70cf396c6154238e593bf1adcf4e93d5b47e2a66c49fc9c3c3d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/e": "512abdd43c549b7ac333a15be48dcf522aa45506765a0163d855e423aebec6b3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/gasSoundSpeed": "a25286925c660c6d1f3d8b64ef3efb613954e4ebe90d50d054ee25d31fdf9bca",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/p": "85f137fd63fce41dc8d637f85afbf6b812454ae762ac5d46a10fd13862323cc8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/phi": "5ce43b2f1732874468e924c75b378871838ad77c6db5785798d96fc5b96eaf02",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/rho": "024549ca47a5bc329d485e053f7f24883b968b2d2f6b8089273b8dcddeaf8ea6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527/rhoPhi": "ba85331e7195aebdf9a203c2f4803fd3ea9bc95265d877da0cb9c9b984c2be02"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new/0.0010037575527",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 7.959881073178743e-05,
+        "min_T": 299.99286902392583,
+        "min_p": 1999801.2498097466,
+        "min_rho": 40.22623390271289,
+        "periodic_energy_drift": 1.9384494009955233e-13,
+        "periodic_mass_drift": -6.661338147750939e-16
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-n2o-m0-n160-new",
+      "delta_t": "5.0187877635176344e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m0-n160-new",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": false,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 2.1521360241432267e-16,
+          "energyResidualMax": 2.3312486743084455e-15,
+          "massResidualMax": 8.452602636272342e-16
+        },
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9460563002203518,
+          "leftgoing_characteristic_ratio": 0.005647154947030497,
+          "phase_speed_relative_error": 0.001064443073565702,
+          "propagation_speed_measured": 729.9388793595524,
+          "sound_speed_reference": 347.22034625959066
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2000077359767025,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.026445644344040845,
+            "max_abs": 0.0007112831013387222
+          },
+          "U": {
+            "l1_normalized": 0.014661623042536319,
+            "max_abs": 0.0011417742748562887
+          },
+          "p": {
+            "l1_normalized": 0.034351295955872045,
+            "max_abs": 10.795576724456623
+          },
+          "rho": {
+            "l1_normalized": 0.013628019875359165,
+            "max_abs": 7.09583485907217e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/T": "e6e11433474a696bce4d0a018fb62f839d5e794674d9437fd36fdd2138f1b15b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/U": "39041e3dbd2b99794826b8bf8bd3d274554d068cebcff9939821df124c471f9c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/alpha.air": "8f27dc034f8d52b16bec6b32ff45065245136be7e3ab303342822bef28ee59ac",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/alpha.ipa": "09a88c38583bb933836a8efc6e56269dac72f807ff01339aaa371291f723b8a9",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/alpha.n2o": "247a44b3c04160fde9f2a53e95d4318c0e84f4d55a4af6814f1dcdd4477294bf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/dgdt.air": "cde2a9046f303be6c0b05c489da674bf37a003e38f53943e5276de0a2a2c1093",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/dgdt.ipa": "e8a218e26f9b9ab2f73661178deebeb45ed7ac8ed0a4f04783443ff71429e3e4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/dgdt.n2o": "4e5c5d952e361ba672f94e8d4043f869c2c488f0111538968823c77c24fd3f5d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/e": "bf3cbc6f0bf2bf7d453b406b45365cd882ce8821365ed04b4de78f44fcaccbac",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/gasSoundSpeed": "7edf15788b345e0176fd284f54176654e0e4651ca918e541b68c5199a38a4709",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/p": "a677080fcf62178ddc3d3d4494c6ace23fc01f00e79d3d34e07e35e65814dca6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/phi": "4326efd4d4a8f4c81e941a2c20932b0a6daf9a4395e8e9921ee0055d7c224352",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/rho": "89484530d9b2fffbce7897ead4263797e9b4792a573e01040866d3515336a215",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246/rhoPhi": "b8c46de84ac908b0f7e9877f5dc38bd014ff197b8ede0a35e51546e366ad114c"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new/0.000342858995246",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.100053726677704,
+        "min_T": 299.99213379191707,
+        "min_p": 1999810.9258175988,
+        "min_rho": 23.222983935249694,
+        "periodic_energy_drift": 1.0880185641326534e-14,
+        "periodic_mass_drift": -2.220446049250313e-16
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-air-m1.1-n80-new",
+      "delta_t": "3.4285899524625224e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-air-m1.1-n80-new",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 6.956398671205936e-17,
+          "energyResidualMax": 1.2798523688363241e-15,
+          "massResidualMax": 6.929887974177975e-16
+        },
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9726620624876933,
+          "leftgoing_characteristic_ratio": 0.0028767577320058064,
+          "phase_speed_relative_error": 0.0009000864624816249,
+          "propagation_speed_measured": 729.81903664479,
+          "sound_speed_reference": 347.22034625959066
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20000794770328073,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.013465214698082586,
+            "max_abs": 0.00036262751569893226
+          },
+          "U": {
+            "l1_normalized": 0.007401470833905067,
+            "max_abs": 0.0005769043867189794
+          },
+          "p": {
+            "l1_normalized": 0.017426562968008513,
+            "max_abs": 5.47726512583904
+          },
+          "rho": {
+            "l1_normalized": 0.006878036583345503,
+            "max_abs": 3.585410905770914e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/T": "b39fcc17218e3e02037bcf411821e43f3c061d8787e9ff406e8278126248b025",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/U": "aa2ba3256731b14ffa37c5d42681a63ca787687d2c0a059b89c5aa18a4044568",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/alpha.air": "8f27dc034f8d52b16bec6b32ff45065245136be7e3ab303342822bef28ee59ac",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/alpha.ipa": "09a88c38583bb933836a8efc6e56269dac72f807ff01339aaa371291f723b8a9",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/alpha.n2o": "247a44b3c04160fde9f2a53e95d4318c0e84f4d55a4af6814f1dcdd4477294bf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/dgdt.air": "cde2a9046f303be6c0b05c489da674bf37a003e38f53943e5276de0a2a2c1093",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/dgdt.ipa": "e8a218e26f9b9ab2f73661178deebeb45ed7ac8ed0a4f04783443ff71429e3e4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/dgdt.n2o": "4e5c5d952e361ba672f94e8d4043f869c2c488f0111538968823c77c24fd3f5d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/e": "345f590a8e7ecb8abbfad579107eb24979a53c416d9fce899013af1232c3f9d9",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/gasSoundSpeed": "7623dc628f0eb3bcc388babafb8aa15c682e95b0696f6a59012ea4736c11753b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/p": "a21a476887a7718fd3df9dfac847ce7a9b98f8a068d509f528b952ec47632384",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/phi": "a51a24d6e0c12736e02b0e5cf70c001a1823d253fd0cc2d9da4328216ab9d2ff",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/rho": "d1d9c5bc4f49a61d29f0edaa129dca5633e992b12297f0b6d57c85d895547053",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246/rhoPhi": "2ac0dc5a6d289e35b60e8bf5f79ed0d7eae389fcce54f529d66fbf4d3ee0e7f8"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new/0.000342858995246",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000547127277027,
+        "min_T": 299.9917863106327,
+        "min_p": 1999805.5036473908,
+        "min_rho": 23.222948168341297,
+        "periodic_energy_drift": 1.1102230246251565e-15,
+        "periodic_mass_drift": -2.220446049250313e-16
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-air-m1.1-n160-new",
+      "delta_t": "1.7142949762312612e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-air-m1.1-n160-new",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": false,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 7.476261319814739e-16,
+          "energyResidualMax": 6.130171147514843e-10,
+          "massResidualMax": 1.0361426332566517e-15
+        },
+        "passed": false
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9489189986074441,
+          "leftgoing_characteristic_ratio": 0.004242787216680033,
+          "phase_speed_relative_error": 0.0009147653390497601,
+          "propagation_speed_measured": 523.5131236498986,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20000823159210834,
+        "eos_density_relative_error": 1.5543122344752192e-15,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.022444473816972232,
+            "max_abs": 0.0005046441580134342
+          },
+          "U": {
+            "l1_normalized": 0.014542443023502582,
+            "max_abs": 0.0009116357069274272
+          },
+          "p": {
+            "l1_normalized": 0.03252815880940761,
+            "max_abs": 10.221847055945545
+          },
+          "rho": {
+            "l1_normalized": 0.013718239198964277,
+            "max_abs": 0.00013879814691364345
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/T": "9b185be9240cf9d80283e02c90528e09166eae5b3203aadcdce78fa6d4513d75",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/U": "02f277d8dc6096711edbd2c4db9cf738f5fe4ebd1ff44527be060e4da491061c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/alpha.air": "100ee3086eb07e37f21a2acd4fa9f17e2490f2698cb1690f4c349c152d8721a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/alpha.ipa": "b2e7effa42611396071c7e85549ecb4b662419e5b2ee66beb3cc746053407206",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/alpha.n2o": "d96e2fd854c2746eb0275e441aa8e0495ff673174ce4778dea5ea7e5ba330c94",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/dgdt.air": "cff9fac56262b29bfcfec5db69c6ba555568f81e3eaf9a01889942338050f0ad",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/dgdt.ipa": "dd5fb1da14a059ea8820da22671f23e8107beb6b9de03aae2e5ee9c801e56667",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/dgdt.n2o": "a6b9b0e93904664d5dba805310e53d1b21b111edabfd9cb8eb2925f229841145",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/e": "1751282df286c0cdbcc35be72047bd55f39d6c5c4a2c62440ae788e5da67b462",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/gasSoundSpeed": "350542320516b6497904e018c3c2eafca7eb88260698c617e3572bc42780a32e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/p": "819235586f32a8baeee8f365ba10db5bc14b4b37870f99571e4e1c35794df829",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/phi": "af9be54f6edad12264701ee4c30e849618970ae311f4fcccab42865b98c5d3f3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/rho": "fed1c21f2dffa7a6cd28bbd9e57546c6d109a5fb16bba445d5e201af39b12c16",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002/rhoPhi": "1dca8649d49705f01a3243bd0e9ba276d880d7e966fd77da2c0d55fff9ba7c81"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new/0.000477979787002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.100065489282243,
+        "min_T": 299.99333391901007,
+        "min_p": 1999810.3555759026,
+        "min_rho": 40.226352872104734,
+        "periodic_energy_drift": 6.306066779870889e-14,
+        "periodic_mass_drift": -1.1102230246251565e-16
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n80-new",
+      "delta_t": "4.7797978700167946e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m1.1-n80-new",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "amplitude": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "leftgoing": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "periodic_energy": true,
+          "periodic_mass": true,
+          "phase_speed": true,
+          "positive": true,
+          "pressure_l1": true,
+          "pure_phase": true,
+          "supersonic_observed": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 2.1211236472692227e-16,
+          "energyResidualMax": 3.075440732136566e-10,
+          "massResidualMax": 5.830852906056522e-15
+        },
+        "passed": true
+      },
+      "analysis": {
+        "acoustic": {
+          "amplitude_ratio": 0.9742685415132415,
+          "leftgoing_characteristic_ratio": 0.002184498502233141,
+          "phase_speed_relative_error": 0.0010618245904412999,
+          "propagation_speed_measured": 523.5900407368711,
+          "sound_speed_reference": 249.06412841093788
+        },
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.20000844904517895,
+        "eos_density_relative_error": 1.3322676295501878e-15,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.011336045977742324,
+            "max_abs": 0.00025521669294903404
+          },
+          "U": {
+            "l1_normalized": 0.0073863169619976035,
+            "max_abs": 0.0004633201459114389
+          },
+          "p": {
+            "l1_normalized": 0.016413738233830372,
+            "max_abs": 5.1597153570037335
+          },
+          "rho": {
+            "l1_normalized": 0.00693107747874617,
+            "max_abs": 7.018686865478685e-05
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/T": "8ddf1415339b19a243af7a613fbbc5fed261caf3b2f831f1c3a5a7536beaafcf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/U": "4b396b6764c4d67fc0ffc872c469b93f77e6f792f0d48d23b8c5696af040ca84",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/alpha.air": "100ee3086eb07e37f21a2acd4fa9f17e2490f2698cb1690f4c349c152d8721a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/alpha.ipa": "b2e7effa42611396071c7e85549ecb4b662419e5b2ee66beb3cc746053407206",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/alpha.n2o": "d96e2fd854c2746eb0275e441aa8e0495ff673174ce4778dea5ea7e5ba330c94",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/dgdt.air": "cff9fac56262b29bfcfec5db69c6ba555568f81e3eaf9a01889942338050f0ad",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/dgdt.ipa": "dd5fb1da14a059ea8820da22671f23e8107beb6b9de03aae2e5ee9c801e56667",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/dgdt.n2o": "a6b9b0e93904664d5dba805310e53d1b21b111edabfd9cb8eb2925f229841145",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/e": "9fe19c0e8fc821e3902a4b2b82b71319da08fcada1069fa6445857e21f4247fc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/gasSoundSpeed": "c0e97ab5b30437fd31b0ebc6017060e29867220cc3054326fc1b2081b6cf72eb",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/p": "b98264ddad5a204f240631c53b5677fdadaae223a9b1ab0cda7c9c886fc185b2",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/phi": "843c34b173fb8d1cc4cbcd7ef47bb793e0b46e810b120cccf482e86a83b0d8d5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/rho": "afd4991efaabee87a93a444a6d9e11b5db99fbb42705c968cda4f3049148ef4a",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002/rhoPhi": "655233fe1d92a825df1ee883d01a96c3b7dc15497df6c5fa707bec4a930b608f"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new/0.000477979787002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000667914408062,
+        "min_T": 299.993082633419,
+        "min_p": 1999805.1817457424,
+        "min_rho": 40.22628295525973,
+        "periodic_energy_drift": 1.9095836023552692e-14,
+        "periodic_mass_drift": -1.199040866595169e-14
+      },
+      "case": "benchmarks/gas-final-release-waves/acoustic-n2o-m1.1-n160-new",
+      "delta_t": "2.3898989350083973e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "acoustic-n2o-m1.1-n160-new",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "T_l1": true,
+          "U_l1": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "mode_activated": true,
+          "p_l1": true,
+          "positive": true,
+          "pure_phase": true,
+          "rho_l1": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2773294275085657,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.046864462896928166,
+            "max_abs": 60.415578125864414
+          },
+          "U": {
+            "l1_normalized": 0.022443216361557716,
+            "max_abs": 71.45903927854232
+          },
+          "p": {
+            "l1_normalized": 0.013652615888671688,
+            "max_abs": 7829.441140576149
+          },
+          "rho": {
+            "l1_normalized": 0.017653440935349766,
+            "max_abs": 0.08399785288138417
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/T": "f95240b65dbce642540f0e6a1852da95f24db04c22ad8c61180cea1b640e6afe",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/U": "d9803b424acc77d2eddab318037a73566a86431d9574344ce2782a657125fdaf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/dgdt.air": "b1ff6f6347715b68c0716d4c1c7c0559804d3bc15c0918583a99afadf9b18b1c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/dgdt.ipa": "804e7c34eabf6900615d5feef2db4e7e23eabad8daa87bf374027f8f8302f07a",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/dgdt.n2o": "9d2ccbe0b73807561542ed6c7f9f746840b94dbfa2bf6dcebd27cb2dbcb1f3fc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/p": "384fba1f4b6d17b26ed048163b3edecc293e4c0c275153fe1f0df07d757fbd6e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/phi": "456d05e096a62aa917eb16b7d132e3a04d8bc59ccee108dcde5e455e74567b65",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/rho": "0991b6011d998f51d361cdc2006acda02e63e7c2dce103d8e7315d682853f037",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005/rhoPhi": "5a0deb7f3b35e49263ff2ff4d1513764f26bef503cf51bf4f76807059d4e60cb"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-base/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.9227818643507952,
+        "min_T": 251.11615374733617,
+        "min_p": 10000.000000000664,
+        "min_rho": 0.1250000000000061,
+        "p_star": 30313.017805064686,
+        "reference": "Exact ideal Euler Riemann solution; conserved cell averages from 128 midpoint samples/cell",
+        "u_star": 293.2862701245426
+      },
+      "case": "benchmarks/gas-final-shocks/sod-air-m0-n80-base",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "sod-air-m0-n80-base",
+      "outer": 8,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "T_l1": true,
+          "U_l1": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "p_l1": true,
+          "positive": true,
+          "pure_phase": true,
+          "rho_l1": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 1.0678608803912914e-09,
+          "energyResidualMax": 4.722460025709534e-06,
+          "massResidualMax": 3.193775048699684e-08
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2755785745156356,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.058751540677791085,
+            "max_abs": 60.940626060520685
+          },
+          "U": {
+            "l1_normalized": 0.026849467553089822,
+            "max_abs": 109.07577730812979
+          },
+          "p": {
+            "l1_normalized": 0.01613464778884565,
+            "max_abs": 8919.361599050433
+          },
+          "rho": {
+            "l1_normalized": 0.019513078454226562,
+            "max_abs": 0.08050593995569383
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/T": "bb7fa9d68e914d6668eeb1f5b70de59a8ece78ff60032f2a3f39a0dd6e9f6e2b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/U": "1671acf5f309d6607aaf50d61119b67f6eaa040b0b814408727ac1a68a4ca606",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/dgdt.air": "d6c873e85c517decf847e081337686812cefb5421fe5aa1d0fe2e4e5ce187b04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/dgdt.ipa": "171ce1d6c547620c7c64bd4bac783f38d5b87368781ac243a514f1d5d0bdf658",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/dgdt.n2o": "c799964a73026e74160a23b2a26243c24204ea0ebf8bb422c7b3cda426b21a1f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/e": "7aee2b75ccfff32b2bf9640081c57f358a765580cc17ba5f7b536e420247080e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/gasSoundSpeed": "1d0705717444abd3d8303ed84a1ccf250ce498021249c73b576aa5fef83c2a19",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/p": "a48b69bbf326b5afa0e68ded270fef916513e85bb697c1a5acf8b188b24642d6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/phi": "377c1dc14eaa282b1f9df36f427ecb6a1b5641eacdcd1f13163bcd46043e1218",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/rho": "95217aa06f1d46ffdfdd8f34123a0bf7b28a8d384acb53a5ec86ef837940cbc8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005/rhoPhi": "461af1284dfefdbe7afe6dcb4cfc5e797c5bab1f964d7f4cbe9fa3e85294f9ad"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n80-new/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.901514990841907,
+        "min_T": 255.21411853788194,
+        "min_p": 10000.000000001828,
+        "min_rho": 0.1250000000000162,
+        "p_star": 30313.017805064686,
+        "reference": "Exact ideal Euler Riemann solution; conserved cell averages from 128 midpoint samples/cell",
+        "u_star": 293.2862701245426
+      },
+      "case": "benchmarks/gas-final-shocks/sod-air-m0-n80-new",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "sod-air-m0-n80-new",
+      "outer": 8,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "T_l1": true,
+          "U_l1": true,
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "mode_activated": true,
+          "p_l1": true,
+          "positive": true,
+          "pure_phase": true,
+          "rho_l1": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.27781175127620616,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.029766657625447987,
+            "max_abs": 64.17853332379028
+          },
+          "U": {
+            "l1_normalized": 0.0118279286298778,
+            "max_abs": 82.9344388910405
+          },
+          "p": {
+            "l1_normalized": 0.007752982632779086,
+            "max_abs": 6418.0710019268445
+          },
+          "rho": {
+            "l1_normalized": 0.010816766921987143,
+            "max_abs": 0.0878354106549763
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/T": "1c3e56d43dc7d847e03c8646e4fe86f49f4aa2fef3db1e1ceeef9f59d9d28776",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/U": "b3ce17a08fbb59302d8a3ae544a7959789667eb768d9f1d13e8f85c51a83a6b7",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/dgdt.air": "97a862590d5a890237087932bfb2e588324d96c42cebaedfd6e159731e76b10f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/dgdt.ipa": "068f4d49869abd666d581e6e136ea8871340cf7f4e0d4ff50f5478b5ec98be4d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/dgdt.n2o": "fd5c1b498ab040e3b47bb708b30844172d14232c540a95a5934135c9b92e1c30",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/p": "6c9294dea1a09d0351baeb0a6103bf2bf6920d12e7cdfd838e63e6e0487730fc",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/phi": "6b402ab1188a75c6cdca9e5cd8980cd775fb9cb20b4a08e26d2da65ffe1ac6b5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/rho": "56d57626140668950d458f725baeb0d65a28f76f2e4ff81a7f6c59971e880263",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005/rhoPhi": "229dd00c6f08b03758cc9e4d6bba9ceb3bc49c42fdaf630f61027ebbd5a3e583"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-base/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.9257338263858794,
+        "min_T": 249.61172684780416,
+        "min_p": 9999.999999999989,
+        "min_rho": 0.1249999999999999,
+        "p_star": 30313.017805064686,
+        "reference": "Exact ideal Euler Riemann solution; conserved cell averages from 128 midpoint samples/cell",
+        "u_star": 293.2862701245426
+      },
+      "case": "benchmarks/gas-final-shocks/sod-air-m0-n160-base",
+      "delta_t": "2.5000000000000002e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "sod-air-m0-n160-base",
+      "outer": 8,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "T_l1": true,
+          "U_l1": true,
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "p_l1": true,
+          "positive": true,
+          "pure_phase": true,
+          "rho_l1": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 5.339673868896272e-10,
+          "energyResidualMax": 4.722458919947399e-06,
+          "massResidualMax": 3.195337956834587e-08
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2772626595716521,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.037515455455936104,
+            "max_abs": 65.49747260843361
+          },
+          "U": {
+            "l1_normalized": 0.014747739576332033,
+            "max_abs": 126.39596265342968
+          },
+          "p": {
+            "l1_normalized": 0.009440046528182611,
+            "max_abs": 7148.222954405617
+          },
+          "rho": {
+            "l1_normalized": 0.012507603779833678,
+            "max_abs": 0.08532676099507758
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/T": "0ba4eb545239b92f713a5c7f4e29b6e45411ef40406f0d19d0ecfa7bde7a1d42",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/U": "46a1c0d9d13b15839bd33acb315085e0e38440969ea1e1d7fc772b51d22bca69",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/dgdt.air": "d6c873e85c517decf847e081337686812cefb5421fe5aa1d0fe2e4e5ce187b04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/dgdt.ipa": "171ce1d6c547620c7c64bd4bac783f38d5b87368781ac243a514f1d5d0bdf658",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/dgdt.n2o": "c799964a73026e74160a23b2a26243c24204ea0ebf8bb422c7b3cda426b21a1f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/e": "d1b43b71b0a77a1c68de46d28223699a05171bffb406eabaebbc8049ce976405",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/gasSoundSpeed": "ea7be6fb7e90b6702b5e2f8d48c4c0ff8a022861f6c85e28627d42ccad30af95",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/p": "a2eaa996b93c17aca3af4901dea3c2002290ff80691c84e6a1875a777db39f8e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/phi": "c19aac43e2b9044a2d5723f8f658a284e6fbe8392ecd5c176a41e737618eed88",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/rho": "d3260b2f88160b2f2d6a305e438b30daf083b53b9a4e57dea2905ff467b7ef40",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005/rhoPhi": "38ec61ee3aa306e5fe1d2668193741ecb449f777efbbf9d754e5196248cd3e85"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/sod-air-m0-n160-new/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.921726527615259,
+        "min_T": 250.7490486865874,
+        "min_p": 9999.999999999982,
+        "min_rho": 0.12499999999999986,
+        "p_star": 30313.017805064686,
+        "reference": "Exact ideal Euler Riemann solution; conserved cell averages from 128 midpoint samples/cell",
+        "u_star": 293.2862701245426
+      },
+      "case": "benchmarks/gas-final-shocks/sod-air-m0-n160-new",
+      "delta_t": "2.5000000000000002e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "sod-air-m0-n160-new",
+      "outer": 8,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "axial_cfl": true,
+          "completed": true,
+          "density_ratio_relative_error": true,
+          "eos_agreement": true,
+          "front_error_cells": true,
+          "mass_flux_relative_jump": true,
+          "mode_activated": true,
+          "positive": true,
+          "pressure_ratio_relative_error": true,
+          "profile_l1": true,
+          "pure_phase": true,
+          "stagnation_enthalpy_relative_jump": true,
+          "supersonic_observed": true,
+          "temperature_ratio_relative_error": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.29166509085805864,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.03765604799139726,
+            "max_abs": 10.899585393655741
+          },
+          "U": {
+            "l1_normalized": 0.029807221700519217,
+            "max_abs": 25.07647822990765
+          },
+          "p": {
+            "l1_normalized": 0.029767214315710677,
+            "max_abs": 10866.688162129343
+          },
+          "rho": {
+            "l1_normalized": 0.03309538435155214,
+            "max_abs": 0.0950424994150254
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/T": "019480e4237c4aa018f652f4c3951f95f9ab43e4d134db85d571132abd0e9b3d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/U": "64559c337014e518f7f02e6b9ea88742235dc2889cebd1eef59d1dda7be53725",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/dgdt.air": "6ca8e652042e585f0646abd945b7717e85ebaf349883ee66b5ad611f1f5288ab",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/dgdt.ipa": "d656fe80be65b5c15c15278d3e6a200746a408e3be10233387ee9a391268f637",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/dgdt.n2o": "826d9b4046e51af568785a93f83fa28a5fb9ec7a6e36e4e9158f2885b06293a6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/p": "6957631c8cdc462538202e9cd2cc53ba1f962883d8820b0a91ada3d4ded5fcc1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/phi": "833dfcbb1feb17d0d063a90fba9e0a4aaabee04227bcd9c650c115611a5a07eb",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/rho": "52f4f34113d6262b02337373c64bd92be0457f5a796986b0d2039e440663fd86",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005/rhoPhi": "671df8940ecce21dd97991723d3d093cff2c33a3ed4de97f86144275a3a9ce1c"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000000000000227,
+        "min_T": 299.9999999999984,
+        "min_p": 99999.99999999857,
+        "min_rho": 1.1612285476731388,
+        "normal_shock": {
+          "density_ratio_relative_error": 0.0003087238147343463,
+          "front_error_cells": 0.0,
+          "mass_flux_relative_jump": 0.0005911220468843847,
+          "pressure_ratio_relative_error": 0.0003432071117721591,
+          "stagnation_enthalpy_relative_jump": 0.00011006552436843009,
+          "temperature_ratio_relative_error": 3.447783198651244e-05
+        }
+      },
+      "case": "benchmarks/gas-final-shocks/normal-shock-air-m0-n80-base",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "normal-shock-air-m0-n80-base",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "density_ratio_relative_error": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "front_error_cells": true,
+          "mass_flux_relative_jump": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "positive": true,
+          "pressure_ratio_relative_error": true,
+          "profile_l1": true,
+          "pure_phase": true,
+          "stagnation_enthalpy_relative_jump": true,
+          "supersonic_observed": true,
+          "temperature_ratio_relative_error": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 1.0423960492326145e-08,
+          "energyResidualMax": 4.757336149161972e-06,
+          "massResidualMax": 1.6307727920662334e-07
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2916650908580586,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.0396965919006717,
+            "max_abs": 10.408596122637618
+          },
+          "U": {
+            "l1_normalized": 0.03654228448720306,
+            "max_abs": 25.719062666729712
+          },
+          "p": {
+            "l1_normalized": 0.036758019944555964,
+            "max_abs": 11126.217677667388
+          },
+          "rho": {
+            "l1_normalized": 0.03758616308791424,
+            "max_abs": 0.0886775161390152
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/T": "a02b31122c72721ebd8554a174e62bda80abf43cdb4df6bc5cad1fd4e5143b21",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/U": "28ce3d944ae95ec96894cf7f70e73d5a29f69059e547f39127ff9fa8e78c047b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/dgdt.air": "d6c873e85c517decf847e081337686812cefb5421fe5aa1d0fe2e4e5ce187b04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/dgdt.ipa": "171ce1d6c547620c7c64bd4bac783f38d5b87368781ac243a514f1d5d0bdf658",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/dgdt.n2o": "c799964a73026e74160a23b2a26243c24204ea0ebf8bb422c7b3cda426b21a1f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/e": "39f79dc45e42cc50d57b4401aafb33b191eb5c5f09d5abcdf7583a5d1814c14b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/gasSoundSpeed": "6b9c9808e913f1e697ea2d8e32832516658661b5f556661d6fa9ca2583a84e9f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/p": "76117dc8f34e81482111ee2138e596940eee27a5a35ed91a32016f5a67e79a50",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/phi": "36207ef6cd297daf99300c097e5819726d6628bdcba38ad414d799766c925e1e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/rho": "210af56b4403d12696dc2862c7f8a54f3dd668450f80ef1fdf4594533323c41e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005/rhoPhi": "0297aeefda8de021fe8a4e8304ba767598e383a6329f0e18e2e44c3cdeb6a291"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.1000000000000265,
+        "min_T": 299.9999999999974,
+        "min_p": 99999.99999999799,
+        "min_rho": 1.1612285476731354,
+        "normal_shock": {
+          "density_ratio_relative_error": 0.00038751683232185474,
+          "front_error_cells": 0.0,
+          "mass_flux_relative_jump": 0.0008652656466683339,
+          "pressure_ratio_relative_error": 0.0006114054316846973,
+          "stagnation_enthalpy_relative_jump": 0.00032831037304459354,
+          "temperature_ratio_relative_error": 0.00022399857387933597
+        }
+      },
+      "case": "benchmarks/gas-final-shocks/normal-shock-air-m0-n80-new",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "normal-shock-air-m0-n80-new",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "axial_cfl": true,
+          "completed": true,
+          "density_ratio_relative_error": true,
+          "eos_agreement": true,
+          "front_error_cells": true,
+          "mass_flux_relative_jump": true,
+          "mode_activated": true,
+          "positive": true,
+          "pressure_ratio_relative_error": true,
+          "profile_l1": true,
+          "pure_phase": true,
+          "stagnation_enthalpy_relative_jump": true,
+          "supersonic_observed": true,
+          "temperature_ratio_relative_error": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2916650908580556,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.02378842383102602,
+            "max_abs": 10.733725310485909
+          },
+          "U": {
+            "l1_normalized": 0.019652994466704904,
+            "max_abs": 26.040210831396564
+          },
+          "p": {
+            "l1_normalized": 0.01964283076634033,
+            "max_abs": 11163.076304786358
+          },
+          "rho": {
+            "l1_normalized": 0.021272892925054472,
+            "max_abs": 0.09515151538863709
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/T": "c26421e33b6672c18ec7d3595ef03a87fd07141e6e276a9cafeace09b80940c8",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/U": "802ca839774d8e25f8855621b120da78cbbb34c6fd434a8ecefeb159afb7509f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/dgdt.air": "c788cfc97b3df479d3b5997f344b64593a8369ccebcf67f52d59fbd51543be96",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/dgdt.ipa": "5809b302025a56f57bbc711b9c235c32a1fe8db91ef2d75870adbade3d8e678e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/dgdt.n2o": "4c7d98c3e33b2c496231e77f37f246aac5f80097c3c11e3576521022eb387eb6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/p": "f3614e0762d8f3cdae0562e0f3a2b627eb18ee56d4b4bbb93d29ea841000d8b1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/phi": "b5052647ae76a2db5441ebfd9f84f00af998d918439ea666a119da2d87b7c586",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/rho": "063706f5eab70022297a64f338157a1cbf37a48f502a1ff4e351a48869123d26",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005/rhoPhi": "674942954da463321bc3326ebb577f89cffed1e67958b5a74b9ec6ea43f709fc"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.099999999999993,
+        "min_T": 300.0000000000008,
+        "min_p": 100000.00000000058,
+        "min_rho": 1.1612285476731505,
+        "normal_shock": {
+          "density_ratio_relative_error": 0.00010795373405891873,
+          "front_error_cells": 0.0,
+          "mass_flux_relative_jump": 0.0002211898964996628,
+          "pressure_ratio_relative_error": 0.00014370681841513466,
+          "stagnation_enthalpy_relative_jump": 6.292901745852397e-05,
+          "temperature_ratio_relative_error": 3.574192633948314e-05
+        }
+      },
+      "case": "benchmarks/gas-final-shocks/normal-shock-air-m0-n160-base",
+      "delta_t": "2.5000000000000002e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "normal-shock-air-m0-n160-base",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "density_ratio_relative_error": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "front_error_cells": true,
+          "mass_flux_relative_jump": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "positive": true,
+          "pressure_ratio_relative_error": true,
+          "profile_l1": true,
+          "pure_phase": true,
+          "stagnation_enthalpy_relative_jump": true,
+          "supersonic_observed": true,
+          "temperature_ratio_relative_error": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 5.210278603699441e-09,
+          "energyResidualMax": 4.757336071776624e-06,
+          "massResidualMax": 1.6307727959026558e-07
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.2916650908580556,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.025981780930267116,
+            "max_abs": 10.356596274004517
+          },
+          "U": {
+            "l1_normalized": 0.024461626112000895,
+            "max_abs": 26.601840741365493
+          },
+          "p": {
+            "l1_normalized": 0.024541759011885145,
+            "max_abs": 11436.563518560492
+          },
+          "rho": {
+            "l1_normalized": 0.02523115076138077,
+            "max_abs": 0.09022442082706505
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/T": "041da72e1a8c1be1db679a676185f0a117d449b057ced2251e8146a44f116c0b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/U": "857a39b80d3b4f2045125c0c3137f92dc6566fe48da26946e368aec3557c2b4f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/dgdt.air": "d6c873e85c517decf847e081337686812cefb5421fe5aa1d0fe2e4e5ce187b04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/dgdt.ipa": "171ce1d6c547620c7c64bd4bac783f38d5b87368781ac243a514f1d5d0bdf658",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/dgdt.n2o": "c799964a73026e74160a23b2a26243c24204ea0ebf8bb422c7b3cda426b21a1f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/e": "d37a5947b371464b95e496155492344b61483ea4698f311db7c514e967d53960",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/gasSoundSpeed": "7315b9be7fd2c491ff47930c5e303567b30d0499fd40fc8fbdb3c135ee68c1da",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/p": "8d5191c5491dfb981f9532f670fbf487b32f7c94926a409a5ab890e299609f80",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/phi": "ee3ecb79ed528113ad402b6febab6322d30036ac6cda283d8a8ee5f032881fcf",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/rho": "5ceabc0a5f3d0c78004f2443fc382db1c1787809c9e6a210e54d6d4ba0c6dd50",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005/rhoPhi": "f2b28ab572d113b5d644b9e14382028f9acacd2e6ca9138a33ae1c8536c1c8c2"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 1.099999999999995,
+        "min_T": 300.0000000000002,
+        "min_p": 100000.00000000048,
+        "min_rho": 1.1612285476731536,
+        "normal_shock": {
+          "density_ratio_relative_error": 0.00024970648615307844,
+          "front_error_cells": 0.0,
+          "mass_flux_relative_jump": 0.0005288707944642868,
+          "pressure_ratio_relative_error": 0.0003568884710496434,
+          "stagnation_enthalpy_relative_jump": 0.0001715494205793977,
+          "temperature_ratio_relative_error": 0.00010722462395207355
+        }
+      },
+      "case": "benchmarks/gas-final-shocks/normal-shock-air-m0-n160-new",
+      "delta_t": "2.5000000000000002e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "normal-shock-air-m0-n160-new",
+      "outer": 4,
+      "steps": 200
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "front": true,
+          "l1": true,
+          "mode_activated": true,
+          "positive": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.16611004453378386,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.013786795762297304,
+            "max_abs": 6.1856886862146325
+          },
+          "U": {
+            "l1_normalized": 0.01394797804207605,
+            "max_abs": 19.120322329637908
+          },
+          "p": {
+            "l1_normalized": 0.013335697778912112,
+            "max_abs": 8839.730887879312
+          },
+          "rho": {
+            "l1_normalized": 0.013786937690151966,
+            "max_abs": 0.07148941881587012
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/T": "d8873b5b4e7d353ad15215fc7b43fb0cfae6b38f52ceb1671adf033d638d75f5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/U": "6344a99375d74e64c9a83ba6f3741b1570caf9d86f70fc7e3571a287d1be61b4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/dgdt.air": "a35f3f1e8d50bd144088e6127a9b67ced826aefc5c702a902413e1702fd10e63",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/dgdt.ipa": "9d81672e57a27d49d8e590defbc4d8be6cea70ba9cc671badbc926ddcb1f4a94",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/dgdt.n2o": "e903b76c996e1e0991eac5224338b477ac417e32d23e3e169422acd97be29dc1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/p": "bacffb8000571709cb63a8f156b150f491b3107c923d723245c11e509d45f82b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/phi": "1cc164ef5bd1c444c6347c90ec985f927d8e24436caae962226294656baaedf0",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/rho": "505ac8600581482331a5b0b867a47d8c75abecb2be572ec7b2d8fa53abcb9786",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005/rhoPhi": "f4f8c41f23c37312b757301d9d7ff2b4907b83b02af17b348db4e7ae31e6f392"
+        },
+        "exact_shock_position": 0.4409711904427749,
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.15779009014047754,
+        "min_T": 299.99999999999994,
+        "min_p": 99999.99999999997,
+        "min_rho": 1.1612285476731479,
+        "reference": "Normal-shock Rankine-Hugoniot jump, travelling wave; exact piecewise cell averages",
+        "shock_position": 0.4375
+      },
+      "case": "benchmarks/gas-final-shocks/weak-shock-air-m0-n80-base",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "weak-shock-air-m0-n80-base",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "front": true,
+          "l1": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "positive": true,
+          "pure_phase": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 1.0027777644336772e-09,
+          "energyResidualMax": 1.2044307905155634e-07,
+          "massResidualMax": 1.1010057332040726e-09
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.1659027153336794,
+        "eos_density_relative_error": 0.0,
+        "errors": {
+          "T": {
+            "l1_normalized": 0.014189478574592138,
+            "max_abs": 6.116528128733535
+          },
+          "U": {
+            "l1_normalized": 0.014485308902564262,
+            "max_abs": 18.656391657993375
+          },
+          "p": {
+            "l1_normalized": 0.013836613319603643,
+            "max_abs": 8508.83455062205
+          },
+          "rho": {
+            "l1_normalized": 0.014105226895219031,
+            "max_abs": 0.0680946775997966
+          }
+        },
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/T": "37db73476b575fe96653aa6077bd721023360a32092f954a67da74eabd3e3dc6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/U": "667bbeaa2c76c3288a9860dc65223decd79533195a415056c40a253702916ec4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/alpha.air": "bd8723f0986c8d501270c2e889735df49eb3658dc0516f147bdf949c4edf06f6",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/alpha.ipa": "f50d04b60630234cf6f5705c32ee5839fb8b268dc20c62bf46487a681faed45c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/alpha.n2o": "88ca083aa746b5351a741a3df7006c3c01d9cd5ce3a6cdf8abcef4c68d0d0003",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/dgdt.air": "d6c873e85c517decf847e081337686812cefb5421fe5aa1d0fe2e4e5ce187b04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/dgdt.ipa": "171ce1d6c547620c7c64bd4bac783f38d5b87368781ac243a514f1d5d0bdf658",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/dgdt.n2o": "c799964a73026e74160a23b2a26243c24204ea0ebf8bb422c7b3cda426b21a1f",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/e": "1c18f6d803721cedc60e25286126f7ff572fbfb38f687e650970fee3fc952e1a",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/gasSoundSpeed": "13212082c7f0afbcc9d24135e1a036d29e84356b33252d4085f99ff6fb98cb64",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/p": "23c2b36bf19861f17c3f5074aa050789a8effbdccd1b31be48dea9bdd050c1c5",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/phi": "bd58c8a111b4e457424d5e31b05c14d473524c6a0158f5b68973f068999a71a1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/rho": "fd32ef283870b28e8eaadcef4cafe4eab63711be3572fe88807284a7c5e7c07d",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005/rhoPhi": "942f282ed4ecb54bb47af9059a07f73b940ecd46bd12c8f8e47073dad7a58c24"
+        },
+        "exact_shock_position": 0.4409711904427749,
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new/0.0005",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 0.15675825031616497,
+        "min_T": 299.9999999999992,
+        "min_p": 99999.9999999999,
+        "min_rho": 1.1612285476731457,
+        "reference": "Normal-shock Rankine-Hugoniot jump, travelling wave; exact piecewise cell averages",
+        "shock_position": 0.4375
+      },
+      "case": "benchmarks/gas-final-shocks/weak-shock-air-m0-n80-new",
+      "delta_t": "5.0000000000000004e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "weak-shock-air-m0-n80-new",
+      "outer": 4,
+      "steps": 100
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Final state only; legacy log lacks EOS signal speed",
+        "checks": {
+          "axial_cfl": true,
+          "completed": true,
+          "eos_agreement": true,
+          "mass_flow": true,
+          "mode_activated": true,
+          "positive": true,
+          "pure_phase": true,
+          "station_spread": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {},
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.1971251759417874,
+        "eos_density_relative_error": 2.220446049250313e-16,
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/T": "8fabe1ba7316b62f7fdf44bd3796043a34b99738cf1d3af105a35a316e0ed287",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/U": "9b107439d3e5209084d687e2e66818beae7850cfc62e2da08717ae7132d572e3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/alpha.air": "2c4d172d76fe4b3108c8bdd8d1da634da6a22d46d60073a767ee62963d3f8273",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/alpha.ipa": "84ee577df0b0e6d66135baf18208ed00c6c2d1af19694a72aa21a71033b11616",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/alpha.n2o": "38002a37ac62bc4c921c70bf63cb60d2ef23f7cdabff5df845c779ab35619cc4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/dgdt.air": "93c5f53d66c818b9da4021605a221be5084bf499531cf62f7d9a36541e57ea5b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/dgdt.ipa": "ea8f59bd421d7842014581132475264d3e19f407f0d7a5a9ab2170c9b485f344",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/dgdt.n2o": "98258900b03a087ad0850e249bfea028f755f7987fc3a7e151a07faa166a629b",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/p": "31ddfd5058300a54533a1083cf1c8d924163e56790e239200c6f7164fb977307",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/phi": "dc9b9a287bfac77f0661a29e2bcb644994663627f078ff707c629bd4a89af2db",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/rho": "5af02cb83751d7398d45c2e310a917773a0e40eda7d70dffc59eb78eb8be8e04",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002/rhoPhi": "8cf55ed3ca8d340ab7d771632fc743b59273b38e871b5c05b9c0eacd22e48d4c"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base/0.002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 2.126762996080155,
+        "min_T": 158.22537850826413,
+        "min_p": 20032.282950923483,
+        "min_rho": 0.4410057360059659,
+        "nozzle": {
+          "choked_mass_flow_relative_error": 0.02930646593964692,
+          "isentropic_choked_mass_flow_per_depth": 0.4666691879740654,
+          "mass_flux_relative_spread": 0.03586836245167311,
+          "mean_mass_flow_per_depth": 0.48034561263651004
+        }
+      },
+      "case": "benchmarks/gas-final-nozzle/nozzle-air-m0-n80-base",
+      "delta_t": "3.1250000000000001e-06",
+      "executable_sha256": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "nozzle-air-m0-n80-base",
+      "outer": 4,
+      "steps": 640
+    },
+    {
+      "acceptance": {
+        "axial_cfl_scope": "Maximum over every step",
+        "checks": {
+          "axial_cfl": true,
+          "balance_records": true,
+          "completed": true,
+          "energy_budget": true,
+          "eos_agreement": true,
+          "mass_flow": true,
+          "mode_activated": true,
+          "nonlinear_energy": true,
+          "nonlinear_mass": true,
+          "positive": true,
+          "pure_phase": true,
+          "station_spread": true
+        },
+        "criteria": "Engineering validation thresholds, not certification of arbitrary supersonic or multiphase flow.",
+        "gas_residual_maxima": {
+          "energyBalanceRelative": 2.382879417996515e-09,
+          "energyResidualMax": 2.023575806269646e-06,
+          "massResidualMax": 5.612040334981888e-08
+        },
+        "passed": true
+      },
+      "analysis": {
+        "active_alpha_max_abs_error": 0.0,
+        "axial_characteristic_cfl_final": 0.19613894512807942,
+        "eos_density_relative_error": 0.0,
+        "evidence_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/T": "fd9598c8c2b8d0477119314fc1e79a198772321f0fde337028b301f0cc29fb8c",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/U": "08adb8dee104505899134f32d3f41c74d1b38c21650ccac19663e7f85edcb577",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/alpha.air": "2c4d172d76fe4b3108c8bdd8d1da634da6a22d46d60073a767ee62963d3f8273",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/alpha.ipa": "84ee577df0b0e6d66135baf18208ed00c6c2d1af19694a72aa21a71033b11616",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/alpha.n2o": "38002a37ac62bc4c921c70bf63cb60d2ef23f7cdabff5df845c779ab35619cc4",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/dgdt.air": "52b8a45470669876418f5ed699540057c1ecc36094f2a7f87dacf7a0e00295e0",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/dgdt.ipa": "a85e026a7c279d15270e6ffff84b6fba024674a45ec81b227c92a5dcf31c6d2e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/dgdt.n2o": "d85a1ce7aae34785106a3c9766d4f72f3b4665adeac5971dae52c223682b1f14",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/e": "11cc5458702cc260d52382c179f99a7bf00d6e46a20cbcf345a219f4b5775160",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/gasSoundSpeed": "87ea636f6e94114e86167b9ee3ff91e40b9041f19eca9bd54ef46747614a5d51",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/p": "e017a080554168838277bccb6a9970902faafc03654c874fdb7f9ca3ff389e25",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/phi": "5d01c0cb5276dcac5077fd0467f228d49cf8011fc06971af887c7f4fd60cc8e2",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/rho": "71e5c3ac24ebc05fae47275ced91c6784d24d044f1077411752fe7a5122d5562",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002/rhoPhi": "7878d3beaf0b1fe98790d2f8c0015e69d9332aadeae936ad95c19cba4e0b09eb"
+        },
+        "final_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new/0.002",
+        "inactive_alpha_max_abs": 0.0,
+        "max_mach_eos": 2.0864549851144916,
+        "min_T": 160.78246459643583,
+        "min_p": 20754.326874067403,
+        "min_rho": 0.44968554713474695,
+        "nozzle": {
+          "choked_mass_flow_relative_error": 0.02877416604283911,
+          "isentropic_choked_mass_flow_per_depth": 0.4666691879740654,
+          "mass_flux_relative_spread": 0.035099881188695385,
+          "mean_mass_flow_per_depth": 0.4800972046759081
+        }
+      },
+      "case": "benchmarks/gas-final-nozzle/nozzle-air-m0-n80-new",
+      "delta_t": "3.1250000000000001e-06",
+      "executable_sha256": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+      "library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa",
+      "name": "nozzle-air-m0-n80-new",
+      "outer": 4,
+      "steps": 640
+    }
+  ],
+  "collection_tool_sha256": "804f36333f2ceba5133a7d12ac6566a9f8fce50b15458081a687e70d39b53704",
+  "current_binary_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "7413bc171acaa2cd4f69b9722ceb8fbcb449f2c6a0c45712c562905ae531abae",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa"
+  },
+  "current_source_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/TEqn.H": "05b63d0213c53bd780c9cef3268f7a7ea644952bd9ef4bcb86dd3024a8f8d0d3",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/UEqn.H": "0a7cb5758c2fd36ea38ab21e4b4392527d2e922f7547d6e18a26d57942ad9c4e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/checkState.H": "7b7285c81d8d90947cf7f797ade201af46bf229a35370610cd6d18ec9ef419db",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/compressibleMultiphaseInterFoam.C": "57307f4348216306aae521f6c307ec7bdf9fa431294f15e3e8aaa177b436f52d",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/createFields.H": "cad42c39946c61fd32b87ca65a2da1044e15654dd1f2e0e5294d6eacc95a0ee8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.C": "592691e416251471ff0eec91d6d2d5cc926c7df7ea37548cb93607070c952d68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.H": "039e8a137468d886fcf16a11e196e2303b2d5fcf5baeade03b04520834da7ed4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.C": "bc633651a1856985bb4cc51cbbaf1d333158d8d08ae2b0669e955194a4c18ac1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.H": "7628fb42b6c8065222922d448232ea92c75b1e12faa2dd04675786f9c8854427",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.C": "95ec1bd7c805bf5894fa79e6b23526629a8befccd86fe209766f913ebbda93f8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.H": "647dbc9b8d532c2d13dc0654a88a3d153fece8070429ca1edeb3821f2d5f1e42",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.C": "a3ee73c868eb52ff49e262c6695a8352636121b2f8844fae54a252838abf87ed",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.H": "74cec3e43f7487dd5b56292fd291d009d7f8b169fa9a80bc6887c5455b7cc671",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleIpa.H": "ff47d00d9f868bb9c30130ed25ccf63d41e1b6714616b231ecc238499ebcdf30",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.C": "21caa1a495d56128b2fb97602e0ba4fe66f6348dbae6ec235390106b632311b1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.H": "9d8071ca2367551e03201b6a98d372abf08eca7d4ecf779b65059f5f373b8448",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.C": "95fdff735e737f60fd2c5591356e24bce7c8a820559b17fb8b2a753cfb516b3f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.H": "1a0f089a4cd72b53f5e0c6072e28ba816770d203d611f126cf85e914470fbf3a",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGasI.H": "6d365080fb620e8f1cca8cb8765a35686d6f405c2e7a4a22ee02ed80ea8c6d73",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleTemperatureIncrement.C": "ad0a45329926bd100399c04aebfd32338c6db5713b545186a94b3625eb427532",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleThermos.C": "550ddb603324a8af44158f8a350f7ff0b9e388a49929eaab3f8fbf9a23122a78",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pEqn.H": "2df0af602d8c1d1d12a8dfc5151f4759bf3fa9eb3b309b95f91f6986abb5b2cf",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pintleGasBalance.H": "8dcd8e89aa8c48f8664a26c6f6cf2d3071496594e2e7a5524a0519258cc0ede2",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pintleGasEOS.H": "46986c45177a3c9539bda62d0ec1771d84f41bb037accf41dd416716649decd0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pintleGasFields.H": "d2fc238d3cae107e505d7298ac72cf135a0b43de3351339502625f9bdb4ba042",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pintleWaveCourant.H": "f32c875d08112ebfc89b58cff8c94b8bdb2dc2caeed06015a02a25036b7941fa"
+  },
+  "eos": {
+    "finite_difference_max_scaled_error": 1.1999509297311306e-07,
+    "gpu_max_relative_error": 0,
+    "identity_checks": 240,
+    "passed": true,
+    "states": 32
+  },
+  "final_wave_replay": [
+    {
+      "max_abs_by_field": {
+        "T": 0.0,
+        "U": 0.0,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.12448186904660812,
+        "dgdt.ipa": 0.12448186904660812,
+        "dgdt.n2o": 0.12448186904660812,
+        "p": 0.0,
+        "rho": 0.0
+      },
+      "name": "acoustic-n2o-m0-n80-new"
+    },
+    {
+      "max_abs_by_field": {
+        "T": 0.0,
+        "U": 0.0,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.12532356807010453,
+        "dgdt.ipa": 0.12532356807010453,
+        "dgdt.n2o": 0.12532356807010453,
+        "p": 0.0,
+        "rho": 0.0
+      },
+      "name": "acoustic-n2o-m0-n160-new"
+    },
+    {
+      "max_abs_by_field": {
+        "T": 7.958078640513122e-13,
+        "U": 6.821210263296962e-13,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.1485007182164606,
+        "dgdt.ipa": 0.1485007182164606,
+        "dgdt.n2o": 0.1485007182164606,
+        "p": 6.984919309616089e-09,
+        "rho": 6.750155989720952e-14
+      },
+      "name": "acoustic-air-m1.1-n80-new"
+    },
+    {
+      "max_abs_by_field": {
+        "T": 0.0,
+        "U": 0.0,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.15217873043622998,
+        "dgdt.ipa": 0.15217873043622998,
+        "dgdt.n2o": 0.15217873043622998,
+        "p": 0.0,
+        "rho": 0.0
+      },
+      "name": "acoustic-air-m1.1-n160-new"
+    },
+    {
+      "max_abs_by_field": {
+        "T": 1.3073986337985843e-12,
+        "U": 5.684341886080801e-13,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.11954038263097531,
+        "dgdt.ipa": 0.11954038263097531,
+        "dgdt.n2o": 0.11954038263097531,
+        "p": 9.313225746154785e-09,
+        "rho": 1.0658141036401503e-13
+      },
+      "name": "acoustic-n2o-m1.1-n80-new"
+    },
+    {
+      "max_abs_by_field": {
+        "T": 0.0,
+        "U": 0.0,
+        "alpha.air": 0.0,
+        "alpha.ipa": 0.0,
+        "alpha.n2o": 0.0,
+        "dgdt.air": 0.12247343993488229,
+        "dgdt.ipa": 0.12247343993488229,
+        "dgdt.n2o": 0.12247343993488229,
+        "p": 0.0,
+        "rho": 0.0
+      },
+      "name": "acoustic-n2o-m1.1-n160-new"
+    }
+  ],
+  "gas_guards": [
+    {
+      "name": "mixed",
+      "passed": true
+    },
+    {
+      "name": "energy-backward",
+      "passed": true
+    },
+    {
+      "name": "phase-backward",
+      "passed": true
+    },
+    {
+      "name": "negative-cv",
+      "passed": true
+    },
+    {
+      "name": "mass-flux-units",
+      "passed": true
+    },
+    {
+      "name": "wave-cap",
+      "passed": true
+    },
+    {
+      "name": "mass-flux-nonfinite",
+      "passed": true
+    }
+  ],
+  "legacy_exact": {
+    "comparisons": [
+      {
+        "candidate": "mini-current",
+        "fields": {
+          "T": {
+            "max_abs": 3.410605131648481e-13,
+            "max_scaled": 1.1558797501272535e-15,
+            "rel_l2": 1.3987054449469253e-16
+          },
+          "U": {
+            "max_abs": 3.512541386224699e-12,
+            "max_scaled": 3.497652800575819e-12,
+            "rel_l2": 1.2524661409188627e-12
+          },
+          "alpha.air": {
+            "max_abs": 5.780423882606467e-16,
+            "max_scaled": 5.780423882606467e-16,
+            "rel_l2": 5.342595312848672e-17
+          },
+          "alpha.ipa": {
+            "max_abs": 8.397145825900232e-16,
+            "max_scaled": 8.397145825900232e-16,
+            "rel_l2": 1.684376878640913e-16
+          },
+          "alpha.n2o": {
+            "max_abs": 8.881784197001252e-16,
+            "max_scaled": 8.881784197001252e-16,
+            "rel_l2": 1.0866099010966471e-16
+          },
+          "dgdt.air": {
+            "max_abs": 0.002016444836044684,
+            "max_scaled": 8.910923298002567e-08,
+            "rel_l2": 6.85515649272547e-08
+          },
+          "dgdt.ipa": {
+            "max_abs": 494.35784059963856,
+            "max_scaled": 1.000000401497137,
+            "rel_l2": 1.1705317914285027
+          },
+          "dgdt.n2o": {
+            "max_abs": 0.002501378394299536,
+            "max_scaled": 1.5219040484290363e-07,
+            "rel_l2": 1.0086421495649441e-07
+          },
+          "p": {
+            "max_abs": 3.4716445952653885e-05,
+            "max_scaled": 1.718602541055814e-11,
+            "rel_l2": 1.8757792841779113e-12
+          },
+          "rho": {
+            "max_abs": 6.181721801112872e-13,
+            "max_scaled": 7.867722751635429e-16,
+            "rel_l2": 2.24641221515892e-16
+          }
+        },
+        "reference": "mini-base"
+      },
+      {
+        "candidate": "pintle-current",
+        "fields": {
+          "T": {
+            "max_abs": 2.37429276239709e-08,
+            "max_scaled": 7.183852232347008e-11,
+            "rel_l2": 8.797725119692835e-14
+          },
+          "U": {
+            "max_abs": 9.13277631298115e-08,
+            "max_scaled": 3.3356165830371807e-10,
+            "rel_l2": 3.856370665053757e-12
+          },
+          "alpha.air": {
+            "max_abs": 1.3997942249766027e-08,
+            "max_scaled": 1.3997942238694469e-08,
+            "rel_l2": 9.356354141605459e-11
+          },
+          "alpha.ipa": {
+            "max_abs": 6.434778265784757e-10,
+            "max_scaled": 6.434778264768894e-10,
+            "rel_l2": 1.6723466071498567e-12
+          },
+          "alpha.n2o": {
+            "max_abs": 1.3997942305277178e-08,
+            "max_scaled": 1.399794230527715e-08,
+            "rel_l2": 1.952845007804319e-10
+          },
+          "dgdt.air": {
+            "max_abs": 252634.5875100302,
+            "max_scaled": 1.0,
+            "rel_l2": 0.03278998006439949
+          },
+          "dgdt.ipa": {
+            "max_abs": 10945.658874142511,
+            "max_scaled": 0.8539626735792525,
+            "rel_l2": 0.13704160423220182
+          },
+          "dgdt.n2o": {
+            "max_abs": 2214.0881189779157,
+            "max_scaled": 0.006592149918583574,
+            "rel_l2": 0.0015433539068755355
+          },
+          "p": {
+            "max_abs": 0.001116898376494646,
+            "max_scaled": 2.723262303023076e-10,
+            "rel_l2": 1.4893415937130023e-10
+          },
+          "rho": {
+            "max_abs": 4.855357360611379e-07,
+            "max_scaled": 6.242437983123218e-10,
+            "rel_l2": 3.665317573588936e-12
+          }
+        },
+        "reference": "pintle-base"
+      }
+    ],
+    "evidence": "benchmarks/gas-legacy-ab/comparison.json",
+    "evidence_sha256": "8634baf5735eba3a3852c43a6d3ca4775e5955efd7e13c7b81bb191e505fe779",
+    "passed": false
+  },
+  "legacy_numerical_and_sources": {
+    "cases": [
+      {
+        "acceptance": {
+          "pass": true,
+          "policy": {
+            "alpha_bound_tolerance": 1e-08,
+            "alpha_sum_max_abs": 1e-09,
+            "mass_balance_max_relative": 1e-06,
+            "policy_id": "pintle-numerical-regression-v1",
+            "schema_version": 1,
+            "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification.",
+            "state_max_scaled": {
+              "T": 1e-06,
+              "U": 1e-06,
+              "alpha.air": 1e-06,
+              "alpha.ipa": 1e-06,
+              "alpha.n2o": 1e-06,
+              "p": 1e-05,
+              "rho": 1e-06
+            }
+          },
+          "policy_id": "pintle-numerical-regression-v1",
+          "reasons": [],
+          "run_results": [
+            {
+              "configuration": "baseline",
+              "index": 0,
+              "pass": true,
+              "reasons": []
+            },
+            {
+              "configuration": "candidate",
+              "index": 1,
+              "pass": true,
+              "reasons": []
+            }
+          ],
+          "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification."
+        },
+        "name": "mini",
+        "passed": true,
+        "replay": {
+          "comparisons": [
+            {
+              "phases": {
+                "air": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 2.3085374757647603e-16,
+                    "max_scaled": 2.3085374757647603e-16,
+                    "relative_l2": 1.6546342777174018e-11
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 1.8828959724714875e-16,
+                    "max_scaled": 1.8828959724714875e-16,
+                    "relative_l2": 1.4744656017720204e-12
+                  }
+                },
+                "ipa": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 2.5839248275760784e-16,
+                    "max_scaled": 2.5839248275760784e-16,
+                    "relative_l2": 1.1940549353529872e-11
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 2.170455752894206e-16,
+                    "max_scaled": 2.170455752894206e-16,
+                    "relative_l2": 6.54888653225026e-07
+                  }
+                },
+                "n2o": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.220446049250313e-16,
+                    "relative_l2": 7.950810387488856e-12
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 2.4370820028707383e-16,
+                    "max_scaled": 2.4370820028707383e-16,
+                    "relative_l2": 2.5939245157971832e-12
+                  }
+                }
+              },
+              "repeat": 1
+            }
+          ],
+          "limits": {
+            "alpha_increment_difference_max_abs": 1e-06,
+            "coefficient_error": "64*FP64-epsilon*max(1,sum of absolute source terms)",
+            "dt_source_difference_max_abs": 1e-06,
+            "explicit_update_max_scaled": 1e-12
+          },
+          "pass": true,
+          "runs": [
+            {
+              "all_source_branches_exercised": true,
+              "cells": 1152,
+              "configuration": "baseline",
+              "event": {
+                "deltaT": 1.5e-08,
+                "solve": 31.0,
+                "time": 2.4e-07
+              },
+              "pass": true,
+              "phases": {
+                "air": {
+                  "branch_cells": {
+                    "other_ipa_negative": 305,
+                    "other_ipa_positive": 482,
+                    "other_n2o_negative": 125,
+                    "other_n2o_positive": 342,
+                    "self_negative": 580,
+                    "self_positive": 121
+                  },
+                  "coefficient_abs_error": 9.094947017729282e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 1.1102230246251565e-16,
+                    "max_scaled": 1.1102230246251563e-16,
+                    "relative_l2": 1.0437529527188315e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "ipa": {
+                  "branch_cells": {
+                    "other_air_negative": 580,
+                    "other_air_positive": 121,
+                    "other_n2o_negative": 125,
+                    "other_n2o_positive": 336,
+                    "self_negative": 301,
+                    "self_positive": 482
+                  },
+                  "coefficient_abs_error": 4.547473508864641e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 1.1102230246251565e-16,
+                    "max_scaled": 1.1102230246251565e-16,
+                    "relative_l2": 3.297892215891265e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "n2o": {
+                  "branch_cells": {
+                    "other_air_negative": 580,
+                    "other_air_positive": 121,
+                    "other_ipa_negative": 305,
+                    "other_ipa_positive": 482,
+                    "self_negative": 125,
+                    "self_positive": 336
+                  },
+                  "coefficient_abs_error": 9.094947017729282e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 1.1102230246251565e-16,
+                    "max_scaled": 1.1102230246251563e-16,
+                    "relative_l2": 2.1310173383410903e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                }
+              },
+              "repeat": 1
+            },
+            {
+              "all_source_branches_exercised": true,
+              "cells": 1152,
+              "configuration": "candidate",
+              "event": {
+                "deltaT": 1.5e-08,
+                "solve": 31.0,
+                "time": 2.4e-07
+              },
+              "pass": true,
+              "phases": {
+                "air": {
+                  "branch_cells": {
+                    "other_ipa_negative": 342,
+                    "other_ipa_positive": 494,
+                    "other_n2o_negative": 126,
+                    "other_n2o_positive": 342,
+                    "self_negative": 580,
+                    "self_positive": 121
+                  },
+                  "coefficient_abs_error": 4.547473508864641e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 1.1102230246251565e-16,
+                    "max_scaled": 1.1102230246251563e-16,
+                    "relative_l2": 1.0437529568902606e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "ipa": {
+                  "branch_cells": {
+                    "other_air_negative": 580,
+                    "other_air_positive": 121,
+                    "other_n2o_negative": 126,
+                    "other_n2o_positive": 336,
+                    "self_negative": 335,
+                    "self_positive": 494
+                  },
+                  "coefficient_abs_error": 4.547473508864641e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 1.1102230246251565e-16,
+                    "max_scaled": 1.1102230246251565e-16,
+                    "relative_l2": 3.297892137263383e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "n2o": {
+                  "branch_cells": {
+                    "other_air_negative": 580,
+                    "other_air_positive": 121,
+                    "other_ipa_negative": 342,
+                    "other_ipa_positive": 494,
+                    "self_negative": 126,
+                    "self_positive": 336
+                  },
+                  "coefficient_abs_error": 9.094947017729282e-13,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.2204460492503126e-16,
+                    "relative_l2": 2.790156621026717e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                }
+              },
+              "repeat": 1
+            }
+          ],
+          "scope": "Last recorded solveAlphas call only, before phase-sum correction. Uses the dgdt and divU actually consumed, reconstructs ipa then n2o then air. fvc::div flux oracle uses stock scatter vs limiter cell-gather summation. Source order follows the existing custom kernel, not upstream self-first arithmetic."
+        },
+        "same_binary_repeats": [
+          {
+            "comparison": {
+              "candidate": "base-repeat",
+              "fields": {
+                "T": {
+                  "max_abs": 2.8421709430404007e-13,
+                  "max_scaled": 9.632331251060447e-16,
+                  "rel_l2": 1.4407043042349585e-16
+                },
+                "U": {
+                  "max_abs": 2.900277674272589e-12,
+                  "max_scaled": 2.8879842867189824e-12,
+                  "rel_l2": 1.2399291019270273e-12
+                },
+                "alpha.air": {
+                  "max_abs": 6.455881836064936e-16,
+                  "max_scaled": 6.455881836064936e-16,
+                  "rel_l2": 5.954760538655979e-17
+                },
+                "alpha.ipa": {
+                  "max_abs": 6.661338147750939e-16,
+                  "max_scaled": 6.661338147750939e-16,
+                  "rel_l2": 1.3856839444955534e-16
+                },
+                "alpha.n2o": {
+                  "max_abs": 4.440892098500626e-16,
+                  "max_scaled": 4.440892098500626e-16,
+                  "rel_l2": 5.403115903321987e-17
+                },
+                "dgdt.air": {
+                  "max_abs": 0.0010026712614035205,
+                  "max_scaled": 4.430930389845914e-08,
+                  "rel_l2": 3.320431219039787e-08
+                },
+                "dgdt.ipa": {
+                  "max_abs": 494.3578405369164,
+                  "max_scaled": 1.000000401370261,
+                  "rel_l2": 0.5366337710634765
+                },
+                "dgdt.n2o": {
+                  "max_abs": 0.001172574057136444,
+                  "max_scaled": 7.134247296233414e-08,
+                  "rel_l2": 4.829991410725877e-08
+                },
+                "p": {
+                  "max_abs": 3.137392923235893e-05,
+                  "max_scaled": 1.5531346317872583e-11,
+                  "rel_l2": 1.7702998829646228e-12
+                },
+                "rho": {
+                  "max_abs": 7.958078640513122e-13,
+                  "max_scaled": 1.0128562622795037e-15,
+                  "rel_l2": 2.181647530555311e-16
+                }
+              },
+              "reference": "base-first"
+            },
+            "exact": false,
+            "mode": "base"
+          },
+          {
+            "comparison": {
+              "candidate": "current-repeat",
+              "fields": {
+                "T": {
+                  "max_abs": 2.8421709430404007e-13,
+                  "max_scaled": 9.632331251060447e-16,
+                  "rel_l2": 1.3398602950363039e-16
+                },
+                "U": {
+                  "max_abs": 3.21067998576563e-12,
+                  "max_scaled": 3.1970708980131876e-12,
+                  "rel_l2": 1.4660312363446279e-12
+                },
+                "alpha.air": {
+                  "max_abs": 8.481923236008547e-16,
+                  "max_scaled": 8.481923236008547e-16,
+                  "rel_l2": 6.12563342774809e-17
+                },
+                "alpha.ipa": {
+                  "max_abs": 9.567813121641455e-16,
+                  "max_scaled": 9.567813121641455e-16,
+                  "rel_l2": 1.7869366536062035e-16
+                },
+                "alpha.n2o": {
+                  "max_abs": 8.881784197001252e-16,
+                  "max_scaled": 8.881784197001252e-16,
+                  "rel_l2": 1.028328228403109e-16
+                },
+                "dgdt.air": {
+                  "max_abs": 0.0010654757425072603,
+                  "max_scaled": 4.708471285561996e-08,
+                  "rel_l2": 3.682407751845225e-08
+                },
+                "dgdt.ipa": {
+                  "max_abs": 492.41898439257216,
+                  "max_scaled": 0.9960780308354882,
+                  "rel_l2": 0.16950745223281272
+                },
+                "dgdt.n2o": {
+                  "max_abs": 25550.952628669536,
+                  "max_scaled": 1.5545867568153366,
+                  "rel_l2": 0.5677185348349892
+                },
+                "p": {
+                  "max_abs": 4.070182330906391e-05,
+                  "max_scaled": 2.0149025928506786e-11,
+                  "rel_l2": 2.2505202206192463e-12
+                },
+                "rho": {
+                  "max_abs": 7.958078640513122e-13,
+                  "max_scaled": 1.0128562622795037e-15,
+                  "rel_l2": 2.6184044656464264e-16
+                }
+              },
+              "reference": "current-first"
+            },
+            "exact": false,
+            "mode": "current"
+          }
+        ]
+      },
+      {
+        "acceptance": {
+          "pass": true,
+          "policy": {
+            "alpha_bound_tolerance": 1e-08,
+            "alpha_sum_max_abs": 1e-09,
+            "mass_balance_max_relative": 1e-06,
+            "policy_id": "pintle-numerical-regression-v1",
+            "schema_version": 1,
+            "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification.",
+            "state_max_scaled": {
+              "T": 1e-06,
+              "U": 1e-06,
+              "alpha.air": 1e-06,
+              "alpha.ipa": 1e-06,
+              "alpha.n2o": 1e-06,
+              "p": 1e-05,
+              "rho": 1e-06
+            }
+          },
+          "policy_id": "pintle-numerical-regression-v1",
+          "reasons": [],
+          "run_results": [
+            {
+              "configuration": "baseline",
+              "index": 0,
+              "pass": true,
+              "reasons": []
+            },
+            {
+              "configuration": "candidate",
+              "index": 1,
+              "pass": true,
+              "reasons": []
+            }
+          ],
+          "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification."
+        },
+        "name": "pintle",
+        "passed": true,
+        "replay": {
+          "comparisons": [
+            {
+              "phases": {
+                "air": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 2.142659649706502e-08,
+                    "max_scaled": 2.142659649706502e-08,
+                    "relative_l2": 1.0756584498292299e-06
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 1.5557230562990298e-11,
+                    "max_scaled": 1.5557230562990298e-11,
+                    "relative_l2": 1.2234680614519153e-09
+                  }
+                },
+                "ipa": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 2.1426619201125874e-08,
+                    "max_scaled": 2.1426619201125874e-08,
+                    "relative_l2": 9.272130412774187e-07
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 3.6947130666931114e-13,
+                    "max_scaled": 3.6947130666931114e-13,
+                    "relative_l2": 1.9633819768602558e-08
+                  }
+                },
+                "n2o": {
+                  "actual_alpha_increment_difference": {
+                    "max_abs": 1.8089902353857212e-08,
+                    "max_scaled": 1.8089902353857212e-08,
+                    "relative_l2": 1.1705878449668064e-06
+                  },
+                  "dt_source_difference": {
+                    "max_abs": 1.8196778473793526e-11,
+                    "max_scaled": 1.8196778473793526e-11,
+                    "relative_l2": 7.258783436537695e-10
+                  }
+                }
+              },
+              "repeat": 1
+            }
+          ],
+          "limits": {
+            "alpha_increment_difference_max_abs": 1e-06,
+            "coefficient_error": "64*FP64-epsilon*max(1,sum of absolute source terms)",
+            "dt_source_difference_max_abs": 1e-06,
+            "explicit_update_max_scaled": 1e-12
+          },
+          "pass": true,
+          "runs": [
+            {
+              "all_source_branches_exercised": true,
+              "cells": 3094455,
+              "configuration": "baseline",
+              "event": {
+                "deltaT": 1.5e-08,
+                "solve": 47.0,
+                "time": 4.535999999999998e-05
+              },
+              "pass": true,
+              "phases": {
+                "air": {
+                  "branch_cells": {
+                    "other_ipa_negative": 1091334,
+                    "other_ipa_positive": 1074392,
+                    "other_n2o_negative": 569278,
+                    "other_n2o_positive": 1109626,
+                    "self_negative": 576786,
+                    "self_positive": 184544
+                  },
+                  "coefficient_abs_error": 5.820766091346741e-11,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.220446047494071e-16,
+                    "relative_l2": 2.2458776339558874e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "ipa": {
+                  "branch_cells": {
+                    "other_air_negative": 576786,
+                    "other_air_positive": 184544,
+                    "other_n2o_negative": 569268,
+                    "other_n2o_positive": 1099522,
+                    "self_negative": 1091301,
+                    "self_positive": 1045306
+                  },
+                  "coefficient_abs_error": 5.820766091346741e-11,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.2204460488997694e-16,
+                    "relative_l2": 4.616332757255811e-18
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "n2o": {
+                  "branch_cells": {
+                    "other_air_negative": 576786,
+                    "other_air_positive": 184544,
+                    "other_ipa_negative": 1091334,
+                    "other_ipa_positive": 1074392,
+                    "self_negative": 569268,
+                    "self_positive": 1099522
+                  },
+                  "coefficient_abs_error": 1.1641532182693481e-10,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 3.3306690738754696e-16,
+                    "max_scaled": 3.330669073875463e-16,
+                    "relative_l2": 2.5396159353085544e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                }
+              },
+              "repeat": 1
+            },
+            {
+              "all_source_branches_exercised": true,
+              "cells": 3094455,
+              "configuration": "candidate",
+              "event": {
+                "deltaT": 1.5e-08,
+                "solve": 47.0,
+                "time": 4.535999999999998e-05
+              },
+              "pass": true,
+              "phases": {
+                "air": {
+                  "branch_cells": {
+                    "other_ipa_negative": 1091354,
+                    "other_ipa_positive": 1074392,
+                    "other_n2o_negative": 569278,
+                    "other_n2o_positive": 1109607,
+                    "self_negative": 576776,
+                    "self_positive": 184554
+                  },
+                  "coefficient_abs_error": 5.820766091346741e-11,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.220446047494071e-16,
+                    "relative_l2": 2.2517903621829993e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "ipa": {
+                  "branch_cells": {
+                    "other_air_negative": 576776,
+                    "other_air_positive": 184554,
+                    "other_n2o_negative": 569252,
+                    "other_n2o_positive": 1099496,
+                    "self_negative": 1091325,
+                    "self_positive": 1045338
+                  },
+                  "coefficient_abs_error": 5.820766091346741e-11,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 2.220446049250313e-16,
+                    "max_scaled": 2.2204460488997694e-16,
+                    "relative_l2": 4.615034615849323e-18
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                },
+                "n2o": {
+                  "branch_cells": {
+                    "other_air_negative": 576776,
+                    "other_air_positive": 184554,
+                    "other_ipa_negative": 1091354,
+                    "other_ipa_positive": 1074392,
+                    "self_negative": 569252,
+                    "self_positive": 1099496
+                  },
+                  "coefficient_abs_error": 1.1641532182693481e-10,
+                  "coefficient_roundoff_violations": 0,
+                  "explicit_update_error": {
+                    "max_abs": 3.3306690738754696e-16,
+                    "max_scaled": 3.330669073875463e-16,
+                    "relative_l2": 2.5265864715051544e-17
+                  },
+                  "min_rdt_minus_Sp": 66666666.66666667
+                }
+              },
+              "repeat": 1
+            }
+          ],
+          "scope": "Last recorded solveAlphas call only, before phase-sum correction. Uses the dgdt and divU actually consumed, reconstructs ipa then n2o then air. fvc::div flux oracle uses stock scatter vs limiter cell-gather summation. Source order follows the existing custom kernel, not upstream self-first arithmetic."
+        },
+        "same_binary_repeats": [
+          {
+            "comparison": {
+              "candidate": "base-repeat",
+              "fields": {
+                "T": {
+                  "max_abs": 5.318776175045059e-08,
+                  "max_scaled": 1.6092919417349087e-10,
+                  "rel_l2": 1.2995565268201244e-13
+                },
+                "U": {
+                  "max_abs": 1.783272978173045e-07,
+                  "max_scaled": 6.51315078156605e-10,
+                  "rel_l2": 4.980890749378833e-12
+                },
+                "alpha.air": {
+                  "max_abs": 2.219748990173187e-08,
+                  "max_scaled": 2.219748988417495e-08,
+                  "rel_l2": 9.286642770642913e-11
+                },
+                "alpha.ipa": {
+                  "max_abs": 4.0389114275285465e-10,
+                  "max_scaled": 4.03891142689092e-10,
+                  "rel_l2": 1.5463583164942295e-12
+                },
+                "alpha.n2o": {
+                  "max_abs": 2.2197489957243022e-08,
+                  "max_scaled": 2.219748995724298e-08,
+                  "rel_l2": 1.9383329624646672e-10
+                },
+                "dgdt.air": {
+                  "max_abs": 252634.5875100302,
+                  "max_scaled": 1.0,
+                  "rel_l2": 0.04388040970676593
+                },
+                "dgdt.ipa": {
+                  "max_abs": 10954.519580019902,
+                  "max_scaled": 0.8546539715785654,
+                  "rel_l2": 0.1394127597600352
+                },
+                "dgdt.n2o": {
+                  "max_abs": 2214.088118994279,
+                  "max_scaled": 0.006592149918632293,
+                  "rel_l2": 0.0014464572766400938
+                },
+                "p": {
+                  "max_abs": 0.002316494006663561,
+                  "max_scaled": 5.648160062086007e-10,
+                  "rel_l2": 3.482934933198897e-10
+                },
+                "rho": {
+                  "max_abs": 4.6830212596660203e-07,
+                  "max_scaled": 6.020868829196059e-10,
+                  "rel_l2": 3.573645701432243e-12
+                }
+              },
+              "reference": "base-first"
+            },
+            "exact": false,
+            "mode": "base"
+          },
+          {
+            "comparison": {
+              "candidate": "current-repeat",
+              "fields": {
+                "T": {
+                  "max_abs": 2.0907634734612657e-08,
+                  "max_scaled": 6.325983081787416e-11,
+                  "rel_l2": 9.104875656231502e-14
+                },
+                "U": {
+                  "max_abs": 8.632508752270951e-08,
+                  "max_scaled": 3.1529009756198573e-10,
+                  "rel_l2": 3.982273271039464e-12
+                },
+                "alpha.air": {
+                  "max_abs": 1.2203132282451179e-08,
+                  "max_scaled": 1.2203132272799212e-08,
+                  "rel_l2": 8.844587090827383e-11
+                },
+                "alpha.ipa": {
+                  "max_abs": 2.86404566729459e-10,
+                  "max_scaled": 2.864045666842441e-10,
+                  "rel_l2": 1.3766322819234834e-12
+                },
+                "alpha.n2o": {
+                  "max_abs": 1.2203132226940028e-08,
+                  "max_scaled": 1.2203132226940003e-08,
+                  "rel_l2": 1.84609594693804e-10
+                },
+                "dgdt.air": {
+                  "max_abs": 108661.3239266558,
+                  "max_scaled": 0.4344576970090065,
+                  "rel_l2": 0.018330964213040413
+                },
+                "dgdt.ipa": {
+                  "max_abs": 10941.041456494104,
+                  "max_scaled": 0.853602430092545,
+                  "rel_l2": 0.13632056996950506
+                },
+                "dgdt.n2o": {
+                  "max_abs": 2214.0881189779157,
+                  "max_scaled": 0.006592149918583695,
+                  "rel_l2": 0.0015320116887708709
+                },
+                "p": {
+                  "max_abs": 0.001228703185915947,
+                  "max_scaled": 2.99586886168716e-10,
+                  "rel_l2": 1.7833700885934432e-10
+                },
+                "rho": {
+                  "max_abs": 3.50164036433398e-07,
+                  "max_scaled": 4.501990521003265e-10,
+                  "rel_l2": 3.3904328968548398e-12
+                }
+              },
+              "reference": "current-first"
+            },
+            "exact": false,
+            "mode": "current"
+          }
+        ]
+      }
+    ],
+    "evidence": "benchmarks/gas-legacy-source-audit/checks.json",
+    "evidence_sha256": "227ea40342f840ad3457d6d06ce540ba87e52ee559254fdd7b180666baaaf000",
+    "passed": true
+  },
+  "new_failed": [
+    "acoustic-air-m1.1-n80-new",
+    "acoustic-n2o-m1.1-n80-new"
+  ],
+  "new_passed": 10,
+  "paired_input_checks": 12,
+  "real_case": {
+    "acceptance": {
+      "checks": {
+        "complete_finite_records": true,
+        "completed": true,
+        "energyBalanceRelative": true,
+        "energyResidualMax": true,
+        "fields": true,
+        "gas_mode": true,
+        "massResidualMax": true,
+        "restart_import": true,
+        "source_unchanged": true,
+        "waveCo": true
+      },
+      "passed": true,
+      "wave_scope": "Measured fixed-dt wave Co ceiling; maxWaveCo in controlDict only controls adaptive timestepping."
+    },
+    "comparison": {
+      "boundary_mass_flow": {
+        "farfield": {
+          "faces": 38673,
+          "max_abs": 0.0007009321673382684,
+          "sum": 0.3848596259616909,
+          "sum_abs": 1.2006876109812419
+        },
+        "inlet_fuel": {
+          "faces": 806,
+          "max_abs": 0.00028522879478410664,
+          "sum": -0.16854189642167927,
+          "sum_abs": 0.16854189642167927
+        },
+        "inlet_oxidizer": {
+          "faces": 1804,
+          "max_abs": 0.00035123328229839614,
+          "sum": -0.25067169611117657,
+          "sum_abs": 0.269611791131233
+        },
+        "outlet": {
+          "faces": 4400,
+          "max_abs": 1.9973979747731833e-07,
+          "sum": 0.00016169115096378265,
+          "sum_abs": 0.00016169115096378265
+        },
+        "wall_gasket": {
+          "faces": 768,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_housing": {
+          "faces": 104699,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_locknut": {
+          "faces": 1466,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_pintle": {
+          "faces": 24511,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_sleeve": {
+          "faces": 112575,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        }
+      },
+      "boundary_volume_flow": {
+        "farfield": {
+          "faces": 38673,
+          "max_abs": 2.8512394815016422e-05,
+          "sum": 0.015838550627279905,
+          "sum_abs": 0.049629388481057614
+        },
+        "inlet_fuel": {
+          "faces": 806,
+          "max_abs": 6.052889849603485e-06,
+          "sum": -0.003576656889974524,
+          "sum_abs": 0.003576656889974524
+        },
+        "inlet_oxidizer": {
+          "faces": 1804,
+          "max_abs": 7.453582555983019e-06,
+          "sum": -0.00531954764988817,
+          "sum_abs": 0.0057214786996063445
+        },
+        "outlet": {
+          "faces": 4400,
+          "max_abs": 8.273042589035285e-09,
+          "sum": 6.697099778660099e-06,
+          "sum_abs": 6.697099778660099e-06
+        },
+        "wall_gasket": {
+          "faces": 768,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_housing": {
+          "faces": 104699,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_locknut": {
+          "faces": 1466,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_pintle": {
+          "faces": 24511,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_sleeve": {
+          "faces": 112575,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        }
+      },
+      "checks": {
+        "endpoint_mass_agreement": true,
+        "fields_l1": true,
+        "mach": true,
+        "main_flows": true,
+        "mesh_equal": true,
+        "protected_unchanged": true,
+        "zero_wall_flux": true
+      },
+      "fields": {
+        "T": {
+          "max_abs": 31.73598376859843,
+          "volume_weighted_relative_l1": 3.869238355386697e-06,
+          "volume_weighted_relative_l2": 5.4294890093255495e-05
+        },
+        "U": {
+          "max_abs": 158.14194731641442,
+          "volume_weighted_relative_l1": 0.006561965220168519,
+          "volume_weighted_relative_l2": 0.017238152833136365
+        },
+        "p": {
+          "max_abs": 1510498.7947280756,
+          "volume_weighted_relative_l1": 1.4358743850815666e-05,
+          "volume_weighted_relative_l2": 0.00022859831062631015
+        },
+        "rho": {
+          "max_abs": 16.797230838257512,
+          "volume_weighted_relative_l1": 1.0870805590408776e-05,
+          "volume_weighted_relative_l2": 0.00020227473358615955
+        }
+      },
+      "mach_candidate": 1.0605471277603686,
+      "mach_reference": 1.1006522080587264,
+      "mass_candidate": 0.08627669299642038,
+      "mass_reference": 0.08627668940570539,
+      "mesh_sha256": {
+        "boundary": "5086b544475e2904c2b755479d73eb08e0d0bdbd453634b243f2c2b75792ed55",
+        "cellLevel": "c8b78dad85f3e4bb95e20a6b222521ce587be8709d7fc17dcfb362660a589aba",
+        "cellProc": "b0b3ba8d77839b2b462257035659f6de456aee45cb47fd80762b04579cb11e12",
+        "faces": "17a8436c7ac2d57f3b2aac3945ccb4ad0eea47f8276092ef4cfbf6c7c8f29a40",
+        "level0Edge": "ba1f8293a61aec517d5cffb185c5a2a21cc573a475d2616ae9dfc8e22446db70",
+        "neighbour": "ef60631acbe76978598631e712938175b8396d0360cd03d2ddb01470f32828ae",
+        "owner": "a677be5a9b9195c5ea96b9c572af6d2ba0627f502a53eaedcaa854ae27761942",
+        "pointLevel": "00a4ccaa5f4caae5ee31f1feb6a6947977e175fd5aef444b793c8bdd6003f3d1",
+        "points": "5db6b67c5284996daed839e04ffa57920c5980ad25e23578b8a1a9aa0613d922"
+      },
+      "original_boundary_mass_flow": {
+        "farfield": {
+          "faces": 38673,
+          "max_abs": 0.0007037505327511689,
+          "sum": 0.3895653651216858,
+          "sum_abs": 1.2021634266568753
+        },
+        "inlet_fuel": {
+          "faces": 806,
+          "max_abs": 0.0002851460281592396,
+          "sum": -0.1685034798153719,
+          "sum_abs": 0.1685034798153719
+        },
+        "inlet_oxidizer": {
+          "faces": 1804,
+          "max_abs": 0.0003511590706526114,
+          "sum": -0.2508724670113606,
+          "sum_abs": 0.2698345835433852
+        },
+        "outlet": {
+          "faces": 4400,
+          "max_abs": 1.9958127666399176e-07,
+          "sum": 0.0001615408630306084,
+          "sum_abs": 0.0001615408630306084
+        },
+        "wall_gasket": {
+          "faces": 768,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_housing": {
+          "faces": 104699,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_locknut": {
+          "faces": 1466,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_pintle": {
+          "faces": 24511,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        },
+        "wall_sleeve": {
+          "faces": 112575,
+          "max_abs": 0.0,
+          "sum": 0.0,
+          "sum_abs": 0.0
+        }
+      },
+      "passed": true,
+      "relative_flow_errors": {
+        "farfield": 0.01207945978083819,
+        "inlet_fuel": 0.00022798702050231583,
+        "inlet_oxidizer": 0.00080029069182376,
+        "outlet": 3.583608795674063e-07
+      },
+      "scope": "10-microsecond branch agreement with a supplied rhoPimpleFoam solution; not an independent physical reference or full grid/time convergence study."
+    },
+    "diagnostics": {
+      "energyBalanceRelative_maximum_abs": 2.152255914413924e-13,
+      "energyResidualMax_maximum_abs": 1.8892223821512574e-05,
+      "massResidualMax_maximum_abs": 7.838253031759138e-07,
+      "maxMach_maximum_abs": 1.0947869860917834,
+      "waveCo_maximum_abs": 1.360934483455312
+    },
+    "source_unchanged": true
+  },
+  "regression_checks": [
+    {
+      "name": "temperature-one-sweep-default",
+      "passed": true
+    },
+    {
+      "name": "temperature-converged-default",
+      "passed": true
+    },
+    {
+      "name": "temperature-norm-discrimination-default",
+      "passed": true
+    },
+    {
+      "name": "temperature-one-sweep-none",
+      "passed": true
+    },
+    {
+      "name": "temperature-converged-none",
+      "passed": true
+    },
+    {
+      "name": "temperature-norm-discrimination-none",
+      "passed": true
+    },
+    {
+      "name": "dynamic-contact-angle",
+      "passed": true
+    },
+    {
+      "name": "legacy-temperature-false-pass",
+      "passed": true
+    },
+    {
+      "name": "legacy-dynamic-cache-stale",
+      "passed": true
+    },
+    {
+      "name": "euler",
+      "passed": true
+    },
+    {
+      "name": "backward-default",
+      "passed": true
+    },
+    {
+      "name": "backward-override",
+      "passed": true
+    },
+    {
+      "name": "local-euler-override",
+      "passed": true
+    }
+  ],
+  "scope": "Canonical paired numerical validation; reported failed physics criteria are retained."
+}

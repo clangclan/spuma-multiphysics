@@ -22,16 +22,26 @@
     // Update the pressure BCs to ensure flux consistency
     constrainPressure(p_rgh, U, phiHbyA, rAUf);
 
-    PtrList<fvScalarMatrix> p_rghEqnComps(mixture.phases().size());
+    PtrList<fvScalarMatrix> p_rghEqnComps(gasDynamics ? 1 : mixture.phases().size());
 
     label phasei = 0;
+    updateGasState();
     forAllConstIters(mixture.phases(), phase)
     {
+        if (gasDynamics && phase().name()!=gasPhaseName) continue;
         const rhoThermo& thermo = phase().thermo();
         const tmp<volScalarField> trho(thermo.rho());
         const volScalarField& rho = trho();
 
-        p_rghEqnComps.set
+        if (gasDynamics)
+        {
+            const volScalarField& chi=gasChiPtr();
+            surfaceScalarField phid("phid",fvc::interpolate(chi)*phi);
+            p_rghEqnComps.set(phasei,
+                (fvc::ddt(rho)+fvc::div(mixture.rhoPhi())-fvc::Sp(fvc::div(phi),rho)
+                +correction(chi*fvm::ddt(p_rgh)+fvm::div(phid,p_rgh)-fvm::Sp(fvc::div(phid),p_rgh))).ptr());
+        }
+        else p_rghEqnComps.set
         (
             phasei,
             (
@@ -59,6 +69,7 @@
         phasei = 0;
         forAllConstIters(mixture.phases(), phase)
         {
+            if (gasDynamics && phase().name()!=gasPhaseName) continue;
             tmp<fvScalarMatrix> hmm
             (
                 (max(phase(), scalar(0))/phase().thermo().rho())
@@ -89,6 +100,7 @@
             phasei = 0;
             for (phaseModel& phase : mixture.phases())
             {
+                if (gasDynamics) continue; // Fixed pure alpha needs no VOF source.
                 phase.dgdt() =
                     pos0(phase)
                   *(p_rghEqnComps[phasei] & p_rgh)/phase.thermo().rho();
@@ -104,10 +116,14 @@
         }
     }
 
+    if (gasDynamics && min(p_rgh).value()<pMin.value())
+        FatalErrorInFunction << "Gas pressure would be clipped: minP=" << min(p_rgh).value()
+            << "; reduce timestep or improve nonlinear convergence" << abort(FatalError);
     p = max(p_rgh + mixture.rho()*gh, pMin);
 
     // Update densities from change in p_rgh
-    mixture.correctRho(p_rgh - p_rgh_0);
+    if (gasDynamics) mixture.correct();
+    else mixture.correctRho(p_rgh - p_rgh_0);
     rho = mixture.rho();
 
     // Correct p_rgh for consistency with p and the updated densities
@@ -115,6 +131,8 @@
     p_rgh.correctBoundaryConditions();
 
     K = 0.5*magSqr(U);
+    updateGasState();
+    updateGasMassFlux();
 
     Info<< "max(U) " << max(mag(U)).value() << endl;
     Info<< "min(p_rgh) " << min(p_rgh).value() << endl;

@@ -46,6 +46,8 @@ Description
 #include "pimpleControl.H"
 #include <chrono>
 #include <cmath>
+#include "pintleGasEOS.H"
+#include "upwind.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -75,6 +77,7 @@ int main(int argc, char *argv[])
     volScalarField& T = mixture.T();
 
     turbulence->validate();
+    #include "pintleGasFields.H"
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -86,6 +89,7 @@ int main(int argc, char *argv[])
         #include "CourantNo.H"
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
+        #include "pintleWaveCourant.H"
 
         ++runTime;
 
@@ -98,7 +102,8 @@ int main(int argc, char *argv[])
         // --- Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
-            mixture.solve();
+            if (gasDynamics) updateGasMassFlux();
+            else mixture.solve();
 
             mixture.correctMixture();
             rho=mixture.rho();
@@ -129,6 +134,7 @@ int main(int argc, char *argv[])
             << " energy=" << energySeconds << " pressure=" << pressureSeconds
             << " turbulence=" << turbulenceSeconds << endl;
         #include "checkState.H"
+        #include "pintleGasBalance.H"
         runTime.write();
 
         runTime.printExecutionTime(Info);

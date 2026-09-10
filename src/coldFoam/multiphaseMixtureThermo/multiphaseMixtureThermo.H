@@ -221,6 +221,9 @@ public:
             return rhoPhi_;
         }
 
+        // Used only by the guarded pure-gas pressure/energy path.
+        surfaceScalarField& gasMassFlux() { return rhoPhi_; }
+
         //- Update properties
         virtual void correct();
         void correctMixture();
