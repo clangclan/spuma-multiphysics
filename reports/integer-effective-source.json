@@ -1,0 +1,10 @@
+{
+  "scope": "Current F30/F62/RNE source and binary hashes, captured after actual matrix runs and checked during final review. No later source edits.",
+  "sha256": {
+    "src/integerLab/integerLab.cu": "474674e96f235090be9647b1c2b248b4c925872c6c2ae4d8aa53020226de2516",
+    "src/precisionLab/precisionLab.cu": "fb3278b9e1bd580a7a707b79f278c03e89e5811d318d310b8807b360dcebc6c7",
+    "src/precisionLab/floatExpansion.cuh": "ae27b04f98b9718bf0929f552eec28bf5e5ca0aba8f57a1579e083adca8b71ee",
+    "tools/build_integer_lab.sh": "16560ae31d296b00e39fbee54cec25f277cfab92e248d0c82bac133116309233",
+    "bin/pintleIntegerLab": "ce7c8135abd3cffd137e104a5fe10b1c1316957695192816c8cf96b912f987ae"
+  }
+}

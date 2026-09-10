@@ -294,6 +294,8 @@ template<class T> std::string experiment(const Snapshot& h,const std::string& na
     return out.str();
 }
 
+// The integer lab reuses snapshot I/O, CUDA timing, and error metrics.
+#ifndef PINTLE_LAB_NO_MAIN
 int main(int argc,char** argv)
 {
     try
@@ -337,3 +339,5 @@ int main(int argc,char** argv)
     }
     catch(const std::exception& e){std::cerr<<e.what()<<"\n";return 1;}
 }
+
+#endif

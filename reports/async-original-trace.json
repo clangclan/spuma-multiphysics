@@ -1,0 +1,85 @@
+{
+  "scope": "Profiled 10-second windows. GPU activity union includes kernels/memcpy/memset. Post-gap attribution is temporal, not complete causal proof; host API wait overlaps GPU work. Profiles are excluded from wall benchmarks.",
+  "traces": [
+    {
+      "sqlite": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/profile-gpu-steady12.sqlite",
+      "gpu_timeline": {
+        "busy_ms": 6878.498285,
+        "span_ms": 9992.494946,
+        "idle_ms": 3113.996661,
+        "duty_percent": 68.83664512388336
+      },
+      "smoother": {
+        "calls": 82986,
+        "kernel_ms": 1033.081876,
+        "average_kernel_us": 12.448869399657774,
+        "post_gap_ms": 580.678233,
+        "average_post_gap_us": 6.99730355722652
+      },
+      "runtime_api": [
+        {
+          "api": "cudaDeviceSynchronize",
+          "calls": 263241,
+          "host_ms": 8170.021873
+        },
+        {
+          "api": "cudaLaunchKernel",
+          "calls": 264297,
+          "host_ms": 479.858467
+        },
+        {
+          "api": "cudaMemcpy",
+          "calls": 47753,
+          "host_ms": 629.463744
+        },
+        {
+          "api": "cudaMemcpyAsync",
+          "calls": 15809,
+          "host_ms": 42.289684
+        },
+        {
+          "api": "cudaMemset",
+          "calls": 15244,
+          "host_ms": 143.888441
+        }
+      ],
+      "kernels": {
+        "calls": 264296,
+        "milliseconds": 6632.776273,
+        "under_10us_calls": 226279
+      },
+      "copies": [
+        {
+          "label": "Device-to-Device",
+          "calls": 42485,
+          "bytes": 73037189568,
+          "milliseconds": 161.812743
+        },
+        {
+          "label": "Device-to-Host",
+          "calls": 5271,
+          "bytes": 42148,
+          "milliseconds": 3.903811
+        },
+        {
+          "label": "Host-to-Device",
+          "calls": 15811,
+          "bytes": 247428,
+          "milliseconds": 34.653108
+        },
+        {
+          "label": "Unified Device-to-Host",
+          "calls": 13986,
+          "bytes": 182484992,
+          "milliseconds": 12.019112
+        },
+        {
+          "label": "Unified Host-to-Device",
+          "calls": 10983,
+          "bytes": 182484992,
+          "milliseconds": 15.176856
+        }
+      ]
+    }
+  ]
+}

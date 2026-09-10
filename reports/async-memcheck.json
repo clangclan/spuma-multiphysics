@@ -1,0 +1,35 @@
+{
+  "command": [
+    "compute-sanitizer",
+    "--tool",
+    "memcheck",
+    "--error-exitcode",
+    "97",
+    "--report-api-errors",
+    "explicit",
+    "--kernel-name",
+    "kns=pintleAsync",
+    "--print-limit",
+    "0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+    "-case",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-v2-memcheck1/case",
+    "-noFunctionObjects",
+    "-pool",
+    "fixedSizeMemoryPool",
+    "-poolSize",
+    "10"
+  ],
+  "return_code": 0,
+  "completed_ok": true,
+  "completed_steps": 1,
+  "binary_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleAsyncSmoother.so": "0b9347449da0563744f67af5f25d2b6841ad675fe46f75de30ba9dcdd8b61f47",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-v2-memcheck1/case/stdout.log",
+  "log_sha256": "61cbe9d0e12e8bba2559646ff68bc1ebe4668042cf8c1ee3f1ca6909716d498a",
+  "error_summary": "ERROR SUMMARY: 0 errors",
+  "scope": "One actual Pintle timestep, pintleAsync kernel-name filter and explicit CUDA API errors. Before final host usePool guard; identical final colorLoop SASS separately verified."
+}

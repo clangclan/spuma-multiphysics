@@ -1,0 +1,8 @@
+{
+  "scope": "Same colorLoop device SASS in the memchecked binary and final library. Final change adds a host source.usePool eligibility guard; full CFD tests exercise the final library.",
+  "old_binary_sha256": "0b9347449da0563744f67af5f25d2b6841ad675fe46f75de30ba9dcdd8b61f47",
+  "new_binary_sha256": "ab1670f0fb0d416afc2cb64026c0474c22818b070716e87f8552a4bca8d11c79",
+  "kernel_count": 1,
+  "same_names": true,
+  "identical_device_sass": true
+}

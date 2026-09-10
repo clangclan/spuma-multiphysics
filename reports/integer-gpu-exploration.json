@@ -1,0 +1,1315 @@
+{
+  "bandwidth_scope": "Array-size accounting, each array read once and output written once; not measured DRAM traffic. Cache effects, coalescing and repeat reuse are not modeled.",
+  "benchmark": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/benchmark.json",
+  "comparison_screens": [
+    {
+      "all_field_max_abs": {
+        "T": 6.161991450426285e-08,
+        "U": 2.025462322308158e-07,
+        "alpha.air": 1.9630515213364674e-08,
+        "alpha.ipa": 3.120190772420983e-10,
+        "alpha.n2o": 1.9630515213364674e-08,
+        "dgdt.air": 252634.58751005263,
+        "dgdt.ipa": 10941.303187789772,
+        "dgdt.n2o": 2172.001411853525,
+        "p": 0.0010510776191949844,
+        "rho": 4.1498991265598306e-07
+      },
+      "all_field_max_scaled": {
+        "T": 1.8644219760058645e-10,
+        "U": 7.397712895917202e-10,
+        "alpha.air": 1.963051519783808e-08,
+        "alpha.ipa": 3.120190771928396e-10,
+        "alpha.n2o": 1.9630515213364635e-08,
+        "dgdt.air": 1.0,
+        "dgdt.ipa": 0.8536228499467107,
+        "dgdt.n2o": 0.006466842402335376,
+        "p": 2.562775735146452e-10,
+        "rho": 5.335444131038168e-10
+      },
+      "candidate": "async/1",
+      "pass": true,
+      "state_max_scaled": {
+        "T": 1.8644219760058645e-10,
+        "U": 7.397712895917202e-10,
+        "alpha.air": 1.963051519783808e-08,
+        "alpha.ipa": 3.120190771928396e-10,
+        "alpha.n2o": 1.9630515213364635e-08,
+        "p": 2.562775735146452e-10,
+        "rho": 5.335444131038168e-10
+      }
+    },
+    {
+      "all_field_max_abs": {
+        "T": 2.284883748870925e-08,
+        "U": 9.630588237996562e-08,
+        "alpha.air": 1.3586254121733532e-08,
+        "alpha.ipa": 3.9271547125352413e-10,
+        "alpha.n2o": 1.3586254177244683e-08,
+        "dgdt.air": 108661.32392664715,
+        "dgdt.ipa": 10941.30318776563,
+        "dgdt.n2o": 2214.0881189779166,
+        "p": 0.00172355305403471,
+        "rho": 3.898665994483963e-07
+      },
+      "all_field_max_scaled": {
+        "T": 6.913329088956967e-11,
+        "U": 3.5174353044707357e-10,
+        "alpha.air": 1.3586254110987596e-08,
+        "alpha.ipa": 3.927154711915258e-10,
+        "alpha.n2o": 1.3586254177244657e-08,
+        "dgdt.air": 0.4344576970089719,
+        "dgdt.ipa": 0.8536228499443658,
+        "dgdt.n2o": 0.006592149918583701,
+        "p": 4.202429834345381e-10,
+        "rho": 5.012438607487595e-10
+      },
+      "candidate": "async/2",
+      "pass": true,
+      "state_max_scaled": {
+        "T": 6.913329088956967e-11,
+        "U": 3.5174353044707357e-10,
+        "alpha.air": 1.3586254110987596e-08,
+        "alpha.ipa": 3.927154711915258e-10,
+        "alpha.n2o": 1.3586254177244657e-08,
+        "p": 4.202429834345381e-10,
+        "rho": 5.012438607487595e-10
+      }
+    },
+    {
+      "all_field_max_abs": {
+        "T": 2.0190100258332677e-08,
+        "U": 8.517849892086815e-08,
+        "alpha.air": 1.359964518776735e-08,
+        "alpha.ipa": 3.5372538231825956e-10,
+        "alpha.n2o": 1.359964518776735e-08,
+        "dgdt.air": 108661.3239266428,
+        "dgdt.ipa": 10952.410106911339,
+        "dgdt.n2o": 2203.6999599728515,
+        "p": 0.00046681473031640053,
+        "rho": 3.6557194249553504e-07
+      },
+      "all_field_max_scaled": {
+        "T": 6.108880046692209e-11,
+        "U": 3.111023458612526e-10,
+        "alpha.air": 1.3599645177010823e-08,
+        "alpha.ipa": 3.5372538226241665e-10,
+        "alpha.n2o": 1.3599645187767324e-08,
+        "dgdt.air": 0.434457697008935,
+        "dgdt.ipa": 0.8544893938849677,
+        "dgdt.n2o": 0.006561220570762127,
+        "p": 1.1382046785280029e-10,
+        "rho": 4.70008695531097e-10
+      },
+      "candidate": "async/3",
+      "pass": true,
+      "state_max_scaled": {
+        "T": 6.108880046692209e-11,
+        "U": 3.111023458612526e-10,
+        "alpha.air": 1.3599645177010823e-08,
+        "alpha.ipa": 3.5372538226241665e-10,
+        "alpha.n2o": 1.3599645187767324e-08,
+        "p": 1.1382046785280029e-10,
+        "rho": 4.70008695531097e-10
+      }
+    },
+    {
+      "all_field_max_abs": {
+        "T": 5.5031875945132924e-08,
+        "U": 1.767379558259563e-07,
+        "alpha.air": 1.980967528902866e-08,
+        "alpha.ipa": 4.911082651659626e-10,
+        "alpha.n2o": 1.980967523351751e-08,
+        "dgdt.air": 108661.32392666447,
+        "dgdt.ipa": 10941.303187761208,
+        "dgdt.n2o": 2172.001411840488,
+        "p": 0.0006434675306081772,
+        "rho": 4.303007088424238e-07
+      },
+      "all_field_max_scaled": {
+        "T": 1.665088952465786e-10,
+        "U": 6.455102327080901e-10,
+        "alpha.air": 1.980967527336036e-08,
+        "alpha.ipa": 4.91108265088431e-10,
+        "alpha.n2o": 1.980967523351747e-08,
+        "dgdt.air": 0.4344576970090475,
+        "dgdt.ipa": 0.8536228499444608,
+        "dgdt.n2o": 0.00646684240229656,
+        "p": 1.5689259705294202e-10,
+        "rho": 5.532292042669663e-10
+      },
+      "candidate": "async/4",
+      "pass": true,
+      "state_max_scaled": {
+        "T": 1.665088952465786e-10,
+        "U": 6.455102327080901e-10,
+        "alpha.air": 1.980967527336036e-08,
+        "alpha.ipa": 4.91108265088431e-10,
+        "alpha.n2o": 1.980967523351747e-08,
+        "p": 1.5689259705294202e-10,
+        "rho": 5.532292042669663e-10
+      }
+    }
+  ],
+  "definition": {
+    "change": "same FP64 color order; serial no-interface distinct-source path skips copy and queues sweeps, otherwise one fence per sweep with original interface path",
+    "repeats": 4,
+    "steps": 12,
+    "timing": "exclude first two steps and last write step; alternate order"
+  },
+  "effective_source_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/asyncSmoother/pintleAsyncGaussSeidelSmoother.C": "b557d7001cb2b1e4da251c88144657242f74584470507d0fa58eb2bd88e8a8c0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/asyncSmoother/pintleAsyncGaussSeidelSmoother.H": "e9f90885e1bef46a46e3796bda8b16ef57b5b415835bc65f3b3c58004b15347c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/TEqn.H": "9c5af5f2a036d780ad67fc0531e109d13e512cc69004116fc6dfb8bb965053cf",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/UEqn.H": "0a7cb5758c2fd36ea38ab21e4b4392527d2e922f7547d6e18a26d57942ad9c4e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/checkState.H": "75de32813814276cf35ab4240541ac55f8b82f6fe29fd0265bbdf9bd8045e576",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/compressibleMultiphaseInterFoam.C": "2b812e8835744ef49037b7ff557e2e15348bce918b44e88dcb474a500baf4541",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/createFields.H": "cad42c39946c61fd32b87ca65a2da1044e15654dd1f2e0e5294d6eacc95a0ee8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.C": "592691e416251471ff0eec91d6d2d5cc926c7df7ea37548cb93607070c952d68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.H": "039e8a137468d886fcf16a11e196e2303b2d5fcf5baeade03b04520834da7ed4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.C": "ccbea9bca53c033b9d1d2d55cb12320a043f3e4da5e4ca348fdc696a042c84e5",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.H": "bcd98d786f7261d8811f1f4571ccdaedc1ada72eb5c660771f2f0ec01e77bc5e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.C": "95ec1bd7c805bf5894fa79e6b23526629a8befccd86fe209766f913ebbda93f8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.H": "647dbc9b8d532c2d13dc0654a88a3d153fece8070429ca1edeb3821f2d5f1e42",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.C": "a3ee73c868eb52ff49e262c6695a8352636121b2f8844fae54a252838abf87ed",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.H": "74cec3e43f7487dd5b56292fd291d009d7f8b169fa9a80bc6887c5455b7cc671",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleIpa.H": "ff47d00d9f868bb9c30130ed25ccf63d41e1b6714616b231ecc238499ebcdf30",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.C": "22a8485d2a14fc86c8c5e28e85097d9f624c467bc6839da24d48805a421d2bcb",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.H": "d9f11bd57c43f9fee2d590c86a5ca362baa2f0bb3b43e7ffe03663c0bebf62b9",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.C": "95fdff735e737f60fd2c5591356e24bce7c8a820559b17fb8b2a753cfb516b3f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.H": "1a0f089a4cd72b53f5e0c6072e28ba816770d203d611f126cf85e914470fbf3a",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGasI.H": "6d365080fb620e8f1cca8cb8765a35686d6f405c2e7a4a22ee02ed80ea8c6d73",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleTemperatureIncrement.C": "d6c59e2ea2042a3e9ea56e52ee378ae05974f499ef592fda0b8db4955168ad04",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleThermos.C": "550ddb603324a8af44158f8a350f7ff0b9e388a49929eaab3f8fbf9a23122a78",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pEqn.H": "917d72d3800a6ddb896c5d9f97e8172f4f007c2dbb319f5de8712d63a778d277",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/integerLab/integerLab.cu": "474674e96f235090be9647b1c2b248b4c925872c6c2ae4d8aa53020226de2516",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionLab/floatExpansion.cuh": "ae27b04f98b9718bf0929f552eec28bf5e5ca0aba8f57a1579e083adca8b71ee",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionLab/precisionLab.cu": "fb3278b9e1bd580a7a707b79f278c03e89e5811d318d310b8807b360dcebc6c7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionProbe/pintlePrecisionProbe.C": "226e92d40fed342988071a8d76e37bdee34f2742ca798ccc8aeb7a967eac1a03",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleIrKernels.cu": "0939eb9ff5d38787baf0f681d83cf24a4db2389e0963953a0cadb62b7bdcc241",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleIrKernels.h": "4c74f7376c5ffbfb7e140f618c28afa413270906d9df761ec85e954f18060ea1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleMixedTemperature.C": "1a04427f295dac341d7970fc3ddebb745b4573067da75591ca37d532268f7bea",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/thermoCheck/thermoCheck.C": "50a7fa071d60a072223a332069fc96b01b85d1963a332c9c988625678b5b170b"
+  },
+  "engineering_screen_pass": true,
+  "engineering_thresholds": {
+    "alpha_roundoff": 1e-08,
+    "alpha_sum": 1e-09,
+    "mass_imbalance": 1e-06,
+    "state_max_scaled": {
+      "T": 1e-06,
+      "U": 1e-06,
+      "alpha.air": 1e-06,
+      "alpha.ipa": 1e-06,
+      "alpha.n2o": 1e-06,
+      "p": 1e-05,
+      "rho": 1e-06
+    }
+  },
+  "input_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/benchmark.json": "1217c0a3ea6cf55a7d316d134a4a8ea682f576ccb1ec0c4ce587d1340c01e625",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/reports/async-current-traces.json": "73b288fdeff710eb0cdb1b409688dbaef2ca1ec26a715bbd5a0d8bb6fdd4e8b4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/reports/integer-exponents.json": "cbe2e7ea87ed356ec567154d947aaeb493ceda08c0b4f6fe0ed16bec890e66e9",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/reports/integer-pressure-v4.json": "98aa08022ca4fd0dce559d93026e6e4bd336ca2a19e2071cf756091212ab8ef5",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/reports/integer-temperature-v4.json": "b9099fa5c4325e0eca598edfdc8f05c7577e7c76a2dc867b65e11000daa1e79f"
+  },
+  "instantaneous_phase_source_first_repeat": {
+    "air": {
+      "max_abs_dt_delta_source": 1.959146501349096e-12,
+      "relative_l2": 1.2269199559673853e-09
+    },
+    "ipa": {
+      "max_abs_dt_delta_source": 1.3121359529577603e-13,
+      "relative_l2": 4.0474427941400824e-09
+    },
+    "n2o": {
+      "max_abs_dt_delta_source": 1.9591465081703062e-12,
+      "relative_l2": 1.2227436391812233e-09
+    }
+  },
+  "integer_labs": {
+    "pressure": {
+      "maximum_row_length": 19,
+      "nonzeros": 21419851,
+      "rows": 3094455,
+      "runs": [
+        {
+          "mode": "fp64",
+          "packing": {
+            "max_ms": 0.558027,
+            "median_ms": 0.534133,
+            "min_ms": 0.533579
+          },
+          "residual": {
+            "max_ms": 0.372672,
+            "median_ms": 0.372274,
+            "min_ms": 0.371974
+          },
+          "spmv": {
+            "max_ms": 0.347642,
+            "median_ms": 0.346525,
+            "min_ms": 0.345069
+          }
+        },
+        {
+          "mode": "fp32",
+          "packing": {
+            "max_ms": 0.408107,
+            "median_ms": 0.387072,
+            "min_ms": 0.386347
+          },
+          "residual": {
+            "max_ms": 0.24275,
+            "median_ms": 0.242662,
+            "min_ms": 0.24147
+          },
+          "spmv": {
+            "max_ms": 0.229256,
+            "median_ms": 0.228666,
+            "min_ms": 0.227509
+          }
+        },
+        {
+          "mode": "ds",
+          "packing": {
+            "max_ms": 0.550848,
+            "median_ms": 0.534421,
+            "min_ms": 0.532341
+          },
+          "residual": {
+            "max_ms": 0.453995,
+            "median_ms": 0.369742,
+            "min_ms": 0.369178
+          },
+          "spmv": {
+            "max_ms": 0.341835,
+            "median_ms": 0.341643,
+            "min_ms": 0.340003
+          }
+        },
+        {
+          "Ax_error_vs_quad": {
+            "max_abs": 1.2564687603667383e-09,
+            "max_error_over_row_scale": 3.1539471323692364e-09,
+            "max_scaled": 1.2564687603667383e-09,
+            "nonfinite": 0,
+            "rel_l2": 1.3614359606638887e-09
+          },
+          "accumulator_bits": 64,
+          "eX": 22,
+          "fp64_output_conversion_mismatches": 0,
+          "fraction_bits_after_row_normalization": 30,
+          "hybrid_Ax_error_vs_extended": {
+            "max_abs": 1.192712887642701e-07,
+            "max_error_over_row_scale": 4.4215190938575343e-07,
+            "max_scaled": 1.192712887642701e-07,
+            "nonfinite": 0,
+            "rel_l2": 1.1077017849200903e-07
+          },
+          "hybrid_spmv": {
+            "max_ms": 0.24794718623161316,
+            "median_ms": 0.24695999920368195,
+            "min_ms": 0.24497759342193604
+          },
+          "input_bytes": 4,
+          "integer_arithmetic_mismatches": 0,
+          "max_fraction_of_signed_accumulator_range": 0.24445785453548877,
+          "mode": "q32",
+          "nonzero_a_lost": 0,
+          "nonzero_x_lost": 0,
+          "packing": {
+            "max_ms": 0.5156586766242981,
+            "median_ms": 0.5150080323219299,
+            "min_ms": 0.5143359899520874
+          },
+          "packing_mismatches": 0,
+          "quantized_residual_error_vs_quad": {
+            "max_abs": 1.2564687603667383e-09,
+            "max_error_over_row_scale": 3.1539470852949246e-09,
+            "max_scaled": 1.2564687603667383e-09,
+            "nonfinite": 0,
+            "rel_l2": 7231.67234358516
+          },
+          "residual": {
+            "max_ms": 0.3025935888290405,
+            "median_ms": 0.3021104037761688,
+            "min_ms": 0.30083680152893066
+          },
+          "residual_error_vs_quad": {
+            "max_abs": 1.2564687603667383e-09,
+            "max_error_over_row_scale": 3.1539470852949246e-09,
+            "max_scaled": 1.2564687603667383e-09,
+            "nonfinite": 0,
+            "rel_l2": 7231.67234358516
+          },
+          "rows_checked_exact": 3094455,
+          "sample_rows": 32768,
+          "spmv": {
+            "max_ms": 0.24927039444446564,
+            "median_ms": 0.24655680358409882,
+            "min_ms": 0.24442879855632782
+          }
+        },
+        {
+          "Ax_error_vs_quad": {
+            "max_abs": 2.79276220674766e-17,
+            "max_error_over_row_scale": 5.4352950182258895e-17,
+            "max_scaled": 2.79276220674766e-17,
+            "nonfinite": 0,
+            "rel_l2": 5.814156206266137e-17
+          },
+          "accumulator_bits": 128,
+          "eX": 22,
+          "fp64_output_conversion_mismatches": 0,
+          "fraction_bits_after_row_normalization": 62,
+          "input_bytes": 8,
+          "integer_arithmetic_mismatches": 0,
+          "max_fraction_of_signed_accumulator_range": 0.24445785463665137,
+          "mode": "q64",
+          "nonzero_a_lost": 0,
+          "nonzero_x_lost": 0,
+          "packing": {
+            "max_ms": 0.6358506679534912,
+            "median_ms": 0.6133120059967041,
+            "min_ms": 0.6108906865119934
+          },
+          "packing_mismatches": 0,
+          "quantized_residual_error_vs_quad": {
+            "max_abs": 2.3679243598035634e-19,
+            "max_error_over_row_scale": 6.135212493325509e-19,
+            "max_scaled": 2.3679243598035634e-19,
+            "nonfinite": 0,
+            "rel_l2": 1.4773867082464666e-06
+          },
+          "residual": {
+            "max_ms": 0.41879838705062866,
+            "median_ms": 0.41859522461891174,
+            "min_ms": 0.41824159026145935
+          },
+          "residual_error_vs_quad": {
+            "max_abs": 2.3679243598035586e-19,
+            "max_error_over_row_scale": 6.13521249333141e-19,
+            "max_scaled": 2.3679243598035586e-19,
+            "nonfinite": 0,
+            "rel_l2": 1.477386708246466e-06
+          },
+          "rows_checked_exact": 3094455,
+          "sample_rows": 32768,
+          "spmv": {
+            "max_ms": 0.362004816532135,
+            "median_ms": 0.3618815839290619,
+            "min_ms": 0.36054080724716187
+          }
+        }
+      ],
+      "scope": "Kernel events, 5 rounds, 3 packing repetitions and 20 SpMV/residual repetitions per round. Allocation, host transfer, global x exponent scan and CPU validation excluded. Row exponent selection included in packing. Integer kernels write FP64 result; floating kernels write native result. Separate untimed integer launches also save raw accumulators for exact CPU validation. This is not full CFD.",
+      "snapshot": "benchmarks/precision-pressure-snapshot1/pressure.csr"
+    },
+    "temperature": {
+      "maximum_row_length": 19,
+      "nonzeros": 21419851,
+      "rows": 3094455,
+      "runs": [
+        {
+          "Ax_error_vs_quad": {
+            "max_abs": 6.877053631453815e-06,
+            "max_error_over_row_scale": 2.6919579867328324e-09,
+            "max_scaled": 2.7318028704638636e-09,
+            "nonfinite": 0,
+            "rel_l2": 8.185586830866413e-10
+          },
+          "accumulator_bits": 64,
+          "eX": 9,
+          "fp64_output_conversion_mismatches": 0,
+          "fraction_bits_after_row_normalization": 30,
+          "hybrid_Ax_error_vs_extended": {
+            "max_abs": 0.00029675499262826754,
+            "max_error_over_row_scale": 3.8361417394239406e-07,
+            "max_scaled": 1.1788131722262087e-07,
+            "nonfinite": 0,
+            "rel_l2": 5.622253620136533e-08
+          },
+          "hybrid_spmv": {
+            "max_ms": 0.24863839149475098,
+            "median_ms": 0.24672000110149384,
+            "min_ms": 0.24558880925178528
+          },
+          "input_bytes": 4,
+          "integer_arithmetic_mismatches": 0,
+          "max_fraction_of_signed_accumulator_range": 0.15855293601923065,
+          "mode": "q32",
+          "nonzero_a_lost": 0,
+          "nonzero_x_lost": 0,
+          "packing": {
+            "max_ms": 0.5175040364265442,
+            "median_ms": 0.5138346552848816,
+            "min_ms": 0.5129600167274475
+          },
+          "packing_mismatches": 0,
+          "quantized_residual_error_vs_quad": {
+            "max_abs": 6.87705381974764e-06,
+            "max_error_over_row_scale": 2.6919579721745914e-09,
+            "max_scaled": 6.87705381974764e-06,
+            "nonfinite": 0,
+            "rel_l2": 15186665.463750677
+          },
+          "residual": {
+            "max_ms": 0.30271202325820923,
+            "median_ms": 0.3024432063102722,
+            "min_ms": 0.3009487986564636
+          },
+          "residual_error_vs_quad": {
+            "max_abs": 6.87705381974764e-06,
+            "max_error_over_row_scale": 2.6919579721745914e-09,
+            "max_scaled": 6.87705381974764e-06,
+            "nonfinite": 0,
+            "rel_l2": 15186665.463750677
+          },
+          "rows_checked_exact": 3094455,
+          "sample_rows": 32768,
+          "spmv": {
+            "max_ms": 0.24656960368156433,
+            "median_ms": 0.24608799815177917,
+            "min_ms": 0.24484479427337646
+          }
+        },
+        {
+          "Ax_error_vs_quad": {
+            "max_abs": 2.2154852113611282e-13,
+            "max_error_over_row_scale": 4.937151034627142e-17,
+            "max_scaled": 8.800671311017703e-17,
+            "nonfinite": 0,
+            "rel_l2": 3.7614212878587545e-17
+          },
+          "accumulator_bits": 128,
+          "eX": 9,
+          "fp64_output_conversion_mismatches": 0,
+          "fraction_bits_after_row_normalization": 62,
+          "input_bytes": 8,
+          "integer_arithmetic_mismatches": 0,
+          "max_fraction_of_signed_accumulator_range": 0.1585529360499002,
+          "mode": "q64",
+          "nonzero_a_lost": 0,
+          "nonzero_x_lost": 0,
+          "packing": {
+            "max_ms": 0.6330666542053223,
+            "median_ms": 0.6145066618919373,
+            "min_ms": 0.611840009689331
+          },
+          "packing_mismatches": 0,
+          "quantized_residual_error_vs_quad": {
+            "max_abs": 1.4672618061589942e-15,
+            "max_error_over_row_scale": 4.2761777487668906e-19,
+            "max_scaled": 1.4672618061589942e-15,
+            "nonfinite": 0,
+            "rel_l2": 0.0035382916002396517
+          },
+          "residual": {
+            "max_ms": 0.4185279905796051,
+            "median_ms": 0.4181455969810486,
+            "min_ms": 0.4180287718772888
+          },
+          "residual_error_vs_quad": {
+            "max_abs": 1.4672618061589887e-15,
+            "max_error_over_row_scale": 4.2761777487668906e-19,
+            "max_scaled": 1.4672618061589887e-15,
+            "nonfinite": 0,
+            "rel_l2": 0.0035382916002396517
+          },
+          "rows_checked_exact": 3094455,
+          "sample_rows": 32768,
+          "spmv": {
+            "max_ms": 0.3623616099357605,
+            "median_ms": 0.36206239461898804,
+            "min_ms": 0.36099839210510254
+          }
+        },
+        {
+          "mode": "ds",
+          "packing": {
+            "max_ms": 0.544107,
+            "median_ms": 0.534315,
+            "min_ms": 0.528267
+          },
+          "residual": {
+            "max_ms": 0.370443,
+            "median_ms": 0.370013,
+            "min_ms": 0.368893
+          },
+          "spmv": {
+            "max_ms": 0.407494,
+            "median_ms": 0.356197,
+            "min_ms": 0.341637
+          }
+        },
+        {
+          "mode": "fp32",
+          "packing": {
+            "max_ms": 0.399275,
+            "median_ms": 0.389024,
+            "min_ms": 0.387029
+          },
+          "residual": {
+            "max_ms": 0.242987,
+            "median_ms": 0.242424,
+            "min_ms": 0.241088
+          },
+          "spmv": {
+            "max_ms": 0.229157,
+            "median_ms": 0.228291,
+            "min_ms": 0.227269
+          }
+        },
+        {
+          "mode": "fp64",
+          "packing": {
+            "max_ms": 0.559072,
+            "median_ms": 0.534805,
+            "min_ms": 0.534112
+          },
+          "residual": {
+            "max_ms": 0.373403,
+            "median_ms": 0.373154,
+            "min_ms": 0.372202
+          },
+          "spmv": {
+            "max_ms": 0.347216,
+            "median_ms": 0.34671,
+            "min_ms": 0.34519
+          }
+        }
+      ],
+      "scope": "Kernel events, 5 rounds, 3 packing repetitions and 20 SpMV/residual repetitions per round. Allocation, host transfer, global x exponent scan and CPU validation excluded. Row exponent selection included in packing. Integer kernels write FP64 result; floating kernels write native result. Separate untimed integer launches also save raw accumulators for exact CPU validation. This is not full CFD.",
+      "snapshot": "benchmarks/precision-temperature-snapshot1/temperature.csr"
+    }
+  },
+  "iteration_signatures_all_equal": true,
+  "logical_stream_bandwidth": [
+    {
+      "bytes_for_one_pass_over_arrays": 318927316,
+      "effective_GBps": 920.3587504509054,
+      "mode": "fp64"
+    },
+    {
+      "bytes_for_one_pass_over_arrays": 208492272,
+      "effective_GBps": 911.776442496917,
+      "mode": "fp32"
+    },
+    {
+      "bytes_for_one_pass_over_arrays": 318927316,
+      "effective_GBps": 933.5104656029832,
+      "mode": "ds"
+    },
+    {
+      "bytes_for_one_pass_over_arrays": 233247912,
+      "effective_GBps": 946.0209923610595,
+      "mode": "q32"
+    },
+    {
+      "bytes_for_one_pass_over_arrays": 331305136,
+      "effective_GBps": 915.5070352100159,
+      "mode": "q64"
+    }
+  ],
+  "median_paired_speedup": 1.0394289279834228,
+  "median_paired_time_reduction_percent": 3.7921018655809267,
+  "paired": [
+    {
+      "iteration_signature_equal": true,
+      "linear_solves_per_run": 192,
+      "repeat": 1,
+      "total_iterations_async": 384,
+      "total_iterations_baseline": 384,
+      "wall_speedup": 1.031539534915901,
+      "wall_time_reduction_percent": 3.057520710388706
+    },
+    {
+      "iteration_signature_equal": true,
+      "linear_solves_per_run": 192,
+      "repeat": 2,
+      "total_iterations_async": 384,
+      "total_iterations_baseline": 384,
+      "wall_speedup": 1.0431366530086372,
+      "wall_time_reduction_percent": 4.135283031635561
+    },
+    {
+      "iteration_signature_equal": true,
+      "linear_solves_per_run": 192,
+      "repeat": 3,
+      "total_iterations_async": 384,
+      "total_iterations_baseline": 384,
+      "wall_speedup": 1.0527588763550748,
+      "wall_time_reduction_percent": 5.011487201869036
+    },
+    {
+      "iteration_signature_equal": true,
+      "linear_solves_per_run": 192,
+      "repeat": 4,
+      "total_iterations_async": 384,
+      "total_iterations_baseline": 384,
+      "wall_speedup": 1.0357212029582084,
+      "wall_time_reduction_percent": 3.448920699526292
+    }
+  ],
+  "phase_source_scope": "S_i=alpha_i*(sum_j(alpha_j*dgdt_j)-dgdt_i) evaluated at simultaneous final states, multiplied by dt; not a sequential alpha replay.",
+  "runs": [
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-01",
+      "configuration": "baseline",
+      "control_dict_sha256": "3b4ae23b70a3788cbdda0f4140e8c6f441f95a22d10037d44e3be1be936bc134",
+      "fv_solution_sha256": "4c826891b296ca2409205968ee236457d33afc2fbcaf3ae64dfe4e76bc9ff521",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2484.0,
+          "index": 0,
+          "mean_power_w": 152.84378378378378,
+          "mean_utilization_percent": 85.70270270270271,
+          "peak_memory_increment_mib": 6658.0,
+          "peak_memory_used_mib": 9142.0,
+          "samples": 37,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.076242136888646,
+      "measured_step_wall_s": [
+        2.0400041209941264,
+        2.1197234990031575,
+        2.0617360409960384,
+        2.103023954005039,
+        2.0641669789984007,
+        2.083810090996849,
+        2.0605667359996005,
+        2.0854352040041704,
+        2.0677126070004306
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.699133733,
+          "mean_s": 0.6831355892222223,
+          "median_s": 0.682696996,
+          "min_s": 0.664543887,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.170911842,
+          "mean_s": 0.16805026244444443,
+          "median_s": 0.168968635,
+          "min_s": 0.16314769,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.41227051000000003,
+          "mean_s": 0.40743858400000005,
+          "median_s": 0.407833915,
+          "min_s": 0.40002558600000004,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.808894125,
+          "mean_s": 0.7854509846666666,
+          "median_s": 0.7798412880000001,
+          "min_s": 0.7719490680000001,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.019364164,
+          "mean_s": 0.016848119,
+          "median_s": 0.016614411000000003,
+          "min_s": 0.014804920999999999,
+          "samples": 9
+        }
+      },
+      "repeat": 1,
+      "smoother_selection": "multicolorGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-01/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-01",
+      "configuration": "async",
+      "control_dict_sha256": "59ed39a47fdf5721c53bea001bd5366d778908f7d9370debc840b568408656e7",
+      "fv_solution_sha256": "c73f7d054d7c31c5473b7358c1fa06c73653e5e7171d2fac748004753b7234fd",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2424.0,
+          "index": 0,
+          "mean_power_w": 157.65459459459458,
+          "mean_utilization_percent": 88.67567567567568,
+          "peak_memory_increment_mib": 6810.0,
+          "peak_memory_used_mib": 9234.0,
+          "samples": 37,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.0127606035554586,
+      "measured_step_wall_s": [
+        2.03609826900356,
+        1.9596149009958026,
+        2.0375864890011144,
+        1.9699342520034406,
+        2.0498421259981114,
+        1.9660143319997587,
+        2.0449121659985394,
+        1.9819746620050864,
+        2.0688682349937153
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.711891557,
+          "mean_s": 0.6933229864444445,
+          "median_s": 0.6994767049999999,
+          "min_s": 0.671596608,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.177536899,
+          "mean_s": 0.17242228733333334,
+          "median_s": 0.17430253099999998,
+          "min_s": 0.165815524,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.43253024100000004,
+          "mean_s": 0.4175351956666667,
+          "median_s": 0.42061798,
+          "min_s": 0.40403404600000004,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.717626487,
+          "mean_s": 0.6979986001111111,
+          "median_s": 0.703708676,
+          "min_s": 0.6775941249999999,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.017958013000000002,
+          "mean_s": 0.017115482555555558,
+          "median_s": 0.017192856000000003,
+          "min_s": 0.016353588000000002,
+          "samples": 9
+        }
+      },
+      "repeat": 1,
+      "smoother_selection": "pintleAsyncGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-01/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-02",
+      "configuration": "async",
+      "control_dict_sha256": "59ed39a47fdf5721c53bea001bd5366d778908f7d9370debc840b568408656e7",
+      "fv_solution_sha256": "c73f7d054d7c31c5473b7358c1fa06c73653e5e7171d2fac748004753b7234fd",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2538.0,
+          "index": 0,
+          "mean_power_w": 158.0888888888889,
+          "mean_utilization_percent": 90.88888888888889,
+          "peak_memory_increment_mib": 6677.0,
+          "peak_memory_used_mib": 9215.0,
+          "samples": 36,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.0111370121109453,
+      "measured_step_wall_s": [
+        2.0205195450034807,
+        1.9610963679951965,
+        2.025022619003721,
+        1.9868373299977975,
+        2.0532660559983924,
+        1.9829842090039165,
+        2.0429489000016474,
+        1.9700127829928533,
+        2.0575452990015037
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.7089178819999999,
+          "mean_s": 0.6922167786666666,
+          "median_s": 0.689119461,
+          "min_s": 0.679768708,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.17491371900000002,
+          "mean_s": 0.16921600366666667,
+          "median_s": 0.169856827,
+          "min_s": 0.164185781,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.432447091,
+          "mean_s": 0.414438832,
+          "median_s": 0.41666854200000003,
+          "min_s": 0.403873667,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.721410585,
+          "mean_s": 0.7037666952222222,
+          "median_s": 0.711925894,
+          "min_s": 0.683132836,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.018456353,
+          "mean_s": 0.016628108111111112,
+          "median_s": 0.016675939,
+          "min_s": 0.014906457,
+          "samples": 9
+        }
+      },
+      "repeat": 2,
+      "smoother_selection": "pintleAsyncGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-02/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-02",
+      "configuration": "baseline",
+      "control_dict_sha256": "3b4ae23b70a3788cbdda0f4140e8c6f441f95a22d10037d44e3be1be936bc134",
+      "fv_solution_sha256": "4c826891b296ca2409205968ee236457d33afc2fbcaf3ae64dfe4e76bc9ff521",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2518.0,
+          "index": 0,
+          "mean_power_w": 154.67526315789473,
+          "mean_utilization_percent": 85.57894736842105,
+          "peak_memory_increment_mib": 6651.0,
+          "peak_memory_used_mib": 9169.0,
+          "samples": 38,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.0978907315552027,
+      "measured_step_wall_s": [
+        2.0976836959962384,
+        2.059983140003169,
+        2.123009185997944,
+        2.10148526699777,
+        2.137650882003072,
+        2.065407251000579,
+        2.0998400340031367,
+        2.0925514779955847,
+        2.103405649999331
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.723946525,
+          "mean_s": 0.6938737697777778,
+          "median_s": 0.690121654,
+          "min_s": 0.677409308,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.17206893299999998,
+          "mean_s": 0.169269468,
+          "median_s": 0.17037079900000002,
+          "min_s": 0.166915104,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.422196192,
+          "mean_s": 0.4118879958888889,
+          "median_s": 0.41329825200000003,
+          "min_s": 0.40112185,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.804035826,
+          "mean_s": 0.7896740721111111,
+          "median_s": 0.79162423,
+          "min_s": 0.775922711,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.019130343,
+          "mean_s": 0.017516755111111112,
+          "median_s": 0.017470622,
+          "min_s": 0.015211764999999999,
+          "samples": 9
+        }
+      },
+      "repeat": 2,
+      "smoother_selection": "multicolorGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-02/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-03",
+      "configuration": "baseline",
+      "control_dict_sha256": "3b4ae23b70a3788cbdda0f4140e8c6f441f95a22d10037d44e3be1be936bc134",
+      "fv_solution_sha256": "4c826891b296ca2409205968ee236457d33afc2fbcaf3ae64dfe4e76bc9ff521",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2501.0,
+          "index": 0,
+          "mean_power_w": 154.86783783783784,
+          "mean_utilization_percent": 84.86486486486487,
+          "peak_memory_increment_mib": 6717.0,
+          "peak_memory_used_mib": 9218.0,
+          "samples": 37,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.098744102777952,
+      "measured_step_wall_s": [
+        2.0802740809958777,
+        2.1037629200000083,
+        2.073086358999717,
+        2.1077139690023614,
+        2.107053204999829,
+        2.0934716330011724,
+        2.1185541640006704,
+        2.0790358329977607,
+        2.125744761004171
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.703872943,
+          "mean_s": 0.6904598672222222,
+          "median_s": 0.6909058960000001,
+          "min_s": 0.673820468,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.17360072799999998,
+          "mean_s": 0.16983219688888887,
+          "median_s": 0.170072813,
+          "min_s": 0.164068945,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.43032929600000003,
+          "mean_s": 0.41451534255555555,
+          "median_s": 0.411384992,
+          "min_s": 0.403662299,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.804073328,
+          "mean_s": 0.7910719634444444,
+          "median_s": 0.788470137,
+          "min_s": 0.7763308769999999,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.019120173,
+          "mean_s": 0.017328441,
+          "median_s": 0.017160564,
+          "min_s": 0.015338551,
+          "samples": 9
+        }
+      },
+      "repeat": 3,
+      "smoother_selection": "multicolorGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-03/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-03",
+      "configuration": "async",
+      "control_dict_sha256": "59ed39a47fdf5721c53bea001bd5366d778908f7d9370debc840b568408656e7",
+      "fv_solution_sha256": "c73f7d054d7c31c5473b7358c1fa06c73653e5e7171d2fac748004753b7234fd",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2488.0,
+          "index": 0,
+          "mean_power_w": 158.95555555555555,
+          "mean_utilization_percent": 88.19444444444444,
+          "peak_memory_increment_mib": 6682.0,
+          "peak_memory_used_mib": 9170.0,
+          "samples": 36,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 1.9935658106672538,
+      "measured_step_wall_s": [
+        2.018663896000362,
+        1.958133625004848,
+        2.018917445995612,
+        1.9677488970046397,
+        2.022622259995842,
+        1.9714742619980825,
+        2.011525079004059,
+        1.9506552230013767,
+        2.022351608000463
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.7040242050000001,
+          "mean_s": 0.6888774604444444,
+          "median_s": 0.684518278,
+          "min_s": 0.6734018900000001,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.172372829,
+          "mean_s": 0.16782729033333332,
+          "median_s": 0.167329003,
+          "min_s": 0.164564471,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.428841417,
+          "mean_s": 0.41217766977777776,
+          "median_s": 0.40877032,
+          "min_s": 0.400852471,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.703486759,
+          "mean_s": 0.6927055536666666,
+          "median_s": 0.698324072,
+          "min_s": 0.675405083,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.018896491,
+          "mean_s": 0.01652205788888889,
+          "median_s": 0.016740584,
+          "min_s": 0.014689899,
+          "samples": 9
+        }
+      },
+      "repeat": 3,
+      "smoother_selection": "pintleAsyncGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-03/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-04",
+      "configuration": "async",
+      "control_dict_sha256": "59ed39a47fdf5721c53bea001bd5366d778908f7d9370debc840b568408656e7",
+      "fv_solution_sha256": "c73f7d054d7c31c5473b7358c1fa06c73653e5e7171d2fac748004753b7234fd",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2547.0,
+          "index": 0,
+          "mean_power_w": 157.86567567567567,
+          "mean_utilization_percent": 86.78378378378379,
+          "peak_memory_increment_mib": 6619.0,
+          "peak_memory_used_mib": 9166.0,
+          "samples": 37,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.0150004707781286,
+      "measured_step_wall_s": [
+        2.0129806219993043,
+        1.9778506360016763,
+        2.017501756999991,
+        2.0043674260014086,
+        2.041558434997569,
+        2.0397571100038476,
+        2.0035011599975405,
+        2.050942492998729,
+        1.9865445980030927
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.72460652,
+          "mean_s": 0.6965989247777779,
+          "median_s": 0.6906782069999999,
+          "min_s": 0.683383496,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.17430194100000002,
+          "mean_s": 0.1689447821111111,
+          "median_s": 0.168840357,
+          "min_s": 0.16470815900000002,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.42901745,
+          "mean_s": 0.41988117366666666,
+          "median_s": 0.41985151,
+          "min_s": 0.411342746,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.708824777,
+          "mean_s": 0.6975324177777777,
+          "median_s": 0.699437262,
+          "min_s": 0.686532904,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.018221835999999998,
+          "mean_s": 0.016965283444444444,
+          "median_s": 0.017036926,
+          "min_s": 0.016122729,
+          "samples": 9
+        }
+      },
+      "repeat": 4,
+      "smoother_selection": "pintleAsyncGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-04/stdout.log"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-04",
+      "configuration": "baseline",
+      "control_dict_sha256": "3b4ae23b70a3788cbdda0f4140e8c6f441f95a22d10037d44e3be1be936bc134",
+      "fv_solution_sha256": "4c826891b296ca2409205968ee236457d33afc2fbcaf3ae64dfe4e76bc9ff521",
+      "gpu_measured_window": [
+        {
+          "baseline_memory_used_mib": 2497.0,
+          "index": 0,
+          "mean_power_w": 155.72394736842105,
+          "mean_utilization_percent": 84.86842105263158,
+          "peak_memory_increment_mib": 6663.0,
+          "peak_memory_used_mib": 9160.0,
+          "samples": 38,
+          "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+        }
+      ],
+      "mean_measured_wall_s_per_step": 2.0869787115556795,
+      "measured_step_wall_s": [
+        2.0479476030013757,
+        2.071355321997544,
+        2.0712328070003423,
+        2.0864571370038902,
+        2.0948603189972346,
+        2.067541788004746,
+        2.104944191996765,
+        2.084531082997273,
+        2.1539381530019455
+      ],
+      "pintle_timing_measured_stage_statistics": {
+        "alpha": {
+          "max_s": 0.707472887,
+          "mean_s": 0.6879864203333333,
+          "median_s": 0.689798474,
+          "min_s": 0.658236432,
+          "samples": 9
+        },
+        "energy": {
+          "max_s": 0.175994697,
+          "mean_s": 0.1703902,
+          "median_s": 0.169622401,
+          "min_s": 0.167560816,
+          "samples": 9
+        },
+        "momentum": {
+          "max_s": 0.43197047899999996,
+          "mean_s": 0.41098628077777777,
+          "median_s": 0.41022198099999996,
+          "min_s": 0.394876166,
+          "samples": 9
+        },
+        "pressure": {
+          "max_s": 0.8021565509999999,
+          "mean_s": 0.7847291167777778,
+          "median_s": 0.786436857,
+          "min_s": 0.768964422,
+          "samples": 9
+        },
+        "turbulence": {
+          "max_s": 0.018621144000000003,
+          "mean_s": 0.01700137711111111,
+          "median_s": 0.017055312000000003,
+          "min_s": 0.015396522,
+          "samples": 9
+        }
+      },
+      "repeat": 4,
+      "smoother_selection": "multicolorGaussSeidel",
+      "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-04/stdout.log"
+    }
+  ],
+  "runtime_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "acdd40f2e1557e166f75dc3240cb2d580b0e22760123204beaef7e7d4ac18b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/controlDict": "6f22e1f24d2bdde212107c4dde08aa6de746af5de612b818fb24b527248bc1f4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/pintle45us/system/fvSolution": "7d51958c182baad6823594c7829e7f4cec92d78077cb4048ffb2508f003657a6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleAsyncSmoother.so": "ab1670f0fb0d416afc2cb64026c0474c22818b070716e87f8552a4bca8d11c79",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "a5106714295ec6ceb8f3fcd932934056e56e2938592ce4cd65e3c7b95a145f08"
+  },
+  "scope": "MAIN short-run engineering screen; not user acceptance or physical-model validation. Integer kernels are separate from full CFD. Device-wide power includes desktop processes.",
+  "state_screens": [
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145619050432e-08,
+      "mode": "baseline",
+      "pass": true,
+      "reasons": [],
+      "repeat": 1
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145619050432e-08,
+      "mode": "async",
+      "pass": true,
+      "reasons": [],
+      "repeat": 1
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.0511456190504315e-08,
+      "mode": "async",
+      "pass": true,
+      "reasons": [],
+      "repeat": 2
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145632974536e-08,
+      "mode": "baseline",
+      "pass": true,
+      "reasons": [],
+      "repeat": 2
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145619050431e-08,
+      "mode": "baseline",
+      "pass": true,
+      "reasons": [],
+      "repeat": 3
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145619050432e-08,
+      "mode": "async",
+      "pass": true,
+      "reasons": [],
+      "repeat": 3
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145646898642e-08,
+      "mode": "async",
+      "pass": true,
+      "reasons": [],
+      "repeat": 4
+    },
+    {
+      "alpha_sum_max_abs_error": 2.877698079828406e-13,
+      "max_relative_mass_imbalance": 5.051145660822747e-08,
+      "mode": "baseline",
+      "pass": true,
+      "reasons": [],
+      "repeat": 4
+    }
+  ],
+  "stdout_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-01/stdout.log": "b49e3d7019f5010dbff6aefde3c4afeb660a3c6dcff64986aaec537b76c3ca36",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-02/stdout.log": "f97ac47716a81cc8278a66d279f9cadbf7e28fc5dba2805125289c606ee65839",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-03/stdout.log": "bd121fd16b92c6ea988288c940cb76c6a16e60bf6f39ca6c8f8ee546fad38d8b",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/async/repeat-04/stdout.log": "5de44e18603f78657872afd492acf4ce3e231f09ec660c1836cd7c9c8acad074",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-01/stdout.log": "e708489077cbd05b80c515121580ebf1026760cc25202fcf35b4d19c95f2c82e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-02/stdout.log": "162c89c170311dc20def839ff4147ff4748e5f1927a037b8046d7dd8365227ce",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-03/stdout.log": "c3be9e64243fb7f97f4e8bece0bd435b8d173f0644775a7163ecf5e88a503dbb",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/async-final12/runs/baseline/repeat-04/stdout.log": "771e43936b6b90c466bfa68e5f2288769e2b96f463a6ba977eee8c00cd222dd3"
+  },
+  "timing_summary": [
+    {
+      "mode": "baseline",
+      "wall_max_s": 2.098744102777952,
+      "wall_median_s": 2.092434721555441,
+      "wall_min_s": 2.076242136888646
+    },
+    {
+      "mode": "async",
+      "wall_max_s": 2.0150004707781286,
+      "wall_median_s": 2.011948807833202,
+      "wall_min_s": 1.9935658106672538
+    }
+  ]
+}
