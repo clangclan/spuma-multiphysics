@@ -65,8 +65,8 @@ pintleLimiter::pintleLimiter(const fvMesh& mesh)
     boundaryCorr_(boundaryFaces_.size()),
     upperBudget_(mesh.nCells()), lowerBudget_(mesh.nCells()),
     positive_(mesh.nCells()), negative_(mesh.nCells()),
-    ratioIn_(mesh.nCells()), ratioOut_(mesh.nCells()), lambda_(mesh.nFaces()),
-    ratioIn32_(mesh.nCells()), ratioOut32_(mesh.nCells()), coupled_(false)
+    ratioIn_(), ratioOut_(), lambda_(mesh.nFaces()),
+    ratioIn32_(), ratioOut32_(), coupled_(false)
 {
     // One-time topology setup. Cell gather also handles several patch faces
     // belonging to the same cell, without atomic writes or patch races.
@@ -186,14 +186,33 @@ template<class Ratio> void pintleLimiter::iterate
     pintleKernel::finish();
 }
 
+void pintleLimiter::checkTimeScheme(const volScalarField& psi) const
+{
+    const word key("ddt("+psi.name()+')');
+    const word scheme(mesh_.ddtScheme(key));
+    if(mesh_.moving() || mesh_.topoChanging()
+        || fv::localEulerDdt::enabled(mesh_) || scheme!="Euler")
+        FatalErrorInFunction << "pintleLimiter requires a fixed mesh and global Euler time step; "
+            << key << " selected " << scheme << abort(FatalError);
+}
+
 void pintleLimiter::limit
 (
     const volScalarField& psi, const surfaceScalarField& phi,
     surfaceScalarField& phiPsi, bool mixed, bool returnCorr
 )
 {
-    if(mesh_.moving() || mesh_.topoChanging() || fv::localEulerDdt::enabled(mesh_))
-        FatalErrorInFunction << "pintleLimiter requires a fixed mesh and global Euler time step" << abort(FatalError);
+    checkTimeScheme(psi);
+    // Allocate only the selected storage precision. Both remain valid if a
+    // runtime dictionary deliberately switches precision later.
+    if(mixed)
+    {
+        ratioIn32_.setSize(mesh_.nCells()); ratioOut32_.setSize(mesh_.nCells());
+    }
+    else
+    {
+        ratioIn_.setSize(mesh_.nCells()); ratioOut_.setSize(mesh_.nCells());
+    }
     const auto& controls=mesh_.solverDict(psi.name());
     const label it=controls.getOrDefault<label>("nLimiterIter",3);
     const scalar ex=controls.getOrDefault<scalar>("extremaCoeff",0);
@@ -233,6 +252,7 @@ void pintleLimiter::limit
 void pintleLimiter::explicitSolve(volScalarField& psi,const surfaceScalarField& flux,
     const volScalarField::Internal& Sp,const volScalarField::Internal& Su)
 {
+    checkTimeScheme(psi);
     const auto& addr=mesh_.lduAddr();
     const auto os=addr.ownerStartAddr().cbegin(),ns=addr.losortStartAddr().cbegin();
     const auto nf=addr.losortAddr().cbegin(),bs=boundaryStart_.cbegin(),bf=boundaryFaces_.cbegin();

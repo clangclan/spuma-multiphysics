@@ -35,8 +35,8 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EXECUTABLE = PROJECT_ROOT / "bin" / "spumaPintleColdFoam"
-SPUMA_ENV = Path("/home/jsw/cae-gpu/spuma-env.sh")
-RUN_LOCK = Path("/home/jsw/cae-benchmark/run.lock")
+SPUMA_ENV = Path(os.environ.get("PINTLE_SPUMA_ENV", "/home/jsw/cae-gpu/spuma-env.sh"))
+RUN_LOCK = Path(os.environ.get("PINTLE_RUN_LOCK", "/home/jsw/cae-benchmark/run.lock"))
 DELTA_T = Decimal("3e-8")
 GPU_SAMPLE_INTERVAL_S = 0.5
 VALID_MODES = ("reference", "gpu", "mixed")

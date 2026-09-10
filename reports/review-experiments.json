@@ -1,0 +1,2376 @@
+{
+  "effective_source_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/asyncSmoother/pintleAsyncGaussSeidelSmoother.C": "b557d7001cb2b1e4da251c88144657242f74584470507d0fa58eb2bd88e8a8c0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/asyncSmoother/pintleAsyncGaussSeidelSmoother.H": "e9f90885e1bef46a46e3796bda8b16ef57b5b415835bc65f3b3c58004b15347c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/TEqn.H": "9c5af5f2a036d780ad67fc0531e109d13e512cc69004116fc6dfb8bb965053cf",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/UEqn.H": "0a7cb5758c2fd36ea38ab21e4b4392527d2e922f7547d6e18a26d57942ad9c4e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/checkState.H": "7b7285c81d8d90947cf7f797ade201af46bf229a35370610cd6d18ec9ef419db",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/compressibleMultiphaseInterFoam.C": "2b812e8835744ef49037b7ff557e2e15348bce918b44e88dcb474a500baf4541",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/createFields.H": "cad42c39946c61fd32b87ca65a2da1044e15654dd1f2e0e5294d6eacc95a0ee8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.C": "592691e416251471ff0eec91d6d2d5cc926c7df7ea37548cb93607070c952d68",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/alphaContactAngle/alphaContactAngleFvPatchScalarField.H": "039e8a137468d886fcf16a11e196e2303b2d5fcf5baeade03b04520834da7ed4",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.C": "bc633651a1856985bb4cc51cbbaf1d333158d8d08ae2b0669e955194a4c18ac1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/multiphaseMixtureThermo.H": "bcd98d786f7261d8811f1f4571ccdaedc1ada72eb5c660771f2f0ec01e77bc5e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.C": "95ec1bd7c805bf5894fa79e6b23526629a8befccd86fe209766f913ebbda93f8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/phaseModel/phaseModel.H": "647dbc9b8d532c2d13dc0654a88a3d153fece8070429ca1edeb3821f2d5f1e42",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.C": "a3ee73c868eb52ff49e262c6695a8352636121b2f8844fae54a252838abf87ed",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleDeviceHeRhoThermo.H": "74cec3e43f7487dd5b56292fd291d009d7f8b169fa9a80bc6887c5455b7cc671",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleIpa.H": "ff47d00d9f868bb9c30130ed25ccf63d41e1b6714616b231ecc238499ebcdf30",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.C": "21caa1a495d56128b2fb97602e0ba4fe66f6348dbae6ec235390106b632311b1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleLimiter.H": "9d8071ca2367551e03201b6a98d372abf08eca7d4ecf779b65059f5f373b8448",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.C": "95fdff735e737f60fd2c5591356e24bce7c8a820559b17fb8b2a753cfb516b3f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGas.H": "1a0f089a4cd72b53f5e0c6072e28ba816770d203d611f126cf85e914470fbf3a",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGasI.H": "6d365080fb620e8f1cca8cb8765a35686d6f405c2e7a4a22ee02ed80ea8c6d73",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleTemperatureIncrement.C": "ad0a45329926bd100399c04aebfd32338c6db5713b545186a94b3625eb427532",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/multiphaseMixtureThermo/pintleThermos.C": "550ddb603324a8af44158f8a350f7ff0b9e388a49929eaab3f8fbf9a23122a78",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/coldFoam/pEqn.H": "917d72d3800a6ddb896c5d9f97e8172f4f007c2dbb319f5de8712d63a778d277",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/integerLab/integerLab.cu": "474674e96f235090be9647b1c2b248b4c925872c6c2ae4d8aa53020226de2516",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionLab/floatExpansion.cuh": "ae27b04f98b9718bf0929f552eec28bf5e5ca0aba8f57a1579e083adca8b71ee",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionLab/precisionLab.cu": "fb3278b9e1bd580a7a707b79f278c03e89e5811d318d310b8807b360dcebc6c7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionProbe/pintlePrecisionProbe.C": "226e92d40fed342988071a8d76e37bdee34f2742ca798ccc8aeb7a967eac1a03",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleIrKernels.cu": "0939eb9ff5d38787baf0f681d83cf24a4db2389e0963953a0cadb62b7bdcc241",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleIrKernels.h": "4c74f7376c5ffbfb7e140f618c28afa413270906d9df761ec85e954f18060ea1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/precisionSolver/pintleMixedTemperature.C": "1a04427f295dac341d7970fc3ddebb745b4573067da75591ca37d532268f7bea",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/regressionCheck/pintleRegressionCheck.C": "5cff6bb5c480642905d2d18c1c9d278544d363146b8e35276ede0670d5ccefa6",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/src/thermoCheck/thermoCheck.C": "50a7fa071d60a072223a332069fc96b01b85d1963a332c9c988625678b5b170b"
+  },
+  "extended": {
+    "acceptance": {
+      "pass": true,
+      "policy": {
+        "alpha_bound_tolerance": 1e-08,
+        "alpha_sum_max_abs": 1e-09,
+        "mass_balance_max_relative": 1e-06,
+        "policy_id": "pintle-numerical-regression-v1",
+        "schema_version": 1,
+        "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification.",
+        "state_max_scaled": {
+          "T": 1e-06,
+          "U": 1e-06,
+          "alpha.air": 1e-06,
+          "alpha.ipa": 1e-06,
+          "alpha.n2o": 1e-06,
+          "p": 1e-05,
+          "rho": 1e-06
+        }
+      },
+      "policy_id": "pintle-numerical-regression-v1",
+      "reasons": [],
+      "run_results": [
+        {
+          "configuration": "baseline",
+          "index": 0,
+          "pass": true,
+          "reasons": []
+        },
+        {
+          "configuration": "candidate",
+          "index": 1,
+          "pass": true,
+          "reasons": []
+        }
+      ],
+      "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification."
+    },
+    "comparisons": [
+      {
+        "acceptance": {
+          "note": "Metrics only; no numerical acceptance thresholds were supplied.",
+          "pass": null,
+          "thresholds_supplied": false
+        },
+        "candidate": "candidate/1",
+        "candidate_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05",
+        "field_errors": {},
+        "fields": {
+          "T": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 328.980789594918,
+              "min": 259.7537496948752,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 9.952746921372495e-07,
+            "max_abs": 1.0063126865134109e-07,
+            "max_scaled": 3.058879783687387e-10,
+            "max_scaled_denominator": 328.9807895949188,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 328.9807895949188,
+              "min": 259.75374969498296,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 531907.2632824195,
+            "rel_l2": 1.8711432628224933e-12
+          },
+          "U": {
+            "candidate_health": {
+              "component_max": [
+                271.1277116384295,
+                271.1786908609121,
+                144.38866931607603
+              ],
+              "component_min": [
+                -271.17616346166557,
+                -271.1754353230504,
+                -71.39340153065862
+              ],
+              "components": 3,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 9283365,
+              "max": 271.1786908609121,
+              "min": -271.17616346166557,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 9283365
+            },
+            "components": 3,
+            "entries": 3094455,
+            "error_l2": 5.156894911719201e-06,
+            "max_abs": 6.218555199666298e-07,
+            "max_scaled": 2.2931577624108046e-09,
+            "max_scaled_denominator": 271.17869086899236,
+            "reference_health": {
+              "component_max": [
+                271.127711605456,
+                271.17869086899236,
+                144.388669316102
+              ],
+              "component_min": [
+                -271.1761634543604,
+                -271.17543532606237,
+                -71.3934015324441
+              ],
+              "components": 3,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 9283365,
+              "max": 271.17869086899236,
+              "min": -271.1761634543604,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 9283365
+            },
+            "reference_l2": 51103.46895695996,
+            "rel_l2": 1.0091085824452364e-10
+          },
+          "alpha.air": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0,
+              "min": -4.772951360372922e-11,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 5.392234087976859e-07,
+            "max_abs": 4.15226317773687e-08,
+            "max_scaled": 4.15226317773687e-08,
+            "max_scaled_denominator": 1.0,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0,
+              "min": -4.772951360412617e-11,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 1191.7143121684967,
+            "rel_l2": 4.524770771750579e-10
+          },
+          "alpha.ipa": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0000000000477296,
+              "min": -5.502260750431729e-19,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 9.580826811716007e-09,
+            "max_abs": 2.6643793837877183e-09,
+            "max_scaled": 2.6643793836605484e-09,
+            "max_scaled_denominator": 1.0000000000477296,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0000000000477296,
+              "min": -7.506595403868045e-19,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 1150.861709352485,
+            "rel_l2": 8.324915786021342e-12
+          },
+          "alpha.n2o": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0000000000000397,
+              "min": -6.504764250175526e-33,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 5.391382869884026e-07,
+            "max_abs": 4.15226317773687e-08,
+            "max_scaled": 4.152263177736732e-08,
+            "max_scaled_denominator": 1.0000000000000333,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 1.0000000000000333,
+              "min": -6.504764250386622e-33,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 570.8910569328754,
+            "rel_l2": 9.443803339378529e-10
+          },
+          "dgdt.air": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 260739.92256483642,
+              "min": -232600.80381397138,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 281828.3080104801,
+            "max_abs": 75610.65263285734,
+            "max_scaled": 0.28998494702046496,
+            "max_scaled_denominator": 260739.9225709509,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 260739.9225709509,
+              "min": -232600.80381340007,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 8931441.959030755,
+            "rel_l2": 0.03155462570358172
+          },
+          "dgdt.ipa": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 6872.409671787616,
+              "min": -11772.34934165562,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 127987.67849787202,
+            "max_abs": 7730.3481421991055,
+            "max_scaled": 0.6566529685224001,
+            "max_scaled_denominator": 11772.349342444804,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 6872.409671787602,
+              "min": -11772.349342444804,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 726586.5123311552,
+            "rel_l2": 0.1761492627866718
+          },
+          "dgdt.n2o": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 330594.4454081839,
+              "min": -291978.31214542524,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 19271.162610392217,
+            "max_abs": 2953.111622838011,
+            "max_scaled": 0.00893273212479649,
+            "max_scaled_denominator": 330594.445415018,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 330594.445415018,
+              "min": -291978.3121448007,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 10585200.242565366,
+            "rel_l2": 0.0018205761033125033
+          },
+          "p": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 4101325.0000001155,
+              "min": 1680738.5437084348,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 25.20706794568367,
+            "max_abs": 0.04276888072490692,
+            "max_scaled": 1.0428064277984723e-08,
+            "max_scaled_denominator": 4101325.0000001173,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 4101325.0000001173,
+              "min": 1680738.5437084048,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 4664560434.809554,
+            "rel_l2": 5.403953555317765e-09
+          },
+          "rho": {
+            "candidate_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 777.803729650276,
+              "min": 19.480441943754336,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "components": 1,
+            "entries": 3094455,
+            "error_l2": 1.7861875234941784e-05,
+            "max_abs": 2.0096965727134375e-06,
+            "max_scaled": 2.5838093803137944e-09,
+            "max_scaled_denominator": 777.803729650276,
+            "reference_health": {
+              "components": 1,
+              "entries": 3094455,
+              "finite": true,
+              "finite_values": 3094455,
+              "max": 777.803729650276,
+              "min": 19.480441943753256,
+              "nonfinite_values": 0,
+              "uniform": false,
+              "values": 3094455
+            },
+            "reference_l2": 897078.8307935604,
+            "rel_l2": 1.991115454050017e-11
+          }
+        },
+        "metric_definitions": {
+          "max_abs": "max(abs(candidate-reference))",
+          "max_scaled": "max_abs / max(1, max(abs(reference))); this matches the prior native benchmark analysis convention",
+          "rel_l2": "L2(candidate-reference) / L2(reference); null for zero norm or nonfinite ratio"
+        },
+        "missing_core_from_both": [],
+        "missing_from_candidate": [],
+        "missing_from_reference": [],
+        "reference": "baseline/1",
+        "reference_time_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05",
+        "selected_fields": [
+          "T",
+          "U",
+          "alpha.air",
+          "alpha.ipa",
+          "alpha.n2o",
+          "dgdt.air",
+          "dgdt.ipa",
+          "dgdt.n2o",
+          "p",
+          "rho"
+        ]
+      }
+    ],
+    "dt_s": 3e-08,
+    "end_s": 4.86e-05,
+    "iteration_signature_equal": true,
+    "iterations": [
+      3769,
+      3769
+    ],
+    "linear_solves": [
+      1920,
+      1920
+    ],
+    "replay": {
+      "comparisons": [
+        {
+          "phases": {
+            "air": {
+              "actual_alpha_increment_difference": {
+                "max_abs": 1.266973004288019e-08,
+                "max_scaled": 1.266973004288019e-08,
+                "relative_l2": 9.309394969917453e-07
+              },
+              "dt_source_difference": {
+                "max_abs": 2.6962242827721635e-11,
+                "max_scaled": 2.6962242827721635e-11,
+                "relative_l2": 4.682966753123016e-09
+              }
+            },
+            "ipa": {
+              "actual_alpha_increment_difference": {
+                "max_abs": 2.22762974733115e-09,
+                "max_scaled": 2.22762974733115e-09,
+                "relative_l2": 3.1330492663936374e-08
+              },
+              "dt_source_difference": {
+                "max_abs": 7.290614993007006e-13,
+                "max_scaled": 7.290614993007006e-13,
+                "relative_l2": 4.0222109703484526e-08
+              }
+            },
+            "n2o": {
+              "actual_alpha_increment_difference": {
+                "max_abs": 1.2661338311126258e-08,
+                "max_scaled": 1.2661338311126258e-08,
+                "relative_l2": 1.1730184902675455e-06
+              },
+              "dt_source_difference": {
+                "max_abs": 3.312696710054297e-11,
+                "max_scaled": 3.312696710054297e-11,
+                "relative_l2": 2.277966919172163e-09
+              }
+            }
+          },
+          "repeat": 1
+        }
+      ],
+      "limits": {
+        "alpha_increment_difference_max_abs": 1e-06,
+        "coefficient_error": "64*FP64-epsilon*max(1,sum of absolute source terms)",
+        "dt_source_difference_max_abs": 1e-06,
+        "explicit_update_max_scaled": 1e-12
+      },
+      "pass": true,
+      "runs": [
+        {
+          "all_source_branches_exercised": true,
+          "cells": 3094455,
+          "configuration": "baseline",
+          "event": {
+            "deltaT": 1.5e-08,
+            "solve": 479.0,
+            "time": 4.8599999999999765e-05
+          },
+          "pass": true,
+          "phases": {
+            "air": {
+              "branch_cells": {
+                "other_ipa_negative": 1065990,
+                "other_ipa_positive": 997175,
+                "other_n2o_negative": 618001,
+                "other_n2o_positive": 568888,
+                "self_negative": 622916,
+                "self_positive": 144242
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 3.3306690738754696e-16,
+                "max_scaled": 3.330669073875469e-16,
+                "relative_l2": 2.249376656694218e-17
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            },
+            "ipa": {
+              "branch_cells": {
+                "other_air_negative": 622916,
+                "other_air_positive": 144242,
+                "other_n2o_negative": 617997,
+                "other_n2o_positive": 558342,
+                "self_negative": 1065979,
+                "self_positive": 997064
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 2.220446049250313e-16,
+                "max_scaled": 2.2204460491443326e-16,
+                "relative_l2": 5.314736860898843e-18
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            },
+            "n2o": {
+              "branch_cells": {
+                "other_air_negative": 622916,
+                "other_air_positive": 144242,
+                "other_ipa_negative": 1065990,
+                "other_ipa_positive": 997175,
+                "self_negative": 617997,
+                "self_positive": 558342
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 2.220446049250313e-16,
+                "max_scaled": 2.2204460492502391e-16,
+                "relative_l2": 2.535796818744007e-17
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            }
+          },
+          "repeat": 1
+        },
+        {
+          "all_source_branches_exercised": true,
+          "cells": 3094455,
+          "configuration": "candidate",
+          "event": {
+            "deltaT": 1.5e-08,
+            "solve": 479.0,
+            "time": 4.8599999999999765e-05
+          },
+          "pass": true,
+          "phases": {
+            "air": {
+              "branch_cells": {
+                "other_ipa_negative": 1066012,
+                "other_ipa_positive": 996984,
+                "other_n2o_negative": 617936,
+                "other_n2o_positive": 568860,
+                "self_negative": 622921,
+                "self_positive": 144273
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 3.3306690738754696e-16,
+                "max_scaled": 3.330669073875469e-16,
+                "relative_l2": 2.2556089366418708e-17
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            },
+            "ipa": {
+              "branch_cells": {
+                "other_air_negative": 622921,
+                "other_air_positive": 144273,
+                "other_n2o_negative": 617906,
+                "other_n2o_positive": 558491,
+                "self_negative": 1065983,
+                "self_positive": 996852
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 2.220446049250313e-16,
+                "max_scaled": 2.2204460491443326e-16,
+                "relative_l2": 5.273996402049871e-18
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            },
+            "n2o": {
+              "branch_cells": {
+                "other_air_negative": 622921,
+                "other_air_positive": 144273,
+                "other_ipa_negative": 1066012,
+                "other_ipa_positive": 996984,
+                "self_negative": 617906,
+                "self_positive": 558491
+              },
+              "coefficient_abs_error": 5.820766091346741e-11,
+              "coefficient_roundoff_violations": 0,
+              "explicit_update_error": {
+                "max_abs": 3.3306690738754696e-16,
+                "max_scaled": 3.330669073875338e-16,
+                "relative_l2": 2.532313652655717e-17
+              },
+              "min_rdt_minus_Sp": 66666666.66666667
+            }
+          },
+          "repeat": 1
+        }
+      ],
+      "scope": "Last recorded solveAlphas call only, before phase-sum correction. Uses the dgdt and divU actually consumed, reconstructs ipa then n2o then air. fvc::div flux oracle uses stock scatter vs limiter cell-gather summation. Source order follows the existing custom kernel, not upstream self-first arithmetic."
+    },
+    "start_s": 4.5e-05,
+    "state_history": [
+      {
+        "configuration": "baseline",
+        "invalid_cells": 0.0,
+        "max_abs_relative_mass_balance": 5.051145632974537e-08,
+        "max_alpha_bound_cells": 0.0,
+        "max_alpha_sum_error": 5.944134073843088e-13,
+        "max_temperature": 330.68437278818743,
+        "min_density": 19.26044237774796,
+        "min_pressure": 1645234.9212243103,
+        "min_temperature": 258.3978264065125,
+        "steps": 120
+      },
+      {
+        "configuration": "candidate",
+        "invalid_cells": 0.0,
+        "max_abs_relative_mass_balance": 5.0511456051263256e-08,
+        "max_alpha_bound_cells": 0.0,
+        "max_alpha_sum_error": 5.944134073843088e-13,
+        "max_temperature": 330.68437278818743,
+        "min_density": 19.26044237774755,
+        "min_pressure": 1645234.9212243117,
+        "min_temperature": 258.3978264065124,
+        "steps": 120
+      }
+    ],
+    "steps": 120
+  },
+  "final_protected_input_audit": {
+    "files_checked": 55,
+    "pass": true
+  },
+  "inputs_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-fusion12-replacement/benchmark.json": "4c67dcae01f17d861d86f4b5ea3e96a60af2582708e23364693bcdfdbc760148",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-fusion12/benchmark.json": "38928b959ff403366dec831e5f6d21fe9e0e37da8deb84f6ada90dc7ea0cad0c",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/qoi.json": "f1b0e9d4e99852c6b0460a7bfdac9cf13df2878c95f0e34988bf1c2d179cc077",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/benchmark.json": "a6c949f715c76e28314c84291b7215c90ee916639eb676ef0ca5621333241daf",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-mini-final/benchmark.json": "64105f54b1fdac3bea4fde9f5a6e17cf9477934a639b4bfcc596f4eaae9aadf0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-mini-repro-final/preparation.json": "10528f998d5e97397ab581d995357d6dc73d94bcf6deb44aed2b679b4907e4d3",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-policy-controls-final-v2/checks.json": "347b60c857f14c8e15f2773ef966a3cc3a1e8a06cd55c3b45388fbbf3907a5fd",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/checks.json": "57c0b7ed651b560650f8c755c087602c44050d15c39710f761a529d0de1689be"
+  },
+  "mini_acceptance": {
+    "pass": true,
+    "policy": {
+      "alpha_bound_tolerance": 1e-08,
+      "alpha_sum_max_abs": 1e-09,
+      "mass_balance_max_relative": 1e-06,
+      "policy_id": "pintle-numerical-regression-v1",
+      "schema_version": 1,
+      "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification.",
+      "state_max_scaled": {
+        "T": 1e-06,
+        "U": 1e-06,
+        "alpha.air": 1e-06,
+        "alpha.ipa": 1e-06,
+        "alpha.n2o": 1e-06,
+        "p": 1e-05,
+        "rho": 1e-06
+      }
+    },
+    "policy_id": "pintle-numerical-regression-v1",
+    "reasons": [],
+    "run_results": [
+      {
+        "configuration": "baseline",
+        "index": 0,
+        "pass": true,
+        "reasons": []
+      },
+      {
+        "configuration": "candidate",
+        "index": 1,
+        "pass": true,
+        "reasons": []
+      }
+    ],
+    "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification."
+  },
+  "mini_preparation": {
+    "cells": 1152,
+    "external_restart_required": false,
+    "generator": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/tools/prepare_minicase.py",
+    "generator_sha256": "c873d0a9239fd65c277e5fc3f487463491052e7daa4d66096483338d6bffd73a",
+    "initial_phase_cells": {
+      "air": 792,
+      "ipa": 170,
+      "n2o": 190
+    },
+    "initializer": "pintleRegressionCheck -mode initialize; setFieldsDict is a human-readable region reference only",
+    "initializer_sha256": "60b8e5c39853695929db2018da6b4be83b988511bfc265583cf6ab84108c4de1",
+    "input_sha256": {
+      "0/T": "dcd355da213d5ab4d8a6fa681a9ec8b0101dfa94aaebdc6e164b3ed11f759b31",
+      "0/T.air": "be6c695db0b90ddcbbcbf55fa059bc4c5938658836444db7ef9e0fd166f09b69",
+      "0/T.ipa": "4fd507aa07df4b63bec1c6fb7ecf6b9fcb6ab91b4ebad6e7aca8d967a67ee656",
+      "0/T.n2o": "f03eb76f3ed25260bee33cb8370a4cf85f09a83683b2485505dec42cf6e3ef9b",
+      "0/U": "4a99d3e9efa24d3783dc566633f08ca2e50c9e7422531695c8d103563046dd25",
+      "0/alpha.air": "e94fc5654ccaf2cc95a15111ac965f83a04843f735f039db4c7404a3ebb02e1a",
+      "0/alpha.ipa": "998c943f9ac539e803c87ca851c35621728e15c11fa1e8b86b296460d9d2d077",
+      "0/alpha.n2o": "1009f70a8139e2a3b10e2b17678dec3c75f7f57fa95c4b0b824e4032a1d4cc01",
+      "0/alphas": "bbf2660631cdd789273aa5630eb4fd84320d244d3803d1583f0dd5764a98170a",
+      "0/p": "38d219876d3815b2a3bfd42a21f3babd61a1d60c358c67f660d73aff0b10b885",
+      "0/p_rgh": "0a564e14cc5caaf5b7d208c3c1fb80820e79eb01c59a43b6be3ae14b5b06013e",
+      "constant/g": "6d3bbabfae92f8f85b65b2bf7f3122330d30b258c094c2b8dc685324a71bdb8f",
+      "constant/polyMesh/boundary": "42387d8588cd78b548ec7f3a75c18a021c8b42f38539594ee6f19525b4b34b03",
+      "constant/polyMesh/faces": "065638ebd6de3765915adb80dd51c2f6c2503b5f7785b26c7ea8bc451f7610ab",
+      "constant/polyMesh/neighbour": "9e66f824a8abb94b63fd1c9daa21cd1d65be67e922b52524e13383fa5b413819",
+      "constant/polyMesh/owner": "5f89c7b719dc790ed55c379fb5b3b65ce680db56e1bc18dbea5d78ed3f8182d6",
+      "constant/polyMesh/points": "ef242f8e791f64ad9fe3a5d9339d7c7612a8bf2d3b337625b9fb19b55fa57f62",
+      "constant/thermophysicalProperties": "abda360e7a5a3524fad90850f37d13087b25bf6edaa03a5c735a457b306eb6ef",
+      "constant/thermophysicalProperties.air": "2c8335775fd4355884cd5f2982b54bcd59f9240f8e7d7485afea367c337ed9cc",
+      "constant/thermophysicalProperties.ipa": "bc238be4d75e3b8481086fd63e1b7b95cfe148ebca5e18ad7ffdd909075f467c",
+      "constant/thermophysicalProperties.n2o": "d399c2c3892fedfffb761ceb519bee1c1f4b0a06daf735374a2875478f9424c7",
+      "constant/turbulenceProperties": "cc15f220e2c813afdf0cc8424d6caa0345cba38298e00296d97c8ed0b3f0ba0a",
+      "system/blockMeshDict": "427ba0c1aed512ba78d3856984f0e881c514bd4123f2be94b2c7fd064200154b",
+      "system/controlDict": "0b3e9766c12b91419a16b36b5f2148af8a864b42cc0669744d99a24ccf52eb5b",
+      "system/fvSchemes": "8a4ee559513ed1d13bb07452bff6cc42d953eca5529b87b332213efac266d626",
+      "system/fvSolution": "19f36d0e5765b5d0dc586bfa9b9fe0a186c72500dcf2218119fb4afb1d066112",
+      "system/setFieldsDict": "11c58e4b7a4c1a95770417013ea540f4bb7ed5ec169e2e5485854e5228e1c319"
+    },
+    "scope": "laminar numerical regression; synthetic initial state, not a physical validation experiment",
+    "thermo_library_sha256": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa"
+  },
+  "mini_replay": {
+    "comparisons": [
+      {
+        "phases": {
+          "air": {
+            "actual_alpha_increment_difference": {
+              "max_abs": 2.2352803898234445e-16,
+              "max_scaled": 2.2352803898234445e-16,
+              "relative_l2": 1.896895156385647e-11
+            },
+            "dt_source_difference": {
+              "max_abs": 3.3391031273310995e-16,
+              "max_scaled": 3.3391031273310995e-16,
+              "relative_l2": 2.2520322735269413e-12
+            }
+          },
+          "ipa": {
+            "actual_alpha_increment_difference": {
+              "max_abs": 2.220446049250313e-16,
+              "max_scaled": 2.220446049250313e-16,
+              "relative_l2": 1.1772290696187542e-11
+            },
+            "dt_source_difference": {
+              "max_abs": 2.8937954200657107e-16,
+              "max_scaled": 2.8937954200657107e-16,
+              "relative_l2": 6.440959200114878e-07
+            }
+          },
+          "n2o": {
+            "actual_alpha_increment_difference": {
+              "max_abs": 2.220446049250313e-16,
+              "max_scaled": 2.220446049250313e-16,
+              "relative_l2": 7.698339048053275e-12
+            },
+            "dt_source_difference": {
+              "max_abs": 1.7520278561278245e-16,
+              "max_scaled": 1.7520278561278245e-16,
+              "relative_l2": 1.780937354126954e-12
+            }
+          }
+        },
+        "repeat": 1
+      }
+    ],
+    "limits": {
+      "alpha_increment_difference_max_abs": 1e-06,
+      "coefficient_error": "64*FP64-epsilon*max(1,sum of absolute source terms)",
+      "dt_source_difference_max_abs": 1e-06,
+      "explicit_update_max_scaled": 1e-12
+    },
+    "pass": true,
+    "runs": [
+      {
+        "all_source_branches_exercised": true,
+        "cells": 1152,
+        "configuration": "baseline",
+        "event": {
+          "deltaT": 1.5e-08,
+          "solve": 31.0,
+          "time": 2.4e-07
+        },
+        "pass": true,
+        "phases": {
+          "air": {
+            "branch_cells": {
+              "other_ipa_negative": 335,
+              "other_ipa_positive": 481,
+              "other_n2o_negative": 125,
+              "other_n2o_positive": 342,
+              "self_negative": 580,
+              "self_positive": 121
+            },
+            "coefficient_abs_error": 4.547473508864641e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 1.1102230246251565e-16,
+              "max_scaled": 1.1102230246251563e-16,
+              "relative_l2": 1.0437529524404915e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          },
+          "ipa": {
+            "branch_cells": {
+              "other_air_negative": 580,
+              "other_air_positive": 121,
+              "other_n2o_negative": 125,
+              "other_n2o_positive": 336,
+              "self_negative": 327,
+              "self_positive": 481
+            },
+            "coefficient_abs_error": 4.547473508864641e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 1.1102230246251565e-16,
+              "max_scaled": 1.1102230246251565e-16,
+              "relative_l2": 3.1860665296556195e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          },
+          "n2o": {
+            "branch_cells": {
+              "other_air_negative": 580,
+              "other_air_positive": 121,
+              "other_ipa_negative": 335,
+              "other_ipa_positive": 481,
+              "self_negative": 125,
+              "self_positive": 336
+            },
+            "coefficient_abs_error": 9.094947017729282e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 1.1102230246251565e-16,
+              "max_scaled": 1.1102230246251563e-16,
+              "relative_l2": 2.1310173383410903e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          }
+        },
+        "repeat": 1
+      },
+      {
+        "all_source_branches_exercised": true,
+        "cells": 1152,
+        "configuration": "candidate",
+        "event": {
+          "deltaT": 1.5e-08,
+          "solve": 31.0,
+          "time": 2.4e-07
+        },
+        "pass": true,
+        "phases": {
+          "air": {
+            "branch_cells": {
+              "other_ipa_negative": 343,
+              "other_ipa_positive": 494,
+              "other_n2o_negative": 129,
+              "other_n2o_positive": 342,
+              "self_negative": 580,
+              "self_positive": 121
+            },
+            "coefficient_abs_error": 4.547473508864641e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 1.1102230246251565e-16,
+              "max_scaled": 1.1102230246251563e-16,
+              "relative_l2": 1.0437529524423684e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          },
+          "ipa": {
+            "branch_cells": {
+              "other_air_negative": 580,
+              "other_air_positive": 121,
+              "other_n2o_negative": 129,
+              "other_n2o_positive": 336,
+              "self_negative": 336,
+              "self_positive": 494
+            },
+            "coefficient_abs_error": 4.547473508864641e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 1.1102230246251565e-16,
+              "max_scaled": 1.1102230246251565e-16,
+              "relative_l2": 3.1860665025264255e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          },
+          "n2o": {
+            "branch_cells": {
+              "other_air_negative": 580,
+              "other_air_positive": 121,
+              "other_ipa_negative": 343,
+              "other_ipa_positive": 494,
+              "self_negative": 129,
+              "self_positive": 336
+            },
+            "coefficient_abs_error": 9.094947017729282e-13,
+            "coefficient_roundoff_violations": 0,
+            "explicit_update_error": {
+              "max_abs": 2.220446049250313e-16,
+              "max_scaled": 2.2204460492503126e-16,
+              "relative_l2": 2.671371586872453e-17
+            },
+            "min_rdt_minus_Sp": 66666666.66666667
+          }
+        },
+        "repeat": 1
+      }
+    ],
+    "scope": "Last recorded solveAlphas call only, before phase-sum correction. Uses the dgdt and divU actually consumed, reconstructs ipa then n2o then air. fvc::div flux oracle uses stock scatter vs limiter cell-gather summation. Source order follows the existing custom kernel, not upstream self-first arithmetic."
+  },
+  "policy_controls": {
+    "checks": [
+      {
+        "expected_return_code": 0,
+        "name": "valid",
+        "pass": true,
+        "reasons": [],
+        "return_code": 0,
+        "stderr": "",
+        "stdout": "{\"pass\": true, \"reasons\": []}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "nonfinite-U",
+        "pass": true,
+        "reasons": [
+          "run 0: nonfinite field"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: nonfinite field\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "missing-U",
+        "pass": true,
+        "reasons": [
+          "run 0: missing or unreadable fields"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: missing or unreadable fields\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "alpha-bounds",
+        "pass": true,
+        "reasons": [
+          "run 0: alpha bounds ipa"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: alpha bounds ipa\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "alpha-sum",
+        "pass": true,
+        "reasons": [
+          "run 0: alpha sum"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: alpha sum\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "mass-balance",
+        "pass": true,
+        "reasons": [
+          "run 0: mass balance"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: mass balance\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "missing-alpha-history",
+        "pass": true,
+        "reasons": [
+          "run 0: missing alpha history"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: missing alpha history\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "field-difference",
+        "pass": true,
+        "reasons": [
+          "comparison 0: U"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"comparison 0: U\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "missing-run",
+        "pass": true,
+        "reasons": [
+          "incomplete or duplicate campaign runs",
+          "comparison does not match run directory"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"incomplete or duplicate campaign runs\", \"comparison does not match run directory\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "duplicate-run",
+        "pass": true,
+        "reasons": [
+          "incomplete or duplicate campaign runs"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"incomplete or duplicate campaign runs\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "duplicate-comparison",
+        "pass": true,
+        "reasons": [
+          "incomplete or duplicate comparison pairs"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"incomplete or duplicate comparison pairs\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "changed-input",
+        "pass": true,
+        "reasons": [
+          "protected input changed"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"protected input changed\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "missing-replay",
+        "pass": true,
+        "reasons": [
+          "replay validation missing or failed"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"replay validation missing or failed\"]}\n"
+      },
+      {
+        "expected_return_code": 1,
+        "name": "altered-stdout",
+        "pass": true,
+        "reasons": [
+          "run 0: evidence changed: /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-policy-controls-final-v2/altered-stdout.log"
+        ],
+        "return_code": 1,
+        "stderr": "",
+        "stdout": "{\"pass\": false, \"reasons\": [\"run 0: evidence changed: /home/jsw/\\ubb38\\uc11c/analysis/spuma-multiphysics/benchmarks/review-policy-controls-final-v2/altered-stdout.log\"]}\n"
+      }
+    ],
+    "pass": true,
+    "scope": "Mutated copies of measured reports; these test CLI rejection, not solver fault injection."
+  },
+  "qoi": {
+    "benchmark": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/benchmark.json",
+    "benchmark_sha256": "a6c949f715c76e28314c84291b7215c90ee916639eb676ef0ca5621333241daf",
+    "comparisons": [
+      {
+        "fields": {
+          "T": {
+            "max_abs": 1.0063126865134109e-07,
+            "volume_weighted_relative_l2": 7.392085201156389e-14,
+            "volume_weighted_rms_abs": 2.2409430683611656e-11
+          },
+          "U": {
+            "max_abs": 6.218555199666298e-07,
+            "volume_weighted_relative_l2": 6.003594069388059e-11,
+            "volume_weighted_rms_abs": 1.1536790969445619e-10
+          },
+          "alpha.air": {
+            "max_abs": 4.15226317773687e-08,
+            "volume_weighted_relative_l2": 1.2272444537003893e-11,
+            "volume_weighted_rms_abs": 1.2233384787547859e-11
+          },
+          "alpha.ipa": {
+            "max_abs": 2.6643793837877183e-09,
+            "volume_weighted_relative_l2": 1.0985345878499287e-12,
+            "volume_weighted_rms_abs": 7.809984884936442e-14
+          },
+          "alpha.n2o": {
+            "max_abs": 4.15226317773687e-08,
+            "volume_weighted_relative_l2": 3.4402907082472683e-10,
+            "volume_weighted_rms_abs": 1.2233135487117567e-11
+          },
+          "p": {
+            "max_abs": 0.04276888072490692,
+            "volume_weighted_relative_l2": 7.818868068411879e-10,
+            "volume_weighted_rms_abs": 0.0016495518799026156
+          },
+          "rho": {
+            "max_abs": 2.0096965727134375e-06,
+            "volume_weighted_relative_l2": 6.238942184408561e-12,
+            "volume_weighted_rms_abs": 3.7683020070036296e-10
+          }
+        },
+        "phase_qois": {
+          "air": {
+            "centroidX": {
+              "absolute_difference": 1.902753636888379e-18,
+              "candidate": 1.7423189122563404e-07,
+              "reference": 1.742318912275368e-07,
+              "relative_difference": 1.0920811474195e-11
+            },
+            "centroidY": {
+              "absolute_difference": 4.834813760814339e-18,
+              "candidate": 3.673335896332025e-12,
+              "reference": 3.6733310615182645e-12,
+              "relative_difference": 1.3161933078844273e-06
+            },
+            "centroidZ": {
+              "absolute_difference": 8.326672684688674e-17,
+              "candidate": 0.1300471687524057,
+              "reference": 0.1300471687524058,
+              "relative_difference": 6.4028096609636e-16
+            },
+            "gradientArea": {
+              "absolute_difference": 1.4284255202279272e-14,
+              "candidate": 0.0005999329080135237,
+              "reference": 0.000599932908027808,
+              "relative_difference": 2.380975440943335e-11
+            },
+            "mass": {
+              "absolute_difference": 1.3877787807814457e-17,
+              "candidate": 0.08527883115515111,
+              "reference": 0.08527883115515113,
+              "relative_difference": 1.6273426382411425e-16
+            },
+            "mixedVolume": {
+              "absolute_difference": 1.4625612021121597e-18,
+              "candidate": 2.592033489827369e-07,
+              "reference": 2.5920334898419946e-07,
+              "relative_difference": 5.642524326340068e-12
+            },
+            "sensibleTotalEnergy": {
+              "absolute_difference": 2.7284841053187847e-12,
+              "candidate": -6991.38008363142,
+              "reference": -6991.380083631423,
+              "relative_difference": 3.902640212204814e-16
+            },
+            "volume": {
+              "absolute_difference": 4.336808689942018e-19,
+              "candidate": 0.0035312648408904867,
+              "reference": 0.003531264840890487,
+              "relative_difference": 1.2281176534038707e-16
+            }
+          },
+          "ipa": {
+            "centroidX": {
+              "absolute_difference": 8.673617379884035e-19,
+              "candidate": 0.0012159442475877238,
+              "reference": 0.001215944247587723,
+              "relative_difference": 7.133236081416872e-16
+            },
+            "centroidY": {
+              "absolute_difference": 7.972135133214566e-19,
+              "candidate": -2.544577029603091e-08,
+              "reference": -2.5445770295233696e-08,
+              "relative_difference": 3.132990292971341e-11
+            },
+            "centroidZ": {
+              "absolute_difference": 6.938893903907228e-18,
+              "candidate": 0.012392533340393613,
+              "reference": 0.01239253334039362,
+              "relative_difference": 5.599253771050844e-16
+            },
+            "gradientArea": {
+              "absolute_difference": 1.5578629965901092e-17,
+              "candidate": 2.9510270196588906e-05,
+              "reference": 2.9510270196573327e-05,
+              "relative_difference": 5.279053652212934e-13
+            },
+            "mass": {
+              "absolute_difference": 6.938893903907228e-18,
+              "candidate": 0.013971107131298193,
+              "reference": 0.013971107131298186,
+              "relative_difference": 4.96660274572132e-16
+            },
+            "mixedVolume": {
+              "absolute_difference": 4.3220187005895696e-21,
+              "candidate": 1.6070340811550793e-09,
+              "reference": 1.6070340811594013e-09,
+              "relative_difference": 2.689438109160343e-12
+            },
+            "sensibleTotalEnergy": {
+              "absolute_difference": 2.069864422082901e-07,
+              "candidate": -73697.64672778906,
+              "reference": -73697.64672758208,
+              "relative_difference": 2.808589573740397e-12
+            },
+            "volume": {
+              "absolute_difference": 1.3552527156068805e-20,
+              "candidate": 1.7962791708018912e-05,
+              "reference": 1.79627917080189e-05,
+              "relative_difference": 7.544777769715342e-16
+            }
+          },
+          "n2o": {
+            "centroidX": {
+              "absolute_difference": 1.4700046100152753e-15,
+              "candidate": 6.33765471971037e-07,
+              "reference": 6.337654705010323e-07,
+              "relative_difference": 2.319477280535877e-09
+            },
+            "centroidY": {
+              "absolute_difference": 3.3765718770910462e-15,
+              "candidate": 1.5019301310294205e-08,
+              "reference": 1.5019304686866082e-08,
+              "relative_difference": 2.2481545900348863e-07
+            },
+            "centroidZ": {
+              "absolute_difference": 5.830405602758049e-15,
+              "candidate": 0.011199634821349959,
+              "reference": 0.011199634821344128,
+              "relative_difference": 5.205889027423048e-13
+            },
+            "gradientArea": {
+              "absolute_difference": 1.429943403269407e-14,
+              "candidate": 0.000570422637817192,
+              "reference": 0.0005704226378314914,
+              "relative_difference": 2.5068139103059698e-11
+            },
+            "mass": {
+              "absolute_difference": 6.093216209368535e-17,
+              "candidate": 0.00041787671735148526,
+              "reference": 0.0004178767173514243,
+              "relative_difference": 1.4581372822081125e-13
+            },
+            "mixedVolume": {
+              "absolute_difference": 1.4580084000206679e-18,
+              "candidate": 2.5759631490158086e-07,
+              "reference": 2.5759631490303887e-07,
+              "relative_difference": 5.660051466844441e-12
+            },
+            "sensibleTotalEnergy": {
+              "absolute_difference": 3.836930773104541e-12,
+              "candidate": -35.644096729368655,
+              "reference": -35.64409672936482,
+              "relative_difference": 1.0764561667075566e-13
+            },
+            "volume": {
+              "absolute_difference": 1.1621292036329e-18,
+              "candidate": 4.557813667949872e-06,
+              "reference": 4.55781366794871e-06,
+              "relative_difference": 2.549751456065838e-13
+            }
+          }
+        },
+        "repeat": 1
+      }
+    ],
+    "definitions": {
+      "centroid": "sum(V*alpha*cell_center)/sum(V*alpha)",
+      "gradientArea": "sum(V*mag(grad(alpha))); diffuse-interface diagnostic, not exact geometric area",
+      "mixedVolume": "sum(V*4*alpha*(1-alpha))",
+      "phase_mass": "sum(V*alpha*rho_phase)",
+      "phase_volume": "sum(V*alpha)",
+      "sensibleTotalEnergy": "sum(V*alpha*rho_phase*(phase_sensible_internal_energy + |U|^2/2))"
+    },
+    "executable_sha256": "60b8e5c39853695929db2018da6b4be83b988511bfc265583cf6ab84108c4de1",
+    "runs": [
+      {
+        "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial",
+        "cells": 3094455,
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial",
+          "-atTime",
+          "4.5e-05",
+          "-mode",
+          "qoi",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "10"
+        ],
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial/4.5e-05",
+        "domain_volume": 0.0035537854462664555,
+        "label": "initial",
+        "phases": {
+          "air": {
+            "centroidX": 1.7427250062723595e-07,
+            "centroidY": 2.9108397347527324e-12,
+            "centroidZ": 0.13004660290589776,
+            "gradientArea": 0.000554232499750316,
+            "mass": 0.08527882616953533,
+            "mixedVolume": 2.2370726551158057e-07,
+            "sensibleTotalEnergy": -6991.4231723408,
+            "volume": 0.003531285639675471
+          },
+          "ipa": {
+            "centroidX": 0.0012159786893306164,
+            "centroidY": -2.5446897278387198e-08,
+            "centroidZ": 0.012391900911493125,
+            "gradientArea": 2.7014633292596097e-05,
+            "mass": 0.013970613199584135,
+            "mixedVolume": 1.469663998548603e-09,
+            "sensibleTotalEnergy": -73694.86667863981,
+            "volume": 1.7962156691770133e-05
+          },
+          "n2o": {
+            "centroidX": 6.380073735601547e-07,
+            "centroidY": 1.5680314190099015e-08,
+            "centroidZ": 0.011097907854961767,
+            "gradientArea": 0.0005272178664575749,
+            "mass": 0.0004179086315758911,
+            "mixedVolume": 2.2223760151303024e-07,
+            "sensibleTotalEnergy": -35.6478460675594,
+            "volume": 4.5376498992123785e-06
+          }
+        },
+        "qoi_fields_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial/4.5e-05/pintleRho.air": "5dcbdfa62d72933be0b8a8db4f060fb8a4ca78c03a37e613b2dc41ba61f2b7d3",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial/4.5e-05/pintleRho.ipa": "d6f048378b1218e917b180ad56783f44e2316a3ce2c341224060d1fc1daa31d7",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial/4.5e-05/pintleRho.n2o": "525f886dcbb75869be1df7a2a8512dfd9bf75481254ee0e08e7dc779c9096e9e",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/initial/4.5e-05/pintleVolume": "2e079f97cbb71cc437480dee0c639674973e5f16be43891d0f68c462dc40e047"
+        },
+        "selected_input_unchanged": true,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/qoi-0.log",
+        "stdout_sha256": "6bb0377a87cf3cb03734ce3616e4dc3fa17cee8ca2d295441c1a7e309a4e252a",
+        "time": "4.5e-05"
+      },
+      {
+        "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01",
+        "cells": 3094455,
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01",
+          "-atTime",
+          "0.00004860",
+          "-mode",
+          "qoi",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "10"
+        ],
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05",
+        "domain_volume": 0.0035537854462664555,
+        "label": "baseline/1",
+        "phases": {
+          "air": {
+            "centroidX": 1.742318912275368e-07,
+            "centroidY": 3.6733310615182645e-12,
+            "centroidZ": 0.1300471687524058,
+            "gradientArea": 0.000599932908027808,
+            "mass": 0.08527883115515113,
+            "mixedVolume": 2.5920334898419946e-07,
+            "sensibleTotalEnergy": -6991.380083631423,
+            "volume": 0.003531264840890487
+          },
+          "ipa": {
+            "centroidX": 0.001215944247587723,
+            "centroidY": -2.5445770295233696e-08,
+            "centroidZ": 0.01239253334039362,
+            "gradientArea": 2.9510270196573327e-05,
+            "mass": 0.013971107131298186,
+            "mixedVolume": 1.6070340811594013e-09,
+            "sensibleTotalEnergy": -73697.64672758208,
+            "volume": 1.79627917080189e-05
+          },
+          "n2o": {
+            "centroidX": 6.337654705010323e-07,
+            "centroidY": 1.5019304686866082e-08,
+            "centroidZ": 0.011199634821344128,
+            "gradientArea": 0.0005704226378314914,
+            "mass": 0.0004178767173514243,
+            "mixedVolume": 2.5759631490303887e-07,
+            "sensibleTotalEnergy": -35.64409672936482,
+            "volume": 4.55781366794871e-06
+          }
+        },
+        "qoi_fields_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05/pintleRho.air": "78e2a4e746f197738f9571645ec7f69a296ec293b5fd4a97038d4836a2b52799",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05/pintleRho.ipa": "910c6df95983e04f27799464e6cea647eec1932abdca9f07c991386812bdf2be",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05/pintleRho.n2o": "ad1f0219d841ea445ede632be564e675fe184399c55e158ea023e313ea2d56c1",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/baseline/repeat-01/4.86e-05/pintleVolume": "8341510bba912664d6b173562e114a967540f8e3b05278c505eafedb756da394"
+        },
+        "selected_input_unchanged": true,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/qoi-1.log",
+        "stdout_sha256": "5f4f9847a6e5e823645d10386074ec49129f50d2248057872d8f8eca766ea36e",
+        "time": "0.00004860"
+      },
+      {
+        "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01",
+        "cells": 3094455,
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01",
+          "-atTime",
+          "0.00004860",
+          "-mode",
+          "qoi",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "10"
+        ],
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05",
+        "domain_volume": 0.0035537854462664555,
+        "label": "candidate/1",
+        "phases": {
+          "air": {
+            "centroidX": 1.7423189122563404e-07,
+            "centroidY": 3.673335896332025e-12,
+            "centroidZ": 0.1300471687524057,
+            "gradientArea": 0.0005999329080135237,
+            "mass": 0.08527883115515111,
+            "mixedVolume": 2.592033489827369e-07,
+            "sensibleTotalEnergy": -6991.38008363142,
+            "volume": 0.0035312648408904867
+          },
+          "ipa": {
+            "centroidX": 0.0012159442475877238,
+            "centroidY": -2.544577029603091e-08,
+            "centroidZ": 0.012392533340393613,
+            "gradientArea": 2.9510270196588906e-05,
+            "mass": 0.013971107131298193,
+            "mixedVolume": 1.6070340811550793e-09,
+            "sensibleTotalEnergy": -73697.64672778906,
+            "volume": 1.7962791708018912e-05
+          },
+          "n2o": {
+            "centroidX": 6.33765471971037e-07,
+            "centroidY": 1.5019301310294205e-08,
+            "centroidZ": 0.011199634821349959,
+            "gradientArea": 0.000570422637817192,
+            "mass": 0.00041787671735148526,
+            "mixedVolume": 2.5759631490158086e-07,
+            "sensibleTotalEnergy": -35.644096729368655,
+            "volume": 4.557813667949872e-06
+          }
+        },
+        "qoi_fields_sha256": {
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05/pintleRho.air": "92bee903279fc59449bb198233907fa49b0d398b6abb2e57635f0d16184a9aca",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05/pintleRho.ipa": "4c9dd2daf87aea43027fb2edcfae00100eb94c257575328a467e236044dfc710",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05/pintleRho.n2o": "e2cf7cc06c8dc363cfcd27306eeb6f0f3b1ee5d54ae4db38970904f09fa027dd",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120/runs/candidate/repeat-01/4.86e-05/pintleVolume": "8341510bba912664d6b173562e114a967540f8e3b05278c505eafedb756da394"
+        },
+        "selected_input_unchanged": true,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-long120-qoi/qoi-2.log",
+        "stdout_sha256": "b63356eabdbff146eb2545e0d35cadc99e185367815654a774055bfc5cb04469",
+        "time": "0.00004860"
+      }
+    ],
+    "scope": "Postprocessing only; excluded from timings. Phase densities and sensible internal energies are reconstructed from saved p/T with the selected thermodynamic models. These may differ from the solver final pressure-linearized internal density. This is a reconstructed thermodynamic inventory, not an exact stored-state or boundary heat/work energy-balance validation. No cellwise relative-error claim."
+  },
+  "regressions": {
+    "checks": [
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-one-sweep-default",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-1",
+          "-norm",
+          "default"
+        ],
+        "expected_success": false,
+        "legacy_lib": null,
+        "name": "temperature-one-sweep-default",
+        "pass": true,
+        "return_code": -6,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-one-sweep-default/stdout.log",
+        "stdout_sha256": "6eae6f0db9d2d3101c694f69069ff92f0c0c9c84f323e77141d425f15491e85e"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-converged-default",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-24",
+          "-norm",
+          "default"
+        ],
+        "expected_success": true,
+        "legacy_lib": null,
+        "name": "temperature-converged-default",
+        "pass": true,
+        "return_code": 0,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-converged-default/stdout.log",
+        "stdout_sha256": "3ae229d94bbbd756c7063dbaaaa95be9263e943269f55b24b0973300088ac7f8"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-norm-discrimination-default",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-1",
+          "-norm",
+          "default",
+          "-tolerance",
+          ".3"
+        ],
+        "expected_success": true,
+        "legacy_lib": null,
+        "name": "temperature-norm-discrimination-default",
+        "pass": true,
+        "return_code": 0,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-norm-discrimination-default/stdout.log",
+        "stdout_sha256": "1b684baa5494496e38337b650393e3ebc83100bb4fd00f6da6a76fbe1bdb9579"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-one-sweep-none",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-1",
+          "-norm",
+          "none"
+        ],
+        "expected_success": false,
+        "legacy_lib": null,
+        "name": "temperature-one-sweep-none",
+        "pass": true,
+        "return_code": -6,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-one-sweep-none/stdout.log",
+        "stdout_sha256": "9dbf33b0e9465437062366c8c5b27a51aac571edc17c4c5a3238fc1649771def"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-converged-none",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-24",
+          "-norm",
+          "none"
+        ],
+        "expected_success": true,
+        "legacy_lib": null,
+        "name": "temperature-converged-none",
+        "pass": true,
+        "return_code": 0,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-converged-none/stdout.log",
+        "stdout_sha256": "3c8f77bca47c0cbcc18d26741fff711d7a71bfd17b0b0335fa22f88e2b43ce6e"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-norm-discrimination-none",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-1",
+          "-norm",
+          "none",
+          "-tolerance",
+          ".3"
+        ],
+        "expected_success": false,
+        "legacy_lib": null,
+        "name": "temperature-norm-discrimination-none",
+        "pass": true,
+        "return_code": -6,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/temperature-norm-discrimination-none/stdout.log",
+        "stdout_sha256": "00d40f586feae25ac353b84473387b4e491612a13eb8c32ba5053820003b4128"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/dynamic-contact-angle",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "cache"
+        ],
+        "expected_success": true,
+        "legacy_lib": null,
+        "name": "dynamic-contact-angle",
+        "pass": true,
+        "return_code": 0,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/dynamic-contact-angle/stdout.log",
+        "stdout_sha256": "c1f49fc82962b78649a84839fcfe2f956f7687eeeba8a2b764a3b8df8712881e"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/legacy-temperature-false-pass",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "temperature",
+          "-sweeps",
+          "-1"
+        ],
+        "expected_success": true,
+        "legacy_lib": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-original/lib",
+        "name": "legacy-temperature-false-pass",
+        "pass": true,
+        "return_code": 0,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/legacy-temperature-false-pass/stdout.log",
+        "stdout_sha256": "f2062386bfa7e45fd4684c42acceee9a2afefdf04841b056f242b33a84b73a03"
+      },
+      {
+        "command": [
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck",
+          "-case",
+          "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/legacy-dynamic-cache-stale",
+          "-pool",
+          "fixedSizeMemoryPool",
+          "-poolSize",
+          "1",
+          "-mode",
+          "cache"
+        ],
+        "expected_success": false,
+        "legacy_lib": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-original/lib",
+        "name": "legacy-dynamic-cache-stale",
+        "pass": true,
+        "return_code": 1,
+        "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/legacy-dynamic-cache-stale/stdout.log",
+        "stdout_sha256": "570773f153387439cad59ee453f700a5377df62d3e5c6185425e1955885074db"
+      },
+      {
+        "expected_success": true,
+        "name": "euler",
+        "pass": true,
+        "run": {
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/euler",
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/euler",
+            "-noFunctionObjects",
+            "-pool",
+            "fixedSizeMemoryPool",
+            "-poolSize",
+            "10"
+          ],
+          "completed_ok": true,
+          "completed_steps": 1,
+          "control_dict_sha256": "828170fc7740fef80b1a357c36f45cea9ca2dfa0ee92156fab46296c28e7c41b",
+          "delta_t": "3E-8",
+          "elapsed_wall_s": 0.9649164340007701,
+          "end_marker": true,
+          "end_time": "3E-8",
+          "excluded_steps": {
+            "final_write_at_end": 0,
+            "warmup_at_start": 1
+          },
+          "execution_time_events": [
+            {
+              "line": "ExecutionTime = 0.52000000000000002 s  ClockTime = 1 s",
+              "monotonic_s": 0.9051418740054942,
+              "step": 1
+            }
+          ],
+          "fatal_error_marker": false,
+          "fv_solution_sha256": "19f36d0e5765b5d0dc586bfa9b9fe0a186c72500dcf2218119fb4afb1d066112",
+          "gpu_baseline": [
+            {
+              "index": 0,
+              "memory_used_mib": 3387.0,
+              "power_w": 52.3,
+              "utilization_percent": 0.0,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "gpu_measured_window": [
+            {
+              "baseline_memory_used_mib": 3387.0,
+              "index": 0,
+              "mean_power_w": 53.12,
+              "mean_utilization_percent": 10.5,
+              "peak_memory_increment_mib": 333.0,
+              "peak_memory_used_mib": 3720.0,
+              "samples": 2,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "interrupted": false,
+          "mean_measured_wall_s_per_step": null,
+          "measured_step_wall_s": [],
+          "measured_steps": 0,
+          "median_measured_wall_s_per_step": null,
+          "mode": "gpu",
+          "peak_process_tree_rss_mib": 690.765625,
+          "pintle_timing_events": [
+            {
+              "line": "PINTLE_TIMING time=2.9999999999999997e-08 alpha=0.189071183 momentum=0.047071898000000001 energy=0.011153554 pressure=0.22577449099999999 turbulence=4.9590000000000003e-06",
+              "monotonic_s": 0.8875206040029298,
+              "step": 1,
+              "values": {
+                "alpha": 0.189071183,
+                "energy": 0.011153554,
+                "momentum": 0.047071898,
+                "pressure": 0.225774491,
+                "time": 3e-08,
+                "turbulence": 4.959e-06
+              }
+            }
+          ],
+          "pintle_timing_measured_events": 0,
+          "pintle_timing_measured_stage_statistics": {},
+          "pintle_timing_step_count_matches_execution_time": true,
+          "resource_errors": [],
+          "resource_sample_interval_s": 0.5,
+          "resource_samples": [
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3387.0,
+                  "power_w": 52.3,
+                  "utilization_percent": 0.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.013209290002123453,
+              "process_tree_rss_kib": 42192
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3720.0,
+                  "power_w": 53.94,
+                  "utilization_percent": 21.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.5138472790058586,
+              "process_tree_rss_kib": 707344
+            }
+          ],
+          "resource_scope": "nvidia-smi metrics are device-wide and can include unrelated processes; RSS is summed across the solver process tree and can double-count shared pages.",
+          "return_code": 0,
+          "smoother_selection": "multicolorGaussSeidel",
+          "start_time": "0",
+          "start_time_text": "0",
+          "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/euler/stdout.log",
+          "steps": 1,
+          "timed_out": false
+        }
+      },
+      {
+        "expected_success": false,
+        "name": "backward-default",
+        "pass": true,
+        "run": {
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-default",
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-default",
+            "-noFunctionObjects",
+            "-pool",
+            "fixedSizeMemoryPool",
+            "-poolSize",
+            "10"
+          ],
+          "completed_ok": false,
+          "completed_steps": 0,
+          "control_dict_sha256": "828170fc7740fef80b1a357c36f45cea9ca2dfa0ee92156fab46296c28e7c41b",
+          "delta_t": "3E-8",
+          "elapsed_wall_s": 1.6669517109985463,
+          "end_marker": false,
+          "end_time": "3E-8",
+          "excluded_steps": {
+            "final_write_at_end": 0,
+            "warmup_at_start": 0
+          },
+          "execution_time_events": [],
+          "fatal_error_marker": true,
+          "fv_solution_sha256": "19f36d0e5765b5d0dc586bfa9b9fe0a186c72500dcf2218119fb4afb1d066112",
+          "gpu_baseline": [
+            {
+              "index": 0,
+              "memory_used_mib": 3458.0,
+              "power_w": 68.09,
+              "utilization_percent": 44.0,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "gpu_measured_window": [
+            {
+              "baseline_memory_used_mib": 3458.0,
+              "index": 0,
+              "mean_power_w": 72.3775,
+              "mean_utilization_percent": 25.25,
+              "peak_memory_increment_mib": 332.0,
+              "peak_memory_used_mib": 3790.0,
+              "samples": 4,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "interrupted": false,
+          "mean_measured_wall_s_per_step": null,
+          "measured_step_wall_s": [],
+          "measured_steps": 0,
+          "median_measured_wall_s_per_step": null,
+          "mode": "gpu",
+          "peak_process_tree_rss_mib": 697.8203125,
+          "pintle_timing_events": [],
+          "pintle_timing_measured_events": 0,
+          "pintle_timing_measured_stage_statistics": {},
+          "pintle_timing_step_count_matches_execution_time": true,
+          "resource_errors": [],
+          "resource_sample_interval_s": 0.5,
+          "resource_samples": [
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3458.0,
+                  "power_w": 68.09,
+                  "utilization_percent": 44.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.01843545999872731,
+              "process_tree_rss_kib": 41832
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3789.0,
+                  "power_w": 83.23,
+                  "utilization_percent": 48.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.5131713349983329,
+              "process_tree_rss_kib": 714568
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3749.0,
+                  "power_w": 75.86,
+                  "utilization_percent": 7.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.0138513439960661,
+              "process_tree_rss_kib": 707556
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3790.0,
+                  "power_w": 62.33,
+                  "utilization_percent": 2.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.5137210309985676,
+              "process_tree_rss_kib": 707556
+            }
+          ],
+          "resource_scope": "nvidia-smi metrics are device-wide and can include unrelated processes; RSS is summed across the solver process tree and can double-count shared pages.",
+          "return_code": -6,
+          "smoother_selection": "multicolorGaussSeidel",
+          "start_time": "0",
+          "start_time_text": "0",
+          "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-default/stdout.log",
+          "steps": 1,
+          "timed_out": false
+        }
+      },
+      {
+        "expected_success": false,
+        "name": "backward-override",
+        "pass": true,
+        "run": {
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-override",
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-override",
+            "-noFunctionObjects",
+            "-pool",
+            "fixedSizeMemoryPool",
+            "-poolSize",
+            "10"
+          ],
+          "completed_ok": false,
+          "completed_steps": 0,
+          "control_dict_sha256": "828170fc7740fef80b1a357c36f45cea9ca2dfa0ee92156fab46296c28e7c41b",
+          "delta_t": "3E-8",
+          "elapsed_wall_s": 1.6157941760029644,
+          "end_marker": false,
+          "end_time": "3E-8",
+          "excluded_steps": {
+            "final_write_at_end": 0,
+            "warmup_at_start": 0
+          },
+          "execution_time_events": [],
+          "fatal_error_marker": true,
+          "fv_solution_sha256": "19f36d0e5765b5d0dc586bfa9b9fe0a186c72500dcf2218119fb4afb1d066112",
+          "gpu_baseline": [
+            {
+              "index": 0,
+              "memory_used_mib": 3456.0,
+              "power_w": 53.42,
+              "utilization_percent": 0.0,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "gpu_measured_window": [
+            {
+              "baseline_memory_used_mib": 3456.0,
+              "index": 0,
+              "mean_power_w": 54.69,
+              "mean_utilization_percent": 6.25,
+              "peak_memory_increment_mib": 331.0,
+              "peak_memory_used_mib": 3787.0,
+              "samples": 4,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "interrupted": false,
+          "mean_measured_wall_s_per_step": null,
+          "measured_step_wall_s": [],
+          "measured_steps": 0,
+          "median_measured_wall_s_per_step": null,
+          "mode": "gpu",
+          "peak_process_tree_rss_mib": 690.9765625,
+          "pintle_timing_events": [],
+          "pintle_timing_measured_events": 0,
+          "pintle_timing_measured_stage_statistics": {},
+          "pintle_timing_step_count_matches_execution_time": true,
+          "resource_errors": [],
+          "resource_sample_interval_s": 0.5,
+          "resource_samples": [
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3456.0,
+                  "power_w": 53.42,
+                  "utilization_percent": 0.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.013169603000278585,
+              "process_tree_rss_kib": 41716
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3787.0,
+                  "power_w": 54.85,
+                  "utilization_percent": 24.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.5134311660003732,
+              "process_tree_rss_kib": 707560
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3787.0,
+                  "power_w": 55.61,
+                  "utilization_percent": 0.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.0129050510004163,
+              "process_tree_rss_kib": 707560
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3787.0,
+                  "power_w": 54.88,
+                  "utilization_percent": 1.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.5136074260008172,
+              "process_tree_rss_kib": 707560
+            }
+          ],
+          "resource_scope": "nvidia-smi metrics are device-wide and can include unrelated processes; RSS is summed across the solver process tree and can double-count shared pages.",
+          "return_code": -6,
+          "smoother_selection": "multicolorGaussSeidel",
+          "start_time": "0",
+          "start_time_text": "0",
+          "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/backward-override/stdout.log",
+          "steps": 1,
+          "timed_out": false
+        }
+      },
+      {
+        "expected_success": false,
+        "name": "local-euler-override",
+        "pass": true,
+        "run": {
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/local-euler-override",
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/local-euler-override",
+            "-noFunctionObjects",
+            "-pool",
+            "fixedSizeMemoryPool",
+            "-poolSize",
+            "10"
+          ],
+          "completed_ok": false,
+          "completed_steps": 0,
+          "control_dict_sha256": "828170fc7740fef80b1a357c36f45cea9ca2dfa0ee92156fab46296c28e7c41b",
+          "delta_t": "3E-8",
+          "elapsed_wall_s": 1.6158273479959462,
+          "end_marker": false,
+          "end_time": "3E-8",
+          "excluded_steps": {
+            "final_write_at_end": 0,
+            "warmup_at_start": 0
+          },
+          "execution_time_events": [],
+          "fatal_error_marker": true,
+          "fv_solution_sha256": "19f36d0e5765b5d0dc586bfa9b9fe0a186c72500dcf2218119fb4afb1d066112",
+          "gpu_baseline": [
+            {
+              "index": 0,
+              "memory_used_mib": 3454.0,
+              "power_w": 53.5,
+              "utilization_percent": 0.0,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "gpu_measured_window": [
+            {
+              "baseline_memory_used_mib": 3454.0,
+              "index": 0,
+              "mean_power_w": 54.364999999999995,
+              "mean_utilization_percent": 1.5,
+              "peak_memory_increment_mib": 332.0,
+              "peak_memory_used_mib": 3786.0,
+              "samples": 4,
+              "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+            }
+          ],
+          "interrupted": false,
+          "mean_measured_wall_s_per_step": null,
+          "measured_step_wall_s": [],
+          "measured_steps": 0,
+          "median_measured_wall_s_per_step": null,
+          "mode": "gpu",
+          "peak_process_tree_rss_mib": 690.92578125,
+          "pintle_timing_events": [],
+          "pintle_timing_measured_events": 0,
+          "pintle_timing_measured_stage_statistics": {},
+          "pintle_timing_step_count_matches_execution_time": true,
+          "resource_errors": [],
+          "resource_sample_interval_s": 0.5,
+          "resource_samples": [
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3454.0,
+                  "power_w": 53.5,
+                  "utilization_percent": 0.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.012773759000992868,
+              "process_tree_rss_kib": 41868
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3785.0,
+                  "power_w": 52.91,
+                  "utilization_percent": 4.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 0.5133950059971539,
+              "process_tree_rss_kib": 707508
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3785.0,
+                  "power_w": 55.19,
+                  "utilization_percent": 2.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.0135179229982896,
+              "process_tree_rss_kib": 707508
+            },
+            {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3786.0,
+                  "power_w": 55.86,
+                  "utilization_percent": 0.0,
+                  "uuid": "GPU-97fa3a26-adf1-eb05-e326-830d8c659ca3"
+                }
+              ],
+              "monotonic_s": 1.5130875819959329,
+              "process_tree_rss_kib": 707508
+            }
+          ],
+          "resource_scope": "nvidia-smi metrics are device-wide and can include unrelated processes; RSS is summed across the solver process tree and can double-count shared pages.",
+          "return_code": -6,
+          "smoother_selection": "multicolorGaussSeidel",
+          "start_time": "0",
+          "start_time_text": "0",
+          "stdout_log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/review-regressions-final/local-euler-override/stdout.log",
+          "steps": 1,
+          "timed_out": false
+        }
+      }
+    ],
+    "pass": true,
+    "protected_after": {
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck": "60b8e5c39853695929db2018da6b4be83b988511bfc265583cf6ab84108c4de1",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa"
+    },
+    "protected_before": {
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/pintleRegressionCheck": "60b8e5c39853695929db2018da6b4be83b988511bfc265583cf6ab84108c4de1",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa"
+    }
+  },
+  "runtime_sha256": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/bin/spumaPintleColdFoam": "dd546b236bd613bbc4a4dae392713164ce9469f79ca603d8d7bb40f39b0a47d7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleAsyncSmoother.so": "ab1670f0fb0d416afc2cb64026c0474c22818b070716e87f8552a4bca8d11c79",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleMultiphaseThermo.so": "cf1747d527d64c40a14569eb8a7ab1679f27b8fd642a29081220480ba11203aa"
+  },
+  "scope": "Review-driven numerical regression and performance exploration; not physical-model certification.",
+  "timing": {
+    "conclusion": "Raw elapsed differences also affect unchanged solver stages. A causal source-fusion speedup is not established; keep the option disabled by default.",
+    "excluded": {
+      "campaign": "benchmarks/review-fusion12/benchmark.json",
+      "conservative_overlap_utc": [
+        "2026-09-10 08:09:47",
+        "2026-09-10 08:10:11"
+      ],
+      "reason": "Large-array diagnostic analysis overlapped candidate timing; excluded before replacement.",
+      "repeat": 1,
+      "replacement": "benchmarks/review-fusion12-replacement/benchmark.json"
+    },
+    "measured_steps_per_run": 9,
+    "median_alpha_ratio_reduction_percent": 0.06395276831914765,
+    "median_raw_time_reduction_percent": 6.70987093783646,
+    "median_unchanged_stage_time_reduction_percent": 6.911056207566668,
+    "selected_pairs": [
+      {
+        "alpha_ratio_to_unchanged_stages_reduction_percent": 0.6590513040342638,
+        "baseline_s_per_step": 1.661448614222334,
+        "baseline_stages": {
+          "alpha": 0.5754471082222222,
+          "energy": 0.13440730644444446,
+          "momentum": 0.33274498277777775,
+          "pressure": 0.5911954098888889,
+          "turbulence": 0.01389652011111111
+        },
+        "campaign": "benchmarks/review-fusion12-replacement/benchmark.json",
+        "candidate_s_per_step": 1.6304775114444459,
+        "candidate_stages": {
+          "alpha": 0.5624388856666667,
+          "energy": 0.1412845448888889,
+          "momentum": 0.3441742036666667,
+          "pressure": 0.5559549865555555,
+          "turbulence": 0.013544672222222222
+        },
+        "iteration_signature_equal": true,
+        "raw_time_reduction_percent": 1.8641023569895054,
+        "repeat": 1,
+        "unchanged_stage_time_reduction_percent": 1.6121151859813665
+      },
+      {
+        "alpha_ratio_to_unchanged_stages_reduction_percent": -0.5311457673959685,
+        "baseline_s_per_step": 2.004932201222497,
+        "baseline_stages": {
+          "alpha": 0.6888349646666667,
+          "energy": 0.171126001,
+          "momentum": 0.4132959236666667,
+          "pressure": 0.6985091026666667,
+          "turbulence": 0.016488028555555555
+        },
+        "campaign": "benchmarks/review-fusion12/benchmark.json",
+        "candidate_s_per_step": 1.858699745444432,
+        "candidate_stages": {
+          "alpha": 0.6411056147777778,
+          "energy": 0.15717876955555554,
+          "momentum": 0.3846757542222222,
+          "pressure": 0.6454399955555555,
+          "turbulence": 0.01569819211111111
+        },
+        "iteration_signature_equal": true,
+        "raw_time_reduction_percent": 7.293635948831612,
+        "repeat": 2,
+        "unchanged_stage_time_reduction_percent": 7.4207272863551
+      },
+      {
+        "alpha_ratio_to_unchanged_stages_reduction_percent": -0.7234017375193691,
+        "baseline_s_per_step": 1.6811024383334572,
+        "baseline_stages": {
+          "alpha": 0.5778725214444445,
+          "energy": 0.14307760244444445,
+          "momentum": 0.37170791366666667,
+          "pressure": 0.5617721912222222,
+          "turbulence": 0.013773965444444444
+        },
+        "campaign": "benchmarks/review-fusion12/benchmark.json",
+        "candidate_s_per_step": 1.5781163222224375,
+        "candidate_stages": {
+          "alpha": 0.544793416,
+          "energy": 0.1327384321111111,
+          "momentum": 0.32746378944444443,
+          "pressure": 0.5468501987777777,
+          "turbulence": 0.013482922888888887
+        },
+        "iteration_signature_equal": true,
+        "raw_time_reduction_percent": 6.126105926841308,
+        "repeat": 3,
+        "unchanged_stage_time_reduction_percent": 6.401385128778236
+      },
+      {
+        "alpha_ratio_to_unchanged_stages_reduction_percent": 1.1021961276883374,
+        "baseline_s_per_step": 1.7490606294442033,
+        "baseline_stages": {
+          "alpha": 0.6063610044444444,
+          "energy": 0.1415553028888889,
+          "momentum": 0.35151361955555555,
+          "pressure": 0.6154330905555555,
+          "turbulence": 0.016838451
+        },
+        "campaign": "benchmarks/review-fusion12/benchmark.json",
+        "candidate_s_per_step": 1.5827759869999782,
+        "candidate_stages": {
+          "alpha": 0.5458130345555555,
+          "energy": 0.13326333266666668,
+          "momentum": 0.32917331022222224,
+          "pressure": 0.5483587408888889,
+          "turbulence": 0.013463941222222222
+        },
+        "iteration_signature_equal": true,
+        "raw_time_reduction_percent": 9.507082810334888,
+        "repeat": 4,
+        "unchanged_stage_time_reduction_percent": 8.982271786505313
+      }
+    ],
+    "steps_per_run": 12
+  }
+}

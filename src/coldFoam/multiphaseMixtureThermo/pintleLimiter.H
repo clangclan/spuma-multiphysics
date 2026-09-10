@@ -17,6 +17,8 @@ class pintleLimiter
     Field<float> ratioIn32_, ratioOut32_;
     bool coupled_;
 
+    void checkTimeScheme(const volScalarField&) const;
+
     template<class Ratio> void iterate
     (
         const volScalarField&, const surfaceScalarField&,

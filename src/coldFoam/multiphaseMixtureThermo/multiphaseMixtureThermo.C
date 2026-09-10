@@ -756,7 +756,15 @@ Foam::tmp<Foam::volScalarField> Foam::multiphaseMixtureThermo::rCv() const
 Foam::tmp<Foam::surfaceScalarField>
 Foam::multiphaseMixtureThermo::surfaceTensionForce() const
 {
-    const bool cache=mesh_.time().controlDict().getOrDefault<bool>("pintleSurfaceCache",true);
+    bool cache=mesh_.time().controlDict().getOrDefault<bool>("pintleSurfaceCache",true);
+    // Contact-angle curvature may depend on U, which changes in momentum and
+    // pressure correctors while alpha remains unchanged. Keep reuse only for
+    // boundaries without contact-angle state (including the Pintle benchmark).
+    for(const phaseModel& phase:phases_)
+        forAll(phase.boundaryField(),patchi)
+            if(isA<alphaContactAngleFvPatchScalarField>(phase.boundaryField()[patchi]))
+                cache=false;
+    if(!cache) surfaceForceCache_.clear();
     if(cache && surfaceForceCache_) return tmp<surfaceScalarField>(surfaceForceCache_());
     tmp<surfaceScalarField> tstf
     (
@@ -1169,7 +1177,27 @@ void Foam::multiphaseMixtureThermo::solveAlphas
 
 
     volScalarField divU(fvc::div(fvc::absolute(phi_, U_)));
-
+    const bool fuseSource=mesh_.time().controlDict().getOrDefault<bool>("pintleFuseAlphaSource",false);
+    const bool replay=mesh_.time().writeTime()
+        && mesh_.time().controlDict().getOrDefault<bool>("pintleWriteAlphaReplay",false);
+    const auto divUp=divU.cbegin();
+    auto writeReplay=[&](const word& name,const volScalarField::Internal& field)
+    {
+        volScalarField::Internal copy
+        (
+            IOobject(name,mesh_.time().timeName(),mesh_,IOobject::NO_READ,IOobject::NO_WRITE,false),
+            field
+        );
+        copy.write();
+    };
+    if(replay)
+    {
+        writeReplay("replayDivU",divU.internalField());
+        for(const phaseModel& phase:phases_)
+            writeReplay("replayDgdt."+phase.name(),phase.dgdt().internalField());
+        Info<< "PINTLE_ALPHA_REPLAY solve=" << nSolves << " time=" << mesh_.time().value()
+            << " deltaT=" << mesh_.time().deltaTValue() << " order=ipa,n2o,air" << endl;
+    }
 
     phasei = 0;
 
@@ -1187,7 +1215,7 @@ void Foam::multiphaseMixtureThermo::solveAlphas
                 mesh_
             ),
             mesh_,
-            dimensionedScalar(alpha.dgdt().dimensions(), Zero)
+            alpha.dgdt().dimensions()
         );
 
         volScalarField::Internal Su
@@ -1198,10 +1226,14 @@ void Foam::multiphaseMixtureThermo::solveAlphas
                 mesh_.time().timeName(),
                 mesh_
             ),
-            // Divergence term is handled explicitly to be
-            // consistent with the explicit transport solution
-            divU*min(alpha, scalar(1))
+            mesh_,
+            alpha.dgdt().dimensions()
         );
+        if(!fuseSource)
+        {
+            Sp=dimensionedScalar(alpha.dgdt().dimensions(),Zero);
+            Su=divU*min(alpha,scalar(1));
+        }
 
         // Preserve phase update order; earlier phases are already advanced.
         struct Views { const scalar* a[3]; const scalar* d[3]; } views;
@@ -1214,7 +1246,7 @@ void Foam::multiphaseMixtureThermo::solveAlphas
         foamExecutor sourceExec;
         auto sourceKernel=[=](label c)
         {
-            scalar s=0,u=sup[c];
+            scalar s=0,u=fuseSource ? divUp[c]*min(ap[c],scalar(1)) : sup[c];
             for(label j=0;j<3;++j)
             {
                 const scalar d=views.d[j][c],a=views.a[j][c];
@@ -1233,6 +1265,16 @@ void Foam::multiphaseMixtureThermo::solveAlphas
         };
         sourceExec.parallelFor(sourceKernel,alpha.size());
 
+        if(replay)
+        {
+            writeReplay("replaySp."+alpha.name(),Sp);
+            writeReplay("replaySu."+alpha.name(),Su);
+            writeReplay("replayBefore."+alpha.name(),alpha.internalField());
+            writeReplay("replayOld."+alpha.name(),alpha.oldTime().internalField());
+            const volScalarField fluxDiv(fvc::div(alphaPhi));
+            writeReplay("replayFluxDiv."+alpha.name(),fluxDiv.internalField());
+        }
+
         autoPtr<volScalarField> explicitOracle;
         if(verify)
         {
@@ -1240,6 +1282,7 @@ void Foam::multiphaseMixtureThermo::solveAlphas
             explicitOracle.reset(new volScalarField("explicitOracle",alpha));
             MULES::explicitSolve(geometricOneField(),explicitOracle(),alphaPhi,Sp,Su);
         }
+
         if(gpuLimiter) limiter_->explicitSolve(alpha,alphaPhi,Sp,Su);
         else
         {
@@ -1261,6 +1304,7 @@ void Foam::multiphaseMixtureThermo::solveAlphas
                 FatalErrorInFunction << "GPU explicitSolve/reference mismatch" << abort(FatalError);
         }
 
+        if(replay) writeReplay("replayAfter."+alpha.name(),alpha.internalField());
         rhoPhi_ += fvc::interpolate(alpha.thermo().rho())*alphaPhi;
 
         Info<< alpha.name() << " volume fraction, min, max = "

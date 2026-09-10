@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Same linear system as the absolute-T equation, solved for its increment.
 #include "smoothSolver.H"
+#include <cmath>
 namespace Foam
 {
 class pintleTemperatureIncrement : public lduMatrix::solver
@@ -18,7 +19,16 @@ public:
         scalarField delta(psi.size(),Zero);
         smoothSolver inner(fieldName_,matrix_,interfaceBouCoeffs_,interfaceIntCoeffs_,interfaces_,controlDict_);
         solverPerformance perf=inner.solve(delta,rhs,cmpt);
-        if(!perf.checkConvergence(tolerance_,relTol_))
+        // Fixed-sweep smoothSolver leaves residual metadata at zero. Verify
+        // the actual correction for every mode before changing the state.
+        const scalar rhsNorm=gSumMag(rhs,matrix_.mesh().comm());
+        const scalar norm=normType_==lduMatrix::normTypes::NO_NORM
+            ? 1 : rhsNorm+solverPerformance::small_;
+        const scalarField defect(matrix_.residual(delta,rhs,interfaceBouCoeffs_,interfaces_,cmpt));
+        perf.initialResidual()=rhsNorm/norm;
+        perf.finalResidual()=gSumMag(defect,matrix_.mesh().comm())/norm;
+        if(!std::isfinite(rhsNorm) || !std::isfinite(perf.finalResidual())
+            || !perf.checkConvergence(tolerance_,relTol_))
             FatalErrorInFunction << "Temperature increment did not converge: " << perf << abort(FatalError);
         psi+=delta;
         perf.solverName()="pintleTemperatureIncrement";

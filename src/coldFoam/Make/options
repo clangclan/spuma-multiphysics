@@ -1,6 +1,6 @@
 EXE_INC = \
-    -I/home/jsw/cae-gpu/src/spuma/applications/solvers/multiphase/VoF \
-    -I/home/jsw/cae-gpu/src/spuma/applications/solvers/multiphase/interFoam \
+    -I$(WM_PROJECT_DIR)/applications/solvers/multiphase/VoF \
+    -I$(WM_PROJECT_DIR)/applications/solvers/multiphase/interFoam \
     -ImultiphaseMixtureThermo/lnInclude \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
