@@ -18,7 +18,8 @@
 using namespace Foam;
 namespace {
 using Array=std::vector<double>;
-using States=std::vector<PintleThermoState>;
+struct CellState : PintleThermoState {PintleMechanicalState mechanical{};};
+using States=std::vector<CellState>;
 using Gradient=std::array<double,9>;
 void demand(bool ok,const std::string& message) {if(!ok) throw std::runtime_error(message);}
 
@@ -49,23 +50,31 @@ struct Face {
 class Flow {
 public:
     void* thermo;
-    size_t ns,nv,nc;
+    size_t physicalSpecies,ns,nv,nc;
     Array volume;
     std::vector<Face> faces;
     double viscosity,conductivity,diffusivity,waveFactor,chemicalRtol,chemicalAtol;
     std::vector<size_t> liquidSpecies;
-    bool chemistry;
+    bool chemistry,mechanical;
     Flow(void* t,size_t cells,Array volumes,const dictionary& dict)
-      :thermo(t),ns(pintle_rt_species_count(t)),nv(ns+4),nc(cells),volume(std::move(volumes)),
+      :thermo(t),physicalSpecies(pintle_rt_species_count(t)),
+       ns(physicalSpecies*(dict.get<word>("closure")=="mechanicalEquilibrium"?2:1)),
+       nv(ns+4+(dict.get<word>("closure")=="mechanicalEquilibrium"?2:0)),nc(cells),volume(std::move(volumes)),
        viscosity(dict.getOrDefault<scalar>("dynamicViscosity",0)),
        conductivity(dict.getOrDefault<scalar>("thermalConductivity",0)),
        diffusivity(dict.getOrDefault<scalar>("molecularDiffusivity",0)),
        waveFactor(dict.getOrDefault<scalar>("waveSpeedFactor",1.1)),
        chemicalRtol(dict.getOrDefault<scalar>("chemicalRelativeTolerance",1e-8)),
        chemicalAtol(dict.getOrDefault<scalar>("chemicalAbsoluteTolerance",1e-14)),
-       chemistry(dict.getOrDefault<Switch>("chemistry",false))
+       chemistry(dict.getOrDefault<Switch>("chemistry",false)),
+       mechanical(dict.get<word>("closure")=="mechanicalEquilibrium")
     {
         demand(ns>0&&nc>0,"Empty model/mesh");
+        demand(!mechanical||(!chemistry&&viscosity==0&&conductivity==0&&diffusivity==0),
+               "Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange");
+        const word jacobian=dict.getOrDefault<word>("chemicalJacobian","structured");
+        demand(jacobian=="structured"||jacobian=="fullRHS","Unknown chemical Jacobian mode");
+        check(pintle_rt_set_chemical_jacobian(t,jacobian=="structured"),"Chemical Jacobian setting");
         demand(viscosity>=0&&conductivity>=0&&diffusivity>=0&&waveFactor>=1
                &&std::isfinite(viscosity)&&std::isfinite(conductivity)&&std::isfinite(diffusivity)
                &&std::isfinite(waveFactor),"Invalid transport or wave-speed control");
@@ -85,7 +94,11 @@ public:
     {
         for(size_t c=0;c<nc;++c) {
             const double* local=&q[c*nv];
-            check(pintle_rt_recover(thermo,local,internalEnergy(local),1,&states[c]),"UV recovery cell "+std::to_string(c));
+            if(mechanical) {
+                check(pintle_rt_recover_mechanical(thermo,local,local+physicalSpecies,local[ns+4],
+                    local[ns+5],internalEnergy(local),&states[c].mechanical),"Mechanical recovery cell "+std::to_string(c));
+                static_cast<PintleThermoState&>(states[c])=states[c].mechanical.mixture;
+            } else check(pintle_rt_recover(thermo,local,internalEnergy(local),1,&states[c]),"UV recovery cell "+std::to_string(c));
         }
     }
     void react(Array& q,States& states,double dt,double& drift) const
@@ -153,6 +166,7 @@ public:
     void flux(const Array& q,const States& states,Array& derivative,Array& boundaryRate) const
     {
         derivative.assign(q.size(),0);boundaryRate.assign(nv,0);
+        Array divergence(nc,0);
         Array gasY,gasH;
         if(diffusivity>0) {
             gasY.resize(nc*ns,0);gasH.resize(nc*ns,0);
@@ -193,6 +207,14 @@ public:
                 if(k>=ns && k<ns+3) {fl+=sl.p*n[k-ns];fr+=sr.p*n[k-ns];}
                 if(k==ns+3) {fl+=sl.p*unL;fr+=sr.p*unR;}
                 result[k]=(rightWave*fl-left*fr+left*rightWave*(qr[k]-ql[k]))/(rightWave-left);
+            }
+            if(mechanical) {
+                // This is the velocity of the scalar HLL alpha flux above.
+                // Using the momentum HLL star velocity would change alpha=1
+                // across pressure jumps even when the other environment is absent.
+                const double faceVelocity=(rightWave*unL-left*unR)/(rightWave-left);
+                divergence[face.owner]+=faceVelocity*face.area/volume[face.owner];
+                if(face.neighbour>=0) divergence[face.neighbour]-=faceVelocity*face.area/volume[face.neighbour];
             }
             if(diffusivity>0 && sl.gasMass>0 && sr.gasMass>0 && face.type!="slipWall") {
                 const double* yl=&gasY[face.owner*ns],*hl=&gasH[face.owner*ns];
@@ -253,6 +275,10 @@ public:
                 else boundaryRate[k]+=rate;
             }
         }
+        if(mechanical) for(size_t c=0;c<nc;++c) {
+            derivative[c*nv+ns+4]+=(q[c*nv+ns+4]+states[c].mechanical.dilatationK)*divergence[c];
+            derivative[c*nv+ns+5]+=(q[c*nv+ns+5]-states[c].mechanical.dilatationK)*divergence[c];
+        }
     }
     Array totals(const Array& q) const
     {
@@ -305,14 +331,17 @@ int main(int argc,char** argv)
                &&(!controls.found("functions")||controls.subDict("functions").empty()),
                "Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported");
         IOdictionary dict(IOobject("reactiveProperties",runTime.constant(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE));
-        demand(dict.get<word>("closure")=="HEM","Only homogeneous equilibrium closure is supported");
+        const word closure=dict.get<word>("closure");
+        demand(closure=="HEM"||closure=="mechanicalEquilibrium","Unknown thermodynamic closure");
         const fileName config=dict.get<fileName>("thermoConfiguration");
         demand(config.isAbsolute(),"thermoConfiguration must be an absolute path");
         char error[8192]{};
         std::unique_ptr<void,decltype(&pintle_rt_destroy)> model(pintle_rt_create(config.c_str(),error,sizeof(error)),&pintle_rt_destroy);
         demand(bool(model),error);
-        const label nc=mesh.nCells();const size_t ns=pintle_rt_species_count(model.get()),nv=ns+4;
-        const double memoryEstimate=8.0*nc*(7.0*nv+100)+8.0*mesh.nFaces()*32;
+        const bool mechanical=closure=="mechanicalEquilibrium";
+        const label nc=mesh.nCells();const size_t physicalSpecies=pintle_rt_species_count(model.get());
+        const size_t ns=physicalSpecies*(mechanical?2:1),nv=ns+4+(mechanical?2:0);
+        const double memoryEstimate=8.0*nc*(7.0*nv+160)+8.0*mesh.nFaces()*32;
         const double memoryLimit=dict.getOrDefault<scalar>("maxHostMemoryGB",2)*1e9;
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
                "Conservative species/stage allocation exceeds configured host memory budget");
@@ -327,10 +356,12 @@ int main(int argc,char** argv)
         const auto velocity=host(U.primitiveField());
         const word initialization=dict.get<word>("initialization");
         demand(initialization=="primitive"||initialization=="conserved","Unknown initialization mode");
+        demand(!mechanical||initialization=="conserved","Mechanical environments require explicit conserved initial data");
         if(initialization=="conserved") {
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE));
             demand(identity.get<word>("fingerprint")==pintle_rt_fingerprint(model.get())
-                   &&identity.get<label>("speciesCount")==label(ns),
+                   &&identity.get<label>("speciesCount")==label(physicalSpecies)
+                   &&identity.getOrDefault<word>("closure","HEM")==closure,
                    "Conserved restart species order/EOS/mechanism fingerprint differs; an explicit model migration is required");
         }
         if(initialization=="primitive") {
@@ -368,6 +399,25 @@ int main(int argc,char** argv)
             for(label c=0;c<nc;++c) {
                 for(int i=0;i<3;++i) q[c*nv+ns+i]=mv[c][i];q[c*nv+ns+3]=ev[c];
                 states[c].p=pressure[c];states[c].T=temperature[c];
+            }
+            if(mechanical) {
+                volScalarField alpha(IOobject("alphaEnvironment",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
+                volScalarField beta(IOobject("betaEnvironment",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
+                demand(alpha.dimensions()==dimless&&beta.dimensions()==dimless,"Environment volume fraction must be dimensionless");
+                const auto av=host(alpha.primitiveField()),bv=host(beta.primitiveField());
+                for(label c=0;c<nc;++c) {
+                    q[c*nv+ns+4]=av[c];q[c*nv+ns+5]=bv[c];states[c].mechanical.mixture=states[c];
+                }
+                for(int a=0;a<2;++a) {
+                    volScalarField et(IOobject("environmentT"+Foam::name(a),runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
+                    volScalarField ee(IOobject("environmentE"+Foam::name(a),runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
+                    demand(et.dimensions()==dimTemperature&&ee.dimensions()==dimEnergy/dimMass,"Wrong environment predictor dimensions");
+                    const auto tv=host(et.primitiveField()),evv=host(ee.primitiveField());
+                    for(label c=0;c<nc;++c) {
+                        states[c].mechanical.environment[a].p=pressure[c];
+                        states[c].mechanical.environment[a].T=tv[c];states[c].mechanical.environment[a].e=evv[c];
+                    }
+                }
             }
             // Liquid fractions are initial guesses only; conserved q/E define
             // the restarted phase distribution.
@@ -420,6 +470,7 @@ int main(int argc,char** argv)
             demand(type=="slipWall"||type=="extrapolate"||type=="fixedState","Unsupported reactive boundary type");
             Array fixed;PintleThermoState fixedState{};
             if(type=="fixedState") {
+                demand(!mechanical,"Mechanical environments currently support cyclic, extrapolate and slipWall boundaries");
                 const scalarList Y(boundary.lookup("Y")),liquid(boundary.lookup("liquidFractions"));
                 demand(Y.size()==label(ns)&&liquid.size()==2,"Wrong fixed boundary species/liquid length");
                 fixed=flow.make(boundary.get<scalar>("T"),boundary.get<scalar>("p"),boundary.get<vector>("U"),host(Y),liquid.cdata(),fixedState);
@@ -463,16 +514,27 @@ int main(int argc,char** argv)
                 for(label c=0;c<nc;++c) values[c]=states[c].alphaLiquid[i];
                 writeScalar("alphaLiquid"+Foam::name(i),dimless,values);
             }
+            if(mechanical) {
+                for(label c=0;c<nc;++c) values[c]=q[c*nv+ns+4];writeScalar("alphaEnvironment",dimless,values);
+                for(label c=0;c<nc;++c) values[c]=q[c*nv+ns+5];writeScalar("betaEnvironment",dimless,values);
+                for(label c=0;c<nc;++c) values[c]=states[c].mechanical.pressureResidual;writeScalar("mechanicalPressureResidual",dimless,values);
+                for(int a=0;a<2;++a) {
+                    for(label c=0;c<nc;++c) values[c]=states[c].mechanical.environment[a].T;
+                    writeScalar("environmentT"+Foam::name(a),dimTemperature,values);
+                    for(label c=0;c<nc;++c) values[c]=states[c].mechanical.environment[a].e;
+                    writeScalar("environmentE"+Foam::name(a),dimEnergy/dimMass,values);
+                }
+            }
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
             identity.add("fingerprint",word(pintle_rt_fingerprint(model.get())));
-            identity.add("speciesCount",label(ns));identity.regIOobject::write();
+            identity.add("speciesCount",label(physicalSpecies));identity.add("closure",closure);identity.regIOobject::write();
         };
         const Array initial=flow.totals(q);Array accumulatedBoundary(nv,0);
         const double mass0=std::accumulate(initial.begin(),initial.begin()+ns,0.0);
         const size_t ne=pintle_rt_element_count(model.get());
         Array atomCoefficients(ns*ne),initialAtoms(ne,0);
         for(size_t e=0;e<ne;++e) for(size_t k=0;k<ns;++k) {
-            atomCoefficients[e*ns+k]=pintle_rt_atom_coefficient(model.get(),k,e);
+            atomCoefficients[e*ns+k]=pintle_rt_atom_coefficient(model.get(),k%physicalSpecies,e);
             initialAtoms[e]+=initial[k]*atomCoefficients[e*ns+k];
         }
         const double atomScale=std::accumulate(initialAtoms.begin(),initialAtoms.end(),0.0);
@@ -483,7 +545,7 @@ int main(int argc,char** argv)
         Info().precision(17);
         Info<<"REACTIVE_MODEL cells="<<nc<<" species="<<ns<<" reactions="<<pintle_rt_reaction_count(model.get())
             <<" liquids="<<pintle_rt_liquid_count(model.get())<<" estimatedHostBytes="<<memoryEstimate<<" chemistry="<<flow.chemistry<<nl;
-        for(size_t k=0;k<ns;++k) Info<<"REACTIVE_SPECIES index="<<k<<" name="<<pintle_rt_species_name(model.get(),k)<<nl;
+        for(size_t k=0;k<ns;++k) Info<<"REACTIVE_SPECIES index="<<k<<" name="<<pintle_rt_species_name(model.get(),k%physicalSpecies)<<nl;
         writeState();
         auto beforeEnd=[&]() {
             return runTime.value()<runTime.endTime().value()
@@ -528,9 +590,10 @@ int main(int argc,char** argv)
                    "Global boundary-corrected mass/total-energy balance failed");
             demand(momentumError<1e-9&&elementError<1e-7&&(flow.chemistry||speciesError<1e-9),
                    "Global boundary-corrected momentum/element/species balance failed");
-            double minP=GREAT,minT=GREAT,maxT=0,maxMach=0,minGas=1,maxGas=0,maxV=0,maxE=0,maxMu=0;
+            double minP=GREAT,maxP=0,minT=GREAT,maxT=0,maxMach=0,minGas=1,maxGas=0,maxV=0,maxE=0,maxMu=0,maxME=0;
             for(label c=0;c<nc;++c) {
                 const auto& s=states[c];minP=std::min(minP,s.p);minT=std::min(minT,s.T);maxT=std::max(maxT,s.T);
+                maxP=std::max(maxP,s.p);maxME=std::max(maxME,s.mechanical.pressureResidual);
                 maxMach=std::max(maxMach,mag(flow.velocity(&q[c*nv]))/s.soundEquilibrium);
                 minGas=std::min(minGas,s.alphaGas);maxGas=std::max(maxGas,s.alphaGas);
                 maxV=std::max(maxV,s.volumeResidual);maxE=std::max(maxE,s.energyResidual);maxMu=std::max(maxMu,s.chemicalResidual);
@@ -538,11 +601,17 @@ int main(int argc,char** argv)
             const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
             Info<<"REACTIVE_STEP time="<<runTime.value()<<" dt="<<dt<<" retries="<<retries<<" massResidual="<<massError
                 <<" energyResidual="<<energyError<<" momentumResidual="<<momentumError<<" globalElementResidual="<<elementError
-                <<" speciesResidual="<<speciesError<<" elementDrift="<<drift<<" minP="<<minP<<" minT="<<minT<<" maxT="<<maxT
+                <<" speciesResidual="<<speciesError<<" elementDrift="<<drift<<" minP="<<minP<<" maxP="<<maxP<<" minT="<<minT<<" maxT="<<maxT
                 <<" maxMach="<<maxMach<<" minAlphaGas="<<minGas<<" maxAlphaGas="<<maxGas
-                <<" maxVolumeResidual="<<maxV<<" maxUVResidual="<<maxE<<" maxMuResidual="<<maxMu<<" seconds="<<seconds<<nl;
+                <<" maxVolumeResidual="<<maxV<<" maxUVResidual="<<maxE<<" maxMuResidual="<<maxMu<<" maxMechanicalResidual="<<maxME<<" seconds="<<seconds<<nl;
             if(runTime.writeTime()||!beforeEnd()) writeState();
         }
+        PintleChemicalStats chemicalStats{};
+        flow.check(pintle_rt_chemical_stats(model.get(),0,&chemicalStats),"Chemical statistics");
+        Info<<"REACTIVE_CHEMISTRY rhsCalls="<<double(chemicalStats.rhsCalls)<<" uvCalls="<<double(chemicalStats.uvCalls)
+            <<" fixedStateCalls="<<double(chemicalStats.fixedStateCalls)<<" structuredCalls="<<double(chemicalStats.structuredCalls)
+            <<" fallbackCalls="<<double(chemicalStats.fallbackCalls)
+            <<" integrationFallbacks="<<double(pintle_rt_chemical_integration_fallbacks(model.get()))<<nl;
         Info<<"End"<<nl;
     } catch(const std::exception& error) {
         Info<<"REACTIVE_FAILURE "<<error.what()<<nl;

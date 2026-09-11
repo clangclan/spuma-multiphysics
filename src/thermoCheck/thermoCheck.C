@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Broad p,T comparison against independently instantiated native CPU models.
+// Broad CPU/GPU parity. Unchanged properties retain native CPU references;
+// corrected PR H/Cv use the local CPU EOS and separate differential tests.
 #include "fvCFD.H"
 #include "pintleIpa.H"
 #include "pintlePengRobinsonGas.H"
@@ -41,7 +42,7 @@ int main(int argc,char** argv)
         const scalar p=1e5+7.9e6*scalar(i%np)/(np-1);
         const scalar T=250+240*scalar(i/np)/(nt-1);
         const scalar ref[fields]={prReference.rho(p,T),prReference.psi(p,T),
-            prReference.H(p,T),prReference.Cp(p,T),prReference.Cv(p,T),prReference.CpMCv(p,T),
+            pr.H(p,T),prReference.Cp(p,T),pr.Cv(p,T),prReference.CpMCv(p,T),
             ipaReference.rho(p,T),ipaReference.Cp(p,T),ipaReference.Hs(p,T),
             ipaReference.Hs(p,T)-p/ipaReference.rho(p,T),ipaReference.mu(p,T),ipaReference.kappa(p,T)};
         for(label f=0;f<fields;++f)

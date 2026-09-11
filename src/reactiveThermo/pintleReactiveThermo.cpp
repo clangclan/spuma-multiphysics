@@ -106,6 +106,9 @@ public:
     std::vector<std::string> names,elementNames;
     std::string fingerprint;
     Vector weights;
+    bool structuredChemicalJacobian=true;
+    PintleChemicalStats chemicalStats{};
+    unsigned long long chemicalIntegrationFallbacks=0;
 
     explicit Model(const std::string& filename)
     {
@@ -538,7 +541,7 @@ class ChemicalODE {
 public:
     Model& model;
     double energy, negativeTrialTolerance;
-    bool equilibrium;
+    bool equilibrium,useStructured;
     PintleThermoState guess;
     std::string failure;
     SUNContext context=nullptr;
@@ -547,7 +550,8 @@ public:
     SUNLinearSolver linear=nullptr;
     void* integrator=nullptr;
     ChemicalODE(Model& m,double e,bool eq,const PintleThermoState& s,double atol)
-        :model(m),energy(e),negativeTrialTolerance(atol*s.rho*100),equilibrium(eq),guess(s) {}
+        :model(m),energy(e),negativeTrialTolerance(atol*s.rho*100),equilibrium(eq),
+         useStructured(m.structuredChemicalJacobian),guess(s) {}
     ~ChemicalODE() {
         if(integrator) CVodeFree(&integrator);
         if(linear) SUNLinSolFree(linear);
@@ -556,29 +560,156 @@ public:
         if(y) N_VDestroy(y);
         if(context) SUNContext_Free(&context);
     }
+    Vector rates(const Vector& q,const Evaluation& value) {
+        ++model.chemicalStats.fixedStateCalls;
+        // evaluate restores the gas composition/p/T after any phase probes.
+        const auto restored=model.evaluate(q,{value.state.liquidMass[0],value.state.liquidMass[1]},
+                                          value.state.p,value.state.T);
+        Vector output(model.ns,0);
+        if(restored.state.gasMass>0) model.gasSolution->kinetics()->getNetProductionRates(output.data());
+        for(size_t k=0;k<model.ns;++k) {
+            output[k]*=restored.state.alphaGas*model.weights[k];
+            require(std::isfinite(output[k]),"Non-finite chemical source");
+        }
+        return output;
+    }
+    Vector source(Vector q,bool updateGuess=true) {
+        ++model.chemicalStats.rhsCalls;
+        for(double& amount:q) {
+            require(std::isfinite(amount)&&amount>=-negativeTrialTolerance,
+                    "Chemical Newton trial leaves the nonnegative species domain");
+            amount=std::max(amount,0.0);
+        }
+        ++model.chemicalStats.uvCalls;
+        const auto value=equilibrium ? model.equilibrium(q,energy,guess)
+            : model.frozen(q,{guess.liquidMass[0],guess.liquidMass[1]},energy,guess);
+        const Vector result=rates(q,value);
+        if(updateGuess) guess=value.state;
+        return result;
+    }
+    Eigen::MatrixXd fullJacobian(const Vector& q) {
+        ++model.chemicalStats.fallbackCalls;
+        const auto base=source(q,false);
+        Eigen::MatrixXd J(model.ns,model.ns);
+        const double rho=std::accumulate(q.begin(),q.end(),0.0);
+        for(size_t j=0;j<model.ns;++j) {
+            // Match the local derivative of the RHS's negative trial extension.
+            if(q[j]<0) {J.col(j).setZero();continue;}
+            double h=1e-6*std::max(q[j],rho*1e-5);
+            double available=q[j];
+            if(!equilibrium) for(size_t i=0;i<model.nl;++i)
+                if(j==model.condensable[i]) available-=guess.liquidMass[i];
+            bool found=false;
+            for(int attempt=0;attempt<10&&!found;++attempt,h*=.5) {
+                Vector fp,fm;bool plus=false,minus=false;
+                try {Vector qp=q;qp[j]+=h;fp=source(qp,false);plus=true;} catch(const std::exception&) {}
+                if(available>=h) try {Vector qm=q;qm[j]-=h;fm=source(qm,false);minus=true;} catch(const std::exception&) {}
+                if(plus||minus) {
+                    for(size_t k=0;k<model.ns;++k)
+                        J(k,j)=((plus?fp[k]:base[k])-(minus?fm[k]:base[k]))/((plus&&minus?2:1)*h);
+                    found=true;
+                }
+            }
+            require(found,"Full RHS Jacobian could not find a bounded derivative");
+        }
+        require(J.allFinite(),"Non-finite full RHS chemical Jacobian");
+        source(q,false); // restore the unperturbed gas state after fallback probes
+        return J;
+    }
+    Eigen::MatrixXd structuredJacobian(const Vector& q) {
+        auto& m=model;
+        for(double amount:q) require(amount>=0,"Negative trial requires the full RHS Jacobian");
+        ++m.chemicalStats.uvCalls;
+        const auto base=equilibrium ? m.equilibrium(q,energy,guess)
+            : m.frozen(q,{guess.liquidMass[0],guess.liquidMass[1]},energy,guess);
+        require(base.state.alphaGas>1e-7,"Vanishing gas requires the full RHS Jacobian");
+        std::vector<size_t> active;
+        if(equilibrium) {
+            const auto comparison=m.evaluate(q,{base.state.liquidMass[0],base.state.liquidMass[1]},
+                                            base.state.p,base.state.T,true);
+            for(size_t i=0;i<m.nl;++i) if(q[m.condensable[i]]>0) {
+                const double lambda=base.state.liquidMass[i]/q[m.condensable[i]];
+                if(lambda>0) {
+                    require(lambda>1e-5&&lambda<1-1e-5,"Active-set boundary requires full RHS derivatives");
+                    active.push_back(i);
+                } else require(comparison.muLiquid[i]-comparison.muGas[i]>1e-5,
+                               "Incipient liquid requires full RHS derivatives");
+            }
+        }
+        Eigen::VectorXd z(2+active.size());z[0]=std::log(base.state.p);z[1]=std::log(base.state.T);
+        for(size_t j=0;j<active.size();++j) z[2+j]=base.state.liquidMass[active[j]]/q[m.condensable[active[j]]];
+        const double scale=m.energyScale(base); // fixed across every derivative probe
+        auto probe=[&](const Vector& mass,const Eigen::VectorXd& x) {
+            Evaluation value;Eigen::VectorXd F(x.size());
+            if(equilibrium) F=m.residual(mass,energy,active,x,scale,&value);
+            else {
+                // Frozen partition means fixed LIQUID MASS, not fixed fraction.
+                value=m.evaluate(mass,{base.state.liquidMass[0],base.state.liquidMass[1]},std::exp(x[0]),std::exp(x[1]));
+                F[0]=value.volume-1;F[1]=(value.energy-energy)/scale;
+            }
+            const auto f=rates(mass,value);
+            Eigen::VectorXd both(x.size()+m.ns);both.head(x.size())=F;
+            for(size_t k=0;k<m.ns;++k) both[x.size()+k]=f[k];
+            return both;
+        };
+        const auto f0=probe(q,z);
+        Eigen::MatrixXd partialZ(z.size()+m.ns,z.size()),partialQ(z.size()+m.ns,m.ns);
+        for(Eigen::Index j=0;j<z.size();++j) {
+            const double h=j<2?2e-6:1e-6;
+            auto zp=z,zm=z;zp[j]+=h;zm[j]-=h;
+            partialZ.col(j)=(probe(q,zp)-probe(q,zm))/(2*h);
+        }
+        for(size_t j=0;j<m.ns;++j) {
+            const double h=1e-6*std::max(q[j],base.state.rho*1e-5);
+            Vector qp=q;qp[j]+=h;
+            double available=q[j];
+            if(!equilibrium) for(size_t i=0;i<m.nl;++i)
+                if(j==m.condensable[i]) available-=base.state.liquidMass[i];
+            if(available>=h) {
+                Vector qm=q;qm[j]-=h;
+                partialQ.col(j)=(probe(qp,z)-probe(qm,z))/(2*h);
+            } else partialQ.col(j)=(probe(qp,z)-f0)/h;
+        }
+        const Eigen::MatrixXd D=partialZ.topRows(z.size());
+        const auto lu=D.fullPivLu();
+        require(lu.isInvertible()&&lu.rcond()>1e-10,"Ill-conditioned thermodynamic correction");
+        Eigen::MatrixXd J=partialQ.bottomRows(m.ns)
+            -partialZ.bottomRows(m.ns)*lu.solve(partialQ.topRows(z.size()));
+        require(J.allFinite(),"Non-finite structured chemical Jacobian");
+        rates(q,base);++m.chemicalStats.structuredCalls;
+        return J;
+    }
+    Eigen::MatrixXd jacobian(const Vector& q,bool& usedStructured) {
+        ++model.chemicalStats.jacobianCalls;usedStructured=false;
+        const auto saved=guess;
+        try {
+            // A negative Newton trial triggers the full RHS extension. This
+            // conservative fallback is retained after full-mechanism tests of
+            // clamped structured columns produced negative accepted traces.
+            auto J=structuredJacobian(q);
+            guess=saved;usedStructured=true;return J;
+        } catch(const std::exception&) {
+            guess=saved;
+            try {auto J=fullJacobian(q);guess=saved;return J;}
+            catch(...) {guess=saved;throw;}
+        }
+    }
+    static int jac(double,N_Vector y,N_Vector,SUNMatrix matrix,void* data,N_Vector,N_Vector,N_Vector) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {
+            const Vector q(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns);
+            bool structured=false;const auto J=self.jacobian(q,structured);
+            for(size_t j=0;j<self.model.ns;++j) for(size_t k=0;k<self.model.ns;++k)
+                SM_ELEMENT_D(matrix,k,j)=J(k,j); // CVODE forms I-gamma*J itself.
+            return 0;
+        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+    }
     static int rhs(double,N_Vector y,N_Vector dy,void* data) {
         auto& self=*static_cast<ChemicalODE*>(data);
         try {
-            auto& m=self.model;
-            Vector q(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+m.ns);
-            for(double& amount:q) {
-                require(std::isfinite(amount)&&amount>=-self.negativeTrialTolerance,
-                        "Chemical Newton trial leaves the nonnegative species domain");
-                amount=std::max(amount,0.0);
-            }
-            auto value=self.equilibrium ? m.equilibrium(q,self.energy,self.guess)
-                : m.frozen(q,{self.guess.liquidMass[0],self.guess.liquidMass[1]},self.energy,self.guess);
-            // Flash stability/acoustic evaluations change temporary phase
-            // objects. Restore the accepted RHS gas state before using rates.
-            value=m.evaluate(q,{value.state.liquidMass[0],value.state.liquidMass[1]},value.state.p,value.state.T);
-            Vector rates(m.ns,0);
-            if(value.state.gasMass>0) m.gasSolution->kinetics()->getNetProductionRates(rates.data());
-            double* output=N_VGetArrayPointer(dy);
-            for(size_t k=0;k<m.ns;++k) {
-                output[k]=value.state.alphaGas*m.weights[k]*rates[k];
-                require(std::isfinite(output[k]),"Non-finite chemical source");
-            }
-            self.guess=value.state;
+            const Vector q(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns);
+            const auto output=self.source(q);
+            std::copy(output.begin(),output.end(),N_VGetArrayPointer(dy));
             return 0;
         } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
     }
@@ -595,13 +726,25 @@ public:
         check(CVodeSetConstraints(integrator,constraints),"nonnegative constraints");
         check(CVodeSetMaxNumSteps(integrator,100000),"maximum steps");
         check(CVodeSetStopTime(integrator,dt),"stop time");
+        check(CVodeSetInterpolateStopTime(integrator,SUNFALSE),"copy constrained stop state");
         matrix=SUNDenseMatrix(model.ns,model.ns,context);require(matrix,"CVODE dense matrix allocation failed");
         linear=SUNLinSol_Dense(y,matrix,context);require(linear,"CVODE dense solver allocation failed");
         check(CVodeSetLinearSolver(integrator,linear,matrix),"linear solver");
+        if(useStructured) check(CVodeSetJacFn(integrator,jac),"structured Jacobian");
         double actualTime=0;
         const int flag=CVode(integrator,dt,y,&actualTime,CV_NORMAL);
         require(flag>=0 && std::abs(actualTime-dt)<=1e-12*dt,
                 "Chemical CVODE failed (flag="+std::to_string(flag)+"): "+failure);
+        // Inspect the accepted step state at a coincident final internal time.
+        // Zero-offset extraction is a defensive complement to tstop's copy
+        // mode; the accepted-state check below still rejects every negative.
+        double internalTime=0;
+        check(CVodeGetCurrentTime(integrator,&internalTime),"current time");
+        if(std::abs(internalTime-dt)<=16*std::numeric_limits<double>::epsilon()*dt) {
+            // GetCurrentState returns CVODE's yout workspace, not zn[0].
+            // GetDky(tn,0) has exactly zero polynomial offset and returns zn[0].
+            check(CVodeGetDky(integrator,internalTime,0,y),"constrained final internal state");
+        }
         return Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+model.ns);
     }
 };
@@ -635,6 +778,30 @@ const char* pintle_rt_element_name(void* model,size_t element){auto& m=*static_c
 double pintle_rt_atom_coefficient(void* model,size_t species,size_t element){auto& m=*static_cast<Model*>(model);return species<m.ns&&element<m.gas->nElements()?m.gas->nAtoms(species,element)/m.weights[species]:0;}
 const char* pintle_rt_fingerprint(void* model){return static_cast<Model*>(model)->fingerprint.c_str();}
 int pintle_rt_ideal_gas(void* model){return static_cast<Model*>(model)->gas->type()=="ideal-gas";}
+int pintle_rt_set_chemical_jacobian(void* model,int mode)
+{return protect(model,[&](Model& m){require(mode==0||mode==1,"Invalid chemical Jacobian mode");m.structuredChemicalJacobian=mode;});}
+int pintle_rt_chemical_stats(void* model,int reset,PintleChemicalStats* result)
+{return protect(model,[&](Model& m){*result=m.chemicalStats;if(reset) {m.chemicalStats={};m.chemicalIntegrationFallbacks=0;}});}
+unsigned long long pintle_rt_chemical_integration_fallbacks(void* model)
+{return static_cast<Model*>(model)->chemicalIntegrationFallbacks;}
+int pintle_rt_chemical_jacobian(void* model,const double* q,double energy,int equilibrium,
+    const PintleThermoState* guess,double* result,int* usedStructured)
+{
+    return protect(model,[&](Model& m){
+        ChemicalODE ode(m,energy,equilibrium,*guess,1e-14);bool used=false;
+        const auto J=ode.jacobian(Vector(q,q+m.ns),used);
+        for(size_t k=0;k<m.ns;++k) for(size_t j=0;j<m.ns;++j) result[k*m.ns+j]=J(k,j);
+        *usedStructured=used;
+    });
+}
+int pintle_rt_chemical_rhs(void* model,const double* q,double energy,int equilibrium,
+    const PintleThermoState* guess,double* result)
+{
+    return protect(model,[&](Model& m){
+        ChemicalODE ode(m,energy,equilibrium,*guess,1e-14);
+        const auto f=ode.source(Vector(q,q+m.ns));std::copy(f.begin(),f.end(),result);
+    });
+}
 const char* pintle_rt_species_name(void* model,size_t species){auto& m=*static_cast<Model*>(model);return species<m.ns?m.names[species].c_str():nullptr;}
 double pintle_rt_molecular_weight(void* model,size_t species){auto& m=*static_cast<Model*>(model);return species<m.ns?m.weights[species]:0;}
 int pintle_rt_liquid_species(void* model,size_t liquid){auto& m=*static_cast<Model*>(model);return liquid<m.nl?int(m.condensable[liquid]):-1;}
@@ -662,6 +829,115 @@ int pintle_rt_recover(void* model,const double* q,double energy,int equilibrium,
         if(equilibrium) result=m.equilibrium(masses,energy,*state);
         else result=m.frozen(masses,{state->liquidMass[0],state->liquidMass[1]},energy,*state);
         *state=result.state;
+    });
+}
+
+int pintle_rt_recover_mechanical(void* model,const double* qa,const double* qb,double alpha,double beta,
+    double energy,PintleMechanicalState* state)
+{
+    return protect(model,[&](Model& m){
+        require(std::isfinite(alpha)&&alpha>=0&&alpha<=1+1e-12
+                &&std::isfinite(beta)&&beta>=0&&beta<=1+1e-12
+                &&std::abs(alpha+beta-1)<=1e-12&&std::isfinite(energy),
+                "Invalid mechanical environment volume or total energy");
+        struct ToleranceRestore {
+            Model& model;double v,e,mu;
+            explicit ToleranceRestore(Model& m):model(m),v(m.vtol),e(m.etol),mu(m.mutol) {
+                m.vtol=std::min(m.vtol,1e-12);m.etol=std::min(m.etol,1e-12);m.mutol=std::min(m.mutol,1e-9);
+            }
+            ~ToleranceRestore(){model.vtol=v;model.etol=e;model.mutol=mu;}
+        } restore(m);
+        PintleMechanicalState result=*state;
+        Vector q[2]={Vector(qa,qa+m.ns),Vector(qb,qb+m.ns)};
+        double mass[2]={0,0},fraction[2]={alpha,beta};
+        for(int a=0;a<2;++a) {
+            for(double amount:q[a]) require(std::isfinite(amount)&&amount>=0,"Invalid environment species mass");
+            mass[a]=std::accumulate(q[a].begin(),q[a].end(),0.0);
+            require((mass[a]==0)==(fraction[a]==0),"Absent environment must have exactly zero mass and volume");
+            if(fraction[a]>0) for(double& amount:q[a]) amount/=fraction[a];
+        }
+        const double rho=mass[0]+mass[1];require(rho>0,"Empty mechanical mixture");
+        auto recover=[&](int a,double internal) {
+            auto guess=result.environment[a];
+            if(!(guess.p>0)) guess.p=result.mixture.p;
+            if(!(guess.T>0)) guess.T=result.mixture.T;
+            return m.equilibrium(q[a],internal/fraction[a],guess).state;
+        };
+        if(alpha==0||beta==0) {
+            const int a=beta==0?0:1;
+            result.environment[a]=recover(a,energy);result.mixture=result.environment[a];
+            result.energyA=a==0?energy:0;result.dilatationK=0;result.pressureResidual=0;
+        } else {
+            const double splitScale=std::min(mass[0]*std::max(1e5,std::abs(result.environment[0].e)),
+                                             mass[1]*std::max(1e5,std::abs(result.environment[1].e)));
+            // Solve for the smaller environment's energy directly. Computing
+            // a trace environment energy as total-minus-majority loses all its
+            // significant digits and makes pressure recovery unsolvable.
+            const int split=mass[0]<=mass[1]?0:1;
+            double x=mass[split]*result.environment[split].e;
+            auto pair=[&](double smallEnergy) {
+                return std::array<PintleThermoState,2>{recover(0,split==0?smallEnergy:energy-smallEnergy),
+                                                      recover(1,split==1?smallEnergy:energy-smallEnergy)};
+            };
+            auto current=pair(x);
+            bool converged=false;
+            for(int iteration=0;iteration<45;++iteration) {
+                const double residual=std::log(current[split].p/current[1-split].p);
+                if(std::abs(residual)<2e-8) {converged=true;break;}
+                double derivative=0;bool found=false;
+                for(double h=splitScale*1e-5;h>splitScale*1e-12;h*=.5) {
+                    double fp=0,fm=0;bool plus=false,minus=false;
+                    try {const auto v=pair(x+h);fp=std::log(v[split].p/v[1-split].p);plus=true;}
+                    catch(const std::exception&) {}
+                    try {const auto v=pair(x-h);fm=std::log(v[split].p/v[1-split].p);minus=true;}
+                    catch(const std::exception&) {}
+                    if(plus&&minus) derivative=(fp-fm)/(2*h);
+                    else if(plus) derivative=(fp-residual)/h;
+                    else if(minus) derivative=(residual-fm)/h;
+                    else continue;
+                    if(std::isfinite(derivative)&&derivative>0) {found=true;break;}
+                }
+                require(found,"Mechanical energy-split derivative failed");
+                const double step=std::clamp(-residual/derivative,-.25*splitScale,.25*splitScale);
+                bool accepted=false;
+                for(double damping=1;damping>1e-8;damping*=.5) {
+                    try {
+                        const auto trial=pair(x+damping*step);
+                        if(std::abs(std::log(trial[0].p/trial[1].p))<std::abs(residual)) {
+                            current=trial;x+=damping*step;accepted=true;break;
+                        }
+                    } catch(const std::exception&) {}
+                }
+                require(accepted,"Mechanical energy-split line search failed");
+            }
+            require(converged,"Mechanical energy-split recovery did not converge");
+            result.environment[0]=current[0];result.environment[1]=current[1];result.energyA=split==0?x:energy-x;
+            result.pressureResidual=std::abs(current[0].p/current[1].p-1);
+            const double BA=current[0].rho*std::pow(current[0].soundEquilibrium,2);
+            const double BB=current[1].rho*std::pow(current[1].soundEquilibrium,2);
+            result.dilatationK=alpha*beta*(BB-BA)/(alpha*BB+beta*BA);
+            auto& mixed=result.mixture;mixed={};
+            mixed.rho=rho;mixed.e=energy/rho;mixed.p=.5*(current[0].p+current[1].p);
+            // T is a diagnostic volume average, never used as a thermal closure.
+            mixed.T=alpha*current[0].T+beta*current[1].T;
+            mixed.soundEquilibrium=std::sqrt(1/(rho*(alpha/BA+beta/BB)));
+            mixed.soundFrozen=std::max(current[0].soundFrozen,current[1].soundFrozen);
+            for(int a=0;a<2;++a) {
+                const auto& env=current[a];
+                mixed.cp+=mass[a]*env.cp/rho;mixed.cv+=mass[a]*env.cv/rho;
+                mixed.entropy+=mass[a]*env.entropy/rho;
+                mixed.alphaGas+=fraction[a]*env.alphaGas;mixed.gasMass+=fraction[a]*env.gasMass;
+                mixed.activeLiquids|=env.activeLiquids;
+                for(int i=0;i<2;++i) {
+                    mixed.alphaLiquid[i]+=fraction[a]*env.alphaLiquid[i];
+                    mixed.liquidMass[i]+=fraction[a]*env.liquidMass[i];
+                }
+                mixed.volumeResidual=std::max(mixed.volumeResidual,env.volumeResidual);
+                mixed.energyResidual=std::max(mixed.energyResidual,env.energyResidual);
+                mixed.chemicalResidual=std::max(mixed.chemicalResidual,env.chemicalResidual);
+            }
+        }
+        *state=result; // no change to either inventory, alpha, or total energy
     });
 }
 
@@ -696,6 +972,16 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
         if(dt>0 && m.gasSolution->kinetics()->nReactions()>0) {
             ChemicalODE ode(m,energy,equilibrium,before.state,atol);
             result=ode.solve(initial,dt,rtol,atol);
+            if(m.structuredChemicalJacobian && std::any_of(result.begin(),result.end(),
+                [](double v){return !std::isfinite(v)||v<0;})) {
+                // Some stiff trace systems return a negative roundoff-level
+                // inventory despite CVODE constraints. Reintegrate the entire
+                // source from its original data with the reference Jacobian;
+                // never clip, renormalize, or alter energy to accept a state.
+                ++m.chemicalIntegrationFallbacks;
+                ChemicalODE reference(m,energy,equilibrium,before.state,atol);
+                reference.useStructured=false;result=reference.solve(initial,dt,rtol,atol);
+            }
         }
         m.checkMass(result,{});
         auto after=equilibrium ? m.equilibrium(result,energy,before.state)

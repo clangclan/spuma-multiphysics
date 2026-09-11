@@ -1,8 +1,8 @@
 # N₂O/IPA 상변화·반응 열유동 연구 솔버
 
-`pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **직렬 HEM 기준 솔버**다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. 기체 반응과 액체 상평형의 보존적 결합을 구현했지만, **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 물질 접촉면 압력 시험도 현재 실패한다.
+`pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **직렬 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
-검증 수치와 미해결 항목은 [개발·검증 보고서](reports/reactive-phase-development-20260911.md), 재현 가능한 검사 코드는 `tools/validate_reactive_thermo.py`, `tools/validate_reactive_runtime.py`, `tools/run_reactive_campaign.py`에 있다. 모든 구현·실행 검증은 MAIN이 수행했다.
+최신 수정·검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 모든 구현·실행 검증은 MAIN이 수행했다.
 
 ## 계산 모델
 
@@ -11,10 +11,35 @@
 - 매 단계 보존량으로부터 일정 부피·내부에너지(UV) flash를 수행한다. 공존상은 화학퍼텐셜을 일치시키고, 없는 상의 안정성 조건을 검사한다. 여러 초기 추정에서 찾은 허용 해 중 엔트로피가 가장 큰 해를 선택한다. 전역 최대해를 보증하는 알고리즘은 아니다.
 - 잠열과 반응열은 같은 열역학 에너지 기준에 들어 있다. 별도 `Gamma*L`나 `Qdot`를 총에너지에 다시 더하지 않는다.
 - 전체 반응기구의 강직 적분은 CVODE BDF를 사용한다. 각 RHS에서 flash를 풀고 기상 체적분율을 곱한 반응률을 적용한다. 화학종·원소·총질량 검사를 통과한 상태만 채택한다.
+- 화학 Jacobian은 기본적으로 고정 활성 상 구간의 암시적 열역학 미분 `J=f_q−f_z solve(F_z,F_q)`를 사용한다. 상 경계, 나쁜 조건수 및 음의 Newton 시험 상태에서는 전체 RHS 차분으로 돌아간다. `reactiveProperties`의 `chemicalJacobian fullRHS;`로 기존 CVODE 차분과 비교할 수 있다. 현재 선형계 풀이는 여전히 밀집형이다.
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
 
-## 제공되는 세 가지 구성
+## 비혼합 접촉면 모드
+
+`closure mechanicalEquilibrium;`에서는 셀 안의 두 공간적 환경 A/B가 압력과 속도만 공유한다. 각 환경 안에서는 기존 HEM flash를 사용하지만 환경 사이 온도·조성은 같게 만들지 않는다. `q0 … q(N−1)`와 `qN … q(2N−1)`가 각 환경의 화학종 질량이고, `alphaEnvironment`, `betaEnvironment`가 환경 체적분율이다. 환경 내부 액상 체적분율과는 다른 변수다. 총에너지는 하나이며 압력 보존을 위해 에너지를 덮어쓰지 않는다.
+
+이 모드는 **비반응·비점성·열 및 질량 교환 없음**으로 제한된다. 화학·점성·전도·확산을 켜면 실행을 거부한다. `fixedState`도 아직 지원하지 않는다. 출력 `T`는 환경 온도의 체적 평균 진단값이며, 물리 상태에는 `environmentT0/1`과 `environmentE0/1`을 함께 사용한다. HEM과 다른 보존 변수와 폐쇄식 식별값을 사용하므로 재시작 파일을 그대로 교환할 수 없다.
+
+```bash
+flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
+  tools/prepare_mechanical_case.py --output cases/mechanical-example \
+  --thermo-dir research/reactive-thermo --kind contact --cells 32 --mach 2
+source env.sh
+flock /home/jsw/cae-benchmark/run.lock pintleReactiveFoam -case cases/mechanical-example
+flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
+  tools/validate_mechanical.py --output cases/mechanical-check \
+  --thermo-dir research/reactive-thermo
+flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
+  tools/validate_mechanical_runtime.py --output cases/mechanical-runtime-check \
+  --thermo-dir research/reactive-thermo
+```
+
+HLL의 계면 확산은 남아 있다. 압력이 일정한 접촉면 시험 통과가 계면의 날카로움, 다상 충격파, 상간 열교환 또는 분무 정확도까지 입증하지 않는다.
+
+기본 기계적 평형 캠페인의 16셀 M=±2 이동 속도 오차는 약 2.54%로 1.5% 기준에 미달해 종료 코드 1을 반환한다. 압력·속도·수지 보존은 통과하고 32·64셀의 이동 속도 오차는 약 0.638%·0.160%로 감소한다. `campaign.json`의 개별 판정을 확인한다.
+
+## 제공되는 세 가지 물성 구성
 
 | 파일 | 모델 | 사용 범위와 중요한 제한 |
 |---|---|---|
@@ -90,4 +115,4 @@ research/reactive-env/bin/python tools/run_reactive_campaign.py \
 
 마지막 두 도구는 내부에서 실행 잠금을 획득하므로 외부 `flock`으로 다시 감싸지 않는다. 기본 캠페인은 알려진 물질 접촉면 정확도 실패를 포함하며 정상적으로 **종료 코드 1**을 반환할 수 있다. `campaign.json`에서 실패 항목을 확인한다. 점성·전도·확산 검사의 큰 상수 계수는 연산자 검증용이며 실제 유체의 물성값이 아니다.
 
-실제 분사·연소계 적용 전에 고압 반응 EOS, 접촉면 압력 보존, 유한속도 상변화·상간 열교환, 액적 슬립·분열·합체, 액체 혼합·용해, 표면장력, 난류·복사·벽 열전달 및 실험 자료에 대한 검증을 추가해야 한다. 세부 우선순위와 초음속 적용 판정은 보고서에 있다.
+실제 분사·연소계 적용 전에 고압 반응 EOS, 반응·열교환을 포함한 비혼합 계면 결합, 유한속도 상변화, 액적 슬립·분열·합체, 액체 혼합·용해, 표면장력, 난류·복사·벽 열전달 및 실험 자료에 대한 검증을 추가해야 한다. PR 물성의 미분 항등식이 일치해도 실제 액체 열용량·음속의 정확도가 보장되지는 않는다. 기준 EOS와의 편차 및 초음속 적용 범위는 최신 보고서에 있다.

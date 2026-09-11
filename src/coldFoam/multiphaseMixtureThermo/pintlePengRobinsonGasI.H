@@ -104,22 +104,18 @@ FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::rho
 template<class Specie>
 FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::H(scalar p, scalar T) const
 {
-    const scalar Pr = p/Pc_;
     const scalar Tr = T/Tc_;
-    const scalar B = 0.07780*Pr/Tr;
+    const scalar a = 0.45724*sqr(pintleRR_*Tc_)/Pc_;
+    const scalar b = 0.07780*pintleRR_*Tc_/Pc_;
+    const scalar B = b*p/(pintleRR_*T);
     const scalar kappa = 0.37464 + 1.54226*omega_ - 0.26992*sqr(omega_);
-    const scalar alpha = sqr(1 + kappa*(1 - sqrt(Tr)));
-
+    const scalar q = 1 + kappa*(1 - sqrt(Tr));
     const scalar Z = this->Z(p, T);
-
-    return
-        this->R()
-       *Tc_
-       *(
-           Tr*(Z - 1)
-         - 2.078*(1 + kappa)*sqrt(alpha)
-          *log((Z + 2.414*B)/(Z - 0.414*B))
-        );
+    const scalar root2 = sqrt(2.0);
+    const scalar L = log((Z + (1 + root2)*B)/(Z + (1 - root2)*B));
+    // T*a'(T)-a(T) = -a0*(1+kappa)*q. Keep signed q; sqrt(q*q)
+    // changes the derivative above its zero. H is the enthalpy departure.
+    return this->R()*T*(Z - 1) - a*(1 + kappa)*q*L/(2*root2*b*this->W());
 }
 
 
@@ -157,21 +153,17 @@ FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::Cp(scalar p
 template<class Specie>
 FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::E(scalar p, scalar T) const
 {
-    const scalar Pr = p/Pc_;
     const scalar Tr = T/Tc_;
-    const scalar B = 0.07780*Pr/Tr;
+    const scalar a = 0.45724*sqr(pintleRR_*Tc_)/Pc_;
+    const scalar b = 0.07780*pintleRR_*Tc_/Pc_;
+    const scalar B = b*p/(pintleRR_*T);
     const scalar kappa = 0.37464 + 1.54226*omega_ - 0.26992*sqr(omega_);
-    const scalar alpha = sqr(1 + kappa*(1 - sqrt(Tr)));
-
+    const scalar q = 1 + kappa*(1 - sqrt(Tr));
     const scalar Z = this->Z(p, T);
-
-    return
-        this->R()
-       *Tc_
-       *(
-         - 2.078*(1 + kappa)*sqrt(alpha)
-          *log((Z + 2.414*B)/(Z - 0.414*B))
-        );
+    const scalar root2 = sqrt(2.0);
+    const scalar L = log((Z + (1 + root2)*B)/(Z + (1 - root2)*B));
+    // Internal-energy departure only: an ideal-gas -R*T is not added here.
+    return -a*(1 + kappa)*q*L/(2*root2*b*this->W());
 }
 
 
@@ -193,7 +185,6 @@ FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::Cv(scalar p
     return
     (
         app*(T/(2*root2*b))*log((Z + (root2 + 1)*B)/(Z - (root2 - 1)*B))
-      - pintleRR_
     )/this->W();
 }
 
@@ -205,23 +196,19 @@ FOAM_DEVICE inline Foam::scalar Foam::pintlePengRobinsonGas<Specie>::S
     scalar T
 ) const
 {
-    const scalar Pr = p/Pc_;
     const scalar Tr = T/Tc_;
-    const scalar B = 0.07780*Pr/Tr;
+    const scalar a = 0.45724*sqr(pintleRR_*Tc_)/Pc_;
+    const scalar b = 0.07780*pintleRR_*Tc_/Pc_;
+    const scalar B = b*p/(pintleRR_*T);
     const scalar kappa = 0.37464 + 1.54226*omega_ - 0.26992*sqr(omega_);
-
+    const scalar q = 1 + kappa*(1 - sqrt(Tr));
+    const scalar ap = -a*kappa*q/sqrt(T*Tc_);
     const scalar Z = this->Z(p, T);
-
-    return
-        this->R()
-       *(
-          - log(p/pintlePstd_)
-          + (
-                log(Z - B)
-              - 2.078*kappa*((1 + kappa)/sqrt(Tr) - kappa)
-               *log((Z + 2.414*B)/(Z - 0.414*B))
-            )
-        );
+    const scalar root2 = sqrt(2.0);
+    const scalar L = log((Z + (1 + root2)*B)/(Z + (1 - root2)*B));
+    // EOS entropy contains its ideal-gas pressure contribution as required by
+    // hConstThermo; the temperature contribution is supplied by that wrapper.
+    return this->R()*(-log(p/pintlePstd_) + log(Z - B)) + ap*L/(2*root2*b*this->W());
 }
 
 

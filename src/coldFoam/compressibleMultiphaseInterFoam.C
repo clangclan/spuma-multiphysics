@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
 
     turbulence->validate();
     #include "pintleGasFields.H"
+    #include "pintleThermoRestart.H"
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -136,6 +137,7 @@ int main(int argc, char *argv[])
         #include "checkState.H"
         #include "pintleGasBalance.H"
         runTime.write();
+        writeThermoRestart();
 
         runTime.printExecutionTime(Info);
     }

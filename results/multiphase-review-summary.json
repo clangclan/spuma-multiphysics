@@ -1,0 +1,3306 @@
+{
+  "HEM": {
+    "passed": false,
+    "runs": [
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "species_density": true,
+            "total_energy": true,
+            "uniform_invariance": true
+          },
+          "max_mach": 2.0,
+          "max_temperature": 300.0,
+          "min_pressure": 2000000.0,
+          "min_temperature": 300.0,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 0.0,
+          "residual_maxima": {
+            "elementDrift": 0.0,
+            "energyResidual": 0.0,
+            "globalElementResidual": 0.0,
+            "massResidual": 0.0,
+            "maxMuResidual": 0.0,
+            "maxUVResidual": 3.178275314487694e-17,
+            "maxVolumeResidual": 0.0,
+            "momentumResidual": 0.0
+          },
+          "retries": 0,
+          "rho_species_sum_error": 0.0,
+          "two_phase_cells": 0,
+          "uniform_relative_error": 0.0
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "uniform:16:2",
+        "wall_seconds": 0.9002201160001277
+      },
+      {
+        "analysis": {
+          "acoustic": {
+            "amplitude_ratio": 0.9258452652512568,
+            "relative_pressure_L1": 0.04722945018572749,
+            "speed_expected": 292.66734015269583,
+            "speed_measured": 292.2030878071379,
+            "speed_relative_error": 0.0015862799905029812
+          },
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "finite_wave_amplitude": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "multiphase": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "species_density": true,
+            "supersonic": true,
+            "total_energy": true,
+            "wave_speed": true
+          },
+          "max_mach": 2.0001452427311137,
+          "max_temperature": 270.00250418871866,
+          "min_pressure": 2878413.6773098917,
+          "min_temperature": 269.9974956670441,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 5.243658840470289e-10,
+          "residual_maxima": {
+            "elementDrift": 0.0,
+            "energyResidual": 6.460176721980864e-16,
+            "globalElementResidual": 4.171865203186175e-16,
+            "massResidual": 6.257797804779263e-16,
+            "maxMuResidual": 3.907985046680551e-14,
+            "maxUVResidual": 1.608417902724427e-11,
+            "maxVolumeResidual": 9.692864288979308e-10,
+            "momentumResidual": 5.266292811901713e-16
+          },
+          "retries": 0,
+          "rho_species_sum_error": 0.0,
+          "two_phase_cells": 64
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "acoustic:64:2",
+        "wall_seconds": 28.884585468000296
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "pressure_contact_accuracy": false,
+            "species_density": true,
+            "total_energy": true
+          },
+          "contact": {
+            "pressure_L1_relative_error": 0.011009223772230858,
+            "pressure_peak_relative_error": 0.06487907264222104,
+            "temperature_peak_error_K": 24.095962659629947
+          },
+          "max_mach": 3.49379138835581,
+          "max_temperature": 299.9999982869548,
+          "min_pressure": 93512.0927357779,
+          "min_temperature": 275.90403734037005,
+          "minimum_species_mass": 0.0,
+          "passed": false,
+          "phase_volume_sum_error": 4.811160358997313e-10,
+          "residual_maxima": {
+            "elementDrift": 0.0,
+            "energyResidual": 3.8462328552459366e-16,
+            "globalElementResidual": 1.713690554431582e-16,
+            "massResidual": 1.7281284048844186e-16,
+            "maxMuResidual": 9.965938829736842e-08,
+            "maxUVResidual": 9.963021721025036e-10,
+            "maxVolumeResidual": 8.930427508602179e-10,
+            "momentumResidual": 2.9140345363871966e-16
+          },
+          "retries": 0,
+          "rho_species_sum_error": 0.0,
+          "two_phase_cells": 23
+        },
+        "passed": false,
+        "returncode": 0,
+        "spec": "contact:32:2",
+        "wall_seconds": 7.5658493419996375
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "pressure_contact_accuracy": false,
+            "species_density": true,
+            "total_energy": true
+          },
+          "contact": {
+            "pressure_L1_relative_error": 0.008133816699244293,
+            "pressure_peak_relative_error": 0.06249375563827342,
+            "temperature_peak_error_K": 22.656368917775012
+          },
+          "max_mach": 3.493791660697208,
+          "max_temperature": 300.0000003460543,
+          "min_pressure": 93750.62443617266,
+          "min_temperature": 277.343631082225,
+          "minimum_species_mass": 0.0,
+          "passed": false,
+          "phase_volume_sum_error": 7.570271076673407e-10,
+          "residual_maxima": {
+            "elementDrift": 0.0,
+            "energyResidual": 2.5641552368306234e-16,
+            "globalElementResidual": 2.5705358316473724e-16,
+            "massResidual": 3.024224708547732e-16,
+            "maxMuResidual": 9.982886695070192e-08,
+            "maxUVResidual": 9.999423645458692e-10,
+            "maxVolumeResidual": 9.965512859366754e-10,
+            "momentumResidual": 3.885379381849594e-16
+          },
+          "retries": 0,
+          "rho_species_sum_error": 0.0,
+          "two_phase_cells": 42
+        },
+        "passed": false,
+        "returncode": 0,
+        "spec": "contact:64:2",
+        "wall_seconds": 26.394904745999156
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "shock_jump": true,
+            "shock_position": true,
+            "species_density": true,
+            "supersonic": true,
+            "total_energy": true
+          },
+          "max_mach": 2.0,
+          "max_temperature": 513.2263798997596,
+          "min_pressure": 100000.0,
+          "min_temperature": 300.0,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 8.719285293778967e-10,
+          "residual_maxima": {
+            "elementDrift": 0.0,
+            "energyResidual": 7.026603349095795e-16,
+            "globalElementResidual": 4.0935580176759582e-16,
+            "massResidual": 4.0935580176759587e-16,
+            "maxMuResidual": 0.0,
+            "maxUVResidual": 7.552263437812841e-10,
+            "maxVolumeResidual": 9.864755678989923e-10,
+            "momentumResidual": 2.981112610765777e-16
+          },
+          "retries": 0,
+          "rho_species_sum_error": 0.0,
+          "shock": {
+            "downstream_pressure": 1.2391065951078417e-10,
+            "front_error_cells": 0.0,
+            "mass_flux_jump": 4.997060543132648e-10,
+            "upstream_pressure": 0.0
+          },
+          "two_phase_cells": 0
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "shock:64:2",
+        "wall_seconds": 0.8379364049997093
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "source_T": true,
+            "source_Y": true,
+            "species_density": true,
+            "supersonic": true,
+            "total_energy": true
+          },
+          "max_mach": 1.8821250663151496,
+          "max_temperature": 2342.1340811538116,
+          "min_pressure": 111333.229300807,
+          "min_temperature": 2342.1340811538116,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 2.220446049250313e-16,
+          "residual_maxima": {
+            "elementDrift": 9.34527182702962e-13,
+            "energyResidual": 0.0,
+            "globalElementResidual": 9.450737034749856e-13,
+            "massResidual": 6.092943427868617e-13,
+            "maxMuResidual": 0.0,
+            "maxUVResidual": 7.498811174402127e-15,
+            "maxVolumeResidual": 2.220446049250313e-16,
+            "momentumResidual": 0.0
+          },
+          "retries": 0,
+          "rho_species_sum_error": 1.5543122344752192e-15,
+          "source_comparison": {
+            "T_reference": 2342.1340838932842,
+            "T_relative_error": 1.1696480450851254e-09,
+            "Y_Linf_error": 4.391776924766999e-10,
+            "alpha_gas_change": 2.220446049250313e-16,
+            "reference_element_drift": 4.624362422834464e-15
+          },
+          "two_phase_cells": 0
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "chemistry:4:2",
+        "wall_seconds": 56.556694825001614
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_partition_changed": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "source_T": true,
+            "source_Y": true,
+            "species_density": true,
+            "supersonic": true,
+            "total_energy": true
+          },
+          "max_mach": 1.9995477167782207,
+          "max_temperature": 288.4447601860784,
+          "min_pressure": 98148.91236514639,
+          "min_temperature": 288.4447601860784,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 1.908473379330644e-13,
+          "residual_maxima": {
+            "elementDrift": 4.448702225701403e-16,
+            "energyResidual": 0.0,
+            "globalElementResidual": 1.8699229908130318e-16,
+            "massResidual": 2.4296265631935317e-16,
+            "maxMuResidual": 1.517150849394966e-10,
+            "maxUVResidual": 4.348892731905487e-12,
+            "maxVolumeResidual": 1.971756091734278e-13,
+            "momentumResidual": 0.0
+          },
+          "retries": 0,
+          "rho_species_sum_error": 2.220446049250313e-16,
+          "source_comparison": {
+            "T_reference": 288.444760187904,
+            "T_relative_error": 6.329270441085555e-12,
+            "Y_Linf_error": 1.8825829783963854e-11,
+            "alpha_gas_change": 6.897786740678313e-07,
+            "reference_element_drift": 4.448702225701402e-16
+          },
+          "two_phase_cells": 4
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "coupled:4:2",
+        "wall_seconds": 8.754446094000741
+      },
+      {
+        "analysis": {
+          "checks": {
+            "UV_energy": true,
+            "UV_volume": true,
+            "elements": true,
+            "global_elements": true,
+            "mass": true,
+            "momentum": true,
+            "nonnegative_species": true,
+            "phase_volume": true,
+            "positive_primitives": true,
+            "reaction_active": true,
+            "shock_position": true,
+            "species_density": true,
+            "supersonic": true,
+            "total_energy": true
+          },
+          "max_mach": 2.500000041597533,
+          "max_temperature": 1972.6422934032078,
+          "min_pressure": 19999.997387055948,
+          "min_temperature": 1099.9996372717612,
+          "minimum_species_mass": 0.0,
+          "passed": true,
+          "phase_volume_sum_error": 7.642775301519578e-13,
+          "residual_maxima": {
+            "elementDrift": 1.3056498752597342e-13,
+            "energyResidual": 1.9457885430131113e-16,
+            "globalElementResidual": 1.738962471763491e-14,
+            "massResidual": 1.8950969903861212e-14,
+            "maxMuResidual": 0.0,
+            "maxUVResidual": 9.387832317148422e-13,
+            "maxVolumeResidual": 1.2968959239856304e-11,
+            "momentumResidual": 3.843565086559786e-17
+          },
+          "retries": 0,
+          "rho_species_sum_error": 8.881784197001252e-16,
+          "shock": {
+            "N2O_max_mass_fraction_change": 0.0051205032374789725,
+            "downstream_pressure": 0.003993005010681228,
+            "front_error_cells": 0.0,
+            "mass_flux_jump": 4.2073226925509744e-05,
+            "scope": "Reactive evolution from an independently computed frozen shock; frozen jumps are not a reacting steady-state reference",
+            "upstream_pressure": 1.2982065000777254e-07
+          },
+          "two_phase_cells": 0
+        },
+        "passed": true,
+        "returncode": 0,
+        "spec": "reacting-shock:8:2.5",
+        "wall_seconds": 14.658597683001062
+      }
+    ],
+    "scope": "Serial numerical reference, first-order spatial HLL and SSPRK2/Strang; engineering checks, not universal E2E validation"
+  },
+  "HEM_runtime": {
+    "backend_sha256": "d3dfda73b769e37d19a0bc2f939dcd508c3af4060f5de880dd195b056deaed77",
+    "passed": true,
+    "solver_sha256": "7b225010d383c26e4ca4e4b404f24fbee79077ef1725cdd83d82b159b70ea873",
+    "tests": [
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE UV recovery cell 0: Negative or non-finite conserved chemical species mass"
+        ],
+        "name": "negative_inventory",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+        ],
+        "name": "wrong_dimensions",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Conserved restart species order/EOS/mechanism fingerprint differs; an explicit model migration is required"
+        ],
+        "name": "changed_identity",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+        ],
+        "name": "nonideal_fick",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Require finite endTime strictly after start time"
+        ],
+        "name": "invalid_end_time",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+        ],
+        "name": "unsupported_runtime_edit",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "Create time",
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+        ],
+        "name": "nonequilibrium_fixed_state",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "continuous_steps": 20,
+        "field_relative_errors": {
+          "T": 2.7368788324283227e-15,
+          "alphaGas": 1.0547118733938987e-14,
+          "p": 1.6013759955069658e-14,
+          "q0": 0.0,
+          "q1": 0.0,
+          "q2": 7.873360214675282e-16,
+          "q3": 0.0,
+          "rhoMomentum": 1.0674244483383812e-14,
+          "rhoTotalEnergy": 8.466753334241479e-16
+        },
+        "final_time": 2e-05,
+        "name": "conserved_restart_and_clock",
+        "passed": true
+      },
+      {
+        "dx": [
+          0.10980271233968018,
+          0.17430094107696992,
+          0.2766854972246291,
+          0.4392108493587208
+        ],
+        "expected": [
+          -586.2764921274174,
+          -2152.674884669671,
+          -436.56994606679194,
+          1275.880549549904
+        ],
+        "measured": [
+          -586.2779417498132,
+          -2152.671783051119,
+          -436.56990911244975,
+          1275.879668583002
+        ],
+        "name": "graded_gas_diffusion_resistance",
+        "passed": true,
+        "relative_error": 1.4408207083312477e-06
+      },
+      {
+        "name": "unhashed_import_rejected",
+        "passed": true,
+        "reason": "External species imports are unsupported; export a self-contained mechanism first"
+      }
+    ]
+  },
+  "N2O_reference_EOS": {
+    "Cantera_version": "3.2.0",
+    "CoolProp_version": "6.7.0",
+    "calculation_completed": true,
+    "fixed_states": [
+      {
+        "T": 283.137492,
+        "p": 5000000.0,
+        "phase": "liquid",
+        "properties": {
+          "cp": {
+            "PR": 2811.308566021496,
+            "reference": 2440.800504681103,
+            "relative_error": 0.1517977649667852
+          },
+          "cv": {
+            "PR": 890.6642538483261,
+            "reference": 914.1004417063311,
+            "relative_error": -0.025638525908878496
+          },
+          "rho": {
+            "PR": 845.1693739000233,
+            "reference": 863.428893263842,
+            "relative_error": -0.021147681651926264
+          },
+          "sound": {
+            "PR": 423.9935442599121,
+            "reference": 504.61872188268,
+            "relative_error": -0.15977444776912708
+          }
+        }
+      },
+      {
+        "T": 283.137492,
+        "p": 10000000.0,
+        "phase": "liquid",
+        "properties": {
+          "cp": {
+            "PR": 2253.556667824114,
+            "reference": 2111.3398158330065,
+            "relative_error": 0.06735858004695339
+          },
+          "cv": {
+            "PR": 904.135634307605,
+            "reference": 907.8793790852886,
+            "relative_error": -0.004123614726722402
+          },
+          "rho": {
+            "PR": 911.9066092205951,
+            "reference": 905.0806674625206,
+            "relative_error": 0.007541804839574784
+          },
+          "sound": {
+            "PR": 487.00728435770895,
+            "reference": 584.1809728668613,
+            "relative_error": -0.1663417554191703
+          }
+        }
+      },
+      {
+        "T": 300.0,
+        "p": 100000.0,
+        "phase": "gas",
+        "properties": {
+          "cp": {
+            "PR": 882.1945158849886,
+            "reference": 884.8022669302657,
+            "relative_error": -0.0029472698508383743
+          },
+          "cv": {
+            "PR": 689.0782707846155,
+            "reference": 691.5386931340316,
+            "relative_error": -0.003557895420523205
+          },
+          "rho": {
+            "PR": 1.774730583759889,
+            "reference": 1.7738911367242942,
+            "relative_error": 0.00047322353565903974
+          },
+          "sound": {
+            "PR": 267.8086377239391,
+            "reference": 267.85232328140256,
+            "relative_error": -0.00016309568245764794
+          }
+        }
+      },
+      {
+        "T": 300.0,
+        "p": 2000000.0,
+        "phase": "gas",
+        "properties": {
+          "cp": {
+            "PR": 1010.6301595870433,
+            "reference": 1052.4554539573303,
+            "relative_error": -0.03974067901213296
+          },
+          "cv": {
+            "PR": 702.2992386325623,
+            "reference": 737.2332691000464,
+            "relative_error": -0.04738531470524754
+          },
+          "rho": {
+            "PR": 40.22947324169698,
+            "reference": 39.84516581350214,
+            "relative_error": 0.00964502017618929
+          },
+          "sound": {
+            "PR": 249.30274800448564,
+            "reference": 250.56236359740774,
+            "relative_error": -0.005027154018015234
+          }
+        }
+      }
+    ],
+    "model_fingerprint": "b0ae19b9a882c150e81311dd26c2eef6d5e22363543972d61bd280e9d3c8c060",
+    "reference": "CoolProp NitrousOxide multiparameter reference EOS",
+    "saturation": [
+      {
+        "T": 240.0,
+        "comparison_path": "Each EOS at its own saturation pressure at the same T",
+        "properties": {
+          "gas_cp": {
+            "PR": 952.7479931062833,
+            "reference": 1151.0370786888134,
+            "relative_error": -0.17226993747969277
+          },
+          "gas_cv": {
+            "PR": 636.6050174782836,
+            "reference": 756.3582935227084,
+            "relative_error": -0.1583287670274346
+          },
+          "gas_rho": {
+            "PR": 30.383001435689522,
+            "reference": 30.716889109025562,
+            "relative_error": -0.010869840111443207
+          },
+          "gas_sound": {
+            "PR": 221.6233045512333,
+            "reference": 220.63707409435696,
+            "relative_error": 0.004469921752382255
+          },
+          "latent_heat": {
+            "PR": 302733.2689010296,
+            "reference": 299993.1650411687,
+            "relative_error": 0.00913388763202283
+          },
+          "liquid_cp": {
+            "PR": 1872.4782292966363,
+            "reference": 1882.968286580117,
+            "relative_error": -0.005571021752327487
+          },
+          "liquid_cv": {
+            "PR": 915.5829368947689,
+            "reference": 913.4391127152268,
+            "relative_error": 0.0023469809314049517
+          },
+          "liquid_rho": {
+            "PR": 1090.5074370442155,
+            "reference": 1049.6653616617398,
+            "relative_error": 0.03890961526806791
+          },
+          "liquid_sound": {
+            "PR": 644.3657574513538,
+            "reference": 781.3128483261311,
+            "relative_error": -0.17527817591656136
+          },
+          "pressure": {
+            "PR": 1183073.196677133,
+            "reference": 1187771.2948284661,
+            "relative_error": -0.003955389536511422
+          }
+        }
+      },
+      {
+        "T": 270.0,
+        "comparison_path": "Each EOS at its own saturation pressure at the same T",
+        "properties": {
+          "gas_cp": {
+            "PR": 1278.5189372593427,
+            "reference": 1626.1545458041808,
+            "relative_error": -0.2137777183858759
+          },
+          "gas_cv": {
+            "PR": 685.1549622238388,
+            "reference": 865.0103194701312,
+            "relative_error": -0.2079227879691241
+          },
+          "gas_rho": {
+            "PR": 77.71726296419003,
+            "reference": 77.58282507158448,
+            "relative_error": 0.0017328305908106412
+          },
+          "gas_sound": {
+            "PR": 214.31010926699796,
+            "reference": 212.56372178791491,
+            "relative_error": 0.008215830360862375
+          },
+          "latent_heat": {
+            "PR": 242212.42417945154,
+            "reference": 240452.32940973423,
+            "relative_error": 0.007319932287776165
+          },
+          "liquid_cp": {
+            "PR": 2433.9268883468826,
+            "reference": 2209.203182471369,
+            "relative_error": 0.10172161060537754
+          },
+          "liquid_cv": {
+            "PR": 898.5255899761241,
+            "reference": 910.2855451445076,
+            "relative_error": -0.012918973866070327
+          },
+          "liquid_rho": {
+            "PR": 924.3443334960197,
+            "reference": 922.7639258031093,
+            "relative_error": 0.0017126890732479527
+          },
+          "liquid_sound": {
+            "PR": 478.1593065574473,
+            "reference": 580.9721215564222,
+            "relative_error": -0.17696686499093917
+          },
+          "pressure": {
+            "PR": 2878604.29941803,
+            "reference": 2877209.9859167626,
+            "relative_error": 0.0004846060969105892
+          }
+        }
+      },
+      {
+        "T": 283.137492,
+        "comparison_path": "Each EOS at its own saturation pressure at the same T",
+        "properties": {
+          "gas_cp": {
+            "PR": 1668.5946968879853,
+            "reference": 2133.852877632553,
+            "relative_error": -0.21803667235988544
+          },
+          "gas_cv": {
+            "PR": 710.7956719553365,
+            "reference": 923.2044829072671,
+            "relative_error": -0.23007775079582926
+          },
+          "gas_rho": {
+            "PR": 116.33109805435575,
+            "reference": 114.86402718839491,
+            "relative_error": 0.0127722395067571
+          },
+          "gas_sound": {
+            "PR": 208.95818981794866,
+            "reference": 205.458659885963,
+            "relative_error": 0.017032769190298724
+          },
+          "latent_heat": {
+            "PR": 203273.7736783803,
+            "reference": 204932.05967403157,
+            "relative_error": -0.008091881759686448
+          },
+          "liquid_cp": {
+            "PR": 3048.566620071067,
+            "reference": 2567.3357230840543,
+            "relative_error": 0.1874436960698409
+          },
+          "liquid_cv": {
+            "PR": 886.8283262870975,
+            "reference": 916.9515733807569,
+            "relative_error": -0.03285151361112393
+          },
+          "liquid_rho": {
+            "PR": 826.425988081052,
+            "reference": 852.2420271412205,
+            "relative_error": -0.030291910323604232
+          },
+          "liquid_sound": {
+            "PR": 408.1160591348482,
+            "reference": 483.65407928892256,
+            "relative_error": -0.1561819146964124
+          },
+          "pressure": {
+            "PR": 4013490.1522359587,
+            "reference": 3999999.9906691257,
+            "relative_error": 0.0033725403995754633
+          }
+        }
+      },
+      {
+        "T": 300.0,
+        "comparison_path": "Each EOS at its own saturation pressure at the same T",
+        "properties": {
+          "gas_cp": {
+            "PR": 3896.1135446115704,
+            "reference": 4744.8285685060155,
+            "relative_error": -0.1788715886444927
+          },
+          "gas_cv": {
+            "PR": 754.0670726094851,
+            "reference": 1030.9814565296579,
+            "relative_error": -0.26859298212043725
+          },
+          "gas_rho": {
+            "PR": 208.47180375544247,
+            "reference": 202.90584031677184,
+            "relative_error": 0.027431262845767135
+          },
+          "gas_sound": {
+            "PR": 204.50196583916926,
+            "reference": 192.02329559061704,
+            "relative_error": 0.06498518948011411
+          },
+          "latent_heat": {
+            "PR": 126462.17108428874,
+            "reference": 137880.27679482347,
+            "relative_error": -0.08281174056189167
+          },
+          "liquid_cp": {
+            "PR": 6121.562741447367,
+            "reference": 4367.330523914736,
+            "relative_error": 0.40167150343367974
+          },
+          "liquid_cv": {
+            "PR": 861.4493748955886,
+            "reference": 953.798395508067,
+            "relative_error": -0.0968223694308965
+          },
+          "liquid_rho": {
+            "PR": 650.0283814736923,
+            "reference": 724.7012851449044,
+            "relative_error": -0.10303956292319971
+          },
+          "liquid_sound": {
+            "PR": 313.71806684010363,
+            "reference": 331.5665560526037,
+            "relative_error": -0.05383078868083535
+          },
+          "pressure": {
+            "PR": 5915233.332420192,
+            "reference": 5887436.804562035,
+            "relative_error": 0.0047213292950538666
+          }
+        }
+      },
+      {
+        "T": 305.0,
+        "comparison_path": "Each EOS at its own saturation pressure at the same T",
+        "properties": {
+          "gas_cp": {
+            "PR": 7983.375373372996,
+            "reference": 9245.160244033497,
+            "relative_error": -0.1364805841494
+          },
+          "gas_cv": {
+            "PR": 773.2140938809656,
+            "reference": 1084.5267466234711,
+            "relative_error": -0.2870493085686783
+          },
+          "gas_rho": {
+            "PR": 262.0140034945084,
+            "reference": 255.74156782013762,
+            "relative_error": 0.02452646133295855
+          },
+          "gas_sound": {
+            "PR": 207.2574066247897,
+            "reference": 186.65621147772916,
+            "relative_error": 0.11036972723256278
+          },
+          "latent_heat": {
+            "PR": 88061.80529641057,
+            "reference": 104190.13482900042,
+            "relative_error": -0.15479708860210317
+          },
+          "liquid_cp": {
+            "PR": 11182.753470366002,
+            "reference": 7476.688676610143,
+            "relative_error": 0.495682641615105
+          },
+          "liquid_cv": {
+            "PR": 847.5913833030113,
+            "reference": 989.8012913083321,
+            "relative_error": -0.14367520961439229
+          },
+          "liquid_rho": {
+            "PR": 569.4681760425215,
+            "reference": 661.1564513827886,
+            "relative_error": -0.138678636725852
+          },
+          "liquid_sound": {
+            "PR": 280.8185325615355,
+            "reference": 271.2372845750075,
+            "relative_error": 0.03532422912115685
+          },
+          "pressure": {
+            "PR": 6588714.267606093,
+            "reference": 6566324.089853033,
+            "relative_error": 0.0034098496276873114
+          }
+        }
+      }
+    ],
+    "scope": "Independent reference-EOS comparison; no experimental fit or claimed validated operating envelope",
+    "validated_operating_range": null
+  },
+  "PR_identities": {
+    "CpMCv_identity": 4.4475920624506135e-12,
+    "Cp_departure_300K_4MPa": 455.28752575629176,
+    "H_E_departure_identity": 9.890643859478132e-11,
+    "T_dS_dT_vs_Cp": 1.0401623878321297e-07,
+    "caloric_wrapper_reference_error": 2.144452588226025e-15,
+    "dE_dT_rho_vs_Cv": 5.602252437994504e-10,
+    "dH_dT_300K_4MPa": 455.2875257538188,
+    "dH_dT_vs_Cp": 1.030658104978558e-07,
+    "gpu_scaled_error": 1.3088469903235946e-15,
+    "invalid": 0,
+    "maxwell_relative_error": 7.78977722811669e-08,
+    "passed": true,
+    "points": 24
+  },
+  "PR_identity_log": {
+    "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/logs/build-legacy-pr-v2.log",
+    "sha256": "ba4f37c4033fb62b778fb66f0654755fd8984a4ad6db2d6fa9f74aaa3b16b22e"
+  },
+  "PR_restart": {
+    "before_state_max_scaled": {
+      "T": 6.042092025646782e-07,
+      "U": 0.0006536094828566226,
+      "alpha.air": 1.0401342931987404e-07,
+      "alpha.ipa": 2.1661675786432966e-09,
+      "alpha.n2o": 1.0398969918501422e-07,
+      "dgdt.air": 0.007435496249789344,
+      "dgdt.ipa": 1.0021106300958909,
+      "dgdt.n2o": 1.5663033578771932,
+      "p": 2.6322831489441464e-05,
+      "rho": 9.011020113066405e-07
+    },
+    "caloric_only_regressions": [
+      {
+        "candidate": "mini-current",
+        "exact_comparison_passed": false,
+        "passed": true,
+        "reference": "mini-base",
+        "state_checks": {
+          "T": true,
+          "U": true,
+          "alpha.air": true,
+          "alpha.ipa": true,
+          "alpha.n2o": true,
+          "p": true,
+          "rho": true
+        },
+        "state_max_scaled": {
+          "T": 9.632331251060447e-16,
+          "U": 2.752129618597114e-12,
+          "alpha.air": 9.287166754018872e-16,
+          "alpha.ipa": 8.881784197001252e-16,
+          "alpha.n2o": 3.3306690738754696e-16,
+          "p": 1.9771893719585573e-11,
+          "rho": 1.1575500140337184e-15
+        }
+      },
+      {
+        "candidate": "pintle-current",
+        "exact_comparison_passed": false,
+        "passed": true,
+        "reference": "pintle-base",
+        "state_checks": {
+          "T": true,
+          "U": true,
+          "alpha.air": true,
+          "alpha.ipa": true,
+          "alpha.n2o": true,
+          "p": true,
+          "rho": true
+        },
+        "state_max_scaled": {
+          "T": 6.234329586261602e-11,
+          "U": 3.196497524122098e-10,
+          "alpha.air": 1.4096471090360645e-08,
+          "alpha.ipa": 2.9896796145122145e-10,
+          "alpha.n2o": 1.4096471157021256e-08,
+          "p": 1.2725374845029652e-10,
+          "rho": 5.196003323118909e-10
+        }
+      }
+    ],
+    "energy_semantics": "coldFoam reconstructs phase he from p/T; old-to-new p/T means caloric reinterpretation, not identical conserved energy. Restart check uses only the corrected model.",
+    "guards": [
+      {
+        "name": "missing_phase_density",
+        "passed": true,
+        "return_code": 1
+      },
+      {
+        "name": "changed_thermo_dictionary",
+        "passed": true,
+        "return_code": -6
+      }
+    ],
+    "original_binary_restart_state_max_scaled": {
+      "T": 6.042092025646782e-07,
+      "U": 0.0006536094828566226,
+      "alpha.air": 1.0401342931930229e-07,
+      "alpha.ipa": 2.166167911710204e-09,
+      "alpha.n2o": 1.0398969918501422e-07,
+      "dgdt.air": 0.007435494206946529,
+      "dgdt.ipa": 1.0021102277515037,
+      "dgdt.n2o": 0.00999345483656337,
+      "p": 2.6322831489440936e-05,
+      "rho": 9.011020121114994e-07
+    },
+    "passed": true,
+    "policy": {
+      "alpha_bound_tolerance": 1e-08,
+      "alpha_sum_max_abs": 1e-09,
+      "mass_balance_max_relative": 1e-06,
+      "policy_id": "pintle-numerical-regression-v1",
+      "schema_version": 1,
+      "scope": "Engineering regression thresholds chosen before this campaign; not physical-model certification.",
+      "state_max_scaled": {
+        "T": 1e-06,
+        "U": 1e-06,
+        "alpha.air": 1e-06,
+        "alpha.ipa": 1e-06,
+        "alpha.n2o": 1e-06,
+        "p": 1e-05,
+        "rho": 1e-06
+      }
+    },
+    "policy_sha256": "ed2a52e5073381a2b6860ab0ff6e7e15d8c07676b7e88065d022406e41342e9d",
+    "state_max_scaled": {
+      "T": 3.8529329772311254e-16,
+      "U": 1.765390120103224e-14,
+      "alpha.air": 9.215718466126788e-19,
+      "alpha.ipa": 2.168404344971009e-19,
+      "alpha.n2o": 7.337353051641675e-26,
+      "p": 1.2678650056102201e-15,
+      "rho": 1.8086718969276523e-17
+    }
+  },
+  "all_accuracy_gates_passed": false,
+  "chemical": {
+    "backend_sha256": "d3dfda73b769e37d19a0bc2f939dcd508c3af4060f5de880dd195b056deaed77",
+    "passed": true,
+    "tests": [
+      {
+        "Jv_errors": {
+          "absent": [
+            3.776875478137044e-07,
+            7.121665479036544e-09,
+            5.327773276431158e-09
+          ],
+          "present": [
+            5.436930201733036e-09,
+            7.654765826885889e-10,
+            1.471859569449217e-09
+          ]
+        },
+        "construction_counters": {
+          "fallbackCalls": 0,
+          "fixedStateCalls": 422,
+          "integrationFallbacks": 0,
+          "jacobianCalls": 1,
+          "rhsCalls": 0,
+          "structuredCalls": 1,
+          "uvCalls": 1
+        },
+        "construction_seconds": 0.05490515299970866,
+        "independent_ideal_matrix_relative_error": 4.465895210742348e-10,
+        "name": "hot-gas-derivatives",
+        "passed": true,
+        "seconds": 0.6471774309993634,
+        "structured": true
+      },
+      {
+        "ReactorNet_T_relative_error": 3.117039959477097e-11,
+        "ReactorNet_Y_Linf": 5.1170136270567435e-11,
+        "T_relative_difference": 1.8278317748254835e-09,
+        "Y_Linf_difference": 7.13827799821154e-10,
+        "measured_speedup": 1.4682701415592578,
+        "name": "hot-gas-CVODE",
+        "passed": true,
+        "runs": [
+          {
+            "counters": {
+              "fallbackCalls": 0,
+              "fixedStateCalls": 51938,
+              "integrationFallbacks": 0,
+              "jacobianCalls": 0,
+              "rhsCalls": 51942,
+              "structuredCalls": 0,
+              "uvCalls": 51938
+            },
+            "element_drift": 3.874305770201625e-12,
+            "minimum_species": 0.0,
+            "seconds": 7.95286487300109,
+            "structured": false,
+            "temperature": 2342.1340793962677
+          },
+          {
+            "counters": {
+              "fallbackCalls": 46,
+              "fixedStateCalls": 33155,
+              "integrationFallbacks": 0,
+              "jacobianCalls": 58,
+              "rhsCalls": 26659,
+              "structuredCalls": 12,
+              "uvCalls": 26660
+            },
+            "element_drift": 2.460545783619866e-11,
+            "minimum_species": 0.0,
+            "seconds": 5.41648614100086,
+            "structured": true,
+            "temperature": 2342.1340836772947
+          }
+        ],
+        "seconds": 17.40363312899899
+      },
+      {
+        "Jv_errors": {
+          "absent": [
+            0.00020199116770532835,
+            2.036086944638731e-06,
+            2.3678628521856056e-07
+          ],
+          "present": [
+            3.860867815127194e-07,
+            5.1172957734801375e-09,
+            3.8103363388680436e-10
+          ]
+        },
+        "construction_counters": {
+          "fallbackCalls": 0,
+          "fixedStateCalls": 427,
+          "integrationFallbacks": 0,
+          "jacobianCalls": 1,
+          "rhsCalls": 0,
+          "structuredCalls": 1,
+          "uvCalls": 1
+        },
+        "construction_seconds": 0.06273650599905523,
+        "name": "equilibrium-liquid-derivatives",
+        "passed": true,
+        "seconds": 0.36021220200018433,
+        "structured": true
+      },
+      {
+        "T_relative_difference": 7.093103882027663e-12,
+        "Y_Linf_difference": 1.0976347197539353e-12,
+        "measured_speedup": 2.5630707753587405,
+        "name": "equilibrium-liquid-CVODE",
+        "passed": true,
+        "runs": [
+          {
+            "counters": {
+              "fallbackCalls": 0,
+              "fixedStateCalls": 1349,
+              "integrationFallbacks": 0,
+              "jacobianCalls": 0,
+              "rhsCalls": 1349,
+              "structuredCalls": 0,
+              "uvCalls": 1349
+            },
+            "element_drift": 5.549756026562499e-14,
+            "minimum_species": 0.0,
+            "seconds": 6.67845777399998,
+            "structured": false,
+            "temperature": 288.4447601860051
+          },
+          {
+            "counters": {
+              "fallbackCalls": 1,
+              "fixedStateCalls": 954,
+              "integrationFallbacks": 0,
+              "jacobianCalls": 2,
+              "rhsCalls": 527,
+              "structuredCalls": 1,
+              "uvCalls": 528
+            },
+            "element_drift": 1.1121755564253505e-16,
+            "minimum_species": 0.0,
+            "seconds": 2.605647038000825,
+            "structured": true,
+            "temperature": 288.4447601880511
+          }
+        ],
+        "seconds": 9.480662769001356
+      },
+      {
+        "Jv_errors": {
+          "absent": [
+            0.00025672442948824066,
+            2.576598902029175e-06,
+            2.1877359688872292e-07
+          ],
+          "present": [
+            2.6306898760008204e-07,
+            2.5261161672926507e-09,
+            1.758688371936949e-09
+          ]
+        },
+        "construction_counters": {
+          "fallbackCalls": 0,
+          "fixedStateCalls": 425,
+          "integrationFallbacks": 0,
+          "jacobianCalls": 1,
+          "rhsCalls": 0,
+          "structuredCalls": 1,
+          "uvCalls": 1
+        },
+        "construction_seconds": 0.05622699100058526,
+        "name": "frozen-liquid-derivatives",
+        "passed": true,
+        "seconds": 0.3068749800004298,
+        "structured": true
+      },
+      {
+        "counters": {
+          "fallbackCalls": 1,
+          "fixedStateCalls": 7,
+          "integrationFallbacks": 0,
+          "jacobianCalls": 1,
+          "rhsCalls": 7,
+          "structuredCalls": 0,
+          "uvCalls": 8
+        },
+        "jacobian_norm": 0.0,
+        "name": "incipient-liquid-fallback",
+        "passed": true,
+        "seconds": 0.03713981599867111,
+        "usedStructured": false
+      }
+    ]
+  },
+  "code_sha256": {
+    "Allwmake": "85430ec2005ab85319dcb14c1f97ad337460a5ae50bd9b3ece88e77571c4faec",
+    "src/coldFoam/compressibleMultiphaseInterFoam.C": "17e1fff453b53573d774e58864cd6aa98fc25235c3d37c07d33beed95d1add4f",
+    "src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGasI.H": "3d2ee2c5abdb185db771d8eda4c85ddf185b03904cfcad0f0090b3ba25121f71",
+    "src/coldFoam/pintleThermoRestart.H": "bf673c6f2a0e39f2b2830a4d94a690aeb5694ebed953df2a40fb99e3357d23bc",
+    "src/prIdentityCheck/Make/files": "e649e938590e672d0ff4e6c14f0057cae856c09c0c4bf78a463455bcf276614d",
+    "src/prIdentityCheck/Make/options": "fd70f8799cf664393eb1d8e99b4391e298958d499f8f9664c28adc0165cfb822",
+    "src/prIdentityCheck/prIdentityCheck.C": "5cd7e28a957b975df41d27d0b3bd328a49c0a2fd36a94e2e963fcb179e14502f",
+    "src/reactiveFoam/pintleReactiveFoam.C": "46a8dab2121cb58e9581dcf331e72c6162bb5fa3b56280a6313f063adce4eb91",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "c8b317bfda7e4095deb1746f09827ffcecb284722d7f45fa06f6ae6a9c49fcaa",
+    "src/reactiveThermo/pintleReactiveThermo.h": "5d2539ab433b6cbb34983926ea49c80cdf71aa2a0d717dcd3d34b8c297a3836e",
+    "src/thermoCheck/thermoCheck.C": "4e2636b14377f02d4f621588fefa690e3cb7a82fbc40d02e1d220a5098d41f21",
+    "tools/collect_multiphase_review_results.py": "d1739c51e23b4bb1358ba939c1604e03618520e7e887cbc2a588a70a2b7ed71f",
+    "tools/compare_n2o_reference_eos.py": "0b5de0fa138f0667cc612a48191e37d8541f48ce52f65dca08bc94568c27309d",
+    "tools/prepare_mechanical_case.py": "2a2f10d30379fb8933d47db964c88a0699e73aa312c8cec931a87b730be890d9",
+    "tools/prepare_reactive_case.py": "b71e08eed7c5288ab5e48e8ece2ab4e60597ee3e374a2c422609efbe0149f170",
+    "tools/reactive_backend.py": "d1da9fa4f54df8287bd40cc3f66b0976fe57b771132ca580f382ac1366d72136",
+    "tools/validate_chemical_jacobian.py": "363b3adf47fc6321f68138fe94eea24e066a319b6d44b4a657c08f7e6e127f3b",
+    "tools/validate_mechanical.py": "151c6d702364a5ea7737ed19991787922a426b7f2f9283081d8d5e3026456d7f",
+    "tools/validate_mechanical_runtime.py": "4bd8be81642117a9b4b9ab10b0ce1954003aa6e28e9509566c39a9cbf3ceae34",
+    "tools/validate_pr_restart.py": "87062eee4ff28ca3710f15127124505ef3fa5244e4b2c628449a78880ff8ae37"
+  },
+  "current_binaries_sha256": {
+    "bin/pintlePrIdentityCheck": "5dca7abe88e16c7529517e6f58e5144200118ee923c8c940d32a986b897b46ad",
+    "bin/pintleReactiveFoam": "7b225010d383c26e4ca4e4b404f24fbee79077ef1725cdd83d82b159b70ea873",
+    "bin/spumaPintleColdFoam": "0bc3344c00f567f5b93be375f736210678223cc188152c3c449312a306bab546",
+    "lib/libpintleMultiphaseThermo.so": "ca15fb4df28ff1183a02746d562476c90cc8d1680f91958c996dfd78cfa47733",
+    "lib/libpintleReactiveBackend.so": "77d0c6cf7c42210cb9555c20b9588ee206df7369ebfbc8947f0f4ea6452e6481"
+  },
+  "date": "2026-09-11",
+  "end_to_end_high_pressure_injection_combustion_validated": false,
+  "implemented_correction_checks": {
+    "HEM_runtime": true,
+    "PR_caloric_only_state_regression": true,
+    "PR_identities": true,
+    "PR_restart_guards": true,
+    "PR_same_model_restart": true,
+    "chemical_jacobian": true,
+    "legacy_regressions": true,
+    "mechanical_contact_grid_L1_decreases": true,
+    "mechanical_contact_pressure": true,
+    "mechanical_runtime": true,
+    "thermo": true
+  },
+  "implemented_correction_checks_passed": true,
+  "known_accuracy_failures": {
+    "HEM": [
+      "contact:32:2",
+      "contact:64:2"
+    ],
+    "mechanical": [
+      "contact:16:2:.1",
+      "contact:16:-2:.1"
+    ]
+  },
+  "legacy": {
+    "checks": [
+      {
+        "name": "temperature-one-sweep-default",
+        "passed": true
+      },
+      {
+        "name": "temperature-converged-default",
+        "passed": true
+      },
+      {
+        "name": "temperature-norm-discrimination-default",
+        "passed": true
+      },
+      {
+        "name": "temperature-one-sweep-none",
+        "passed": true
+      },
+      {
+        "name": "temperature-converged-none",
+        "passed": true
+      },
+      {
+        "name": "temperature-norm-discrimination-none",
+        "passed": true
+      },
+      {
+        "name": "dynamic-contact-angle",
+        "passed": true
+      },
+      {
+        "name": "legacy-temperature-false-pass",
+        "passed": true
+      },
+      {
+        "name": "legacy-dynamic-cache-stale",
+        "passed": true
+      },
+      {
+        "name": "euler",
+        "passed": true
+      },
+      {
+        "name": "backward-default",
+        "passed": true
+      },
+      {
+        "name": "backward-override",
+        "passed": true
+      },
+      {
+        "name": "local-euler-override",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "limitations": [
+    "Mechanical environments are nonreacting, inviscid, with no inter-environment heat or mass transfer.",
+    "16-cell moving contacts fail the 1.5% phase-speed gate; HLL contact diffusion remains.",
+    "The homogeneous-equilibrium material contact still fails pressure accuracy.",
+    "Measured chemical speedups are two serial CPU source tests, not universal CFD/GPU acceleration.",
+    "N2O reference EOS comparison does not establish a validated operating range or validate IPA/mixed-liquid properties.",
+    "Finite-rate phase change, slip, breakup/coalescence, interface area and high-pressure reactive mixture closure remain unavailable."
+  ],
+  "main_owns_all_code_and_execution": true,
+  "mechanical": {
+    "analysis_script_sha256": "151c6d702364a5ea7737ed19991787922a426b7f2f9283081d8d5e3026456d7f",
+    "backend_sha256": "77d0c6cf7c42210cb9555c20b9588ee206df7369ebfbc8947f0f4ea6452e6481",
+    "criterion_note": "Contact Fourier phase is normalized by traveled distance and checked at 1.5% speed error, matching the acoustic speed tolerance. A fixed angle cap would change the speed tolerance with travel duration. Raw source campaign and fields are retained.",
+    "passed": false,
+    "reanalyzed_existing_states": true,
+    "solver_sha256": "7b225010d383c26e4ca4e4b404f24fbee79077ef1725cdd83d82b159b70ea873",
+    "source_campaign": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/campaign.json",
+    "source_campaign_sha256": "0c1714ad2713db1cfed79273046eeebf439ab245bf140527877fbf6ca27729c6",
+    "tests": [
+      {
+        "name": "analytic-p-c-K-and-trace-environments",
+        "passed": true,
+        "seconds": 0.0021341930005291943,
+        "states": [
+          {
+            "alpha": 0,
+            "beta": 1,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              0.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            "pressure_residual": 0.0
+          },
+          {
+            "alpha": 1e-20,
+            "beta": 1,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              },
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              0.0,
+              0.0,
+              2.445028249710358e-36
+            ],
+            "pressure_residual": 0.0
+          },
+          {
+            "alpha": 1e-10,
+            "beta": 0.9999999999,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 1.3180420983877904e-16
+              },
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              2.220446049250313e-16,
+              2.220446049250313e-16,
+              3.2311742677852644e-26
+            ],
+            "pressure_residual": 0.0
+          },
+          {
+            "alpha": 0.01,
+            "beta": 0.99,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 1.3180420983877904e-16
+              },
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              0.0,
+              2.220446049250313e-16,
+              1.3010426069826053e-18
+            ],
+            "pressure_residual": 0.0
+          },
+          {
+            "alpha": 0.37,
+            "beta": 0.63,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              },
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              1.1102230246251565e-16,
+              0.0,
+              6.245004513516506e-17
+            ],
+            "pressure_residual": 0.0
+          },
+          {
+            "alpha": 0.9,
+            "beta": 0.1,
+            "environment_errors": [
+              {
+                "T": 1.6763044641265879e-09,
+                "e": 1.8432644187998307e-10,
+                "p": 1.6763043822720647e-09,
+                "rho": 0.0
+              },
+              {
+                "T": 9.81379081657416e-09,
+                "e": 2.407156247294174e-09,
+                "p": 9.813790820771828e-09,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              4.068740788731873e-09,
+              2.0697754621323838e-10,
+              1.1236644115175665e-09
+            ],
+            "pressure_residual": 1.1490095319643956e-08
+          },
+          {
+            "alpha": 0.9999999999,
+            "beta": 1e-10,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              },
+              {
+                "T": 1.1835011789046873e-08,
+                "e": 2.9029277206029532e-09,
+                "p": 1.1835011682705953e-08,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              5.917504708463639e-09,
+              4.440892098500626e-16,
+              1.3146550336472503e-18
+            ],
+            "pressure_residual": 1.1835011859417932e-08
+          },
+          {
+            "alpha": 1,
+            "beta": 1e-20,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              },
+              {
+                "T": 1.1835011789046873e-08,
+                "e": 2.9029277206029532e-09,
+                "p": 1.1835011682705953e-08,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              5.917504153352127e-09,
+              6.661338147750939e-16,
+              1.3146550332534235e-28
+            ],
+            "pressure_residual": 1.1835011859417932e-08
+          },
+          {
+            "alpha": 1,
+            "beta": 0,
+            "environment_errors": [
+              {
+                "T": 0.0,
+                "e": 0.0,
+                "p": 0.0,
+                "rho": 0.0
+              }
+            ],
+            "errors": [
+              1.5543122344752192e-15,
+              6.661338147750939e-16,
+              0.0
+            ],
+            "pressure_residual": 0.0
+          }
+        ]
+      },
+      {
+        "errors": [
+          8.608624924022479e-11,
+          6.222355963814152e-12,
+          3.993194663820532e-11
+        ],
+        "name": "bounded-energy-split-one-sided-derivative",
+        "passed": true,
+        "seconds": 0.0012067759998899419
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.8746161110269767,
+          "advection_phase_error": 1.1757404126848803e-16,
+          "advection_speed_relative_error": 1.8712489847170368e-16,
+          "alpha_profile_L1": 0.12126761957426502,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.2507969055805006e-07,
+            3.460618245298974e-07
+          ],
+          "environment_volume_sum_error": 2.220446049250313e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-0-.1/0.0003293432182351",
+          "inventory_volume_error": 3.4672154036741176e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.1974947422555005e-10,
+          "pressure_peak_all_steps": 4.320989122064134e-10,
+          "residual_maxima": {
+            "energyResidual": 2.4969821236931446e-16,
+            "globalElementResidual": 8.56845277215791e-17,
+            "massResidual": 1.7281284048844186e-16,
+            "maxMechanicalResidual": 1.999306165068049e-09,
+            "maxUVResidual": 7.263765194917404e-13,
+            "maxVolumeResidual": 9.756639940405876e-13,
+            "momentumResidual": 1.0863862643932067e-18,
+            "speciesResidual": 8.640642024422093e-17
+          },
+          "retries": 0,
+          "steps": 15,
+          "temperature_peak_final": 2.6243804995829123e-07,
+          "velocity_error": 4.9942400351646185e-08
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-0-.1",
+        "name": "contact:16:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.9346008353322756,
+          "advection_phase_error": 3.2935152734034313e-17,
+          "advection_speed_relative_error": 5.2417923591081124e-17,
+          "alpha_profile_L1": 0.09000046063909058,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.2505985220486764e-07,
+            3.461497612988751e-07
+          ],
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-0-.1/0.0003293432182351",
+          "inventory_volume_error": 8.009459762092774e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.0783339499109701e-10,
+          "pressure_peak_all_steps": 4.3268866267709427e-10,
+          "residual_maxima": {
+            "energyResidual": 2.4969821236931446e-16,
+            "globalElementResidual": 2.570535831647373e-16,
+            "massResidual": 2.8082086579371806e-16,
+            "maxMechanicalResidual": 1.9995501920888614e-09,
+            "maxUVResidual": 6.72169316546564e-13,
+            "maxVolumeResidual": 9.945377854592152e-13,
+            "momentumResidual": 1.1950248922305603e-18,
+            "speciesResidual": 2.5921926073266283e-16
+          },
+          "retries": 0,
+          "steps": 30,
+          "temperature_peak_final": 2.393317117821425e-07,
+          "velocity_error": 6.477172242211944e-08
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-0-.1",
+        "name": "contact:32:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.9666686283224066,
+          "advection_phase_error": 1.2163187088111323e-16,
+          "advection_speed_relative_error": 1.935831348824434e-16,
+          "alpha_profile_L1": 0.0649464390728514,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.2498368202359416e-07,
+            3.4618625477378373e-07
+          ],
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-0-.1/0.0003293432182351",
+          "inventory_volume_error": 1.4361023481512802e-10,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.0227363227144348e-10,
+          "pressure_peak_all_steps": 4.3268666427564995e-10,
+          "residual_maxima": {
+            "energyResidual": 3.745473185539716e-16,
+            "globalElementResidual": 2.5705358316473724e-16,
+            "massResidual": 3.8882889109899413e-16,
+            "maxMechanicalResidual": 2.0598285299655572e-09,
+            "maxUVResidual": 8.365027320408824e-13,
+            "maxVolumeResidual": 9.99866855977416e-13,
+            "momentumResidual": 1.955495278942364e-18,
+            "speciesResidual": 2.5921926073266274e-16
+          },
+          "retries": 0,
+          "steps": 60,
+          "temperature_peak_final": 2.530881602069712e-07,
+          "velocity_error": 7.4272016895882e-08
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-0-.1",
+        "name": "contact:64:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.8852878343239347,
+          "advection_phase_error": 0.015947005433466707,
+          "advection_speed_relative_error": 0.025380447422495397,
+          "alpha_profile_L1": 0.08175143496639187,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": false
+          },
+          "environment_T_errors_K": [
+            4.3070065203210106e-07,
+            3.4639248269741074e-07
+          ],
+          "environment_volume_sum_error": 3.3306690738754696e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-2-.1/0.00016467160911755",
+          "inventory_volume_error": 2.0201507133776886e-11,
+          "minimum_species": 0.0,
+          "passed": false,
+          "pressure_L1_final": 1.6144074271862152e-10,
+          "pressure_peak_all_steps": 6.307299127428223e-10,
+          "residual_maxima": {
+            "energyResidual": 2.564155236830624e-16,
+            "globalElementResidual": 1.713690554431582e-16,
+            "massResidual": 2.160160506105523e-16,
+            "maxMechanicalResidual": 1.998097132194232e-09,
+            "maxUVResidual": 9.397817184656535e-13,
+            "maxVolumeResidual": 9.952039192739903e-13,
+            "momentumResidual": 9.713448454623988e-17,
+            "speciesResidual": 1.7281284048844186e-16
+          },
+          "retries": 0,
+          "steps": 21,
+          "temperature_peak_final": 2.093678403980448e-07,
+          "velocity_error": 5.462692591033317e-11
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-2-.1",
+        "name": "contact:16:2:.1",
+        "passed": false
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.940358913980145,
+          "advection_phase_error": 0.004007003544961464,
+          "advection_speed_relative_error": 0.006377344211673647,
+          "alpha_profile_L1": 0.07401345558101974,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.3071241861980525e-07,
+            3.469283456070116e-07
+          ],
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-.1/0.00016467160911755",
+          "inventory_volume_error": 4.1165293396261404e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.6663146557016617e-10,
+          "pressure_peak_all_steps": 6.930243046099349e-10,
+          "residual_maxima": {
+            "energyResidual": 3.8462328552459366e-16,
+            "globalElementResidual": 3.427381108863164e-16,
+            "massResidual": 3.024224708547733e-16,
+            "maxMechanicalResidual": 1.998120668922354e-09,
+            "maxUVResidual": 9.717354381076224e-13,
+            "maxVolumeResidual": 9.965361869035405e-13,
+            "momentumResidual": 1.942689690924798e-16,
+            "speciesResidual": 3.456256809768838e-16
+          },
+          "retries": 0,
+          "steps": 42,
+          "temperature_peak_final": 2.2685588874082896e-07,
+          "velocity_error": 8.636912093012662e-11
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-.1",
+        "name": "contact:32:2:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.9696514703471236,
+          "advection_phase_error": 0.0010029999492696098,
+          "advection_speed_relative_error": 0.0015963239984717868,
+          "alpha_profile_L1": 0.04988826353108891,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.3075851863250136e-07,
+            3.488556217234873e-07
+          ],
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-2-.1/0.00016467160911755",
+          "inventory_volume_error": 6.837963528738555e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.6807203545576854e-10,
+          "pressure_peak_all_steps": 7.734453078001025e-10,
+          "residual_maxima": {
+            "energyResidual": 3.846232855245935e-16,
+            "globalElementResidual": 1.7136905544315818e-16,
+            "massResidual": 3.672272860379389e-16,
+            "maxMechanicalResidual": 2.0365379382880633e-09,
+            "maxUVResidual": 9.70594233835037e-13,
+            "maxVolumeResidual": 9.992007221626409e-13,
+            "momentumResidual": 4.856724227311993e-16,
+            "speciesResidual": 1.7281284048844182e-16
+          },
+          "retries": 0,
+          "steps": 84,
+          "temperature_peak_final": 2.5889789867505897e-07,
+          "velocity_error": 1.258614332543152e-10
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-2-.1",
+        "name": "contact:64:2:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.8852878343239349,
+          "advection_phase_error": 0.015947005433466804,
+          "advection_speed_relative_error": 0.02538044742249555,
+          "alpha_profile_L1": 0.08175143496639185,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": false
+          },
+          "environment_T_errors_K": [
+            4.3070429001090815e-07,
+            3.4639248269741074e-07
+          ],
+          "environment_volume_sum_error": 2.220446049250313e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16--2-.1/0.00016467160911755",
+          "inventory_volume_error": 2.020172917838181e-11,
+          "minimum_species": 0.0,
+          "passed": false,
+          "pressure_L1_final": 1.6144103415216549e-10,
+          "pressure_peak_all_steps": 6.30724805716909e-10,
+          "residual_maxima": {
+            "energyResidual": 2.564155236830624e-16,
+            "globalElementResidual": 1.713690554431582e-16,
+            "massResidual": 1.0800802530527616e-16,
+            "maxMechanicalResidual": 1.998112231227367e-09,
+            "maxUVResidual": 9.386405141930784e-13,
+            "maxVolumeResidual": 9.952039192739903e-13,
+            "momentumResidual": 1.9426896909247976e-16,
+            "speciesResidual": 1.7281284048844186e-16
+          },
+          "retries": 0,
+          "steps": 21,
+          "temperature_peak_final": 2.0936977307428606e-07,
+          "velocity_error": 5.462748754016826e-11
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16--2-.1",
+        "name": "contact:16:-2:.1",
+        "passed": false
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.940358913980145,
+          "advection_phase_error": 0.004007003544961464,
+          "advection_speed_relative_error": 0.006377344211673647,
+          "alpha_profile_L1": 0.07401345558101956,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.3071673871963867e-07,
+            3.469296530056454e-07
+          ],
+          "environment_volume_sum_error": 2.220446049250313e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-.1/0.00016467160911755",
+          "inventory_volume_error": 4.1166181574681104e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.6663325233534643e-10,
+          "pressure_peak_all_steps": 6.930335194610393e-10,
+          "residual_maxima": {
+            "energyResidual": 2.5641552368306244e-16,
+            "globalElementResidual": 3.427381108863164e-16,
+            "massResidual": 3.8882889109899423e-16,
+            "maxMechanicalResidual": 1.998143428494359e-09,
+            "maxUVResidual": 9.711648359713305e-13,
+            "maxVolumeResidual": 9.969802761133906e-13,
+            "momentumResidual": 1.942689690924798e-16,
+            "speciesResidual": 3.456256809768838e-16
+          },
+          "retries": 0,
+          "steps": 42,
+          "temperature_peak_final": 2.268610614919453e-07,
+          "velocity_error": 8.636986976990675e-11
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-.1",
+        "name": "contact:32:-2:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.9696514703471238,
+          "advection_phase_error": 0.0010029999492693316,
+          "advection_speed_relative_error": 0.001596323998471344,
+          "alpha_profile_L1": 0.04988826353108882,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.3075374378531706e-07,
+            3.488590891720378e-07
+          ],
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64--2-.1/0.00016467160911755",
+          "inventory_volume_error": 6.837963528738555e-11,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 1.680761033823197e-10,
+          "pressure_peak_all_steps": 7.734413109972138e-10,
+          "residual_maxima": {
+            "energyResidual": 3.846232855245935e-16,
+            "globalElementResidual": 2.5705358316473724e-16,
+            "massResidual": 3.024224708547732e-16,
+            "maxMechanicalResidual": 2.0366062170040777e-09,
+            "maxUVResidual": 9.694530295624528e-13,
+            "maxVolumeResidual": 9.989786775577159e-13,
+            "momentumResidual": 3.885379381849594e-16,
+            "speciesResidual": 2.5921926073266274e-16
+          },
+          "retries": 0,
+          "steps": 84,
+          "temperature_peak_final": 2.5889926291711163e-07,
+          "velocity_error": 1.2586180767420525e-10
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64--2-.1",
+        "name": "contact:64:-2:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.4781052441973898,
+          "advection_phase_error": 0.048082104301086746,
+          "advection_speed_relative_error": 0.0063770871448150315,
+          "alpha_profile_L1": 0.2806618827801165,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.17328635649028e-07,
+            3.537849693202588e-07
+          ],
+          "environment_volume_sum_error": 1.1102230246251565e-15,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-1.2/0.0019760593094106",
+          "inventory_volume_error": 3.204781995336248e-10,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 3.305399669251141e-10,
+          "pressure_peak_all_steps": 7.811534752377725e-10,
+          "residual_maxima": {
+            "energyResidual": 7.692465710491873e-16,
+            "globalElementResidual": 4.284226386078955e-16,
+            "massResidual": 3.2402407591582855e-16,
+            "maxMechanicalResidual": 2.253652930939154e-09,
+            "maxUVResidual": 9.992219189115177e-13,
+            "maxVolumeResidual": 9.99866855977416e-13,
+            "momentumResidual": 4.856724227311995e-16,
+            "speciesResidual": 4.320321012211047e-16
+          },
+          "retries": 0,
+          "steps": 502,
+          "temperature_peak_final": 2.514955212973291e-07,
+          "velocity_error": 1.0569817333469174e-10
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-1.2",
+        "name": "contact:32:2:1.2",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "advection_amplitude_ratio": 0.4781052441973892,
+          "advection_phase_error": 0.048082104301088974,
+          "advection_speed_relative_error": 0.006377087144815326,
+          "alpha_profile_L1": 0.2806618827801165,
+          "checks": {
+            "advected_profile_amplitude": true,
+            "advection_speed": true
+          },
+          "environment_T_errors_K": [
+            4.173263050688547e-07,
+            3.537900852279563e-07
+          ],
+          "environment_volume_sum_error": 5.551115123125783e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-1.2/0.0019760593094106",
+          "inventory_volume_error": 3.2047886566743955e-10,
+          "minimum_species": 0.0,
+          "passed": true,
+          "pressure_L1_final": 3.305436063749667e-10,
+          "pressure_peak_all_steps": 7.811628011111793e-10,
+          "residual_maxima": {
+            "energyResidual": 3.8462328552459366e-16,
+            "globalElementResidual": 5.141071663294746e-16,
+            "massResidual": 3.8882889109899423e-16,
+            "maxMechanicalResidual": 2.2536744692658317e-09,
+            "maxUVResidual": 9.992219189115132e-13,
+            "maxVolumeResidual": 9.999778782798785e-13,
+            "momentumResidual": 4.856724227311995e-16,
+            "speciesResidual": 5.184385214653257e-16
+          },
+          "retries": 0,
+          "steps": 502,
+          "temperature_peak_final": 2.5150387727990164e-07,
+          "velocity_error": 1.0570360242309764e-10
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-1.2",
+        "name": "contact:32:-2:1.2",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "alpha_amplitude_ratio": 0.8365559191911194,
+          "amplitude_ratio": 0.8365252126792411,
+          "environment_volume_sum_error": 5.551115123125783e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-32-0-.1/0.000571945217528734",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 5.698977272831401e-16,
+            "globalElementResidual": 2.90481699179075e-16,
+            "massResidual": 2.3196479090046293e-16,
+            "maxMechanicalResidual": 1.9984229382430385e-08,
+            "maxUVResidual": 5.316725359173149e-15,
+            "maxVolumeResidual": 1.2656542480726785e-14,
+            "momentumResidual": 5.054531390882873e-18,
+            "speciesResidual": 3.092863878672839e-16
+          },
+          "retries": 0,
+          "speed_error": 0.006594004837053302,
+          "speed_expected": 437.1048001418776,
+          "speed_measured": 434.22252897544286,
+          "steps": 79
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-32-0-.1",
+        "name": "acoustic:32:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "alpha_amplitude_ratio": 0.914475047354816,
+          "amplitude_ratio": 0.9144420558808196,
+          "environment_volume_sum_error": 4.440892098500626e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-64-0-.1/0.000571945217528734",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 9.498295454719003e-16,
+            "globalElementResidual": 3.6310212397384375e-16,
+            "massResidual": 4.639295818009259e-16,
+            "maxMechanicalResidual": 1.9993443900467867e-08,
+            "maxUVResidual": 5.316731894273938e-15,
+            "maxVolumeResidual": 3.552713678800501e-15,
+            "momentumResidual": 2.7791302427984137e-18,
+            "speciesResidual": 3.8660798483410487e-16
+          },
+          "retries": 0,
+          "speed_error": 0.001822419149905996,
+          "speed_expected": 437.1048001418776,
+          "speed_measured": 436.3082119835832,
+          "steps": 157
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-64-0-.1",
+        "name": "acoustic:64:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "alpha_amplitude_ratio": 0.9564312384485827,
+          "amplitude_ratio": 0.9563805284922792,
+          "environment_volume_sum_error": 8.881784197001252e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-128-0-.1/0.000571945217528734",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 1.32976136366066e-15,
+            "globalElementResidual": 6.635848797267111e-16,
+            "massResidual": 6.958943727013887e-16,
+            "maxMechanicalResidual": 1.9998065425852474e-08,
+            "maxUVResidual": 5.316735066166566e-15,
+            "maxVolumeResidual": 1.3322676295501878e-15,
+            "momentumResidual": 5.476882009570663e-18,
+            "speciesResidual": 6.185727757345678e-16
+          },
+          "retries": 0,
+          "speed_error": 0.00047616834397035124,
+          "speed_expected": 437.1048001418776,
+          "speed_measured": 436.89666467305256,
+          "steps": 313
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-128-0-.1",
+        "name": "acoustic:128:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "alpha_amplitude_ratio": 0.9258475193012133,
+          "amplitude_ratio": 0.9258525871205385,
+          "environment_volume_sum_error": 8.881784197001252e-16,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-64-2-.1/0.000190648405842911",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 6.80727452130535e-16,
+            "globalElementResidual": 4.357225487686125e-16,
+            "massResidual": 4.639295818009259e-16,
+            "maxMechanicalResidual": 1.996786158642294e-08,
+            "maxUVResidual": 6.645853717318217e-15,
+            "maxVolumeResidual": 4.218847493575595e-15,
+            "momentumResidual": 5.928665629887812e-16,
+            "speciesResidual": 4.639295818009259e-16
+          },
+          "retries": 0,
+          "speed_error": 0.0016098594675162392,
+          "speed_expected": 1311.3144004256328,
+          "speed_measured": 1309.2033685232173,
+          "steps": 142
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/acoustic-64-2-.1",
+        "name": "acoustic:64:2:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "alpha_amplitude_ratio": null,
+          "amplitude_ratio": 0.8444031490808169,
+          "environment_volume_sum_error": 0.0,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/pure-acoustic-32-0-.1/0.00061333913043703",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 3.901264165724018e-16,
+            "globalElementResidual": 3.770948691523907e-16,
+            "massResidual": 3.770948691523907e-16,
+            "maxMechanicalResidual": 0.0,
+            "maxUVResidual": 5.31672556311642e-15,
+            "maxVolumeResidual": 1.1546319456101628e-14,
+            "momentumResidual": 7.367473031032139e-18,
+            "speciesResidual": 3.770948691523907e-16
+          },
+          "retries": 0,
+          "speed_error": 0.0063418960902562604,
+          "speed_expected": 407.60484305291993,
+          "speed_measured": 405.0198554923931,
+          "steps": 75
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/pure-acoustic-32-0-.1",
+        "name": "pure-acoustic:32:0:.1",
+        "passed": true
+      },
+      {
+        "analysis": {
+          "environment_volume_sum_error": 0.0,
+          "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/uniform-16-2-.1/0.000190648405842911",
+          "minimum_species": 0.0,
+          "passed": true,
+          "residual_maxima": {
+            "energyResidual": 0.0,
+            "globalElementResidual": 0.0,
+            "massResidual": 0.0,
+            "maxMechanicalResidual": 0.0,
+            "maxUVResidual": 1.3291707098080435e-15,
+            "maxVolumeResidual": 0.0,
+            "momentumResidual": 0.0,
+            "speciesResidual": 0.0
+          },
+          "retries": 0,
+          "steps": 36,
+          "uniform_error": 0.0
+        },
+        "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/uniform-16-2-.1",
+        "name": "uniform:16:2:.1",
+        "passed": true
+      }
+    ]
+  },
+  "mechanical_contacts": [
+    {
+      "advection_amplitude_ratio": 0.8746161110269767,
+      "advection_phase_error": 1.1757404126848803e-16,
+      "advection_speed_relative_error": 1.8712489847170368e-16,
+      "alpha_profile_L1": 0.12126761957426502,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.2507969055805006e-07,
+        3.460618245298974e-07
+      ],
+      "environment_volume_sum_error": 2.220446049250313e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-0-.1/0.0003293432182351",
+      "inventory_volume_error": 3.4672154036741176e-11,
+      "minimum_species": 0.0,
+      "name": "contact:16:0:.1",
+      "passed": true,
+      "pressure_L1_final": 1.1974947422555005e-10,
+      "pressure_peak_all_steps": 4.320989122064134e-10,
+      "residual_maxima": {
+        "energyResidual": 2.4969821236931446e-16,
+        "globalElementResidual": 8.56845277215791e-17,
+        "massResidual": 1.7281284048844186e-16,
+        "maxMechanicalResidual": 1.999306165068049e-09,
+        "maxUVResidual": 7.263765194917404e-13,
+        "maxVolumeResidual": 9.756639940405876e-13,
+        "momentumResidual": 1.0863862643932067e-18,
+        "speciesResidual": 8.640642024422093e-17
+      },
+      "retries": 0,
+      "steps": 15,
+      "temperature_peak_final": 2.6243804995829123e-07,
+      "velocity_error": 4.9942400351646185e-08
+    },
+    {
+      "advection_amplitude_ratio": 0.9346008353322756,
+      "advection_phase_error": 3.2935152734034313e-17,
+      "advection_speed_relative_error": 5.2417923591081124e-17,
+      "alpha_profile_L1": 0.09000046063909058,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.2505985220486764e-07,
+        3.461497612988751e-07
+      ],
+      "environment_volume_sum_error": 4.440892098500626e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-0-.1/0.0003293432182351",
+      "inventory_volume_error": 8.009459762092774e-11,
+      "minimum_species": 0.0,
+      "name": "contact:32:0:.1",
+      "passed": true,
+      "pressure_L1_final": 1.0783339499109701e-10,
+      "pressure_peak_all_steps": 4.3268866267709427e-10,
+      "residual_maxima": {
+        "energyResidual": 2.4969821236931446e-16,
+        "globalElementResidual": 2.570535831647373e-16,
+        "massResidual": 2.8082086579371806e-16,
+        "maxMechanicalResidual": 1.9995501920888614e-09,
+        "maxUVResidual": 6.72169316546564e-13,
+        "maxVolumeResidual": 9.945377854592152e-13,
+        "momentumResidual": 1.1950248922305603e-18,
+        "speciesResidual": 2.5921926073266283e-16
+      },
+      "retries": 0,
+      "steps": 30,
+      "temperature_peak_final": 2.393317117821425e-07,
+      "velocity_error": 6.477172242211944e-08
+    },
+    {
+      "advection_amplitude_ratio": 0.9666686283224066,
+      "advection_phase_error": 1.2163187088111323e-16,
+      "advection_speed_relative_error": 1.935831348824434e-16,
+      "alpha_profile_L1": 0.0649464390728514,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.2498368202359416e-07,
+        3.4618625477378373e-07
+      ],
+      "environment_volume_sum_error": 4.440892098500626e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-0-.1/0.0003293432182351",
+      "inventory_volume_error": 1.4361023481512802e-10,
+      "minimum_species": 0.0,
+      "name": "contact:64:0:.1",
+      "passed": true,
+      "pressure_L1_final": 1.0227363227144348e-10,
+      "pressure_peak_all_steps": 4.3268666427564995e-10,
+      "residual_maxima": {
+        "energyResidual": 3.745473185539716e-16,
+        "globalElementResidual": 2.5705358316473724e-16,
+        "massResidual": 3.8882889109899413e-16,
+        "maxMechanicalResidual": 2.0598285299655572e-09,
+        "maxUVResidual": 8.365027320408824e-13,
+        "maxVolumeResidual": 9.99866855977416e-13,
+        "momentumResidual": 1.955495278942364e-18,
+        "speciesResidual": 2.5921926073266274e-16
+      },
+      "retries": 0,
+      "steps": 60,
+      "temperature_peak_final": 2.530881602069712e-07,
+      "velocity_error": 7.4272016895882e-08
+    },
+    {
+      "advection_amplitude_ratio": 0.8852878343239347,
+      "advection_phase_error": 0.015947005433466707,
+      "advection_speed_relative_error": 0.025380447422495397,
+      "alpha_profile_L1": 0.08175143496639187,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": false
+      },
+      "environment_T_errors_K": [
+        4.3070065203210106e-07,
+        3.4639248269741074e-07
+      ],
+      "environment_volume_sum_error": 3.3306690738754696e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16-2-.1/0.00016467160911755",
+      "inventory_volume_error": 2.0201507133776886e-11,
+      "minimum_species": 0.0,
+      "name": "contact:16:2:.1",
+      "passed": false,
+      "pressure_L1_final": 1.6144074271862152e-10,
+      "pressure_peak_all_steps": 6.307299127428223e-10,
+      "residual_maxima": {
+        "energyResidual": 2.564155236830624e-16,
+        "globalElementResidual": 1.713690554431582e-16,
+        "massResidual": 2.160160506105523e-16,
+        "maxMechanicalResidual": 1.998097132194232e-09,
+        "maxUVResidual": 9.397817184656535e-13,
+        "maxVolumeResidual": 9.952039192739903e-13,
+        "momentumResidual": 9.713448454623988e-17,
+        "speciesResidual": 1.7281284048844186e-16
+      },
+      "retries": 0,
+      "steps": 21,
+      "temperature_peak_final": 2.093678403980448e-07,
+      "velocity_error": 5.462692591033317e-11
+    },
+    {
+      "advection_amplitude_ratio": 0.940358913980145,
+      "advection_phase_error": 0.004007003544961464,
+      "advection_speed_relative_error": 0.006377344211673647,
+      "alpha_profile_L1": 0.07401345558101974,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.3071241861980525e-07,
+        3.469283456070116e-07
+      ],
+      "environment_volume_sum_error": 4.440892098500626e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-.1/0.00016467160911755",
+      "inventory_volume_error": 4.1165293396261404e-11,
+      "minimum_species": 0.0,
+      "name": "contact:32:2:.1",
+      "passed": true,
+      "pressure_L1_final": 1.6663146557016617e-10,
+      "pressure_peak_all_steps": 6.930243046099349e-10,
+      "residual_maxima": {
+        "energyResidual": 3.8462328552459366e-16,
+        "globalElementResidual": 3.427381108863164e-16,
+        "massResidual": 3.024224708547733e-16,
+        "maxMechanicalResidual": 1.998120668922354e-09,
+        "maxUVResidual": 9.717354381076224e-13,
+        "maxVolumeResidual": 9.965361869035405e-13,
+        "momentumResidual": 1.942689690924798e-16,
+        "speciesResidual": 3.456256809768838e-16
+      },
+      "retries": 0,
+      "steps": 42,
+      "temperature_peak_final": 2.2685588874082896e-07,
+      "velocity_error": 8.636912093012662e-11
+    },
+    {
+      "advection_amplitude_ratio": 0.9696514703471236,
+      "advection_phase_error": 0.0010029999492696098,
+      "advection_speed_relative_error": 0.0015963239984717868,
+      "alpha_profile_L1": 0.04988826353108891,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.3075851863250136e-07,
+        3.488556217234873e-07
+      ],
+      "environment_volume_sum_error": 4.440892098500626e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64-2-.1/0.00016467160911755",
+      "inventory_volume_error": 6.837963528738555e-11,
+      "minimum_species": 0.0,
+      "name": "contact:64:2:.1",
+      "passed": true,
+      "pressure_L1_final": 1.6807203545576854e-10,
+      "pressure_peak_all_steps": 7.734453078001025e-10,
+      "residual_maxima": {
+        "energyResidual": 3.846232855245935e-16,
+        "globalElementResidual": 1.7136905544315818e-16,
+        "massResidual": 3.672272860379389e-16,
+        "maxMechanicalResidual": 2.0365379382880633e-09,
+        "maxUVResidual": 9.70594233835037e-13,
+        "maxVolumeResidual": 9.992007221626409e-13,
+        "momentumResidual": 4.856724227311993e-16,
+        "speciesResidual": 1.7281284048844182e-16
+      },
+      "retries": 0,
+      "steps": 84,
+      "temperature_peak_final": 2.5889789867505897e-07,
+      "velocity_error": 1.258614332543152e-10
+    },
+    {
+      "advection_amplitude_ratio": 0.8852878343239349,
+      "advection_phase_error": 0.015947005433466804,
+      "advection_speed_relative_error": 0.02538044742249555,
+      "alpha_profile_L1": 0.08175143496639185,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": false
+      },
+      "environment_T_errors_K": [
+        4.3070429001090815e-07,
+        3.4639248269741074e-07
+      ],
+      "environment_volume_sum_error": 2.220446049250313e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-16--2-.1/0.00016467160911755",
+      "inventory_volume_error": 2.020172917838181e-11,
+      "minimum_species": 0.0,
+      "name": "contact:16:-2:.1",
+      "passed": false,
+      "pressure_L1_final": 1.6144103415216549e-10,
+      "pressure_peak_all_steps": 6.30724805716909e-10,
+      "residual_maxima": {
+        "energyResidual": 2.564155236830624e-16,
+        "globalElementResidual": 1.713690554431582e-16,
+        "massResidual": 1.0800802530527616e-16,
+        "maxMechanicalResidual": 1.998112231227367e-09,
+        "maxUVResidual": 9.386405141930784e-13,
+        "maxVolumeResidual": 9.952039192739903e-13,
+        "momentumResidual": 1.9426896909247976e-16,
+        "speciesResidual": 1.7281284048844186e-16
+      },
+      "retries": 0,
+      "steps": 21,
+      "temperature_peak_final": 2.0936977307428606e-07,
+      "velocity_error": 5.462748754016826e-11
+    },
+    {
+      "advection_amplitude_ratio": 0.940358913980145,
+      "advection_phase_error": 0.004007003544961464,
+      "advection_speed_relative_error": 0.006377344211673647,
+      "alpha_profile_L1": 0.07401345558101956,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.3071673871963867e-07,
+        3.469296530056454e-07
+      ],
+      "environment_volume_sum_error": 2.220446049250313e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-.1/0.00016467160911755",
+      "inventory_volume_error": 4.1166181574681104e-11,
+      "minimum_species": 0.0,
+      "name": "contact:32:-2:.1",
+      "passed": true,
+      "pressure_L1_final": 1.6663325233534643e-10,
+      "pressure_peak_all_steps": 6.930335194610393e-10,
+      "residual_maxima": {
+        "energyResidual": 2.5641552368306244e-16,
+        "globalElementResidual": 3.427381108863164e-16,
+        "massResidual": 3.8882889109899423e-16,
+        "maxMechanicalResidual": 1.998143428494359e-09,
+        "maxUVResidual": 9.711648359713305e-13,
+        "maxVolumeResidual": 9.969802761133906e-13,
+        "momentumResidual": 1.942689690924798e-16,
+        "speciesResidual": 3.456256809768838e-16
+      },
+      "retries": 0,
+      "steps": 42,
+      "temperature_peak_final": 2.268610614919453e-07,
+      "velocity_error": 8.636986976990675e-11
+    },
+    {
+      "advection_amplitude_ratio": 0.9696514703471238,
+      "advection_phase_error": 0.0010029999492693316,
+      "advection_speed_relative_error": 0.001596323998471344,
+      "alpha_profile_L1": 0.04988826353108882,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.3075374378531706e-07,
+        3.488590891720378e-07
+      ],
+      "environment_volume_sum_error": 4.440892098500626e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-64--2-.1/0.00016467160911755",
+      "inventory_volume_error": 6.837963528738555e-11,
+      "minimum_species": 0.0,
+      "name": "contact:64:-2:.1",
+      "passed": true,
+      "pressure_L1_final": 1.680761033823197e-10,
+      "pressure_peak_all_steps": 7.734413109972138e-10,
+      "residual_maxima": {
+        "energyResidual": 3.846232855245935e-16,
+        "globalElementResidual": 2.5705358316473724e-16,
+        "massResidual": 3.024224708547732e-16,
+        "maxMechanicalResidual": 2.0366062170040777e-09,
+        "maxUVResidual": 9.694530295624528e-13,
+        "maxVolumeResidual": 9.989786775577159e-13,
+        "momentumResidual": 3.885379381849594e-16,
+        "speciesResidual": 2.5921926073266274e-16
+      },
+      "retries": 0,
+      "steps": 84,
+      "temperature_peak_final": 2.5889926291711163e-07,
+      "velocity_error": 1.2586180767420525e-10
+    },
+    {
+      "advection_amplitude_ratio": 0.4781052441973898,
+      "advection_phase_error": 0.048082104301086746,
+      "advection_speed_relative_error": 0.0063770871448150315,
+      "alpha_profile_L1": 0.2806618827801165,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.17328635649028e-07,
+        3.537849693202588e-07
+      ],
+      "environment_volume_sum_error": 1.1102230246251565e-15,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32-2-1.2/0.0019760593094106",
+      "inventory_volume_error": 3.204781995336248e-10,
+      "minimum_species": 0.0,
+      "name": "contact:32:2:1.2",
+      "passed": true,
+      "pressure_L1_final": 3.305399669251141e-10,
+      "pressure_peak_all_steps": 7.811534752377725e-10,
+      "residual_maxima": {
+        "energyResidual": 7.692465710491873e-16,
+        "globalElementResidual": 4.284226386078955e-16,
+        "massResidual": 3.2402407591582855e-16,
+        "maxMechanicalResidual": 2.253652930939154e-09,
+        "maxUVResidual": 9.992219189115177e-13,
+        "maxVolumeResidual": 9.99866855977416e-13,
+        "momentumResidual": 4.856724227311995e-16,
+        "speciesResidual": 4.320321012211047e-16
+      },
+      "retries": 0,
+      "steps": 502,
+      "temperature_peak_final": 2.514955212973291e-07,
+      "velocity_error": 1.0569817333469174e-10
+    },
+    {
+      "advection_amplitude_ratio": 0.4781052441973892,
+      "advection_phase_error": 0.048082104301088974,
+      "advection_speed_relative_error": 0.006377087144815326,
+      "alpha_profile_L1": 0.2806618827801165,
+      "checks": {
+        "advected_profile_amplitude": true,
+        "advection_speed": true
+      },
+      "environment_T_errors_K": [
+        4.173263050688547e-07,
+        3.537900852279563e-07
+      ],
+      "environment_volume_sum_error": 5.551115123125783e-16,
+      "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-v8/contact-32--2-1.2/0.0019760593094106",
+      "inventory_volume_error": 3.2047886566743955e-10,
+      "minimum_species": 0.0,
+      "name": "contact:32:-2:1.2",
+      "passed": true,
+      "pressure_L1_final": 3.305436063749667e-10,
+      "pressure_peak_all_steps": 7.811628011111793e-10,
+      "residual_maxima": {
+        "energyResidual": 3.8462328552459366e-16,
+        "globalElementResidual": 5.141071663294746e-16,
+        "massResidual": 3.8882889109899423e-16,
+        "maxMechanicalResidual": 2.2536744692658317e-09,
+        "maxUVResidual": 9.992219189115132e-13,
+        "maxVolumeResidual": 9.999778782798785e-13,
+        "momentumResidual": 4.856724227311995e-16,
+        "speciesResidual": 5.184385214653257e-16
+      },
+      "retries": 0,
+      "steps": 502,
+      "temperature_peak_final": 2.5150387727990164e-07,
+      "velocity_error": 1.0570360242309764e-10
+    }
+  ],
+  "mechanical_grid_convergence": [
+    {
+      "alpha_profile_L1": [
+        0.12126761957426502,
+        0.09000046063909058,
+        0.0649464390728514
+      ],
+      "cells": [
+        16,
+        32,
+        64
+      ],
+      "mach": 0,
+      "strictly_decreasing": true
+    },
+    {
+      "alpha_profile_L1": [
+        0.08175143496639187,
+        0.07401345558101974,
+        0.04988826353108891
+      ],
+      "cells": [
+        16,
+        32,
+        64
+      ],
+      "mach": 2,
+      "strictly_decreasing": true
+    },
+    {
+      "alpha_profile_L1": [
+        0.08175143496639185,
+        0.07401345558101956,
+        0.04988826353108882
+      ],
+      "cells": [
+        16,
+        32,
+        64
+      ],
+      "mach": -2,
+      "strictly_decreasing": true
+    }
+  ],
+  "mechanical_runtime": {
+    "backend_sha256": "d3dfda73b769e37d19a0bc2f939dcd508c3af4060f5de880dd195b056deaed77",
+    "passed": true,
+    "solver_sha256": "7b225010d383c26e4ca4e4b404f24fbee79077ef1725cdd83d82b159b70ea873",
+    "tests": [
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+        ],
+        "name": "negative_environment_mass",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+        ],
+        "name": "invalid_volume_sum",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+        ],
+        "name": "mass_without_volume",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+        ],
+        "name": "unsupported_chemistry",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+        ],
+        "name": "unsupported_heat_transfer",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "last_lines": [
+          "",
+          "Create mesh for time = 0",
+          "",
+          "REACTIVE_FAILURE Conserved restart species order/EOS/mechanism fingerprint differs; an explicit model migration is required"
+        ],
+        "name": "closure_restart_mismatch",
+        "passed": true,
+        "returncode": 1
+      },
+      {
+        "continuous_steps": 20,
+        "field_relative_errors": {
+          "T": 1.0012020842042721e-12,
+          "alphaEnvironment": 5.551115123125783e-17,
+          "betaEnvironment": 1.3877787807814457e-17,
+          "environmentE0": 2.0457039346193198e-13,
+          "environmentE1": 4.813680372232288e-15,
+          "environmentT0": 1.0023389525817645e-12,
+          "environmentT1": 5.059064277319199e-14,
+          "p": 5.515175870001921e-13,
+          "q0": 2.220446049250313e-16,
+          "q1": 0.0,
+          "q2": 2.220446049250313e-16,
+          "q3": 0.0,
+          "q4": 1.0408340855860843e-17,
+          "q5": 0.0,
+          "q6": 0.0,
+          "q7": 1.1102230246251565e-16,
+          "rhoMomentum": 1.5245396859508633e-15,
+          "rhoTotalEnergy": 1.3741859079702582e-15
+        },
+        "final_time": 2e-05,
+        "name": "moving_contact_conserved_restart",
+        "passed": true
+      },
+      {
+        "common_total_energy": -5610301.29207471,
+        "homogeneous_T": 293.8057068073994,
+        "homogeneous_pressure": 99393.9656710273,
+        "meaning": "HEM thermally and molecularly equilibrates the inventories; ME keeps the two spatial environments separate",
+        "mechanical_T": 300.00000000000665,
+        "mechanical_pressure": 99999.99999999939,
+        "name": "unmixed_ME_versus_molecular_HEM",
+        "passed": true,
+        "separate_energy_error": 6.640089550492373e-16
+      }
+    ]
+  },
+  "schema_version": 1,
+  "source_artifacts": {
+    "chemical": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/results/chemical-jacobian-final.json",
+      "sha256": "edfb557abee7b19c61ef32bda621e9267cf78139b55124575ae3582c5bd7dd2d"
+    },
+    "hem": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/reactive-review-final-v7/campaign.json",
+      "sha256": "bacb8f57ae0d039b20d7ada3aaeccb3721402d8b227504cf5f1c298d028ff8cc"
+    },
+    "hem_runtime": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/reactive-runtime-review-v7/validation.json",
+      "sha256": "e8b2167ae5eb8652e886a9de4f8ab0b1e92279f5d94ffaf0dfe51107648dccf1"
+    },
+    "legacy": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/multiphase-final-regressions/checks.json",
+      "sha256": "92bc3167c3d3d4418890e4b0580c40d7c7bec474c62d849ba884a013a0020c2b"
+    },
+    "mechanical": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-review-final-analysis-v3/campaign.json",
+      "sha256": "c354fc8166cd43dd59deffc87979c0fd17fd30887b75c8a4282359e5b45788ad"
+    },
+    "mechanical_runtime": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/cases/mechanical-runtime-final-v7/validation.json",
+      "sha256": "b4d41dce07dc67daf8c76095e8d48d9fbfa294f3a881996f2d4f3b4858d1e31d"
+    },
+    "n2o": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/results/n2o-reference-eos-comparison.json",
+      "sha256": "888302fdfe9b729acdd7136793202847d0118d40c8082dbb109f0914a495e744"
+    },
+    "pr_original_restart": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/pr-restart-original-probe/comparison.json",
+      "sha256": "2e6b3e43de1218931ad4502a17850d512589641809f2edf6e93c1aaf6a1e2805"
+    },
+    "pr_restart": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/pr-restart-policy-v4/validation.json",
+      "sha256": "5927a9ec4cc1e24908bbc580eaa1925f7954d1d5b44de67e10e2a04ddfe98f7c"
+    },
+    "pr_restart_before": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/benchmarks/pr-restart-policy/validation.json",
+      "sha256": "4d60ea8675253330acb9608bbeec7f94b32629ff8786bf9780621a61ec0810a7"
+    },
+    "thermo": {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/results/reactive-thermo-validation-review-v7.json",
+      "sha256": "6b4df39a2754cffc527e209414eb852e536c6a84e10b434cbe0b65aebee551b2"
+    }
+  },
+  "thermo": {
+    "cantera_version": "3.2.0",
+    "inputs": {
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleReactiveBackend.so": "d3dfda73b769e37d19a0bc2f939dcd508c3af4060f5de880dd195b056deaed77",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4/manifest.json": "d75dab43575e0bf4f21e473f978a388bbaddae14594883a8a3d4d20dbedf43a8",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/tools/validate_reactive_thermo.py": "b039bfd4c48fc036c17f37ffe676e618553890038dc52c31cfd8e13e8ff3e651"
+    },
+    "passed": true,
+    "scope": "Numerical and thermodynamic consistency; not experimental propulsion validation",
+    "tests": [
+      {
+        "data": [
+          {
+            "max_derivative_relative_error": 3.0475763765126305e-09,
+            "mu_gibbs_relative_error": 1.5066006355353688e-16,
+            "phase": 0,
+            "species": "N2O"
+          },
+          {
+            "max_derivative_relative_error": 2.0934985245957998e-07,
+            "mu_gibbs_relative_error": 0.0,
+            "phase": 1,
+            "species": "IC3H7OH"
+          },
+          {
+            "max_derivative_relative_error": 4.898708634794806e-10,
+            "mu_gibbs_relative_error": 6.457212023817883e-17,
+            "phase": -1,
+            "species": "N2O"
+          },
+          {
+            "max_derivative_relative_error": 2.661514647101255e-10,
+            "mu_gibbs_relative_error": 2.224065733316286e-13,
+            "phase": -1,
+            "species": "N2"
+          }
+        ],
+        "name": "phase_differential_identities",
+        "passed": true,
+        "seconds": 0.00018990599892276805
+      },
+      {
+        "data": [
+          {
+            "Clapeyron_relative_error": 6.45483755334908e-09,
+            "CoolProp_psat_Pa": 1187771.2948284661,
+            "PR_psat_relative_difference": -0.003955389536511422,
+            "T_K": 240.0,
+            "latent_J_kg": 302733.2689010296,
+            "p_Pa": 1183073.196677133,
+            "species": "N2O"
+          },
+          {
+            "Clapeyron_relative_error": 3.988831043244545e-09,
+            "CoolProp_psat_Pa": 2877209.9859167626,
+            "PR_psat_relative_difference": 0.0004846060969105892,
+            "T_K": 270.0,
+            "latent_J_kg": 242212.42417945154,
+            "p_Pa": 2878604.29941803,
+            "species": "N2O"
+          },
+          {
+            "Clapeyron_relative_error": 3.426459782573943e-09,
+            "CoolProp_psat_Pa": 3999999.9906691257,
+            "PR_psat_relative_difference": 0.0033725403995754633,
+            "T_K": 283.137492,
+            "latent_J_kg": 203273.7736783803,
+            "p_Pa": 4013490.1522359587,
+            "species": "N2O"
+          },
+          {
+            "Clapeyron_relative_error": 3.436310924698205e-08,
+            "T_K": 300.0,
+            "latent_J_kg": 728198.3697623536,
+            "p_Pa": 7277.84266752018,
+            "species": "IC3H7OH"
+          },
+          {
+            "Clapeyron_relative_error": 1.3437097434731982e-08,
+            "T_K": 350.0,
+            "latent_J_kg": 657633.5996056926,
+            "p_Pa": 81885.30887788125,
+            "species": "IC3H7OH"
+          }
+        ],
+        "name": "saturation_and_Clapeyron",
+        "passed": true,
+        "seconds": 0.023081343000740162
+      },
+      {
+        "data": [
+          {
+            "Y": {
+              "N2O": 1
+            },
+            "guess_sensitivity": 1.9571710918597773e-10,
+            "initial": {
+              "T": 283.137492,
+              "activeLiquids": 1,
+              "alphaGas": 0.6411283177409288,
+              "alphaLiquid": [
+                0.35887168225907135,
+                0.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2773.4499708793946,
+              "cv": 2344.69593879074,
+              "e": 1609834.508668705,
+              "energyResidual": 0.0,
+              "entropy": 3538.1801678229813,
+              "gasMass": 74.1202105665509,
+              "iterations": 0,
+              "liquidMass": [
+                296.48084226620364,
+                0.0
+              ],
+              "p": 4000000.0,
+              "rho": 370.60105283275453,
+              "rhoGas": 115.60901073239111,
+              "rhoLiquid": [
+                826.1472189721912,
+                0.0
+              ],
+              "soundEquilibrium": 102.3762720838607,
+              "soundFrozen": 102.3762720838607,
+              "volumeResidual": 0.0
+            },
+            "result": {
+              "T": 283.0813825555436,
+              "activeLiquids": 1,
+              "alphaGas": 0.6419724463299239,
+              "alphaLiquid": [
+                0.35802755382972945,
+                0.0
+              ],
+              "chemicalResidual": 1.283950723518501e-11,
+              "cp": 2767.384551362697,
+              "cv": 2336.883639245292,
+              "e": 1609834.508678256,
+              "energyResidual": 5.933026614216877e-12,
+              "entropy": 3538.1803722645823,
+              "gasMass": 74.54976980408497,
+              "iterations": 2,
+              "liquidMass": [
+                296.05128302866956,
+                0.0
+              ],
+              "p": 4008039.0259577786,
+              "rho": 370.60105283275453,
+              "rhoGas": 116.1261207241474,
+              "rhoLiquid": [
+                826.8952483178584,
+                0.0
+              ],
+              "soundEquilibrium": 80.19519032203887,
+              "soundFrozen": 102.24529784506966,
+              "volumeResidual": 1.5965340161017139e-10
+            },
+            "sound_relative_error": 3.8850656025601893e-10
+          },
+          {
+            "Y": {
+              "N2O": 1
+            },
+            "guess_sensitivity": 1.2806466997972166e-10,
+            "initial": {
+              "T": 270.0,
+              "activeLiquids": 1,
+              "alphaGas": 0.8273467530311539,
+              "alphaLiquid": [
+                0.17265324696884582,
+                0.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2094.8602543464317,
+              "cv": 1832.7765340501599,
+              "e": 1605426.2954852628,
+              "energyResidual": 0.0,
+              "entropy": 3543.0473998085463,
+              "gasMass": 68.50197426842465,
+              "iterations": 0,
+              "liquidMass": [
+                159.83793995965755,
+                0.0
+              ],
+              "p": 3000000.0,
+              "rho": 228.3399142280822,
+              "rhoGas": 82.79717544965719,
+              "rhoLiquid": [
+                925.7743063963303,
+                0.0
+              ],
+              "soundEquilibrium": 107.50198119672736,
+              "soundFrozen": 107.50198119672736,
+              "volumeResidual": 0.0
+            },
+            "result": {
+              "T": 271.0228185962255,
+              "activeLiquids": 1,
+              "alphaGas": 0.8230326912250336,
+              "alphaLiquid": [
+                0.17696730877528785,
+                0.0
+              ],
+              "chemicalResidual": 5.329070518200751e-15,
+              "cp": 2129.770689309675,
+              "cv": 1881.640359706816,
+              "e": 1605426.2954852732,
+              "energyResidual": 6.503810663390722e-15,
+              "entropy": 3543.0757558148284,
+              "gasMass": 65.9805555560441,
+              "iterations": 4,
+              "liquidMass": [
+                162.3593586720381,
+                0.0
+              ],
+              "p": 2957238.0734583596,
+              "rho": 228.3399142280822,
+              "rhoGas": 80.167599974475,
+              "rhoLiquid": [
+                917.4539625180216,
+                0.0
+              ],
+              "soundEquilibrium": 95.42455670794165,
+              "soundFrozen": 107.80195195776028,
+              "volumeResidual": 3.2152058793144533e-13
+            },
+            "sound_relative_error": 3.943123605409937e-10
+          },
+          {
+            "Y": {
+              "IC3H7OH": 1
+            },
+            "guess_sensitivity": 7.684346670089326e-08,
+            "initial": {
+              "T": 300.0,
+              "activeLiquids": 2,
+              "alphaGas": 0.0,
+              "alphaLiquid": [
+                0.0,
+                1.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2788.6622326807656,
+              "cv": 2226.691292153719,
+              "e": -5266490.98278113,
+              "energyResidual": 0.0,
+              "entropy": 3082.2216421215658,
+              "gasMass": 0.0,
+              "iterations": 0,
+              "liquidMass": [
+                0.0,
+                755.3272542836073
+              ],
+              "p": 5000000.0,
+              "rho": 755.3272542836073,
+              "rhoGas": 0.0,
+              "rhoLiquid": [
+                0.0,
+                755.3272542836073
+              ],
+              "soundEquilibrium": 1494.2546442911303,
+              "soundFrozen": 1494.2546442911303,
+              "volumeResidual": 0.0
+            },
+            "result": {
+              "T": 300.0,
+              "activeLiquids": 2,
+              "alphaGas": 0.0,
+              "alphaLiquid": [
+                0.0,
+                1.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2788.6622326807656,
+              "cv": 2226.691292153719,
+              "e": -5266490.98278113,
+              "energyResidual": 0.0,
+              "entropy": 3082.2216421215658,
+              "gasMass": 0.0,
+              "iterations": 0,
+              "liquidMass": [
+                0.0,
+                755.3272542836073
+              ],
+              "p": 5000000.0,
+              "rho": 755.3272542836073,
+              "rhoGas": 0.0,
+              "rhoLiquid": [
+                0.0,
+                755.3272542836073
+              ],
+              "soundEquilibrium": 1494.2546442911303,
+              "soundFrozen": 1494.2546442911303,
+              "volumeResidual": 0.0
+            },
+            "sound_relative_error": null
+          },
+          {
+            "Y": {
+              "N2O": 1
+            },
+            "guess_sensitivity": 3.0475622025960547e-13,
+            "initial": {
+              "T": 283.0,
+              "activeLiquids": 1,
+              "alphaGas": 0.0,
+              "alphaLiquid": [
+                1.0,
+                0.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2802.1492583563977,
+              "cv": 890.8336058249325,
+              "e": 1570857.4414691771,
+              "energyResidual": 0.0,
+              "entropy": 3378.965474925497,
+              "gasMass": 0.0,
+              "iterations": 0,
+              "liquidMass": [
+                846.4347107139145,
+                0.0
+              ],
+              "p": 5000000.0,
+              "rho": 846.4347107139145,
+              "rhoGas": 0.0,
+              "rhoLiquid": [
+                846.4347107139145,
+                0.0
+              ],
+              "soundEquilibrium": 424.87480653109094,
+              "soundFrozen": 424.87480653109094,
+              "volumeResidual": 0.0
+            },
+            "result": {
+              "T": 283.0,
+              "activeLiquids": 1,
+              "alphaGas": 0.0,
+              "alphaLiquid": [
+                1.0,
+                0.0
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2802.1492583563977,
+              "cv": 890.8336058249325,
+              "e": 1570857.4414691771,
+              "energyResidual": 0.0,
+              "entropy": 3378.965474925497,
+              "gasMass": 0.0,
+              "iterations": 0,
+              "liquidMass": [
+                846.4347107139145,
+                0.0
+              ],
+              "p": 5000000.0,
+              "rho": 846.4347107139145,
+              "rhoGas": 0.0,
+              "rhoLiquid": [
+                846.4347107139145,
+                0.0
+              ],
+              "soundEquilibrium": 424.87480653109094,
+              "soundFrozen": 424.87480653109094,
+              "volumeResidual": 0.0
+            },
+            "sound_relative_error": null
+          },
+          {
+            "Y": {
+              "IC3H7OH": 0.19,
+              "N2": 0.01,
+              "N2O": 0.8
+            },
+            "guess_sensitivity": 1.8271262280933342e-10,
+            "initial": {
+              "T": 270.0,
+              "activeLiquids": 3,
+              "alphaGas": 0.8013615395001776,
+              "alphaLiquid": [
+                0.14755777278736854,
+                0.05108068771245381
+              ],
+              "chemicalResidual": 0.0,
+              "cp": 2304.5147621805663,
+              "cv": 2203.4499388358604,
+              "e": 255495.33357895768,
+              "energyResidual": 0.0,
+              "entropy": 3394.5406305056003,
+              "gasMass": 36.20350757756759,
+              "iterations": 0,
+              "liquidMass": [
+                134.78909162096144,
+                39.615356459223186
+              ],
+              "p": 2000000.0,
+              "rho": 210.60795565775223,
+              "rhoGas": 45.17749579066187,
+              "rhoLiquid": [
+                913.4665634672677,
+                775.5446967007983
+              ],
+              "soundEquilibrium": 100.95957799453566,
+              "soundFrozen": 100.95957799453566,
+              "volumeResidual": 0.0
+            },
+            "result": {
+              "T": 262.11858949751877,
+              "activeLiquids": 3,
+              "alphaGas": 0.8296966873706907,
+              "alphaLiquid": [
+                0.1191297859180866,
+                0.051173527157589535
+              ],
+              "chemicalResidual": 8.484587965540413e-08,
+              "cp": 2028.1273136630862,
+              "cv": 1866.004269956506,
+              "e": 255495.3336009316,
+              "energyResidual": 4.069245381158258e-11,
+              "entropy": 3397.6827274206603,
+              "gasMass": 54.36268576318674,
+              "iterations": 10,
+              "liquidMass": [
+                116.28281329985484,
+                39.962456594710645
+              ],
+              "p": 2535754.984314926,
+              "rho": 210.60795565775223,
+              "rhoGas": 65.52115561104881,
+              "rhoLiquid": [
+                976.1019244994754,
+                780.9205035182692
+              ],
+              "soundEquilibrium": 93.86445636363466,
+              "soundFrozen": 106.58246903675771,
+              "volumeResidual": 4.4636672136277866e-10
+            },
+            "sound_relative_error": 8.407934071197332e-08
+          }
+        ],
+        "name": "UV_flash_and_equilibrium_sound",
+        "passed": true,
+        "seconds": 0.04736692600090464
+      },
+      {
+        "data": {
+          "rejected_invalid_inputs": 3
+        },
+        "name": "invalid_state_guards",
+        "passed": true,
+        "seconds": 6.712999856972601e-05
+      },
+      {
+        "data": [
+          {
+            "T0_K": 1800.0,
+            "T_K": 1801.4907146759308,
+            "dt_s": 0.0001,
+            "element_mass_drift": 9.258297933829524e-16,
+            "minimum_species_mass": 0.0,
+            "reactor_T_relative_error": 1.7255086248724183e-12,
+            "reactor_Y_Linf_error": 2.2506410797540344e-13,
+            "two_half_steps_T_relative_error": 3.0266900097331018e-12
+          },
+          {
+            "T0_K": 2200.0,
+            "T_K": 2333.2609658276824,
+            "dt_s": 1e-05,
+            "element_mass_drift": 6.82595091031509e-14,
+            "minimum_species_mass": 0.0,
+            "reactor_T_relative_error": 4.0289771519042006e-11,
+            "reactor_Y_Linf_error": 1.4225173122772716e-11,
+            "two_half_steps_T_relative_error": 9.014455848443959e-12
+          }
+        ],
+        "name": "full_mechanism_closed_reactor",
+        "passed": true,
+        "seconds": 22.750442037999164
+      }
+    ]
+  }
+}

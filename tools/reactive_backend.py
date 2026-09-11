@@ -35,6 +35,19 @@ class PhaseProperties(C.Structure):
         return {name: getattr(self, name) for name, _ in self._fields_}
 
 
+class ChemicalStats(C.Structure):
+    _fields_ = [(name, C.c_ulonglong) for name in (
+        "rhsCalls", "uvCalls", "fixedStateCalls", "jacobianCalls", "structuredCalls", "fallbackCalls")]
+
+
+class MechanicalState(C.Structure):
+    _fields_ = [("mixture", State), ("environment", State*2), ("energyA", C.c_double),
+                ("dilatationK", C.c_double), ("pressureResidual", C.c_double)]
+
+    def copy(self):
+        return MechanicalState.from_buffer_copy(self)
+
+
 class Backend:
     def __init__(self, configuration, library=None):
         root = Path(__file__).resolve().parents[1]
@@ -55,6 +68,12 @@ class Backend:
             "phase": ([void, C.c_int, double, double, ptr, C.c_size_t, C.POINTER(PhaseProperties)], C.c_int),
             "make_state": ([void, double, double, ptr, ptr, ptr, ptr, C.POINTER(State)], C.c_int),
             "recover": ([void, ptr, double, C.c_int, C.POINTER(State)], C.c_int),
+            "recover_mechanical": ([void, ptr, ptr, double, double, double, C.POINTER(MechanicalState)], C.c_int),
+            "set_chemical_jacobian": ([void, C.c_int], C.c_int),
+            "chemical_stats": ([void, C.c_int, C.POINTER(ChemicalStats)], C.c_int),
+            "chemical_integration_fallbacks": ([void], C.c_ulonglong),
+            "chemical_jacobian": ([void, ptr, double, C.c_int, C.POINTER(State), ptr, C.POINTER(C.c_int)], C.c_int),
+            "chemical_rhs": ([void, ptr, double, C.c_int, C.POINTER(State), ptr], C.c_int),
             "react": ([void, ptr, double, double, C.c_int, double, double, C.POINTER(State), ptr], C.c_int),
         }
         for name, (args, result) in specs.items():
@@ -142,3 +161,30 @@ class Backend:
         q, values = self.vector(q), np.empty(self.ns)
         self.check(self.lib.pintle_rt_gas_enthalpies(self.handle, self.pointer(q), C.byref(state), self.pointer(values)))
         return values
+
+    def set_chemical_jacobian(self, structured=True):
+        self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))
+
+    def chemical_stats(self, reset=False):
+        result = ChemicalStats()
+        fallbacks = self.lib.pintle_rt_chemical_integration_fallbacks(self.handle)
+        self.check(self.lib.pintle_rt_chemical_stats(self.handle, int(reset), C.byref(result)))
+        return {name: getattr(result, name) for name, _ in result._fields_} | {"integrationFallbacks": fallbacks}
+
+    def chemical_jacobian(self, q, energy, guess, equilibrium=True):
+        q, result, used = self.vector(q), np.empty((self.ns, self.ns)), C.c_int()
+        self.check(self.lib.pintle_rt_chemical_jacobian(self.handle, self.pointer(q), energy,
+                   int(equilibrium), C.byref(guess), self.pointer(result), C.byref(used)))
+        return result, bool(used.value)
+
+    def chemical_rhs(self, q, energy, guess, equilibrium=True):
+        q, result = self.vector(q), np.empty(self.ns)
+        self.check(self.lib.pintle_rt_chemical_rhs(self.handle, self.pointer(q), energy,
+                   int(equilibrium), C.byref(guess), self.pointer(result)))
+        return result
+
+    def recover_mechanical(self, qa, qb, alpha, energy, guess, beta=None):
+        qa, qb, result = self.vector(qa), self.vector(qb), guess.copy()
+        self.check(self.lib.pintle_rt_recover_mechanical(self.handle, self.pointer(qa), self.pointer(qb),
+                   alpha, 1-alpha if beta is None else beta, energy, C.byref(result)))
+        return result

@@ -1,0 +1,480 @@
+{
+  "cantera_version": "3.2.0",
+  "tests": [
+    {
+      "name": "phase_differential_identities",
+      "passed": true,
+      "data": [
+        {
+          "species": "N2O",
+          "phase": 0,
+          "max_derivative_relative_error": 3.0475763765126305e-09,
+          "mu_gibbs_relative_error": 1.5066006355353688e-16
+        },
+        {
+          "species": "IC3H7OH",
+          "phase": 1,
+          "max_derivative_relative_error": 2.0934985245957998e-07,
+          "mu_gibbs_relative_error": 0.0
+        },
+        {
+          "species": "N2O",
+          "phase": -1,
+          "max_derivative_relative_error": 4.898708634794806e-10,
+          "mu_gibbs_relative_error": 6.457212023817883e-17
+        },
+        {
+          "species": "N2",
+          "phase": -1,
+          "max_derivative_relative_error": 2.661514647101255e-10,
+          "mu_gibbs_relative_error": 2.224065733316286e-13
+        }
+      ],
+      "seconds": 0.00018990599892276805
+    },
+    {
+      "name": "saturation_and_Clapeyron",
+      "passed": true,
+      "data": [
+        {
+          "species": "N2O",
+          "T_K": 240.0,
+          "p_Pa": 1183073.196677133,
+          "latent_J_kg": 302733.2689010296,
+          "Clapeyron_relative_error": 6.45483755334908e-09,
+          "CoolProp_psat_Pa": 1187771.2948284661,
+          "PR_psat_relative_difference": -0.003955389536511422
+        },
+        {
+          "species": "N2O",
+          "T_K": 270.0,
+          "p_Pa": 2878604.29941803,
+          "latent_J_kg": 242212.42417945154,
+          "Clapeyron_relative_error": 3.988831043244545e-09,
+          "CoolProp_psat_Pa": 2877209.9859167626,
+          "PR_psat_relative_difference": 0.0004846060969105892
+        },
+        {
+          "species": "N2O",
+          "T_K": 283.137492,
+          "p_Pa": 4013490.1522359587,
+          "latent_J_kg": 203273.7736783803,
+          "Clapeyron_relative_error": 3.426459782573943e-09,
+          "CoolProp_psat_Pa": 3999999.9906691257,
+          "PR_psat_relative_difference": 0.0033725403995754633
+        },
+        {
+          "species": "IC3H7OH",
+          "T_K": 300.0,
+          "p_Pa": 7277.84266752018,
+          "latent_J_kg": 728198.3697623536,
+          "Clapeyron_relative_error": 3.436310924698205e-08
+        },
+        {
+          "species": "IC3H7OH",
+          "T_K": 350.0,
+          "p_Pa": 81885.30887788125,
+          "latent_J_kg": 657633.5996056926,
+          "Clapeyron_relative_error": 1.3437097434731982e-08
+        }
+      ],
+      "seconds": 0.023081343000740162
+    },
+    {
+      "name": "UV_flash_and_equilibrium_sound",
+      "passed": true,
+      "data": [
+        {
+          "Y": {
+            "N2O": 1
+          },
+          "initial": {
+            "p": 4000000.0,
+            "T": 283.137492,
+            "rho": 370.60105283275453,
+            "e": 1609834.508668705,
+            "entropy": 3538.1801678229813,
+            "soundFrozen": 102.3762720838607,
+            "soundEquilibrium": 102.3762720838607,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.6411283177409288,
+            "alphaLiquid": [
+              0.35887168225907135,
+              0.0
+            ],
+            "rhoGas": 115.60901073239111,
+            "rhoLiquid": [
+              826.1472189721912,
+              0.0
+            ],
+            "liquidMass": [
+              296.48084226620364,
+              0.0
+            ],
+            "gasMass": 74.1202105665509,
+            "cp": 2773.4499708793946,
+            "cv": 2344.69593879074,
+            "activeLiquids": 1,
+            "iterations": 0
+          },
+          "result": {
+            "p": 4008039.0259577786,
+            "T": 283.0813825555436,
+            "rho": 370.60105283275453,
+            "e": 1609834.508678256,
+            "entropy": 3538.1803722645823,
+            "soundFrozen": 102.24529784506966,
+            "soundEquilibrium": 80.19519032203887,
+            "volumeResidual": 1.5965340161017139e-10,
+            "energyResidual": 5.933026614216877e-12,
+            "chemicalResidual": 1.283950723518501e-11,
+            "alphaGas": 0.6419724463299239,
+            "alphaLiquid": [
+              0.35802755382972945,
+              0.0
+            ],
+            "rhoGas": 116.1261207241474,
+            "rhoLiquid": [
+              826.8952483178584,
+              0.0
+            ],
+            "liquidMass": [
+              296.05128302866956,
+              0.0
+            ],
+            "gasMass": 74.54976980408497,
+            "cp": 2767.384551362697,
+            "cv": 2336.883639245292,
+            "activeLiquids": 1,
+            "iterations": 2
+          },
+          "guess_sensitivity": 1.9571710918597773e-10,
+          "sound_relative_error": 3.8850656025601893e-10
+        },
+        {
+          "Y": {
+            "N2O": 1
+          },
+          "initial": {
+            "p": 3000000.0,
+            "T": 270.0,
+            "rho": 228.3399142280822,
+            "e": 1605426.2954852628,
+            "entropy": 3543.0473998085463,
+            "soundFrozen": 107.50198119672736,
+            "soundEquilibrium": 107.50198119672736,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.8273467530311539,
+            "alphaLiquid": [
+              0.17265324696884582,
+              0.0
+            ],
+            "rhoGas": 82.79717544965719,
+            "rhoLiquid": [
+              925.7743063963303,
+              0.0
+            ],
+            "liquidMass": [
+              159.83793995965755,
+              0.0
+            ],
+            "gasMass": 68.50197426842465,
+            "cp": 2094.8602543464317,
+            "cv": 1832.7765340501599,
+            "activeLiquids": 1,
+            "iterations": 0
+          },
+          "result": {
+            "p": 2957238.0734583596,
+            "T": 271.0228185962255,
+            "rho": 228.3399142280822,
+            "e": 1605426.2954852732,
+            "entropy": 3543.0757558148284,
+            "soundFrozen": 107.80195195776028,
+            "soundEquilibrium": 95.42455670794165,
+            "volumeResidual": 3.2152058793144533e-13,
+            "energyResidual": 6.503810663390722e-15,
+            "chemicalResidual": 5.329070518200751e-15,
+            "alphaGas": 0.8230326912250336,
+            "alphaLiquid": [
+              0.17696730877528785,
+              0.0
+            ],
+            "rhoGas": 80.167599974475,
+            "rhoLiquid": [
+              917.4539625180216,
+              0.0
+            ],
+            "liquidMass": [
+              162.3593586720381,
+              0.0
+            ],
+            "gasMass": 65.9805555560441,
+            "cp": 2129.770689309675,
+            "cv": 1881.640359706816,
+            "activeLiquids": 1,
+            "iterations": 4
+          },
+          "guess_sensitivity": 1.2806466997972166e-10,
+          "sound_relative_error": 3.943123605409937e-10
+        },
+        {
+          "Y": {
+            "IC3H7OH": 1
+          },
+          "initial": {
+            "p": 5000000.0,
+            "T": 300.0,
+            "rho": 755.3272542836073,
+            "e": -5266490.98278113,
+            "entropy": 3082.2216421215658,
+            "soundFrozen": 1494.2546442911303,
+            "soundEquilibrium": 1494.2546442911303,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.0,
+            "alphaLiquid": [
+              0.0,
+              1.0
+            ],
+            "rhoGas": 0.0,
+            "rhoLiquid": [
+              0.0,
+              755.3272542836073
+            ],
+            "liquidMass": [
+              0.0,
+              755.3272542836073
+            ],
+            "gasMass": 0.0,
+            "cp": 2788.6622326807656,
+            "cv": 2226.691292153719,
+            "activeLiquids": 2,
+            "iterations": 0
+          },
+          "result": {
+            "p": 5000000.0,
+            "T": 300.0,
+            "rho": 755.3272542836073,
+            "e": -5266490.98278113,
+            "entropy": 3082.2216421215658,
+            "soundFrozen": 1494.2546442911303,
+            "soundEquilibrium": 1494.2546442911303,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.0,
+            "alphaLiquid": [
+              0.0,
+              1.0
+            ],
+            "rhoGas": 0.0,
+            "rhoLiquid": [
+              0.0,
+              755.3272542836073
+            ],
+            "liquidMass": [
+              0.0,
+              755.3272542836073
+            ],
+            "gasMass": 0.0,
+            "cp": 2788.6622326807656,
+            "cv": 2226.691292153719,
+            "activeLiquids": 2,
+            "iterations": 0
+          },
+          "guess_sensitivity": 7.684346670089326e-08,
+          "sound_relative_error": null
+        },
+        {
+          "Y": {
+            "N2O": 1
+          },
+          "initial": {
+            "p": 5000000.0,
+            "T": 283.0,
+            "rho": 846.4347107139145,
+            "e": 1570857.4414691771,
+            "entropy": 3378.965474925497,
+            "soundFrozen": 424.87480653109094,
+            "soundEquilibrium": 424.87480653109094,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.0,
+            "alphaLiquid": [
+              1.0,
+              0.0
+            ],
+            "rhoGas": 0.0,
+            "rhoLiquid": [
+              846.4347107139145,
+              0.0
+            ],
+            "liquidMass": [
+              846.4347107139145,
+              0.0
+            ],
+            "gasMass": 0.0,
+            "cp": 2802.1492583563977,
+            "cv": 890.8336058249325,
+            "activeLiquids": 1,
+            "iterations": 0
+          },
+          "result": {
+            "p": 5000000.0,
+            "T": 283.0,
+            "rho": 846.4347107139145,
+            "e": 1570857.4414691771,
+            "entropy": 3378.965474925497,
+            "soundFrozen": 424.87480653109094,
+            "soundEquilibrium": 424.87480653109094,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.0,
+            "alphaLiquid": [
+              1.0,
+              0.0
+            ],
+            "rhoGas": 0.0,
+            "rhoLiquid": [
+              846.4347107139145,
+              0.0
+            ],
+            "liquidMass": [
+              846.4347107139145,
+              0.0
+            ],
+            "gasMass": 0.0,
+            "cp": 2802.1492583563977,
+            "cv": 890.8336058249325,
+            "activeLiquids": 1,
+            "iterations": 0
+          },
+          "guess_sensitivity": 3.0475622025960547e-13,
+          "sound_relative_error": null
+        },
+        {
+          "Y": {
+            "N2O": 0.8,
+            "IC3H7OH": 0.19,
+            "N2": 0.01
+          },
+          "initial": {
+            "p": 2000000.0,
+            "T": 270.0,
+            "rho": 210.60795565775223,
+            "e": 255495.33357895768,
+            "entropy": 3394.5406305056003,
+            "soundFrozen": 100.95957799453566,
+            "soundEquilibrium": 100.95957799453566,
+            "volumeResidual": 0.0,
+            "energyResidual": 0.0,
+            "chemicalResidual": 0.0,
+            "alphaGas": 0.8013615395001776,
+            "alphaLiquid": [
+              0.14755777278736854,
+              0.05108068771245381
+            ],
+            "rhoGas": 45.17749579066187,
+            "rhoLiquid": [
+              913.4665634672677,
+              775.5446967007983
+            ],
+            "liquidMass": [
+              134.78909162096144,
+              39.615356459223186
+            ],
+            "gasMass": 36.20350757756759,
+            "cp": 2304.5147621805663,
+            "cv": 2203.4499388358604,
+            "activeLiquids": 3,
+            "iterations": 0
+          },
+          "result": {
+            "p": 2535754.984314926,
+            "T": 262.11858949751877,
+            "rho": 210.60795565775223,
+            "e": 255495.3336009316,
+            "entropy": 3397.6827274206603,
+            "soundFrozen": 106.58246903675771,
+            "soundEquilibrium": 93.86445636363466,
+            "volumeResidual": 4.4636672136277866e-10,
+            "energyResidual": 4.069245381158258e-11,
+            "chemicalResidual": 8.484587965540413e-08,
+            "alphaGas": 0.8296966873706907,
+            "alphaLiquid": [
+              0.1191297859180866,
+              0.051173527157589535
+            ],
+            "rhoGas": 65.52115561104881,
+            "rhoLiquid": [
+              976.1019244994754,
+              780.9205035182692
+            ],
+            "liquidMass": [
+              116.28281329985484,
+              39.962456594710645
+            ],
+            "gasMass": 54.36268576318674,
+            "cp": 2028.1273136630862,
+            "cv": 1866.004269956506,
+            "activeLiquids": 3,
+            "iterations": 10
+          },
+          "guess_sensitivity": 1.8271262280933342e-10,
+          "sound_relative_error": 8.407934071197332e-08
+        }
+      ],
+      "seconds": 0.04736692600090464
+    },
+    {
+      "name": "invalid_state_guards",
+      "passed": true,
+      "data": {
+        "rejected_invalid_inputs": 3
+      },
+      "seconds": 6.712999856972601e-05
+    },
+    {
+      "name": "full_mechanism_closed_reactor",
+      "passed": true,
+      "data": [
+        {
+          "T0_K": 1800.0,
+          "T_K": 1801.4907146759308,
+          "dt_s": 0.0001,
+          "element_mass_drift": 9.258297933829524e-16,
+          "reactor_T_relative_error": 1.7255086248724183e-12,
+          "reactor_Y_Linf_error": 2.2506410797540344e-13,
+          "two_half_steps_T_relative_error": 3.0266900097331018e-12,
+          "minimum_species_mass": 0.0
+        },
+        {
+          "T0_K": 2200.0,
+          "T_K": 2333.2609658276824,
+          "dt_s": 1e-05,
+          "element_mass_drift": 6.82595091031509e-14,
+          "reactor_T_relative_error": 4.0289771519042006e-11,
+          "reactor_Y_Linf_error": 1.4225173122772716e-11,
+          "two_half_steps_T_relative_error": 9.014455848443959e-12,
+          "minimum_species_mass": 0.0
+        }
+      ],
+      "seconds": 22.750442037999164
+    }
+  ],
+  "scope": "Numerical and thermodynamic consistency; not experimental propulsion validation",
+  "passed": true,
+  "inputs": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4/manifest.json": "d75dab43575e0bf4f21e473f978a388bbaddae14594883a8a3d4d20dbedf43a8",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/tools/validate_reactive_thermo.py": "b039bfd4c48fc036c17f37ffe676e618553890038dc52c31cfd8e13e8ff3e651",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/lib/libpintleReactiveBackend.so": "d3dfda73b769e37d19a0bc2f939dcd508c3af4060f5de880dd195b056deaed77"
+  }
+}

@@ -95,7 +95,8 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
                 internal = row[-1]-.5*np.dot(row[ns:ns+3],row[ns:ns+3])/s.rho
                 row[ns:ns+3] = (s.rho*commonU, 0, 0);row[-1] = internal+.5*s.rho*commonU**2
                 q[i]=row;states.append(s.copy())
-            duration=.1/commonU;reference.update(p=1e5, T=300, mean_velocity=commonU)
+            duration=.1/max(abs(commonU),sa.soundEquilibrium,sb.soundEquilibrium)
+            reference.update(p=1e5, T=300, mean_velocity=commonU)
         elif kind == "release":
             a, sa = pack(283.137492, 5e6, {"N2O": 1}, (1, 0), u=[0, 0, 0])
             b, sb = pack(283.137492, 1e6, {"N2O": 1}, u=[0, 0, 0])

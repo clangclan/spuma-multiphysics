@@ -1,0 +1,401 @@
+{
+  "Cantera_version": "3.2.0",
+  "CoolProp_version": "6.7.0",
+  "calculation_completed": true,
+  "fixed_states": [
+    {
+      "T": 283.137492,
+      "p": 5000000.0,
+      "phase": "liquid",
+      "properties": {
+        "cp": {
+          "PR": 2811.308566021496,
+          "reference": 2440.800504681103,
+          "relative_error": 0.1517977649667852
+        },
+        "cv": {
+          "PR": 890.6642538483261,
+          "reference": 914.1004417063311,
+          "relative_error": -0.025638525908878496
+        },
+        "rho": {
+          "PR": 845.1693739000233,
+          "reference": 863.428893263842,
+          "relative_error": -0.021147681651926264
+        },
+        "sound": {
+          "PR": 423.9935442599121,
+          "reference": 504.61872188268,
+          "relative_error": -0.15977444776912708
+        }
+      }
+    },
+    {
+      "T": 283.137492,
+      "p": 10000000.0,
+      "phase": "liquid",
+      "properties": {
+        "cp": {
+          "PR": 2253.556667824114,
+          "reference": 2111.3398158330065,
+          "relative_error": 0.06735858004695339
+        },
+        "cv": {
+          "PR": 904.135634307605,
+          "reference": 907.8793790852886,
+          "relative_error": -0.004123614726722402
+        },
+        "rho": {
+          "PR": 911.9066092205951,
+          "reference": 905.0806674625206,
+          "relative_error": 0.007541804839574784
+        },
+        "sound": {
+          "PR": 487.00728435770895,
+          "reference": 584.1809728668613,
+          "relative_error": -0.1663417554191703
+        }
+      }
+    },
+    {
+      "T": 300.0,
+      "p": 100000.0,
+      "phase": "gas",
+      "properties": {
+        "cp": {
+          "PR": 882.1945158849886,
+          "reference": 884.8022669302657,
+          "relative_error": -0.0029472698508383743
+        },
+        "cv": {
+          "PR": 689.0782707846155,
+          "reference": 691.5386931340316,
+          "relative_error": -0.003557895420523205
+        },
+        "rho": {
+          "PR": 1.774730583759889,
+          "reference": 1.7738911367242942,
+          "relative_error": 0.00047322353565903974
+        },
+        "sound": {
+          "PR": 267.8086377239391,
+          "reference": 267.85232328140256,
+          "relative_error": -0.00016309568245764794
+        }
+      }
+    },
+    {
+      "T": 300.0,
+      "p": 2000000.0,
+      "phase": "gas",
+      "properties": {
+        "cp": {
+          "PR": 1010.6301595870433,
+          "reference": 1052.4554539573303,
+          "relative_error": -0.03974067901213296
+        },
+        "cv": {
+          "PR": 702.2992386325623,
+          "reference": 737.2332691000464,
+          "relative_error": -0.04738531470524754
+        },
+        "rho": {
+          "PR": 40.22947324169698,
+          "reference": 39.84516581350214,
+          "relative_error": 0.00964502017618929
+        },
+        "sound": {
+          "PR": 249.30274800448564,
+          "reference": 250.56236359740774,
+          "relative_error": -0.005027154018015234
+        }
+      }
+    }
+  ],
+  "model_fingerprint": "b0ae19b9a882c150e81311dd26c2eef6d5e22363543972d61bd280e9d3c8c060",
+  "reference": "CoolProp NitrousOxide multiparameter reference EOS",
+  "saturation": [
+    {
+      "T": 240.0,
+      "comparison_path": "Each EOS at its own saturation pressure at the same T",
+      "properties": {
+        "gas_cp": {
+          "PR": 952.7479931062833,
+          "reference": 1151.0370786888134,
+          "relative_error": -0.17226993747969277
+        },
+        "gas_cv": {
+          "PR": 636.6050174782836,
+          "reference": 756.3582935227084,
+          "relative_error": -0.1583287670274346
+        },
+        "gas_rho": {
+          "PR": 30.383001435689522,
+          "reference": 30.716889109025562,
+          "relative_error": -0.010869840111443207
+        },
+        "gas_sound": {
+          "PR": 221.6233045512333,
+          "reference": 220.63707409435696,
+          "relative_error": 0.004469921752382255
+        },
+        "latent_heat": {
+          "PR": 302733.2689010296,
+          "reference": 299993.1650411687,
+          "relative_error": 0.00913388763202283
+        },
+        "liquid_cp": {
+          "PR": 1872.4782292966363,
+          "reference": 1882.968286580117,
+          "relative_error": -0.005571021752327487
+        },
+        "liquid_cv": {
+          "PR": 915.5829368947689,
+          "reference": 913.4391127152268,
+          "relative_error": 0.0023469809314049517
+        },
+        "liquid_rho": {
+          "PR": 1090.5074370442155,
+          "reference": 1049.6653616617398,
+          "relative_error": 0.03890961526806791
+        },
+        "liquid_sound": {
+          "PR": 644.3657574513538,
+          "reference": 781.3128483261311,
+          "relative_error": -0.17527817591656136
+        },
+        "pressure": {
+          "PR": 1183073.196677133,
+          "reference": 1187771.2948284661,
+          "relative_error": -0.003955389536511422
+        }
+      }
+    },
+    {
+      "T": 270.0,
+      "comparison_path": "Each EOS at its own saturation pressure at the same T",
+      "properties": {
+        "gas_cp": {
+          "PR": 1278.5189372593427,
+          "reference": 1626.1545458041808,
+          "relative_error": -0.2137777183858759
+        },
+        "gas_cv": {
+          "PR": 685.1549622238388,
+          "reference": 865.0103194701312,
+          "relative_error": -0.2079227879691241
+        },
+        "gas_rho": {
+          "PR": 77.71726296419003,
+          "reference": 77.58282507158448,
+          "relative_error": 0.0017328305908106412
+        },
+        "gas_sound": {
+          "PR": 214.31010926699796,
+          "reference": 212.56372178791491,
+          "relative_error": 0.008215830360862375
+        },
+        "latent_heat": {
+          "PR": 242212.42417945154,
+          "reference": 240452.32940973423,
+          "relative_error": 0.007319932287776165
+        },
+        "liquid_cp": {
+          "PR": 2433.9268883468826,
+          "reference": 2209.203182471369,
+          "relative_error": 0.10172161060537754
+        },
+        "liquid_cv": {
+          "PR": 898.5255899761241,
+          "reference": 910.2855451445076,
+          "relative_error": -0.012918973866070327
+        },
+        "liquid_rho": {
+          "PR": 924.3443334960197,
+          "reference": 922.7639258031093,
+          "relative_error": 0.0017126890732479527
+        },
+        "liquid_sound": {
+          "PR": 478.1593065574473,
+          "reference": 580.9721215564222,
+          "relative_error": -0.17696686499093917
+        },
+        "pressure": {
+          "PR": 2878604.29941803,
+          "reference": 2877209.9859167626,
+          "relative_error": 0.0004846060969105892
+        }
+      }
+    },
+    {
+      "T": 283.137492,
+      "comparison_path": "Each EOS at its own saturation pressure at the same T",
+      "properties": {
+        "gas_cp": {
+          "PR": 1668.5946968879853,
+          "reference": 2133.852877632553,
+          "relative_error": -0.21803667235988544
+        },
+        "gas_cv": {
+          "PR": 710.7956719553365,
+          "reference": 923.2044829072671,
+          "relative_error": -0.23007775079582926
+        },
+        "gas_rho": {
+          "PR": 116.33109805435575,
+          "reference": 114.86402718839491,
+          "relative_error": 0.0127722395067571
+        },
+        "gas_sound": {
+          "PR": 208.95818981794866,
+          "reference": 205.458659885963,
+          "relative_error": 0.017032769190298724
+        },
+        "latent_heat": {
+          "PR": 203273.7736783803,
+          "reference": 204932.05967403157,
+          "relative_error": -0.008091881759686448
+        },
+        "liquid_cp": {
+          "PR": 3048.566620071067,
+          "reference": 2567.3357230840543,
+          "relative_error": 0.1874436960698409
+        },
+        "liquid_cv": {
+          "PR": 886.8283262870975,
+          "reference": 916.9515733807569,
+          "relative_error": -0.03285151361112393
+        },
+        "liquid_rho": {
+          "PR": 826.425988081052,
+          "reference": 852.2420271412205,
+          "relative_error": -0.030291910323604232
+        },
+        "liquid_sound": {
+          "PR": 408.1160591348482,
+          "reference": 483.65407928892256,
+          "relative_error": -0.1561819146964124
+        },
+        "pressure": {
+          "PR": 4013490.1522359587,
+          "reference": 3999999.9906691257,
+          "relative_error": 0.0033725403995754633
+        }
+      }
+    },
+    {
+      "T": 300.0,
+      "comparison_path": "Each EOS at its own saturation pressure at the same T",
+      "properties": {
+        "gas_cp": {
+          "PR": 3896.1135446115704,
+          "reference": 4744.8285685060155,
+          "relative_error": -0.1788715886444927
+        },
+        "gas_cv": {
+          "PR": 754.0670726094851,
+          "reference": 1030.9814565296579,
+          "relative_error": -0.26859298212043725
+        },
+        "gas_rho": {
+          "PR": 208.47180375544247,
+          "reference": 202.90584031677184,
+          "relative_error": 0.027431262845767135
+        },
+        "gas_sound": {
+          "PR": 204.50196583916926,
+          "reference": 192.02329559061704,
+          "relative_error": 0.06498518948011411
+        },
+        "latent_heat": {
+          "PR": 126462.17108428874,
+          "reference": 137880.27679482347,
+          "relative_error": -0.08281174056189167
+        },
+        "liquid_cp": {
+          "PR": 6121.562741447367,
+          "reference": 4367.330523914736,
+          "relative_error": 0.40167150343367974
+        },
+        "liquid_cv": {
+          "PR": 861.4493748955886,
+          "reference": 953.798395508067,
+          "relative_error": -0.0968223694308965
+        },
+        "liquid_rho": {
+          "PR": 650.0283814736923,
+          "reference": 724.7012851449044,
+          "relative_error": -0.10303956292319971
+        },
+        "liquid_sound": {
+          "PR": 313.71806684010363,
+          "reference": 331.5665560526037,
+          "relative_error": -0.05383078868083535
+        },
+        "pressure": {
+          "PR": 5915233.332420192,
+          "reference": 5887436.804562035,
+          "relative_error": 0.0047213292950538666
+        }
+      }
+    },
+    {
+      "T": 305.0,
+      "comparison_path": "Each EOS at its own saturation pressure at the same T",
+      "properties": {
+        "gas_cp": {
+          "PR": 7983.375373372996,
+          "reference": 9245.160244033497,
+          "relative_error": -0.1364805841494
+        },
+        "gas_cv": {
+          "PR": 773.2140938809656,
+          "reference": 1084.5267466234711,
+          "relative_error": -0.2870493085686783
+        },
+        "gas_rho": {
+          "PR": 262.0140034945084,
+          "reference": 255.74156782013762,
+          "relative_error": 0.02452646133295855
+        },
+        "gas_sound": {
+          "PR": 207.2574066247897,
+          "reference": 186.65621147772916,
+          "relative_error": 0.11036972723256278
+        },
+        "latent_heat": {
+          "PR": 88061.80529641057,
+          "reference": 104190.13482900042,
+          "relative_error": -0.15479708860210317
+        },
+        "liquid_cp": {
+          "PR": 11182.753470366002,
+          "reference": 7476.688676610143,
+          "relative_error": 0.495682641615105
+        },
+        "liquid_cv": {
+          "PR": 847.5913833030113,
+          "reference": 989.8012913083321,
+          "relative_error": -0.14367520961439229
+        },
+        "liquid_rho": {
+          "PR": 569.4681760425215,
+          "reference": 661.1564513827886,
+          "relative_error": -0.138678636725852
+        },
+        "liquid_sound": {
+          "PR": 280.8185325615355,
+          "reference": 271.2372845750075,
+          "relative_error": 0.03532422912115685
+        },
+        "pressure": {
+          "PR": 6588714.267606093,
+          "reference": 6566324.089853033,
+          "relative_error": 0.0034098496276873114
+        }
+      }
+    }
+  ],
+  "scope": "Independent reference-EOS comparison; no experimental fit or claimed validated operating envelope",
+  "validated_operating_range": null
+}
