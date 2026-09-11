@@ -1,0 +1,8 @@
+EXE_INC = \
+    -I../reactiveThermo \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude
+
+EXE_LIBS = \
+    -lfiniteVolume -lmeshTools \
+    -L$(PINTLE_GPU_ROOT)/lib -lpintleReactiveBackend
