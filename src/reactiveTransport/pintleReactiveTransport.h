@@ -23,6 +23,26 @@ typedef struct PintleTransportStats {
     uint64_t allocatedBytes, uploadedBytes, downloadedBytes, kernelLaunches;
     uint64_t stages, stepQueries;
 } PintleTransportStats;
+typedef struct PintleTransportPrimitive { double rho, u[3]; } PintleTransportPrimitive;
+// Separate statistics ABI: counts exclude immutable initialization data.
+typedef struct PintleTransportProfile {
+    uint64_t conservedUploads, conservedUploadBytes, conservedDownloadBytes;
+    uint64_t stateUploadBytes, primitiveUploadBytes, gasUploadBytes;
+    uint64_t boundaryPartitions, residentStages;
+} PintleTransportProfile;
+int pintle_transport_profile(void* transport, PintleTransportProfile* profile);
+// Versions describe CONTENT, never pointer identity. Use strictly increasing,
+// nonzero versions for changed data, including restoration after a rejected step.
+int pintle_transport_upload_conserved(void* transport, const double* q, uint64_t version);
+// CFL requires only compact primitive/thermodynamic data, and leaves q intact.
+int pintle_transport_stable_step_primitives(void* transport,
+    const PintleTransportPrimitive* primitive, const PintleTransportState* state,
+    double cfl, double maximum, double* dt);
+// Requires the exact resident input version; writes a newer output version.
+// qOutput is downloaded for the current CPU flash, but is not uploaded again.
+int pintle_transport_stage_resident(void* transport, const PintleTransportState* state,
+    const double* gasY, const double* gasH, double dt, int stage,
+    uint64_t inputVersion, uint64_t outputVersion, double* qOutput, double* boundaryRate);
 // backend=0 executes the same kernels serially for portable operator tests.
 // backend=1 requires a CUDA build AND a working device; no silent CPU fallback.
 void* pintle_transport_create(int backend, const PintleTransportConfig* config,

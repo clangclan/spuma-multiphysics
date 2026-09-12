@@ -60,6 +60,8 @@ public:
     std::unique_ptr<void,decltype(&pintle_transport_destroy)> transport{nullptr,&pintle_transport_destroy};
     mutable std::vector<PintleTransportState> transportStates;
     mutable Array transportGasY,transportGasH;
+    mutable std::vector<PintleTransportPrimitive> transportPrimitive;
+    uint64_t transportVersion=0;
     Flow(void* t,size_t cells,Array volumes,const dictionary& dict)
       :thermo(t),physicalSpecies(pintle_rt_species_count(t)),
        ns(physicalSpecies*(dict.get<word>("closure")=="mechanicalEquilibrium"?2:1)),
@@ -200,8 +202,13 @@ public:
     double stableStep(const Array& q,const States& states,double cfl,double maximum) const
     {
         if(transport) {
-            packTransport(q,states,false);double dt=0;
-            checkTransport(pintle_transport_stable_step(transport.get(),q.data(),transportStates.data(),cfl,maximum,&dt));
+            packTransport(q,states,false);double dt=0;transportPrimitive.resize(nc);
+            for(size_t c=0;c<nc;++c) {
+                auto& p=transportPrimitive[c];p.rho=states[c].rho;
+                for(int d=0;d<3;++d) p.u[d]=q[c*nv+ns+d]/p.rho;
+            }
+            checkTransport(pintle_transport_stable_step_primitives(transport.get(),transportPrimitive.data(),
+                transportStates.data(),cfl,maximum,&dt));
             return dt;
         }
         Array denominator(nc,0);
@@ -360,8 +367,13 @@ public:
         Array initial;
         if(transport) {
             packTransport(q,states,true);boundaryA.resize(nv);
-            checkTransport(pintle_transport_stage(transport.get(),q.data(),transportStates.data(),
-                transportGasY.data(),transportGasH.data(),dt,0,boundaryA.data()));
+            // CPU chemistry (or rollback) may have changed q. A fresh content
+            // version forces one upload; the two RK stages then share device q.
+            const uint64_t input=++transportVersion;
+            checkTransport(pintle_transport_upload_conserved(transport.get(),q.data(),input));
+            const uint64_t output=++transportVersion;
+            checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),
+                transportGasY.data(),transportGasH.data(),dt,0,input,output,q.data(),boundaryA.data()));
         } else {
             initial=q;flux(q,states,rhs,boundaryA);
             for(size_t j=0;j<q.size();++j) q[j]=initial[j]+dt*rhs[j];
@@ -370,8 +382,10 @@ public:
         demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
         if(transport) {
             packTransport(q,states,true);boundaryB.resize(nv);
-            checkTransport(pintle_transport_stage(transport.get(),q.data(),transportStates.data(),
-                transportGasY.data(),transportGasH.data(),dt,1,boundaryB.data()));
+            // recover() and the primitive CFL query do not modify conserved q.
+            const uint64_t input=transportVersion,output=++transportVersion;
+            checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),
+                transportGasY.data(),transportGasH.data(),dt,1,input,output,q.data(),boundaryB.data()));
         } else {
             flux(q,states,rhs,boundaryB);
             for(size_t j=0;j<q.size();++j) q[j]=.5*initial[j]+.5*(q[j]+dt*rhs[j]);
@@ -698,11 +712,31 @@ int main(int argc,char** argv)
         Info<<"REACTIVE_SPARSE setups="<<double(sparseStats.setups)<<" products="<<double(sparseStats.products)
             <<" nonzeros="<<double(sparseStats.nonzeros)<<" sparseIntegrations="<<double(sparseStats.sparseIntegrations)
             <<" denseIntegrations="<<double(sparseStats.denseIntegrations)<<" denseFallbacks="<<double(sparseStats.denseFallbacks)<<nl;
+        PintleChemicalProfile profile{};
+        flow.check(pintle_rt_chemical_profile(model.get(),0,&profile),"Chemical profile");
+        Info<<"REACTIVE_CHEMICAL_PROFILE jvSetups="<<double(profile.jvSetups)
+            <<" preconditionerSetups="<<double(profile.preconditionerSetups)
+            <<" jacobianCacheHits="<<double(profile.jacobianCacheHits)
+            <<" preconditionerReuses="<<double(profile.preconditionerReuses)
+            <<" patternBuilds="<<double(profile.patternBuilds)<<" symbolicAnalyses="<<double(profile.symbolicAnalyses)
+            <<" numericFactorizations="<<double(profile.numericFactorizations)<<" factorNonzeros="<<double(profile.factorNonzeros)
+            <<" workspaceCreates="<<double(profile.workspaceCreates)<<" workspaceReinitializations="<<double(profile.workspaceReinitializations)
+            <<" thermoSeconds="<<profile.thermoSeconds<<" kineticsSeconds="<<profile.kineticsSeconds
+            <<" csrSeconds="<<profile.csrSeconds<<" symbolicSeconds="<<profile.symbolicSeconds
+            <<" factorSeconds="<<profile.factorSeconds<<" solveSeconds="<<profile.solveSeconds<<nl;
         if(flow.transport) {
             PintleTransportStats stats{};flow.checkTransport(pintle_transport_stats(flow.transport.get(),&stats));
             Info<<"REACTIVE_TRANSPORT allocatedBytes="<<double(stats.allocatedBytes)<<" uploadedBytes="<<double(stats.uploadedBytes)
                 <<" downloadedBytes="<<double(stats.downloadedBytes)<<" kernelLaunches="<<double(stats.kernelLaunches)
                 <<" stages="<<double(stats.stages)<<" stepQueries="<<double(stats.stepQueries)<<nl;
+            PintleTransportProfile profile{};flow.checkTransport(pintle_transport_profile(flow.transport.get(),&profile));
+            Info<<"REACTIVE_TRANSFER conservedUploads="<<double(profile.conservedUploads)
+                <<" conservedUploadBytes="<<double(profile.conservedUploadBytes)
+                <<" conservedDownloadBytes="<<double(profile.conservedDownloadBytes)
+                <<" stateUploadBytes="<<double(profile.stateUploadBytes)
+                <<" primitiveUploadBytes="<<double(profile.primitiveUploadBytes)
+                <<" gasUploadBytes="<<double(profile.gasUploadBytes)
+                <<" boundaryPartitions="<<double(profile.boundaryPartitions)<<nl;
         }
         Info<<"End"<<nl;
     } catch(const std::exception& error) {

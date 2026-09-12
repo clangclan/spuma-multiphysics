@@ -33,6 +33,13 @@ typedef struct PintleSparseStats {
     unsigned long long setups, products, preconditioners, preconditionerSolves;
     unsigned long long sparseIntegrations, denseIntegrations, denseFallbacks, nonzeros;
 } PintleSparseStats;
+typedef struct PintleChemicalProfile {
+    unsigned long long jvSetups, preconditionerSetups, jacobianCacheHits, patternBuilds;
+    unsigned long long preconditionerReuses, symbolicAnalyses, numericFactorizations;
+    unsigned long long workspaceCreates, workspaceReinitializations, factorNonzeros;
+    double thermoSeconds, kineticsSeconds, csrSeconds, symbolicSeconds, factorSeconds, solveSeconds;
+} PintleChemicalProfile;
+int pintle_rt_chemical_profile(void* model, int reset, PintleChemicalProfile* result);
 // 0=dense reference (default), 1=sparse ideal-gas/no-liquid only (strict),
 // 2=auto: sparse for that model, dense for liquid/nonideal models or failure.
 int pintle_rt_set_chemical_linear_solver(void* model, int mode);

@@ -6,6 +6,8 @@
 
 별도 반응·상변화 연구 솔버는 [ReactiveFoam 문서](README.reactive-phase.ko.md)에 설명한다. [2026-09-12 GPU 수송·희소 화학 포팅](README.reactive-gpu-sparse.ko.md)은 선택 가능한 새 경로이며, 아래 ColdFoam의 기존 GPU 성능 측정과 구분한다.
 
+ReactiveFoam의 최신 변경은 [포팅 리뷰 반영 기록](README.reactive-review.ko.md)에 있다.
+
 ## 실행
 
 이 컴퓨터의 SPUMA v2512 `5916a466`, NVIDIA HPC SDK 26.5, CUDA 13.2, RTX 5080(sm_120), FP64 환경을 사용한다.

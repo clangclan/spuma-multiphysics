@@ -54,6 +54,15 @@ class SparseStats(C.Structure):
         "sparseIntegrations", "denseIntegrations", "denseFallbacks", "nonzeros")]
 
 
+class ChemicalProfile(C.Structure):
+    _fields_ = [(n, C.c_ulonglong) for n in (
+        "jvSetups", "preconditionerSetups", "jacobianCacheHits", "patternBuilds",
+        "preconditionerReuses", "symbolicAnalyses", "numericFactorizations",
+        "workspaceCreates", "workspaceReinitializations", "factorNonzeros")] + [
+        (n, C.c_double) for n in ("thermoSeconds", "kineticsSeconds", "csrSeconds",
+                                  "symbolicSeconds", "factorSeconds", "solveSeconds")]
+
+
 class Backend:
     def __init__(self, configuration, library=None):
         root = Path(__file__).resolve().parents[1]
@@ -88,6 +97,9 @@ class Backend:
         for name, (args, result) in specs.items():
             function = getattr(self.lib, f"pintle_rt_{name}")
             function.argtypes, function.restype = args, result
+        if hasattr(self.lib, "pintle_rt_chemical_profile"):
+            self.lib.pintle_rt_chemical_profile.argtypes = [void, C.c_int, C.POINTER(ChemicalProfile)]
+            self.lib.pintle_rt_chemical_profile.restype = C.c_int
         error = C.create_string_buffer(8192)
         self.handle = self.lib.pintle_rt_create(str(self.configuration).encode(), error, len(error))
         if not self.handle:
@@ -177,6 +189,11 @@ class Backend:
     def set_chemical_linear_solver(self, mode="dense"):
         modes = {"dense": 0, "sparse": 1, "auto": 2}
         self.check(self.lib.pintle_rt_set_chemical_linear_solver(self.handle, modes[mode]))
+
+    def chemical_profile(self, reset=False):
+        result = ChemicalProfile()
+        self.check(self.lib.pintle_rt_chemical_profile(self.handle, int(reset), C.byref(result)))
+        return {name: getattr(result, name) for name, _ in result._fields_}
 
     def sparse_stats(self, reset=False):
         result = SparseStats()

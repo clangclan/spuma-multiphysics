@@ -11,9 +11,10 @@
 namespace PintleTransport {
 PINTLE_HD inline double minimum(double a,double b) {return a<b?a:b;}
 PINTLE_HD inline double maximum(double a,double b) {return a>b?a:b;}
-struct Primitive {double rho,u[3];};
+using Primitive=PintleTransportPrimitive;
 struct FaceWork {
     double unL,unR,left,right,faceVelocity,speed,traction[3],energy;
+    double advectL,advectR,pressureMomentum,pressureEnergy;
     double diffusion,sumJ,carrierFlux;
     size_t carrier;
 };
@@ -25,7 +26,7 @@ struct View {
     PintleTransportState* state;
     size_t *row,*boundary;
     int64_t* incidence;
-    double *volume,*q,*initial,*rhs,*gasY,*gasH,*gradient,*boundaryRate,*step;
+    double *inverseVolume,*q,*initial,*rhs,*gasY,*gasH,*gradient,*boundaryRate,*step;
     Primitive* primitive;
     FaceWork* work;
     size_t nBoundary;
@@ -56,12 +57,9 @@ struct View {
     PINTLE_HD double faceFlux(size_t fi,size_t k) const {
         const auto& f=faces[fi];const auto& w=work[fi];
         const double ql=q[qi(f.owner,k)],qr=rightValue(f,k);
-        double fl=ql*w.unL,fr=qr*w.unR;
-        if(k>=cfg.species&&k<cfg.species+3) {
-            fl+=state[f.owner].p*f.normal[k-cfg.species];fr+=state[rightCell(f)].p*f.normal[k-cfg.species];
-        }
-        if(k==cfg.species+3) {fl+=state[f.owner].p*w.unL;fr+=state[rightCell(f)].p*w.unR;}
-        double flux=(w.right*fl-w.left*fr+w.left*w.right*(qr-ql))/(w.right-w.left);
+        double flux=w.advectL*ql+w.advectR*qr;
+        if(k>=cfg.species&&k<cfg.species+3) flux+=w.pressureMomentum*f.normal[k-cfg.species];
+        if(k==cfg.species+3) flux+=w.pressureEnergy;
         if(k<cfg.species) flux+=speciesDiffusion(fi,k);
         else if(k<cfg.species+3) flux-=w.traction[k-cfg.species];
         else if(k==cfg.species+3) flux+=w.energy;
@@ -81,7 +79,7 @@ struct Gradients {
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const auto& f=v.faces[size_t(entry<0?-entry-1:entry-1)];
             double ul[3],ur[3];v.velocities(f,ul,ur);
-            const double scale=(entry<0?1.0:-1.0)*f.area/v.volume[c];
+            const double scale=(entry<0?1.0:-1.0)*f.area*v.inverseVolume[c];
             for(int i=0;i<3;++i) for(int d=0;d<3;++d)
                 g[3*i+d]+=(f.ownerWeight*ul[i]+(1-f.ownerWeight)*ur[i])*f.normal[d]*scale;
         }
@@ -97,10 +95,17 @@ struct Faces {
         for(int d=0;d<3;++d) {w.unL+=ul[d]*f.normal[d];w.unR+=ur[d]*f.normal[d];}
         const double aL=v.cfg.waveFactor*sl.sound,aR=v.cfg.waveFactor*sr.sound;
         w.left=minimum(0,minimum(w.unL-aL,w.unR-aR));w.right=maximum(0,maximum(w.unL+aL,w.unR+aR));
-        w.faceVelocity=(w.right*w.unL-w.left*w.unR)/(w.right-w.left);
+        const double invWave=1/(w.right-w.left);
+        w.faceVelocity=(w.right*w.unL-w.left*w.unR)*invWave;
+        w.advectL=w.right*(w.unL-w.left)*invWave;
+        w.advectR=w.left*(w.right-w.unR)*invWave;
+        w.pressureMomentum=(w.right*sl.p-w.left*sr.p)*invWave;
+        w.pressureEnergy=(w.right*sl.p*w.unL-w.left*sr.p*w.unR)*invWave;
         const double D=v.cfg.diffusivity+maximum(maximum(4*v.cfg.viscosity/(3*sl.rho),4*v.cfg.viscosity/(3*sr.rho)),
             maximum(v.cfg.conductivity/(sl.rho*sl.cv),v.cfg.conductivity/(sr.rho*sr.cv)));
         w.speed=maximum(fabs(w.unL)+aL,fabs(w.unR)+aR)+2*D/f.distance;
+        if(!std::isfinite(w.unL)||!std::isfinite(w.unR)||!std::isfinite(w.speed)
+           ||!std::isfinite(invWave)||w.right<=w.left) w.speed=-1;
         if(transport&&v.cfg.viscosity>0) {
             double g[9];for(int j=0;j<9;++j) {
                 g[j]=v.gradient[l*9+j];
@@ -129,13 +134,14 @@ struct Faces {
                 w.sumJ+=w.diffusion*(yr-yl);const double y=f.ownerWeight*yl+(1-f.ownerWeight)*yr;
                 if(y>largest) {largest=y;w.carrier=k;}
             }
+            const double hc=f.ownerWeight*v.gasH[v.qi(l,w.carrier)]+(1-f.ownerWeight)*v.gasH[v.qi(r,w.carrier)];
             for(size_t k=0;k<v.cfg.species;++k) if(k!=w.carrier) {
                 const double yl=v.gasY[v.qi(l,k)],yr=v.gasY[v.qi(r,k)];
-                w.carrierFlux-=w.diffusion*(yr-yl)-(f.ownerWeight*yl+(1-f.ownerWeight)*yr)*w.sumJ;
+                const double J=w.diffusion*(yr-yl)-(f.ownerWeight*yl+(1-f.ownerWeight)*yr)*w.sumJ;
+                w.carrierFlux-=J;
+                const double hk=f.ownerWeight*v.gasH[v.qi(l,k)]+(1-f.ownerWeight)*v.gasH[v.qi(r,k)];
+                w.energy+=J*(hk-hc);
             }
-            v.work[fi]=w;
-            for(size_t k=0;k<v.cfg.species;++k)
-                w.energy+=v.speciesDiffusion(fi,k)*(f.ownerWeight*v.gasH[v.qi(l,k)]+(1-f.ownerWeight)*v.gasH[v.qi(r,k)]);
         }
         v.work[fi]=w;
     }
@@ -146,18 +152,12 @@ struct Rhs {
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
             const double sign=entry<0?-1:1;
-            rate+=sign*v.faceFlux(fi,k)/v.volume[c];
-            if(v.cfg.mechanical&&k>=v.cfg.species+4) div-=sign*v.work[fi].faceVelocity*v.faces[fi].area/v.volume[c];
+            rate+=sign*v.faceFlux(fi,k)*v.inverseVolume[c];
+            if(v.cfg.mechanical&&k>=v.cfg.species+4) div-=sign*v.work[fi].faceVelocity*v.faces[fi].area*v.inverseVolume[c];
         }
         if(v.cfg.mechanical&&k>=v.cfg.species+4)
             rate+=(v.q[v.qi(c,k)]+(k==v.cfg.species+4?1:-1)*v.state[c].dilatation)*div;
         v.rhs[index]=rate;
-    }
-};
-struct Boundary {
-    PINTLE_HD void operator()(size_t k,View v) const {
-        double total=0;for(size_t j=0;j<v.nBoundary;++j) total+=v.faceFlux(v.boundary[j],k);
-        v.boundaryRate[k]=total;
     }
 };
 struct Step {
@@ -166,9 +166,11 @@ struct Step {
         double denominator=0;
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
-            denominator+=v.faces[fi].area*v.work[fi].speed;
+            const double speed=v.work[fi].speed;
+            if(!std::isfinite(speed)||speed<0) {v.step[c]=-1;return;}
+            denominator+=v.faces[fi].area*speed;
         }
-        v.step[c]=denominator>0?minimum(maximumStep,cfl*v.volume[c]/denominator):maximumStep;
+        v.step[c]=denominator>0?minimum(maximumStep,cfl/(v.inverseVolume[c]*denominator)):maximumStep;
         if(!std::isfinite(denominator)||denominator<0) v.step[c]=-1;
     }
 };

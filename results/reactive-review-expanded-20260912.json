@@ -1,0 +1,396 @@
+{
+  "baseline": "fad4ecfd4d627c8903ee71dde25941a63268a767",
+  "backend": "cpu",
+  "cantera": "3.2.0",
+  "sundials": "7.4.0",
+  "tests": [
+    {
+      "name": "sparse-cache-callbacks",
+      "passed": true,
+      "pattern_change": true,
+      "zero_crossing": true,
+      "independent_preconditioner_residual": true,
+      "current_Jv_preserved": true,
+      "energy_invalidation": true
+    },
+    {
+      "name": "varied-chemistry-reinit",
+      "passed": true,
+      "runs": [
+        {
+          "T": 1400,
+          "p": 100000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 25
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": false,
+          "Jv_relative_error": 1.2796742471404562e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 4.985520078710142e-13,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 1,
+            "workspaceReinitializations": 0,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 1400,
+          "p": 100000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 25
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": true,
+          "Jv_relative_error": 1.2796742471404562e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 4.199228649713898e-16,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 1400,
+          "p": 100000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 25
+          },
+          "dt": 1e-08,
+          "mode": "sparse",
+          "structured": true,
+          "Jv_relative_error": 1.2796742471404562e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 4.199228649713898e-16,
+          "profile": {
+            "jvSetups": 22,
+            "preconditionerSetups": 13,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 1,
+            "preconditionerReuses": 12,
+            "symbolicAnalyses": 1,
+            "numericFactorizations": 13,
+            "workspaceCreates": 1,
+            "workspaceReinitializations": 0,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.000767408,
+            "kineticsSeconds": 0.08886411200000002,
+            "csrSeconds": 0.002037535,
+            "symbolicSeconds": 0.002012157,
+            "factorSeconds": 0.057928505,
+            "solveSeconds": 0.0038967750000000003
+          }
+        },
+        {
+          "T": 2000,
+          "p": 2000000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 50,
+            "CO2": 2,
+            "H2O": 3
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": false,
+          "Jv_relative_error": 1.3623532953240847e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 1.9462283183172979e-13,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 2000,
+          "p": 2000000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 50,
+            "CO2": 2,
+            "H2O": 3
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": true,
+          "Jv_relative_error": 1.3623532953240847e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 1.0045520828590027e-15,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 2000,
+          "p": 2000000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 50,
+            "CO2": 2,
+            "H2O": 3
+          },
+          "dt": 1e-08,
+          "mode": "sparse",
+          "structured": true,
+          "Jv_relative_error": 1.3623532953240847e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 8.009170034227563e-16,
+          "profile": {
+            "jvSetups": 142,
+            "preconditionerSetups": 23,
+            "jacobianCacheHits": 2,
+            "patternBuilds": 0,
+            "preconditionerReuses": 20,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 23,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.004584149999999998,
+            "kineticsSeconds": 0.5167340390000001,
+            "csrSeconds": 0.010704568000000001,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.100372292,
+            "solveSeconds": 0.023618521000000014
+          }
+        },
+        {
+          "T": 2600,
+          "p": 800000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 200
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": false,
+          "Jv_relative_error": 2.746537859835028e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 1.4521575584361129e-12,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 2600,
+          "p": 800000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 200
+          },
+          "dt": 1e-08,
+          "mode": "dense",
+          "structured": true,
+          "Jv_relative_error": 2.746537859835028e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 1.2719905958179715e-15,
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "T": 2600,
+          "p": 800000.0,
+          "X": {
+            "N2O": 3,
+            "IC3H7OH": 1,
+            "N2": 200
+          },
+          "dt": 1e-08,
+          "mode": "sparse",
+          "structured": true,
+          "Jv_relative_error": 2.746537859835028e-09,
+          "negative_column_norm": 0.0,
+          "reused_fresh_Y_Linf": 0.0,
+          "reused_fresh_T_relative": 0.0,
+          "drift": 2.112221067296541e-15,
+          "profile": {
+            "jvSetups": 326,
+            "preconditionerSetups": 38,
+            "jacobianCacheHits": 5,
+            "patternBuilds": 0,
+            "preconditionerReuses": 32,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 38,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.011142712999999995,
+            "kineticsSeconds": 1.2597253929999987,
+            "csrSeconds": 0.026611645000000003,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.17007658400000006,
+            "solveSeconds": 0.06210627800000004
+          }
+        }
+      ]
+    },
+    {
+      "name": "PLOG-knot-sides",
+      "passed": true,
+      "rows": [
+        {
+          "pressure": 9990.0,
+          "knot": 10000.0,
+          "side": -1,
+          "relative_error": 9.623877215195155e-09
+        },
+        {
+          "pressure": 10009.999999999998,
+          "knot": 10000.0,
+          "side": 1,
+          "relative_error": 6.700087091441657e-08
+        },
+        {
+          "pressure": 999000.0,
+          "knot": 1000000.0,
+          "side": -1,
+          "relative_error": 3.1151910454687926e-08
+        },
+        {
+          "pressure": 1000999.9999999999,
+          "knot": 1000000.0,
+          "side": 1,
+          "relative_error": 2.179339032432898e-08
+        }
+      ],
+      "exact_knot_differentiability_claimed": false
+    },
+    {
+      "name": "real-transport-ideal",
+      "passed": false,
+      "error": "Real boundary mismatch"
+    },
+    {
+      "name": "real-transport-mixed",
+      "passed": false,
+      "error": "Expected coexisting phases"
+    },
+    {
+      "name": "real-transport-liquid",
+      "passed": false,
+      "error": "Real boundary mismatch"
+    }
+  ],
+  "library_sha256": {
+    "libpintleReactiveTransport.so": "a15dc6ae64c5c58e3a5b261a06c7a7d6e85acb2b991046739ef650d3693d2a6b",
+    "libpintleReactiveCacheTest.so": "a7c90daaae2cbcb1961310f29047d0d060b86908d5a1d8c8434d1897b57c9201",
+    "libpintleReactiveBackend.so": "4bccd333c693e4889e0c3d7385abe3ebe0ae1a4bef9660d24fa988faa6ee18f8"
+  },
+  "passed": false
+}

@@ -22,6 +22,18 @@ void cudaCheck(cudaError_t status) {if(status!=cudaSuccess) throw std::runtime_e
 template<class Operator> __global__ void execute(size_t n,View v,Operator op) {
     for(size_t j=size_t(blockIdx.x)*blockDim.x+threadIdx.x;j<n;j+=size_t(blockDim.x)*gridDim.x) op(j,v);
 }
+template<class Reduction> __global__ void reduceGroups(size_t groups,View v,Reduction op,double* output) {
+    __shared__ double values[256];
+    for(size_t g=blockIdx.x;g<groups;g+=gridDim.x) {
+        values[threadIdx.x]=op(g,threadIdx.x,v);__syncthreads();
+        for(unsigned stride=128;stride;stride/=2) {
+            if(threadIdx.x<stride) values[threadIdx.x]=op.combine(values[threadIdx.x],values[threadIdx.x+stride]);
+            __syncthreads();
+        }
+        if(threadIdx.x==0) output[g]=values[0];
+        __syncthreads();
+    }
+}
 #endif
 struct Execution {
     bool cuda;PintleTransportStats stats{};std::vector<void*> allocations;
@@ -94,27 +106,62 @@ struct Execution {
         for(size_t j=0;j<n;++j) op(j,v);
         ++stats.kernelLaunches;
     }
+    template<class Reduction> void reduce(size_t groups,View v,Reduction op,double* output) {
+        if(!groups) return;
+#ifdef __CUDACC__
+        if(cuda) {reduceGroups<<<unsigned(std::min(size_t(65535),groups)),256,0,stream>>>(groups,v,op,output);cudaCheck(cudaGetLastError());}
+        else
+#endif
+        for(size_t g=0;g<groups;++g) {
+            double values[256];for(size_t j=0;j<256;++j) values[j]=op(g,j,v);
+            for(size_t stride=128;stride;stride/=2)
+                for(size_t j=0;j<stride;++j) values[j]=op.combine(values[j],values[j+stride]);
+            output[g]=values[0];
+        }
+        ++stats.kernelLaunches;
+    }
     void finish() {
 #ifdef __CUDACC__
         if(cuda) cudaCheck(cudaStreamSynchronize(stream));
 #endif
     }
 };
-struct Minimum {
-    const double* input;double* output;size_t count;
 #ifdef __CUDACC__
-    __host__ __device__
+#define RT_HD __host__ __device__
+#else
+#define RT_HD
 #endif
-    void operator()(size_t j,View) const {
-        double value=input[j*128];
-        const size_t end=(j+1)*128<count?(j+1)*128:count;
-        for(size_t k=j*128+1;k<end;++k) value=minimum(value,input[k]);
-        output[j]=value;
+struct Minimum {
+    const double* input;size_t count;
+    RT_HD double operator()(size_t group,size_t lane,View) const {
+        const size_t i=group*256+lane;
+        if(i>=count) return HUGE_VAL;
+        const double value=input[i];
+        // Invalid state is absorbing, including in subsequent reduction levels.
+        return std::isfinite(value)&&value>0?value:-1;
     }
+    RT_HD double combine(double a,double b) const {return minimum(a,b);}
 };
+struct BoundaryPartial {
+    size_t partitions;
+    RT_HD double operator()(size_t group,size_t lane,View v) const {
+        const size_t k=group/partitions,tile=group%partitions;double sum=0;
+        for(size_t j=tile*256+lane;j<v.nBoundary;j+=partitions*256) sum+=v.faceFlux(v.boundary[j],k);
+        return sum;
+    }
+    RT_HD double combine(double a,double b) const {return a+b;}
+};
+struct BoundaryFinish {
+    const double* input;size_t partitions;
+    RT_HD double operator()(size_t k,size_t lane,View) const {return lane<partitions?input[k*partitions+lane]:0;}
+    RT_HD double combine(double a,double b) const {return a+b;}
+};
+#undef RT_HD
 class Transport {
 public:
-    Execution execution;View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr;
+    Execution execution;View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr,*boundaryPartial=nullptr;
+    PintleTransportProfile profile{};
+    uint64_t residentVersion=0,highestVersion=0;bool haveResident=false;
     bool haveInitial=false;double stageDt=0;std::string error;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
               const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH)
@@ -153,7 +200,7 @@ public:
         }
 #define ALLOC(member,type,count) v.member=execution.allocate<type>((count),cfg.maxBytes)
         ALLOC(faces,PintleTransportFace,cfg.faces);ALLOC(state,PintleTransportState,all);
-        ALLOC(volume,double,cfg.cells);ALLOC(row,size_t,row.size());ALLOC(incidence,int64_t,incidence.size());
+        ALLOC(inverseVolume,double,cfg.cells);ALLOC(row,size_t,row.size());ALLOC(incidence,int64_t,incidence.size());
         ALLOC(boundary,size_t,boundary.size());v.nBoundary=boundary.size();
         ALLOC(q,double,product(all,cfg.variables));ALLOC(initial,double,n);ALLOC(rhs,double,n);
         ALLOC(primitive,Primitive,all);ALLOC(work,FaceWork,cfg.faces);
@@ -162,14 +209,27 @@ public:
         ALLOC(gasH,double,cfg.diffusivity>0?product(all,cfg.species):0);
         ALLOC(boundaryRate,double,cfg.variables);ALLOC(step,double,cfg.cells);
 #undef ALLOC
-        reduceA=execution.allocate<double>((cfg.cells+127)/128,cfg.maxBytes);
-        reduceB=execution.allocate<double>((cfg.cells+127)/128,cfg.maxBytes);
+        reduceA=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
+        reduceB=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
         bridge=execution.allocate<double>(product(std::max(cfg.cells,cfg.fixed),cfg.variables),cfg.maxBytes);
-        execution.upload(v.faces,faces,cfg.faces);execution.upload(v.volume,volumes,cfg.cells);
+        profile.boundaryPartitions=std::min(size_t(256),std::max(size_t(1),(boundary.size()+255)/256));
+        boundaryPartial=execution.allocate<double>(product(cfg.variables,profile.boundaryPartitions),cfg.maxBytes);
+        std::vector<double> inverse(cfg.cells);
+        for(size_t c=0;c<cfg.cells;++c) {inverse[c]=1/volumes[c];require(std::isfinite(inverse[c]),"Invalid inverse volume");}
+        execution.upload(v.faces,faces,cfg.faces);execution.upload(v.inverseVolume,inverse.data(),cfg.cells);
         execution.upload(v.row,row.data(),row.size());execution.upload(v.incidence,incidence.data(),incidence.size());
         execution.upload(v.boundary,boundary.data(),boundary.size());
         pack(v.q,fixedQ,cfg.fixed,cfg.variables,cfg.cells);
+        validateStates(fixedStates,cfg.fixed);
         execution.upload(v.state+cfg.cells,fixedStates,cfg.fixed);
+        std::vector<Primitive> fixedPrimitive(cfg.fixed);
+        for(size_t c=0;c<cfg.fixed;++c) {
+            auto& p=fixedPrimitive[c];
+            for(size_t k=0;k<cfg.species;++k) p.rho+=fixedQ[c*cfg.variables+k];
+            require(std::isfinite(p.rho)&&p.rho>0,"Invalid fixed density");
+            for(int d=0;d<3;++d) {p.u[d]=fixedQ[c*cfg.variables+cfg.species+d]/p.rho;require(std::isfinite(p.u[d]),"Invalid fixed velocity");}
+        }
+        execution.upload(v.primitive+cfg.cells,fixedPrimitive.data(),cfg.fixed);
         if(cfg.diffusivity>0) {
             pack(v.gasY,fixedY,cfg.fixed,cfg.species,cfg.cells);
             pack(v.gasH,fixedH,cfg.fixed,cfg.species,cfg.cells);
@@ -180,36 +240,78 @@ public:
         execution.upload(bridge,source,cells*variables);
         execution.launch(cells*variables,v,Layout{bridge,destination,cells,variables,v.cfg.cells+v.cfg.fixed,offset,true});
     }
-    void unpack(double* destination,const double* source,size_t stride) {
+    void unpack(double* destination,const double* source,size_t stride,bool conserved=true) {
         execution.launch(v.cfg.cells*v.cfg.variables,v,Layout{source,bridge,v.cfg.cells,v.cfg.variables,stride,0,false});
         execution.download(destination,bridge,v.cfg.cells*v.cfg.variables);
+        if(conserved) profile.conservedDownloadBytes+=v.cfg.cells*v.cfg.variables*sizeof(double);
     }
-    void prepare(const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
-        require(q&&states,"Null transport state");
-        for(size_t c=0;c<v.cfg.cells;++c) {
+    static void validateStates(const PintleTransportState* states,size_t count) {
+        require(!count||states,"Null transport state");
+        for(size_t c=0;c<count;++c) {
             const auto& s=states[c];
             require(std::isfinite(s.p)&&s.p>0&&std::isfinite(s.T)&&s.T>0&&std::isfinite(s.rho)&&s.rho>0
                     &&std::isfinite(s.sound)&&s.sound>0&&std::isfinite(s.cv)&&s.cv>0
                     &&std::isfinite(s.gasMass)&&s.gasMass>=0&&std::isfinite(s.dilatation),"Invalid recovered transport state");
         }
-        pack(v.q,q,v.cfg.cells,v.cfg.variables);execution.upload(v.state,states,v.cfg.cells);
+    }
+    void uploadQ(const double* q) {
+        pack(v.q,q,v.cfg.cells,v.cfg.variables);
+        ++profile.conservedUploads;profile.conservedUploadBytes+=v.cfg.cells*v.cfg.variables*sizeof(double);
+    }
+    void uploadState(const PintleTransportState* states) {
+        validateStates(states,v.cfg.cells);execution.upload(v.state,states,v.cfg.cells);
+        profile.stateUploadBytes+=v.cfg.cells*sizeof(PintleTransportState);
+    }
+    void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
+        uploadState(states);
         if(transport&&v.cfg.diffusivity>0) {
             pack(v.gasY,gasY,v.cfg.cells,v.cfg.species);pack(v.gasH,gasH,v.cfg.cells,v.cfg.species);
+            profile.gasUploadBytes+=2*v.cfg.cells*v.cfg.species*sizeof(double);
         }
         execution.launch(v.cfg.cells+v.cfg.fixed,v,Cells{});
         if(transport&&v.cfg.viscosity>0) execution.launch(v.cfg.cells,v,Gradients{});
         execution.launch(v.cfg.faces,v,Faces{transport});
     }
-    void flux(const double* q,const PintleTransportState* state,const double* gasY,const double* gasH) {
-        prepare(q,state,gasY,gasH,true);
-        execution.launch(v.cfg.cells*v.cfg.variables,v,Rhs{});execution.launch(v.cfg.variables,v,Boundary{});
+    void prepare(const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
+        haveResident=false;uploadQ(q);prepareResident(states,gasY,gasH,transport);
     }
+    void gather() {
+        execution.launch(v.cfg.cells*v.cfg.variables,v,Rhs{});
+        execution.reduce(v.cfg.variables*profile.boundaryPartitions,v,BoundaryPartial{profile.boundaryPartitions},boundaryPartial);
+        execution.reduce(v.cfg.variables,v,BoundaryFinish{boundaryPartial,profile.boundaryPartitions},v.boundaryRate);
+    }
+    void flux(const double* q,const PintleTransportState* state,const double* gasY,const double* gasH) {
+        prepare(q,state,gasY,gasH,true);gather();
+    }
+    void stableStep(double cfl,double maximumStep,double* dt) {
+        require(dt&&std::isfinite(cfl)&&cfl>0&&cfl<=.5&&std::isfinite(maximumStep)&&maximumStep>0,"Invalid transport CFL controls");
+        execution.launch(v.cfg.cells,v,Step{cfl,maximumStep});
+        size_t count=v.cfg.cells;const double* input=v.step;double* output=reduceA;
+        while(count>1) {
+            execution.reduce((count+255)/256,v,Minimum{input,count},output);
+            count=(count+255)/256;input=output;output=output==reduceA?reduceB:reduceA;
+        }
+        execution.download(dt,input,1);execution.finish();
+        require(std::isfinite(*dt)&&*dt>0,"Invalid wave/diffusion timestep");++execution.stats.stepQueries;
+    }
+    void advance(double dt,int stage,double* q,double* boundary) {
+        execution.launch(v.cfg.cells*v.cfg.variables,v,Advance{dt,stage});
+        unpack(q,v.q,v.cfg.cells+v.cfg.fixed);
+        execution.download(boundary,v.boundaryRate,v.cfg.variables);execution.finish();
+        haveInitial=stage==0;stageDt=dt;++execution.stats.stages;
+    }
+
 };
 template<class F> int protect(void* handle,F f) {
     if(!handle) return -1;
     auto& t=*static_cast<Transport*>(handle);
     try {f(t);t.error.clear();return 0;}
-    catch(const std::exception& ex) {t.error=ex.what();t.haveInitial=false;return 1;}
+    catch(const std::exception& ex) {
+        // Even failed calls must release any outstanding use of caller-owned
+        // host arrays before returning control to rollback/destruction.
+        try {t.execution.finish();} catch(...) {}
+        t.error=ex.what();t.haveInitial=false;t.haveResident=false;return 1;
+    }
 }
 }
 extern "C" {
@@ -228,29 +330,57 @@ int pintle_transport_stats(void* t,PintleTransportStats* result) {
 int pintle_transport_stable_step(void* t,const double* q,const PintleTransportState* state,double cfl,double maximumStep,double* dt) {
     return protect(t,[&](Transport& x){
         require(dt&&std::isfinite(cfl)&&cfl>0&&cfl<=.5&&std::isfinite(maximumStep)&&maximumStep>0,"Invalid transport CFL controls");
-        x.prepare(q,state,nullptr,nullptr,false);x.execution.launch(x.v.cfg.cells,x.v,Step{cfl,maximumStep});
-        size_t count=x.v.cfg.cells;const double* input=x.v.step;double* output=x.reduceA;
-        while(count>1) {
-            x.execution.launch((count+127)/128,x.v,Minimum{input,output,count});
-            count=(count+127)/128;input=output;output=output==x.reduceA?x.reduceB:x.reduceA;
-        }
-        x.execution.download(dt,input,1);x.execution.finish();
-        require(std::isfinite(*dt)&&*dt>0,"Invalid wave/diffusion timestep");++x.execution.stats.stepQueries;
+        x.prepare(q,state,nullptr,nullptr,false);
+        x.stableStep(cfl,maximumStep,dt);
     });
 }
 int pintle_transport_rhs(void* t,const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,double* rhs,double* boundary) {
     return protect(t,[&](Transport& x){x.haveInitial=false;x.flux(q,states,gasY,gasH);
-        x.unpack(rhs,x.v.rhs,x.v.cfg.cells);
+        x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
         x.execution.download(boundary,x.v.boundaryRate,x.v.cfg.variables);x.execution.finish();});
 }
 int pintle_transport_stage(void* t,double* q,const PintleTransportState* states,const double* gasY,const double* gasH,double dt,int stage,double* boundary) {
     return protect(t,[&](Transport& x){
         require(std::isfinite(dt)&&dt>0&&(stage==0||stage==1),"Invalid RK stage");
         require(stage==0||(x.haveInitial&&x.stageDt==dt),"RK stage 1 requires matching stage 0");
-        x.flux(q,states,gasY,gasH);x.execution.launch(x.v.cfg.cells*x.v.cfg.variables,x.v,Advance{dt,stage});
-        x.unpack(q,x.v.q,x.v.cfg.cells+x.v.cfg.fixed);
-        x.execution.download(boundary,x.v.boundaryRate,x.v.cfg.variables);x.execution.finish();
-        x.haveInitial=stage==0;x.stageDt=dt;++x.execution.stats.stages;
+        x.flux(q,states,gasY,gasH);x.advance(dt,stage,q,boundary);
     });
 }
+int pintle_transport_profile(void* t,PintleTransportProfile* result) {
+    return protect(t,[&](Transport& x){require(result,"Null transport profile");*result=x.profile;});
+}
+int pintle_transport_upload_conserved(void* t,const double* q,uint64_t version) {
+    return protect(t,[&](Transport& x){
+        require(version,"Conserved version must be nonzero");
+        if(x.haveResident&&version==x.residentVersion) return;
+        require(version>x.highestVersion,"Conserved upload version must increase");
+        x.haveInitial=false;x.uploadQ(q);x.execution.finish();
+        x.residentVersion=x.highestVersion=version;x.haveResident=true;
+    });
+}
+int pintle_transport_stable_step_primitives(void* t,const PintleTransportPrimitive* primitive,
+    const PintleTransportState* state,double cfl,double maximumStep,double* dt) {
+    return protect(t,[&](Transport& x){
+        require(primitive,"Null CFL primitives");
+        for(size_t c=0;c<x.v.cfg.cells;++c) {
+            require(std::isfinite(primitive[c].rho)&&primitive[c].rho>0,"Invalid CFL density");
+            for(double u:primitive[c].u) require(std::isfinite(u),"Invalid CFL velocity");
+        }
+        x.uploadState(state);x.execution.upload(x.v.primitive,primitive,x.v.cfg.cells);
+        x.profile.primitiveUploadBytes+=x.v.cfg.cells*sizeof(PintleTransportPrimitive);
+        x.execution.launch(x.v.cfg.faces,x.v,Faces{false});x.stableStep(cfl,maximumStep,dt);
+    });
+}
+int pintle_transport_stage_resident(void* t,const PintleTransportState* states,const double* gasY,const double* gasH,
+    double dt,int stage,uint64_t inputVersion,uint64_t outputVersion,double* q,double* boundary) {
+    return protect(t,[&](Transport& x){
+        require(x.haveResident&&x.residentVersion==inputVersion,"Stale resident conserved state");
+        require(outputVersion>x.highestVersion,"Output conserved version must increase");
+        require(std::isfinite(dt)&&dt>0&&(stage==0||stage==1),"Invalid RK stage");
+        require(stage==0||(x.haveInitial&&x.stageDt==dt),"RK stage 1 requires matching stage 0");
+        x.prepareResident(states,gasY,gasH,true);x.gather();x.advance(dt,stage,q,boundary);
+        x.residentVersion=x.highestVersion=outputVersion;++x.profile.residentStages;
+    });
+}
+
 }

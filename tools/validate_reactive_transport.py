@@ -35,6 +35,17 @@ class Stats(C.Structure):
         "allocatedBytes", "uploadedBytes", "downloadedBytes", "kernelLaunches", "stages", "stepQueries")]
 
 
+class Primitive(C.Structure):
+    _fields_ = [("rho", C.c_double), ("u", C.c_double*3)]
+
+class Profile(C.Structure):
+    _fields_ = [(n, C.c_uint64) for n in ("conservedUploads", "conservedUploadBytes", "conservedDownloadBytes",
+        "stateUploadBytes", "primitiveUploadBytes", "gasUploadBytes", "boundaryPartitions", "residentStages")]
+
+def primitives(q, states, ns):
+    return (Primitive*len(q))(*[Primitive(s.rho, (C.c_double*3)(*(q[c, ns:ns+3]/s.rho))) for c,s in enumerate(states)])
+
+
 def ptr(a):
     return a.ctypes.data_as(C.POINTER(C.c_double)) if a is not None else None
 
@@ -122,6 +133,10 @@ def load(path):
         "create": ([C.c_int, C.POINTER(Config), d, C.POINTER(Face), d, s, d, d, C.c_char_p, C.c_size_t], v),
         "destroy": ([v], None), "error": ([v], C.c_char_p), "is_cuda": ([v], C.c_int),
         "stats": ([v, C.POINTER(Stats)], C.c_int),
+        "profile": ([v, C.POINTER(Profile)], C.c_int),
+        "upload_conserved": ([v, d, C.c_uint64], C.c_int),
+        "stable_step_primitives": ([v, C.POINTER(Primitive), s, C.c_double, C.c_double, d], C.c_int),
+        "stage_resident": ([v, s, d, d, C.c_double, C.c_int, C.c_uint64, C.c_uint64, d, d], C.c_int),
         "rhs": ([v, d, s, d, d, d, d], C.c_int),
         "stage": ([v, d, s, d, d, C.c_double, C.c_int, d], C.c_int),
         "stable_step": ([v, d, s, C.c_double, C.c_double, d], C.c_int),
@@ -131,7 +146,7 @@ def load(path):
     return lib
 
 
-def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False):
+def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, spatial=False, boundary_count=0):
     rng = np.random.default_rng(401+ns+nc); nv = ns+4+2*mechanical
     q = np.zeros((nc, nv)); q[:, :ns] = rng.uniform(.001, 1, (nc, ns)); q[:, :ns] /= q[:, :ns].sum(axis=1)[:, None]
     q[:, :ns] *= rng.uniform(.8, 1.3, (nc, 1)); rho = q[:, :ns].sum(axis=1)
@@ -149,6 +164,18 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False):
             weight = {1: .5, 2: 1., 3: 0.}[boundary_kind]
             faces.append(Face(c, -1, 0 if boundary_kind == 3 else -1, (C.c_double*3)(normal, 0, 0), 1, .1, weight, boundary_kind))
         nf = int(boundary_kind == 3)
+    if spatial:
+        # Irregular incidence and oblique normals exercise all tensor entries.
+        # This is an operator graph, not a claim of a closed polyhedral PDE mesh.
+        for i in range(max(0, nc-2)):
+            faces.append(Face(i, i+2, -1, (C.c_double*3)(1, 0, 0), .31, .27, .61, 0))
+        for f in faces:
+            normal = rng.normal(size=3); normal /= np.linalg.norm(normal)
+            f.normal = (C.c_double*3)(*normal)
+            f.area *= rng.uniform(.5, 1.5)
+    for j in range(boundary_count):
+        normal=rng.normal(size=3); normal/=np.linalg.norm(normal)
+        faces.append(Face(j%nc, -1, -1, (C.c_double*3)(*normal), .003, .13, 1, 2))
     geometry = (Face*len(faces))(*faces)
     cfg = Config(nc, ns, nv, len(faces), nf, .007 if transport else 0, 2 if transport else 0,
         .003 if transport else 0, 1.1, 2e8, mechanical)
@@ -194,11 +221,84 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False):
         q[:] = original
         check(lib.pintle_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step/2, 0, ptr(br)))
         compare(q, original+step/2*expected)
+        # Three CFL queries + two RK stages, exactly as in Flow::step. Only
+        # one conserved upload is allowed. Same pointer, changed version must
+        # refresh data; wrong input version and rollback are checked below.
+        q[:] = original
+        before=Profile();check(lib.pintle_transport_profile(handle,C.byref(before)))
+        primitive=primitives(q,states,ns)
+        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+        assert abs(dt.value/expected_dt-1)<3e-14
+        check(lib.pintle_transport_upload_conserved(handle,ptr(q),10))
+        check(lib.pintle_transport_upload_conserved(handle,ptr(q),10))
+        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+        check(lib.pintle_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step,0,10,11,ptr(q),ptr(br)))
+        compare(q,original+step*expected)
+        rs,ry,rh=recovered(q,ns,mechanical)
+        check(lib.pintle_transport_stable_step_primitives(handle,primitives(q,rs,ns),rs,.23,.1,C.byref(dt)))
+        check(lib.pintle_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,12,ptr(q),ptr(br)))
+        compare(q,expected_final)
+        after=Profile();check(lib.pintle_transport_profile(handle,C.byref(after)))
+        assert after.conservedUploads-before.conservedUploads==1
+        assert after.conservedUploadBytes-before.conservedUploadBytes==q.nbytes
+        assert after.conservedDownloadBytes-before.conservedDownloadBytes==2*q.nbytes
+        assert after.residentStages-before.residentStages==2
+        # Stale versions cannot consume a later q. Error invalidates residency.
+        assert lib.pintle_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,13,ptr(q),ptr(br))!=0
+        q[:]=original
+        check(lib.pintle_transport_upload_conserved(handle,ptr(q),20))
+        check(lib.pintle_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step/2,0,20,21,ptr(q),ptr(br)))
+        compare(q,original+step/2*expected)
+        # Same host storage now represents a CPU chemical update / restoration.
+        q[:]=original*1.001
+        altered=q.copy();ar,ay,ah=recovered(q,ns,mechanical)
+        arhs,_,_=reference(q,ar,faces,volumes,cfg,fixed,fs,ay,ah,fy,fh)
+        check(lib.pintle_transport_upload_conserved(handle,ptr(q),30))
+        check(lib.pintle_transport_stage_resident(handle,ar,ptr(ay),ptr(ah),step/2,0,30,31,ptr(q),ptr(br)))
+        compare(q,altered+step/2*arhs)
+        # Invalid velocities/states at different reduction positions must fail.
+        for c in set((0,nc//2,nc-1)):
+            bad=primitives(original,states,ns);bad[c].u[1]=float('nan')
+            assert lib.pintle_transport_stable_step_primitives(handle,bad,states,.23,.1,C.byref(dt))!=0
+        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+        assert abs(dt.value/expected_dt-1)<3e-14
+        delta={n:getattr(after,n)-getattr(before,n) for n,_ in Profile._fields_ if n!='boundaryPartitions'}
         stats = Stats(); check(lib.pintle_transport_stats(handle, C.byref(stats)))
         return dict(species=ns, cells=nc, boundary_kind=boundary_kind, transport=transport,
-            mechanical=mechanical, scaled_error=err, stats={n: getattr(stats, n) for n, _ in stats._fields_})
+            mechanical=mechanical, spatial=spatial, boundary_faces=sum(f.neighbour<0 for f in faces),
+            scaled_error=err, resident_cycle=delta, boundary_partitions=after.boundaryPartitions,
+            stats={n: getattr(stats, n) for n, _ in stats._fields_})
     finally:
         lib.pintle_transport_destroy(handle)
+
+
+def run_large_cfl(lib,backend,nc):
+    # The 256^2 boundary tests the third reduction level without redundantly
+    # running the much more expensive NumPy flux reference on a huge mesh.
+    cfg=Config(nc,1,5,nc,0,0,0,0,1.1,2e8,0)
+    volume=np.full(nc,.2);states=(State*nc)(*[State(1e5,300,1,717,300,1,0)]*nc)
+    primitive=(Primitive*nc)(*[Primitive(1,(C.c_double*3)(5,0,0))]*nc)
+    faces=(Face*nc)(*[Face(c,(c+1)%nc,-1,(C.c_double*3)(1,0,0),1,.2,.5,0) for c in range(nc)])
+    error=C.create_string_buffer(4096)
+    handle=lib.pintle_transport_create(backend,C.byref(cfg),ptr(volume),faces,None,None,None,None,error,len(error))
+    if not handle:raise RuntimeError(error.value.decode())
+    try:
+        dt=C.c_double();expected=.23*.2/(2*(5+1.1*300))
+        status=lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))
+        if status:raise AssertionError(lib.pintle_transport_error(handle).decode())
+        assert abs(dt.value/expected-1)<3e-14
+        for c in (0,nc//2,nc-1):
+            # Finite input passes host validation but overflows the GPU cell
+            # denominator. Its error must survive every reduction level.
+            primitive[c].u[0]=1e308
+            assert lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))!=0
+            primitive[c].u[0]=5
+        assert lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))==0
+        profile=Profile();assert lib.pintle_transport_profile(handle,C.byref(profile))==0
+        assert profile.conservedUploadBytes==0
+        return dict(name="large-CFL-reduction",cells=nc,relative_error=abs(dt.value/expected-1),
+                    invalid_device_denominator_rejected=True,conserved_upload_bytes=0)
+    finally:lib.pintle_transport_destroy(handle)
 
 
 def main():
@@ -212,6 +312,9 @@ def main():
         (413, 7, 0, False, False), (53, 257, 0, True, False), (4, 1, 3, True, False),
         (8, 7, 0, False, True), (8, 7, 1, False, True), (4, 1, 0, False, False)]:
         rows.append(run(lib, int(args.backend=="cuda"), ns, nc, bc, tr, mech))
+    for ns,nc,boundary_count in [(4,255,0),(4,256,0),(4,257,4097),(413,17,513)]:
+        rows.append(run(lib,int(args.backend=="cuda"),ns,nc,3,True,False,True,boundary_count))
+    for nc in (65535,65536,65537):rows.append(run_large_cfl(lib,int(args.backend=="cuda"),nc))
     report = dict(passed=True, backend=args.backend, gpu_execution_verified=args.backend=="cuda", tests=rows,
         library_sha256=hashlib.sha256(args.library.read_bytes()).hexdigest())
     args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(json.dumps(report, indent=2)+"\n")

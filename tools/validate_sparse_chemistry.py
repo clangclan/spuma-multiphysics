@@ -49,7 +49,7 @@ def check_gas(configuration, pressure):
         require(reference_error<2e-5, "Sparse/structured dense product differs")
         runs = []; strict_failure = None; dt = 2e-5 if pressure <= 1e5 else 1e-6
         for mode in ("dense", "sparse", "auto"):
-            b.set_chemical_linear_solver(mode); b.sparse_stats(True)
+            b.set_chemical_linear_solver(mode); b.sparse_stats(True); b.chemical_profile(True)
             start = time.perf_counter()
             try: final, result, drift = b.react(q, energy, dt, state)
             except RuntimeError as ex:
@@ -66,7 +66,7 @@ def check_gas(configuration, pressure):
                 if mode == "auto" and strict_failure:
                     require(stats["denseFallbacks"]==1 and stats["denseIntegrations"]==1, "Rejected sparse state was not reintegrated with dense reference")
             runs.append(dict(mode=mode, seconds=time.perf_counter()-start, q=final, T=result.T,
-                drift=drift, minimum_species=float(final.min()), stats=stats))
+                drift=drift, minimum_species=float(final.min()), stats=stats, profile=b.chemical_profile(True)))
         for run in runs[1:]:
             run["Y_Linf_difference"] = float(np.max(np.abs(run["q"]/run["q"].sum()-runs[0]["q"]/runs[0]["q"].sum())))
             run["T_relative_difference"] = abs(run["T"]/runs[0]["T"]-1)
