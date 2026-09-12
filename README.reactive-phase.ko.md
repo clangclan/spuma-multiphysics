@@ -1,8 +1,10 @@
 # N₂O/IPA 상변화·반응 열유동 연구 솔버
 
-`pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **직렬 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
+`pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
-최신 수정·검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 모든 구현·실행 검증은 MAIN이 수행했다.
+최신 수정·검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 이 보고서들의 구현·실행 검증은 MAIN이 수행했다.
+
+2026-09-12에는 **선택 가능한 CUDA 수송과 CPU 희소 화학**을 추가했다. [GPU·희소 포팅 문서](README.reactive-gpu-sparse.ko.md)에 두 공유 채팅과의 대조, 기존 상태와 새 변경, 새 환경의 시험 결과를 분리했다. 실제 GPU 실행과 SPUMA 전체 빌드는 아직 검증하지 못했으며 기본값은 CPU 수송·밀집 화학이다.
 
 ## 계산 모델
 
@@ -11,7 +13,7 @@
 - 매 단계 보존량으로부터 일정 부피·내부에너지(UV) flash를 수행한다. 공존상은 화학퍼텐셜을 일치시키고, 없는 상의 안정성 조건을 검사한다. 여러 초기 추정에서 찾은 허용 해 중 엔트로피가 가장 큰 해를 선택한다. 전역 최대해를 보증하는 알고리즘은 아니다.
 - 잠열과 반응열은 같은 열역학 에너지 기준에 들어 있다. 별도 `Gamma*L`나 `Qdot`를 총에너지에 다시 더하지 않는다.
 - 전체 반응기구의 강직 적분은 CVODE BDF를 사용한다. 각 RHS에서 flash를 풀고 기상 체적분율을 곱한 반응률을 적용한다. 화학종·원소·총질량 검사를 통과한 상태만 채택한다.
-- 화학 Jacobian은 기본적으로 고정 활성 상 구간의 암시적 열역학 미분 `J=f_q−f_z solve(F_z,F_q)`를 사용한다. 상 경계, 나쁜 조건수 및 음의 Newton 시험 상태에서는 전체 RHS 차분으로 돌아간다. `reactiveProperties`의 `chemicalJacobian fullRHS;`로 기존 CVODE 차분과 비교할 수 있다. 현재 선형계 풀이는 여전히 밀집형이다.
+- 화학 Jacobian은 기본적으로 고정 활성 상 구간의 암시적 열역학 미분 `J=f_q−f_z solve(F_z,F_q)`를 사용한다. 상 경계, 나쁜 조건수 및 음의 Newton 시험 상태에서는 전체 RHS 차분으로 돌아간다. `reactiveProperties`의 `chemicalJacobian fullRHS;`로 기존 CVODE 차분과 비교할 수 있다. 기본 선형계 풀이는 밀집형이며, 액상 없는 이상기체 구성에는 선택 가능한 희소 경로도 제공한다.
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
 
@@ -99,7 +101,7 @@ flock /home/jsw/cae-benchmark/run.lock pintleReactiveFoam -case cases/reactive-e
 
 경계 유속은 `reactiveProperties/boundaryConditions`에 직접 지정한다. 지원 항목은 `slipWall`(단열), `extrapolate`, `fixedState`(평형인 정적 `p,T,U,Y,liquidFractions`), 평행 이동 cyclic이다. `fixedState`는 고정 reservoir를 사용하는 Riemann 경계이며 전압력·전온도 경계나 비반사 출구가 아니다. 출력 필드의 `calculated` 패치 값은 물리적 경계 상태를 표시하지 않는다.
 
-고정 메시·직렬·FP64만 지원한다. 수송은 직교 메시, 점성 구배는 면 중심 skew가 없는 메시가 필요하다. 회전 cyclic, AMI, MPI, 동적 메시, function objects, 실행 중 사전 변경 및 다른 `stopAt` 설정은 거부한다. `maxDeltaT>0`, `0<maxCo<=0.5`, 종료시간이 시작시간보다 커야 한다. `maxHostMemoryGB`는 배열 크기 추정 한도이며 실제 프로세스 메모리 사용량 측정값이 아니다.
+고정 메시·단일 MPI rank·FP64만 지원한다. 수송은 직교 메시, 점성 구배는 면 중심 skew가 없는 메시가 필요하다. 회전 cyclic, AMI, MPI, 동적 메시, function objects, 실행 중 사전 변경 및 다른 `stopAt` 설정은 거부한다. `maxDeltaT>0`, `0<maxCo<=0.5`, 종료시간이 시작시간보다 커야 한다. `maxHostMemoryGB`는 배열 크기 추정 한도이며 실제 프로세스 메모리 사용량 측정값이 아니다.
 
 ## 검사 실행
 

@@ -48,6 +48,12 @@ class MechanicalState(C.Structure):
         return MechanicalState.from_buffer_copy(self)
 
 
+class SparseStats(C.Structure):
+    _fields_ = [(name, C.c_ulonglong) for name in (
+        "setups", "products", "preconditioners", "preconditionerSolves",
+        "sparseIntegrations", "denseIntegrations", "denseFallbacks", "nonzeros")]
+
+
 class Backend:
     def __init__(self, configuration, library=None):
         root = Path(__file__).resolve().parents[1]
@@ -70,6 +76,9 @@ class Backend:
             "recover": ([void, ptr, double, C.c_int, C.POINTER(State)], C.c_int),
             "recover_mechanical": ([void, ptr, ptr, double, double, double, C.POINTER(MechanicalState)], C.c_int),
             "set_chemical_jacobian": ([void, C.c_int], C.c_int),
+            "set_chemical_linear_solver": ([void, C.c_int], C.c_int),
+            "sparse_stats": ([void, C.c_int, C.POINTER(SparseStats)], C.c_int),
+            "chemical_sparse_jvp": ([void, ptr, double, C.POINTER(State), ptr, ptr], C.c_int),
             "chemical_stats": ([void, C.c_int, C.POINTER(ChemicalStats)], C.c_int),
             "chemical_integration_fallbacks": ([void], C.c_ulonglong),
             "chemical_jacobian": ([void, ptr, double, C.c_int, C.POINTER(State), ptr, C.POINTER(C.c_int)], C.c_int),
@@ -164,6 +173,21 @@ class Backend:
 
     def set_chemical_jacobian(self, structured=True):
         self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))
+
+    def set_chemical_linear_solver(self, mode="dense"):
+        modes = {"dense": 0, "sparse": 1, "auto": 2}
+        self.check(self.lib.pintle_rt_set_chemical_linear_solver(self.handle, modes[mode]))
+
+    def sparse_stats(self, reset=False):
+        result = SparseStats()
+        self.check(self.lib.pintle_rt_sparse_stats(self.handle, int(reset), C.byref(result)))
+        return {name: getattr(result, name) for name, _ in result._fields_}
+
+    def chemical_sparse_jvp(self, q, energy, guess, direction):
+        q, direction, result = self.vector(q), self.vector(direction), np.empty(self.ns)
+        self.check(self.lib.pintle_rt_chemical_sparse_jvp(self.handle, self.pointer(q), energy,
+                   C.byref(guess), self.pointer(direction), self.pointer(result)))
+        return result
 
     def chemical_stats(self, reset=False):
         result = ChemicalStats()

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pintleReactiveThermo.h"
+#include "pintleSparseJacobian.h"
 #include "cantera/base/Solution.h"
 #include "cantera/base/AnyMap.h"
 #include "cantera/thermo/ThermoPhase.h"
@@ -12,8 +13,10 @@
 #include <nvector/nvector_serial.h>
 #include <sunmatrix/sunmatrix_dense.h>
 #include <sunlinsol/sunlinsol_dense.h>
+#include <sunlinsol/sunlinsol_spgmr.h>
 #include <openssl/sha.h>
 #include <Eigen/Dense>
+#include <Eigen/SparseLU>
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -107,6 +110,8 @@ public:
     std::string fingerprint;
     Vector weights;
     bool structuredChemicalJacobian=true;
+    int chemicalLinearSolver=0;
+    PintleSparseStats sparseStats{};
     PintleChemicalStats chemicalStats{};
     unsigned long long chemicalIntegrationFallbacks=0;
 
@@ -541,7 +546,10 @@ class ChemicalODE {
 public:
     Model& model;
     double energy, negativeTrialTolerance;
-    bool equilibrium,useStructured;
+    bool equilibrium,useStructured,useSparse;
+    PintleSparseJacobian sparse;
+    Eigen::SparseMatrix<double> kinetic;
+    Eigen::SparseLU<Eigen::SparseMatrix<double>> preconditioner;
     PintleThermoState guess;
     std::string failure;
     SUNContext context=nullptr;
@@ -551,7 +559,9 @@ public:
     void* integrator=nullptr;
     ChemicalODE(Model& m,double e,bool eq,const PintleThermoState& s,double atol)
         :model(m),energy(e),negativeTrialTolerance(atol*s.rho*100),equilibrium(eq),
-         useStructured(m.structuredChemicalJacobian),guess(s) {}
+         useStructured(m.structuredChemicalJacobian),
+         useSparse(m.chemicalLinearSolver!=0 && m.structuredChemicalJacobian
+                   && m.nl==0 && m.gas->type()=="ideal-gas"),guess(s) {}
     ~ChemicalODE() {
         if(integrator) CVodeFree(&integrator);
         if(linear) SUNLinSolFree(linear);
@@ -713,6 +723,86 @@ public:
             return 0;
         } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
     }
+    void sparseJacobian(Vector q) {
+        auto& m=model;
+        require(m.nl==0&&m.gas->type()=="ideal-gas","Sparse chemistry requires ideal gas without liquid phases");
+        Vector mask(m.ns,1.0);
+        for(size_t j=0;j<m.ns;++j) {
+            require(std::isfinite(q[j])&&q[j]>=-negativeTrialTolerance,"Sparse Newton trial leaves the species domain");
+            if(q[j]<0) {q[j]=0;mask[j]=0;}
+        }
+        ++m.chemicalStats.uvCalls;
+        const auto base=m.frozen(q,{},energy,guess);
+        const double rho=std::accumulate(q.begin(),q.end(),0.0);
+        // At fixed volume C_k=q_k/W_k. Enforce this identity after the UV
+        // inversion instead of differentiating a normalized mole fraction.
+        m.gas->setMassFractions(q.data());m.gas->setTemperature(base.state.T);m.gas->setDensity(rho);
+        auto kinetics=m.gasSolution->kinetics();
+        Cantera::AnyMap settings;
+        settings["skip-third-bodies"]=false;settings["skip-falloff"]=false;
+        settings["rtol-delta"]=1e-8;kinetics->setDerivativeSettings(settings);
+        kinetic=kinetics->netProductionRates_ddCi();
+        for(int j=0;j<kinetic.outerSize();++j)
+            for(Eigen::SparseMatrix<double>::InnerIterator it(kinetic,j);it;++it) {
+                it.valueRef()*=m.weights[it.row()]/m.weights[it.col()]*mask[it.col()];
+                require(std::isfinite(it.value()),"Non-finite sparse kinetic derivative");
+            }
+        Vector u(m.ns),cv(m.ns),dT(m.ns),dP(m.ns);
+        m.gas->getPartialMolarIntEnergies(u.data());m.gas->getPartialMolarCp(cv.data());
+        kinetics->getNetProductionRates_ddT(dT.data());kinetics->getNetProductionRates_ddP(dP.data());
+        double heat=0;
+        for(size_t j=0;j<m.ns;++j) {u[j]/=m.weights[j];cv[j]=(cv[j]-R)/m.weights[j];heat+=q[j]*cv[j];}
+        require(std::isfinite(heat)&&heat>0,"Invalid constant-volume heat capacity in sparse chemistry");
+        sparse.uT.resize(m.ns);sparse.vT.resize(m.ns);sparse.uP.resize(m.ns);sparse.vP.resize(m.ns);
+        for(size_t j=0;j<m.ns;++j) {
+            sparse.uT[j]=m.weights[j]*dT[j];sparse.uP[j]=m.weights[j]*dP[j];
+            sparse.vT[j]=-u[j]/heat*mask[j];
+            sparse.vP[j]=R*base.state.T/m.weights[j]*mask[j]+m.gas->pressure()/base.state.T*sparse.vT[j];
+            require(std::isfinite(sparse.uT[j])&&std::isfinite(sparse.uP[j])
+                    &&std::isfinite(sparse.vT[j])&&std::isfinite(sparse.vP[j]),"Non-finite thermodynamic rank correction");
+        }
+        const Eigen::SparseMatrix<double,Eigen::RowMajor> rows=kinetic;
+        sparse.row.assign(m.ns+1,0);sparse.column.clear();sparse.value.clear();
+        for(int i=0;i<rows.outerSize();++i) {
+            for(Eigen::SparseMatrix<double,Eigen::RowMajor>::InnerIterator it(rows,i);it;++it) {
+                sparse.column.push_back(it.col());sparse.value.push_back(it.value());
+            }
+            sparse.row[i+1]=sparse.value.size();
+        }
+        ++m.sparseStats.setups;m.sparseStats.nonzeros=sparse.value.size();
+    }
+    static int sparseSetup(double,N_Vector y,N_Vector,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {self.sparseJacobian(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns));return 0;}
+        catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+    }
+    static int sparseProduct(N_Vector v,N_Vector Jv,double,N_Vector,N_Vector,void* data,N_Vector) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        self.sparse.apply(N_VGetArrayPointer(v),N_VGetArrayPointer(Jv));
+        ++self.model.sparseStats.products;return 0;
+    }
+    static int precSetup(double,N_Vector y,N_Vector,sunbooleantype,
+                         sunbooleantype* current,double gamma,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {
+            self.sparseJacobian(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns));
+            Eigen::SparseMatrix<double> A=-gamma*self.kinetic;
+            for(size_t j=0;j<self.model.ns;++j) A.coeffRef(j,j)+=1;
+            A.makeCompressed();self.preconditioner.compute(A);
+            require(self.preconditioner.info()==Eigen::Success,"Sparse preconditioner factorization failed");
+            *current=SUNTRUE;++self.model.sparseStats.preconditioners;return 0;
+        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+    }
+    static int precSolve(double,N_Vector,N_Vector,N_Vector r,N_Vector z,double,double,int,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {
+            Eigen::Map<const Eigen::VectorXd> rhs(N_VGetArrayPointer(r),self.model.ns);
+            const Eigen::VectorXd result=self.preconditioner.solve(rhs);
+            require(self.preconditioner.info()==Eigen::Success&&result.allFinite(),"Sparse preconditioner solve failed");
+            std::copy(result.data(),result.data()+self.model.ns,N_VGetArrayPointer(z));
+            ++self.model.sparseStats.preconditionerSolves;return 0;
+        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+    }
     Vector solve(const Vector& initial,double dt,double rtol,double atol) {
         auto check=[](int status,const char* operation) {require(status>=0,std::string("CVODE setup failure: ")+operation);};
         check(SUNContext_Create(SUN_COMM_NULL,&context),"context");
@@ -727,10 +817,20 @@ public:
         check(CVodeSetMaxNumSteps(integrator,100000),"maximum steps");
         check(CVodeSetStopTime(integrator,dt),"stop time");
         check(CVodeSetInterpolateStopTime(integrator,SUNFALSE),"copy constrained stop state");
-        matrix=SUNDenseMatrix(model.ns,model.ns,context);require(matrix,"CVODE dense matrix allocation failed");
-        linear=SUNLinSol_Dense(y,matrix,context);require(linear,"CVODE dense solver allocation failed");
-        check(CVodeSetLinearSolver(integrator,linear,matrix),"linear solver");
-        if(useStructured) check(CVodeSetJacFn(integrator,jac),"structured Jacobian");
+        if(useSparse) {
+            linear=SUNLinSol_SPGMR(y,SUN_PREC_LEFT,30,context);require(linear,"CVODE SPGMR allocation failed");
+            check(SUNLinSol_SPGMRSetMaxRestarts(linear,2),"GMRES restarts");
+            check(CVodeSetLinearSolver(integrator,linear,nullptr),"sparse iterative solver");
+            check(CVodeSetJacTimes(integrator,sparseSetup,sparseProduct),"sparse plus rank-two Jacobian products");
+            check(CVodeSetPreconditioner(integrator,precSetup,precSolve),"sparse LU preconditioner");
+            ++model.sparseStats.sparseIntegrations;
+        } else {
+            matrix=SUNDenseMatrix(model.ns,model.ns,context);require(matrix,"CVODE dense matrix allocation failed");
+            linear=SUNLinSol_Dense(y,matrix,context);require(linear,"CVODE dense solver allocation failed");
+            check(CVodeSetLinearSolver(integrator,linear,matrix),"linear solver");
+            if(useStructured) check(CVodeSetJacFn(integrator,jac),"structured Jacobian");
+            ++model.sparseStats.denseIntegrations;
+        }
         double actualTime=0;
         const int flag=CVode(integrator,dt,y,&actualTime,CV_NORMAL);
         require(flag>=0 && std::abs(actualTime-dt)<=1e-12*dt,
@@ -779,7 +879,26 @@ double pintle_rt_atom_coefficient(void* model,size_t species,size_t element){aut
 const char* pintle_rt_fingerprint(void* model){return static_cast<Model*>(model)->fingerprint.c_str();}
 int pintle_rt_ideal_gas(void* model){return static_cast<Model*>(model)->gas->type()=="ideal-gas";}
 int pintle_rt_set_chemical_jacobian(void* model,int mode)
-{return protect(model,[&](Model& m){require(mode==0||mode==1,"Invalid chemical Jacobian mode");m.structuredChemicalJacobian=mode;});}
+{return protect(model,[&](Model& m){require(mode==0||mode==1,"Invalid chemical Jacobian mode");require(mode||m.chemicalLinearSolver!=1,"Strict sparse solver requires structured Jacobian");m.structuredChemicalJacobian=mode;});}
+int pintle_rt_set_chemical_linear_solver(void* model,int mode)
+{
+    return protect(model,[&](Model& m){
+        require(mode>=0&&mode<=2,"Unknown chemical linear solver mode");
+        require(mode!=1||(m.nl==0&&m.gas->type()=="ideal-gas"&&m.structuredChemicalJacobian),
+                "Strict sparse chemistry requires structured Jacobian, ideal gas and no liquid phases; use auto for dense fallback");
+        m.chemicalLinearSolver=mode;
+    });
+}
+int pintle_rt_sparse_stats(void* model,int reset,PintleSparseStats* result)
+{return protect(model,[&](Model& m){require(result,"Null sparse statistics output");*result=m.sparseStats;if(reset)m.sparseStats={};});}
+int pintle_rt_chemical_sparse_jvp(void* model,const double* q,double energy,const PintleThermoState* guess,
+                                  const double* direction,double* result)
+{
+    return protect(model,[&](Model& m){
+        ChemicalODE ode(m,energy,true,*guess,1e-14);ode.sparseJacobian(Vector(q,q+m.ns));
+        ode.sparse.apply(direction,result);++m.sparseStats.products;
+    });
+}
 int pintle_rt_chemical_stats(void* model,int reset,PintleChemicalStats* result)
 {return protect(model,[&](Model& m){*result=m.chemicalStats;if(reset) {m.chemicalStats={};m.chemicalIntegrationFallbacks=0;}});}
 unsigned long long pintle_rt_chemical_integration_fallbacks(void* model)
@@ -971,16 +1090,24 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
         Vector result=initial;
         if(dt>0 && m.gasSolution->kinetics()->nReactions()>0) {
             ChemicalODE ode(m,energy,equilibrium,before.state,atol);
-            result=ode.solve(initial,dt,rtol,atol);
-            if(m.structuredChemicalJacobian && std::any_of(result.begin(),result.end(),
-                [](double v){return !std::isfinite(v)||v<0;})) {
+            bool retryDense=false;
+            try {result=ode.solve(initial,dt,rtol,atol);}
+            catch(const std::exception&) {
+                if(m.chemicalLinearSolver!=2||!ode.useSparse) throw;
+                retryDense=true;
+            }
+            const bool invalid=std::any_of(result.begin(),result.end(),
+                [](double v){return !std::isfinite(v)||v<0;});
+            require(!(invalid&&ode.useSparse&&m.chemicalLinearSolver==1),"Strict sparse integration returned an invalid accepted state");
+            if(retryDense||(m.structuredChemicalJacobian&&invalid)) {
                 // Some stiff trace systems return a negative roundoff-level
                 // inventory despite CVODE constraints. Reintegrate the entire
                 // source from its original data with the reference Jacobian;
                 // never clip, renormalize, or alter energy to accept a state.
                 ++m.chemicalIntegrationFallbacks;
+                if(ode.useSparse) ++m.sparseStats.denseFallbacks;
                 ChemicalODE reference(m,energy,equilibrium,before.state,atol);
-                reference.useStructured=false;result=reference.solve(initial,dt,rtol,atol);
+                reference.useStructured=false;reference.useSparse=false;result=reference.solve(initial,dt,rtol,atol);
             }
         }
         m.checkMass(result,{});

@@ -11,5 +11,5 @@ g++ -std=c++17 -O2 -fPIC -shared -Wall -Wextra -fno-fast-math \
     "$project_root/src/reactiveThermo/pintleReactiveThermo.cpp" \
     -L"$reactive_prefix/lib" -Wl,-rpath,"$reactive_prefix/lib" \
     -lcantera -lfmt -lpthread -lcrypto -lsundials_cvode -lsundials_nvecserial \
-    -lsundials_sunmatrixdense -lsundials_sunlinsoldense -lsundials_core \
+    -lsundials_sunmatrixdense -lsundials_sunlinsoldense -lsundials_sunlinsolspgmr -lsundials_core \
     -o "$project_root/lib/libpintleReactiveBackend.so"

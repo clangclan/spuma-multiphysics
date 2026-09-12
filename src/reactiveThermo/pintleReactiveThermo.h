@@ -28,6 +28,19 @@ typedef struct PintleChemicalStats {
     unsigned long long structuredCalls, fallbackCalls;
 } PintleChemicalStats;
 
+// Separate ABI: existing PintleChemicalStats/ctypes callers retain their size.
+typedef struct PintleSparseStats {
+    unsigned long long setups, products, preconditioners, preconditionerSolves;
+    unsigned long long sparseIntegrations, denseIntegrations, denseFallbacks, nonzeros;
+} PintleSparseStats;
+// 0=dense reference (default), 1=sparse ideal-gas/no-liquid only (strict),
+// 2=auto: sparse for that model, dense for liquid/nonideal models or failure.
+int pintle_rt_set_chemical_linear_solver(void* model, int mode);
+int pintle_rt_sparse_stats(void* model, int reset, PintleSparseStats* result);
+int pintle_rt_chemical_sparse_jvp(void* model, const double* speciesMass,
+    double internalEnergyDensity, const PintleThermoState* guess,
+    const double* direction, double* product);
+
 // Two spatially unmixed environments. Each environment internally uses HEM;
 // common pressure and velocity do not imply common environment temperature.
 typedef struct PintleMechanicalState {
