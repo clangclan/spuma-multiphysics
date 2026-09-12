@@ -4,6 +4,48 @@
 // implementation exercises real CVODE callbacks without adding test-only ABI to
 // the production library. Numerical references below do not use its CSR product.
 #include "../src/reactiveThermo/pintleReactiveThermo.cpp"
+#include <Eigen/LU>
+#include <cstring>
+#include <iomanip>
+
+namespace {
+thread_local int injectedRhsCalls=0;
+void factorPatternChanges(Model& model,const Evaluation& state) {
+    // A synthetic 3x3 block embedded in the model's species-sized matrix.
+    // All other rows become identity through the production diagonal insertion.
+    ChemicalODE ode(model,state.energy,true,state.state,1e-14);
+    const int outer[]={0,2,3,4},innerA[]={0,2,1,0},innerB[]={0,1,2,0};
+    const double values[]={2,3,4,5},changed[]={0,-3,0,7},gamma[]={.01,.03,.02};
+    const auto symbolic=model.chemicalProfile.symbolicAnalyses;
+    const auto numeric=model.chemicalProfile.numericFactorizations;
+    const auto n=model.ns;
+    for(int step=0;step<3;++step) {
+        const int* inner=step==0?innerA:innerB;const double* v=step==2?changed:values;
+        Eigen::MatrixXd reference=Eigen::MatrixXd::Identity(n,n);
+        std::vector<Eigen::Triplet<double>> entries;
+        for(int col=0;col<3;++col) for(int j=outer[col];j<outer[col+1];++j) {
+            entries.emplace_back(inner[j],col,v[j]);
+            reference(inner[j],col)-=gamma[step]*v[j];
+        }
+        ode.preconditionerKinetic.resize(n,n);
+        ode.preconditionerKinetic.setFromTriplets(entries.begin(),entries.end());
+        ode.preconditionerKinetic.makeCompressed();
+        require(ode.preconditionerKinetic.nonZeros()==4,"Synthetic pattern lost stored zero slots");
+        ode.factorPreconditioner(gamma[step]);
+        const Eigen::VectorXd rhs=Eigen::VectorXd::LinSpaced(n,-.5,2);
+        const Eigen::VectorXd actual=ode.preconditioner.solve(rhs);
+        const Eigen::VectorXd expected=reference.partialPivLu().solve(rhs);
+        require(ode.preconditioner.info()==Eigen::Success&&actual.allFinite(),"Synthetic LU solve failed");
+        require((actual-expected).norm()/expected.norm()<1e-12,"Synthetic LU differs from dense solve");
+        require((reference*actual-rhs).norm()/rhs.norm()<1e-12,"Synthetic LU residual failed");
+        require((Eigen::MatrixXd(ode.factorMatrix)-reference).norm()<1e-14,"Diagonal insertion/value mapping failed");
+        require(model.chemicalProfile.symbolicAnalyses-symbolic==static_cast<unsigned>(std::min(step+1,2)),
+                "Symbolic analysis did not follow actual pattern changes");
+        require(model.chemicalProfile.numericFactorizations-numeric==static_cast<unsigned>(step+1),
+                "Numerical factorization not refreshed");
+    }
+}
+}
 
 extern "C" int pintle_test_sparse_cache(const char* configuration,char* error,size_t size) {
     try {
@@ -51,6 +93,85 @@ extern "C" int pintle_test_sparse_cache(const char* configuration,char* error,si
         require(ChemicalODE::sparseSetup(0,y,nullptr,&ode)==0&&model.sparseStats.setups==count,"Same-state Jv cache missed");
         ode.reset(state.energy*1.001,true,state.state,1e-14);ode.sparseJacobian(q);
         require(model.sparseStats.setups==count+1,"Energy change retained stale Jv");
+        factorPatternChanges(model,state);
         return 0;
     } catch(const std::exception& ex) {if(error&&size) std::snprintf(error,size,"%s",ex.what());return 1;}
+}
+
+// Fault injection is confined to this test translation unit. CVODE invokes the
+// real chemical RHS, then receives an unrecoverable nonlinear-RHS error through
+// its public API. The production react() catch/fallback/commit path is unchanged.
+extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,int mode,char* report,size_t size) {
+    try {
+        Model model(configuration);model.chemicalLinearSolver=mode;
+        Vector initial(model.ns,0);initial[model.gas->speciesIndex("N2O")]=.2;
+        initial[model.gas->speciesIndex("IC3H7OH")]=.1;initial[model.gas->speciesIndex("N2")]=2;
+        const double T=1400,p=R*T*std::inner_product(initial.begin(),initial.end(),model.weights.begin(),0.0,
+            std::plus<double>(),[](double m,double W){return m/W;});
+        const auto value=model.evaluate(initial,{},p,T);const double dt=1e-8,rtol=1e-8,atol=1e-14;
+        Vector q=initial;auto state=value.state;double drift=0;
+        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Failure fixture warmup: "+model.error);
+        const int slot=mode==0?0:1;
+        require(bool(model.chemicalWorkspace[slot]),"Missing warm workspace");
+        std::weak_ptr<ChemicalODE> old=model.chemicalWorkspace[slot];
+        injectedRhsCalls=0;
+        auto reject=[](sunrealtype t,N_Vector y,N_Vector out,void* data)->int {
+            auto& ode=*static_cast<ChemicalODE*>(data);
+            const int status=ChemicalODE::rhs(t,y,out,data);
+            if(status!=0) return status;
+            ++injectedRhsCalls;
+            ode.failure="injected nonlinear RHS failure after real chemistry evaluation";
+            return -1;
+        };
+        require(CVodeSetNlsRhsFn(model.chemicalWorkspace[slot]->integrator,reject)==CV_SUCCESS,"Cannot install test RHS fault");
+        const auto beforeProfile=model.chemicalProfile;
+        q=initial;state=value.state;const auto beforeState=state;drift=-17;
+        const int failure=pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift);
+        const std::string diagnostic=model.error;
+        require(injectedRhsCalls==1,"Injected callback was not reached exactly once");
+        require(old.expired()&&!model.chemicalWorkspace[slot],"Failed CVODE workspace survived");
+        require(model.chemicalProfile.workspaceReinitializations==beforeProfile.workspaceReinitializations+1,
+                "Failure did not occur in a reinitialized workspace");
+        if(mode!=2) {
+            require(failure!=0&&diagnostic.find("injected nonlinear RHS failure")!=std::string::npos
+                    &&diagnostic.find("flag="+std::to_string(CV_RHSFUNC_FAIL))!=std::string::npos,
+                    "Expected actual CVODE RHS failure was not observed: "+diagnostic);
+            require(q==initial&&std::memcmp(&state,&beforeState,sizeof(state))==0&&drift==-17,
+                    "Failed source modified caller state");
+        } else {
+            require(failure==0&&model.sparseStats.denseFallbacks==1,"Auto did not recover with dense integration: "+diagnostic);
+            require(model.chemicalProfile.workspaceCreates==beforeProfile.workspaceCreates+1,"Auto did not create fresh dense workspace");
+        }
+        Model fresh(configuration);fresh.chemicalLinearSolver=mode==2?0:mode;
+        fresh.structuredChemicalJacobian=mode!=2;
+        Vector reference=initial;auto expected=value.state;double expectedDrift=0;
+        require(pintle_rt_react(&fresh,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
+                "Fresh recovery reference failed: "+fresh.error);
+        auto compare=[&](const Vector& actual,const PintleThermoState& s) {
+            double error=0;for(size_t k=0;k<model.ns;++k) error=std::max(error,std::abs(actual[k]-reference[k])/value.state.rho);
+            require(error<2e-10&&std::abs(s.T/expected.T-1)<2e-10,"Recovered workspace differs from fresh solve");
+            return error;
+        };
+        const double fallbackError=mode==2?compare(q,state):0;
+        const auto creates=model.chemicalProfile.workspaceCreates;
+        q=initial;state=value.state;
+        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Next source failed: "+model.error);
+        require(model.chemicalProfile.workspaceCreates==creates+1&&bool(model.chemicalWorkspace[slot]),
+                "Next source did not allocate a new worker");
+        // For auto, the next successful source uses sparse again, so obtain the
+        // corresponding fresh sparse reference rather than its fallback policy.
+        if(mode==2) {
+            Model sparseReference(configuration);sparseReference.chemicalLinearSolver=1;
+            reference=initial;expected=value.state;
+            require(pintle_rt_react(&sparseReference,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
+                    "Fresh sparse reference failed: "+sparseReference.error);
+        }
+        const double recoveryError=compare(q,state);
+        std::ostringstream out;out<<std::setprecision(17)<<"{\"mode\":"<<mode
+            <<",\"cvode_rhs_failure\":true,\"failed_worker_destroyed\":true,\"new_worker_created\":true"
+            <<",\"auto_dense_fallback\":"<<(mode==2?"true":"false")
+            <<",\"recovery_Y_Linf\":"<<recoveryError<<",\"fallback_Y_Linf\":"<<fallbackError<<"}";
+        if(report&&size) std::snprintf(report,size,"%s",out.str().c_str());
+        return 0;
+    } catch(const std::exception& ex) {if(report&&size) std::snprintf(report,size,"%s",ex.what());return 1;}
 }

@@ -30,7 +30,76 @@ def callbacks(root, directory):
     error = C.create_string_buffer(8192)
     require(fn(str(directory / "chemistry-config.yaml").encode(), error, len(error)) == 0, error.value.decode())
     return dict(pattern_change=True, zero_crossing=True, independent_preconditioner_residual=True,
-                current_Jv_preserved=True, energy_invalidation=True)
+                current_Jv_preserved=True, energy_invalidation=True,
+                factor_missing_diagonal=True, factor_same_nnz_pattern_change=True,
+                factor_value_only_update=True, factor_dense_solve_and_residual=True,
+                factor_symbolic_analyses=2, factor_numeric_factorizations=3)
+
+
+def failure_recovery(root, directory):
+    lib = C.CDLL(str(root / "lib/libpintleReactiveCacheTest.so"))
+    fn = lib.pintle_test_chemical_failure_recovery
+    fn.argtypes = [C.c_char_p, C.c_int, C.c_char_p, C.c_size_t]; fn.restype = C.c_int
+    rows = []
+    for mode in (0, 1, 2):
+        report = C.create_string_buffer(8192)
+        require(fn(str(directory / "chemistry-config.yaml").encode(), mode, report, len(report)) == 0,
+                report.value.decode())
+        rows.append(json.loads(report.value))
+    return dict(runs=rows, fault="test-only nonlinear RHS callback returns -1 after real chemistry evaluation")
+
+
+def workspace_lifetime(directory):
+    cfg = directory / "chemistry-config.yaml"
+    rows = []
+    states = {
+        "A": (1400, 1e5, {"N2O": 3, "IC3H7OH": 1, "N2": 25}),
+        "B": (2600, 2e6, {"N2O": 3, "IC3H7OH": 1, "N2": 200, "CO2": 2, "H2O": 3}),
+    }
+    # Separate dt, tolerance and state round trips, all in one persistent worker.
+    sequence = [
+        ("A", 1e-9, 1e-8, 1e-14), ("A", 1e-7, 1e-8, 1e-14), ("A", 1e-9, 1e-8, 1e-14),
+        ("A", 1e-9, 1e-7, 1e-13), ("A", 1e-9, 1e-9, 1e-15), ("A", 1e-9, 1e-8, 1e-14),
+        ("B", 1e-9, 1e-8, 1e-14), ("A", 1e-9, 1e-8, 1e-14),
+    ]
+    for mode, structured in (("dense", False), ("dense", True), ("sparse", True)):
+        with Backend(cfg) as b:
+            b.set_chemical_jacobian(structured); b.set_chemical_linear_solver(mode)
+            inputs = {}
+            for name, (T, p, X) in states.items():
+                q, e, s = b.make_state(T, p, b.mole_to_mass(X))
+                inputs[name] = (q, e, b.recover(q, e, s))
+            first = None
+            for index, (name, dt, rtol, atol) in enumerate(sequence):
+                q, e, s = inputs[name]; b.chemical_profile(True); b.chemical_stats(True)
+                actual, state, drift = b.react(q, e, dt, s, rtol=rtol, atol=atol)
+                profile = b.chemical_profile(); stats = b.chemical_stats()
+                with Backend(cfg) as fresh:
+                    fresh.set_chemical_jacobian(structured); fresh.set_chemical_linear_solver(mode)
+                    expected, other, _ = fresh.react(q, e, dt, s, rtol=rtol, atol=atol)
+                dy = float(np.max(np.abs(actual-expected))/s.rho); dT = abs(state.T/other.T-1)
+                require(dy < 2e-10 and dT < 2e-10, "Changed interval/tolerances/state retained stale history")
+                # Structured dense integration may reject a negative accepted
+                # trace and retry the same worker with the full RHS Jacobian.
+                # Count that existing policy explicitly, never hide the retry.
+                fallbacks = stats["integrationFallbacks"]
+                require(fallbacks == 0 or (mode == "dense" and structured and fallbacks == 1),
+                        "Unexpected integration fallback in lifetime test")
+                require(profile["workspaceCreates"] == int(index == 0)
+                        and profile["workspaceReinitializations"] == int(index != 0)+fallbacks,
+                        f"Lifetime test did not reuse one worker: {mode=}, {structured=}, {index=}, {profile=}")
+                require(actual.min() >= 0 and np.isfinite(actual).all(), "Invalid accepted inventory")
+                if index == 0:
+                    first = actual.copy(), state.T
+                round_trip = None
+                if index in (2, 5, 7):
+                    round_trip = float(np.max(np.abs(actual-first[0]))/s.rho)
+                    require(round_trip < 2e-10 and abs(state.T/first[1]-1) < 2e-10, "A round trip changed the solution")
+                rows.append(dict(mode=mode, structured=structured, index=index, state=name,
+                    T=s.T, p=s.p, dt=dt, rtol=rtol, atol=atol, drift=drift,
+                    reused_fresh_Y_Linf=dy, reused_fresh_T_relative=dT,
+                    round_trip_Y_Linf=round_trip, integration_fallbacks=fallbacks, profile=profile))
+    return dict(runs=rows, intervals="short-long-short", tolerances="loose-tight-original", states="A-B-A")
 
 
 def varied_chemistry(directory):
@@ -159,17 +228,25 @@ def main():
     p.add_argument("--thermo-dir", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--backend", choices=("cpu", "cuda"), default="cpu")
+    p.add_argument("--checks", nargs="+", help="Run only the named groups; selection is recorded in the evidence")
     a = p.parse_args(); directory = a.thermo_dir.resolve(); root = Path(__file__).resolve().parents[1]
     if a.output.exists(): raise SystemExit("Refusing to overwrite evidence")
     scratch = directory / "review-validation-inputs" / a.output.stem; scratch.mkdir(parents=True, exist_ok=False)
-    report = dict(baseline="fad4ecfd4d627c8903ee71dde25941a63268a767", backend=a.backend,
+    report = dict(baseline="c26e9c9965145a4d0f1bf0253a61f9d2a5c6b2e0", backend=a.backend,
         cantera=ct.__version__, sundials=ct.__sundials_version__, tests=[], library_sha256={
         f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in (root / "lib").glob("libpintleReactive*.so") if "reviewed" not in f.name})
     checks = [("sparse-cache-callbacks", lambda: callbacks(root, directory)),
+              ("workspace-lifetime", lambda: workspace_lifetime(directory)),
+              ("CVODE-failure-recovery", lambda: failure_recovery(root, directory)),
               ("varied-chemistry-reinit", lambda: varied_chemistry(directory)),
               ("PLOG-knot-sides", lambda: pressure_knots(scratch))]
     checks += [("real-transport-"+kind, lambda kind=kind: real_transport(root, directory, a.backend, kind))
                for kind in ("ideal", "mixed", "liquid")]
+    if a.checks:
+        unknown = set(a.checks)-{name for name, _ in checks}
+        if unknown: p.error("Unknown checks: "+", ".join(sorted(unknown)))
+        checks = [(name, fn) for name, fn in checks if name in a.checks]
+    report["selected_checks"] = [name for name, _ in checks]
     a.output.parent.mkdir(parents=True, exist_ok=True)
     for name, function in checks:
         try: row = dict(name=name, passed=True, **function())

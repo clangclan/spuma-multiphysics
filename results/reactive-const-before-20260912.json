@@ -1,0 +1,13 @@
+{
+  "passed": false,
+  "scope": "source-derived version mutation contract only; not a full SPUMA build",
+  "source_sha256": "2e0ee28d089747292f18829f499d24fb17267c0b661c45c4c407e64747217e3d",
+  "member": "uint64_t transportVersion=0;",
+  "signature": "void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift) const",
+  "increments": 3,
+  "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "compiler_exit_code": 1,
+  "diagnostic": "flow_contract.cpp: In member function \u2018void FlowMutationContract::step(Array&, States&, double, double, Array&, double&) const\u2019:\nflow_contract.cpp:8:3: error: increment of member \u2018FlowMutationContract::transportVersion\u2019 in read-only object\n    8 | ++transportVersion;\n      |   ^~~~~~~~~~~~~~~~\nflow_contract.cpp:9:3: error: increment of member \u2018FlowMutationContract::transportVersion\u2019 in read-only object\n    9 | ++transportVersion;\n      |   ^~~~~~~~~~~~~~~~\nflow_contract.cpp:10:3: error: increment of member \u2018FlowMutationContract::transportVersion\u2019 in read-only object\n   10 | ++transportVersion;\n      |   ^~~~~~~~~~~~~~~~\n",
+  "non_const_step_and_non_mutable_version": false,
+  "translation_unit": "#include <cstdint>\n#include <vector>\nusing Array=std::vector<double>; using States=std::vector<int>;\nstruct FlowMutationContract {\nuint64_t transportVersion=0;\nvoid step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift) const\n    {\n++transportVersion;\n++transportVersion;\n++transportVersion;\n}\n};\n"
+}

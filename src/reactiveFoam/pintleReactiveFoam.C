@@ -358,7 +358,7 @@ public:
         return result;
     }
     // One conservative SSPRK2 transport update, between chemical half steps.
-    void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift) const
+    void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift)
     {
         react(q,states,.5*dt,drift);
         demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");

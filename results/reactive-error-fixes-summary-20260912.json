@@ -1,0 +1,62 @@
+{
+  "baseline_commit": "c26e9c9965145a4d0f1bf0253a61f9d2a5c6b2e0",
+  "passed": true,
+  "scope": "Latest result per group; seven groups from the initial run plus the corrected lifetime group rerun",
+  "tests": [
+    {
+      "name": "sparse-cache-callbacks",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "workspace-lifetime",
+      "passed": true,
+      "source": "reactive-lifetime-final-20260912.json"
+    },
+    {
+      "name": "CVODE-failure-recovery",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "varied-chemistry-reinit",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "PLOG-knot-sides",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "real-transport-ideal",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "real-transport-mixed",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    },
+    {
+      "name": "real-transport-liquid",
+      "passed": true,
+      "source": "reactive-error-review-20260912.json"
+    }
+  ],
+  "flow_compile_contract": {
+    "before": "reactive-const-before-20260912.json",
+    "after": "reactive-const-after-20260912.json",
+    "full_spuma_build": false
+  },
+  "lifetime": {
+    "runs": 24,
+    "max_Y_Linf": 0.0,
+    "max_T_relative": 0.0,
+    "workspace_creates": 3,
+    "workspace_reinitializations": 22,
+    "integration_fallbacks": 1
+  },
+  "original_experiment_host": false,
+  "gpu_execution_verified": false
+}

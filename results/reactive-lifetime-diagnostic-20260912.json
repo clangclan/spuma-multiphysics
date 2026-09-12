@@ -1,0 +1,22 @@
+{
+  "baseline": "c26e9c9965145a4d0f1bf0253a61f9d2a5c6b2e0",
+  "backend": "cpu",
+  "cantera": "3.2.0",
+  "sundials": "7.4.0",
+  "tests": [
+    {
+      "name": "workspace-lifetime",
+      "passed": false,
+      "error": "Lifetime test did not reuse one worker: mode='dense', structured=True, index=3, profile={'jvSetups': 0, 'preconditionerSetups': 0, 'jacobianCacheHits': 0, 'patternBuilds': 0, 'preconditionerReuses': 0, 'symbolicAnalyses': 0, 'numericFactorizations': 0, 'workspaceCreates': 0, 'workspaceReinitializations': 2, 'factorNonzeros': 0, 'thermoSeconds': 0.0, 'kineticsSeconds': 0.0, 'csrSeconds': 0.0, 'symbolicSeconds': 0.0, 'factorSeconds': 0.0, 'solveSeconds': 0.0}"
+    }
+  ],
+  "library_sha256": {
+    "libpintleReactiveTransport.so": "4b26fb6cf94fa698e339ea80a7cb5335922a0a7714b1996f14cb4fd8c2b6bc42",
+    "libpintleReactiveCacheTest.so": "acc020c928fd64671aa0345637dde7e163119a166407b55da9733f621db9bcd1",
+    "libpintleReactiveBackend.so": "4bccd333c693e4889e0c3d7385abe3ebe0ae1a4bef9660d24fa988faa6ee18f8"
+  },
+  "selected_checks": [
+    "workspace-lifetime"
+  ],
+  "passed": false
+}

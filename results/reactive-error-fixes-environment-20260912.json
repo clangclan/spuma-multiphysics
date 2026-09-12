@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-12",
+  "baseline_commit": "c26e9c9965145a4d0f1bf0253a61f9d2a5c6b2e0",
+  "original_experiment_baseline": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "review_sha256": "fba409da08dfd68a80fb27fa8a7a8896fa37a1b5742dcb4fcfba59093e1a55fd",
+  "original_experiment_host": false,
+  "system": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "spuma_build_available": false,
+  "full_spuma_build_verified": false,
+  "gpu_execution_verified": false,
+  "cuda_compilation": "Not rerun: CUDA transport source is unchanged from c26e9c9; previous compile evidence remains separate",
+  "test_runtime": "Cantera 3.2.0/SUNDIALS 7.4.0/Eigen 3.4.1; separate from the original pinned host",
+  "cpp_test_build": "g++ 13.3.0, C++17, O2, PIC/shared, Wall/Wextra, fno-fast-math; actual backend included in test translation unit",
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "97ec7a38313099df04f883d57b4358d0bfc2897dabf05d784eff9a187a8e84d6",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "8c8dc28c4fc71c65d3a7603743f756bf5c4ea7fa0b997192509df500f440e575",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "2a14f3877f46ec034171acfa47679ba3ae869257e9aa2364fa38735cc017ecef",
+    "src/reactiveTransport/pintleTransportKernels.h": "7c9d13a99258a47fb9680bb042560c184472431a2a637ed5e9070c567e820859",
+    "tools/test_reactive_sparse_cache.cpp": "f061dffd861fefb1d7ee5615b4e4a5ec027b3173be3224d6fef8dabfa2b00b9c",
+    "tools/validate_reactive_review.py": "5dc0622005b6786d0f6b10141a3819bb79bc087fc8e201c43286ec6a9f0aca1a",
+    "tools/validate_reactive_flow_contract.py": "78f07c84deb1da2dd0efb38839713e3d907614654aafe3e8d74cf24ab90ded4b"
+  },
+  "evidence_sha256": {
+    "reactive-const-before-20260912.json": "ecb020e58ee7dd437ea0220d62481f3f5d262c252b723652118c92986776821f",
+    "reactive-const-after-20260912.json": "e94281aa9af28b4293af2c6b03391266941b124dfc87a9acd131a39bc74ab502",
+    "reactive-error-review-20260912.json": "dff71707241b1ba1c4775f2c12650d6e0bcaa37c2399f7001425390ddafdd679",
+    "reactive-lifetime-diagnostic-20260912.json": "8004d4d151d01e01b06ebae020b822873346c9d1c66b2381e7a74cf1037becf0",
+    "reactive-lifetime-final-20260912.json": "5b053c6315136b889f97ffa78cefbe0d96a6798eec94cbaa44e76eaa548db441",
+    "reactive-error-fixes-summary-20260912.json": "b1f87fac656bc3eff6e02aee8d258ab55916c5d1009599f02ca74059fdcc7ccb"
+  }
+}
