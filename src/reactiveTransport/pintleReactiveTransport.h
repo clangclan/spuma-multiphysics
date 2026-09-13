@@ -3,6 +3,7 @@
 #define PINTLE_REACTIVE_TRANSPORT_H
 #include <stddef.h>
 #include <stdint.h>
+#include "../reactiveThermo/pintleGasThermo.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,6 +32,25 @@ typedef struct PintleTransportProfile {
     uint64_t boundaryPartitions, residentStages;
 } PintleTransportProfile;
 int pintle_transport_profile(void* transport, PintleTransportProfile* profile);
+// Additive ABI; the existing statistics structures retain their sizes.
+typedef struct PintleTransportDeviceProfile {
+    uint64_t gasPropertyBuilds, gasPropertyCells, partitionUploadBytes, thermoTableBytes;
+    uint64_t gasStatusChecks, cflFaceLaunches, transportFaceLaunches, faceWorkspaceBytes;
+} PintleTransportDeviceProfile;
+int pintle_transport_device_profile(void* transport, PintleTransportDeviceProfile* profile);
+// Install once before stepping. Fixed-boundary gas arrays remain immutable inputs
+// to create(); only interior properties are generated from the resident state.
+int pintle_transport_set_gas_thermo(void* transport, const PintleGasThermoSpecies* species,
+    size_t count, const PintleGasThermoRegion* regions, size_t regionCount,
+    const int64_t* liquidSpecies, size_t liquids);
+int pintle_transport_stage_resident_gas(void* transport, const PintleTransportState* state,
+    const PintleGasPartition* partition, double dt, int stage,
+    uint64_t inputVersion, uint64_t outputVersion, double* qOutput, double* boundaryRate);
+int pintle_transport_rhs_gas(void* transport, const double* q, const PintleTransportState* state,
+    const PintleGasPartition* partition, double* rhs, double* boundaryRate);
+// Diagnostic download of generated interior Y/h (AoS); not used by Flow::step.
+int pintle_transport_gas_properties_resident(void* transport, const PintleTransportState* state,
+    const PintleGasPartition* partition, double* gasY, double* gasH);
 // Versions describe CONTENT, never pointer identity. Use strictly increasing,
 // nonzero versions for changed data, including restoration after a rejected step.
 int pintle_transport_upload_conserved(void* transport, const double* q, uint64_t version);

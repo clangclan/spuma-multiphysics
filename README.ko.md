@@ -6,7 +6,7 @@
 
 별도 반응·상변화 연구 솔버는 [ReactiveFoam 문서](README.reactive-phase.ko.md)에 설명한다. [2026-09-12 GPU 수송·희소 화학 포팅](README.reactive-gpu-sparse.ko.md)은 선택 가능한 새 경로이며, 아래 ColdFoam의 기존 GPU 성능 측정과 구분한다.
 
-ReactiveFoam의 최신 변경은 [컴파일 오류 수정·회귀 검사 보강](README.reactive-error-fixes.ko.md)에 있다. 앞선 성능 구조 개선은 [포팅 리뷰 반영 기록](README.reactive-review.ko.md)에 구분했다.
+ReactiveFoam의 최신 변경은 [MFC·PeleC 구조를 참고한 GPU 수송 물성 계산](README.reactive-mfc-pele.ko.md)에 있다. 앞선 [컴파일 오류 수정](README.reactive-error-fixes.ko.md)과 [준비 비용 개선](README.reactive-review.ko.md)은 당시 기록으로 구분했다.
 
 ## 실행
 

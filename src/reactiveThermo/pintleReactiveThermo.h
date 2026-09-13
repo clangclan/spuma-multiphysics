@@ -3,6 +3,7 @@
 #ifndef PINTLE_REACTIVE_THERMO_H
 #define PINTLE_REACTIVE_THERMO_H
 #include <stddef.h>
+#include "pintleGasThermo.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -69,6 +70,11 @@ const char* pintle_rt_element_name(void* model, size_t element);
 double pintle_rt_atom_coefficient(void* model, size_t species, size_t element);
 const char* pintle_rt_fingerprint(void* model);
 int pintle_rt_ideal_gas(void* model);
+// Export atomically: ideal gas, NASA7/NASA9 with original temperature regions.
+// Query required regions with null arrays and zero capacities, then export with
+// species count and region capacity. Unsupported representations return error.
+int pintle_rt_export_gas_thermo(void* model, PintleGasThermoSpecies* species, size_t count,
+    PintleGasThermoRegion* regions, size_t capacity, size_t* requiredRegions);
 // mode=0: CVODE's full-RHS finite differences; mode=1: fixed-state
 // derivatives plus the implicit thermodynamic correction, with full fallback.
 int pintle_rt_set_chemical_jacobian(void* model, int mode);

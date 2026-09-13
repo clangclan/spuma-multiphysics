@@ -35,6 +35,18 @@ class PhaseProperties(C.Structure):
         return {name: getattr(self, name) for name, _ in self._fields_}
 
 
+class GasThermoSpecies(C.Structure):
+    _fields_ = [("regionOffset",C.c_uint64),("regionCount",C.c_uint64),("gasConstant",C.c_double),("polynomial",C.c_int)]
+
+
+class GasThermoRegion(C.Structure):
+    _fields_ = [("minimumTemperature",C.c_double),("maximumTemperature",C.c_double),("coefficient",C.c_double*9)]
+
+
+class GasPartition(C.Structure):
+    _fields_ = [("liquidMass", C.c_double*2)]
+
+
 class ChemicalStats(C.Structure):
     _fields_ = [(name, C.c_ulonglong) for name in (
         "rhsCalls", "uvCalls", "fixedStateCalls", "jacobianCalls", "structuredCalls", "fallbackCalls")]
@@ -100,6 +112,10 @@ class Backend:
         if hasattr(self.lib, "pintle_rt_chemical_profile"):
             self.lib.pintle_rt_chemical_profile.argtypes = [void, C.c_int, C.POINTER(ChemicalProfile)]
             self.lib.pintle_rt_chemical_profile.restype = C.c_int
+        if hasattr(self.lib, "pintle_rt_export_gas_thermo"):
+            self.lib.pintle_rt_export_gas_thermo.argtypes = [void, C.POINTER(GasThermoSpecies), C.c_size_t,
+                C.POINTER(GasThermoRegion), C.c_size_t, C.POINTER(C.c_size_t)]
+            self.lib.pintle_rt_export_gas_thermo.restype = C.c_int
         error = C.create_string_buffer(8192)
         self.handle = self.lib.pintle_rt_create(str(self.configuration).encode(), error, len(error))
         if not self.handle:
@@ -182,6 +198,13 @@ class Backend:
         q, values = self.vector(q), np.empty(self.ns)
         self.check(self.lib.pintle_rt_gas_enthalpies(self.handle, self.pointer(q), C.byref(state), self.pointer(values)))
         return values
+
+    def export_gas_thermo(self):
+        count=C.c_size_t()
+        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,None,0,None,0,C.byref(count)))
+        records=(GasThermoSpecies*self.ns)();regions=(GasThermoRegion*count.value)()
+        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,records,self.ns,regions,len(regions),C.byref(count)))
+        return records,regions
 
     def set_chemical_jacobian(self, structured=True):
         self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))

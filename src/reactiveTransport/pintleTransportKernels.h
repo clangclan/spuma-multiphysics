@@ -13,7 +13,7 @@ PINTLE_HD inline double minimum(double a,double b) {return a<b?a:b;}
 PINTLE_HD inline double maximum(double a,double b) {return a>b?a:b;}
 using Primitive=PintleTransportPrimitive;
 struct FaceWork {
-    double unL,unR,left,right,faceVelocity,speed,traction[3],energy;
+    double faceVelocity,traction[3],energy;
     double advectL,advectR,pressureMomentum,pressureEnergy;
     double diffusion,sumJ,carrierFlux;
     size_t carrier;
@@ -27,6 +27,13 @@ struct View {
     size_t *row,*boundary;
     int64_t* incidence;
     double *inverseVolume,*q,*initial,*rhs,*gasY,*gasH,*gradient,*boundaryRate,*step;
+    double* faceSpeed;
+    const PintleGasThermoSpecies* gasThermo;
+    const PintleGasThermoRegion* gasRegions;
+    PintleGasPartition* partition;
+    uint32_t* gasError;
+    size_t liquids;
+    int64_t liquidSpecies[2];
     Primitive* primitive;
     FaceWork* work;
     size_t nBoundary;
@@ -73,6 +80,56 @@ struct Cells {
         v.primitive[c]=p;
     }
 };
+PINTLE_HD inline void gasFailure(View v) {
+#ifdef __CUDA_ARCH__
+    atomicExch(v.gasError,1u); // Rare error flag only; no floating-point atomics.
+#else
+    *v.gasError=1;
+#endif
+}
+struct GasProperties {
+    PINTLE_HD void operator()(size_t j,View v) const {
+        // Adjacent lanes handle adjacent cells of one species (SoA). No
+        // per-thread NUM_SPECIES scratch array or host Cantera call is needed.
+        const size_t c=j%v.cfg.cells,k=j/v.cfg.cells;const auto& s=v.state[c];
+        double amount=v.q[v.qi(c,k)];
+        if(!std::isfinite(amount)||amount<0) {gasFailure(v);return;}
+        for(size_t i=0;i<v.liquids;++i) if(k==size_t(v.liquidSpecies[i])) amount-=v.partition[c].liquidMass[i];
+        if(!std::isfinite(amount)||amount<0) {gasFailure(v);return;}
+        if(k==0) {
+            double total=0,gas=0;
+            for(size_t n=0;n<v.cfg.species;++n) {
+                double mass=v.q[v.qi(c,n)];total+=mass;
+                for(size_t i=0;i<v.liquids;++i) if(n==size_t(v.liquidSpecies[i])) mass-=v.partition[c].liquidMass[i];
+                gas+=mass;
+            }
+            const double tolerance=1e-10*s.rho;
+            if(!std::isfinite(total)||!std::isfinite(gas)||fabs(total-s.rho)>tolerance||fabs(gas-s.gasMass)>tolerance)
+                gasFailure(v);
+        }
+        double y=0,h=0;
+        if(s.gasMass>0) {
+            const auto& t=v.gasThermo[k];const double T=s.T,T2=T*T,T3=T*T2,T4=T*T3;
+            size_t region=t.regionOffset;
+            for(size_t i=1;i<t.regionCount;++i) {
+                const double boundary=v.gasRegions[t.regionOffset+i].minimumTemperature;
+                if(t.polynomial==7?T<=boundary:T<boundary) break;
+                ++region;
+            }
+            const double* a=v.gasRegions[region].coefficient;
+            double hRT;
+            if(t.polynomial==7) hRT=a[0]+.5*a[1]*T+(a[2]/3)*T2+.25*a[3]*T3+.2*a[4]*T4+a[5]/T;
+            else {
+                const double invT=1/T;
+                hRT=-a[0]*invT*invT+a[1]*log(T)*invT+a[2]+.5*a[3]*T+(a[4]/3)*T2+.25*a[5]*T3+.2*a[6]*T4+a[7]*invT;
+            }
+            h=hRT*t.gasConstant*T;
+            y=amount/s.gasMass;
+            if(!std::isfinite(y)||!std::isfinite(h)) {gasFailure(v);return;}
+        } else if(amount!=0) {gasFailure(v);return;}
+        v.gasY[v.qi(c,k)]=y;v.gasH[v.qi(c,k)]=h;
+    }
+};
 struct Gradients {
     PINTLE_HD void operator()(size_t c,View v) const {
         double g[9]{};
@@ -86,27 +143,37 @@ struct Gradients {
         for(int j=0;j<9;++j) v.gradient[c*9+j]=g[j];
     }
 };
+// CFL does not construct flux, traction or species-diffusion work records.
+struct FaceSpeeds {
+    PINTLE_HD void operator()(size_t fi,View v) const {
+        const auto& f=v.faces[fi];const auto& sl=v.state[f.owner];const auto& sr=v.state[v.rightCell(f)];
+        double ul[3],ur[3],unL=0,unR=0;v.velocities(f,ul,ur);
+        for(int d=0;d<3;++d) {unL+=ul[d]*f.normal[d];unR+=ur[d]*f.normal[d];}
+        const double aL=v.cfg.waveFactor*sl.sound,aR=v.cfg.waveFactor*sr.sound;
+        const double left=minimum(0,minimum(unL-aL,unR-aR)),right=maximum(0,maximum(unL+aL,unR+aR));
+        const double invWave=1/(right-left);
+        const double D=v.cfg.diffusivity+maximum(maximum(4*v.cfg.viscosity/(3*sl.rho),4*v.cfg.viscosity/(3*sr.rho)),
+            maximum(v.cfg.conductivity/(sl.rho*sl.cv),v.cfg.conductivity/(sr.rho*sr.cv)));
+        double speed=maximum(fabs(unL)+aL,fabs(unR)+aR)+2*D/f.distance;
+        if(!std::isfinite(unL)||!std::isfinite(unR)||!std::isfinite(speed)||!std::isfinite(invWave)||right<=left) speed=-1;
+        v.faceSpeed[fi]=speed;
+    }
+};
 struct Faces {
-    bool transport;
     PINTLE_HD void operator()(size_t fi,View v) const {
         const auto& f=v.faces[fi];const size_t l=f.owner,r=v.rightCell(f);
         const auto& sl=v.state[l];const auto& sr=v.state[r];FaceWork w{};
-        double ul[3],ur[3];v.velocities(f,ul,ur);
-        for(int d=0;d<3;++d) {w.unL+=ul[d]*f.normal[d];w.unR+=ur[d]*f.normal[d];}
+        double ul[3],ur[3],unL=0,unR=0;v.velocities(f,ul,ur);
+        for(int d=0;d<3;++d) {unL+=ul[d]*f.normal[d];unR+=ur[d]*f.normal[d];}
         const double aL=v.cfg.waveFactor*sl.sound,aR=v.cfg.waveFactor*sr.sound;
-        w.left=minimum(0,minimum(w.unL-aL,w.unR-aR));w.right=maximum(0,maximum(w.unL+aL,w.unR+aR));
-        const double invWave=1/(w.right-w.left);
-        w.faceVelocity=(w.right*w.unL-w.left*w.unR)*invWave;
-        w.advectL=w.right*(w.unL-w.left)*invWave;
-        w.advectR=w.left*(w.right-w.unR)*invWave;
-        w.pressureMomentum=(w.right*sl.p-w.left*sr.p)*invWave;
-        w.pressureEnergy=(w.right*sl.p*w.unL-w.left*sr.p*w.unR)*invWave;
-        const double D=v.cfg.diffusivity+maximum(maximum(4*v.cfg.viscosity/(3*sl.rho),4*v.cfg.viscosity/(3*sr.rho)),
-            maximum(v.cfg.conductivity/(sl.rho*sl.cv),v.cfg.conductivity/(sr.rho*sr.cv)));
-        w.speed=maximum(fabs(w.unL)+aL,fabs(w.unR)+aR)+2*D/f.distance;
-        if(!std::isfinite(w.unL)||!std::isfinite(w.unR)||!std::isfinite(w.speed)
-           ||!std::isfinite(invWave)||w.right<=w.left) w.speed=-1;
-        if(transport&&v.cfg.viscosity>0) {
+        const double left=minimum(0,minimum(unL-aL,unR-aR)),right=maximum(0,maximum(unL+aL,unR+aR));
+        const double invWave=1/(right-left);
+        w.faceVelocity=(right*unL-left*unR)*invWave;
+        w.advectL=right*(unL-left)*invWave;
+        w.advectR=left*(right-unR)*invWave;
+        w.pressureMomentum=(right*sl.p-left*sr.p)*invWave;
+        w.pressureEnergy=(right*sl.p*unL-left*sr.p*unR)*invWave;
+        if(v.cfg.viscosity>0) {
             double g[9];for(int j=0;j<9;++j) {
                 g[j]=v.gradient[l*9+j];
                 if(f.neighbour>=0) g[j]=f.ownerWeight*g[j]+(1-f.ownerWeight)*v.gradient[r*9+j];
@@ -125,8 +192,8 @@ struct Faces {
             }
             for(int d=0;d<3;++d) w.energy-=w.traction[d]*(f.ownerWeight*ul[d]+(1-f.ownerWeight)*ur[d]);
         }
-        if(transport&&v.cfg.conductivity>0&&f.kind!=1) w.energy-=v.cfg.conductivity*(sr.T-sl.T)/f.distance;
-        if(transport&&v.cfg.diffusivity>0&&sl.gasMass>0&&sr.gasMass>0&&f.kind!=1) {
+        if(v.cfg.conductivity>0&&f.kind!=1) w.energy-=v.cfg.conductivity*(sr.T-sl.T)/f.distance;
+        if(v.cfg.diffusivity>0&&sl.gasMass>0&&sr.gasMass>0&&f.kind!=1) {
             const double mass=f.neighbour>=0?sl.gasMass*sr.gasMass/((1-f.ownerWeight)*sr.gasMass+f.ownerWeight*sl.gasMass):sl.gasMass;
             w.diffusion=-mass*v.cfg.diffusivity/f.distance;double largest=-1;
             for(size_t k=0;k<v.cfg.species;++k) {
@@ -166,7 +233,7 @@ struct Step {
         double denominator=0;
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
-            const double speed=v.work[fi].speed;
+            const double speed=v.faceSpeed[fi];
             if(!std::isfinite(speed)||speed<0) {v.step[c]=-1;return;}
             denominator+=v.faces[fi].area*speed;
         }

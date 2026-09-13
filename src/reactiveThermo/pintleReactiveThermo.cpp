@@ -6,6 +6,7 @@
 #include "cantera/thermo/ThermoPhase.h"
 #include "cantera/thermo/Species.h"
 #include "cantera/thermo/SpeciesThermoInterpType.h"
+#include "cantera/thermo/NasaPoly2.h"
 #include "cantera/thermo/MixtureFugacityTP.h"
 #include "cantera/kinetics/Kinetics.h"
 #include <cvode/cvode.h>
@@ -1130,6 +1131,48 @@ int pintle_rt_recover_mechanical(void* model,const double* qa,const double* qb,d
             }
         }
         *state=result; // no change to either inventory, alpha, or total energy
+    });
+}
+
+int pintle_rt_export_gas_thermo(void* model,PintleGasThermoSpecies* output,size_t count,
+                              PintleGasThermoRegion* outputRegions,size_t capacity,size_t* requiredRegions)
+{
+    return protect(model,[&](Model& m){
+        require(requiredRegions,"Missing gas thermo region count output");
+        require(m.gas->type()=="ideal-gas","Device NASA transport requires an ideal-gas phase");
+        std::vector<PintleGasThermoSpecies> records(m.ns);
+        std::vector<PintleGasThermoRegion> regions;
+        for(size_t k=0;k<m.ns;++k) {
+            const auto& thermo=m.gas->species(k)->thermo;
+            require(bool(thermo),"Missing species thermo");const int representation=thermo->reportType();
+            require(representation==NASA1||representation==NASA2||representation==NASA9||representation==NASA9MULTITEMP,
+                    "Device transport requires NASA7/NASA9 for species "+m.names[k]);
+            Vector coefficients(thermo->nCoeffs());double low,high,referencePressure;size_t index;int type;
+            thermo->reportParameters(index,type,low,high,referencePressure,coefficients.data());
+            for(double a:coefficients) require(std::isfinite(a),"Non-finite NASA coefficient");
+            auto& record=records[k];record.regionOffset=regions.size();record.gasConstant=R/m.weights[k];
+            auto append=[&](double minimum,double maximum,const double* a,size_t n) {
+                PintleGasThermoRegion region{};region.minimumTemperature=minimum;region.maximumTemperature=maximum;
+                std::copy(a,a+n,region.coefficient);regions.push_back(region);
+            };
+            if(representation==NASA1) {
+                require(coefficients.size()==7,"Invalid NASA7 single-region data");record.polynomial=7;
+                append(low,high,coefficients.data(),7);
+            } else if(representation==NASA2) {
+                require(coefficients.size()==15,"Invalid NASA7 two-region data");record.polynomial=7;
+                append(low,coefficients[0],coefficients.data()+8,7);append(coefficients[0],high,coefficients.data()+1,7);
+            } else {
+                require(coefficients.size()>=12&&(coefficients.size()-1)%11==0
+                    &&coefficients[0]==double((coefficients.size()-1)/11),"Invalid NASA9 region layout");record.polynomial=9;
+                for(size_t j=1;j<coefficients.size();j+=11) append(coefficients[j],coefficients[j+1],coefficients.data()+j+2,9);
+            }
+            record.regionCount=regions.size()-record.regionOffset;
+            require(std::isfinite(record.gasConstant)&&record.gasConstant>0,"Invalid species gas constant");
+        }
+        if(!output&&!outputRegions&&count==0&&capacity==0) {*requiredRegions=regions.size();return;}
+        require(output&&outputRegions&&count==m.ns&&capacity>=regions.size(),"Wrong gas thermo export buffer size");
+        std::copy(records.begin(),records.end(),output);
+        std::copy(regions.begin(),regions.end(),outputRegions);*requiredRegions=regions.size();
     });
 }
 

@@ -60,6 +60,8 @@ public:
     std::unique_ptr<void,decltype(&pintle_transport_destroy)> transport{nullptr,&pintle_transport_destroy};
     mutable std::vector<PintleTransportState> transportStates;
     mutable Array transportGasY,transportGasH;
+    mutable std::vector<PintleGasPartition> transportPartition;
+    bool deviceGasProperties=false;
     mutable std::vector<PintleTransportPrimitive> transportPrimitive;
     uint64_t transportVersion=0;
     Flow(void* t,size_t cells,Array volumes,const dictionary& dict)
@@ -113,15 +115,38 @@ public:
         transportStates.resize(nc);
         for(size_t c=0;c<nc;++c) transportStates[c]=compact(states[c],states[c].mechanical.dilatationK);
         if(includeGas&&diffusivity>0) {
-            transportGasY.resize(nc*ns);transportGasH.resize(nc*ns);
-            for(size_t c=0;c<nc;++c) gasTransport(&q[c*nv],states[c],&transportGasY[c*ns],&transportGasH[c*ns]);
+            if(deviceGasProperties) {
+                if(!liquidSpecies.empty()) {
+                    transportPartition.resize(nc);
+                    for(size_t c=0;c<nc;++c) for(size_t i=0;i<2;++i) transportPartition[c].liquidMass[i]=states[c].liquidMass[i];
+                }
+            } else {
+                transportGasY.resize(nc*ns);transportGasH.resize(nc*ns);
+                for(size_t c=0;c<nc;++c) gasTransport(&q[c*nv],states[c],&transportGasY[c*ns],&transportGasH[c*ns]);
+            }
         }
     }
     void startTransport(const dictionary& dict)
     {
         const word backend=dict.getOrDefault<word>("transportBackend","cpu");
         demand(backend=="cpu"||backend=="cuda","Unknown reactive transport backend");
+        const word properties=dict.getOrDefault<word>("transportGasProperties","auto");
+        demand(properties=="auto"||properties=="host"||properties=="deviceNasa","Unknown transport gas property mode");
+        demand(properties!="deviceNasa"||(backend=="cuda"&&diffusivity>0),"deviceNasa requires CUDA transport with species diffusion");
         if(backend=="cpu") return;
+        std::vector<PintleGasThermoSpecies> gasThermo;
+        std::vector<PintleGasThermoRegion> gasRegions;
+        if(diffusivity>0&&properties!="host") {
+            size_t regions=0;const int status=pintle_rt_export_gas_thermo(thermo,nullptr,0,nullptr,0,&regions);
+            if(status) {
+                demand(properties!="deviceNasa",std::string("Device gas thermo: ")+pintle_rt_error(thermo));
+                Info<<"REACTIVE_GAS_PROPERTIES selected=host reason="<<pintle_rt_error(thermo)<<nl;
+                gasThermo.clear();
+            } else {
+                gasThermo.resize(ns);gasRegions.resize(regions);
+                check(pintle_rt_export_gas_thermo(thermo,gasThermo.data(),ns,gasRegions.data(),regions,&regions),"Gas thermo export");
+            }
+        }
         std::vector<PintleTransportFace> geometry;Array fixedQ,fixedY,fixedH;
         std::vector<PintleTransportState> fixedStates;
         for(const auto& face:faces) {
@@ -146,6 +171,19 @@ public:
             fixedStates.data(),fixedY.data(),fixedH.data(),message,sizeof(message)));
         demand(bool(transport),message);
         demand(pintle_transport_is_cuda(transport.get()),"Requested CUDA transport was not selected");
+        if(!gasThermo.empty()) {
+            const std::vector<int64_t> condensable(liquidSpecies.begin(),liquidSpecies.end());
+            checkTransport(pintle_transport_set_gas_thermo(transport.get(),gasThermo.data(),ns,gasRegions.data(),gasRegions.size(),
+                condensable.data(),condensable.size()));
+            deviceGasProperties=true;
+        }
+    }
+    void transportStage(double dt,int stage,uint64_t input,uint64_t output,Array& q,Array& boundary) const
+    {
+        if(deviceGasProperties) checkTransport(pintle_transport_stage_resident_gas(transport.get(),transportStates.data(),
+            liquidSpecies.empty()?nullptr:transportPartition.data(),dt,stage,input,output,q.data(),boundary.data()));
+        else checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),transportGasY.data(),
+            transportGasH.data(),dt,stage,input,output,q.data(),boundary.data()));
     }
     double density(const double* q) const {return std::accumulate(q,q+ns,0.0);}
     vector velocity(const double* q) const {return vector(q[ns],q[ns+1],q[ns+2])/density(q);}
@@ -372,8 +410,7 @@ public:
             const uint64_t input=++transportVersion;
             checkTransport(pintle_transport_upload_conserved(transport.get(),q.data(),input));
             const uint64_t output=++transportVersion;
-            checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),
-                transportGasY.data(),transportGasH.data(),dt,0,input,output,q.data(),boundaryA.data()));
+            transportStage(dt,0,input,output,q,boundaryA);
         } else {
             initial=q;flux(q,states,rhs,boundaryA);
             for(size_t j=0;j<q.size();++j) q[j]=initial[j]+dt*rhs[j];
@@ -384,8 +421,7 @@ public:
             packTransport(q,states,true);boundaryB.resize(nv);
             // recover() and the primitive CFL query do not modify conserved q.
             const uint64_t input=transportVersion,output=++transportVersion;
-            checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),
-                transportGasY.data(),transportGasH.data(),dt,1,input,output,q.data(),boundaryB.data()));
+            transportStage(dt,1,input,output,q,boundaryB);
         } else {
             flux(q,states,rhs,boundaryB);
             for(size_t j=0;j<q.size();++j) q[j]=.5*initial[j]+.5*(q[j]+dt*rhs[j]);
@@ -578,7 +614,8 @@ int main(int argc,char** argv)
         flow.startTransport(dict);
         Info<<"REACTIVE_BACKENDS transport="<<(flow.transport?"cuda":"cpu")
             <<" thermodynamics=cpu chemistry=cpu chemicalLinearSolver="
-            <<dict.getOrDefault<word>("chemicalLinearSolver","dense")<<nl;
+            <<dict.getOrDefault<word>("chemicalLinearSolver","dense")
+            <<" transportGasProperties="<<(flow.diffusivity==0?"disabled":(flow.deviceGasProperties?"deviceNasa":"host"))<<nl;
         wordList outputTypes(mesh.boundary().size(),"calculated");
         forAll(mesh.boundary(),patchi) if(mesh.boundary()[patchi].type()=="empty") outputTypes[patchi]="empty";
         auto writeScalar=[&](const word& name,const dimensionSet& dimensions,const Array& values) {
@@ -737,6 +774,13 @@ int main(int argc,char** argv)
                 <<" primitiveUploadBytes="<<double(profile.primitiveUploadBytes)
                 <<" gasUploadBytes="<<double(profile.gasUploadBytes)
                 <<" boundaryPartitions="<<double(profile.boundaryPartitions)<<nl;
+            PintleTransportDeviceProfile device{};
+            flow.checkTransport(pintle_transport_device_profile(flow.transport.get(),&device));
+            Info<<"REACTIVE_DEVICE_PROPERTIES builds="<<double(device.gasPropertyBuilds)
+                <<" cells="<<double(device.gasPropertyCells)<<" partitionUploadBytes="<<double(device.partitionUploadBytes)
+                <<" thermoTableBytes="<<double(device.thermoTableBytes)<<" gasStatusChecks="<<double(device.gasStatusChecks)
+                <<" cflFaceLaunches="<<double(device.cflFaceLaunches)<<" transportFaceLaunches="<<double(device.transportFaceLaunches)
+                <<" faceWorkspaceBytes="<<double(device.faceWorkspaceBytes)<<nl;
         }
         Info<<"End"<<nl;
     } catch(const std::exception& error) {

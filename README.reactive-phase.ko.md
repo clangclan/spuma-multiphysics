@@ -6,7 +6,7 @@
 
 2026-09-12에는 **선택 가능한 CUDA 수송과 CPU 희소 화학**을 추가했다. [GPU·희소 포팅 문서](README.reactive-gpu-sparse.ko.md)에 두 공유 채팅과의 대조, 기존 상태와 새 변경, 새 환경의 시험 결과를 분리했다. 실제 GPU 실행과 SPUMA 전체 빌드는 아직 검증하지 못했으며 기본값은 CPU 수송·밀집 화학이다.
 
-최신 [포팅 리뷰 반영](README.reactive-review.ko.md)은 원시량 CFL, RK 장 재사용, 병렬 reduction, 희소 구조·CVODE 작업공간 재사용을 추가하고 새 검증 결과를 기록한다.
+앞선 [포팅 리뷰 반영](README.reactive-review.ko.md)은 원시량 CFL, RK 장 재사용, 병렬 reduction, 희소 구조·CVODE 작업공간 재사용을 추가했다. 2026-09-13에는 [MFC·PeleC 구조를 참고한 개선](README.reactive-mfc-pele.ko.md)으로 선택 가능한 GPU `gasY/h` 계산, NASA7/NASA9 계수 상주와 CFL 전용 면 커널을 연결했다. 전체 flash·화학 적분은 계속 CPU다.
 
 ## 계산 모델
 

@@ -1,0 +1,84 @@
+{
+  "date": "2026-09-13",
+  "baseline_commit": "69bd3f0e4a81f89c6ca083f9ea69acd6849111fd",
+  "original_experiment_baseline": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "original_experiment_host": false,
+  "input_report_sha256": "6fd80e25c08ceaec8721f28fd767fc15e9ceb81d70e62fd5e6adba89c9e82486",
+  "system": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "full_spuma_build_verified": false,
+  "wmake_available": false,
+  "gpu_execution_verified": false,
+  "cuda_compile_link": "passed: CUDA 13.4.59, compute_80 + sm_80, FP64, fmad=false, prec-div=true, prec-sqrt=true",
+  "cuda_cpu_path": "7 groups passed using the nvcc-built library with backend=cpu; not CUDA device execution",
+  "gpu_probe": {
+    "requested_backend": "cuda",
+    "device_created": false,
+    "error": "CUDA driver version is insufficient for CUDA runtime version",
+    "library_sha256": "f034c2d5e05e902ed9c88d0572ad799d66dc5e0e1b375aaf07274f8d69a3d42d",
+    "scope": "Device availability probe, not GPU numerical validation"
+  },
+  "test_environment": "Cantera 3.2.0, SUNDIALS 7.4.0, Eigen 3.4.1; g++ 13.3.0; separate from the original pinned host",
+  "c_header_abi": "C11 Wall/Wextra/Werror syntax passed; species=32 B, region=88 B, existing transport profile=64 B",
+  "full_solver_compile_contract": "Only extracted version mutation declaration/signature/increments; no SPUMA header/body/link claim",
+  "performance_benchmark": false,
+  "successful_checks": [
+    {
+      "file": "reactive-mfc-pele-transport-final-20260913.json",
+      "passed": true,
+      "cases": 21
+    },
+    {
+      "file": "reactive-mfc-pele-gas-final-20260913.json",
+      "passed": true,
+      "cases": 7
+    },
+    {
+      "file": "reactive-mfc-pele-cuda-host-20260913.json",
+      "passed": true,
+      "cases": 7
+    },
+    {
+      "file": "reactive-mfc-pele-chemical-20260913.json",
+      "passed": true,
+      "cases": 6
+    },
+    {
+      "file": "reactive-mfc-pele-flow-contract-final-20260913.json",
+      "passed": true,
+      "cases": 1
+    }
+  ],
+  "initial_failure": "NASA7-only prototype rejected N2; extended with original NASA9 coefficients and regions without mechanism reduction",
+  "source_map_sha256": "2e7e3521bc46a1157ea36afb86beaa2f7b500d83843897a4c3363f6977851fa0",
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "f39e1068f9b6fd5715519cf657a48b4e704beb9abc04513364540c98bd0adfb2",
+    "src/reactiveThermo/pintleGasThermo.h": "bb24475ad380d7b77780508d51534905f88e09dea8062574fc6dd2cfeab2bdc5",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "938a9dea76871bdf3dbdc72674d05bddb3c76f6ddf8a5e280fc70e571edeeff9",
+    "src/reactiveThermo/pintleReactiveThermo.h": "7412c07755b522a4e56ea416b8d705ad8ce5eed041c97df07708bda96e7fe5b0",
+    "src/reactiveTransport/pintleReactiveTransport.h": "040e5e981044b8fce3c2428950736ebeeaf15ab8f8bae0832d9949f49b558b52",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "3fdbf6543d0cdd292bc26efbebcbc24b064236e513c7984c66f1ccb62e6d4e5b",
+    "src/reactiveTransport/pintleTransportKernels.h": "0212cd9a43577f168d6a5fefc420224c5ae3962cc5ccf5649b753c2d78bfcf39",
+    "tools/reactive_backend.py": "b0e278f8f9439afd506b8617b032003bd086d50bcbfad31ce5129b0745f736e1",
+    "tools/prepare_reactive_case.py": "79ede501914b12419dbb075f01667e927c8bdf039171b65131a4e422c677e2e8",
+    "tools/validate_device_gas_transport.py": "e382c3a5f501d5ddff96ebea982d6a34f513e1c49998b01d9436efc43fd1572a",
+    "tools/validate_reactive_transport.py": "1a44e008e60c8b50e5022fecec1a141870c3bd60fb6cd6d68f898a69ddef9a02",
+    "tools/validate_chemical_jacobian.py": "363b3adf47fc6321f68138fe94eea24e066a319b6d44b4a657c08f7e6e127f3b",
+    "tools/validate_reactive_flow_contract.py": "78f07c84deb1da2dd0efb38839713e3d907614654aafe3e8d74cf24ab90ded4b"
+  },
+  "evidence_sha256": {
+    "reactive-mfc-pele-chemical-20260913.json": "1f80c8017a295fa580b5ada501f14c83e4df14fb7382be16cd0a25682a29d061",
+    "reactive-mfc-pele-cuda-host-20260913.json": "8b163804409acf7dbdb46a58f6b37e17732727138cbffe48f023e277eb9c56c3",
+    "reactive-mfc-pele-cuda-probe-20260913.json": "343b0c5ecda7f68eaa62a312351268f6e347dedf60a8510a44cf999a76915a13",
+    "reactive-mfc-pele-flow-contract-20260913.json": "47a6a28ada834d9cfdf5a2d8a2f5af9e8549e653234c905ad9f070687db491aa",
+    "reactive-mfc-pele-flow-contract-final-20260913.json": "acb1f6b839940923839b039ebfd49d2bd80eef0a67dead187d8dd8a7d8e18f5c",
+    "reactive-mfc-pele-gas-20260913.json": "82e5994144e0fdb3515217f19c205c66ca0b9b659d6f184eb58ae42f4eb9de0e",
+    "reactive-mfc-pele-gas-final-20260913.json": "06e0b584594f91783e3b69d115c47460997ba512fc3621d85603200c0dc22162",
+    "reactive-mfc-pele-transport-20260913.json": "4d1c38db15822d9491e433f55c7a09032937d39ae55a9e42586c917221526ff2",
+    "reactive-mfc-pele-transport-final-20260913.json": "2798aadc3d32e867b11586b4fbf5320c227dfc04373e9f563a3e89a13e614569"
+  },
+  "libraries": {
+    "libpintleReactiveBackend.so": "2d4beb12cc8aed0c5d65d2b65618d7e906d66d7db429f6e0fd977c6deb683859",
+    "libpintleReactiveTransport.so": "816f62a927d49ff5c3b55e88e8cd33193f077076baa62929d5456e31cdfffb4c",
+    "libpintleReactiveTransport-cuda-mfc-pele.so": "f034c2d5e05e902ed9c88d0572ad799d66dc5e0e1b375aaf07274f8d69a3d42d"
+  }
+}

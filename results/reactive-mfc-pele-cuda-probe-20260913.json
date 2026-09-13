@@ -1,0 +1,7 @@
+{
+  "requested_backend": "cuda",
+  "device_created": false,
+  "error": "CUDA driver version is insufficient for CUDA runtime version",
+  "library_sha256": "f034c2d5e05e902ed9c88d0572ad799d66dc5e0e1b375aaf07274f8d69a3d42d",
+  "scope": "Device availability probe, not GPU numerical validation"
+}

@@ -161,6 +161,7 @@ class Transport {
 public:
     Execution execution;View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr,*boundaryPartial=nullptr;
     PintleTransportProfile profile{};
+    PintleTransportDeviceProfile deviceProfile{};uint32_t gasStatus=0;
     uint64_t residentVersion=0,highestVersion=0;bool haveResident=false;
     bool haveInitial=false;double stageDt=0;std::string error;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
@@ -204,11 +205,13 @@ public:
         ALLOC(boundary,size_t,boundary.size());v.nBoundary=boundary.size();
         ALLOC(q,double,product(all,cfg.variables));ALLOC(initial,double,n);ALLOC(rhs,double,n);
         ALLOC(primitive,Primitive,all);ALLOC(work,FaceWork,cfg.faces);
+        ALLOC(faceSpeed,double,cfg.faces);
         ALLOC(gradient,double,cfg.viscosity>0?product(cfg.cells,9):0);
         ALLOC(gasY,double,cfg.diffusivity>0?product(all,cfg.species):0);
         ALLOC(gasH,double,cfg.diffusivity>0?product(all,cfg.species):0);
         ALLOC(boundaryRate,double,cfg.variables);ALLOC(step,double,cfg.cells);
 #undef ALLOC
+        deviceProfile.faceWorkspaceBytes=product(cfg.faces,sizeof(FaceWork)+sizeof(double));
         reduceA=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
         reduceB=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
         bridge=execution.allocate<double>(product(std::max(cfg.cells,cfg.fixed),cfg.variables),cfg.maxBytes);
@@ -262,15 +265,68 @@ public:
         validateStates(states,v.cfg.cells);execution.upload(v.state,states,v.cfg.cells);
         profile.stateUploadBytes+=v.cfg.cells*sizeof(PintleTransportState);
     }
-    void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
+    void installGasThermo(const PintleGasThermoSpecies* species,size_t count,const PintleGasThermoRegion* regions,
+                         size_t regionCount,const int64_t* liquidSpecies,size_t liquids) {
+        require(!v.gasThermo&&!highestVersion&&!execution.stats.stages,"Gas thermo is immutable and must be installed before stepping");
+        require(v.cfg.diffusivity>0&&!v.cfg.mechanical,"Generated gas properties require non-mechanical diffusion");
+        require(species&&regions&&regionCount&&count==v.cfg.species&&liquids<=2&&(!liquids||liquidSpecies),"Invalid gas thermo layout");
+        for(size_t i=0;i<liquids;++i) {
+            require(liquidSpecies[i]>=0&&size_t(liquidSpecies[i])<count,"Invalid condensable species index");
+            if(i) require(liquidSpecies[0]!=liquidSpecies[i],"Duplicate condensable species index");
+        }
+        for(size_t k=0;k<count;++k) {
+            const auto& s=species[k];
+            require((s.polynomial==7||s.polynomial==9)&&s.regionCount&&s.regionOffset<regionCount
+                &&s.regionCount<=regionCount-s.regionOffset&&std::isfinite(s.gasConstant)&&s.gasConstant>0,"Invalid NASA species layout");
+            for(size_t i=0;i<s.regionCount;++i) {
+                const auto& r=regions[s.regionOffset+i];
+                require(std::isfinite(r.minimumTemperature)&&std::isfinite(r.maximumTemperature)&&r.minimumTemperature>0
+                    &&r.maximumTemperature>r.minimumTemperature,"Invalid NASA temperature range");
+                if(i) require(r.minimumTemperature==regions[s.regionOffset+i-1].maximumTemperature,"Noncontiguous NASA temperature regions");
+                for(double a:r.coefficient) require(std::isfinite(a),"Invalid NASA coefficient");
+            }
+        }
+        auto* table=execution.allocate<PintleGasThermoSpecies>(count,v.cfg.maxBytes);
+        auto* coefficients=execution.allocate<PintleGasThermoRegion>(regionCount,v.cfg.maxBytes);
+        auto* partition=execution.allocate<PintleGasPartition>(liquids?v.cfg.cells:0,v.cfg.maxBytes);
+        auto* status=execution.allocate<uint32_t>(1,v.cfg.maxBytes);
+        execution.upload(table,species,count);execution.upload(coefficients,regions,regionCount);execution.finish();
+        v.gasThermo=table;v.gasRegions=coefficients;v.partition=partition;v.gasError=status;v.liquids=liquids;
+        for(size_t i=0;i<liquids;++i) v.liquidSpecies[i]=liquidSpecies[i];
+        deviceProfile.thermoTableBytes=count*sizeof(PintleGasThermoSpecies)+regionCount*sizeof(PintleGasThermoRegion);
+    }
+    void buildGasProperties(const PintleGasPartition* partition) {
+        require(v.gasThermo,"Device gas thermo has not been installed");
+        if(v.liquids) {
+            require(partition,"Missing CPU flash phase partition");
+            for(size_t c=0;c<v.cfg.cells;++c) for(size_t i=0;i<2;++i) {
+                const double amount=partition[c].liquidMass[i];
+                require(std::isfinite(amount)&&amount>=0&&(i<v.liquids||amount==0),"Invalid liquid partition");
+            }
+            execution.upload(v.partition,partition,v.cfg.cells);
+            deviceProfile.partitionUploadBytes+=v.cfg.cells*sizeof(PintleGasPartition);
+        } else require(!partition,"Liquid partition supplied to a no-liquid model");
+        gasStatus=0;execution.upload(v.gasError,&gasStatus,1);
+        execution.launch(v.cfg.cells*v.cfg.species,v,GasProperties{});
+        execution.download(&gasStatus,v.gasError,1);execution.finish();
+        ++deviceProfile.gasStatusChecks;
+        require(gasStatus==0,"Invalid resident inventory/phase partition or non-finite generated gas properties");
+        ++deviceProfile.gasPropertyBuilds;deviceProfile.gasPropertyCells+=v.cfg.cells;
+    }
+    void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport,
+                         bool generated=false,const PintleGasPartition* partition=nullptr) {
         uploadState(states);
         if(transport&&v.cfg.diffusivity>0) {
-            pack(v.gasY,gasY,v.cfg.cells,v.cfg.species);pack(v.gasH,gasH,v.cfg.cells,v.cfg.species);
-            profile.gasUploadBytes+=2*v.cfg.cells*v.cfg.species*sizeof(double);
+            if(generated) buildGasProperties(partition);
+            else {
+                pack(v.gasY,gasY,v.cfg.cells,v.cfg.species);pack(v.gasH,gasH,v.cfg.cells,v.cfg.species);
+                profile.gasUploadBytes+=2*v.cfg.cells*v.cfg.species*sizeof(double);
+            }
         }
         execution.launch(v.cfg.cells+v.cfg.fixed,v,Cells{});
         if(transport&&v.cfg.viscosity>0) execution.launch(v.cfg.cells,v,Gradients{});
-        execution.launch(v.cfg.faces,v,Faces{transport});
+        if(transport) {execution.launch(v.cfg.faces,v,Faces{});++deviceProfile.transportFaceLaunches;}
+        else {execution.launch(v.cfg.faces,v,FaceSpeeds{});++deviceProfile.cflFaceLaunches;}
     }
     void prepare(const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
         haveResident=false;uploadQ(q);prepareResident(states,gasY,gasH,transport);
@@ -349,6 +405,35 @@ int pintle_transport_stage(void* t,double* q,const PintleTransportState* states,
 int pintle_transport_profile(void* t,PintleTransportProfile* result) {
     return protect(t,[&](Transport& x){require(result,"Null transport profile");*result=x.profile;});
 }
+int pintle_transport_device_profile(void* t,PintleTransportDeviceProfile* result) {
+    return protect(t,[&](Transport& x){require(result,"Null device profile");*result=x.deviceProfile;});
+}
+int pintle_transport_set_gas_thermo(void* t,const PintleGasThermoSpecies* species,size_t count,const PintleGasThermoRegion* regions,
+                                   size_t regionCount,const int64_t* liquids,size_t nl) {
+    return protect(t,[&](Transport& x){x.installGasThermo(species,count,regions,regionCount,liquids,nl);});
+}
+int pintle_transport_gas_properties_resident(void* t,const PintleTransportState* states,const PintleGasPartition* partition,
+                                          double* gasY,double* gasH) {
+    return protect(t,[&](Transport& x){
+        require(x.haveResident&&gasY&&gasH,"Gas diagnostic requires a resident state and output buffers");
+        x.uploadState(states);x.buildGasProperties(partition);
+        for(int h=0;h<2;++h) {
+            x.execution.launch(x.v.cfg.cells*x.v.cfg.species,x.v,Layout{h?x.v.gasH:x.v.gasY,x.bridge,
+                x.v.cfg.cells,x.v.cfg.species,x.v.cfg.cells+x.v.cfg.fixed,0,false});
+            x.execution.download(h?gasH:gasY,x.bridge,x.v.cfg.cells*x.v.cfg.species);
+        }
+        x.execution.finish();
+    });
+}
+int pintle_transport_rhs_gas(void* t,const double* q,const PintleTransportState* states,const PintleGasPartition* partition,
+                            double* rhs,double* boundary) {
+    return protect(t,[&](Transport& x){
+        require(x.v.gasThermo,"Device gas thermo has not been installed");
+        x.haveInitial=false;x.haveResident=false;x.uploadQ(q);x.prepareResident(states,nullptr,nullptr,true,true,partition);x.gather();
+        x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
+        x.execution.download(boundary,x.v.boundaryRate,x.v.cfg.variables);x.execution.finish();
+    });
+}
 int pintle_transport_upload_conserved(void* t,const double* q,uint64_t version) {
     return protect(t,[&](Transport& x){
         require(version,"Conserved version must be nonzero");
@@ -368,7 +453,8 @@ int pintle_transport_stable_step_primitives(void* t,const PintleTransportPrimiti
         }
         x.uploadState(state);x.execution.upload(x.v.primitive,primitive,x.v.cfg.cells);
         x.profile.primitiveUploadBytes+=x.v.cfg.cells*sizeof(PintleTransportPrimitive);
-        x.execution.launch(x.v.cfg.faces,x.v,Faces{false});x.stableStep(cfl,maximumStep,dt);
+        x.execution.launch(x.v.cfg.faces,x.v,FaceSpeeds{});++x.deviceProfile.cflFaceLaunches;
+        x.stableStep(cfl,maximumStep,dt);
     });
 }
 int pintle_transport_stage_resident(void* t,const PintleTransportState* states,const double* gasY,const double* gasH,
@@ -379,6 +465,19 @@ int pintle_transport_stage_resident(void* t,const PintleTransportState* states,c
         require(std::isfinite(dt)&&dt>0&&(stage==0||stage==1),"Invalid RK stage");
         require(stage==0||(x.haveInitial&&x.stageDt==dt),"RK stage 1 requires matching stage 0");
         x.prepareResident(states,gasY,gasH,true);x.gather();x.advance(dt,stage,q,boundary);
+        x.residentVersion=x.highestVersion=outputVersion;++x.profile.residentStages;
+    });
+}
+int pintle_transport_stage_resident_gas(void* t,const PintleTransportState* states,const PintleGasPartition* partition,
+    double dt,int stage,uint64_t inputVersion,uint64_t outputVersion,double* q,double* boundary) {
+    return protect(t,[&](Transport& x){
+        require(x.v.gasThermo,"Device gas thermo has not been installed");
+        require(x.haveResident&&x.residentVersion==inputVersion,"Stale resident conserved state");
+        require(outputVersion>x.highestVersion,"Output conserved version must increase");
+        require(std::isfinite(dt)&&dt>0&&(stage==0||stage==1),"Invalid RK stage");
+        require(stage==0||(x.haveInitial&&x.stageDt==dt),"RK stage 1 requires matching stage 0");
+        require(q&&boundary,"Null RK output buffer");
+        x.prepareResident(states,nullptr,nullptr,true,true,partition);x.gather();x.advance(dt,stage,q,boundary);
         x.residentVersion=x.highestVersion=outputVersion;++x.profile.residentStages;
     });
 }
