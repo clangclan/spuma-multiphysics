@@ -20,7 +20,14 @@ from validate_reactive_thermo import saturation
 KINDS = ("uniform", "acoustic", "contact", "release", "shock", "reacting-shock", "viscous", "viscous-zero", "conduction", "conduction-zero", "diffusion", "diffusion-zero", "chemistry", "coupled")
 
 
-def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.):
+def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.,
+            transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto"):
+    if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto"):
+        raise ValueError("Unknown reactive execution backend")
+    if transport_gas_properties not in ("auto", "host", "deviceNasa"):
+        raise ValueError("Unknown transport gas property mode")
+    if transport_gas_properties == "deviceNasa" and (transport_backend != "cuda" or kind not in ("diffusion", "coupled")):
+        raise ValueError("deviceNasa requires CUDA and an active diffusion case")
     case, thermo_dir = Path(case).resolve(), Path(thermo_dir).resolve()
     if (case.exists() or cells < 4 or cells % 2 or kind not in KINDS or not (0<dt_scale<=1)
             or (end is not None and (not np.isfinite(end) or end<=0))
@@ -182,6 +189,8 @@ interpolationSchemes { default linear; } snGradSchemes { default uncorrected; }
 thermoConfiguration "{configuration}"; initialization conserved;
 chemistry {str(kind in ("chemistry","coupled","reacting-shock")).lower()}; dynamicViscosity {viscosity}; thermalConductivity {conductivity}; molecularDiffusivity {diffusivity};
 chemicalRelativeTolerance 1e-8; chemicalAbsoluteTolerance 1e-14;
+transportBackend {transport_backend}; chemicalLinearSolver {chemical_linear_solver}; maxDeviceMemoryGB 2;
+transportGasProperties {transport_gas_properties};
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
 ''')
         def field(name, values, dimensions):
@@ -202,6 +211,8 @@ waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
                     "configuration":str(configuration),"species":backend.names,"liquid_indices":backend.liquid_indices,
                     "reference":reference,"viscosity":viscosity,"conductivity":conductivity,"diffusivity":diffusivity,
                     "model_fingerprint":backend.fingerprint,
+                    "transport_backend":transport_backend,"chemical_linear_solver":chemical_linear_solver,
+                    "transport_gas_properties":transport_gas_properties,
                     "initial_states":[s.as_dict() for s in states],"generator_sha256":common.sha256(Path(__file__))}
     env=common.sourced_environment()
     with (case/"blockMesh.log").open("w") as log:
@@ -218,5 +229,9 @@ if __name__ == "__main__":
     parser.add_argument("--mach",type=float,default=2.);parser.add_argument("--cfl",type=float,default=.25)
     parser.add_argument("--end",type=float)
     parser.add_argument("--dt-scale",type=float,default=1.)
+    parser.add_argument("--transport-backend",choices=("cpu","cuda"),default="cpu")
+    parser.add_argument("--chemical-linear-solver",choices=("dense","sparse","auto"),default="dense")
+    parser.add_argument("--transport-gas-properties",choices=("auto","host","deviceNasa"),default="auto")
     args=parser.parse_args()
-    print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale),indent=2))
+    print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale,
+                             args.transport_backend,args.chemical_linear_solver,args.transport_gas_properties),indent=2))

@@ -4,6 +4,10 @@
 
 핵심 CUDA 연산과 물성 포트는 메인 에이전트가 작성했다. 별도 GPT 5.6 Sol xHigh 에이전트가 작성한 벤치마크 도구는 메인이 전체 검토하고 실제 실행 중 발견한 CLI·진단 문제를 수정했다. 원본 Pintle 및 SPUMA 설치는 수정하지 않고 이 디렉터리에 별도 소스·라이브러리·실행파일을 둔다.
 
+별도 반응·상변화 연구 솔버는 [ReactiveFoam 문서](README.reactive-phase.ko.md)에 설명한다. [2026-09-12 GPU 수송·희소 화학 포팅](README.reactive-gpu-sparse.ko.md)은 선택 가능한 새 경로이며, 아래 ColdFoam의 기존 GPU 성능 측정과 구분한다.
+
+ReactiveFoam의 최신 변경은 [MFC·PeleC 구조를 참고한 GPU 수송 물성 계산](README.reactive-mfc-pele.ko.md)에 있다. 앞선 [컴파일 오류 수정](README.reactive-error-fixes.ko.md)과 [준비 비용 개선](README.reactive-review.ko.md)은 당시 기록으로 구분했다.
+
 ## 실행
 
 이 컴퓨터의 SPUMA v2512 `5916a466`, NVIDIA HPC SDK 26.5, CUDA 13.2, RTX 5080(sm_120), FP64 환경을 사용한다.

@@ -3,6 +3,7 @@
 #ifndef PINTLE_REACTIVE_THERMO_H
 #define PINTLE_REACTIVE_THERMO_H
 #include <stddef.h>
+#include "pintleGasThermo.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,6 +29,26 @@ typedef struct PintleChemicalStats {
     unsigned long long structuredCalls, fallbackCalls;
 } PintleChemicalStats;
 
+// Separate ABI: existing PintleChemicalStats/ctypes callers retain their size.
+typedef struct PintleSparseStats {
+    unsigned long long setups, products, preconditioners, preconditionerSolves;
+    unsigned long long sparseIntegrations, denseIntegrations, denseFallbacks, nonzeros;
+} PintleSparseStats;
+typedef struct PintleChemicalProfile {
+    unsigned long long jvSetups, preconditionerSetups, jacobianCacheHits, patternBuilds;
+    unsigned long long preconditionerReuses, symbolicAnalyses, numericFactorizations;
+    unsigned long long workspaceCreates, workspaceReinitializations, factorNonzeros;
+    double thermoSeconds, kineticsSeconds, csrSeconds, symbolicSeconds, factorSeconds, solveSeconds;
+} PintleChemicalProfile;
+int pintle_rt_chemical_profile(void* model, int reset, PintleChemicalProfile* result);
+// 0=dense reference (default), 1=sparse ideal-gas/no-liquid only (strict),
+// 2=auto: sparse for that model, dense for liquid/nonideal models or failure.
+int pintle_rt_set_chemical_linear_solver(void* model, int mode);
+int pintle_rt_sparse_stats(void* model, int reset, PintleSparseStats* result);
+int pintle_rt_chemical_sparse_jvp(void* model, const double* speciesMass,
+    double internalEnergyDensity, const PintleThermoState* guess,
+    const double* direction, double* product);
+
 // Two spatially unmixed environments. Each environment internally uses HEM;
 // common pressure and velocity do not imply common environment temperature.
 typedef struct PintleMechanicalState {
@@ -49,6 +70,11 @@ const char* pintle_rt_element_name(void* model, size_t element);
 double pintle_rt_atom_coefficient(void* model, size_t species, size_t element);
 const char* pintle_rt_fingerprint(void* model);
 int pintle_rt_ideal_gas(void* model);
+// Export atomically: ideal gas, NASA7/NASA9 with original temperature regions.
+// Query required regions with null arrays and zero capacities, then export with
+// species count and region capacity. Unsupported representations return error.
+int pintle_rt_export_gas_thermo(void* model, PintleGasThermoSpecies* species, size_t count,
+    PintleGasThermoRegion* regions, size_t capacity, size_t* requiredRegions);
 // mode=0: CVODE's full-RHS finite differences; mode=1: fixed-state
 // derivatives plus the implicit thermodynamic correction, with full fallback.
 int pintle_rt_set_chemical_jacobian(void* model, int mode);

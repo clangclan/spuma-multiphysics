@@ -1,0 +1,276 @@
+{
+  "cantera": "3.2.0",
+  "sundials": "7.4.0",
+  "backend": "host C++",
+  "gpu_execution": false,
+  "library_sha256": "4bccd333c693e4889e0c3d7385abe3ebe0ae1a4bef9660d24fa988faa6ee18f8",
+  "tests": [
+    {
+      "name": "PLOG",
+      "passed": true,
+      "relative_error": 7.929709368978968e-08,
+      "product_norm": 1977273.6614218098
+    },
+    {
+      "name": "liquid-routing",
+      "passed": true,
+      "strict_rejected": "Strict sparse chemistry requires structured Jacobian, ideal gas and no liquid phases; use auto for dense fallback",
+      "auto_recovery_temperature": 270.0,
+      "fingerprint": "7455a104aad5d17884d5404a46797be37d4240f5446e18e29b6bffe0982b3211"
+    },
+    {
+      "name": "full-mechanism-100000Pa",
+      "passed": true,
+      "pressure": 100000.0,
+      "species": 413,
+      "reactions": 14922,
+      "Jv_errors": {
+        "present": [
+          8.271101701435238e-08,
+          1.9262397281649933e-09,
+          2.8692570445197344e-09
+        ],
+        "absent": [
+          2.613861520550503e-07,
+          3.3654048225688304e-09,
+          3.3848185560544407e-11
+        ]
+      },
+      "structured_product_relative_error": 3.582862583001336e-09,
+      "construction": {
+        "setups": 2,
+        "products": 2,
+        "preconditioners": 0,
+        "preconditionerSolves": 0,
+        "sparseIntegrations": 0,
+        "denseIntegrations": 0,
+        "denseFallbacks": 0,
+        "nonzeros": 57132
+      },
+      "stored_density": 0.33494949258071516,
+      "runs": [
+        {
+          "mode": "dense",
+          "seconds": 12.658567947999472,
+          "T": 2342.1340836772947,
+          "drift": 2.460545783619866e-11,
+          "minimum_species": 0.0,
+          "stats": {
+            "setups": 0,
+            "products": 0,
+            "preconditioners": 0,
+            "preconditionerSolves": 0,
+            "sparseIntegrations": 0,
+            "denseIntegrations": 1,
+            "denseFallbacks": 0,
+            "nonzeros": 0
+          },
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 1,
+            "workspaceReinitializations": 0,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "mode": "auto",
+          "seconds": 24.119236779000857,
+          "T": 2342.1340793962677,
+          "drift": 3.874305770201625e-12,
+          "minimum_species": 0.0,
+          "stats": {
+            "setups": 952,
+            "products": 2398,
+            "preconditioners": 87,
+            "preconditionerSolves": 3349,
+            "sparseIntegrations": 1,
+            "denseIntegrations": 1,
+            "denseFallbacks": 1,
+            "nonzeros": 57132
+          },
+          "profile": {
+            "jvSetups": 951,
+            "preconditionerSetups": 87,
+            "jacobianCacheHits": 17,
+            "patternBuilds": 0,
+            "preconditionerReuses": 69,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 87,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 2,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.029532056000000008,
+            "kineticsSeconds": 4.439752126000004,
+            "csrSeconds": 0.07765118600000015,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.3910099650000001,
+            "solveSeconds": 0.26522027400000003
+          },
+          "Y_Linf_difference": 7.13827799821154e-10,
+          "T_relative_difference": 1.8278317748254835e-09
+        }
+      ],
+      "strict_sparse_rejection": "Strict sparse integration returned an invalid accepted state",
+      "ReactorNet_Y_Linf": 7.164180915175677e-10,
+      "ReactorNet_T_relative_error": 1.8589914052569156e-09
+    },
+    {
+      "name": "full-mechanism-2000000Pa",
+      "passed": true,
+      "pressure": 2000000.0,
+      "species": 413,
+      "reactions": 14922,
+      "Jv_errors": {
+        "present": [
+          8.266593970682434e-08,
+          1.990786953688248e-09,
+          2.3786781836796634e-09
+        ],
+        "absent": [
+          2.614298395758136e-07,
+          3.3658720960215557e-09,
+          3.3892234831558326e-11
+        ]
+      },
+      "structured_product_relative_error": 8.987183215723911e-09,
+      "construction": {
+        "setups": 2,
+        "products": 2,
+        "preconditioners": 0,
+        "preconditionerSolves": 0,
+        "sparseIntegrations": 0,
+        "denseIntegrations": 0,
+        "denseFallbacks": 0,
+        "nonzeros": 57132
+      },
+      "stored_density": 0.33494949258071516,
+      "runs": [
+        {
+          "mode": "dense",
+          "seconds": 4.094405887999528,
+          "T": 2259.9017356660497,
+          "drift": 4.086051172483119e-12,
+          "minimum_species": 0.0,
+          "stats": {
+            "setups": 0,
+            "products": 0,
+            "preconditioners": 0,
+            "preconditionerSolves": 0,
+            "sparseIntegrations": 0,
+            "denseIntegrations": 1,
+            "denseFallbacks": 0,
+            "nonzeros": 0
+          },
+          "profile": {
+            "jvSetups": 0,
+            "preconditionerSetups": 0,
+            "jacobianCacheHits": 0,
+            "patternBuilds": 0,
+            "preconditionerReuses": 0,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 0,
+            "workspaceCreates": 1,
+            "workspaceReinitializations": 0,
+            "factorNonzeros": 0,
+            "thermoSeconds": 0.0,
+            "kineticsSeconds": 0.0,
+            "csrSeconds": 0.0,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.0,
+            "solveSeconds": 0.0
+          }
+        },
+        {
+          "mode": "sparse",
+          "seconds": 3.050819738999053,
+          "T": 2259.9017357877497,
+          "drift": 5.011296965822793e-13,
+          "minimum_species": 0.0,
+          "stats": {
+            "setups": 589,
+            "products": 614,
+            "preconditioners": 52,
+            "preconditionerSolves": 1202,
+            "sparseIntegrations": 1,
+            "denseIntegrations": 0,
+            "denseFallbacks": 0,
+            "nonzeros": 57132
+          },
+          "profile": {
+            "jvSetups": 588,
+            "preconditionerSetups": 52,
+            "jacobianCacheHits": 9,
+            "patternBuilds": 1,
+            "preconditionerReuses": 42,
+            "symbolicAnalyses": 1,
+            "numericFactorizations": 52,
+            "workspaceCreates": 1,
+            "workspaceReinitializations": 0,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.019850067000000006,
+            "kineticsSeconds": 2.198021729,
+            "csrSeconds": 0.05226473699999997,
+            "symbolicSeconds": 0.001774263,
+            "factorSeconds": 0.23531892699999998,
+            "solveSeconds": 0.10444567500000002
+          },
+          "Y_Linf_difference": 2.3783478658723212e-11,
+          "T_relative_difference": 5.385181189865307e-11
+        },
+        {
+          "mode": "auto",
+          "seconds": 2.994053888000053,
+          "T": 2259.9017357877497,
+          "drift": 5.011296965822793e-13,
+          "minimum_species": 0.0,
+          "stats": {
+            "setups": 589,
+            "products": 614,
+            "preconditioners": 52,
+            "preconditionerSolves": 1202,
+            "sparseIntegrations": 1,
+            "denseIntegrations": 0,
+            "denseFallbacks": 0,
+            "nonzeros": 57132
+          },
+          "profile": {
+            "jvSetups": 588,
+            "preconditionerSetups": 52,
+            "jacobianCacheHits": 9,
+            "patternBuilds": 0,
+            "preconditionerReuses": 42,
+            "symbolicAnalyses": 0,
+            "numericFactorizations": 52,
+            "workspaceCreates": 0,
+            "workspaceReinitializations": 1,
+            "factorNonzeros": 83579,
+            "thermoSeconds": 0.018003799000000004,
+            "kineticsSeconds": 2.1721597310000003,
+            "csrSeconds": 0.049202605,
+            "symbolicSeconds": 0.0,
+            "factorSeconds": 0.23128443200000004,
+            "solveSeconds": 0.1016106599999999
+          },
+          "Y_Linf_difference": 2.3783478658723212e-11,
+          "T_relative_difference": 5.385181189865307e-11
+        }
+      ],
+      "strict_sparse_rejection": null,
+      "ReactorNet_Y_Linf": 1.325300980070665e-11,
+      "ReactorNet_T_relative_error": 3.22830651100503e-11
+    }
+  ],
+  "passed": true
+}

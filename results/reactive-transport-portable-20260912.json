@@ -1,0 +1,232 @@
+{
+  "passed": true,
+  "backend": "cpu",
+  "gpu_execution_verified": false,
+  "tests": [
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 4120,
+        "uploadedBytes": 5832,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 7.85809160974705e-17,
+      "stats": {
+        "allocatedBytes": 5072,
+        "uploadedBytes": 7624,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 49,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 4328,
+        "uploadedBytes": 5928,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 3.929045804873525e-17,
+      "stats": {
+        "allocatedBytes": 5280,
+        "uploadedBytes": 7720,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 49,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 4328,
+        "uploadedBytes": 5928,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 3.929045804873525e-17,
+      "stats": {
+        "allocatedBytes": 5280,
+        "uploadedBytes": 7720,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 49,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 4480,
+        "uploadedBytes": 6048,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 38,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 3.929045804873525e-17,
+      "stats": {
+        "allocatedBytes": 5496,
+        "uploadedBytes": 7904,
+        "downloadedBytes": 2064,
+        "kernelLaunches": 52,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 413,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 4.440892098500626e-16,
+      "stats": {
+        "allocatedBytes": 99008,
+        "uploadedBytes": 143256,
+        "downloadedBytes": 106768,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 53,
+      "cells": 257,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 4.794857860849052e-16,
+      "stats": {
+        "allocatedBytes": 787960,
+        "uploadedBytes": 1690040,
+        "downloadedBytes": 470608,
+        "kernelLaunches": 51,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 1,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 1224,
+        "uploadedBytes": 1376,
+        "downloadedBytes": 528,
+        "kernelLaunches": 50,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 8,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": true,
+      "scaled_error": 7.516311913261166e-17,
+      "stats": {
+        "allocatedBytes": 5512,
+        "uploadedBytes": 7848,
+        "downloadedBytes": 3600,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 8,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": false,
+      "mechanical": true,
+      "scaled_error": 7.516311913261166e-17,
+      "stats": {
+        "allocatedBytes": 5720,
+        "uploadedBytes": 7944,
+        "downloadedBytes": 3600,
+        "kernelLaunches": 37,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    },
+    {
+      "species": 4,
+      "cells": 1,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "scaled_error": 0.0,
+      "stats": {
+        "allocatedBytes": 664,
+        "uploadedBytes": 840,
+        "downloadedBytes": 528,
+        "kernelLaunches": 35,
+        "stages": 3,
+        "stepQueries": 2
+      }
+    }
+  ],
+  "library_sha256": "e916fc41489827707ba4b9df7e888b9f40734d22c50ea498e605153a7f7c402b"
+}

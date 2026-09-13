@@ -1,0 +1,174 @@
+{
+  "date": "2026-09-13",
+  "baseline": "69bd3f0e4a81f89c6ca083f9ea69acd6849111fd",
+  "references": [
+    {
+      "project": "MFC",
+      "repo": "MFlowCode/MFC",
+      "commit": "ec783a899ff1d8ed0056a986117166cc5f868dc6",
+      "path": "src/simulation/m_time_steppers.fpp",
+      "ranges": [
+        [
+          50,
+          177
+        ],
+        [
+          435,
+          550
+        ]
+      ],
+      "idea": "Persistent device RK state and explicit host/device updates",
+      "blob_sha": "8e13a687bb816b8017a5438e54509e4742cc32af",
+      "url": "https://github.com/MFlowCode/MFC/blob/ec783a899ff1d8ed0056a986117166cc5f868dc6/src/simulation/m_time_steppers.fpp"
+    },
+    {
+      "project": "MFC",
+      "repo": "MFlowCode/MFC",
+      "commit": "ec783a899ff1d8ed0056a986117166cc5f868dc6",
+      "path": "src/simulation/m_rhs.fpp",
+      "ranges": [
+        [
+          1104,
+          1155
+        ]
+      ],
+      "idea": "Component and cell loop parallelism with local scalar flux work",
+      "blob_sha": "edd500ef18d296b253f6e195736f326547225296",
+      "url": "https://github.com/MFlowCode/MFC/blob/ec783a899ff1d8ed0056a986117166cc5f868dc6/src/simulation/m_rhs.fpp"
+    },
+    {
+      "project": "MFC",
+      "repo": "MFlowCode/MFC",
+      "commit": "ec783a899ff1d8ed0056a986117166cc5f868dc6",
+      "path": "src/common/include/parallel_macros.fpp",
+      "ranges": [
+        [
+          1,
+          72
+        ]
+      ],
+      "idea": "Shared GPU loop/routine abstraction",
+      "blob_sha": "b1382ec49a7dce0c0a987bbe3da2c63ffa82abe4",
+      "url": "https://github.com/MFlowCode/MFC/blob/ec783a899ff1d8ed0056a986117166cc5f868dc6/src/common/include/parallel_macros.fpp"
+    },
+    {
+      "project": "MFC",
+      "repo": "MFlowCode/MFC",
+      "commit": "ec783a899ff1d8ed0056a986117166cc5f868dc6",
+      "path": "src/common/m_chemistry.fpp",
+      "ranges": [
+        [
+          1,
+          40
+        ],
+        [
+          350,
+          420
+        ],
+        [
+          485,
+          540
+        ]
+      ],
+      "idea": "Thermodynamic and transport evaluation inside device loops",
+      "blob_sha": "687b2a11806594c5433e3eebd67c29ebdd60756b",
+      "url": "https://github.com/MFlowCode/MFC/blob/ec783a899ff1d8ed0056a986117166cc5f868dc6/src/common/m_chemistry.fpp"
+    },
+    {
+      "project": "PeleC",
+      "repo": "Pele-Suite/PeleC",
+      "commit": "c3f925cc9f54b761b7d5a1efe9e5409c98ed3a3c",
+      "path": "Source/Diffusion.cpp",
+      "ranges": [
+        [
+          123,
+          144
+        ],
+        [
+          180,
+          211
+        ]
+      ],
+      "idea": "Device primitive conversion and transport coefficient evaluation",
+      "blob_sha": "624042039d6b246fb2bc7629375286c4cba857d4",
+      "url": "https://github.com/Pele-Suite/PeleC/blob/c3f925cc9f54b761b7d5a1efe9e5409c98ed3a3c/Source/Diffusion.cpp"
+    },
+    {
+      "project": "PeleC",
+      "repo": "Pele-Suite/PeleC",
+      "commit": "c3f925cc9f54b761b7d5a1efe9e5409c98ed3a3c",
+      "path": "Source/React.cpp",
+      "ranges": [
+        [
+          173,
+          230
+        ]
+      ],
+      "idea": "Device reactor staging and stream ownership; not imported in this change",
+      "blob_sha": "302b1f4399af94781893a933c224e733b02321c5",
+      "url": "https://github.com/Pele-Suite/PeleC/blob/c3f925cc9f54b761b7d5a1efe9e5409c98ed3a3c/Source/React.cpp"
+    },
+    {
+      "project": "PelePhysics-pinned",
+      "repo": "Pele-Suite/PelePhysics",
+      "commit": "6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b",
+      "path": "Source/Eos/Fuego.H",
+      "ranges": [
+        [
+          399,
+          425
+        ]
+      ],
+      "idea": "Host/device callable mass enthalpies from temperature",
+      "blob_sha": "f7f8bcd53732d2ed895a8692679b250f788c5ece",
+      "url": "https://github.com/Pele-Suite/PelePhysics/blob/6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b/Source/Eos/Fuego.H"
+    },
+    {
+      "project": "PelePhysics-pinned",
+      "repo": "Pele-Suite/PelePhysics",
+      "commit": "6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b",
+      "path": "Source/Reactions/ReactorCvode.cpp",
+      "ranges": [
+        [
+          50,
+          145
+        ],
+        [
+          244,
+          250
+        ],
+        [
+          314,
+          334
+        ]
+      ],
+      "idea": "Ordering- and backend-specific batched reactor linear solvers; follow-up only",
+      "blob_sha": "461e4abc232c4c842067cd97cd4d284220018af8",
+      "url": "https://github.com/Pele-Suite/PelePhysics/blob/6e8026fc6ed121c07e32c9d3fe1d1c919bafc64b/Source/Reactions/ReactorCvode.cpp"
+    },
+    {
+      "project": "PelePhysics",
+      "repo": "Pele-Suite/PelePhysics",
+      "commit": "4eef939b943693e97c24fb3359fcd2970a8ad4db",
+      "path": "Support/ceptr/ceptr/thermo.py",
+      "ranges": [
+        [
+          31,
+          78
+        ],
+        [
+          649,
+          670
+        ],
+        [
+          848,
+          875
+        ]
+      ],
+      "idea": "NASA7 and NASA9 device function generation",
+      "blob_sha": "0feb6ebcdab629b3463aef7838dc6752e604a6bf",
+      "url": "https://github.com/Pele-Suite/PelePhysics/blob/4eef939b943693e97c24fb3359fcd2970a8ad4db/Support/ceptr/ceptr/thermo.py"
+    }
+  ],
+  "implementation": "Independent implementation of data residency/loop/device-polynomial patterns; no upstream source copied or solver physics imported"
+}

@@ -1,0 +1,193 @@
+{
+  "backend_sha256": "2d4beb12cc8aed0c5d65d2b65618d7e906d66d7db429f6e0fd977c6deb683859",
+  "passed": true,
+  "tests": [
+    {
+      "Jv_errors": {
+        "absent": [
+          3.776875478137044e-07,
+          7.121665479036544e-09,
+          5.327773276431158e-09
+        ],
+        "present": [
+          5.436930201733036e-09,
+          7.654765826885889e-10,
+          1.471859569449217e-09
+        ]
+      },
+      "construction_counters": {
+        "fallbackCalls": 0,
+        "fixedStateCalls": 422,
+        "integrationFallbacks": 0,
+        "jacobianCalls": 1,
+        "rhsCalls": 0,
+        "structuredCalls": 1,
+        "uvCalls": 1
+      },
+      "construction_seconds": 0.5920688899996094,
+      "independent_ideal_matrix_relative_error": 4.465895210742348e-10,
+      "name": "hot-gas-derivatives",
+      "passed": true,
+      "seconds": 5.7263532959996155,
+      "structured": true
+    },
+    {
+      "ReactorNet_T_relative_error": 3.1116775822681575e-11,
+      "ReactorNet_Y_Linf": 5.1167031982907174e-11,
+      "T_relative_difference": 1.8278317748254835e-09,
+      "Y_Linf_difference": 7.13827799821154e-10,
+      "measured_speedup": 1.4708543024264285,
+      "name": "hot-gas-CVODE",
+      "passed": true,
+      "runs": [
+        {
+          "counters": {
+            "fallbackCalls": 0,
+            "fixedStateCalls": 51938,
+            "integrationFallbacks": 0,
+            "jacobianCalls": 0,
+            "rhsCalls": 51942,
+            "structuredCalls": 0,
+            "uvCalls": 51938
+          },
+          "element_drift": 3.874305770201625e-12,
+          "minimum_species": 0.0,
+          "seconds": 72.80547706899961,
+          "structured": false,
+          "temperature": 2342.1340793962677
+        },
+        {
+          "counters": {
+            "fallbackCalls": 46,
+            "fixedStateCalls": 33155,
+            "integrationFallbacks": 0,
+            "jacobianCalls": 58,
+            "rhsCalls": 26659,
+            "structuredCalls": 12,
+            "uvCalls": 26660
+          },
+          "element_drift": 2.460545783619866e-11,
+          "minimum_species": 0.0,
+          "seconds": 49.49876881,
+          "structured": true,
+          "temperature": 2342.1340836772947
+        }
+      ],
+      "seconds": 156.35013332299968
+    },
+    {
+      "Jv_errors": {
+        "absent": [
+          0.00020199116770532835,
+          2.036086944638731e-06,
+          2.3678628521856054e-07
+        ],
+        "present": [
+          3.860867815127194e-07,
+          5.1172957734801375e-09,
+          3.8103363388680436e-10
+        ]
+      },
+      "construction_counters": {
+        "fallbackCalls": 0,
+        "fixedStateCalls": 427,
+        "integrationFallbacks": 0,
+        "jacobianCalls": 1,
+        "rhsCalls": 0,
+        "structuredCalls": 1,
+        "uvCalls": 1
+      },
+      "construction_seconds": 0.8222318279995307,
+      "name": "equilibrium-liquid-derivatives",
+      "passed": true,
+      "seconds": 2.708959683000103,
+      "structured": true
+    },
+    {
+      "T_relative_difference": 7.093103882027663e-12,
+      "Y_Linf_difference": 1.0976347197539353e-12,
+      "measured_speedup": 2.5631076882422956,
+      "name": "equilibrium-liquid-CVODE",
+      "passed": true,
+      "runs": [
+        {
+          "counters": {
+            "fallbackCalls": 0,
+            "fixedStateCalls": 1349,
+            "integrationFallbacks": 0,
+            "jacobianCalls": 0,
+            "rhsCalls": 1349,
+            "structuredCalls": 0,
+            "uvCalls": 1349
+          },
+          "element_drift": 5.549756026562499e-14,
+          "minimum_species": 0.0,
+          "seconds": 41.865826029000345,
+          "structured": false,
+          "temperature": 288.4447601860051
+        },
+        {
+          "counters": {
+            "fallbackCalls": 1,
+            "fixedStateCalls": 954,
+            "integrationFallbacks": 0,
+            "jacobianCalls": 2,
+            "rhsCalls": 527,
+            "structuredCalls": 1,
+            "uvCalls": 528
+          },
+          "element_drift": 1.1121755564253505e-16,
+          "minimum_species": 0.0,
+          "seconds": 16.334009772999707,
+          "structured": true,
+          "temperature": 288.4447601880511
+        }
+      ],
+      "seconds": 59.742190107999704
+    },
+    {
+      "Jv_errors": {
+        "absent": [
+          0.00025672442948824066,
+          2.576598902029175e-06,
+          2.1877359688872292e-07
+        ],
+        "present": [
+          2.6306898760008204e-07,
+          2.5261161672926507e-09,
+          1.758688371936949e-09
+        ]
+      },
+      "construction_counters": {
+        "fallbackCalls": 0,
+        "fixedStateCalls": 425,
+        "integrationFallbacks": 0,
+        "jacobianCalls": 1,
+        "rhsCalls": 0,
+        "structuredCalls": 1,
+        "uvCalls": 1
+      },
+      "construction_seconds": 0.49459740000020247,
+      "name": "frozen-liquid-derivatives",
+      "passed": true,
+      "seconds": 1.5277937939999902,
+      "structured": true
+    },
+    {
+      "counters": {
+        "fallbackCalls": 1,
+        "fixedStateCalls": 7,
+        "integrationFallbacks": 0,
+        "jacobianCalls": 1,
+        "rhsCalls": 7,
+        "structuredCalls": 0,
+        "uvCalls": 8
+      },
+      "jacobian_norm": 0.0,
+      "name": "incipient-liquid-fallback",
+      "passed": true,
+      "seconds": 0.16728507900006662,
+      "usedStructured": false
+    }
+  ]
+}
