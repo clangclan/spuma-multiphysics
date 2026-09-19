@@ -60,6 +60,9 @@ int pintle_rt_chemical_matrix_free_jvp(void* model,const double* q,double energy
     double* product,int* usedFixedBranch);
 // Independent mutable model/CVODE state per worker. Scratch is bounded by batch
 // capacity; the Flow-level pre-Strang snapshot owns whole-step rollback.
+// Prototype must outlive the pool. Externally serialize ALL calls including
+// error/profile/destruction; return 2 means concurrent entry rejected without
+// changing the error string. Mutating the prototype invalidates this pool.
 void* pintle_rt_pool_create(void* prototype,size_t workers,size_t batchCapacity,
     size_t scratchBudget,char* error,size_t errorSize);
 void pintle_rt_pool_destroy(void* pool);

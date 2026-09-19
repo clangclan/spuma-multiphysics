@@ -2,6 +2,7 @@
 // Included inside Model; only public Cantera APIs are used.
     Cantera::ThermoPhase& setTRho(double T,double rho,const Vector& Y,int phase)
     {
+        ++cost.trhoStateEvaluations;
         require(std::isfinite(T)&&T>=Tmin&&T<=Tmax&&std::isfinite(rho)&&rho>0,"Invalid EOS T/rho domain");
         Cantera::ThermoPhase* selected=gas.get();
         if(phase<0) {
@@ -16,7 +17,7 @@
         selected->setTemperature(T);selected->setDensity(rho);
         const double p=selected->pressure();bounds(p,T);
         if(auto* fluid=dynamic_cast<Cantera::MixtureFugacityTP*>(selected)) {
-            const double root=fluid->densityCalc(T,p,phase<0?FLUID_GAS:FLUID_LIQUID_0,rho);
+            ++cost.densityRootChecks;const double root=fluid->densityCalc(T,p,phase<0?FLUID_GAS:FLUID_LIQUID_0,rho);
             require(root>0&&std::isfinite(root)&&std::abs(root-rho)<=1e-8*rho,"T/rho does not belong to requested EOS branch");
             // densityCalc may use scratch state; restore the requested inputs.
             selected->setTemperature(T);selected->setDensity(rho);
@@ -63,11 +64,11 @@
         }
         for(size_t k:selected) require(k<fluid.nSpecies(),"Selected EOS species out of range");
         if(mask&PINTLE_RF_PARTIAL_H) {
-            Vector values(fluid.nSpecies());fluid.getPartialMolarEnthalpies(values.data());
+            ++cost.partialHEvaluations;Vector values(fluid.nSpecies());fluid.getPartialMolarEnthalpies(values.data());
             for(size_t k:selected) {const double value=values[k]/fluid.molecularWeight(k);require(std::isfinite(value),"Nonfinite partial enthalpy");partialH.push_back(value);}
         }
         if(mask&PINTLE_RF_CHEMICAL_POTENTIAL) {
-            Vector values(fluid.nSpecies());fluid.getChemPotentials(values.data());
+            ++cost.selectedMuEvaluations;Vector values(fluid.nSpecies());fluid.getChemPotentials(values.data());
             for(size_t k:selected) {const double value=values[k]/fluid.molecularWeight(k);require(std::isfinite(value),"Nonfinite chemical potential");mu.push_back(value);}
         }
         return out;
@@ -78,23 +79,45 @@
         ++realProfile.scalarAttempts;checkMass(q,{});
         const double rho=std::accumulate(q.begin(),q.end(),0.);
         Vector Y=q;for(double& y:Y)y/=rho;
+        std::unique_ptr<PintleFixedCaloric> fast;
+        if(caloric->supported)fast=std::make_unique<PintleFixedCaloric>(*caloric,Y,weights,cost);
         auto probe=[&](double T) {
-            auto& fluid=setTRho(T,rho,Y,-1);
+            ++cost.scalarProbes;
+            if(fast) {
+                const auto value=fast->evaluate(T,rho);bounds(value.p,T);
+                // Certificate is scoped to this exact composition/rho/EOS and
+                // this T. It does not certify absent-liquid global stability.
+                // Ambiguous roots retain the original inverse-EOS branch check.
+                if(!value.uniqueRoot)setTRho(T,rho,Y,-1);
+                return std::array<double,3>{rho*value.energy-energy,rho*value.cv,value.p};
+            }
+            ++cost.energyCvEvaluations;auto& fluid=setTRho(T,rho,Y,-1);
             const double cv=fluid.cv_mass(),F=rho*fluid.intEnergy_mass()-energy;
             require(std::isfinite(F)&&std::isfinite(cv)&&cv>0&&fluid.isothermalCompressibility()>0,"Invalid scalar EOS branch");
             return std::array<double,3>{F,rho*cv,fluid.pressure()};
         };
         double T=std::clamp(guess.T,Tmin,Tmax);auto value=probe(T);
-        const double scale=std::max(1e5*rho,rho*gas->cp_mass()*T);
+        // Set the same-EOS reference once for the original energy scaling and
+        // base branch check. Iterative minimal probes do not use mutable state.
+        auto& reference=setTRho(T,rho,Y,-1);
+        const double scale=std::max(1e5*rho,rho*reference.cp_mass()*T);
         double lo=T,hi=T;auto low=value,high=value;
         if(std::abs(value[0])>etol*scale) {
             double radius=std::max(1.,.01*T);
             for(int j=0;j<24&&(low[0]>0||high[0]<0);++j,radius*=2) {
-                if(low[0]>0) {lo=std::max(Tmin,T-radius);low=probe(lo);}
-                if(high[0]<0) {hi=std::min(Tmax,T+radius);high=probe(hi);}
+                if(low[0]>0) {double candidate=std::max(Tmin,T-radius);bool found=false;
+                    for(int retry=0;retry<8&&!found;++retry)try{low=probe(candidate);lo=candidate;found=true;}
+                        catch(const std::exception&){++cost.bracketRejects;candidate=.5*(lo+candidate);}
+                    require(found,"No bounded lower scalar probe");}
+                if(high[0]<0) {double candidate=std::min(Tmax,T+radius);bool found=false;
+                    for(int retry=0;retry<8&&!found;++retry)try{high=probe(candidate);hi=candidate;found=true;}
+                        catch(const std::exception&){++cost.bracketRejects;candidate=.5*(hi+candidate);}
+                    require(found,"No bounded upper scalar probe");}
+                if(std::abs(low[0])<=etol*scale){T=lo;value=low;break;}
+                if(std::abs(high[0])<=etol*scale){T=hi;value=high;break;}
                 if(lo==Tmin&&hi==Tmax) break;
             }
-            require(low[0]<=0&&high[0]>=0&&hi>lo,"No same-branch scalar energy bracket");
+            require(std::abs(value[0])<=etol*scale||(low[0]<=0&&high[0]>=0&&hi>lo),"No same-branch scalar energy bracket");
         }
         int iteration=0;
         for(;iteration<70&&std::abs(value[0])>etol*scale;++iteration) {

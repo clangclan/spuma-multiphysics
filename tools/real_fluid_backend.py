@@ -56,15 +56,15 @@ class RealFluidBackend(Backend):
     def profile(self):
         out=Profile();self.check(self.lib.pintle_rt_real_fluid_profile(self.handle,0,C.byref(out)));return fields(out)
     def evaluate(self,T,rho,Y,phase=-1,mask=31,selected=None):
-        y=np.ascontiguousarray(Y,dtype=float);selected=list(range(self.ns)) if selected is None else selected
+        y=self.vector(Y) if phase<0 else np.ascontiguousarray(Y,dtype=float);selected=list(range(self.ns)) if selected is None else selected
         indices=(C.c_size_t*len(selected))(*selected);h=np.zeros(len(selected));mu=h.copy();out=Result()
         self.check(self.lib.pintle_rt_evaluate_real_fluid(self.handle,T,rho,ptr(y),phase,mask,indices,len(selected),C.byref(out),ptr(h),ptr(mu)))
         return fields(out),h,mu
     def tangent(self,q,e,state,v,de=0):
-        q,v=np.ascontiguousarray(q,dtype=float),np.ascontiguousarray(v,dtype=float);out=Tangent()
+        q,v=self.vector(q),self.vector(v);out=Tangent()
         self.check(self.lib.pintle_rt_thermo_tangent(self.handle,ptr(q),e,C.byref(state),ptr(v),de,C.byref(out)))
         return out
     def jvp(self,q,e,state,v,equilibrium=True):
-        q,v=np.ascontiguousarray(q,dtype=float),np.ascontiguousarray(v,dtype=float);out=np.zeros(self.ns);used=C.c_int()
+        q,v=self.vector(q),self.vector(v);out=np.zeros(self.ns);used=C.c_int()
         self.check(self.lib.pintle_rt_chemical_matrix_free_jvp(self.handle,ptr(q),e,equilibrium,C.byref(state),ptr(v),ptr(out),C.byref(used)))
         return out,bool(used.value)

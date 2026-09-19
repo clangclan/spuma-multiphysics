@@ -7,7 +7,9 @@ test -f "$reactive_prefix/include/cantera/thermo/PengRobinson.h"
 # The caller holds the shared run lock, including when this is part of a larger
 # validation campaign. Host-only Cantera calls are isolated behind a C ABI.
 build_backend() {
-g++ -std=c++17 -O2 -fPIC -shared -Wall -Wextra -fno-fast-math -pthread \
+local link_flags=(-fPIC -shared)
+if [[ "${3:-shared}" == executable ]]; then link_flags=(); fi
+g++ -std=c++17 -O2 "${link_flags[@]}" -Wall -Wextra -fno-fast-math -pthread \
     -isystem "$reactive_prefix/include" -isystem "$reactive_prefix/include/eigen3" \
     "$1" \
     -L"$reactive_prefix/lib" -Wl,-rpath,"$reactive_prefix/lib" \
@@ -18,4 +20,9 @@ g++ -std=c++17 -O2 -fPIC -shared -Wall -Wextra -fno-fast-math -pthread \
 build_backend "$project_root/src/reactiveThermo/pintleReactiveThermo.cpp" "$project_root/lib/libpintleReactiveBackend.so"
 if [[ "${PINTLE_REACTIVE_CACHE_TEST:-0}" == 1 ]]; then
     build_backend "$project_root/tools/test_reactive_sparse_cache.cpp" "$project_root/lib/libpintleReactiveCacheTest.so"
+fi
+
+if [[ "${PINTLE_RF21_CONTRACT_TEST:-0}" == 1 ]]; then
+    mkdir -p "$project_root/bin"
+    build_backend "$project_root/tools/check_real_fluid_v21_contract.cpp" "$project_root/bin/check-real-fluid-v21-contract" executable
 fi

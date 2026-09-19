@@ -5,28 +5,38 @@
 #include <stdexcept>
 // Equilibrated pivoted solve, never an explicit inverse. Residual is measured
 // in the original equations; rcond describes the equilibrated system.
-inline Eigen::VectorXd pintleSmallSolve(const Eigen::MatrixXd& D,const Eigen::VectorXd& b,
-                                      double* rcond=nullptr,double* residual=nullptr)
-{
-    if(D.rows()!=D.cols()||D.rows()!=b.size()||!D.allFinite()||!b.allFinite())
+class PintleSmallFactor {
+    Eigen::MatrixXd D;
+    Eigen::VectorXd rows,cols;
+    Eigen::FullPivLU<Eigen::MatrixXd> lu;
+public:
+explicit PintleSmallFactor(const Eigen::MatrixXd& matrix):D(matrix),rows(D.rows()),cols(D.cols()) {
+    if(D.rows()==0||D.rows()!=D.cols()||!D.allFinite())
         throw std::runtime_error("Invalid small tangent system");
-    Eigen::VectorXd rows(D.rows()),cols(D.cols());Eigen::MatrixXd A=D;
+    Eigen::MatrixXd A=D;
     for(Eigen::Index i=0;i<A.rows();++i) {rows[i]=A.row(i).cwiseAbs().maxCoeff();
         if(!(rows[i]>0))throw std::runtime_error("Zero tangent equation");
         A.row(i)/=rows[i];}
     for(Eigen::Index j=0;j<A.cols();++j) {cols[j]=A.col(j).cwiseAbs().maxCoeff();
         if(!(cols[j]>0))throw std::runtime_error("Zero tangent variable");
         A.col(j)/=cols[j];}
-    const auto lu=A.fullPivLu();
+    lu.compute(A);
     if(!lu.isInvertible()||lu.rcond()<1e-10)throw std::runtime_error("Ill-conditioned scaled tangent");
+}
+Eigen::VectorXd solve(const Eigen::VectorXd& b,double* rcond=nullptr,double* residual=nullptr) const {
+    if(b.size()!=D.rows()||!b.allFinite())throw std::runtime_error("Invalid tangent RHS");
     const Eigen::VectorXd x=lu.solve((b.array()/rows.array()).matrix()).array()/cols.array();
     const double error=(D*x-b).lpNorm<Eigen::Infinity>()/
-        std::max(1.,D.lpNorm<Eigen::Infinity>()*x.lpNorm<Eigen::Infinity>()+b.lpNorm<Eigen::Infinity>());
+        std::max(1.,D.cwiseAbs().rowwise().sum().maxCoeff()*x.lpNorm<Eigen::Infinity>()+b.lpNorm<Eigen::Infinity>());
     if(!x.allFinite()||!std::isfinite(error)||error>1e-10)throw std::runtime_error("Small tangent residual failed");
     if(rcond)*rcond=lu.rcond();
     if(residual)*residual=error;
     return x;
 }
+};
+inline Eigen::VectorXd pintleSmallSolve(const Eigen::MatrixXd& D,const Eigen::VectorXd& b,
+                                      double* rcond=nullptr,double* residual=nullptr)
+{return PintleSmallFactor(D).solve(b,rcond,residual);}
 // Flash retains its previous FP64 pivoted reference solve if equilibration is
 // rejected. A new tangent screening threshold must not silently remove an old
 // entropy candidate. The flash still applies its original nonlinear acceptance.

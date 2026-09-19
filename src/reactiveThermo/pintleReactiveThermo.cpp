@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pintleReactiveThermo.h"
 #include "pintleRealFluid.h"
+#include "pintleRealFluidV21.h"
 #include "pintleSmallSystem.h"
 #include <thread>
 #include <atomic>
@@ -29,6 +30,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <cstdio>
 #include <fstream>
 #include <iomanip>
 #include <limits>
@@ -109,6 +111,8 @@ struct ProfileTimer {
     explicit ProfileTimer(double& value):seconds(value) {}
     ~ProfileTimer() {seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();}
 };
+#include "pintleCaloricFast.h"
+
 class ChemicalODE;
 class Model {
 public:
@@ -119,11 +123,13 @@ public:
     std::array<double,2> liquidTmin{}, liquidTc{};
     size_t ns=0, nl=0;
     double Tmin=0, Tmax=0, pmin=0, pmax=0, vtol=0, etol=0, mutol=0;
-    std::string error;
+    std::array<char,8192> error{};
     std::vector<std::string> names,elementNames;
     std::string fingerprint,configuration,physicalHash,policyHash,eosName,basePhysicalHash,physicalContext,numericalContext;
     bool scalarRecovery=true;
+    std::unique_ptr<PintleCaloricData> caloric;
     PintleRealFluidProfile realProfile{};
+    PintleCostProfileV21 cost{};double jobSeconds=0;
     Vector weights;
     bool structuredChemicalJacobian=true;
     int chemicalLinearSolver=0;
@@ -131,7 +137,7 @@ public:
     PintleChemicalProfile chemicalProfile{};
     // Per-model worker storage. No objects or numerical histories are shared
     // between handles/threads. Index 0 is dense, index 1 is sparse.
-    std::shared_ptr<ChemicalODE> chemicalWorkspace[2];
+    std::shared_ptr<ChemicalODE> chemicalWorkspace[3];
     PintleChemicalStats chemicalStats{};
     unsigned long long chemicalIntegrationFallbacks=0;
 
@@ -220,6 +226,7 @@ public:
             std::ostringstream limits;limits<<std::setprecision(17)<<liquidTmin[i]<<":"<<liquidTc[i];physical+=limits.str();
             if(e.hasKey("mechanism"))physicalFile(e["mechanism"].asString());}
         physicalHash=basePhysicalHash=hashText(physical);refreshPolicyHash();
+        caloric=std::make_unique<PintleCaloricData>(*gas);
     }
 
     static std::string hashText(const std::string& text) {
@@ -227,7 +234,7 @@ public:
         std::ostringstream out;out<<std::hex<<std::setfill('0');for(auto c:digest)out<<std::setw(2)<<int(c);return out.str();
     }
     void refreshPolicyHash() {
-        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v1:"<<vtol<<":"<<etol<<":"<<mutol
+        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
             <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
         policyHash=hashText(policy.str());
     }
@@ -241,6 +248,7 @@ public:
 
     PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected)
     {
+        ++cost.fullPhaseEvaluations;
         bounds(p,T);
         Cantera::ThermoPhase* phase;
         if(index<0) {
@@ -285,7 +293,7 @@ public:
         result.expansion=phase->thermalExpansionCoeff();
         result.compressibility=phase->isothermalCompressibility();
         result.sound=phase->soundSpeed();
-        Vector mu(phase->nSpecies()); phase->getChemPotentials(mu.data());
+        ++cost.selectedMuEvaluations;Vector mu(phase->nSpecies()); phase->getChemPotentials(mu.data());
         result.chemicalPotential=mu[selected]/phase->molecularWeight(selected);
         const double values[]={result.rho,result.e,result.h,result.s,result.cp,result.cv,
                                result.expansion,result.compressibility,result.sound,result.chemicalPotential};
@@ -369,7 +377,7 @@ public:
         // Only the zero-liquid gas candidate changes its inversion algorithm.
         // Equilibrium still tests absent phases and compares all old candidates.
         if(scalarRecovery&&mass[0]==0&&mass[1]==0) {
-            try {return scalarGas(q,energy,guess);} catch(const std::exception&) {++realProfile.scalarFallbacks;}
+            try {return scalarGas(q,energy,guess);} catch(const std::exception&) {++realProfile.scalarFallbacks;++cost.branchFallbacks;}
         }
         double p=std::clamp(guess.p,pmin,pmax), T=std::clamp(guess.T,Tmin,Tmax);
         Evaluation value=evaluate(q,mass,p,T);
@@ -447,6 +455,7 @@ public:
     Evaluation activeFlash(const Vector& q,double energy,const std::vector<size_t>& active,
                            const PintleThermoState& guess,double seed)
     {
+        ++cost.flashCandidates;
         const double rho=std::accumulate(q.begin(),q.end(),0.0);
         const double scale=std::max({1e5*rho,std::abs(energy),rho*2000*std::max(guess.T,Tmin)});
         Eigen::VectorXd x(2+active.size());
@@ -591,11 +600,17 @@ public:
 // CVODE integrates actual species masses with nonnegative accepted states.
 // Tiny negative Newton trial values are used only as zero in the RHS; no
 // clipping, rescaling or energy correction is applied to an accepted state.
+#include "pintleDirectional.inc"
+
 class ChemicalODE {
 public:
     Model& model;
     double energy, negativeTrialTolerance;
-    bool equilibrium,useStructured,useSparse;
+    bool equilibrium,useStructured,useSparse,useMatrixFree=false;
+    std::unique_ptr<LinearizationContext> linearization;
+    PintleThermoState mfState{};Vector mfBase;double mfEnergy=0;bool mfEquilibrium=false,mfPrepared=false;
+    std::string mfPhysical,mfPolicy;uint64_t mfGeneration=0,precGeneration=0;
+    double identityGamma=0;
     PintleSparseJacobian sparse;
     Eigen::SparseMatrix<double> kinetic,preconditionerKinetic,factorMatrix;
     Vector jacobianState,mask,u,cv,dT,dP;
@@ -614,8 +629,8 @@ public:
     ChemicalODE(Model& m,double e,bool eq,const PintleThermoState& s,double atol)
         :model(m),energy(e),negativeTrialTolerance(atol*s.rho*100),equilibrium(eq),
          useStructured(m.structuredChemicalJacobian),
-         useSparse(m.chemicalLinearSolver!=0 && m.structuredChemicalJacobian
-                   && m.nl==0 && m.gas->type()=="ideal-gas"),guess(s) {}
+         useSparse((m.chemicalLinearSolver==1||m.chemicalLinearSolver==2) && m.structuredChemicalJacobian
+                   && m.nl==0 && m.gas->type()=="ideal-gas"),guess(s) {useMatrixFree=m.chemicalLinearSolver==3;}
     ~ChemicalODE() {
         if(integrator) CVodeFree(&integrator);
         if(linear) SUNLinSolFree(linear);
@@ -624,12 +639,13 @@ public:
         if(y) N_VDestroy(y);
         if(context) SUNContext_Free(&context);
     }
+    void setCallbackFailure(const char* message) noexcept {try{failure=message;}catch(...){}}
     void reset(double e,bool eq,const PintleThermoState& state,double atol) {
         energy=e;equilibrium=eq;guess=state;negativeTrialTolerance=atol*state.rho*100;
         useStructured=model.structuredChemicalJacobian;failure.clear();
         // Retain memory and symbolic structure, never state values or BDF history
         // across another cell, source interval, energy, or phase configuration.
-        jacobianValid=false;preconditionerValid=false;
+        jacobianValid=false;preconditionerValid=false;mfPrepared=false;linearization.reset();
     }
     Vector rates(const Vector& q,const Evaluation& value) {
         ++model.chemicalStats.fixedStateCalls;
@@ -645,7 +661,7 @@ public:
         return output;
     }
     Vector source(Vector q,bool updateGuess=true) {
-        ++model.chemicalStats.rhsCalls;
+        ++model.chemicalStats.rhsCalls;++model.cost.sourceRhsCalls;
         for(double& amount:q) {
             require(std::isfinite(amount)&&amount>=-negativeTrialTolerance,
                     "Chemical Newton trial leaves the nonnegative species domain");
@@ -657,6 +673,72 @@ public:
         const Vector result=rates(q,value);
         if(updateGuess) guess=value.state;
         return result;
+    }
+    void setupMatrixFree(const Vector& q) {
+        if(mfPrepared&&mfBase==q&&mfEnergy==energy&&mfEquilibrium==equilibrium
+            &&mfPhysical==model.physicalHash&&mfPolicy==model.policyHash
+            &&mfState.activeLiquids==guess.activeLiquids&&mfState.p==guess.p&&mfState.T==guess.T
+            &&mfState.liquidMass[0]==guess.liquidMass[0]&&mfState.liquidMass[1]==guess.liquidMass[1]
+            &&(!linearization||equilibrium||
+                (linearization->state.liquidMass[0]==guess.liquidMass[0]&&linearization->state.liquidMass[1]==guess.liquidMass[1])))return;
+        mfPrepared=false;linearization.reset();++mfGeneration;
+        mfBase=q;mfEnergy=energy;mfEquilibrium=equilibrium;mfPhysical=model.physicalHash;mfPolicy=model.policyHash;
+        // source establishes the recovered base using the SAME Newton-trial
+        // extension as CVODE's RHS. A negative trial uses the direct fallback.
+        source(q,true);
+        try {linearization=std::make_unique<LinearizationContext>(model,q,energy,equilibrium,guess,mfGeneration,
+                [&](const Vector& a,const Evaluation& value){return rates(a,value);});}
+        catch(const std::exception&) {linearization.reset();}
+        mfState=guess;mfPrepared=true;
+    }
+    Vector matrixFreeProduct(const Vector& q,const Vector& v,bool* fixed=nullptr) {
+        validateDirection(q,v,energy,0,std::max(1.,std::abs(energy)));
+        setupMatrixFree(q);Eigen::VectorXd result;bool used=false;
+        if(linearization)try {
+            result=linearization->apply(model,v,[&](const Vector& a,const Evaluation& value){return rates(a,value);});used=true;
+        }catch(const std::exception&){}
+        if(!used) {
+            ++model.cost.JvFallbacks;++model.realProfile.sourceJvFallbacks;
+            const auto f=source(q,false);const Eigen::VectorXd base=Eigen::Map<const Eigen::VectorXd>(f.data(),f.size());
+            result=directionProbe(q,v,energy,0,std::max(1.,std::abs(energy)),base,[&](const Vector& a,double){
+                const auto r=source(a,false);return Eigen::Map<const Eigen::VectorXd>(r.data(),r.size()).eval();},nullptr,&model.cost);
+        }
+        // All rate/closure consumers establish their own complete thermodynamic
+        // state; no caller may consume mutable Cantera state left by a probe.
+        if(fixed)*fixed=used;
+        return Vector(result.data(),result.data()+result.size());
+    }
+    static int matrixFreeSetup(double,N_Vector y,N_Vector,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);++self.model.cost.matrixFreeSetups;
+        try {self.setupMatrixFree(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns));return 0;}
+        catch(const std::exception& ex){self.mfPrepared=false;self.setCallbackFailure(ex.what());return 1;}
+        catch(...){self.mfPrepared=false;return -1;}
+    }
+    static int matrixFreeTimes(N_Vector v,N_Vector Jv,double,N_Vector y,N_Vector,void* data,N_Vector) {
+        auto& self=*static_cast<ChemicalODE*>(data);++self.model.cost.matrixFreeProducts;
+        try {const auto out=self.matrixFreeProduct(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns),
+                Vector(N_VGetArrayPointer(v),N_VGetArrayPointer(v)+self.model.ns));
+            std::copy(out.begin(),out.end(),N_VGetArrayPointer(Jv));return 0;}
+        catch(const std::exception& ex){self.mfPrepared=false;self.setCallbackFailure(ex.what());return 1;}
+        catch(...){self.mfPrepared=false;return -1;}
+    }
+    // First opt-in integration gate: identity preconditioner, with explicit
+    // snapshot/gamma bookkeeping. No ideal-gas sparse guard is relaxed for PR.
+    static int identitySetup(double,N_Vector y,N_Vector,sunbooleantype,
+        sunbooleantype* current,double gamma,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {require(std::isfinite(gamma),"Invalid matrix-free gamma");
+            self.setupMatrixFree(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns));
+            self.precGeneration=self.mfGeneration;self.identityGamma=gamma;*current=SUNTRUE;return 0;}
+        catch(const std::exception& ex){self.setCallbackFailure(ex.what());return 1;}
+        catch(...){return -1;}
+    }
+    static int identitySolve(double,N_Vector,N_Vector,N_Vector r,N_Vector z,double gamma,double,int,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        if(!std::isfinite(gamma)||!self.precGeneration)return 1;
+        // Identity is gamma-independent. Record actual solve gamma; unlike a
+        // numerical factor it remains exact when CVODE changes gamma.
+        self.identityGamma=gamma;N_VScale(1.,r,z);return 0;
     }
     Eigen::MatrixXd fullJacobian(const Vector& q) {
         ++model.chemicalStats.fallbackCalls;
@@ -768,7 +850,7 @@ public:
             for(size_t j=0;j<self.model.ns;++j) for(size_t k=0;k<self.model.ns;++k)
                 SM_ELEMENT_D(matrix,k,j)=J(k,j); // CVODE forms I-gamma*J itself.
             return 0;
-        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+        } catch(const std::exception& ex) {self.setCallbackFailure(ex.what());return 1;}
     }
     static int rhs(double,N_Vector y,N_Vector dy,void* data) {
         auto& self=*static_cast<ChemicalODE*>(data);
@@ -777,7 +859,7 @@ public:
             const auto output=self.source(q);
             std::copy(output.begin(),output.end(),N_VGetArrayPointer(dy));
             return 0;
-        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+        } catch(const std::exception& ex) {self.setCallbackFailure(ex.what());return 1;}
     }
     void sparseJacobian(Vector q) {
         auto& m=model;
@@ -834,7 +916,7 @@ public:
         auto& self=*static_cast<ChemicalODE*>(data);
         ++self.model.chemicalProfile.jvSetups;
         try {self.sparseJacobian(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns));return 0;}
-        catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+        catch(const std::exception& ex) {self.setCallbackFailure(ex.what());return 1;}
     }
     static int sparseProduct(N_Vector v,N_Vector Jv,double,N_Vector,N_Vector,void* data,N_Vector) {
         auto& self=*static_cast<ChemicalODE*>(data);
@@ -880,7 +962,7 @@ public:
                 self.preconditionerKinetic=self.kinetic;self.preconditionerValid=true;*current=SUNTRUE;
             } else {*current=SUNFALSE;++self.model.chemicalProfile.preconditionerReuses;}
             self.factorPreconditioner(gamma);++self.model.sparseStats.preconditioners;return 0;
-        } catch(const std::exception& ex) {self.preconditionerValid=false;self.failure=ex.what();return 1;}
+        } catch(const std::exception& ex) {self.preconditionerValid=false;self.setCallbackFailure(ex.what());return 1;}
     }
     static int precSolve(double,N_Vector,N_Vector,N_Vector r,N_Vector z,double,double,int,void* data) {
         auto& self=*static_cast<ChemicalODE*>(data);
@@ -891,7 +973,7 @@ public:
             require(self.preconditioner.info()==Eigen::Success&&self.triangularResult.allFinite(),"Sparse preconditioner solve failed");
             std::copy(self.triangularResult.data(),self.triangularResult.data()+self.model.ns,N_VGetArrayPointer(z));
             ++self.model.sparseStats.preconditionerSolves;return 0;
-        } catch(const std::exception& ex) {self.failure=ex.what();return 1;}
+        } catch(const std::exception& ex) {self.setCallbackFailure(ex.what());return 1;}
     }
     Vector solve(const Vector& initial,double dt,double rtol,double atol) {
         auto check=[](int status,const char* operation) {require(status>=0,std::string("CVODE setup failure: ")+operation);};
@@ -911,7 +993,16 @@ public:
         check(CVodeSetMaxNumSteps(integrator,100000),"maximum steps");
         check(CVodeSetStopTime(integrator,dt),"stop time");
         check(CVodeSetInterpolateStopTime(integrator,SUNFALSE),"copy constrained stop state");
-        if(useSparse) {
+        if(useMatrixFree) {
+            if(fresh) {
+                linear=SUNLinSol_SPGMR(y,SUN_PREC_LEFT,30,context);require(linear,"Matrix-free SPGMR allocation failed");
+                check(SUNLinSol_SPGMRSetMaxRestarts(linear,2),"matrix-free GMRES restarts");
+                check(CVodeSetLinearSolver(integrator,linear,nullptr),"matrix-free iterative solver");
+            }
+            check(CVodeSetJacTimes(integrator,matrixFreeSetup,matrixFreeTimes),"same-EOS matrix-free Jtimes");
+            check(CVodeSetPreconditioner(integrator,identitySetup,identitySolve),"matrix-free identity preconditioner");
+            ++model.cost.matrixFreeIntegrations;
+        } else if(useSparse) {
             if(fresh) {
                 linear=SUNLinSol_SPGMR(y,SUN_PREC_LEFT,30,context);require(linear,"CVODE SPGMR allocation failed");
                 check(SUNLinSol_SPGMRSetMaxRestarts(linear,2),"GMRES restarts");
@@ -947,18 +1038,19 @@ public:
     }
 };
 
-ChemicalODE& chemicalWorker(Model& m,double energy,bool equilibrium,const PintleThermoState& state,double atol,bool sparse) {
-    auto& worker=m.chemicalWorkspace[sparse?1:0];
+ChemicalODE& chemicalWorker(Model& m,double energy,bool equilibrium,const PintleThermoState& state,double atol,int mode) {
+    auto& worker=m.chemicalWorkspace[mode];
     if(!worker) worker=std::make_shared<ChemicalODE>(m,energy,equilibrium,state,atol);
-    worker->reset(energy,equilibrium,state,atol);worker->useSparse=sparse;return *worker;
+    worker->reset(energy,equilibrium,state,atol);worker->useSparse=mode==1;worker->useMatrixFree=mode==2;return *worker;
 }
 
 template<class Function> int protect(void* pointer,Function&& function)
 {
     if(!pointer) return -1;
     auto& model=*static_cast<Model*>(pointer);
-    try {function(model);model.error.clear();return 0;}
-    catch(const std::exception& exception) {model.error=exception.what();return 1;}
+    try {function(model);model.error[0]=0;return 0;}
+    catch(const std::exception& exception) {std::snprintf(model.error.data(),model.error.size(),"%s",exception.what());return 1;}
+    catch(...) {std::snprintf(model.error.data(),model.error.size(),"Unknown backend exception");return 1;}
 }
 
 } // namespace
@@ -973,7 +1065,7 @@ void* pintle_rt_create(const char* filename,char* error,size_t size)
     }
 }
 void pintle_rt_destroy(void* model){delete static_cast<Model*>(model);}
-const char* pintle_rt_error(void* model){return model?static_cast<Model*>(model)->error.c_str():"Null model";}
+const char* pintle_rt_error(void* model){return model?static_cast<Model*>(model)->error.data():"Null model";}
 size_t pintle_rt_species_count(void* model){return static_cast<Model*>(model)->ns;}
 size_t pintle_rt_reaction_count(void* model){return static_cast<Model*>(model)->gasSolution->kinetics()->nReactions();}
 size_t pintle_rt_liquid_count(void* model){return static_cast<Model*>(model)->nl;}
@@ -987,7 +1079,7 @@ int pintle_rt_set_chemical_jacobian(void* model,int mode)
 int pintle_rt_set_chemical_linear_solver(void* model,int mode)
 {
     return protect(model,[&](Model& m){
-        require(mode>=0&&mode<=2,"Unknown chemical linear solver mode");
+        require(mode>=0&&mode<=3,"Unknown chemical linear solver mode");
         require(mode!=1||(m.nl==0&&m.gas->type()=="ideal-gas"&&m.structuredChemicalJacobian),
                 "Strict sparse chemistry requires structured Jacobian, ideal gas and no liquid phases; use auto for dense fallback");
         m.chemicalLinearSolver=mode;m.refreshPolicyHash();
@@ -1230,6 +1322,10 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
                     double rtol,double atol,PintleThermoState* state,double* maxElementDrift)
 {
     return protect(model,[&](Model& m){
+        struct SourceAttempt {PintleCostProfileV21& c;bool accepted=false;
+            explicit SourceAttempt(PintleCostProfileV21& cost):c(cost){++c.sourceAttempts;}
+            ~SourceAttempt(){if(accepted)++c.sourceAccepted;else ++c.sourceFailed;}} attempt(m.cost);
+        require(q&&state&&maxElementDrift&&(equilibrium==0||equilibrium==1),"Invalid source pointers/selector");
         require(std::isfinite(dt)&&dt>=0&&rtol>0&&rtol<1&&atol>0&&atol<1,
                 "Invalid chemical timestep or tolerances");
         const Vector initial(q,q+m.ns);
@@ -1237,27 +1333,29 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
             : m.frozen(initial,{state->liquidMass[0],state->liquidMass[1]},energy,*state);
         Vector result=initial;
         if(dt>0 && m.gasSolution->kinetics()->nReactions()>0) {
-            const bool sparse=m.chemicalLinearSolver!=0&&m.structuredChemicalJacobian&&m.nl==0&&m.gas->type()=="ideal-gas";
-            auto& ode=chemicalWorker(m,energy,equilibrium,before.state,atol,sparse);
+            const bool sparse=(m.chemicalLinearSolver==1||m.chemicalLinearSolver==2)&&m.structuredChemicalJacobian&&m.nl==0&&m.gas->type()=="ideal-gas";
+            const bool matrixFree=m.chemicalLinearSolver==3;const int mode=matrixFree?2:(sparse?1:0);
+            auto& ode=chemicalWorker(m,energy,equilibrium,before.state,atol,mode);
             bool retryDense=false;
             try {result=ode.solve(initial,dt,rtol,atol);}
             catch(const std::exception&) {
                 // Failed setup may leave a partially initialized object. Drop
                 // that workspace before another source interval is attempted.
-                m.chemicalWorkspace[sparse?1:0].reset();
-                if(m.chemicalLinearSolver!=2||!sparse) throw;
+                m.chemicalWorkspace[mode].reset();
+                if(!matrixFree&&(m.chemicalLinearSolver!=2||!sparse)) throw;
                 retryDense=true;
             }
             const bool invalid=std::any_of(result.begin(),result.end(),
                 [](double v){return !std::isfinite(v)||v<0;});
             require(!(invalid&&sparse&&m.chemicalLinearSolver==1),"Strict sparse integration returned an invalid accepted state");
-            if(retryDense||(m.structuredChemicalJacobian&&invalid)) {
+            if(retryDense||((matrixFree||m.structuredChemicalJacobian)&&invalid)) {
                 // Some stiff trace systems return a negative roundoff-level
                 // inventory despite CVODE constraints. Reintegrate the entire
                 // source from its original data with the reference Jacobian;
                 // never clip, renormalize, or alter energy to accept a state.
                 ++m.chemicalIntegrationFallbacks;
                 if(sparse) ++m.sparseStats.denseFallbacks;
+                if(matrixFree)++m.cost.matrixFreeIntegrationFallbacks;
                 auto& reference=chemicalWorker(m,energy,equilibrium,before.state,atol,false);
                 reference.useStructured=false;
                 try {result=reference.solve(initial,dt,rtol,atol);}
@@ -1278,11 +1376,12 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
         for(size_t j=0;j<atomsBefore.size();++j)
             drift=std::max(drift,std::abs(atomsAfter[j]-atomsBefore[j])/std::max(totalAtoms,1e-100));
         require(drift<=std::max(1e-9,rtol*10),"Closed chemical source violated mass/element conservation");
-        std::copy(result.begin(),result.end(),q);*state=after.state;*maxElementDrift=drift;
+        std::copy(result.begin(),result.end(),q);*state=after.state;*maxElementDrift=drift;attempt.accepted=true;
     });
 }
 }
 
 #include "pintleRealFluidAPI.inc"
 
+#include "pintleProfilesV21.inc"
 #include "pintleReactivePool.inc"
