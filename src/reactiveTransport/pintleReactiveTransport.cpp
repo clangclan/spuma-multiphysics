@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Compile as C++ for portable operator checks, or via .cu for CUDA execution.
 #include "pintleTransportKernels.h"
+#include "pintleTransportV21.h"
 #include <algorithm>
+#include <array>
+#include <mutex>
 #include <cstdio>
 #include <cstdlib>
 #include <limits>
@@ -38,7 +41,8 @@ template<class Reduction> __global__ void reduceGroups(size_t groups,View v,Redu
 #endif
 struct Execution {
     bool cuda;PintleTransportStats stats{};std::vector<void*> allocations;
-    uint64_t peakBytes=0,deviceCopies=0,synchronizations=0;
+    uint64_t peakBytes=0,deviceCopies=0,synchronizations=0,memcpyCalls=0;
+    unsigned blockThreads=256;
 #ifdef __CUDACC__
     cudaStream_t stream=nullptr;
 #endif
@@ -88,7 +92,7 @@ struct Execution {
         if(cuda) cudaCheck(cudaMemcpyAsync(dst,src,product(n,sizeof(T)),cudaMemcpyHostToDevice,stream));else
 #endif
         std::copy(src,src+n,dst);
-        stats.uploadedBytes+=product(n,sizeof(T));
+        stats.uploadedBytes+=product(n,sizeof(T));++memcpyCalls;
     }
     template<class T> void download(T* dst,const T* src,size_t n) {
         if(!n) return;
@@ -97,12 +101,12 @@ struct Execution {
         if(cuda) cudaCheck(cudaMemcpyAsync(dst,src,product(n,sizeof(T)),cudaMemcpyDeviceToHost,stream));else
 #endif
         std::copy(src,src+n,dst);
-        stats.downloadedBytes+=product(n,sizeof(T));
+        stats.downloadedBytes+=product(n,sizeof(T));++memcpyCalls;
     }
     template<class Operator> void launch(size_t n,View v,Operator op) {
         if(!n) return;
 #ifdef __CUDACC__
-        if(cuda) {execute<<<unsigned(std::min(size_t(65535),(n+255)/256)),256,0,stream>>>(n,v,op);cudaCheck(cudaGetLastError());}
+        if(cuda) {execute<<<unsigned(std::min(size_t(65535),(n+blockThreads-1)/blockThreads)),blockThreads,0,stream>>>(n,v,op);cudaCheck(cudaGetLastError());}
         else
 #endif
         for(size_t j=0;j<n;++j) op(j,v);
@@ -128,7 +132,7 @@ struct Execution {
         if(cuda)cudaCheck(cudaMemcpyAsync(dst,src,product(n,sizeof(T)),cudaMemcpyDeviceToDevice,stream));else
 #endif
         std::copy(src,src+n,dst);
-        deviceCopies+=product(n,sizeof(T));
+        deviceCopies+=product(n,sizeof(T));++memcpyCalls;
     }
     void finish() {
         ++synchronizations;
@@ -168,19 +172,50 @@ struct BoundaryFinish {
     RT_HD double combine(double a,double b) const {return a+b;}
 };
 #undef RT_HD
+struct StagingSlot {
+    enum State {FREE,PACKING,TRANSFER,HOST_CONSUMING};State state=FREE;
+    Execution& ex;double* host=nullptr;size_t bytes=0;PintleTransportToken token{};
+#ifdef __CUDACC__
+    cudaEvent_t event=nullptr;
+#endif
+    explicit StagingSlot(Execution& execution):ex(execution){}
+    void allocate(size_t n) {
+        bytes=n;
+#ifdef __CUDACC__
+        if(ex.cuda){cudaCheck(cudaHostAlloc(reinterpret_cast<void**>(&host),n,cudaHostAllocDefault));
+            cudaCheck(cudaEventCreateWithFlags(&event,cudaEventDisableTiming));return;}
+#endif
+        host=static_cast<double*>(std::malloc(n));require(host,"Host staging allocation failed");
+    }
+    void begin(PintleTransportToken t) {require(state==FREE,"Staging slot still in use");token=t;state=PACKING;}
+    void wait(PintleTransportToken now) {
+        state=TRANSFER;
+#ifdef __CUDACC__
+        if(ex.cuda){cudaCheck(cudaEventRecord(event,ex.stream));cudaCheck(cudaEventSynchronize(event));}
+#endif
+        require(token.attemptId==now.attemptId&&token.stageId==now.stageId&&token.contentVersion==now.contentVersion,"Stale staging completion");
+        state=HOST_CONSUMING;
+    }
+    ~StagingSlot(){
+#ifdef __CUDACC__
+        if(ex.cuda){cudaStreamSynchronize(ex.stream);if(event)cudaEventDestroy(event);if(host)cudaFreeHost(host);return;}
+#endif
+        std::free(host);
+    }
+};
 class Transport {
 public:
-    Execution execution;View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr,*boundaryPartial=nullptr;
+    std::mutex entry;Execution execution;StagingSlot slot;PintleTransportProfileV21 cost{};View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr,*boundaryPartial=nullptr;
     size_t bridgeCells=256;std::string physicalHash;
     uint64_t attemptId=0,lastAttempt=0,tokenStage=0;bool attemptOpen=false;
     PintleTransportProfile profile{};
     PintleTransportDeviceProfile deviceProfile{};uint32_t gasStatus=0;
     uint64_t residentVersion=0,highestVersion=0;bool haveResident=false;
-    bool haveInitial=false;double stageDt=0;std::string error;
+    bool haveInitial=false;double stageDt=0;std::array<char,1024> error{};size_t nonemptyGasCells=0;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
               const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,
-              const PintleTransportOptionsV2* options=nullptr)
-      :execution(backend) {
+              const PintleTransportOptionsV2* options=nullptr,const PintleTransportOptionsV21* options21=nullptr)
+      :execution(backend),slot(execution) {
         v.cfg=cfg;
         if(options) {
             require(options->abiVersion==1&&options->structBytes==sizeof(*options)&&options->bridgeCells>0,"Invalid transport options ABI");
@@ -189,6 +224,12 @@ public:
             require(!v.recomputeGas||(cfg.diffusivity>0&&!cfg.mechanical),"Recompute requires ideal-gas diffusive transport");
         }
         bridgeCells=std::min(bridgeCells,std::max(cfg.cells,cfg.fixed));
+        if(options21) {
+            execution.blockThreads=options21->blockThreads;v.detailedGasCounters=options21->detailedGasCounters!=0;
+            slot.allocate(product(product(bridgeCells,cfg.variables),sizeof(double)));
+            cost.pinnedBytes=execution.cuda?slot.bytes:0;
+        }
+        cost.slotCells=bridgeCells;cost.slots=1;cost.blockThreads=execution.blockThreads;
         require(cfg.cells&&cfg.species&&cfg.faces,"Empty transport mesh/model");
         require(cfg.cells<=size_t(INT64_MAX)&&cfg.faces<size_t(INT64_MAX)&&cfg.fixed<=size_t(INT64_MAX),"Transport index overflow");
         require(cfg.variables==cfg.species+4+(cfg.mechanical?2:0),"Wrong transport conserved-variable count");
@@ -236,6 +277,7 @@ public:
         reduceA=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
         reduceB=execution.allocate<double>((cfg.cells+255)/256,cfg.maxBytes);
         bridge=execution.allocate<double>(product(bridgeCells,cfg.variables),cfg.maxBytes);
+        cost.deviceStagingBytes=product(product(bridgeCells,cfg.variables),sizeof(double));
         profile.boundaryPartitions=std::min(size_t(256),std::max(size_t(1),(boundary.size()+255)/256));
         boundaryPartial=execution.allocate<double>(product(cfg.variables,profile.boundaryPartitions),cfg.maxBytes);
         std::vector<double> inverse(cfg.cells);
@@ -266,16 +308,24 @@ public:
         require(!cells||source,"Null packed source");
         for(size_t begin=0;begin<cells;begin+=bridgeCells) {
             const size_t count=std::min(bridgeCells,cells-begin);
-            execution.upload(bridge,source+begin*variables,count*variables);
+            const PintleTransportToken token{attemptId,tokenStage,residentVersion};
+            if(slot.host){slot.begin(token);std::copy(source+begin*variables,source+(begin+count)*variables,slot.host);}
+            execution.upload(bridge,slot.host?slot.host:source+begin*variables,count*variables);
             execution.launch(count*variables,v,Layout{bridge,destination,count,variables,stride,offset+begin,true});
+            ++cost.layoutTiles;++cost.layoutLaunches;
+            if(slot.host){slot.wait({attemptId,tokenStage,residentVersion});++cost.eventWaits;slot.state=StagingSlot::FREE;}
         }
     }
     void unpackFields(double* destination,const double* source,size_t variables,size_t stride) {
         require(destination,"Null unpack output");
         for(size_t begin=0;begin<v.cfg.cells;begin+=bridgeCells) {
             const size_t count=std::min(bridgeCells,v.cfg.cells-begin);
+            const PintleTransportToken token{attemptId,tokenStage,residentVersion};if(slot.host)slot.begin(token);
             execution.launch(count*variables,v,Layout{source,bridge,count,variables,stride,begin,false});
-            execution.download(destination+begin*variables,bridge,count*variables);
+            execution.download(slot.host?slot.host:destination+begin*variables,bridge,count*variables);
+            ++cost.layoutTiles;++cost.layoutLaunches;
+            if(slot.host){slot.wait({attemptId,tokenStage,residentVersion});++cost.eventWaits;
+                std::copy(slot.host,slot.host+count*variables,destination+begin*variables);slot.state=StagingSlot::FREE;}
         }
     }
     void unpack(double* destination,const double* source,size_t stride,bool conserved=true) {
@@ -296,7 +346,7 @@ public:
         ++profile.conservedUploads;profile.conservedUploadBytes+=v.cfg.cells*v.cfg.variables*sizeof(double);
     }
     void uploadState(const PintleTransportState* states) {
-        validateStates(states,v.cfg.cells);execution.upload(v.state,states,v.cfg.cells);
+        validateStates(states,v.cfg.cells);nonemptyGasCells=0;for(size_t c=0;c<v.cfg.cells;++c)nonemptyGasCells+=states[c].gasMass>0;execution.upload(v.state,states,v.cfg.cells);
         profile.stateUploadBytes+=v.cfg.cells*sizeof(PintleTransportState);
     }
     void installGasThermo(const PintleGasThermoSpecies* species,size_t count,const PintleGasThermoRegion* regions,
@@ -309,7 +359,7 @@ public:
             if(i) require(liquidSpecies[0]!=liquidSpecies[i],"Duplicate condensable species index");
         }
         for(size_t k=0;k<count;++k) {
-            const auto& s=species[k];
+            const auto& s=species[k];if(s.polynomial==9)v.hasNasa9=true;
             require((s.polynomial==7||s.polynomial==9)&&s.regionCount&&s.regionOffset<regionCount
                 &&s.regionCount<=regionCount-s.regionOffset&&std::isfinite(s.gasConstant)&&s.gasConstant>0,"Invalid NASA species layout");
             for(size_t i=0;i<s.regionCount;++i) {
@@ -326,6 +376,10 @@ public:
         auto* status=execution.allocate<uint32_t>(1,v.cfg.maxBytes);
         execution.upload(table,species,count);execution.upload(coefficients,regions,regionCount);execution.finish();
         v.gasThermo=table;v.gasRegions=coefficients;v.partition=partition;v.gasError=status;v.liquids=liquids;
+        if(v.recomputeGas){v.basis=execution.allocate<TemperatureBasis>(v.cfg.cells,v.cfg.maxBytes);
+            cost.temperatureBasisBytes=v.cfg.cells*sizeof(TemperatureBasis);}
+        if(v.detailedGasCounters){v.gasCounters=execution.allocate<uint64_t>(1,v.cfg.maxBytes);
+            const uint64_t zero=0;execution.upload(v.gasCounters,&zero,1);execution.finish();}
         for(size_t i=0;i<liquids;++i) v.liquidSpecies[i]=liquidSpecies[i];
         deviceProfile.thermoTableBytes=count*sizeof(PintleGasThermoSpecies)+regionCount*sizeof(PintleGasThermoRegion);
     }
@@ -341,6 +395,8 @@ public:
             deviceProfile.partitionUploadBytes+=v.cfg.cells*sizeof(PintleGasPartition);
         } else require(!partition,"Liquid partition supplied to a no-liquid model");
         gasStatus=0;execution.upload(v.gasError,&gasStatus,1);
+        if(v.basis){execution.launch(v.cfg.cells,v,BuildTemperatureBasis{});cost.temperatureBasisBuilds+=v.cfg.cells;}
+        if(!v.recomputeGas)cost.nasaValidationEvaluations+=nonemptyGasCells*v.cfg.species;
         execution.launch(v.cfg.cells*v.cfg.species,v,GasProperties{});
         execution.download(&gasStatus,v.gasError,1);execution.finish();
         ++deviceProfile.gasStatusChecks;
@@ -388,7 +444,12 @@ public:
         execution.download(dt,input,1);execution.finish();
         require(std::isfinite(*dt)&&*dt>0,"Invalid wave/diffusion timestep");++execution.stats.stepQueries;
     }
+    void checkGasCommit() {
+        if(v.recomputeGas&&v.gasError){execution.download(&gasStatus,v.gasError,1);execution.finish();++deviceProfile.gasStatusChecks;
+            require(gasStatus==0,"Nonfinite actually-used gas enthalpy/flux; stage remains uncommitted");}
+    }
     void advance(double dt,int stage,double* q,double* boundary) {
+        checkGasCommit();
         execution.launch(v.cfg.cells*v.cfg.variables,v,Advance{dt,stage});
         std::swap(v.q,v.initial);
         if(q)unpack(q,v.q,v.cfg.cells+v.cfg.fixed);
@@ -400,12 +461,20 @@ public:
 template<class F> int protect(void* handle,F f) {
     if(!handle) return -1;
     auto& t=*static_cast<Transport*>(handle);
-    try {f(t);t.error.clear();return 0;}
+    std::unique_lock<std::mutex> use(t.entry,std::defer_lock);
+    try {if(!use.try_lock())return 2;f(t);t.error[0]=0;return 0;}
     catch(const std::exception& ex) {
+        if(!use.owns_lock())return 2;
         // Even failed calls must release any outstanding use of caller-owned
         // host arrays before returning control to rollback/destruction.
         try {t.execution.finish();} catch(...) {}
-        t.error=ex.what();t.haveInitial=false;t.haveResident=false;return 1;
+        t.slot.state=StagingSlot::FREE;++t.cost.failedCalls;
+        std::snprintf(t.error.data(),t.error.size(),"%s",ex.what());t.haveInitial=false;t.haveResident=false;return 1;
+    }catch(...) {
+        if(!use.owns_lock())return 2;
+        try{t.execution.finish();}catch(...){}
+        t.slot.state=StagingSlot::FREE;++t.cost.failedCalls;t.haveInitial=t.haveResident=false;
+        std::snprintf(t.error.data(),t.error.size(),"Unknown transport failure");return 1;
     }
 }
 }
@@ -417,7 +486,7 @@ void* pintle_transport_create(int backend,const PintleTransportConfig* cfg,const
     catch(const std::exception& ex) {if(error&&size) std::snprintf(error,size,"%s",ex.what());return nullptr;}
 }
 void pintle_transport_destroy(void* t) {delete static_cast<Transport*>(t);}
-const char* pintle_transport_error(void* t) {return t?static_cast<Transport*>(t)->error.c_str():"Null transport";}
+const char* pintle_transport_error(void* t) {return t?static_cast<Transport*>(t)->error.data():"Null transport";}
 int pintle_transport_is_cuda(void* t) {return t&&static_cast<Transport*>(t)->execution.cuda;}
 int pintle_transport_stats(void* t,PintleTransportStats* result) {
     return protect(t,[&](Transport& x){require(result,"Null transport statistics");*result=x.execution.stats;});
@@ -431,7 +500,7 @@ int pintle_transport_stable_step(void* t,const double* q,const PintleTransportSt
 }
 int pintle_transport_rhs(void* t,const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,double* rhs,double* boundary) {
     return protect(t,[&](Transport& x){x.haveInitial=false;x.flux(q,states,gasY,gasH);
-        x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
+        x.checkGasCommit();x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
         x.execution.download(boundary,x.v.boundaryRate,x.v.cfg.variables);x.execution.finish();});
 }
 int pintle_transport_stage(void* t,double* q,const PintleTransportState* states,const double* gasY,const double* gasH,double dt,int stage,double* boundary) {
@@ -461,7 +530,7 @@ int pintle_transport_gas_properties_resident(void* t,const PintleTransportState*
             x.execution.launch(count*x.v.cfg.species,x.v,GasDiagnostic{x.bridge,begin,count,h!=0});
             x.execution.download((h?gasH:gasY)+begin*x.v.cfg.species,x.bridge,count*x.v.cfg.species);
         }
-        x.execution.finish();
+        x.execution.finish();x.checkGasCommit();
     });
 }
 int pintle_transport_rhs_gas(void* t,const double* q,const PintleTransportState* states,const PintleGasPartition* partition,
@@ -469,7 +538,7 @@ int pintle_transport_rhs_gas(void* t,const double* q,const PintleTransportState*
     return protect(t,[&](Transport& x){
         require(x.v.gasThermo,"Device gas thermo has not been installed");
         x.haveInitial=false;x.haveResident=false;x.uploadQ(q);x.prepareResident(states,nullptr,nullptr,true,true,partition);x.gather();
-        x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
+        x.checkGasCommit();x.unpack(rhs,x.v.rhs,x.v.cfg.cells,false);
         x.execution.download(boundary,x.v.boundaryRate,x.v.cfg.variables);x.execution.finish();
     });
 }
@@ -542,7 +611,7 @@ int pintle_transport_begin_attempt(void* handle,const char* hash,uint64_t id) {
         t.attemptId=t.lastAttempt=id;t.tokenStage=0;t.attemptOpen=true;t.haveResident=t.haveInitial=false;});
 }
 int pintle_transport_end_attempt(void* handle,uint64_t id,int commit) {
-    return protect(handle,[&](Transport& t){require(t.attemptOpen&&id==t.attemptId,"Wrong transport attempt completion");
+    return protect(handle,[&](Transport& t){require((commit==0||commit==1)&&t.attemptOpen&&id==t.attemptId,"Wrong transport attempt completion");
         require(!commit||t.tokenStage==2,"Cannot commit incomplete transport RK");t.execution.finish();
         t.attemptOpen=false;t.haveInitial=false;if(!commit)t.haveResident=false;});
 }
@@ -563,4 +632,29 @@ int pintle_transport_download_conserved(void* handle,PintleTransportToken token,
         &&t.haveResident&&token.contentVersion==t.residentVersion,"Stale explicit download token");
         t.unpack(output,t.v.q,t.v.cfg.cells+t.v.cfg.fixed);t.execution.finish();});
 }
+}
+
+extern "C" void* pintle_transport_create_v21(int backend,const PintleTransportConfig* cfg,const PintleTransportOptionsV21* opt,
+    const double* volume,const PintleTransportFace* faces,const double* q,const PintleTransportState* state,
+    const double* y,const double* h,char* error,size_t errorSize) {
+    try {
+        require(cfg&&opt&&opt->abiVersion==1&&opt->structBytes==sizeof(*opt),"Invalid v2.1 staging options");
+        require(opt->slots==1,"This version supports one event-owned staging slot");
+        require(opt->blockThreads==32||opt->blockThreads==64||opt->blockThreads==128||opt->blockThreads==256,"Unsupported transport block size");
+        const size_t cellBytes=product(cfg->variables,sizeof(double));require(cellBytes>0&&opt->slotBytes>=cellBytes,"Staging budget cannot hold one cell");
+        require(opt->pinnedBudgetBytes>=opt->slotBytes,"Pinned staging budget smaller than slot budget");
+        const size_t cells=opt->bridgeCellsOverride?opt->bridgeCellsOverride:opt->slotBytes/cellBytes;
+        require(cells>0&&product(cells,cellBytes)<=opt->slotBytes,"Bridge override exceeds byte budget");
+        PintleTransportOptionsV2 old{};old.abiVersion=1;old.structBytes=sizeof(old);old.bridgeCells=cells;old.recomputeGas=opt->recomputeGas;
+        std::copy(opt->physicalModelHash,opt->physicalModelHash+65,old.physicalModelHash);
+        return new Transport(backend,*cfg,volume,faces,q,state,y,h,&old,opt);
+    }catch(const std::exception& ex){if(error&&errorSize)std::snprintf(error,errorSize,"%s",ex.what());return nullptr;}
+    catch(...){if(error&&errorSize)std::snprintf(error,errorSize,"Unknown staging creation failure");return nullptr;}
+}
+extern "C" int pintle_transport_profile_v21(void* handle,PintleTransportProfileV21* out) {
+    return protect(handle,[&](Transport& t){require(out,"Missing transport v2.1 profile");auto result=t.cost;
+        result.memcpyCalls=t.execution.memcpyCalls;
+        result.payloadBytes=t.execution.stats.uploadedBytes+t.execution.stats.downloadedBytes+t.execution.deviceCopies;
+        if(t.v.gasCounters){t.execution.download(&result.nasaFaceEvaluations,t.v.gasCounters,1);t.execution.finish();}
+        *out=result;});
 }

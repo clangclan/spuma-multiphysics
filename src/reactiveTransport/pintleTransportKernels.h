@@ -12,6 +12,7 @@ namespace PintleTransport {
 PINTLE_HD inline double minimum(double a,double b) {return a<b?a:b;}
 PINTLE_HD inline double maximum(double a,double b) {return a>b?a:b;}
 using Primitive=PintleTransportPrimitive;
+struct TemperatureBasis {double T2,T3,T4,invT,logT;};
 struct FaceWork {
     double faceVelocity,traction[3],energy;
     double advectL,advectR,pressureMomentum,pressureEnergy;
@@ -32,6 +33,7 @@ struct View {
     const PintleGasThermoRegion* gasRegions;
     PintleGasPartition* partition;
     uint32_t* gasError;
+    TemperatureBasis* basis;uint64_t* gasCounters;bool hasNasa9,detailedGasCounters;
     size_t liquids;
     bool recomputeGas;
     int64_t liquidSpecies[2];
@@ -39,8 +41,25 @@ struct View {
     FaceWork* work;
     size_t nBoundary;
     PINTLE_HD size_t qi(size_t c,size_t k) const {return k*(cfg.cells+cfg.fixed)+c;}
+    PINTLE_HD void failGas() const {
+#ifdef __CUDA_ARCH__
+        atomicExch(gasError,1u);
+#else
+        *gasError=1;
+#endif
+    }
+    PINTLE_HD void countNasa(uint64_t n) const {
+        if(!detailedGasCounters)return;
+#ifdef __CUDA_ARCH__
+        atomicAdd(reinterpret_cast<unsigned long long*>(gasCounters),static_cast<unsigned long long>(n));
+#else
+        *gasCounters+=n;
+#endif
+    }
     PINTLE_HD double nasaH(size_t c,size_t k) const {
-            const auto& t=gasThermo[k];const double T=state[c].T,T2=T*T,T3=T*T2,T4=T*T3;
+            const auto& t=gasThermo[k];const double T=state[c].T;
+            const TemperatureBasis b=basis?basis[c]:TemperatureBasis{T*T,T*T*T,T*T*T*T,1/T,t.polynomial==9?log(T):0};
+            const double T2=b.T2,T3=b.T3,T4=b.T4;
             size_t region=t.regionOffset;
             for(size_t i=1;i<t.regionCount;++i) {
                 const double boundary=gasRegions[t.regionOffset+i].minimumTemperature;
@@ -49,10 +68,10 @@ struct View {
             }
             const double* a=gasRegions[region].coefficient;
             double hRT;
-            if(t.polynomial==7) hRT=a[0]+.5*a[1]*T+(a[2]/3)*T2+.25*a[3]*T3+.2*a[4]*T4+a[5]/T;
+            if(t.polynomial==7) hRT=a[0]+.5*a[1]*T+(a[2]/3)*T2+.25*a[3]*T3+.2*a[4]*T4+a[5]*b.invT;
             else {
-                const double invT=1/T;
-                hRT=-a[0]*invT*invT+a[1]*log(T)*invT+a[2]+.5*a[3]*T+(a[4]/3)*T2+.25*a[5]*T3+.2*a[6]*T4+a[7]*invT;
+                const double invT=b.invT;
+                hRT=-a[0]*invT*invT+a[1]*b.logT*invT+a[2]+.5*a[3]*T+(a[4]/3)*T2+.25*a[5]*T3+.2*a[6]*T4+a[7]*invT;
             }
             return hRT*t.gasConstant*T;
     }
@@ -66,7 +85,9 @@ struct View {
     PINTLE_HD double gasHValue(size_t c,size_t k) const {
         if(!recomputeGas)return gasH[qi(c,k)];
         if(c>=cfg.cells)return gasH[k*cfg.fixed+c-cfg.cells];
-        return state[c].gasMass>0?nasaH(c,k):0;
+        const double h=state[c].gasMass>0?nasaH(c,k):0;
+        if(!std::isfinite(h))failGas();
+        return h;
     }
     PINTLE_HD size_t rightCell(const PintleTransportFace& f) const {
         return f.neighbour>=0?size_t(f.neighbour):(f.kind==3?cfg.cells+size_t(f.fixed):size_t(f.owner));
@@ -117,6 +138,14 @@ PINTLE_HD inline void gasFailure(View v) {
     *v.gasError=1;
 #endif
 }
+struct BuildTemperatureBasis {
+    PINTLE_HD void operator()(size_t c,View v) const {
+        const double T=v.state[c].T,T2=T*T,T3=T2*T;
+        const TemperatureBasis b{T2,T3,T3*T,1/T,v.hasNasa9?log(T):0};
+        if(!std::isfinite(b.T2)||!std::isfinite(b.T3)||!std::isfinite(b.T4)||!std::isfinite(b.invT)||!std::isfinite(b.logT))v.failGas();
+        v.basis[c]=b;
+    }
+};
 struct GasProperties {
     PINTLE_HD void operator()(size_t j,View v) const {
         // Adjacent lanes handle adjacent cells of one species (SoA). No
@@ -139,7 +168,7 @@ struct GasProperties {
         }
         double y=0,h=0;
         if(s.gasMass>0) {
-            h=v.nasaH(c,k);
+            if(!v.recomputeGas)h=v.nasaH(c,k);
             y=amount/s.gasMass;
             if(!std::isfinite(y)||!std::isfinite(h)) {gasFailure(v);return;}
         } else if(amount!=0) {gasFailure(v);return;}
@@ -225,6 +254,11 @@ struct Faces {
                 const double hk=f.ownerWeight*v.gasHValue(l,k)+(1-f.ownerWeight)*v.gasHValue(r,k);
                 w.energy+=J*(hk-hc);
             }
+        }
+        if(v.recomputeGas&&w.diffusion!=0) {
+            const uint64_t evaluations=(l<v.cfg.cells?v.cfg.species:0)+(r<v.cfg.cells?v.cfg.species:0);
+            v.countNasa(evaluations); // one integer atomic/face only in opt-in profiling
+            if(!std::isfinite(w.energy)||!std::isfinite(w.sumJ)||!std::isfinite(w.carrierFlux))v.failGas();
         }
         v.work[fi]=w;
     }
