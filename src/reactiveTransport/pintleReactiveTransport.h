@@ -20,6 +20,30 @@ typedef struct PintleTransportConfig {
     double viscosity, conductivity, diffusivity, waveFactor, maxBytes;
     int mechanical;
 } PintleTransportConfig;
+typedef struct PintleTransportOptionsV2 {
+    uint32_t abiVersion,structBytes;
+    size_t bridgeCells; // bounded AoS/SoA staging; never a full-mesh bridge
+    int recomputeGas; // NASA ideal-gas transport only; real-fluid guard stays
+    char physicalModelHash[65];
+} PintleTransportOptionsV2;
+typedef struct PintleTransportMemoryV2 {
+    uint64_t liveBytes,peakBytes,bridgeBytes,conservedWorkspaceBytes,gasWorkspaceBytes;
+    uint64_t rhsWorkspaceBytes,deviceToDeviceBytes,synchronizations;
+} PintleTransportMemoryV2;
+typedef struct PintleTransportToken {uint64_t attemptId,stageId,contentVersion;} PintleTransportToken;
+void* pintle_transport_create_v2(int backend,const PintleTransportConfig* config,
+    const PintleTransportOptionsV2* options,const double* volume,const PintleTransportFace* faces,
+    const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,
+    char* error,size_t errorSize);
+int pintle_transport_memory_v2(void* transport,PintleTransportMemoryV2* result);
+// The whole Strang rollback snapshot belongs to Flow. Rollback here invalidates
+// resident data and tokens; the next attempt must explicitly upload its input.
+int pintle_transport_begin_attempt(void* transport,const char* modelHash,uint64_t attemptId);
+int pintle_transport_end_attempt(void* transport,uint64_t attemptId,int commit);
+int pintle_transport_advance_resident_v2(void* transport,PintleTransportToken input,
+    PintleTransportToken output,const PintleTransportState* state,const PintleGasPartition* partition,
+    const double* gasY,const double* gasH,double dt,double* boundaryRate);
+int pintle_transport_download_conserved(void* transport,PintleTransportToken token,double* output);
 typedef struct PintleTransportStats {
     uint64_t allocatedBytes, uploadedBytes, downloadedBytes, kernelLaunches;
     uint64_t stages, stepQueries;

@@ -33,11 +33,41 @@ struct View {
     PintleGasPartition* partition;
     uint32_t* gasError;
     size_t liquids;
+    bool recomputeGas;
     int64_t liquidSpecies[2];
     Primitive* primitive;
     FaceWork* work;
     size_t nBoundary;
     PINTLE_HD size_t qi(size_t c,size_t k) const {return k*(cfg.cells+cfg.fixed)+c;}
+    PINTLE_HD double nasaH(size_t c,size_t k) const {
+            const auto& t=gasThermo[k];const double T=state[c].T,T2=T*T,T3=T*T2,T4=T*T3;
+            size_t region=t.regionOffset;
+            for(size_t i=1;i<t.regionCount;++i) {
+                const double boundary=gasRegions[t.regionOffset+i].minimumTemperature;
+                if(t.polynomial==7?T<=boundary:T<boundary) break;
+                ++region;
+            }
+            const double* a=gasRegions[region].coefficient;
+            double hRT;
+            if(t.polynomial==7) hRT=a[0]+.5*a[1]*T+(a[2]/3)*T2+.25*a[3]*T3+.2*a[4]*T4+a[5]/T;
+            else {
+                const double invT=1/T;
+                hRT=-a[0]*invT*invT+a[1]*log(T)*invT+a[2]+.5*a[3]*T+(a[4]/3)*T2+.25*a[5]*T3+.2*a[6]*T4+a[7]*invT;
+            }
+            return hRT*t.gasConstant*T;
+    }
+    PINTLE_HD double gasYValue(size_t c,size_t k) const {
+        if(!recomputeGas)return gasY[qi(c,k)];
+        if(c>=cfg.cells)return gasY[k*cfg.fixed+c-cfg.cells];
+        if(state[c].gasMass<=0)return 0;
+        double amount=q[qi(c,k)];for(size_t i=0;i<liquids;++i)if(k==size_t(liquidSpecies[i]))amount-=partition[c].liquidMass[i];
+        return amount/state[c].gasMass;
+    }
+    PINTLE_HD double gasHValue(size_t c,size_t k) const {
+        if(!recomputeGas)return gasH[qi(c,k)];
+        if(c>=cfg.cells)return gasH[k*cfg.fixed+c-cfg.cells];
+        return state[c].gasMass>0?nasaH(c,k):0;
+    }
     PINTLE_HD size_t rightCell(const PintleTransportFace& f) const {
         return f.neighbour>=0?size_t(f.neighbour):(f.kind==3?cfg.cells+size_t(f.fixed):size_t(f.owner));
     }
@@ -58,7 +88,7 @@ struct View {
         const auto& f=faces[fi];const auto& w=work[fi];
         if(w.diffusion==0) return 0;
         if(k==w.carrier) return w.carrierFlux;
-        const double yl=gasY[qi(f.owner,k)],yr=gasY[qi(rightCell(f),k)];
+        const double yl=gasYValue(f.owner,k),yr=gasYValue(rightCell(f),k);
         return w.diffusion*(yr-yl)-(f.ownerWeight*yl+(1-f.ownerWeight)*yr)*w.sumJ;
     }
     PINTLE_HD double faceFlux(size_t fi,size_t k) const {
@@ -109,25 +139,11 @@ struct GasProperties {
         }
         double y=0,h=0;
         if(s.gasMass>0) {
-            const auto& t=v.gasThermo[k];const double T=s.T,T2=T*T,T3=T*T2,T4=T*T3;
-            size_t region=t.regionOffset;
-            for(size_t i=1;i<t.regionCount;++i) {
-                const double boundary=v.gasRegions[t.regionOffset+i].minimumTemperature;
-                if(t.polynomial==7?T<=boundary:T<boundary) break;
-                ++region;
-            }
-            const double* a=v.gasRegions[region].coefficient;
-            double hRT;
-            if(t.polynomial==7) hRT=a[0]+.5*a[1]*T+(a[2]/3)*T2+.25*a[3]*T3+.2*a[4]*T4+a[5]/T;
-            else {
-                const double invT=1/T;
-                hRT=-a[0]*invT*invT+a[1]*log(T)*invT+a[2]+.5*a[3]*T+(a[4]/3)*T2+.25*a[5]*T3+.2*a[6]*T4+a[7]*invT;
-            }
-            h=hRT*t.gasConstant*T;
+            h=v.nasaH(c,k);
             y=amount/s.gasMass;
             if(!std::isfinite(y)||!std::isfinite(h)) {gasFailure(v);return;}
         } else if(amount!=0) {gasFailure(v);return;}
-        v.gasY[v.qi(c,k)]=y;v.gasH[v.qi(c,k)]=h;
+        if(!v.recomputeGas){v.gasY[v.qi(c,k)]=y;v.gasH[v.qi(c,k)]=h;}
     }
 };
 struct Gradients {
@@ -197,16 +213,16 @@ struct Faces {
             const double mass=f.neighbour>=0?sl.gasMass*sr.gasMass/((1-f.ownerWeight)*sr.gasMass+f.ownerWeight*sl.gasMass):sl.gasMass;
             w.diffusion=-mass*v.cfg.diffusivity/f.distance;double largest=-1;
             for(size_t k=0;k<v.cfg.species;++k) {
-                const double yl=v.gasY[v.qi(l,k)],yr=v.gasY[v.qi(r,k)];
+                const double yl=v.gasYValue(l,k),yr=v.gasYValue(r,k);
                 w.sumJ+=w.diffusion*(yr-yl);const double y=f.ownerWeight*yl+(1-f.ownerWeight)*yr;
                 if(y>largest) {largest=y;w.carrier=k;}
             }
-            const double hc=f.ownerWeight*v.gasH[v.qi(l,w.carrier)]+(1-f.ownerWeight)*v.gasH[v.qi(r,w.carrier)];
+            const double hc=f.ownerWeight*v.gasHValue(l,w.carrier)+(1-f.ownerWeight)*v.gasHValue(r,w.carrier);
             for(size_t k=0;k<v.cfg.species;++k) if(k!=w.carrier) {
-                const double yl=v.gasY[v.qi(l,k)],yr=v.gasY[v.qi(r,k)];
+                const double yl=v.gasYValue(l,k),yr=v.gasYValue(r,k);
                 const double J=w.diffusion*(yr-yl)-(f.ownerWeight*yl+(1-f.ownerWeight)*yr)*w.sumJ;
                 w.carrierFlux-=J;
-                const double hk=f.ownerWeight*v.gasH[v.qi(l,k)]+(1-f.ownerWeight)*v.gasH[v.qi(r,k)];
+                const double hk=f.ownerWeight*v.gasHValue(l,k)+(1-f.ownerWeight)*v.gasHValue(r,k);
                 w.energy+=J*(hk-hc);
             }
         }
@@ -214,7 +230,7 @@ struct Faces {
     }
 };
 struct Rhs {
-    PINTLE_HD void operator()(size_t index,View v) const {
+    PINTLE_HD double value(size_t index,View v) const {
         const size_t c=index%v.cfg.cells,k=index/v.cfg.cells;double rate=0,div=0;
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
@@ -224,8 +240,9 @@ struct Rhs {
         }
         if(v.cfg.mechanical&&k>=v.cfg.species+4)
             rate+=(v.q[v.qi(c,k)]+(k==v.cfg.species+4?1:-1)*v.state[c].dilatation)*div;
-        v.rhs[index]=rate;
+        return rate;
     }
+    PINTLE_HD void operator()(size_t index,View v) const {v.rhs[index]=value(index,v);}
 };
 struct Step {
     double cfl,maximumStep;
@@ -245,12 +262,20 @@ struct Advance {
     double dt;int stage;
     PINTLE_HD void operator()(size_t j,View v) const {
         const size_t index=v.qi(j%v.cfg.cells,j/v.cfg.cells);
-        if(stage==0) {v.initial[j]=v.q[index];v.q[index]+=dt*v.rhs[j];}
-        else v.q[index]=.5*v.initial[j]+.5*(v.q[index]+dt*v.rhs[j]);
+        const double rate=Rhs{}.value(j,v);
+        // All neighbour reads use q; every write goes to the other buffer.
+        if(stage==0)v.initial[index]=v.q[index]+dt*rate;
+        else v.initial[index]=.5*v.initial[index]+.5*(v.q[index]+dt*rate);
     }
 };
-// Host ABI stays cell-major. The numerical arrays are variable-major on the
-// device; this bridge is temporary until the host flash is replaced.
+// Host ABI stays cell-major. Layout operates on bounded cell tiles.
+struct GasDiagnostic {
+    double* output;size_t begin,cells;bool enthalpy;
+    PINTLE_HD void operator()(size_t j,View v) const {
+        const size_t c=j/v.cfg.species,k=j%v.cfg.species;
+        output[j]=enthalpy?v.gasHValue(begin+c,k):v.gasYValue(begin+c,k);
+    }
+};
 struct Layout {
     const double* input;double* output;size_t cells,variables,stride,offset;bool pack;
     PINTLE_HD void operator()(size_t j,View) const {
