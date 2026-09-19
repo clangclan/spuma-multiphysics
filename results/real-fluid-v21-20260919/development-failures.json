@@ -1,0 +1,39 @@
+{
+  "preserved_runs": [
+    "legacy-v2-initial.json",
+    "smoke-initial.json",
+    "smoke-second.json",
+    "smoke-third.json",
+    "final-smoke/smoke.json"
+  ],
+  "resolved": [
+    {
+      "issue": "Huge finite direction caused squared-norm overflow in h/h2 quality check",
+      "fix": "Use maximum absolute component, retain long-double rescaling and explicit nonzero detection"
+    },
+    {
+      "issue": "NASA work-reduction assertion was applied to every boundary state",
+      "fix": "Keep boundary accuracy gate; require reduction in stable-region state separately"
+    },
+    {
+      "issue": "Transport harness unpacked two values from existing three-value reference",
+      "fix": "Consume RHS, boundary and CFL tuple"
+    },
+    {
+      "issue": "Compiler required template disambiguation for dependent Eigen lpNorm",
+      "fix": "Use equivalent cwiseAbs().maxCoeff()"
+    },
+    {
+      "issue": "Executable linked against unavailable generic libpython symlink in this environment",
+      "fix": "Link exact runtime libpython3.12.so.1.0; normal local builds link standalone libcantera"
+    },
+    {
+      "issue": "Werror flagged intentional bounded worker error message truncation",
+      "fix": "Use explicit %.511s bound in preallocated buffer"
+    },
+    {
+      "issue": "Standalone internal harness also needed wheel-bundled fmt/YAML and Fortran transitive link search",
+      "fix": "Compile an object once and link exact local libraries with rpath-link; normal local build uses libcantera"
+    }
+  ]
+}

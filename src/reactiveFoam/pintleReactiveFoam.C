@@ -5,9 +5,12 @@
 #include "cyclicPolyPatch.H"
 #include "pintleReactiveThermo.h"
 #include "pintleRealFluid.h"
+#include "pintleRealFluidV21.h"
+#include "pintleCheckpointIdentity.h"
 #include <cstring>
 #include <sstream>
 #include "pintleReactiveTransport.h"
+#include "pintleTransportV21.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -97,8 +100,8 @@ public:
         demand(jacobian=="structured"||jacobian=="fullRHS","Unknown chemical Jacobian mode");
         check(pintle_rt_set_chemical_jacobian(t,jacobian=="structured"),"Chemical Jacobian setting");
         const word linear=dict.getOrDefault<word>("chemicalLinearSolver","dense");
-        demand(linear=="dense"||linear=="sparse"||linear=="auto","Unknown chemical linear solver");
-        check(pintle_rt_set_chemical_linear_solver(t,linear=="dense"?0:(linear=="sparse"?1:2)),"Chemical linear solver setting");
+        demand(linear=="dense"||linear=="sparse"||linear=="auto"||linear=="matrixFree"||linear=="matrixFreeWoodbury","Unknown chemical linear solver");
+        check(pintle_rt_set_chemical_linear_solver(t,linear=="dense"?0:(linear=="sparse"?1:(linear=="auto"?2:(linear=="matrixFree"?3:4)))),"Chemical linear solver setting");
         demand(viscosity>=0&&conductivity>=0&&diffusivity>=0&&waveFactor>=1
                &&std::isfinite(viscosity)&&std::isfinite(conductivity)&&std::isfinite(diffusivity)
                &&std::isfinite(waveFactor),"Invalid transport or wave-speed control");
@@ -120,8 +123,28 @@ public:
             demand(size_t(workers)<=batchCells,"Worker count exceeds batch capacity");
             const double budget=dict.getOrDefault<scalar>("maxThermoBatchMemoryMB",64)*1e6;
             demand(std::isfinite(budget)&&budget>0&&budget<double(SIZE_MAX),"Invalid batch memory budget");char error[8192]{};
-            pool.reset(pintle_rt_pool_create(t,workers,batchCells,size_t(budget),error,sizeof(error)));demand(bool(pool),error);
+            const size_t flowStagingBytes=batchCells*(physicalSpecies*sizeof(double)+sizeof(double)+sizeof(PintleThermoState));
+            demand(double(flowStagingBytes)<budget,"Flow staging exceeds thermo batch budget");
+            pool.reset(pintle_rt_pool_create(t,workers,batchCells,size_t(budget)-flowStagingBytes,error,sizeof(error)));demand(bool(pool),error);
         }
+    }
+    PintleModelProfilesV21 profiles() const {
+        PintleModelProfilesV21 combined{};check(pintle_rt_profiles_v21(thermo,&combined),"Prototype profile");
+        if(pool){PintleBatchProfile p{};demand(pintle_rt_pool_profile(pool.get(),&p)==0,"Pool profile");
+            std::vector<PintleModelProfilesV21> workers(p.workers);PintleModelProfilesV21 total{};PintlePoolSummaryV21 summary{};
+            demand(pintle_rt_pool_profiles_v21(pool.get(),workers.data(),workers.size(),&total,&combined,&summary)==0,"Combined profile");}
+        return combined;
+    }
+    void reportAttempt(const PintleModelProfilesV21& before,bool accepted,int retry) const {
+        const auto after=profiles();
+        Info<<"REACTIVE_ATTEMPT_PROFILE attempt="<<double(attemptId)<<" accepted="<<accepted<<" retry="<<retry
+            <<" sourceCalls="<<double(after.cost.sourceRhsCalls-before.cost.sourceRhsCalls)
+            <<" fullPhaseEvaluations="<<double(after.cost.fullPhaseEvaluations-before.cost.fullPhaseEvaluations)
+            <<" scalarProbes="<<double(after.cost.scalarProbes-before.cost.scalarProbes)
+            <<" rootChecks="<<double(after.cost.densityRootChecks-before.cost.densityRootChecks)
+            <<" matrixFreeProducts="<<double(after.cost.matrixFreeProducts-before.cost.matrixFreeProducts)
+            <<" factorBuilds="<<double(after.cost.FzFactorizations-before.cost.FzFactorizations)
+            <<" workerJobElapsedSeconds="<<after.jobSeconds-before.jobSeconds<<nl;
     }
     void check(int status,const std::string& location) const
     {if(status) throw std::runtime_error(location+": "+pintle_rt_error(thermo));}
@@ -195,11 +218,18 @@ public:
         PintleTransportConfig config{nc,ns,nv,faces.size(),fixedStates.size(),viscosity,conductivity,diffusivity,
             waveFactor,dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9,int(mechanical)};
         char message[8192]{};
-        PintleTransportOptionsV2 options{};options.abiVersion=1;options.structBytes=sizeof(options);
-        const label bridgeCells=dict.getOrDefault<label>("transportBridgeCells",256);
-        demand(bridgeCells>0,"Invalid transport bridge capacity");options.bridgeCells=bridgeCells;
+        PintleTransportOptionsV21 options{};options.abiVersion=1;options.structBytes=sizeof(options);
+        const label bridgeCells=dict.getOrDefault<label>("transportBridgeCells",0);
+        demand(bridgeCells>=0,"Invalid transport bridge override");options.bridgeCellsOverride=bridgeCells;
+        const double slotBudget=dict.getOrDefault<scalar>("transportStagingBytes",1048576);
+        const double pinnedBudget=dict.getOrDefault<scalar>("maxPinnedTransportBytes",1048576);
+        demand(std::isfinite(slotBudget)&&std::isfinite(pinnedBudget)&&slotBudget>=8*nv&&pinnedBudget>=slotBudget
+            &&slotBudget<double(SIZE_MAX)&&pinnedBudget<double(SIZE_MAX),"Invalid transport byte budgets");
+        options.slotBytes=size_t(slotBudget);options.pinnedBudgetBytes=size_t(pinnedBudget);options.slots=1;
+        options.blockThreads=dict.getOrDefault<label>("transportBlockThreads",256);
+        options.detailedGasCounters=dict.getOrDefault<bool>("transportDetailedGasCounters",false);
         options.recomputeGas=!gasThermo.empty();std::strncpy(options.physicalModelHash,pintle_rt_physical_model_hash(thermo),64);
-        transport.reset(pintle_transport_create_v2(1,&config,&options,volume.data(),geometry.data(),fixedQ.data(),
+        transport.reset(pintle_transport_create_v21(1,&config,&options,volume.data(),geometry.data(),fixedQ.data(),
             fixedStates.data(),fixedY.data(),fixedH.data(),message,sizeof(message)));
         demand(bool(transport),message);
         demand(pintle_transport_is_cuda(transport.get()),"Requested CUDA transport was not selected");
@@ -528,7 +558,10 @@ int main(int argc,char** argv)
         const bool mechanical=closure=="mechanicalEquilibrium";
         const label nc=mesh.nCells();const size_t physicalSpecies=pintle_rt_species_count(model.get());
         const size_t ns=physicalSpecies*(mechanical?2:1),nv=ns+4+(mechanical?2:0);
-        const double memoryEstimate=8.0*nc*(7.0*nv+160)+8.0*mesh.nFaces()*32;
+        const double batchCapacity=std::min(double(nc),double(dict.getOrDefault<label>("thermoBatchCells",64)));
+        const double batchKnown=dict.getOrDefault<label>("thermoWorkers",1)>1?
+            batchCapacity*(2*physicalSpecies*sizeof(double)+2*sizeof(PintleThermoState)+2*sizeof(double)+sizeof(size_t)+512):0;
+        const double memoryEstimate=8.0*nc*(7.0*nv+160)+8.0*mesh.nFaces()*32+batchKnown;
         const double memoryLimit=dict.getOrDefault<scalar>("maxHostMemoryGB",2)*1e9;
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
                "Conservative species/stage allocation exceeds configured host memory budget");
@@ -544,15 +577,23 @@ int main(int argc,char** argv)
         const word initialization=dict.get<word>("initialization");
         demand(initialization=="primitive"||initialization=="conserved","Unknown initialization mode");
         demand(!mechanical||initialization=="conserved","Mechanical environments require explicit conserved initial data");
+        std::string restartPolicyHash;
         if(initialization=="conserved") {
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE));
-            demand(identity.get<word>("fingerprint")==pintle_rt_fingerprint(model.get())
-                   &&identity.get<label>("speciesCount")==label(physicalSpecies)
-                   &&identity.getOrDefault<word>("closure","HEM")==closure,
-                   "Conserved restart species order/EOS/mechanism fingerprint differs; an explicit model migration is required");
-            demand(identity.getOrDefault<label>("identitySchema",1)==1||identity.get<label>("identitySchema")==2,"Unsupported checkpoint identity schema");
-            if(identity.found("physicalModelHash")) demand(identity.get<word>("physicalModelHash")==pintle_rt_physical_model_hash(model.get()),
-                "Restart physical model hash differs");
+            PintleCheckpointIdentity oldIdentity,currentIdentity;
+            oldIdentity.schema=identity.getOrDefault<label>("identitySchema",1);
+            oldIdentity.speciesCount=identity.get<label>("speciesCount");
+            oldIdentity.fingerprint=identity.get<word>("fingerprint");
+            oldIdentity.closure=identity.getOrDefault<word>("closure","");
+            oldIdentity.physicalModelHash=identity.getOrDefault<word>("physicalModelHash","");
+            oldIdentity.numericalPolicyHash=identity.getOrDefault<word>("numericalPolicyHash","");
+            currentIdentity={2,label(physicalSpecies),pintle_rt_fingerprint(model.get()),closure,
+                pintle_rt_physical_model_hash(model.get()),pintle_rt_numerical_policy_hash(model.get())};
+            if(pintleValidateIdentity(oldIdentity,currentIdentity)) {
+                restartPolicyHash=oldIdentity.numericalPolicyHash;
+                Info<<"REACTIVE_RESTART_POLICY previous="<<restartPolicyHash<<" current="<<currentIdentity.numericalPolicyHash
+                    <<" decision=supported_current_settings physicalModelUnchanged=1 legacyFingerprintRetained=1"<<nl;
+            }
         }
         if(initialization=="primitive") {
             demand(runTime.value()==0,"A restart requires conserved initialization; p/T must not regenerate total energy");
@@ -731,6 +772,7 @@ int main(int argc,char** argv)
             identity.add("identitySchema",label(2));
             identity.add("physicalModelHash",word(pintle_rt_physical_model_hash(model.get())));
             identity.add("numericalPolicyHash",word(pintle_rt_numerical_policy_hash(model.get())));
+            if(!restartPolicyHash.empty())identity.add("restartNumericalPolicyHash",word(restartPolicyHash));
             identity.add("speciesCount",label(physicalSpecies));identity.add("closure",closure);identity.regIOobject::write();
         };
         const Array initial=flow.totals(q);Array accumulatedBoundary(nv,0);
@@ -766,9 +808,10 @@ int main(int argc,char** argv)
             const Array previous=q;const States previousStates=states;
             Array boundaryIntegral;double drift=0;int retries=0;
             for(;;) {
-                try {flow.step(q,states,dt,cfl,boundaryIntegral,drift);break;}
+                const auto attemptProfile=flow.profiles();
+                try {flow.step(q,states,dt,cfl,boundaryIntegral,drift);flow.reportAttempt(attemptProfile,true,retries);break;}
                 catch(const std::exception& failure) {
-                    q=previous;states=previousStates;
+                    q=previous;states=previousStates;flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
                     if(++retries>12) throw;
                     dt*=.5;drift=0;
@@ -810,20 +853,99 @@ int main(int argc,char** argv)
                 <<" maxVolumeResidual="<<maxV<<" maxUVResidual="<<maxE<<" maxMuResidual="<<maxMu<<" maxMechanicalResidual="<<maxME<<" seconds="<<seconds<<nl;
             if(runTime.writeTime()||!beforeEnd()) writeState();
         }
-        PintleChemicalStats chemicalStats{};
-        flow.check(pintle_rt_chemical_stats(model.get(),0,&chemicalStats),"Chemical statistics");
-        Info<<"REACTIVE_CHEMISTRY rhsCalls="<<double(chemicalStats.rhsCalls)<<" uvCalls="<<double(chemicalStats.uvCalls)
+        PintleModelProfilesV21 prototypeProfile{},workerTotal{},combined{};
+        flow.check(pintle_rt_profiles_v21(model.get(),&prototypeProfile),"Prototype profile");combined=prototypeProfile;
+        auto printProfile=[&](const std::string& scope,const PintleModelProfilesV21& p) {
+            Info<<"REACTIVE_PROFILE_V21 scope="<<scope<<" jobElapsedSeconds="<<p.jobSeconds
+                <<" integrationFallbacks="<<double(p.integrationFallbacks);
+            Info<<" chemical_rhsCalls="<<double(p.chemical.rhsCalls);
+            Info<<" chemical_uvCalls="<<double(p.chemical.uvCalls);
+            Info<<" chemical_fixedStateCalls="<<double(p.chemical.fixedStateCalls);
+            Info<<" chemical_jacobianCalls="<<double(p.chemical.jacobianCalls);
+            Info<<" chemical_structuredCalls="<<double(p.chemical.structuredCalls);
+            Info<<" chemical_fallbackCalls="<<double(p.chemical.fallbackCalls);
+            Info<<" sparse_setups="<<double(p.sparse.setups);
+            Info<<" sparse_products="<<double(p.sparse.products);
+            Info<<" sparse_preconditioners="<<double(p.sparse.preconditioners);
+            Info<<" sparse_preconditionerSolves="<<double(p.sparse.preconditionerSolves);
+            Info<<" sparse_sparseIntegrations="<<double(p.sparse.sparseIntegrations);
+            Info<<" sparse_denseIntegrations="<<double(p.sparse.denseIntegrations);
+            Info<<" sparse_denseFallbacks="<<double(p.sparse.denseFallbacks);
+            Info<<" sparse_nonzeros="<<double(p.sparse.nonzeros);
+            Info<<" timing_jvSetups="<<double(p.timing.jvSetups);
+            Info<<" timing_preconditionerSetups="<<double(p.timing.preconditionerSetups);
+            Info<<" timing_jacobianCacheHits="<<double(p.timing.jacobianCacheHits);
+            Info<<" timing_patternBuilds="<<double(p.timing.patternBuilds);
+            Info<<" timing_preconditionerReuses="<<double(p.timing.preconditionerReuses);
+            Info<<" timing_symbolicAnalyses="<<double(p.timing.symbolicAnalyses);
+            Info<<" timing_numericFactorizations="<<double(p.timing.numericFactorizations);
+            Info<<" timing_workspaceCreates="<<double(p.timing.workspaceCreates);
+            Info<<" timing_workspaceReinitializations="<<double(p.timing.workspaceReinitializations);
+            Info<<" timing_factorNonzeros="<<double(p.timing.factorNonzeros);
+            Info<<" timing_thermoSeconds="<<double(p.timing.thermoSeconds);
+            Info<<" timing_kineticsSeconds="<<double(p.timing.kineticsSeconds);
+            Info<<" timing_csrSeconds="<<double(p.timing.csrSeconds);
+            Info<<" timing_symbolicSeconds="<<double(p.timing.symbolicSeconds);
+            Info<<" timing_factorSeconds="<<double(p.timing.factorSeconds);
+            Info<<" timing_solveSeconds="<<double(p.timing.solveSeconds);
+            Info<<" realFluid_eosEvaluations="<<double(p.realFluid.eosEvaluations);
+            Info<<" realFluid_referenceEvaluations="<<double(p.realFluid.referenceEvaluations);
+            Info<<" realFluid_derivativeEvaluations="<<double(p.realFluid.derivativeEvaluations);
+            Info<<" realFluid_scalarAttempts="<<double(p.realFluid.scalarAttempts);
+            Info<<" realFluid_scalarAccepted="<<double(p.realFluid.scalarAccepted);
+            Info<<" realFluid_scalarFallbacks="<<double(p.realFluid.scalarFallbacks);
+            Info<<" realFluid_scalarIterations="<<double(p.realFluid.scalarIterations);
+            Info<<" realFluid_flashResiduals="<<double(p.realFluid.flashResiduals);
+            Info<<" realFluid_tangentBuilds="<<double(p.realFluid.tangentBuilds);
+            Info<<" realFluid_tangentSolves="<<double(p.realFluid.tangentSolves);
+            Info<<" realFluid_sourceJv="<<double(p.realFluid.sourceJv);
+            Info<<" realFluid_sourceJvFallbacks="<<double(p.realFluid.sourceJvFallbacks);
+#define PRINT_COST(n) Info<<" " #n "="<<double(p.cost.n);
+            PINTLE_RF21_COUNTERS(PRINT_COST)
+#undef PRINT_COST
+            Info<<nl;
+        };
+        printProfile("prototype",prototypeProfile);
+        if(flow.pool) {
+            PintleBatchProfile batch{};demand(pintle_rt_pool_profile(flow.pool.get(),&batch)==0,"Batch profile failed");
+            std::vector<PintleModelProfilesV21> workers(batch.workers);PintlePoolSummaryV21 memory{};
+            demand(pintle_rt_pool_profiles_v21(flow.pool.get(),workers.data(),workers.size(),&workerTotal,&combined,&memory)==0,"Worker profiles failed");
+            for(size_t i=0;i<workers.size();++i)printProfile("worker_"+std::to_string(i),workers[i]);
+            printProfile("workers",workerTotal);
+            Info<<"REACTIVE_BATCH_V21 attempted="<<double(memory.attemptedBatches)<<" accepted="<<double(memory.acceptedBatches)
+                <<" failed="<<double(memory.failedBatches)<<" batchWallSeconds="<<memory.batchWallSeconds
+                <<" workerJobSecondsSum="<<memory.workerJobSecondsSum<<" workerJobSecondsMax="<<memory.workerJobSecondsMax
+                <<" poolScratchBytes="<<double(memory.poolScratchBytes)
+                <<" flowStagingBytes="<<double(flow.batchQ.capacity()*sizeof(double)+flow.batchEnergy.capacity()*sizeof(double)+flow.batchStates.capacity()*sizeof(PintleThermoState))
+                <<" workerOwnedBytesKnownLowerBound="<<double(memory.workerOwnedBytesKnown)
+                <<" workerInternalBytesUnmeasured="<<memory.workerInternalBytesUnmeasured<<nl;
+            double max_thermoSeconds=0;for(const auto& w:workers)max_thermoSeconds=std::max(max_thermoSeconds,w.timing.thermoSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=thermoSeconds sum="<<workerTotal.timing.thermoSeconds<<" max="<<max_thermoSeconds<<nl;
+            double max_kineticsSeconds=0;for(const auto& w:workers)max_kineticsSeconds=std::max(max_kineticsSeconds,w.timing.kineticsSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=kineticsSeconds sum="<<workerTotal.timing.kineticsSeconds<<" max="<<max_kineticsSeconds<<nl;
+            double max_csrSeconds=0;for(const auto& w:workers)max_csrSeconds=std::max(max_csrSeconds,w.timing.csrSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=csrSeconds sum="<<workerTotal.timing.csrSeconds<<" max="<<max_csrSeconds<<nl;
+            double max_symbolicSeconds=0;for(const auto& w:workers)max_symbolicSeconds=std::max(max_symbolicSeconds,w.timing.symbolicSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=symbolicSeconds sum="<<workerTotal.timing.symbolicSeconds<<" max="<<max_symbolicSeconds<<nl;
+            double max_factorSeconds=0;for(const auto& w:workers)max_factorSeconds=std::max(max_factorSeconds,w.timing.factorSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=factorSeconds sum="<<workerTotal.timing.factorSeconds<<" max="<<max_factorSeconds<<nl;
+            double max_solveSeconds=0;for(const auto& w:workers)max_solveSeconds=std::max(max_solveSeconds,w.timing.solveSeconds);
+            Info<<"REACTIVE_WORKER_TIME metric=solveSeconds sum="<<workerTotal.timing.solveSeconds<<" max="<<max_solveSeconds<<nl;
+        }
+        printProfile("combined",combined);
+        // The following legacy log names now consume the combined snapshot.
+        // LAST factor nnz snapshots are sums, not temporal peak allocations.
+        PintleChemicalStats chemicalStats=combined.chemical;
+        Info<<"REACTIVE_CHEMISTRY scope=combined rhsCalls="<<double(chemicalStats.rhsCalls)<<" uvCalls="<<double(chemicalStats.uvCalls)
             <<" fixedStateCalls="<<double(chemicalStats.fixedStateCalls)<<" structuredCalls="<<double(chemicalStats.structuredCalls)
             <<" fallbackCalls="<<double(chemicalStats.fallbackCalls)
-            <<" integrationFallbacks="<<double(pintle_rt_chemical_integration_fallbacks(model.get()))<<nl;
-        PintleSparseStats sparseStats{};
-        flow.check(pintle_rt_sparse_stats(model.get(),0,&sparseStats),"Sparse chemistry statistics");
-        Info<<"REACTIVE_SPARSE setups="<<double(sparseStats.setups)<<" products="<<double(sparseStats.products)
+            <<" integrationFallbacks="<<double(combined.integrationFallbacks)<<nl;
+        PintleSparseStats sparseStats=combined.sparse;
+        Info<<"REACTIVE_SPARSE scope=combined nnzMeaning=last_snapshot_sum setups="<<double(sparseStats.setups)<<" products="<<double(sparseStats.products)
             <<" nonzeros="<<double(sparseStats.nonzeros)<<" sparseIntegrations="<<double(sparseStats.sparseIntegrations)
             <<" denseIntegrations="<<double(sparseStats.denseIntegrations)<<" denseFallbacks="<<double(sparseStats.denseFallbacks)<<nl;
-        PintleChemicalProfile profile{};
-        flow.check(pintle_rt_chemical_profile(model.get(),0,&profile),"Chemical profile");
-        Info<<"REACTIVE_CHEMICAL_PROFILE jvSetups="<<double(profile.jvSetups)
+        PintleChemicalProfile profile=combined.timing;
+        Info<<"REACTIVE_CHEMICAL_PROFILE scope=combined factorNnzMeaning=last_snapshot_sum jvSetups="<<double(profile.jvSetups)
             <<" preconditionerSetups="<<double(profile.preconditionerSetups)
             <<" jacobianCacheHits="<<double(profile.jacobianCacheHits)
             <<" preconditionerReuses="<<double(profile.preconditionerReuses)
@@ -833,8 +955,8 @@ int main(int argc,char** argv)
             <<" thermoSeconds="<<profile.thermoSeconds<<" kineticsSeconds="<<profile.kineticsSeconds
             <<" csrSeconds="<<profile.csrSeconds<<" symbolicSeconds="<<profile.symbolicSeconds
             <<" factorSeconds="<<profile.factorSeconds<<" solveSeconds="<<profile.solveSeconds<<nl;
-        PintleRealFluidProfile realProfile{};flow.check(pintle_rt_real_fluid_profile(model.get(),0,&realProfile),"Real-fluid profile");
-        Info<<"REACTIVE_REAL_FLUID eosEvaluations="<<double(realProfile.eosEvaluations)
+        PintleRealFluidProfile realProfile=combined.realFluid;
+        Info<<"REACTIVE_REAL_FLUID scope=combined eosEvaluations="<<double(realProfile.eosEvaluations)
             <<" scalarAttempts="<<double(realProfile.scalarAttempts)<<" scalarAccepted="<<double(realProfile.scalarAccepted)
             <<" scalarFallbacks="<<double(realProfile.scalarFallbacks)<<" scalarIterations="<<double(realProfile.scalarIterations)<<nl;
         if(flow.pool) {PintleBatchProfile batch{};demand(pintle_rt_pool_profile(flow.pool.get(),&batch)==0,"Batch profile failed");
@@ -842,6 +964,16 @@ int main(int argc,char** argv)
                 <<" batches="<<double(batch.batches)<<" cells="<<double(batch.cells)<<" failures="<<double(batch.failures)
                 <<" scope=bounded_scratch_excludes_Cantera_CVODE_worker_allocations"<<nl;}
         if(flow.transport) {
+            PintleTransportProfileV21 v21{};flow.checkTransport(pintle_transport_profile_v21(flow.transport.get(),&v21));
+            Info<<"REACTIVE_TRANSPORT_V21 layoutTiles="<<double(v21.layoutTiles)<<" layoutLaunches="<<double(v21.layoutLaunches)
+                <<" memcpyCalls="<<double(v21.memcpyCalls)<<" payloadBytes="<<double(v21.payloadBytes)
+                <<" nasaValidationEvaluations="<<double(v21.nasaValidationEvaluations)<<" nasaFaceEvaluations="<<double(v21.nasaFaceEvaluations)
+                <<" detailedGasCounters="<<dict.getOrDefault<bool>("transportDetailedGasCounters",false)
+                <<" temperatureBasisBuilds="<<double(v21.temperatureBasisBuilds)<<" temperatureBasisBytes="<<double(v21.temperatureBasisBytes)
+                <<" pinnedBytes="<<double(v21.pinnedBytes)<<" deviceStagingBytes="<<double(v21.deviceStagingBytes)
+                <<" slotCells="<<double(v21.slotCells)<<" slots="<<double(v21.slots)<<" blockThreads="<<double(v21.blockThreads)
+                <<" eventWaits="<<double(v21.eventWaits)<<" failedCalls="<<double(v21.failedCalls)
+                <<" stageBarrier=full closureDownloadsPerRK=2 overlapValidated=0"<<nl;
             PintleTransportMemoryV2 memory{};flow.checkTransport(pintle_transport_memory_v2(flow.transport.get(),&memory));
             Info<<"REACTIVE_MEMORY liveBytes="<<double(memory.liveBytes)<<" peakBytes="<<double(memory.peakBytes)
                 <<" bridgeBytes="<<double(memory.bridgeBytes)<<" conservedWorkspaceBytes="<<double(memory.conservedWorkspaceBytes)

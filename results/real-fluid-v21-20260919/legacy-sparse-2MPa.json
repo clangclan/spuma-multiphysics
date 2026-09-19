@@ -1,0 +1,174 @@
+{
+  "status": "PASSED",
+  "result": {
+    "pressure": 2000000.0,
+    "species": 413,
+    "reactions": 14922,
+    "Jv_errors": {
+      "present": [
+        8.402803474384096e-08,
+        2.021751481642152e-09,
+        2.3606104964684722e-09
+      ],
+      "absent": [
+        2.5394794405621496e-07,
+        2.6937681904012818e-09,
+        2.706878627874735e-11
+      ]
+    },
+    "structured_product_relative_error": 8.987183215723911e-09,
+    "construction": {
+      "setups": 2,
+      "products": 2,
+      "preconditioners": 0,
+      "preconditionerSolves": 0,
+      "sparseIntegrations": 0,
+      "denseIntegrations": 0,
+      "denseFallbacks": 0,
+      "nonzeros": 57132
+    },
+    "stored_density": 0.33494949258071516,
+    "runs": [
+      {
+        "mode": "dense",
+        "seconds": 3.929884143999516,
+        "T": 2259.901736189725,
+        "drift": 3.739314248311261e-14,
+        "minimum_species": 0.0,
+        "stats": {
+          "setups": 0,
+          "products": 0,
+          "preconditioners": 0,
+          "preconditionerSolves": 0,
+          "sparseIntegrations": 0,
+          "denseIntegrations": 1,
+          "denseFallbacks": 0,
+          "nonzeros": 0
+        },
+        "profile": {
+          "jvSetups": 0,
+          "preconditionerSetups": 0,
+          "jacobianCacheHits": 0,
+          "patternBuilds": 0,
+          "preconditionerReuses": 0,
+          "symbolicAnalyses": 0,
+          "numericFactorizations": 0,
+          "workspaceCreates": 1,
+          "workspaceReinitializations": 0,
+          "factorNonzeros": 0,
+          "thermoSeconds": 0.0,
+          "kineticsSeconds": 0.0,
+          "csrSeconds": 0.0,
+          "symbolicSeconds": 0.0,
+          "factorSeconds": 0.0,
+          "solveSeconds": 0.0
+        }
+      },
+      {
+        "mode": "sparse",
+        "seconds": 4.0202269170004,
+        "T": 2259.9017361961132,
+        "drift": 2.3132283425248852e-12,
+        "minimum_species": 0.0,
+        "stats": {
+          "setups": 608,
+          "products": 661,
+          "preconditioners": 53,
+          "preconditionerSolves": 1268,
+          "sparseIntegrations": 1,
+          "denseIntegrations": 0,
+          "denseFallbacks": 0,
+          "nonzeros": 57132
+        },
+        "profile": {
+          "jvSetups": 607,
+          "preconditionerSetups": 53,
+          "jacobianCacheHits": 10,
+          "patternBuilds": 1,
+          "preconditionerReuses": 42,
+          "symbolicAnalyses": 1,
+          "numericFactorizations": 53,
+          "workspaceCreates": 1,
+          "workspaceReinitializations": 0,
+          "factorNonzeros": 83579,
+          "thermoSeconds": 0.04498754599999999,
+          "kineticsSeconds": 3.000532205,
+          "csrSeconds": 0.06488500800000006,
+          "symbolicSeconds": 0.00233391,
+          "factorSeconds": 0.319910303,
+          "solveSeconds": 0.13308300599999998
+        },
+        "Y_Linf_difference": 1.6422828374995646e-11,
+        "T_relative_difference": 2.8268498653005736e-12
+      },
+      {
+        "mode": "auto",
+        "seconds": 3.8371103970002878,
+        "T": 2259.9017361961132,
+        "drift": 2.3132283425248852e-12,
+        "minimum_species": 0.0,
+        "stats": {
+          "setups": 608,
+          "products": 661,
+          "preconditioners": 53,
+          "preconditionerSolves": 1268,
+          "sparseIntegrations": 1,
+          "denseIntegrations": 0,
+          "denseFallbacks": 0,
+          "nonzeros": 57132
+        },
+        "profile": {
+          "jvSetups": 607,
+          "preconditionerSetups": 53,
+          "jacobianCacheHits": 10,
+          "patternBuilds": 0,
+          "preconditionerReuses": 42,
+          "symbolicAnalyses": 0,
+          "numericFactorizations": 53,
+          "workspaceCreates": 0,
+          "workspaceReinitializations": 1,
+          "factorNonzeros": 83579,
+          "thermoSeconds": 0.04356117700000001,
+          "kineticsSeconds": 2.8763600609999984,
+          "csrSeconds": 0.05657116500000002,
+          "symbolicSeconds": 0.0,
+          "factorSeconds": 0.306957154,
+          "solveSeconds": 0.12685245400000006
+        },
+        "Y_Linf_difference": 1.6422828374995646e-11,
+        "T_relative_difference": 2.8268498653005736e-12
+      }
+    ],
+    "strict_sparse_rejection": null,
+    "ReactorNet_Y_Linf": 4.9825851777818286e-11,
+    "ReactorNet_T_relative_error": 2.1298274255343586e-10
+  },
+  "seconds": 17.802418872999624,
+  "scope": "Existing 413-species ideal-gas regression, not high-pressure PR support",
+  "library": "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveBackend-rf-v21.so",
+  "tested_library_sha256": "bcddf818bf55880024cc047575b8cb3a340f42c24930ebb2fd56bd3615267036",
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "121e871a613b9b897b29cfcce85e81312d928bdba98c78b898b50743be7f9ca3",
+    "src/reactiveThermo/pintleCaloricFast.h": "0556f02fa802670af4326417d7b6089909ccb4367f8b852e11029a8351817ee2",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "3f0270485c892b0850c938b2e907f14c74f1ef120a9cae35df23a4836d4bb4dc",
+    "src/reactiveThermo/pintleDirectional.inc": "cb161f706bac11923ace4a821a3805007ebe0f20238bb775e4e0f22b66950d7b",
+    "src/reactiveThermo/pintleGasThermo.h": "c81bafe41dfaab0df27f459a4f2cc549c9d647f293b6ec1b3a62b19c8c5147c1",
+    "src/reactiveThermo/pintleProfilesV21.inc": "71dd6057f59c41a0b8a767d8f16572b287e20db53c50c3b44867654942f02e97",
+    "src/reactiveThermo/pintleReactivePool.inc": "1016d2be08e3d8e0c6e81ce1459a2319f2e05c314d2e88d2b9990e2de2d717ba",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "850202c9788bd80bae5d8a6e1d21183ec6aadd0ed7cbba3ca4a466f7dbdeb8dd",
+    "src/reactiveThermo/pintleReactiveThermo.h": "3de03e253a095ac72fb4554d124d2c4120d0cc3e51bf032d374aaff473ae78da",
+    "src/reactiveThermo/pintleRealFluid.h": "aa9631db19230df06e81e3b3e902f6689238de85599fed6af7339dbfa7116e97",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "8008b07e740136ac49096dc20059b992218ca3406b562b1eeb023c25ce726672",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "f3637ea26074e856029dc9dfd8f11ee31844f3871d78dda2a4ef6441c18b995c",
+    "src/reactiveThermo/pintleRealFluidV21.h": "fec35b5cf4e98ad69d53442f3dd3fc3d275950556678460250b1e4e3aebb7861",
+    "src/reactiveThermo/pintleSmallSystem.h": "5f7e21dd7c953d85de0ad97a370ee5ae19c72f0a2611f185963cd797351b6d61",
+    "src/reactiveThermo/pintleSparseJacobian.h": "20033058c4e9497356f4c6120164cbb6a192d39e0069e4a2f275d4119c4b3aed",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "5ab7f121fd8b020be2738222b977eeb922a339f66d1f19b68a9dd44f77d775ff",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleReactiveTransport.h": "85a7b52b118127f8c478c582ad6ea90bba7a180ed257c1dbace9abff4361dd6e",
+    "src/reactiveTransport/pintleTransportKernels.h": "4a0cb55363c0fea76e8f96649b1f0334ecb1363d4bad979ed62e250859190e47",
+    "src/reactiveTransport/pintleTransportV21.h": "d59cdb48f63eaf524cd997699490464646ced353f006e4a5109191bea00f7216",
+    "tools/check_real_fluid_v21.py": "b4fdb440407374d824436c257665fad69c591715d69d957f56c76e198175739e"
+  },
+  "subsequent_change": "Only opt-in Woodbury K screening changed afterward; this evidence retains the actual earlier binary/source identity."
+}

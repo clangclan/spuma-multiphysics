@@ -23,14 +23,14 @@ KINDS = ("uniform", "acoustic", "contact", "release", "shock", "reacting-shock",
 
 def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.,
             transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto",
-            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=256, optimization_policy=None):
-    if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto"):
+            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=0, optimization_policy=None):
+    if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto", "matrixFree", "matrixFreeWoodbury"):
         raise ValueError("Unknown reactive execution backend")
     if transport_gas_properties not in ("auto", "host", "deviceNasa"):
         raise ValueError("Unknown transport gas property mode")
     if transport_gas_properties == "deviceNasa" and (transport_backend != "cuda" or kind not in ("diffusion", "coupled")):
         raise ValueError("deviceNasa requires CUDA and an active diffusion case")
-    if not (1<=thermo_workers<=64 and thermo_workers<=min(cells,thermo_batch_cells) and transport_bridge_cells>0):
+    if not (1<=thermo_workers<=64 and thermo_workers<=min(cells,thermo_batch_cells) and transport_bridge_cells>=0):
         raise ValueError("Invalid worker/batch/bridge limits")
     policy=Path(optimization_policy or Path(__file__).resolve().parents[1]/"policies/real-fluid-optimization-v2.yaml").resolve()
     case, thermo_dir = Path(case).resolve(), Path(thermo_dir).resolve()
@@ -203,6 +203,7 @@ transportGasProperties {transport_gas_properties};
 optimizationPolicy "{case/'constant/realFluidPolicy.yaml'}";
 thermoWorkers {thermo_workers}; thermoBatchCells {thermo_batch_cells}; maxThermoBatchMemoryMB 64;
 transportBridgeCells {transport_bridge_cells};
+transportStagingBytes 1048576; maxPinnedTransportBytes 1048576; transportBlockThreads 256; transportDetailedGasCounters false;
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
 ''')
         def field(name, values, dimensions):
@@ -245,11 +246,11 @@ if __name__ == "__main__":
     parser.add_argument("--end",type=float)
     parser.add_argument("--dt-scale",type=float,default=1.)
     parser.add_argument("--transport-backend",choices=("cpu","cuda"),default="cpu")
-    parser.add_argument("--chemical-linear-solver",choices=("dense","sparse","auto"),default="dense")
+    parser.add_argument("--chemical-linear-solver",choices=("dense","sparse","auto","matrixFree","matrixFreeWoodbury"),default="dense")
     parser.add_argument("--transport-gas-properties",choices=("auto","host","deviceNasa"),default="auto")
     parser.add_argument("--thermo-workers",type=int,default=1)
     parser.add_argument("--thermo-batch-cells",type=int,default=64)
-    parser.add_argument("--transport-bridge-cells",type=int,default=256)
+    parser.add_argument("--transport-bridge-cells",type=int,default=0)
     parser.add_argument("--optimization-policy",type=Path)
     args=parser.parse_args()
     print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale,

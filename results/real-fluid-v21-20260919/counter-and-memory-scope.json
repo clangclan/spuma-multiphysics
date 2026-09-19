@@ -1,0 +1,61 @@
+{
+  "schema": "rf21-counter-scope-1",
+  "legacy_ABI_bytes": {
+    "PintleThermoState": 176,
+    "PintleTransportProfile": 64
+  },
+  "thermo_counters": {
+    "trhoStateEvaluations": "Calls to public Cantera TD branch validation, includes rejected calls",
+    "densityRootChecks": "Explicit densityCalc inverse root checks inside setTRho; implicit roots inside full phase TP evaluations are counted by fullPhaseEvaluations",
+    "fullPhaseEvaluations": "Entries to phaseProperties, including rejected calls; not all Cantera internal work",
+    "energyCvEvaluations": "Minimal e/cv/p probe calls (fast or same-EOS public fallback)",
+    "selectedMuEvaluations": "Explicit chemical-potential requests in phaseProperties and selected real-fluid API; excludes internal Cantera requests",
+    "partialHEvaluations": "Selected real-fluid partial enthalpy requests; not all kinetic internal work",
+    "scalarProbes": "Temperature probes including rejected attempts",
+    "flashCandidates": "activeFlash candidate starts; not scalar/no-gas candidate calls",
+    "sourceDirectionProbes": "Invoked directional closure OR source probe samples; includes h and h/2, both feasible directions",
+    "FzFactorizations": "Cached small tangent LU builds, excludes Woodbury K factors",
+    "RzBuilds": "Completed Ns by m source linearization builds",
+    "nasaCoefficientVisits": "Nonzero-composition species coefficient contributions when rebuilding a NASA region aggregate",
+    "branchCertificates": "Per-probe exact admissible-root certificates, not global phase stability",
+    "woodburyFactors": "Successful small K factors; kinetic core is S=0",
+    "sourceAttempts/sourceAccepted/sourceFailed": "Individual C source calls, including worker calls; whole Flow accepted/rejected attempts logged separately",
+    "diagnosticJvCalls": "Public Jv diagnostic calls, separate from actual matrixFreeProducts"
+  },
+  "profile_aggregation": {
+    "counters": "sum",
+    "legacy_sparse_nonzeros": "sum of last worker snapshots, NOT temporal peak",
+    "legacy_timing_factorNonzeros": "sum of last worker snapshots, NOT temporal peak",
+    "legacy_timing_seconds": "sum and per-metric max logged; original sparse-profile scope retained",
+    "jobSeconds": "sum elapsed worker job durations including failures; NOT batch wall time or process CPU seconds",
+    "prototype/workers/combined": "combined = prototype + workers once; never add all three",
+    "resets": "v21 costs never reset; legacy reset APIs retained, only quiescent external use, no campaign resets"
+  },
+  "transport": {
+    "layoutTiles/layoutLaunches": "Submitted pack/unpack tiles including immutable fixed initialization",
+    "memcpyCalls": "H2D+D2H+D2D submissions, includes initialization and diagnostics",
+    "payloadBytes": "H2D+D2H+D2D bytes; profiling query reads are charged on the next snapshot",
+    "nasaValidationEvaluations": "Actually evaluated cached-mode h values for cells with gas; recompute=0",
+    "nasaFaceEvaluations": "Actual interior face h calls with detailedGasCounters enabled; zero when instrumentation disabled, NOT proof of no work",
+    "temperatureBasisBuilds": "Built cell temperature bases; NASA9 log/inv and powers reused",
+    "detailedGasCounters": "one integer atomic per diffusive face when explicitly enabled; default off; match profiling settings in comparisons",
+    "slot_lifetime": "FREE -> PACKING -> TRANSFER/event -> HOST_CONSUMING -> FREE; one stream, one owned pinned slot; no overlap claim",
+    "blockThreads": "elementwise kernels only; reduction kernels retain 256 threads"
+  },
+  "memory": {
+    "poolScratchBytes": "capacity times preallocated mass/state/drift/order/fixed error storage",
+    "flowStagingBytes": "actual vector capacities in Flow (reported separately)",
+    "workerOwnedBytesKnown": "sizeof(Model) times worker count, lower bound only",
+    "workerInternalBytesUnmeasured": true,
+    "external_missing": [
+      "Cantera/CVODE/Eigen dynamic capacity",
+      "thread stacks",
+      "allocator overhead",
+      "CUDA context"
+    ],
+    "hostSnapshotBytes": "pre-Strang q and CellState snapshots remain alive; see report lifetime table",
+    "pinnedBytes": "actual CUDA pinned allocation, zero in CPU emulation",
+    "deviceLiveBytes": "Execution-owned CUDA allocations (CPU heap for backend=0), not device-process RSS"
+  },
+  "baseline": "0517be936c1a5f4720bd8c3703ffb38ba4289045"
+}

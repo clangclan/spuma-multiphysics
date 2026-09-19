@@ -1,0 +1,21 @@
+{
+  "head": "0517be936c1a5f4720bd8c3703ffb38ba4289045",
+  "branch": "codex/reactive-gpu-sparse-20260912",
+  "starting_dirty_diff": "",
+  "package_sha256": "2aa862d82085aae3375ce8ee6dba2b936c3bb148e4feda0f621fae505684f30c",
+  "scope": [
+    "RF21-01",
+    "RF21-02",
+    "RF21-03",
+    "RF21-04",
+    "RF21-05",
+    "RF21-06",
+    "RF21-10"
+  ],
+  "physical_model_change": false,
+  "full_flow_and_GPU_execution": "deferred_to_local",
+  "instruction_sha256": "c8e29171b60dd69b8ec4a4889620bcc1816555a99171169c73b1562afbc72e03",
+  "attachment_report_sha256": "6fd80e25c08ceaec8721f28fd767fc15e9ceb81d70e62fd5e6adba89c9e82486",
+  "review_arithmetic_quoted_report_sha256": "df9825b3a0930278c88b40f435628f0cd84818061a66da2cd68d1368bb2f4436",
+  "report_identity_note": "The review quoted a different report file hash. Its tile arithmetic is reproduced independently; neither report is treated as current ReactiveFoam performance."
+}
