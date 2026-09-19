@@ -1,5 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pintleReactiveThermo.h"
+#include "pintleRealFluid.h"
+#include "pintleSmallSystem.h"
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 #include "pintleSparseJacobian.h"
 #include "cantera/base/Solution.h"
 #include "cantera/base/AnyMap.h"
@@ -115,7 +121,9 @@ public:
     double Tmin=0, Tmax=0, pmin=0, pmax=0, vtol=0, etol=0, mutol=0;
     std::string error;
     std::vector<std::string> names,elementNames;
-    std::string fingerprint;
+    std::string fingerprint,configuration,physicalHash,policyHash,eosName,basePhysicalHash,physicalContext,numericalContext;
+    bool scalarRecovery=true;
+    PintleRealFluidProfile realProfile{};
     Vector weights;
     bool structuredChemicalJacobian=true;
     int chemicalLinearSolver=0;
@@ -129,6 +137,7 @@ public:
 
     explicit Model(const std::string& filename)
     {
+        configuration=filename;
         const auto input=Cantera::AnyMap::fromYamlFile(filename);
         const std::string mechanism=input["mechanism"].asString();
         std::string identity="pintle-reactive-thermo-v3:"+Cantera::version();
@@ -141,7 +150,7 @@ public:
         hashFile(filename);hashFile(mechanism);
         requireSelfContained(mechanism);
         gasSolution=Cantera::newSolution(mechanism,input["gas-phase"].asString(),"none");
-        gas=gasSolution->thermo();
+        gas=gasSolution->thermo();eosName=gas->type();
         ns=gas->nSpecies();
         require(ns>0,"Empty gas species list");
         if (auto* phase=dynamic_cast<Cantera::MixtureFugacityTP*>(gas.get()))
@@ -200,7 +209,29 @@ public:
         std::ostringstream encoded;encoded<<std::hex<<std::setfill('0');
         for(unsigned char byte:digest) encoded<<std::setw(2)<<int(byte);
         fingerprint=encoded.str();
+        // Preserve the v3 checkpoint fingerprint. New physical identity excludes
+        // nonlinear tolerances and file paths, but includes all mechanism bytes.
+        std::string physical="pintle-physical-v1:"+Cantera::version()+":"+input["gas-phase"].asString();
+        auto physicalFile=[&](const std::string& path) {std::ifstream f(path,std::ios::binary);std::ostringstream b;b<<f.rdbuf();physical+=std::to_string(b.str().size())+":"+b.str();};
+        physicalFile(mechanism);
+        std::ostringstream domain;domain<<std::setprecision(17)<<Tmin<<":"<<Tmax<<":"<<pmin<<":"<<pmax;
+        physical+=domain.str();
+        for(size_t i=0;i<nl;++i) {const auto& e=descriptions[i];physical+=e["species"].asString()+":"+e["phase"].asString();
+            std::ostringstream limits;limits<<std::setprecision(17)<<liquidTmin[i]<<":"<<liquidTc[i];physical+=limits.str();
+            if(e.hasKey("mechanism"))physicalFile(e["mechanism"].asString());}
+        physicalHash=basePhysicalHash=hashText(physical);refreshPolicyHash();
     }
+
+    static std::string hashText(const std::string& text) {
+        unsigned char digest[SHA256_DIGEST_LENGTH];SHA256(reinterpret_cast<const unsigned char*>(text.data()),text.size(),digest);
+        std::ostringstream out;out<<std::hex<<std::setfill('0');for(auto c:digest)out<<std::setw(2)<<int(c);return out.str();
+    }
+    void refreshPolicyHash() {
+        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v1:"<<vtol<<":"<<etol<<":"<<mutol
+            <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
+        policyHash=hashText(policy.str());
+    }
+#include "pintleRealFluidModel.inc"
 
     void bounds(double p,double T) const
     {
@@ -335,6 +366,11 @@ public:
     Evaluation frozen(const Vector& q,const Liquids& mass,double energy,const PintleThermoState& guess)
     {
         require(std::isfinite(energy),"Non-finite conserved internal energy");
+        // Only the zero-liquid gas candidate changes its inversion algorithm.
+        // Equilibrium still tests absent phases and compares all old candidates.
+        if(scalarRecovery&&mass[0]==0&&mass[1]==0) {
+            try {return scalarGas(q,energy,guess);} catch(const std::exception&) {++realProfile.scalarFallbacks;}
+        }
         double p=std::clamp(guess.p,pmin,pmax), T=std::clamp(guess.T,Tmin,Tmax);
         Evaluation value=evaluate(q,mass,p,T);
         for(int iteration=0;iteration<70;++iteration) {
@@ -346,7 +382,7 @@ public:
             Eigen::Matrix2d jac;
             jac<<value.Vp*p,value.VT*T,value.Ep*p/scale,value.ET*T/scale;
             require(jac.fullPivLu().isInvertible(),"Singular volume/energy thermodynamic Jacobian");
-            Eigen::Vector2d step=jac.fullPivLu().solve(Eigen::Vector2d(-rv,-re));
+            Eigen::Vector2d step=pintleFlashSolve(jac,Eigen::Vector2d(-rv,-re));
             double stepScale=std::max({1.0,std::abs(step[0])/0.7,std::abs(step[1])/0.2});
             step/=stepScale;
             bool accepted=false;
@@ -369,6 +405,7 @@ public:
     Eigen::VectorXd residual(const Vector& q,double energy,const std::vector<size_t>& active,
                              const Eigen::VectorXd& x,double scale,Evaluation* result=nullptr)
     {
+        ++realProfile.flashResiduals;
         Liquids mass{};
         for(size_t j=0;j<active.size();++j) {
             const size_t i=active[j];
@@ -430,7 +467,7 @@ public:
                 Eigen::VectorXd rhs=Eigen::VectorXd::Zero(x.size());
                 rhs[0]=-1/rho;rhs[1]=value.state.p/(rho*scale);
                 require(jac.fullPivLu().isInvertible(),"Singular equilibrium acoustic Jacobian");
-                const Eigen::VectorXd response=jac.fullPivLu().solve(rhs);
+                const Eigen::VectorXd response=pintleFlashSolve(jac,rhs);
                 const double squared=value.state.p*response[0];
                 require(std::isfinite(squared)&&squared>0,"Invalid equilibrium HEM sound speed");
                 value.state.soundEquilibrium=std::sqrt(squared);
@@ -440,7 +477,7 @@ public:
             }
             const auto jac=jacobian(q,energy,active,x,scale,f);
             require(jac.fullPivLu().isInvertible(),"Singular active-set flash Jacobian");
-            Eigen::VectorXd step=jac.fullPivLu().solve(-f);
+            Eigen::VectorXd step=pintleFlashSolve(jac,-f);
             double limiter=std::max({1.0,std::abs(step[0])/0.7,std::abs(step[1])/0.18});
             for(Eigen::Index j=2;j<step.size();++j) limiter=std::max(limiter,std::abs(step[j])/0.3);
             step/=limiter;
@@ -675,12 +712,7 @@ public:
         const double scale=m.energyScale(base); // fixed across every derivative probe
         auto probe=[&](const Vector& mass,const Eigen::VectorXd& x) {
             Evaluation value;Eigen::VectorXd F(x.size());
-            if(equilibrium) F=m.residual(mass,energy,active,x,scale,&value);
-            else {
-                // Frozen partition means fixed LIQUID MASS, not fixed fraction.
-                value=m.evaluate(mass,{base.state.liquidMass[0],base.state.liquidMass[1]},std::exp(x[0]),std::exp(x[1]));
-                F[0]=value.volume-1;F[1]=(value.energy-energy)/scale;
-            }
+            F=m.closureResidual(mass,energy,equilibrium,base.state,active,x,scale,&value);
             const auto f=rates(mass,value);
             Eigen::VectorXd both(x.size()+m.ns);both.head(x.size())=F;
             for(size_t k=0;k<m.ns;++k) both[x.size()+k]=f[k];
@@ -951,14 +983,14 @@ double pintle_rt_atom_coefficient(void* model,size_t species,size_t element){aut
 const char* pintle_rt_fingerprint(void* model){return static_cast<Model*>(model)->fingerprint.c_str();}
 int pintle_rt_ideal_gas(void* model){return static_cast<Model*>(model)->gas->type()=="ideal-gas";}
 int pintle_rt_set_chemical_jacobian(void* model,int mode)
-{return protect(model,[&](Model& m){require(mode==0||mode==1,"Invalid chemical Jacobian mode");require(mode||m.chemicalLinearSolver!=1,"Strict sparse solver requires structured Jacobian");m.structuredChemicalJacobian=mode;});}
+{return protect(model,[&](Model& m){require(mode==0||mode==1,"Invalid chemical Jacobian mode");require(mode||m.chemicalLinearSolver!=1,"Strict sparse solver requires structured Jacobian");m.structuredChemicalJacobian=mode;m.refreshPolicyHash();});}
 int pintle_rt_set_chemical_linear_solver(void* model,int mode)
 {
     return protect(model,[&](Model& m){
         require(mode>=0&&mode<=2,"Unknown chemical linear solver mode");
         require(mode!=1||(m.nl==0&&m.gas->type()=="ideal-gas"&&m.structuredChemicalJacobian),
                 "Strict sparse chemistry requires structured Jacobian, ideal gas and no liquid phases; use auto for dense fallback");
-        m.chemicalLinearSolver=mode;
+        m.chemicalLinearSolver=mode;m.refreshPolicyHash();
     });
 }
 int pintle_rt_chemical_profile(void* model,int reset,PintleChemicalProfile* result)
@@ -1250,3 +1282,7 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
     });
 }
 }
+
+#include "pintleRealFluidAPI.inc"
+
+#include "pintleReactivePool.inc"

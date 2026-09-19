@@ -7,7 +7,7 @@ test -f "$reactive_prefix/include/cantera/thermo/PengRobinson.h"
 # The caller holds the shared run lock, including when this is part of a larger
 # validation campaign. Host-only Cantera calls are isolated behind a C ABI.
 build_backend() {
-g++ -std=c++17 -O2 -fPIC -shared -Wall -Wextra -fno-fast-math \
+g++ -std=c++17 -O2 -fPIC -shared -Wall -Wextra -fno-fast-math -pthread \
     -isystem "$reactive_prefix/include" -isystem "$reactive_prefix/include/eigen3" \
     "$1" \
     -L"$reactive_prefix/lib" -Wl,-rpath,"$reactive_prefix/lib" \

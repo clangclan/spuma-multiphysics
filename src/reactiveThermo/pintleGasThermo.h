@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+// NASA tables describe species ideal-gas REFERENCE states only. A real EOS
+// requires its residual and partial-molar contributions (pintleRealFluid.h).
 #ifndef PINTLE_GAS_THERMO_H
 #define PINTLE_GAS_THERMO_H
 #include <stdint.h>
