@@ -44,7 +44,9 @@ int pintle_rt_chemical_profile(void* model, int reset, PintleChemicalProfile* re
 // 0=dense reference (default), 1=sparse ideal-gas/no-liquid only (strict),
 // 2=auto: sparse for that model, dense for liquid/nonideal models or failure.
 // 3=matrixFree: opt-in same-EOS SPGMR/Jtimes with identity preconditioning;
-// a failed source interval is reintegrated from original data with dense reference.
+// 4=matrixFreeWoodbury: same source, opt-in thermodynamic Woodbury correction
+// with an identity kinetic core (S=0), not a production kinetic preconditioner.
+// A failed source interval is reintegrated from original data with dense reference.
 int pintle_rt_set_chemical_linear_solver(void* model, int mode);
 int pintle_rt_sparse_stats(void* model, int reset, PintleSparseStats* result);
 int pintle_rt_chemical_sparse_jvp(void* model, const double* speciesMass,

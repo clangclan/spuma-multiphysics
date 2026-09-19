@@ -46,6 +46,8 @@ int main(int argc,char** argv) {
         maxMix=std::max(maxMix,std::abs(compressed(x,T)-direct(x,T))/std::max(1.,std::abs(direct(x,T))));
         const double at=c[1]/(2*std::sqrt(T))+c[2],fd=(direct(x,T+eps)-direct(x,T-eps))/(2*eps);
         maxDerivative=std::max(maxDerivative,std::abs(at-fd)/std::max(1.,std::abs(fd)));
+        const double h2=.1,att=-c[1]/(4*T*std::sqrt(T)),fd2=(direct(x,T+h2)-2*direct(x,T)+direct(x,T-h2))/(h2*h2);
+        require(std::abs(att-fd2)<2e-5*std::max(1.,std::abs(att)),"Exact mixing second T derivative mismatch");
         Vector xp=x,xm=x;for(size_t i=0;i<x.size();++i){xp[i]+=eps*v[i];xm[i]-=eps*v[i];}
         const double a=(compressed(xp,T)-compressed(xm,T))/(2*eps),b=(direct(xp,T)-direct(xm,T))/(2*eps);
         require(std::abs(a-b)<1e-7*std::max(1.,std::abs(b)),"Mixing composition direction mismatch");
@@ -57,6 +59,31 @@ int main(int argc,char** argv) {
     ode.setupMatrixFree(q);const auto factors=m.cost.FzFactorizations,rz=m.cost.RzBuilds;
     for(int k=0;k<4;++k)ode.matrixFreeProduct(q,Vector(m.ns,.01*(k+1)));
     require(m.cost.FzFactorizations==factors&&m.cost.RzBuilds==rz,"Factor/Rz rebuilt per apply");
+    // Synthetic nonzero U combined with the ACTUAL same-EOS V action.
+    // Dense assembly is an independent small TEST reference, never production.
+    ode.preLinearization=ode.linearization;auto snapshot=ode.preLinearization;
+    require(bool(snapshot),"Missing Woodbury snapshot");
+    for(Eigen::Index i=0;i<snapshot->Rz.rows();++i)for(Eigen::Index j=0;j<snapshot->Rz.cols();++j)
+        snapshot->Rz(i,j)=.1*(i+1)*(j%2?-1:1);
+    Eigen::MatrixXd V(snapshot->Rz.cols(),m.ns);
+    for(size_t i=0;i<m.ns;++i){Vector direction(m.ns,0);direction[i]=1;V.col(i)=snapshot->tangent->apply(direction,0);}
+    const Vector rhs(m.ns,.3);double woodburyError=0;
+    for(double gamma:{.02,.07}){
+        ode.setupWoodbury(q,gamma,true);require(bool(ode.woodburyFactor),"Woodbury factor missing");
+        const Eigen::MatrixXd A=Eigen::MatrixXd::Identity(m.ns,m.ns)-gamma*snapshot->Rz*V;
+        const auto actual=ode.applyWoodbury(rhs,gamma);const Eigen::Map<const Eigen::VectorXd> b(rhs.data(),rhs.size());
+        woodburyError=std::max(woodburyError,(A*actual-b).cwiseAbs().maxCoeff());
+    }
+    require(woodburyError<2e-8,"Woodbury/dense residual mismatch");
+    Vector otherQ=q;otherQ[0]*=1.001;ode.setupMatrixFree(otherQ);
+    require(ode.preLinearization==snapshot&&ode.preLinearization!=ode.linearization,"Jtimes overwrote preconditioner snapshot");
+    ode.applyWoodbury(rhs,.11);require(ode.woodburyGamma==.11,"Gamma did not refresh Woodbury factor");
+    const Eigen::MatrixXd originalU=snapshot->Rz;
+    snapshot->Rz=V.transpose()*(V*V.transpose()).fullPivLu().solve(Eigen::MatrixXd::Identity(V.rows(),V.rows()));
+    ode.woodburyFactor.reset();const auto rejectedK=m.cost.woodburyFallbacks;
+    ode.setupWoodbury(q,1.,true);require(!ode.woodburyFactor&&m.cost.woodburyFallbacks>rejectedK,"Near-singular K was not rejected");
+    const auto fallback=ode.applyWoodbury(rhs,1.);for(size_t i=0;i<rhs.size();++i)require(fallback[i]==rhs[i],"Bad K did not use identity");
+    snapshot->Rz=originalU;
     SUNContext context=nullptr;require(SUNContext_Create(SUN_COMM_NULL,&context)==0,"Context allocation");
     auto y=N_VNew_Serial(m.ns,context),direction=N_VClone(y),out=N_VClone(y);
     std::copy(q.begin(),q.end(),N_VGetArrayPointer(y));N_VConst(0.,direction);N_VConst(123.,out);
@@ -69,7 +96,7 @@ int main(int argc,char** argv) {
     N_VDestroy(out);N_VDestroy(direction);N_VDestroy(y);SUNContext_Free(&context);
     std::cout<<"{\"passed\":true,\"schema_rejections\":"<<rejected<<",\"minimal_caloric_error\":"<<maxCaloricError
         <<",\"exact_mixing_error\":"<<maxMix<<",\"mixing_dT_error\":"<<maxDerivative
-        <<",\"same_base_applies\":4,\"factor_rebuilds_in_applies\":0,\"callback_nan_rejected\":true,\"reintegration_passed\":true}\n";
+        <<",\"woodbury_residual\":"<<woodburyError<<",\"same_base_applies\":4,\"factor_rebuilds_in_applies\":0,\"callback_nan_rejected\":true,\"reintegration_passed\":true}\n";
     return 0;
  }catch(const std::exception& e){std::cerr<<e.what()<<"\n";return 1;}
 }

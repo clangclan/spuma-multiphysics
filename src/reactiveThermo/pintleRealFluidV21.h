@@ -31,6 +31,10 @@
     X(matrixFreeProducts) \
     X(matrixFreeIntegrations) \
     X(matrixFreeIntegrationFallbacks) \
+    X(woodburySetups) \
+    X(woodburyFactors) \
+    X(woodburySolves) \
+    X(woodburyFallbacks) \
     X(diagnosticJvCalls) \
     X(oneSidedProbes) \
     X(derivativeRetries) \

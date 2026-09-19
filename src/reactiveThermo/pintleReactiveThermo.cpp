@@ -606,8 +606,9 @@ class ChemicalODE {
 public:
     Model& model;
     double energy, negativeTrialTolerance;
-    bool equilibrium,useStructured,useSparse,useMatrixFree=false;
-    std::unique_ptr<LinearizationContext> linearization;
+    bool equilibrium,useStructured,useSparse,useMatrixFree=false,useWoodbury=false;
+    std::shared_ptr<LinearizationContext> linearization,preLinearization;
+    std::unique_ptr<PintleSmallFactor> woodburyFactor;double woodburyGamma=0;
     PintleThermoState mfState{};Vector mfBase;double mfEnergy=0;bool mfEquilibrium=false,mfPrepared=false;
     std::string mfPhysical,mfPolicy;uint64_t mfGeneration=0,precGeneration=0;
     double identityGamma=0;
@@ -630,7 +631,7 @@ public:
         :model(m),energy(e),negativeTrialTolerance(atol*s.rho*100),equilibrium(eq),
          useStructured(m.structuredChemicalJacobian),
          useSparse((m.chemicalLinearSolver==1||m.chemicalLinearSolver==2) && m.structuredChemicalJacobian
-                   && m.nl==0 && m.gas->type()=="ideal-gas"),guess(s) {useMatrixFree=m.chemicalLinearSolver==3;}
+                   && m.nl==0 && m.gas->type()=="ideal-gas"),guess(s) {useMatrixFree=m.chemicalLinearSolver>=3;useWoodbury=m.chemicalLinearSolver==4;}
     ~ChemicalODE() {
         if(integrator) CVodeFree(&integrator);
         if(linear) SUNLinSolFree(linear);
@@ -645,7 +646,7 @@ public:
         useStructured=model.structuredChemicalJacobian;failure.clear();
         // Retain memory and symbolic structure, never state values or BDF history
         // across another cell, source interval, energy, or phase configuration.
-        jacobianValid=false;preconditionerValid=false;mfPrepared=false;linearization.reset();
+        jacobianValid=false;preconditionerValid=false;mfPrepared=false;linearization.reset();preLinearization.reset();woodburyFactor.reset();
     }
     Vector rates(const Vector& q,const Evaluation& value) {
         ++model.chemicalStats.fixedStateCalls;
@@ -686,7 +687,7 @@ public:
         // source establishes the recovered base using the SAME Newton-trial
         // extension as CVODE's RHS. A negative trial uses the direct fallback.
         source(q,true);
-        try {linearization=std::make_unique<LinearizationContext>(model,q,energy,equilibrium,guess,mfGeneration,
+        try {linearization=std::make_shared<LinearizationContext>(model,q,energy,equilibrium,guess,mfGeneration,
                 [&](const Vector& a,const Evaluation& value){return rates(a,value);});}
         catch(const std::exception&) {linearization.reset();}
         mfState=guess;mfPrepared=true;
@@ -739,6 +740,59 @@ public:
         // Identity is gamma-independent. Record actual solve gamma; unlike a
         // numerical factor it remains exact when CVODE changes gamma.
         self.identityGamma=gamma;N_VScale(1.,r,z);return 0;
+    }
+    void setupWoodbury(const Vector& q,double gamma,bool reuse) {
+        ++model.cost.woodburySetups;require(std::isfinite(gamma),"Invalid Woodbury gamma");
+        if(!reuse||!preLinearization){setupMatrixFree(q);preLinearization=linearization;woodburyFactor.reset();}
+        // A=I (S=0) is an explicit first-stage core. U=Rz and V^T v=dz(v)
+        // retain the same-EOS thermodynamic coupling. No full Fq/Ns^2 storage.
+        if(!preLinearization){++model.cost.woodburyFallbacks;return;}
+        if(woodburyFactor&&gamma==woodburyGamma)return;
+        woodburyFactor.reset();woodburyGamma=gamma;
+        try {
+            auto& c=*preLinearization;const Eigen::Index n=c.Rz.cols();
+            Eigen::MatrixXd K=Eigen::MatrixXd::Identity(n,n);
+            for(Eigen::Index j=0;j<n;++j){const Eigen::VectorXd u=c.Rz.col(j);
+                K.col(j)-=gamma*c.tangent->apply(Vector(u.data(),u.data()+u.size()),0);}
+            // K is dimensionless. Row equilibration must not hide a nearly
+            // singular Woodbury correction or catastrophic I-gamma*VZ cancellation.
+            const auto raw=K.fullPivLu();const double norm=K.cwiseAbs().rowwise().sum().maxCoeff();
+            require(raw.isInvertible()&&raw.rcond()>1e-10&&norm*raw.rcond()>1e-8,"Unreliable Woodbury K; use identity");
+            woodburyFactor=std::make_unique<PintleSmallFactor>(K);++model.cost.woodburyFactors;
+        }catch(const std::exception&){woodburyFactor.reset();++model.cost.woodburyFallbacks;}
+    }
+    Eigen::VectorXd applyWoodbury(const Vector& rhs,double gamma) {
+        const Eigen::Map<const Eigen::VectorXd> r(rhs.data(),rhs.size());
+        require(r.allFinite(),"Nonfinite preconditioner RHS");
+        if(!woodburyFactor||!preLinearization)return r;
+        // CVODE may change gamma between setups. Regenerate K using the SAME
+        // retained snapshot; later Jtimes setup may have a different snapshot.
+        if(gamma!=woodburyGamma)setupWoodbury(preLinearization->q,gamma,true);
+        if(!woodburyFactor)return r;
+        try {
+            auto& c=*preLinearization;
+            require(c.physical==model.physicalHash&&c.policy==model.policyHash,"Stale preconditioner identity");
+            const Eigen::VectorXd small=c.tangent->apply(rhs,0);
+            const Eigen::VectorXd result=r+gamma*c.Rz*woodburyFactor->solve(small);
+            require(result.allFinite(),"Nonfinite Woodbury solve");++model.cost.woodburySolves;return result;
+        }catch(const std::exception&){woodburyFactor.reset();++model.cost.woodburyFallbacks;return r;}
+    }
+    static int woodburySetup(double,N_Vector y,N_Vector,sunbooleantype jok,
+        sunbooleantype* current,double gamma,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {const bool reuse=jok&&bool(self.preLinearization);
+            self.setupWoodbury(Vector(N_VGetArrayPointer(y),N_VGetArrayPointer(y)+self.model.ns),gamma,reuse);
+            *current=reuse?SUNFALSE:SUNTRUE;return 0;}
+        catch(const std::exception& ex){self.setCallbackFailure(ex.what());return 1;}
+        catch(...){return -1;}
+    }
+    static int woodburySolve(double,N_Vector,N_Vector,N_Vector r,N_Vector z,double gamma,double,int,void* data) {
+        auto& self=*static_cast<ChemicalODE*>(data);
+        try {require(std::isfinite(gamma),"Invalid Woodbury solve gamma");
+            const auto out=self.applyWoodbury(Vector(N_VGetArrayPointer(r),N_VGetArrayPointer(r)+self.model.ns),gamma);
+            std::copy(out.data(),out.data()+out.size(),N_VGetArrayPointer(z));return 0;}
+        catch(const std::exception& ex){self.setCallbackFailure(ex.what());return 1;}
+        catch(...){return -1;}
     }
     Eigen::MatrixXd fullJacobian(const Vector& q) {
         ++model.chemicalStats.fallbackCalls;
@@ -1000,7 +1054,8 @@ public:
                 check(CVodeSetLinearSolver(integrator,linear,nullptr),"matrix-free iterative solver");
             }
             check(CVodeSetJacTimes(integrator,matrixFreeSetup,matrixFreeTimes),"same-EOS matrix-free Jtimes");
-            check(CVodeSetPreconditioner(integrator,identitySetup,identitySolve),"matrix-free identity preconditioner");
+            check(CVodeSetPreconditioner(integrator,useWoodbury?woodburySetup:identitySetup,useWoodbury?woodburySolve:identitySolve),
+                "matrix-free same-EOS preconditioner");
             ++model.cost.matrixFreeIntegrations;
         } else if(useSparse) {
             if(fresh) {
@@ -1041,7 +1096,7 @@ public:
 ChemicalODE& chemicalWorker(Model& m,double energy,bool equilibrium,const PintleThermoState& state,double atol,int mode) {
     auto& worker=m.chemicalWorkspace[mode];
     if(!worker) worker=std::make_shared<ChemicalODE>(m,energy,equilibrium,state,atol);
-    worker->reset(energy,equilibrium,state,atol);worker->useSparse=mode==1;worker->useMatrixFree=mode==2;return *worker;
+    worker->reset(energy,equilibrium,state,atol);worker->useSparse=mode==1;worker->useMatrixFree=mode==2;worker->useWoodbury=m.chemicalLinearSolver==4;return *worker;
 }
 
 template<class Function> int protect(void* pointer,Function&& function)
@@ -1079,7 +1134,7 @@ int pintle_rt_set_chemical_jacobian(void* model,int mode)
 int pintle_rt_set_chemical_linear_solver(void* model,int mode)
 {
     return protect(model,[&](Model& m){
-        require(mode>=0&&mode<=3,"Unknown chemical linear solver mode");
+        require(mode>=0&&mode<=4,"Unknown chemical linear solver mode");
         require(mode!=1||(m.nl==0&&m.gas->type()=="ideal-gas"&&m.structuredChemicalJacobian),
                 "Strict sparse chemistry requires structured Jacobian, ideal gas and no liquid phases; use auto for dense fallback");
         m.chemicalLinearSolver=mode;m.refreshPolicyHash();
@@ -1334,7 +1389,7 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
         Vector result=initial;
         if(dt>0 && m.gasSolution->kinetics()->nReactions()>0) {
             const bool sparse=(m.chemicalLinearSolver==1||m.chemicalLinearSolver==2)&&m.structuredChemicalJacobian&&m.nl==0&&m.gas->type()=="ideal-gas";
-            const bool matrixFree=m.chemicalLinearSolver==3;const int mode=matrixFree?2:(sparse?1:0);
+            const bool matrixFree=m.chemicalLinearSolver>=3;const int mode=matrixFree?2:(sparse?1:0);
             auto& ode=chemicalWorker(m,energy,equilibrium,before.state,atol,mode);
             bool retryDense=false;
             try {result=ode.solve(initial,dt,rtol,atol);}

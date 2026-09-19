@@ -210,7 +210,7 @@ class Backend:
         self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))
 
     def set_chemical_linear_solver(self, mode="dense"):
-        modes = {"dense": 0, "sparse": 1, "auto": 2, "matrixFree": 3}
+        modes = {"dense": 0, "sparse": 1, "auto": 2, "matrixFree": 3, "matrixFreeWoodbury": 4}
         self.check(self.lib.pintle_rt_set_chemical_linear_solver(self.handle, modes[mode]))
 
     def chemical_profile(self, reset=False):
