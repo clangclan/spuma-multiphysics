@@ -1,0 +1,13 @@
+schema: spuma-real-fluid-optimization-v2
+mode: reference_equivalent
+preserve_selected_eos: true
+allow_eos_downgrade: false
+allow_silent_species_property_defaults: false
+single_phase: same_eos_scalar_temperature
+multiphase: reference_candidate_search
+table_mode: disabled
+precision: fp64
+accepted_species_clipping: false
+total_energy_reset: false
+# Only implemented choices are accepted; bounded-final, mixed precision and
+# changed transport/chemistry models need separate model data and validation.

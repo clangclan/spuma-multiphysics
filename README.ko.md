@@ -1,3 +1,5 @@
+> 2026-09-19: [실유체 최적화 v2 구현 보고서](docs/real-fluid-optimization/implementation-status.md) — 이번 변경·간단한 코드 검증·미구현 후속 단계.
+
 # Pintle용 SPUMA GPU 다중물리 솔버
 
 실제 3,094,455셀 Pintle 체크포인트에서 실행하는 압축성·비등온 3상 VOF 개발판이다. 액체 IPA, Peng–Robinson N₂O, 이상기체 air의 공통 속도·온도를 풀고 WALE LES를 사용한다. N₂O와 air는 별도 체적분율로 수송하고 가스–가스 계면 압축은 끈다. 분자 확산, 증발·응축, 화학종 수송, 연소는 구현하지 않았다. 여기서 3상은 수치적으로 구분한 세 재료를 뜻한다. 고정 격자·global Euler·단일 NVIDIA GPU가 현재 검증 범위다.

@@ -13,7 +13,8 @@ from scipy.optimize import root
 
 import benchmark as common
 from prepare_minicase import header
-from reactive_backend import Backend
+from real_fluid_backend import RealFluidBackend as Backend
+from write_real_fluid_manifest import model_manifest
 from validate_reactive_thermo import saturation
 
 
@@ -21,13 +22,17 @@ KINDS = ("uniform", "acoustic", "contact", "release", "shock", "reacting-shock",
 
 
 def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.,
-            transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto"):
+            transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto",
+            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=256, optimization_policy=None):
     if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto"):
         raise ValueError("Unknown reactive execution backend")
     if transport_gas_properties not in ("auto", "host", "deviceNasa"):
         raise ValueError("Unknown transport gas property mode")
     if transport_gas_properties == "deviceNasa" and (transport_backend != "cuda" or kind not in ("diffusion", "coupled")):
         raise ValueError("deviceNasa requires CUDA and an active diffusion case")
+    if not (1<=thermo_workers<=64 and thermo_workers<=min(cells,thermo_batch_cells) and transport_bridge_cells>0):
+        raise ValueError("Invalid worker/batch/bridge limits")
+    policy=Path(optimization_policy or Path(__file__).resolve().parents[1]/"policies/real-fluid-optimization-v2.yaml").resolve()
     case, thermo_dir = Path(case).resolve(), Path(thermo_dir).resolve()
     if (case.exists() or cells < 4 or cells % 2 or kind not in KINDS or not (0<dt_scale<=1)
             or (end is not None and (not np.isfinite(end) or end<=0))
@@ -39,6 +44,9 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
     configuration = thermo_dir / ("reactive-dilute-config.yaml" if kind == "coupled" else
                                    "chemistry-config.yaml" if kind in ("chemistry","reacting-shock","diffusion","diffusion-zero") else "cold-pr-config.yaml")
     with Backend(configuration) as backend:
+        backend.check(backend.lib.pintle_rt_load_optimization_policy(backend.handle,str(policy).encode()))
+        backend.set_chemical_linear_solver(chemical_linear_solver)
+        put("constant/realFluidPolicy.yaml",policy.read_text())
         ns, nv = backend.ns, backend.ns+4
         q = np.zeros((cells, nv)); states = []
         x = (np.arange(cells)+.5)/cells
@@ -51,6 +59,7 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
         diffusivity = 500. if kind == "diffusion" else 0.
         if kind == "reacting-shock":
             viscosity,conductivity,diffusivity=3e-5,.1,1e-5
+        backend.bind_case(kind in ("chemistry","coupled","reacting-shock"),viscosity,conductivity,diffusivity,transport_backend,transport_gas_properties)
         reference = {"kind": kind, "mean_mach_requested": mach}
         def pack(T, p, Y, liquid=(0, 0), u=None):
             mass, E, state = backend.make_state(T, p, Y, liquid)
@@ -191,6 +200,9 @@ chemistry {str(kind in ("chemistry","coupled","reacting-shock")).lower()}; dynam
 chemicalRelativeTolerance 1e-8; chemicalAbsoluteTolerance 1e-14;
 transportBackend {transport_backend}; chemicalLinearSolver {chemical_linear_solver}; maxDeviceMemoryGB 2;
 transportGasProperties {transport_gas_properties};
+optimizationPolicy "{case/'constant/realFluidPolicy.yaml'}";
+thermoWorkers {thermo_workers}; thermoBatchCells {thermo_batch_cells}; maxThermoBatchMemoryMB 64;
+transportBridgeCells {transport_bridge_cells};
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
 ''')
         def field(name, values, dimensions):
@@ -205,12 +217,15 @@ waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
         for k in range(ns):field(f"q{k}",q[:,k],"1 -3 0 0 0 0 0")
         field("rhoMomentum",q[:,ns:ns+3],"1 -2 -1 0 0 0 0")
         field("rhoTotalEnergy",q[:,-1],"1 -1 -2 0 0 0 0")
-        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'fingerprint "{backend.fingerprint}"; speciesCount {ns};\n')
+        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'identitySchema 2; fingerprint "{backend.fingerprint}"; speciesCount {ns}; physicalModelHash "{backend.physical_hash}"; numericalPolicyHash "{backend.policy_hash}";\n')
+        put("physical-model-manifest.json",json.dumps(model_manifest(configuration,backend),indent=2)+"\n")
+        put("capability-matrix.json",json.dumps(backend.capabilities(),indent=2)+"\n")
         np.savez_compressed(case/"initial-conserved.npz",q=q,x=x)
         definition={"kind":kind,"cells":cells,"end_time":duration,"max_delta_t":max_dt,"cfl":cfl,"dt_scale":dt_scale,
                     "configuration":str(configuration),"species":backend.names,"liquid_indices":backend.liquid_indices,
                     "reference":reference,"viscosity":viscosity,"conductivity":conductivity,"diffusivity":diffusivity,
-                    "model_fingerprint":backend.fingerprint,
+                    "model_fingerprint":backend.fingerprint,"physicalModelHash":backend.physical_hash,"numericalPolicyHash":backend.policy_hash,
+                    "thermo_workers":thermo_workers,"thermo_batch_cells":thermo_batch_cells,"transport_bridge_cells":transport_bridge_cells,"policy_sha256":common.sha256(policy),
                     "transport_backend":transport_backend,"chemical_linear_solver":chemical_linear_solver,
                     "transport_gas_properties":transport_gas_properties,
                     "initial_states":[s.as_dict() for s in states],"generator_sha256":common.sha256(Path(__file__))}
@@ -232,6 +247,11 @@ if __name__ == "__main__":
     parser.add_argument("--transport-backend",choices=("cpu","cuda"),default="cpu")
     parser.add_argument("--chemical-linear-solver",choices=("dense","sparse","auto"),default="dense")
     parser.add_argument("--transport-gas-properties",choices=("auto","host","deviceNasa"),default="auto")
+    parser.add_argument("--thermo-workers",type=int,default=1)
+    parser.add_argument("--thermo-batch-cells",type=int,default=64)
+    parser.add_argument("--transport-bridge-cells",type=int,default=256)
+    parser.add_argument("--optimization-policy",type=Path)
     args=parser.parse_args()
     print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale,
-                             args.transport_backend,args.chemical_linear_solver,args.transport_gas_properties),indent=2))
+                             args.transport_backend,args.chemical_linear_solver,args.transport_gas_properties,args.thermo_workers,
+                             args.thermo_batch_cells,args.transport_bridge_cells,args.optimization_policy),indent=2))

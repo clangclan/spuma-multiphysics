@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "scope": "two small legacy C-API/operator checks, not full transport regression or GPU validation",
+  "library_sha256": "20fd33ffd27ffc22381555252313f576282535b1ab7f7c2e0d23a96a3706a784",
+  "tests": [
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "spatial": true,
+      "boundary_faces": 2,
+      "scaled_error": 5.795635230021494e-16,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6664,
+        "uploadedBytes": 15584,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 8,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": true,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 3.9785082237402526e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 784,
+        "conservedDownloadBytes": 1568,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5624,
+        "uploadedBytes": 14232,
+        "downloadedBytes": 7216,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    }
+  ]
+}

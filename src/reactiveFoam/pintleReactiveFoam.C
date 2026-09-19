@@ -4,6 +4,9 @@
 #include "fvCFD.H"
 #include "cyclicPolyPatch.H"
 #include "pintleReactiveThermo.h"
+#include "pintleRealFluid.h"
+#include <cstring>
+#include <sstream>
 #include "pintleReactiveTransport.h"
 #include <algorithm>
 #include <array>
@@ -64,6 +67,12 @@ public:
     bool deviceGasProperties=false;
     mutable std::vector<PintleTransportPrimitive> transportPrimitive;
     uint64_t transportVersion=0;
+    uint64_t attemptId=1;
+    mutable uint64_t workerVersion=0,workerStage=0;
+    std::unique_ptr<void,decltype(&pintle_rt_pool_destroy)> pool{nullptr,&pintle_rt_pool_destroy};
+    size_t batchCells=64;
+    mutable Array batchQ,batchEnergy;
+    mutable std::vector<PintleThermoState> batchStates;
     Flow(void* t,size_t cells,Array volumes,const dictionary& dict)
       :thermo(t),physicalSpecies(pintle_rt_species_count(t)),
        ns(physicalSpecies*(dict.get<word>("closure")=="mechanicalEquilibrium"?2:1)),
@@ -78,6 +87,10 @@ public:
        mechanical(dict.get<word>("closure")=="mechanicalEquilibrium")
     {
         demand(ns>0&&nc>0,"Empty model/mesh");
+        if(dict.found("optimizationPolicy")) {
+            fileName policy(dict.get<fileName>("optimizationPolicy"));policy.expand();
+            check(pintle_rt_load_optimization_policy(t,policy.c_str()),"Optimization policy");
+        }
         demand(!mechanical||(!chemistry&&viscosity==0&&conductivity==0&&diffusivity==0),
                "Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange");
         const word jacobian=dict.getOrDefault<word>("chemicalJacobian","structured");
@@ -94,6 +107,21 @@ public:
         for(size_t i=0;i<pintle_rt_liquid_count(thermo);++i) liquidSpecies.push_back(pintle_rt_liquid_species(thermo,i));
         demand(!chemistry||pintle_rt_reaction_count(thermo)>0,"Chemistry requested with a nonreacting mechanism");
         for(double V:volume) demand(std::isfinite(V)&&V>0,"Invalid cell volume");
+        std::ostringstream physical,numerical;physical<<std::setprecision(17)<<"closure="<<(mechanical?"mechanicalEquilibrium":"HEM")
+            <<";chemistry="<<chemistry<<";viscosity="<<viscosity<<";conductivity="<<conductivity<<";commonD="<<diffusivity;
+        numerical<<std::setprecision(17)<<"chemicalRtol="<<chemicalRtol<<";chemicalAtol="<<chemicalAtol<<";waveFactor="<<waveFactor
+            <<";transportBackend="<<dict.getOrDefault<word>("transportBackend","cpu")
+            <<";transportGasProperties="<<dict.getOrDefault<word>("transportGasProperties","auto");
+        check(pintle_rt_set_case_context(t,physical.str().c_str(),numerical.str().c_str()),"Case model/policy identity");
+        const label workers=dict.getOrDefault<label>("thermoWorkers",1),batch=dict.getOrDefault<label>("thermoBatchCells",64);
+        demand(workers>0&&workers<=64&&batch>0,"Invalid thermo worker/batch limits");batchCells=std::min(nc,size_t(batch));
+        if(workers>1) {
+            demand(!mechanical,"Parallel mechanical-environment recovery is not implemented");
+            demand(size_t(workers)<=batchCells,"Worker count exceeds batch capacity");
+            const double budget=dict.getOrDefault<scalar>("maxThermoBatchMemoryMB",64)*1e6;
+            demand(std::isfinite(budget)&&budget>0&&budget<double(SIZE_MAX),"Invalid batch memory budget");char error[8192]{};
+            pool.reset(pintle_rt_pool_create(t,workers,batchCells,size_t(budget),error,sizeof(error)));demand(bool(pool),error);
+        }
     }
     void check(int status,const std::string& location) const
     {if(status) throw std::runtime_error(location+": "+pintle_rt_error(thermo));}
@@ -167,7 +195,11 @@ public:
         PintleTransportConfig config{nc,ns,nv,faces.size(),fixedStates.size(),viscosity,conductivity,diffusivity,
             waveFactor,dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9,int(mechanical)};
         char message[8192]{};
-        transport.reset(pintle_transport_create(1,&config,volume.data(),geometry.data(),fixedQ.data(),
+        PintleTransportOptionsV2 options{};options.abiVersion=1;options.structBytes=sizeof(options);
+        const label bridgeCells=dict.getOrDefault<label>("transportBridgeCells",256);
+        demand(bridgeCells>0,"Invalid transport bridge capacity");options.bridgeCells=bridgeCells;
+        options.recomputeGas=!gasThermo.empty();std::strncpy(options.physicalModelHash,pintle_rt_physical_model_hash(thermo),64);
+        transport.reset(pintle_transport_create_v2(1,&config,&options,volume.data(),geometry.data(),fixedQ.data(),
             fixedStates.data(),fixedY.data(),fixedH.data(),message,sizeof(message)));
         demand(bool(transport),message);
         demand(pintle_transport_is_cuda(transport.get()),"Requested CUDA transport was not selected");
@@ -180,10 +212,28 @@ public:
     }
     void transportStage(double dt,int stage,uint64_t input,uint64_t output,Array& q,Array& boundary) const
     {
-        if(deviceGasProperties) checkTransport(pintle_transport_stage_resident_gas(transport.get(),transportStates.data(),
-            liquidSpecies.empty()?nullptr:transportPartition.data(),dt,stage,input,output,q.data(),boundary.data()));
-        else checkTransport(pintle_transport_stage_resident(transport.get(),transportStates.data(),transportGasY.data(),
-            transportGasH.data(),dt,stage,input,output,q.data(),boundary.data()));
+        const PintleTransportToken before{attemptId,uint64_t(stage),input},after{attemptId,uint64_t(stage+1),output};
+        checkTransport(pintle_transport_advance_resident_v2(transport.get(),before,after,transportStates.data(),
+            deviceGasProperties&&!liquidSpecies.empty()?transportPartition.data():nullptr,
+            transportGasY.data(),transportGasH.data(),dt,boundary.data()));
+        // Explicit host consumer: current same-EOS full-composition flash.
+        checkTransport(pintle_transport_download_conserved(transport.get(),after,q.data()));
+    }
+    void runBatch(const Array& input,Array* output,States& states,int op,double dt,double& drift) const
+    {
+        ++workerStage;
+        for(size_t start=0;start<nc;start+=batchCells) {
+            const size_t count=std::min(batchCells,nc-start);batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
+            for(size_t c=0;c<count;++c) {const double* local=&input[(start+c)*nv];
+                std::copy(local,local+physicalSpecies,batchQ.data()+c*physicalSpecies);batchEnergy[c]=internalEnergy(local);batchStates[c]=states[start+c];}
+            double localDrift=0;const PintleBatchToken token{attemptId,workerStage,++workerVersion};
+            const int status=pintle_rt_pool_batch(pool.get(),token,op,count,physicalSpecies,batchQ.data(),batchEnergy.data(),batchStates.data(),
+                dt,chemicalRtol,chemicalAtol,&localDrift);
+            demand(status==0,pintle_rt_pool_error(pool.get()));
+            for(size_t c=0;c<count;++c) {static_cast<PintleThermoState&>(states[start+c])=batchStates[c];
+                if(output)std::copy(batchQ.data()+c*physicalSpecies,batchQ.data()+(c+1)*physicalSpecies,output->data()+(start+c)*nv);}
+            drift=std::max(drift,localDrift);
+        }
     }
     double density(const double* q) const {return std::accumulate(q,q+ns,0.0);}
     vector velocity(const double* q) const {return vector(q[ns],q[ns+1],q[ns+2])/density(q);}
@@ -191,6 +241,7 @@ public:
     {return q[ns+3]-.5*(q[ns]*q[ns]+q[ns+1]*q[ns+1]+q[ns+2]*q[ns+2])/density(q);}
     void recover(const Array& q,States& states) const
     {
+        if(pool){double drift=0;runBatch(q,nullptr,states,0,0,drift);return;}
         for(size_t c=0;c<nc;++c) {
             const double* local=&q[c*nv];
             if(mechanical) {
@@ -203,6 +254,7 @@ public:
     void react(Array& q,States& states,double dt,double& drift) const
     {
         if(!chemistry) return;
+        if(pool){runBatch(q,&q,states,1,dt,drift);recover(q,states);return;}
         for(size_t c=0;c<nc;++c) {
             double localDrift=0;double* local=&q[c*nv];
             check(pintle_rt_react(thermo,local,internalEnergy(local),dt,1,chemicalRtol,chemicalAtol,
@@ -398,6 +450,9 @@ public:
     // One conservative SSPRK2 transport update, between chemical half steps.
     void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift)
     {
+        ++attemptId;workerStage=0;
+        if(transport)checkTransport(pintle_transport_begin_attempt(transport.get(),pintle_rt_physical_model_hash(thermo),attemptId));
+        try {
         react(q,states,.5*dt,drift);
         demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
         const States oldStates=states;
@@ -430,6 +485,11 @@ public:
         react(q,states,.5*dt,drift);
         boundaryIntegral.resize(nv);
         for(size_t k=0;k<nv;++k) boundaryIntegral[k]=.5*dt*(boundaryA[k]+boundaryB[k]);
+        if(transport)checkTransport(pintle_transport_end_attempt(transport.get(),attemptId,1));
+        } catch(...) {
+            if(transport)pintle_transport_end_attempt(transport.get(),attemptId,0);
+            boundaryIntegral.clear();throw;
+        }
     }
 };
 } // namespace
@@ -490,6 +550,9 @@ int main(int argc,char** argv)
                    &&identity.get<label>("speciesCount")==label(physicalSpecies)
                    &&identity.getOrDefault<word>("closure","HEM")==closure,
                    "Conserved restart species order/EOS/mechanism fingerprint differs; an explicit model migration is required");
+            demand(identity.getOrDefault<label>("identitySchema",1)==1||identity.get<label>("identitySchema")==2,"Unsupported checkpoint identity schema");
+            if(identity.found("physicalModelHash")) demand(identity.get<word>("physicalModelHash")==pintle_rt_physical_model_hash(model.get()),
+                "Restart physical model hash differs");
         }
         if(initialization=="primitive") {
             demand(runTime.value()==0,"A restart requires conserved initialization; p/T must not regenerate total energy");
@@ -612,6 +675,12 @@ int main(int argc,char** argv)
             }
         }
         flow.startTransport(dict);
+        PintleRealFluidCapabilities capabilities{};flow.check(pintle_rt_capabilities(model.get(),&capabilities),"Capabilities");
+        Info<<"REACTIVE_PHYSICAL_MODEL hash="<<pintle_rt_physical_model_hash(model.get())
+            <<" numericalPolicyHash="<<pintle_rt_numerical_policy_hash(model.get())<<" eos="<<pintle_rt_eos_name(model.get())
+            <<" realEOS="<<capabilities.realEOS<<" phaseEquilibrium="<<capabilities.phaseEquilibrium
+            <<" nonidealDiffusion="<<capabilities.nonidealDiffusion<<" deviceClosure="<<capabilities.deviceClosure
+            <<" deviceKinetics="<<capabilities.deviceKinetics<<" mixtureLiquid="<<capabilities.mixtureLiquid<<nl;
         Info<<"REACTIVE_BACKENDS transport="<<(flow.transport?"cuda":"cpu")
             <<" thermodynamics=cpu chemistry=cpu chemicalLinearSolver="
             <<dict.getOrDefault<word>("chemicalLinearSolver","dense")
@@ -659,6 +728,9 @@ int main(int argc,char** argv)
             }
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
             identity.add("fingerprint",word(pintle_rt_fingerprint(model.get())));
+            identity.add("identitySchema",label(2));
+            identity.add("physicalModelHash",word(pintle_rt_physical_model_hash(model.get())));
+            identity.add("numericalPolicyHash",word(pintle_rt_numerical_policy_hash(model.get())));
             identity.add("speciesCount",label(physicalSpecies));identity.add("closure",closure);identity.regIOobject::write();
         };
         const Array initial=flow.totals(q);Array accumulatedBoundary(nv,0);
@@ -761,7 +833,20 @@ int main(int argc,char** argv)
             <<" thermoSeconds="<<profile.thermoSeconds<<" kineticsSeconds="<<profile.kineticsSeconds
             <<" csrSeconds="<<profile.csrSeconds<<" symbolicSeconds="<<profile.symbolicSeconds
             <<" factorSeconds="<<profile.factorSeconds<<" solveSeconds="<<profile.solveSeconds<<nl;
+        PintleRealFluidProfile realProfile{};flow.check(pintle_rt_real_fluid_profile(model.get(),0,&realProfile),"Real-fluid profile");
+        Info<<"REACTIVE_REAL_FLUID eosEvaluations="<<double(realProfile.eosEvaluations)
+            <<" scalarAttempts="<<double(realProfile.scalarAttempts)<<" scalarAccepted="<<double(realProfile.scalarAccepted)
+            <<" scalarFallbacks="<<double(realProfile.scalarFallbacks)<<" scalarIterations="<<double(realProfile.scalarIterations)<<nl;
+        if(flow.pool) {PintleBatchProfile batch{};demand(pintle_rt_pool_profile(flow.pool.get(),&batch)==0,"Batch profile failed");
+            Info<<"REACTIVE_BATCH workers="<<double(batch.workers)<<" capacity="<<double(batch.capacity)<<" scratchBytes="<<double(batch.scratchBytes)
+                <<" batches="<<double(batch.batches)<<" cells="<<double(batch.cells)<<" failures="<<double(batch.failures)
+                <<" scope=bounded_scratch_excludes_Cantera_CVODE_worker_allocations"<<nl;}
         if(flow.transport) {
+            PintleTransportMemoryV2 memory{};flow.checkTransport(pintle_transport_memory_v2(flow.transport.get(),&memory));
+            Info<<"REACTIVE_MEMORY liveBytes="<<double(memory.liveBytes)<<" peakBytes="<<double(memory.peakBytes)
+                <<" bridgeBytes="<<double(memory.bridgeBytes)<<" conservedWorkspaceBytes="<<double(memory.conservedWorkspaceBytes)
+                <<" gasWorkspaceBytes="<<double(memory.gasWorkspaceBytes)<<" rhsWorkspaceBytes="<<double(memory.rhsWorkspaceBytes)
+                <<" d2dBytes="<<double(memory.deviceToDeviceBytes)<<" synchronizations="<<double(memory.synchronizations)<<nl;
             PintleTransportStats stats{};flow.checkTransport(pintle_transport_stats(flow.transport.get(),&stats));
             Info<<"REACTIVE_TRANSPORT allocatedBytes="<<double(stats.allocatedBytes)<<" uploadedBytes="<<double(stats.uploadedBytes)
                 <<" downloadedBytes="<<double(stats.downloadedBytes)<<" kernelLaunches="<<double(stats.kernelLaunches)

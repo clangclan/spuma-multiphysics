@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "configuration": "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/cold-pr-config.yaml",
+      "physicalModelHash": "1762fa889177952ada297e534f3ecee726a198b81d31c56e544cf70744338fea",
+      "abiVersion": 1,
+      "structBytes": 40,
+      "realEOS": 1,
+      "phaseEquilibrium": 1,
+      "partialMolarEnthalpy": 1,
+      "thermoJvp": 1,
+      "nonidealDiffusion": 0,
+      "deviceClosure": 0,
+      "deviceKinetics": 0,
+      "mixtureLiquid": 0
+    },
+    {
+      "configuration": "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/chemistry-config.yaml",
+      "physicalModelHash": "021071de65488e72052d0a1e73fd9df57cdee361339231e7b50482278a477abc",
+      "abiVersion": 1,
+      "structBytes": 40,
+      "realEOS": 0,
+      "phaseEquilibrium": 0,
+      "partialMolarEnthalpy": 1,
+      "thermoJvp": 1,
+      "nonidealDiffusion": 0,
+      "deviceClosure": 0,
+      "deviceKinetics": 0,
+      "mixtureLiquid": 0
+    },
+    {
+      "configuration": "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/reactive-dilute-config.yaml",
+      "physicalModelHash": "fbc9decdce14cd685937c76c4a5764e7dc45f631bd45bfc18a849905ccebb89e",
+      "abiVersion": 1,
+      "structBytes": 40,
+      "realEOS": 0,
+      "phaseEquilibrium": 1,
+      "partialMolarEnthalpy": 1,
+      "thermoJvp": 1,
+      "nonidealDiffusion": 0,
+      "deviceClosure": 0,
+      "deviceKinetics": 0,
+      "mixtureLiquid": 0
+    }
+  ]
+}

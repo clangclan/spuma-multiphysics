@@ -1,0 +1,72 @@
+{
+  "baseline": "3c3cd49b33ba090b746ce787ca11181f18c50a55",
+  "scope": "brief mathematical/code smoke checks; full G0-G10 campaigns deferred",
+  "libraries": {
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveBackend-rf-v2.so": "4e9c46145bc08e067162ab67f0e14fba8cb566d6c98e373d9601976d8991c7ec",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveTransport-rf-v2.so": "20fd33ffd27ffc22381555252313f576282535b1ab7f7c2e0d23a96a3706a784"
+  },
+  "tests": [
+    {
+      "name": "same-EOS-thermo-policy-tangent",
+      "passed": true,
+      "result": {
+        "direct_scaled_error": 0.0,
+        "derivative_scaled_error": 1.4395086310869375e-11,
+        "e_residual_J_per_kg": [
+          -4599.429820226622,
+          -4891.908217052376
+        ],
+        "profile": {
+          "eosEvaluations": 22,
+          "referenceEvaluations": 2,
+          "derivativeEvaluations": 2,
+          "scalarAttempts": 4,
+          "scalarAccepted": 4,
+          "scalarFallbacks": 0,
+          "scalarIterations": 6,
+          "flashResiduals": 7,
+          "tangentBuilds": 1,
+          "tangentSolves": 1,
+          "sourceJv": 0,
+          "sourceJvFallbacks": 0
+        },
+        "capabilities": {
+          "abiVersion": 1,
+          "structBytes": 40,
+          "realEOS": 1,
+          "phaseEquilibrium": 1,
+          "partialMolarEnthalpy": 1,
+          "thermoJvp": 1,
+          "nonidealDiffusion": 0,
+          "deviceClosure": 0,
+          "deviceKinetics": 0,
+          "mixtureLiquid": 0
+        },
+        "physicalModelHash": "1762fa889177952ada297e534f3ecee726a198b81d31c56e544cf70744338fea"
+      }
+    },
+    {
+      "name": "same-EOS-Jv-worker-transactions",
+      "passed": true,
+      "result": {
+        "jvp_scaled_error": 2.5629626388930876e-11,
+        "fixed_branch": true,
+        "batch": {
+          "workers": 2,
+          "capacity": 3,
+          "scratchBytes": 768,
+          "batches": 3,
+          "cells": 9,
+          "failures": 1
+        },
+        "fixture": "synthetic balanced PR source, not physical combustion validation"
+      }
+    },
+    {
+      "name": "resident-memory-RK-transactions",
+      "passed": false,
+      "error": "'Fixture' object does not support the context manager protocol"
+    }
+  ],
+  "passed": false
+}
