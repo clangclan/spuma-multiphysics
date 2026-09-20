@@ -730,11 +730,13 @@ int main(int argc,char** argv)
         forAll(mesh.boundary(),patchi) if(mesh.boundary()[patchi].type()=="empty") outputTypes[patchi]="empty";
         auto writeScalar=[&](const word& name,const dimensionSet& dimensions,const Array& values) {
             volScalarField field(IOobject(name,runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedScalar(dimensions,0),outputTypes);
-            assign(field.primitiveFieldRef(),values);field.write();
+            assign(field.primitiveFieldRef(),values);
+            demand(field.write(),"Failed to write checkpoint field "+std::string(name.c_str()));
         };
         auto writeVector=[&](const word& name,const dimensionSet& dimensions,const std::vector<vector>& values) {
             volVectorField field(IOobject(name,runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedVector(dimensions,vector::zero),outputTypes);
-            assign(field.primitiveFieldRef(),values);field.write();
+            assign(field.primitiveFieldRef(),values);
+            demand(field.write(),"Failed to write checkpoint field "+std::string(name.c_str()));
         };
         auto writeState=[&]() {
             Array values(nc);std::vector<vector> vectors(nc);
@@ -768,12 +770,15 @@ int main(int argc,char** argv)
                 }
             }
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
-            identity.add("fingerprint",word(pintle_rt_fingerprint(model.get())));
+            // Hex hashes may begin with digits. A word is written unquoted
+            // and can be tokenized as a number when the checkpoint is read.
+            identity.add("fingerprint",Foam::string(pintle_rt_fingerprint(model.get())));
             identity.add("identitySchema",label(2));
-            identity.add("physicalModelHash",word(pintle_rt_physical_model_hash(model.get())));
-            identity.add("numericalPolicyHash",word(pintle_rt_numerical_policy_hash(model.get())));
-            if(!restartPolicyHash.empty())identity.add("restartNumericalPolicyHash",word(restartPolicyHash));
-            identity.add("speciesCount",label(physicalSpecies));identity.add("closure",closure);identity.regIOobject::write();
+            identity.add("physicalModelHash",Foam::string(pintle_rt_physical_model_hash(model.get())));
+            identity.add("numericalPolicyHash",Foam::string(pintle_rt_numerical_policy_hash(model.get())));
+            if(!restartPolicyHash.empty())identity.add("restartNumericalPolicyHash",Foam::string(restartPolicyHash));
+            identity.add("speciesCount",label(physicalSpecies));identity.add("closure",closure);
+            demand(identity.regIOobject::write(),"Failed to write checkpoint reactiveStateIdentity");
         };
         const Array initial=flow.totals(q);Array accumulatedBoundary(nv,0);
         const double mass0=std::accumulate(initial.begin(),initial.begin()+ns,0.0);

@@ -1,5 +1,7 @@
 # SPUMA 실유체 최적화 v2.1 구현 보고서
 
+> 이 문서는 작성 시점의 구현·검증 기록이다. 2026-09-21의 실제 GPU·SPUMA 검증 및 재시작 수정 결과는 [PR #1 로컬 검증 보고서](../../reports/pr1-local-validation-20260921.md)를 기준으로 한다.
+
 작성일: 2026-09-19 · 지시 패키지: **SPUMA-RF-OPT-v2.1**
 
 착수 SHA: `0517be936c1a5f4720bd8c3703ffb38ba4289045` · 코드 결과 SHA: `e37a771005dafd2627fb9f5caefacd87f5567ca2`

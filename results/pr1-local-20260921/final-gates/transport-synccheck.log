@@ -1,0 +1,3 @@
+========= COMPUTE-SANITIZER
+{"passed": true, "tests": 21, "backend": "cuda"}
+========= ERROR SUMMARY: 0 errors

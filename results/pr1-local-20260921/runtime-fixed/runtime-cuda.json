@@ -1,0 +1,125 @@
+{
+  "backend_sha256": "40bf3a7b1b230881bdabfea8e8814305ae9c7ca8db29f70efbe7ba6c5fe33158",
+  "solver_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+  "tests": [
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Batch cell 0: Negative or non-finite conserved chemical species mass"
+      ],
+      "name": "negative_inventory",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+      ],
+      "name": "wrong_dimensions",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+      ],
+      "name": "changed_identity",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+      ],
+      "name": "missing_schema2_closure",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+      ],
+      "name": "nonideal_fick",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Require finite endTime strictly after start time"
+      ],
+      "name": "invalid_end_time",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+      ],
+      "name": "unsupported_runtime_edit",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "Create time",
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+      ],
+      "name": "nonequilibrium_fixed_state",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "name": "checkpoint_hashes_quoted",
+      "passed": true
+    },
+    {
+      "continuous_steps": 20,
+      "field_relative_errors": {
+        "T": 1.6842592591861723e-15,
+        "alphaGas": 9.325873406851315e-15,
+        "p": 1.0677327905820083e-14,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 6.561395470850595e-16,
+        "q3": 0.0,
+        "rhoMomentum": 1.0329914016177882e-14,
+        "rhoTotalEnergy": 6.773584995517539e-16
+      },
+      "final_time": 2e-05,
+      "name": "conserved_restart_and_clock",
+      "passed": true
+    }
+  ],
+  "thermo_workers": 2,
+  "transport_backend": "cuda"
+}

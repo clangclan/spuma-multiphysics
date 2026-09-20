@@ -1,0 +1,75 @@
+{
+  "baseline": "0517be936c1a5f4720bd8c3703ffb38ba4289045",
+  "scope": "small mathematical/API checks",
+  "backend": "cpu",
+  "thresholds": {
+    "jvp_scaled": 2e-05,
+    "source_scaled": 2e-08,
+    "scalar_pT_scaled": 2e-08,
+    "transport_scaled": 2e-11
+  },
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "121e871a613b9b897b29cfcce85e81312d928bdba98c78b898b50743be7f9ca3",
+    "src/reactiveThermo/pintleCaloricFast.h": "0556f02fa802670af4326417d7b6089909ccb4367f8b852e11029a8351817ee2",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "3f0270485c892b0850c938b2e907f14c74f1ef120a9cae35df23a4836d4bb4dc",
+    "src/reactiveThermo/pintleDirectional.inc": "cb161f706bac11923ace4a821a3805007ebe0f20238bb775e4e0f22b66950d7b",
+    "src/reactiveThermo/pintleGasThermo.h": "c81bafe41dfaab0df27f459a4f2cc549c9d647f293b6ec1b3a62b19c8c5147c1",
+    "src/reactiveThermo/pintleProfilesV21.inc": "71dd6057f59c41a0b8a767d8f16572b287e20db53c50c3b44867654942f02e97",
+    "src/reactiveThermo/pintleReactivePool.inc": "1016d2be08e3d8e0c6e81ce1459a2319f2e05c314d2e88d2b9990e2de2d717ba",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "2cb7faca43f5866c1eadb7206664a6d0abb18d0de0309ee77141d95aa8d64aed",
+    "src/reactiveThermo/pintleReactiveThermo.h": "3de03e253a095ac72fb4554d124d2c4120d0cc3e51bf032d374aaff473ae78da",
+    "src/reactiveThermo/pintleRealFluid.h": "aa9631db19230df06e81e3b3e902f6689238de85599fed6af7339dbfa7116e97",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "8008b07e740136ac49096dc20059b992218ca3406b562b1eeb023c25ce726672",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "f3637ea26074e856029dc9dfd8f11ee31844f3871d78dda2a4ef6441c18b995c",
+    "src/reactiveThermo/pintleRealFluidV21.h": "fec35b5cf4e98ad69d53442f3dd3fc3d275950556678460250b1e4e3aebb7861",
+    "src/reactiveThermo/pintleSmallSystem.h": "5f7e21dd7c953d85de0ad97a370ee5ae19c72f0a2611f185963cd797351b6d61",
+    "src/reactiveThermo/pintleSparseJacobian.h": "20033058c4e9497356f4c6120164cbb6a192d39e0069e4a2f275d4119c4b3aed",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "5ab7f121fd8b020be2738222b977eeb922a339f66d1f19b68a9dd44f77d775ff",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleReactiveTransport.h": "85a7b52b118127f8c478c582ad6ea90bba7a180ed257c1dbace9abff4361dd6e",
+    "src/reactiveTransport/pintleTransportKernels.h": "4a0cb55363c0fea76e8f96649b1f0334ecb1363d4bad979ed62e250859190e47",
+    "src/reactiveTransport/pintleTransportV21.h": "d59cdb48f63eaf524cd997699490464646ced353f006e4a5109191bea00f7216",
+    "tools/check_real_fluid_v21.py": "b4fdb440407374d824436c257665fad69c591715d69d957f56c76e198175739e"
+  },
+  "libraries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so": "40bf3a7b1b230881bdabfea8e8814305ae9c7ca8db29f70efbe7ba6c5fe33158",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so": "733db21bb64ad8432324f7d86ddbf338e95b53eecd142f366501963f4c4934c3"
+  },
+  "cantera": "3.2.0",
+  "inputs": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo/cold-pr-config.yaml": "d4948ba8a01392b85e63d095fa583dbcd96f121c6e5d19ee5a4c7317faffd466",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo/reactive-dilute-config.yaml": "f9aed56c95288785e6c92659c3d56ae62e5bcf9dc71bfddf472b91f7906b84da",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo/chemistry-ideal.yaml": "0e20aac3bd3ec16c29f0df18ed191f426b5b92d4f4eab1ce7fcc1966f068c119",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo/cold-pr.yaml": "7ea020c480bff27404a9ccb051c4940bac71631257e159084b93df2092a6ecdd",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo/chemistry-config.yaml": "f344e0f4fd910c41de94a5fb494d430168f33ae16cfd8698e9490eea32a0e53e"
+  },
+  "tests": [
+    {
+      "name": "V1",
+      "status": "SKIPPED",
+      "reason": "not selected"
+    },
+    {
+      "name": "V2-V4",
+      "status": "SKIPPED",
+      "reason": "not selected"
+    },
+    {
+      "name": "V3",
+      "status": "SKIPPED",
+      "reason": "not selected"
+    },
+    {
+      "name": "V5-V6",
+      "status": "SKIPPED",
+      "reason": "not selected"
+    },
+    {
+      "name": "legacy-gas",
+      "status": "SKIPPED",
+      "reason": "not selected"
+    }
+  ],
+  "local_flow": "NOT_RUN",
+  "passed": true
+}

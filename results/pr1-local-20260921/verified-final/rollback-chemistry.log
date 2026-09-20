@@ -1,0 +1,6 @@
+{"name": "cpu-full-step-rollback", "passed": false, "error": "Expected one partial-batch failure and retry"}
+{"name": "cpu-schema1-compatibility", "passed": true, "field_max_scaled": {"q0": 0.0, "q1": 0.0, "q2": 0.0, "q3": 0.0, "rhoMomentum": 0.0, "rhoTotalEnergy": 0.0, "p": 0.0, "T": 0.0, "alphaGas": 0.0}}
+{"name": "cpu-cross-backend-restart", "passed": true, "field_max_scaled": {"q0": 0.0, "q1": 0.0, "q2": 0.0, "q3": 0.0, "rhoMomentum": 0.0, "rhoTotalEnergy": 0.0, "p": 0.0, "T": 0.0, "alphaGas": 0.0}, "resumed_backend": "cuda"}
+{"name": "cuda-full-step-rollback", "passed": false, "error": "Expected one partial-batch failure and retry"}
+{"name": "cuda-schema1-compatibility", "passed": true, "field_max_scaled": {"q0": 0.0, "q1": 0.0, "q2": 0.0, "q3": 0.0, "rhoMomentum": 0.0, "rhoTotalEnergy": 0.0, "p": 0.0, "T": 0.0, "alphaGas": 0.0}}
+{"name": "cuda-cross-backend-restart", "passed": true, "field_max_scaled": {"q0": 0.0, "q1": 0.0, "q2": 0.0, "q3": 0.0, "rhoMomentum": 0.0, "rhoTotalEnergy": 0.0, "p": 0.0, "T": 0.0, "alphaGas": 0.0}, "resumed_backend": "cpu"}

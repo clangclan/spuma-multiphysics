@@ -1,0 +1,7 @@
+{"name": "V1", "status": "SKIPPED", "error": null}
+{"name": "V2-V4", "status": "PASSED", "error": null}
+{"name": "V3", "status": "SKIPPED", "error": null}
+{"name": "V5-V6", "status": "SKIPPED", "error": null}
+{"name": "legacy-gas", "status": "SKIPPED", "error": null}
+{"name": "V6-recompute", "status": "SKIPPED", "error": null}
+{"name": "internal-contract", "status": "PASSED", "error": null}

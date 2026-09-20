@@ -1,0 +1,14 @@
+{"name": "negative_environment_mass", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"]}
+{"name": "invalid_volume_sum", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"]}
+{"name": "mass_without_volume", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"]}
+{"name": "unsupported_chemistry", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"]}
+{"name": "unsupported_heat_transfer", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"]}
+{"name": "closure_restart_mismatch", "passed": true, "returncode": 1, "last_lines": ["", "Create mesh for time = 0", "", "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"]}
+Traceback (most recent call last):
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_mechanical_runtime.py", line 80, in <module>
+    report=run(a.output.resolve(),a.thermo_dir.resolve(),a.transport_backend);raise SystemExit(0 if report['passed'] else 1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_mechanical_runtime.py", line 54, in run
+    if any((rc1,rc2,rc3)):raise RuntimeError('Restart execution failed; inspect retained logs')
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Restart execution failed; inspect retained logs

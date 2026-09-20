@@ -1,0 +1,106 @@
+{
+  "fault_shim_sha256": "591bce6756a11d651ccb15f9871889da5ee47cb283fbba90f5e776548f7ecc3c",
+  "kind": "chemistry",
+  "passed": true,
+  "solver_sha256": "94815c916934a12e564b8c5cc9af7a73d089dc452f22c808258416543f743b69",
+  "tests": [
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "injected_stage": 2,
+      "name": "cpu-full-step-rollback",
+      "partial_batch_failure": true,
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cuda"
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "injected_stage": 2,
+      "name": "cuda-full-step-rollback",
+      "partial_batch_failure": true,
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cpu"
+    }
+  ]
+}

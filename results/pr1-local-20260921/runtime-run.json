@@ -1,0 +1,500 @@
+{
+  "tests": [
+    {
+      "name": "runtime-cpu",
+      "returncode": 1,
+      "seconds": 6.933478025000113,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--thermo-workers",
+        "1",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cpu"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cpu",
+      "tests": [
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE UV recovery cell 0: Negative or non-finite conserved chemical species mass"
+          ],
+          "name": "negative_inventory",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+          ],
+          "name": "wrong_dimensions",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "changed_identity",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+          ],
+          "name": "missing_schema2_closure",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+          ],
+          "name": "nonideal_fick",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Require finite endTime strictly after start time"
+          ],
+          "name": "invalid_end_time",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+          ],
+          "name": "unsupported_runtime_edit",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+          ],
+          "name": "nonequilibrium_fixed_state",
+          "passed": true,
+          "returncode": 1
+        }
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cpu",
+      "returncode": 1,
+      "seconds": 5.376673694999681,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cpu"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cpu",
+      "tests": [
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+          ],
+          "name": "negative_environment_mass",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+          ],
+          "name": "invalid_volume_sum",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+          ],
+          "name": "mass_without_volume",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_chemistry",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_heat_transfer",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "closure_restart_mismatch",
+          "passed": true,
+          "returncode": 1
+        }
+      ]
+    },
+    {
+      "name": "runtime-cuda",
+      "returncode": 1,
+      "seconds": 6.631316531999801,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--thermo-workers",
+        "2",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cuda"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cuda",
+      "tests": [
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Batch cell 0: Negative or non-finite conserved chemical species mass"
+          ],
+          "name": "negative_inventory",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+          ],
+          "name": "wrong_dimensions",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "changed_identity",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+          ],
+          "name": "missing_schema2_closure",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+          ],
+          "name": "nonideal_fick",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Require finite endTime strictly after start time"
+          ],
+          "name": "invalid_end_time",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+          ],
+          "name": "unsupported_runtime_edit",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+          ],
+          "name": "nonequilibrium_fixed_state",
+          "passed": true,
+          "returncode": 1
+        }
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cuda",
+      "returncode": 1,
+      "seconds": 5.427482267999949,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cuda"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cuda",
+      "tests": [
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+          ],
+          "name": "negative_environment_mass",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+          ],
+          "name": "invalid_volume_sum",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+          ],
+          "name": "mass_without_volume",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_chemistry",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_heat_transfer",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "closure_restart_mismatch",
+          "passed": true,
+          "returncode": 1
+        }
+      ]
+    },
+    {
+      "name": "rollback",
+      "returncode": 1,
+      "seconds": 5.828720210000029,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_rollback.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback",
+      "tests": [
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cpu-full-step-rollback",
+          "partial_batch_failure": true,
+          "passed": true,
+          "retries": 1
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cpu-schema1-compatibility",
+          "passed": true
+        },
+        {
+          "error": " CFD Toolbox           |\n|  \\\\    /   O peration     | Version:  2512                                  |\n|   \\\\  /    A nd           | Website:  www.openfoam.com                      |\n|    \\\\/     M anipulation  |                                                 |\n\\*---------------------------------------------------------------------------*/\nBuild  : 5916a466-20260728 OPENFOAM=2512 version=v2512\nArch   : \"LSB;label=32;scalar=64\"\nExec   : /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam -case /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback/cpu-restart\nDate   : Sep 21 2026\nTime   : 03:23:01\nHost   : jsw-ubuntu\nPID    : 72864\nI/O    : uncollated\nCase   : /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback/cpu-restart\nnProcs : 1\nmemory pool : not available\nfileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)\nallowSystemOperations : Allowing user-supplied system call operations\n\n// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\nInitializing CUDA devices\n\nCUDA Driver Version / Runtime Version:  13.2 / 13.2\nNumber of threads per block: 128\n\nCreate dummyMemoryPool\n \nCreate time\n\nCreate mesh for time = 1e-06\n\n\n\n--> FOAM FATAL IO ERROR: (openfoam-2512)\nWrong token type - expected word, found on line 25: int32 18\n\nfile: 1e-06/reactiveStateIdentity/numericalPolicyHash at line 25.\n\n    From Foam::Istream &Foam::operator>>(Foam::Istream &, Foam::word &)\n    in file primitives/strings/word/wordIO.C at line 71.\n\nFOAM exiting\n\n",
+          "name": "cpu-cross-backend-restart",
+          "passed": false
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cuda-full-step-rollback",
+          "partial_batch_failure": true,
+          "passed": true,
+          "retries": 1
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cuda-schema1-compatibility",
+          "passed": true
+        },
+        {
+          "error": "oolbox           |\n|  \\\\    /   O peration     | Version:  2512                                  |\n|   \\\\  /    A nd           | Website:  www.openfoam.com                      |\n|    \\\\/     M anipulation  |                                                 |\n\\*---------------------------------------------------------------------------*/\nBuild  : 5916a466-20260728 OPENFOAM=2512 version=v2512\nArch   : \"LSB;label=32;scalar=64\"\nExec   : /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam -case /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback/cuda-restart\nDate   : Sep 21 2026\nTime   : 03:23:04\nHost   : jsw-ubuntu\nPID    : 73535\nI/O    : uncollated\nCase   : /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback/cuda-restart\nnProcs : 1\nmemory pool : not available\nfileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)\nallowSystemOperations : Allowing user-supplied system call operations\n\n// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //\nInitializing CUDA devices\n\nCUDA Driver Version / Runtime Version:  13.2 / 13.2\nNumber of threads per block: 128\n\nCreate dummyMemoryPool\n \nCreate time\n\nCreate mesh for time = 1e-06\n\n\n\n--> FOAM FATAL IO ERROR: (openfoam-2512)\nWrong token type - expected word, found on line 25: int32 807432\n\nfile: 1e-06/reactiveStateIdentity/numericalPolicyHash at line 25.\n\n    From Foam::Istream &Foam::operator>>(Foam::Istream &, Foam::word &)\n    in file primitives/strings/word/wordIO.C at line 71.\n\nFOAM exiting\n\n",
+          "name": "cuda-cross-backend-restart",
+          "passed": false
+        }
+      ]
+    }
+  ]
+}

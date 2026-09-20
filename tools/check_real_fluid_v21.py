@@ -192,7 +192,9 @@ def transport(a,tmp):
     return {'backend':'cuda' if a.backend else 'CPU common kernels','comparisons':rows}
 
 def legacy_gas(a,tmp):
-    lib=gas.load(ROOT,a.transport_library)
+    # RecomputeFixture also calls the v2.1 constructor. Every CDLL instance
+    # needs its own ctypes signatures or a returned pointer becomes a C int.
+    lib=bind_transport(a)
     # Existing validators instantiate Backend internally; bind the exact tested
     # thermodynamic library explicitly so evidence never names a different .so.
     saved=gas.Backend;gas.Backend=lambda config:BackendV21(config,a.thermo_library)

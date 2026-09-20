@@ -99,7 +99,7 @@ def analyze_existing(output,source):
     return report
 
 
-def run(output,thermo_dir,specs):
+def run(output,thermo_dir,specs,transport_backend='cpu'):
     output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),
         'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so')};env=b.sourced_environment()
     def record(name,fn):
@@ -149,15 +149,19 @@ def run(output,thermo_dir,specs):
         kind,n,mach,travel=spec.split(':');case=output/spec.replace(':','-')
         def case_run(kind=kind,n=n,mach=mach,travel=travel,case=case):
             d=prepare(case,thermo_dir,kind,int(n),float(mach),float(travel))
+            with (case/'constant/reactiveProperties').open('a') as f:
+                f.write('\ntransportBackend '+transport_backend+';\n')
             with (case/'solver.log').open('w') as log:proc=subprocess.run([str(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),'-case',str(case)],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1200)
             text=(case/'solver.log').read_text(errors='replace');require(proc.returncode==0,'Solver failed: '+'\n'.join(text.splitlines()[-6:]))
+            require('REACTIVE_BACKENDS transport='+transport_backend+' ' in text,'Requested transport backend was not selected')
             analysis=analyze(case,d,text)
-            return dict(passed=analysis['passed'],directory=str(case),analysis=analysis)
+            return dict(passed=analysis['passed'],directory=str(case),analysis=analysis,transport_backend=transport_backend)
         record(spec,case_run)
     report['passed']=all(t['passed'] for t in report['tests']);b.atomic_json(output/'campaign.json',report);return report
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--thermo-dir',type=Path);p.add_argument('--case',action='append');p.add_argument('--analyze-existing',type=Path)
+    p.add_argument('--transport-backend',choices=('cpu','cuda'),default='cpu')
     a=p.parse_args()
     if a.output.exists():raise SystemExit('Refusing to overwrite evidence')
     specs=a.case or ['contact:16:0:.1','contact:32:0:.1','contact:64:0:.1','contact:16:2:.1','contact:32:2:.1','contact:64:2:.1',
@@ -166,5 +170,5 @@ if __name__=='__main__':
     if a.analyze_existing:result=analyze_existing(a.output.resolve(),a.analyze_existing.resolve())
     else:
         if not a.thermo_dir:p.error('--thermo-dir is required when running cases')
-        result=run(a.output.resolve(),a.thermo_dir.resolve(),specs)
+        result=run(a.output.resolve(),a.thermo_dir.resolve(),specs,a.transport_backend)
     raise SystemExit(0 if result['passed'] else 1)

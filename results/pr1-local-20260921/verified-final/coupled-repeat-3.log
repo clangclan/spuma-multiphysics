@@ -1,0 +1,4 @@
+{"spec": "coupled:4:2", "mode": "main", "passed": true, "error": null, "wall_seconds": 10.752123670999936}
+{"spec": "coupled:4:2", "mode": "cpu", "passed": true, "error": null, "wall_seconds": 10.326489032000609}
+{"spec": "coupled:4:2", "mode": "cuda", "passed": true, "error": null, "wall_seconds": 11.101020602999597}
+{"spec": "coupled:4:2", "mode": "cuda-workers", "passed": true, "error": null, "wall_seconds": 8.999332174999836}

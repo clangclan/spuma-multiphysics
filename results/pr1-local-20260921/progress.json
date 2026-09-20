@@ -1,0 +1,9 @@
+{
+  "validation_complete": true,
+  "merge_eligible": true,
+  "summary": "acceptance-summary.json",
+  "known_baseline_limitations": [
+    "HEM contact accuracy",
+    "SPUMA duplicate kernel extended diagnostics"
+  ]
+}

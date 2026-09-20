@@ -2,9 +2,9 @@
 
 `pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
-최신 수정·검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 이 보고서들의 구현·실행 검증은 MAIN이 수행했다.
+최신 GPU·SPUMA 실행 검증과 재시작·쓰기·성능 회귀 수정은 [PR #1 로컬 검증 보고서](reports/pr1-local-validation-20260921.md)에 있다. 기존 물리 모델 검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 이 보고서들의 구현·실행 검증은 MAIN이 수행했다.
 
-2026-09-12에는 **선택 가능한 CUDA 수송과 CPU 희소 화학**을 추가했다. [GPU·희소 포팅 문서](README.reactive-gpu-sparse.ko.md)에 두 공유 채팅과의 대조, 기존 상태와 새 변경, 새 환경의 시험 결과를 분리했다. 실제 GPU 실행과 SPUMA 전체 빌드는 아직 검증하지 못했으며 기본값은 CPU 수송·밀집 화학이다.
+2026-09-12에는 **선택 가능한 CUDA 수송과 CPU 희소 화학**을 추가했다. [GPU·희소 포팅 문서](README.reactive-gpu-sparse.ko.md)에 두 공유 채팅과의 대조, 기존 상태와 새 변경, 새 환경의 시험 결과를 분리했다. 당시 미실행했던 실제 GPU·SPUMA 검증은 위 최신 보고서에 후속 기록했다. 기본값은 CPU 수송·밀집 화학이다.
 
 앞선 [포팅 리뷰 반영](README.reactive-review.ko.md)은 원시량 CFL, RK 장 재사용, 병렬 reduction, 희소 구조·CVODE 작업공간 재사용을 추가했다. 2026-09-13에는 [MFC·PeleC 구조를 참고한 개선](README.reactive-mfc-pele.ko.md)으로 선택 가능한 GPU `gasY/h` 계산, NASA7/NASA9 계수 상주와 CFL 전용 면 커널을 연결했다. 전체 flash·화학 적분은 계속 CPU다.
 

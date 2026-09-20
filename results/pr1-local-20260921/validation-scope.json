@@ -1,0 +1,33 @@
+{
+  "base_sha": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "initial_pr_sha": "ad2e178d6a9409094a891466a683051514f39bf1",
+  "criteria": {
+    "final_state_max_scaled": 1e-06,
+    "final_species_mass_fraction_Linf": 1e-07,
+    "restart_max_scaled": 1e-08,
+    "paired_diffusion_rate_relative_error": 0.02,
+    "default_cpu_runtime_ratio_limit": 2.0,
+    "sanitizer_error_count": 0
+  },
+  "known_model_failures": [
+    "HEM contact pressure error: baseline must reproduce the same failure and candidate fields must match baseline",
+    "16-cell mechanical contact advection accuracy remains a documented coarse-mesh limitation; this acceptance uses 32/64 cells"
+  ],
+  "unchanged_scope": [
+    "Single MPI rank, FP64, CPU thermodynamic flash and chemistry",
+    "No high-pressure 413-species PR mechanism or nonideal diffusion data was invented",
+    "No accepted-state clipping, species renormalization or total-energy repair"
+  ],
+  "initial_failure_evidence": [
+    "rf21-cpu.log",
+    "runtime-run.json",
+    "runtime-fixed/runtime-run.json",
+    "final-gates/run.json",
+    "matrix-before-performance-fix.json"
+  ],
+  "latest_evidence": [
+    "final-api/api-run.json",
+    "verified-final/run.json",
+    "provenance.json"
+  ]
+}

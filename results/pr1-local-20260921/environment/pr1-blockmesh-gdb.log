@@ -1,0 +1,22 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+[New Thread 0x7fffe1fff000 (LWP 17034)]
+
+Thread 1 "blockMesh" received signal SIGILL, Illegal instruction.
+0x00007ffff3537983 in _ZN4Foam10readDoubleEPKcRd () at lnInclude/scalarImpl.txx:110
+110	    val =
+=> 0x7ffff3537983 <_ZN4Foam10readDoubleEPKcRd()+67>:	kmovd  %eax,%k1
+#0  0x00007ffff3537983 in _ZN4Foam10readDoubleEPKcRd () at lnInclude/scalarImpl.txx:110
+#1  0x00007ffff37d41e2 in _ZN4Foam8ISstream4readERNS_5tokenE () at db/IOstreams/Sstreams/ISstream.C:175
+#2  0x00007ffff37ceea5 in _ZN4Foam5tokenC1ERNS_7IstreamE () at db/IOstreams/token/tokenIO.C:147
+#3  0x00007ffff3823c38 in _ZN4Foam5entry3NewERNS_10dictionaryERNS_7IstreamENS0_9inputModeEi () at db/dictionary/entry/entryIO.C:283
+#4  0x00007ffff380fcfa in _ZN4Foam10dictionary4readERNS_7IstreamEb () at db/dictionary/dictionaryIO.C:116
+#5  0x00007ffff380f60b in _ZN4Foam10dictionaryC1ERKNS_8fileNameERKS0_RNS_7IstreamEb () at db/dictionary/dictionaryIO.C:45
+#6  0x00007ffff382b98f in _ZN4Foam15dictionaryEntryC1ERKNS_7keyTypeERKNS_10dictionaryERNS_7IstreamE () at db/dictionary/dictionaryEntry/dictionaryEntryIO.C:56
+#7  0x00007ffff382400a in _ZN4Foam5entry3NewERNS_10dictionaryERNS_7IstreamENS0_9inputModeEi () at db/dictionary/entry/entryIO.C:444

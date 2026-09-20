@@ -110,7 +110,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
             std::plus<double>(),[](double m,double W){return m/W;});
         const auto value=model.evaluate(initial,{},p,T);const double dt=1e-8,rtol=1e-8,atol=1e-14;
         Vector q=initial;auto state=value.state;double drift=0;
-        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Failure fixture warmup: "+model.error);
+        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Failure fixture warmup: "+std::string(model.error.data()));
         const int slot=mode==0?0:1;
         require(bool(model.chemicalWorkspace[slot]),"Missing warm workspace");
         std::weak_ptr<ChemicalODE> old=model.chemicalWorkspace[slot];
@@ -127,7 +127,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         const auto beforeProfile=model.chemicalProfile;
         q=initial;state=value.state;const auto beforeState=state;drift=-17;
         const int failure=pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift);
-        const std::string diagnostic=model.error;
+        const std::string diagnostic=model.error.data();
         require(injectedRhsCalls==1,"Injected callback was not reached exactly once");
         require(old.expired()&&!model.chemicalWorkspace[slot],"Failed CVODE workspace survived");
         require(model.chemicalProfile.workspaceReinitializations==beforeProfile.workspaceReinitializations+1,
@@ -146,7 +146,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         fresh.structuredChemicalJacobian=mode!=2;
         Vector reference=initial;auto expected=value.state;double expectedDrift=0;
         require(pintle_rt_react(&fresh,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
-                "Fresh recovery reference failed: "+fresh.error);
+                "Fresh recovery reference failed: "+std::string(fresh.error.data()));
         auto compare=[&](const Vector& actual,const PintleThermoState& s) {
             double error=0;for(size_t k=0;k<model.ns;++k) error=std::max(error,std::abs(actual[k]-reference[k])/value.state.rho);
             require(error<2e-10&&std::abs(s.T/expected.T-1)<2e-10,"Recovered workspace differs from fresh solve");
@@ -155,7 +155,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         const double fallbackError=mode==2?compare(q,state):0;
         const auto creates=model.chemicalProfile.workspaceCreates;
         q=initial;state=value.state;
-        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Next source failed: "+model.error);
+        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Next source failed: "+std::string(model.error.data()));
         require(model.chemicalProfile.workspaceCreates==creates+1&&bool(model.chemicalWorkspace[slot]),
                 "Next source did not allocate a new worker");
         // For auto, the next successful source uses sparse again, so obtain the
@@ -164,7 +164,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
             Model sparseReference(configuration);sparseReference.chemicalLinearSolver=1;
             reference=initial;expected=value.state;
             require(pintle_rt_react(&sparseReference,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
-                    "Fresh sparse reference failed: "+sparseReference.error);
+                    "Fresh sparse reference failed: "+std::string(sparseReference.error.data()));
         }
         const double recoveryError=compare(q,state);
         std::ostringstream out;out<<std::setprecision(17)<<"{\"mode\":"<<mode

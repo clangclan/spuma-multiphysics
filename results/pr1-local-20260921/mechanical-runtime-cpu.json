@@ -1,0 +1,73 @@
+{
+  "backend_sha256": "40bf3a7b1b230881bdabfea8e8814305ae9c7ca8db29f70efbe7ba6c5fe33158",
+  "solver_sha256": "238a7b9fb3f0bb55673d0732a42c812038dc40bec544927ada29bcf083b7a824",
+  "tests": [
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+      ],
+      "name": "negative_environment_mass",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+      ],
+      "name": "invalid_volume_sum",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+      ],
+      "name": "mass_without_volume",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+      ],
+      "name": "unsupported_chemistry",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+      ],
+      "name": "unsupported_heat_transfer",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "last_lines": [
+        "",
+        "Create mesh for time = 0",
+        "",
+        "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+      ],
+      "name": "closure_restart_mismatch",
+      "passed": true,
+      "returncode": 1
+    }
+  ],
+  "transport_backend": "cpu"
+}

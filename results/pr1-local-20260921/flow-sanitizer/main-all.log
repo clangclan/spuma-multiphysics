@@ -1,0 +1,371 @@
+========= COMPUTE-SANITIZER
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2512                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5916a466-20260728 OPENFOAM=2512 version=v2512
+Arch   : "LSB;label=32;scalar=64"
+Exec   : /home/jsw/문서/analysis/spuma-multiphysics-pr-1/research/main-baseline/bin/pintleReactiveFoam -case /home/jsw/문서/analysis/spuma-multiphysics-pr-1/cases/pr1-memcheck-main
+Date   : Sep 21 2026
+Time   : 04:05:42
+Host   : jsw-ubuntu
+PID    : 256265
+I/O    : uncollated
+Case   : /home/jsw/문서/analysis/spuma-multiphysics-pr-1/cases/pr1-memcheck-main
+nProcs : 1
+memory pool : not available
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Initializing CUDA devices
+
+CUDA Driver Version / Runtime Version:  13.2 / 13.2
+Number of threads per block: 128
+
+Create dummyMemoryPool
+ 
+Create time
+
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_5FieldIdEmLERKdEUliE_EEvT_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::Field<double>::operator*=(double const&)::{lambda(int)#1}>(Foam::Field<double>::operator*=(double const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xfa19fe] in libfiniteVolume.so
+=========         Host Frame: Foam::primitiveMeshTools::makeCellCentresAndVols(Foam::primitiveMesh const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> >&, Foam::Field<double>&) in primitiveMeshTools.C:972 [0x101d6a4] in libOpenFOAM.so
+=========         Host Frame: Foam::primitiveMesh::calcCellCentresAndVols() const in primitiveMeshCellCentresAndVols.C:64 [0xfeed83] in libOpenFOAM.so
+=========         Host Frame: Foam::surfaceInterpolation::updateGeom() in surfaceInterpolation.C:180 [0xfc138f] in libfiniteVolume.so
+=========         Host Frame: Foam::primitiveMesh::faceCentres() const in primitiveMeshFaceCentresAndAreas.C:82 [0xffc598] in libOpenFOAM.so
+=========         Host Frame: Foam::polyPatch::faceCentres() const in polyPatch.C:329 [0xdf9721] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcGeometry(Foam::PstreamBuffers&) in cyclicPolyPatch.C:978 [0xe222e0] in libOpenFOAM.so
+=========         Host Frame: Foam::polyBoundaryMesh::calcGeometry() in polyBoundaryMesh.C:329 [0xe94762] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:362 [0xf7ca1d] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_8multiplyIdEEvRNS_5FieldIT_EERKdRKNS_5UListIS4_EEEUliE_EEvS4_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::multiply<double>(Foam::Field<double>&, double const&, Foam::UList<double> const&)::{lambda(int)#1}>(Foam::multiply<double>(Foam::Field<double>&, double const&, Foam::UList<double> const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xe8f173] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<double> > Foam::operator*<double>(double const&, Foam::UList<double> const&) in FieldFunctions.C:1011 [0x14d8a91] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcTransforms(Foam::PrimitivePatch<Foam::SubList<Foam::face>, Foam::Field<Foam::Vector<double> > const&> const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&) in cyclicPolyPatch.C:301 [0xe1c160] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcGeometry(Foam::PstreamBuffers&) in cyclicPolyPatch.C:388 [0xe2273d] in libOpenFOAM.so
+=========         Host Frame: Foam::polyBoundaryMesh::calcGeometry() in polyBoundaryMesh.C:329 [0xe94762] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:362 [0xf7ca1d] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_8subtractINS_6VectorIdEES4_EEvRNS_5FieldINS_9typeOfSumIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::subtract<Foam::Vector<double>, Foam::Vector<double> >(Foam::Field<Foam::typeOfSum<Foam::Vector<double>, Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::subtract<Foam::Vector<double>, Foam::Vector<double> >(Foam::Field<Foam::typeOfSum<Foam::Vector<double>, Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xfa1bf3] in libfiniteVolume.so
+=========         Host Frame: void Foam::subtract<Foam::Vector<double>, Foam::Vector<double> >(Foam::Field<Foam::typeOfSum<Foam::Vector<double>, Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&) in FieldFunctions.C:73 [0xfa4399] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledPolyPatch::calcTransformTensors(Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<double> const&, double, Foam::coupledPolyPatch::transformType) const in coupledPolyPatch.C:396 [0xe0563d] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcTransforms(Foam::PrimitivePatch<Foam::SubList<Foam::face>, Foam::Field<Foam::Vector<double> > const&> const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&) in cyclicPolyPatch.C:312 [0xe1c9bb] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcGeometry(Foam::PstreamBuffers&) in cyclicPolyPatch.C:388 [0xe2273d] in libOpenFOAM.so
+=========         Host Frame: Foam::polyBoundaryMesh::calcGeometry() in polyBoundaryMesh.C:329 [0xe94762] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:362 [0xf7ca1d] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda24reductionLambdaSumKernelIdZNS_3sumIdEET_RKNS_5UListIS3_EEEUliE_EEvPS3_T0_Pii" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x29a3d] in libcudart.so.13
+=========         Host Frame:  [0x1599a] in libcudart.so.13
+=========         Host Frame: cudaFuncSetAttribute [0x5914c] in libcudart.so.13
+=========         Host Frame: void Foam::cudaExecutor::_backendReductionSum<Foam::sum<double>(Foam::UList<double> const&)::{lambda(int)#1}, double>(Foam::sum<double>(Foam::UList<double> const&)::{lambda(int)#1}&, double*, int const&) in cudaExecutor.cu:2472 [0xf851ad] in libfiniteVolume.so
+=========         Host Frame: double Foam::average<double>(Foam::UList<double> const&) in FieldFunctions.C:549 [0xe2cfc2] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcTransforms(Foam::PrimitivePatch<Foam::SubList<Foam::face>, Foam::Field<Foam::Vector<double> > const&> const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&, Foam::Field<Foam::Vector<double> > const&) in cyclicPolyPatch.C:335 [0xe1cac2] in libOpenFOAM.so
+=========         Host Frame: Foam::cyclicPolyPatch::calcGeometry(Foam::PstreamBuffers&) in cyclicPolyPatch.C:388 [0xe2273d] in libOpenFOAM.so
+=========         Host Frame: Foam::polyBoundaryMesh::calcGeometry() in polyBoundaryMesh.C:329 [0xe94762] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:362 [0xf7ca1d] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_7cmptMagINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EEEUliE_EEvS6_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0x1b3753d] in libfiniteVolume.so
+=========         Host Frame: void Foam::cudaExecutor::_backendFor<Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}&, int const&) in cudaExecutor.cu:256 [0x1acbd17] in libfiniteVolume.so
+=========         Host Frame: void Foam::executor<Foam::cudaExecutor>::parallelFor<Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}&, int const&) in executor.H:73 [0x1ac7ae6] in libfiniteVolume.so
+=========         Host Frame: void Foam::cmptMag<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&) in FieldFunctions.C:409 [0x1b3e4f0] in libfiniteVolume.so
+=========         Host Frame: Foam::polyMesh::calcDirections() const in polyMesh.C:85 [0xf6f0c1] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:365 [0xf7ca25] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda24reductionLambdaSumKernelINS_6VectorIdEEZNS_3sumIS3_EET_RKNS_5UListIS5_EEEUliE_EEvPS5_T0_Pii" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x29a3d] in libcudart.so.13
+=========         Host Frame:  [0x1599a] in libcudart.so.13
+=========         Host Frame: cudaFuncSetAttribute [0x5914c] in libcudart.so.13
+=========         Host Frame: void Foam::cudaExecutor::_backendReductionSum<Foam::sum<Foam::Vector<double> >(Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}, Foam::Vector<double> >(Foam::sum<Foam::Vector<double> >(Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}&, Foam::Vector<double>*, int const&) in cudaExecutor.cu:2472 [0xfa76ed] in libfiniteVolume.so
+=========         Host Frame: Foam::polyMesh::calcDirections() const in polyMesh.C:560 [0xf6f137] in libOpenFOAM.so
+=========         Host Frame: Foam::polyMesh::init(bool) in polyMesh.C:365 [0xf7ca25] in libOpenFOAM.so
+=========         Host Frame: Foam::fvMesh::init(bool) in fvMesh.C:280 [0xec3ff7] in libfiniteVolume.so
+=========         Host Frame: main in pintleReactiveFoam.C:97 [0x18163] in pintleReactiveFoam
+========= 
+Create mesh for time = 0
+
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldIdE19patchNeighbourFieldERNS_5UListIdEEEUliE0_EEvT_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::cyclicFvPatchField<double>::patchNeighbourField(Foam::UList<double>&) const::{lambda(int)#2}>(Foam::cyclicFvPatchField<double>::patchNeighbourField(Foam::UList<double>&) const::{lambda(int)#2}, int) in cudaExecutor.cu:54 [0x16a5ef3] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::patchNeighbourField(Foam::UList<double>&) const in cyclicFvPatchField.C:73 [0x1669649] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::patchNeighbourField() const in cyclicFvPatchField.C:168 [0x166923b] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666b1] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldIdEEvRKNS_5UListIT_EERKNS4_IiEERS6_EUliE_EEvS5_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::fvPatch::patchInternalField<double>(Foam::UList<double> const&, Foam::UList<int> const&, Foam::UList<double>&) const::{lambda(int)#1}>(Foam::fvPatch::patchInternalField<double>(Foam::UList<double> const&, Foam::UList<int> const&, Foam::UList<double>&) const::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0x121be33] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<double> > Foam::fvPatch::patchInternalField<double>(Foam::UList<double> const&) const in fvPatchTemplates.C:69 [0x11e3b63] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::patchInternalField() const in fvPatchField.C:262 [0x1331c21] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666c7] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_3magINS_6VectorIdEEEEvRNS_5FieldINS_9typeOfMagIT_E4typeEEERKNS_5UListIS7_EEEUliE_EEvS7_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::mag<Foam::Vector<double> >(Foam::Field<Foam::typeOfMag<Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::mag<Foam::Vector<double> >(Foam::Field<Foam::typeOfMag<Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xe8effd] in libfiniteVolume.so
+=========         Host Frame: void Foam::mag<Foam::Vector<double>, Foam::fvsPatchField, Foam::surfaceMesh>(Foam::GeometricField<Foam::typeOfMag<Foam::Vector<double> >::type, Foam::fvsPatchField, Foam::surfaceMesh>&, Foam::GeometricField<Foam::Vector<double>, Foam::fvsPatchField, Foam::surfaceMesh> const&) in GeometricFieldFunctions.C:258 [0xe923bd] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::GeometricField<Foam::typeOfMag<Foam::Vector<double> >::type, Foam::fvsPatchField, Foam::surfaceMesh> > Foam::mag<Foam::Vector<double>, Foam::fvsPatchField, Foam::surfaceMesh>(Foam::GeometricField<Foam::Vector<double>, Foam::fvsPatchField, Foam::surfaceMesh> const&) in GeometricFieldFunctions.C:339 [0xe8f436] in libfiniteVolume.so
+=========         Host Frame: Foam::fvMesh::makeMagSf() const in fvMeshGeometry.C:91 [0xe615b4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvMesh::magSf() const in fvMeshGeometry.C:356 [0xe63b54] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::nf() const in fvPatch.C:140 [0x10a975e] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatch::makeWeights(Foam::Field<double>&) const in cyclicFvPatch.C:50 [0x10b44a0] in libfiniteVolume.so
+=========         Host Frame: Foam::basicFvGeometryScheme::weights() const in basicFvGeometryScheme.C:138 [0xf6dccf] in libfiniteVolume.so
+=========         Host Frame: Foam::surfaceInterpolation::weights() const in surfaceInterpolation.C:109 [0xfc0d71] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::weights() const in fvPatch.C:198 [0x10aa060] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666d0] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_6divideINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EERKNS9_IdEEEUliE_EEvS6_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::divide<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&)::{lambda(int)#1}>(Foam::divide<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xe8f073] in libfiniteVolume.so
+=========         Host Frame: void Foam::divide<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&) in FieldFunctions.C:73 [0xe9313a] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::nf() const in fvPatch.C:140 [0x10a983b] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatch::makeWeights(Foam::Field<double>&) const in cyclicFvPatch.C:50 [0x10b44a0] in libfiniteVolume.so
+=========         Host Frame: Foam::basicFvGeometryScheme::weights() const in basicFvGeometryScheme.C:138 [0xf6dccf] in libfiniteVolume.so
+=========         Host Frame: Foam::surfaceInterpolation::weights() const in surfaceInterpolation.C:109 [0xfc0d71] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::weights() const in fvPatch.C:198 [0x10aa060] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666d0] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldINS_6VectorIdEEEEvRKNS_5UListIT_EERKNS6_IiEERS8_EUliE_EEvS7_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::fvPatch::patchInternalField<Foam::Vector<double> >(Foam::UList<Foam::Vector<double> > const&, Foam::UList<int> const&, Foam::UList<Foam::Vector<double> >&) const::{lambda(int)#1}>(Foam::fvPatch::patchInternalField<Foam::Vector<double> >(Foam::UList<Foam::Vector<double> > const&, Foam::UList<int> const&, Foam::UList<Foam::Vector<double> >&) const::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0xe8f0f3] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<Foam::Vector<double> > > Foam::fvPatch::patchInternalField<Foam::Vector<double> >(Foam::UList<Foam::Vector<double> > const&) const in fvPatchTemplates.C:69 [0xe60f23] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::Cn() const in fvPatch.C:128 [0x10a9371] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatch::delta() const in coupledFvPatch.C:42 [0x10b01b7] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatch::makeWeights(Foam::Field<double>&) const in cyclicFvPatch.C:50 [0x10b44b0] in libfiniteVolume.so
+=========         Host Frame: Foam::basicFvGeometryScheme::weights() const in basicFvGeometryScheme.C:138 [0xf6dccf] in libfiniteVolume.so
+=========         Host Frame: Foam::surfaceInterpolation::weights() const in surfaceInterpolation.C:109 [0xfc0d71] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::weights() const in fvPatch.C:198 [0x10aa060] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666d0] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_3dotINS_6VectorIdEES4_EEvRNS_5FieldINS_12innerProductIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::dot<Foam::Vector<double>, Foam::Vector<double> >(Foam::Field<Foam::innerProduct<Foam::Vector<double>, Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}>(Foam::dot<Foam::Vector<double>, Foam::Vector<double> >(Foam::Field<Foam::innerProduct<Foam::Vector<double>, Foam::Vector<double> >::type>&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0x10aafb3] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<Foam::innerProduct<Foam::Vector<double>, Foam::Vector<double> >::type> > Foam::operator&<Foam::Vector<double>, Foam::Vector<double> >(Foam::tmp<Foam::Field<Foam::Vector<double> > > const&, Foam::tmp<Foam::Field<Foam::Vector<double> > > const&) in FieldFunctions.C:1190 [0x10b6dad] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatch::makeWeights(Foam::Field<double>&) const in cyclicFvPatch.C:50 [0x10b44ca] in libfiniteVolume.so
+=========         Host Frame: Foam::basicFvGeometryScheme::weights() const in basicFvGeometryScheme.C:138 [0xf6dccf] in libfiniteVolume.so
+=========         Host Frame: Foam::surfaceInterpolation::weights() const in surfaceInterpolation.C:109 [0xfc0d71] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatch::weights() const in fvPatch.C:198 [0x10aa060] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666d0] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_4lerpIdEEvRNS_5FieldIT_EERKNS_5UListIS4_EESA_RKNS7_IdEEEUliE_EEvS4_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::lerp<double>(Foam::Field<double>&, Foam::UList<double> const&, Foam::UList<double> const&, Foam::UList<double> const&)::{lambda(int)#1}>(Foam::lerp<double>(Foam::Field<double>&, Foam::UList<double> const&, Foam::UList<double> const&, Foam::UList<double> const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0x153a0f3] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<double> > Foam::lerp<double>(Foam::tmp<Foam::Field<double> > const&, Foam::tmp<Foam::Field<double> > const&, Foam::UList<double> const&) in FieldFunctions.C:999 [0x16a85a2] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<double>::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x16666ed] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<double>::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1668ab4] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x16658d9] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<double>::New(Foam::fvPatch const&, Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x38353] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<double, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<double, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x31c26] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x333d7] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x339dc] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x33f70] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:350 [0x155a7] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldINS_6VectorIdEEE19patchNeighbourFieldERNS_5UListIS4_EEEUliE0_EEvT_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::cyclicFvPatchField<Foam::Vector<double> >::patchNeighbourField(Foam::UList<Foam::Vector<double> >&) const::{lambda(int)#2}>(Foam::cyclicFvPatchField<Foam::Vector<double> >::patchNeighbourField(Foam::UList<Foam::Vector<double> >&) const::{lambda(int)#2}, int) in cudaExecutor.cu:54 [0x16a6733] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<Foam::Vector<double> >::patchNeighbourField(Foam::UList<Foam::Vector<double> >&) const in cyclicFvPatchField.C:73 [0x1674209] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<Foam::Vector<double> >::patchNeighbourField() const in cyclicFvPatchField.C:168 [0x1673dfb] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<Foam::Vector<double> >::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x167132d] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<Foam::Vector<double> >::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1673674] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<Foam::Vector<double> >::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<Foam::Vector<double> > >::New(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x1670559] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<Foam::Vector<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x3a6d3] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x36766] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x3ca4f] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x3d31c] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x3d8b0] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:352 [0x1596e] in pintleReactiveFoam
+========= 
+========= CUDA API Error: Duplicate entry kernels named "_ZN4Foam4cuda12lambdaKernelIZNS_4lerpINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EESC_RKNS9_IdEEEUliE_EEvS6_i" detected. The Runtime will use the one that was registered first
+=========     Saved host backtrace up to driver entry point at error
+=========         Host Frame:  [0x2a802b] in libcuda.so.1
+=========         Host Frame:  [0x27296] in libcudart.so.13
+=========         Host Frame:  [0x2923a] in libcudart.so.13
+=========         Host Frame:  [0x29960] in libcudart.so.13
+=========         Host Frame:  [0x299d6] in libcudart.so.13
+=========         Host Frame: cudaLaunchKernel [0x82041] in libcudart.so.13
+=========         Host Frame: __pgiLaunchKernelFromStub in pgi_cudastublaunch.c:61 [0x15c5] in libcudanvhpc.so
+=========         Host Frame: void Foam::cuda::lambdaKernel<Foam::lerp<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&)::{lambda(int)#1}>(Foam::lerp<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&)::{lambda(int)#1}, int) in cudaExecutor.cu:54 [0x153a673] in libfiniteVolume.so
+=========         Host Frame: void Foam::lerp<Foam::Vector<double> >(Foam::Field<Foam::Vector<double> >&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<Foam::Vector<double> > const&, Foam::UList<double> const&) in FieldFunctions.C:73 [0x153dda4] in libfiniteVolume.so
+=========         Host Frame: Foam::tmp<Foam::Field<Foam::Vector<double> > > Foam::lerp<Foam::Vector<double> >(Foam::tmp<Foam::Field<Foam::Vector<double> > > const&, Foam::tmp<Foam::Field<Foam::Vector<double> > > const&, Foam::UList<double> const&) in FieldFunctions.C:999 [0x16a972e] in libfiniteVolume.so
+=========         Host Frame: Foam::coupledFvPatchField<Foam::Vector<double> >::evaluate(Foam::UPstream::commsTypes) in coupledFvPatchField.C:176 [0x1671369] in libfiniteVolume.so
+=========         Host Frame: Foam::cyclicFvPatchField<Foam::Vector<double> >::cyclicFvPatchField(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&, bool) in cyclicFvPatchField.C:74 [0x1673674] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<Foam::Vector<double> >::adddictionaryConstructorToTable<Foam::cyclicFvPatchField<Foam::Vector<double> > >::New(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchField.H:379 [0x1670559] in libfiniteVolume.so
+=========         Host Frame: Foam::fvPatchField<Foam::Vector<double> >::New(Foam::fvPatch const&, Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in fvPatchFieldNew.C:147 [0x3a6d3] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricBoundaryField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readField(Foam::DimensionedField<Foam::Vector<double>, Foam::volMesh> const&, Foam::dictionary const&) in GeometricBoundaryField.C:209 [0x36766] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readFields(Foam::dictionary const&) in GeometricField.C:61 [0x3ca4f] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::readFields() in GeometricField.C:102 [0x3d31c] in pintleReactiveFoam
+=========         Host Frame: Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>::GeometricField(Foam::IOobject const&, Foam::fvMesh const&, bool) in GeometricField.C:553 [0x3d8b0] in pintleReactiveFoam
+=========         Host Frame: main in pintleReactiveFoam.C:352 [0x1596e] in pintleReactiveFoam
+========= 
+REACTIVE_MODEL cells=8 species=4 reactions=0 liquids=2 estimatedHostBytes=24320 chemistry=0
+REACTIVE_SPECIES index=0 name=N2
+REACTIVE_SPECIES index=1 name=O2
+REACTIVE_SPECIES index=2 name=N2O
+REACTIVE_SPECIES index=3 name=IC3H7OH
+REACTIVE_STEP time=1.1891754562443536e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.00010812800000000001
+REACTIVE_STEP time=2.3783509124887071e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=7.1173000000000004e-05
+REACTIVE_STEP time=3.567526368733061e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=7.0123999999999995e-05
+REACTIVE_STEP time=4.7567018249774142e-05 dt=1.1891754562443532e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=7.1552999999999997e-05
+REACTIVE_CHEMISTRY rhsCalls=0 uvCalls=0 fixedStateCalls=0 structuredCalls=0 fallbackCalls=0 integrationFallbacks=0
+End
+========= ERROR SUMMARY: 15 errors

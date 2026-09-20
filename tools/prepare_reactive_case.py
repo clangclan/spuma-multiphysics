@@ -218,7 +218,7 @@ waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
         for k in range(ns):field(f"q{k}",q[:,k],"1 -3 0 0 0 0 0")
         field("rhoMomentum",q[:,ns:ns+3],"1 -2 -1 0 0 0 0")
         field("rhoTotalEnergy",q[:,-1],"1 -1 -2 0 0 0 0")
-        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'identitySchema 2; fingerprint "{backend.fingerprint}"; speciesCount {ns}; physicalModelHash "{backend.physical_hash}"; numericalPolicyHash "{backend.policy_hash}";\n')
+        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'identitySchema 2; fingerprint "{backend.fingerprint}"; speciesCount {ns}; closure HEM; physicalModelHash "{backend.physical_hash}"; numericalPolicyHash "{backend.policy_hash}";\n')
         put("physical-model-manifest.json",json.dumps(model_manifest(configuration,backend),indent=2)+"\n")
         put("capability-matrix.json",json.dumps(backend.capabilities(),indent=2)+"\n")
         np.savez_compressed(case/"initial-conserved.npz",q=q,x=x)

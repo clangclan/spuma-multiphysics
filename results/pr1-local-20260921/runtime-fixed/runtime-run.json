@@ -1,0 +1,638 @@
+{
+  "tests": [
+    {
+      "name": "runtime-cpu",
+      "returncode": 1,
+      "seconds": 10.639549428999999,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--thermo-workers",
+        "1",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cpu-fixed"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cpu-fixed",
+      "tests": [
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE UV recovery cell 0: Negative or non-finite conserved chemical species mass"
+          ],
+          "name": "negative_inventory",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+          ],
+          "name": "wrong_dimensions",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "changed_identity",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+          ],
+          "name": "missing_schema2_closure",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+          ],
+          "name": "nonideal_fick",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Require finite endTime strictly after start time"
+          ],
+          "name": "invalid_end_time",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+          ],
+          "name": "unsupported_runtime_edit",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+          ],
+          "name": "nonequilibrium_fixed_state",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "name": "checkpoint_hashes_quoted",
+          "passed": true
+        },
+        {
+          "continuous_steps": 20,
+          "field_relative_errors": {
+            "T": 1.6842630501321886e-15,
+            "alphaGas": 3.0753177782116836e-14,
+            "p": 1.0677327905820083e-14,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 6.561395470850595e-16,
+            "q3": 0.0,
+            "rhoMomentum": 1.0329914016177882e-14,
+            "rhoTotalEnergy": 6.773584995517539e-16
+          },
+          "final_time": 2e-05,
+          "name": "conserved_restart_and_clock",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cpu",
+      "returncode": 0,
+      "seconds": 6.330408286999955,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cpu-fixed"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cpu-fixed",
+      "tests": [
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+          ],
+          "name": "negative_environment_mass",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+          ],
+          "name": "invalid_volume_sum",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+          ],
+          "name": "mass_without_volume",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_chemistry",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_heat_transfer",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "closure_restart_mismatch",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "continuous_steps": 20,
+          "field_relative_errors": {
+            "T": 6.442254141269388e-15,
+            "alphaEnvironment": 0.0,
+            "betaEnvironment": 1.1102230246251565e-16,
+            "environmentE0": 6.688950195965559e-16,
+            "environmentE1": 4.813680372232288e-15,
+            "environmentT0": 3.0316490081969255e-15,
+            "environmentT1": 5.059064277319199e-14,
+            "p": 1.1234078557386262e-13,
+            "q0": 1.1102230246251565e-16,
+            "q1": 0.0,
+            "q2": 2.220446049250313e-16,
+            "q3": 0.0,
+            "q4": 1.0408340855860843e-17,
+            "q5": 0.0,
+            "q6": 0.0,
+            "q7": 1.1102230246251565e-16,
+            "rhoMomentum": 1.5245396859508633e-15,
+            "rhoTotalEnergy": 1.3741859079702582e-15
+          },
+          "final_time": 2e-05,
+          "name": "moving_contact_conserved_restart",
+          "passed": true
+        },
+        {
+          "common_total_energy": -5610301.29207471,
+          "homogeneous_T": 293.8057068073994,
+          "homogeneous_pressure": 99393.9656710273,
+          "meaning": "HEM thermally and molecularly equilibrates the inventories; ME keeps the two spatial environments separate",
+          "mechanical_T": 300.00000000000665,
+          "mechanical_pressure": 99999.99999999939,
+          "name": "unmixed_ME_versus_molecular_HEM",
+          "passed": true,
+          "separate_energy_error": 6.640089550492373e-16
+        }
+      ]
+    },
+    {
+      "name": "runtime-cuda",
+      "returncode": 1,
+      "seconds": 11.44423868900003,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--thermo-workers",
+        "2",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cuda-fixed"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cuda-fixed",
+      "tests": [
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Batch cell 0: Negative or non-finite conserved chemical species mass"
+          ],
+          "name": "negative_inventory",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+          ],
+          "name": "wrong_dimensions",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "changed_identity",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+          ],
+          "name": "missing_schema2_closure",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+          ],
+          "name": "nonideal_fick",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Require finite endTime strictly after start time"
+          ],
+          "name": "invalid_end_time",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+          ],
+          "name": "unsupported_runtime_edit",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "Create time",
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+          ],
+          "name": "nonequilibrium_fixed_state",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "name": "checkpoint_hashes_quoted",
+          "passed": true
+        },
+        {
+          "continuous_steps": 20,
+          "field_relative_errors": {
+            "T": 1.6842592591861723e-15,
+            "alphaGas": 9.325873406851315e-15,
+            "p": 1.0677327905820083e-14,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 6.561395470850595e-16,
+            "q3": 0.0,
+            "rhoMomentum": 1.0329914016177882e-14,
+            "rhoTotalEnergy": 6.773584995517539e-16
+          },
+          "final_time": 2e-05,
+          "name": "conserved_restart_and_clock",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cuda",
+      "returncode": 0,
+      "seconds": 6.327946727000381,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cuda-fixed"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cuda-fixed",
+      "tests": [
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+          ],
+          "name": "negative_environment_mass",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+          ],
+          "name": "invalid_volume_sum",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+          ],
+          "name": "mass_without_volume",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_chemistry",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+          ],
+          "name": "unsupported_heat_transfer",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "last_lines": [
+            "",
+            "Create mesh for time = 0",
+            "",
+            "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+          ],
+          "name": "closure_restart_mismatch",
+          "passed": true,
+          "returncode": 1
+        },
+        {
+          "continuous_steps": 20,
+          "field_relative_errors": {
+            "T": 5.305385760341843e-15,
+            "alphaEnvironment": 1.3234889800848443e-23,
+            "betaEnvironment": 6.938893903907228e-18,
+            "environmentE0": 1.226307535927019e-15,
+            "environmentE1": 4.813680372232288e-15,
+            "environmentT0": 5.4948638273569314e-15,
+            "environmentT1": 4.9832730521908174e-14,
+            "p": 1.1103111320318289e-13,
+            "q0": 1.1102230246251565e-16,
+            "q1": 0.0,
+            "q2": 2.220446049250313e-16,
+            "q3": 0.0,
+            "q4": 1.0408340855860843e-17,
+            "q5": 0.0,
+            "q6": 0.0,
+            "q7": 1.1102230246251565e-16,
+            "rhoMomentum": 1.524539685950863e-15,
+            "rhoTotalEnergy": 1.5459591464665409e-15
+          },
+          "final_time": 2e-05,
+          "name": "moving_contact_conserved_restart",
+          "passed": true
+        },
+        {
+          "common_total_energy": -5610301.29207471,
+          "homogeneous_T": 293.8057068073994,
+          "homogeneous_pressure": 99393.9656710273,
+          "meaning": "HEM thermally and molecularly equilibrates the inventories; ME keeps the two spatial environments separate",
+          "mechanical_T": 300.00000000000665,
+          "mechanical_pressure": 99999.99999999939,
+          "name": "unmixed_ME_versus_molecular_HEM",
+          "passed": true,
+          "separate_energy_error": 6.640089550492373e-16
+        }
+      ]
+    },
+    {
+      "name": "rollback",
+      "returncode": 0,
+      "seconds": 5.7806491040000765,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_rollback.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback-fixed"
+      ],
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback-fixed",
+      "tests": [
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cpu-full-step-rollback",
+          "partial_batch_failure": true,
+          "passed": true,
+          "retries": 1
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cpu-schema1-compatibility",
+          "passed": true
+        },
+        {
+          "field_max_scaled": {
+            "T": 2.532292508258402e-12,
+            "alphaGas": 6.398892526959798e-11,
+            "p": 1.8076157988917747e-11,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 1.312405873590164e-16,
+            "q3": 0.0,
+            "rhoMomentum": 1.997683009146134e-14,
+            "rhoTotalEnergy": 6.774252409640492e-16
+          },
+          "name": "cpu-cross-backend-restart",
+          "passed": true,
+          "resumed_backend": "cuda"
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cuda-full-step-rollback",
+          "partial_batch_failure": true,
+          "passed": true,
+          "retries": 1
+        },
+        {
+          "field_max_scaled": {
+            "T": 0.0,
+            "alphaGas": 0.0,
+            "p": 0.0,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 0.0,
+            "q3": 0.0,
+            "rhoMomentum": 0.0,
+            "rhoTotalEnergy": 0.0
+          },
+          "name": "cuda-schema1-compatibility",
+          "passed": true
+        },
+        {
+          "field_max_scaled": {
+            "T": 2.532292508258402e-12,
+            "alphaGas": 6.398892526959798e-11,
+            "p": 1.8076157988917747e-11,
+            "q0": 0.0,
+            "q1": 0.0,
+            "q2": 1.312405873590164e-16,
+            "q3": 0.0,
+            "rhoMomentum": 1.997683009146134e-14,
+            "rhoTotalEnergy": 6.774252409640492e-16
+          },
+          "name": "cuda-cross-backend-restart",
+          "passed": true,
+          "resumed_backend": "cpu"
+        }
+      ]
+    }
+  ]
+}

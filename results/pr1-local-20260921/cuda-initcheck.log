@@ -1,0 +1,9 @@
+========= COMPUTE-SANITIZER
+{"name": "V1", "status": "SKIPPED", "error": null}
+{"name": "V2-V4", "status": "SKIPPED", "error": null}
+{"name": "V3", "status": "SKIPPED", "error": null}
+{"name": "V5-V6", "status": "PASSED", "error": null}
+{"name": "legacy-gas", "status": "FAILED", "error": "\n*******************************************************************************\nCanteraError thrown by Application::findInputFile:\n\nInput file airNASA9.yaml not found in directories \n'.', \n'/home/jsw//analysis/spuma-multiphysics-pr-1/research/reactive-env/lib/python3.12/site-packages/cantera/data', \n'/home/jsw//analysis/spuma-multiphysics/research/reactive-env/share/cantera/data'\n\nTo fix this problem, either:\n    a) move the missing files into the local directory;\n    b) define environment variable CANTERA_DATA to\n         point to the directory containing the file.\n*******************************************************************************\n"}
+========= Error: process didn't terminate successfully
+========= Target application returned an error
+========= ERROR SUMMARY: 0 errors

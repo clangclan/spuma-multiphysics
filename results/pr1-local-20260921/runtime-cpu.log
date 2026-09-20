@@ -1,0 +1,16 @@
+{"name": "negative_inventory", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE UV recovery cell 0: Negative or non-finite conserved chemical species mass"]}
+{"name": "wrong_dimensions", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"]}
+{"name": "changed_identity", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"]}
+{"name": "missing_schema2_closure", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"]}
+{"name": "nonideal_fick", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"]}
+{"name": "invalid_end_time", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Require finite endTime strictly after start time"]}
+{"name": "unsupported_runtime_edit", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"]}
+{"name": "nonequilibrium_fixed_state", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"]}
+Traceback (most recent call last):
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_reactive_runtime.py", line 151, in <module>
+    if __name__=="__main__":main()
+                            ^^^^^^
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_reactive_runtime.py", line 92, in main
+    if any((rc1,rc2,rc3)):raise RuntimeError("Restart execution failed; inspect retained cases")
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Restart execution failed; inspect retained cases

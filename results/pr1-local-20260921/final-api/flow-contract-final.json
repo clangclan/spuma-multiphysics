@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "scope": "source-derived version mutation contract only; not a full SPUMA build",
+  "source_sha256": "29d1c5d5e9b441ee75d67de5187d008ebc19f2d4e6c815eb50778e2eac8c46d3",
+  "member": "uint64_t transportVersion=0;",
+  "signature": "void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift)",
+  "increments": 3,
+  "compiler": "c++ (Ubuntu 14.3.0-14ubuntu1) 14.3.0",
+  "compiler_exit_code": 0,
+  "diagnostic": "",
+  "non_const_step_and_non_mutable_version": true,
+  "translation_unit": "#include <cstdint>\n#include <vector>\nusing Array=std::vector<double>; using States=std::vector<int>;\nstruct FlowMutationContract {\nuint64_t transportVersion=0;\nvoid step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift)\n    {\n++transportVersion;\n++transportVersion;\n++transportVersion;\n}\n};\n"
+}

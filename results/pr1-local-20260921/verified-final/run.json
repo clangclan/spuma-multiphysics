@@ -1,0 +1,281 @@
+{
+  "tests": [
+    {
+      "name": "api",
+      "returncode": 0,
+      "seconds": 138.85284485500006,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "logs/run-pr1-api-final.py"
+      ]
+    },
+    {
+      "name": "matrix",
+      "returncode": 0,
+      "seconds": 602.5457257890002,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_backends.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--baseline-root",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/main-baseline",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-backend-matrix-final"
+      ]
+    },
+    {
+      "name": "runtime-cpu",
+      "returncode": 0,
+      "seconds": 12.19997930000045,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--thermo-workers",
+        "1",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cpu-verified"
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cpu",
+      "returncode": 0,
+      "seconds": 6.183079367000573,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cpu-verified"
+      ]
+    },
+    {
+      "name": "mechanical-cpu",
+      "returncode": 0,
+      "seconds": 30.35401974100023,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cpu",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cpu-verified",
+        "--case",
+        "contact:32:0:.1",
+        "--case",
+        "contact:32:2:.1",
+        "--case",
+        "contact:64:2:.1",
+        "--case",
+        "contact:32:-2:.1",
+        "--case",
+        "acoustic:64:0:.1",
+        "--case",
+        "acoustic:64:2:.1",
+        "--case",
+        "pure-acoustic:32:0:.1",
+        "--case",
+        "uniform:16:2:.1"
+      ]
+    },
+    {
+      "name": "runtime-cuda",
+      "returncode": 0,
+      "seconds": 12.701171564000106,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--thermo-workers",
+        "2",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-runtime-cuda-verified"
+      ]
+    },
+    {
+      "name": "mechanical-runtime-cuda",
+      "returncode": 0,
+      "seconds": 6.182759414000429,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical_runtime.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-runtime-cuda-verified"
+      ]
+    },
+    {
+      "name": "mechanical-cuda",
+      "returncode": 0,
+      "seconds": 30.34841108299952,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_mechanical.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-verified",
+        "--case",
+        "contact:32:0:.1",
+        "--case",
+        "contact:32:2:.1",
+        "--case",
+        "contact:64:2:.1",
+        "--case",
+        "contact:32:-2:.1",
+        "--case",
+        "acoustic:64:0:.1",
+        "--case",
+        "acoustic:64:2:.1",
+        "--case",
+        "pure-acoustic:32:0:.1",
+        "--case",
+        "uniform:16:2:.1"
+      ]
+    },
+    {
+      "name": "rollback-acoustic",
+      "returncode": 0,
+      "seconds": 5.679667680000421,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_rollback.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--kind",
+        "acoustic",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback-acoustic-verified"
+      ]
+    },
+    {
+      "name": "rollback-chemistry",
+      "returncode": 1,
+      "seconds": 5.127732511000431,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_rollback.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-backend-matrix-final/synthetic-pr",
+        "--kind",
+        "chemistry",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-rollback-chemistry-verified"
+      ]
+    },
+    {
+      "name": "coupled-repeat-2",
+      "returncode": 0,
+      "seconds": 41.487572265999916,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_backends.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--baseline-root",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/main-baseline",
+        "--case",
+        "coupled:4:2",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-coupled-repeat-2"
+      ]
+    },
+    {
+      "name": "coupled-repeat-3",
+      "returncode": 0,
+      "seconds": 41.74297653799931,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_backends.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--baseline-root",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/main-baseline",
+        "--case",
+        "coupled:4:2",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-coupled-repeat-3"
+      ]
+    },
+    {
+      "name": "acceptance",
+      "returncode": 0,
+      "seconds": 12.553304562000449,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/run_real_fluid_v21_local.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--cuda-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--local-plan",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/local-plan.json",
+        "--stages",
+        "smoke",
+        "cpu-integration",
+        "cuda-sanitizer",
+        "flow",
+        "benchmark",
+        "--output-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/verified-final/acceptance"
+      ]
+    },
+    {
+      "name": "flow-memcheck",
+      "returncode": 99,
+      "seconds": 3.975565357999585,
+      "command": [
+        "flock",
+        "-n",
+        "/home/jsw/cae-benchmark/run.lock",
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+        "-case",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+      ]
+    }
+  ],
+  "passed": false
+}

@@ -234,7 +234,7 @@ public:
         std::ostringstream out;out<<std::hex<<std::setfill('0');for(auto c:digest)out<<std::setw(2)<<int(c);return out.str();
     }
     void refreshPolicyHash() {
-        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
+        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1.1:reference-flash:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
             <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
         policyHash=hashText(policy.str());
     }

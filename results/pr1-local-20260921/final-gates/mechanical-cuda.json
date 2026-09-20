@@ -1,0 +1,512 @@
+{
+  "backend_sha256": "40bf3a7b1b230881bdabfea8e8814305ae9c7ca8db29f70efbe7ba6c5fe33158",
+  "passed": true,
+  "solver_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+  "tests": [
+    {
+      "name": "analytic-p-c-K-and-trace-environments",
+      "passed": true,
+      "seconds": 0.0027104640003017266,
+      "states": [
+        {
+          "alpha": 0,
+          "beta": 1,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            0.0,
+            2.220446049250313e-16,
+            0.0
+          ],
+          "pressure_residual": 0.0
+        },
+        {
+          "alpha": 1e-20,
+          "beta": 1,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 1.4551915228366853e-16,
+              "rho": 0.0
+            },
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            0.0,
+            0.0,
+            2.445028249710358e-36
+          ],
+          "pressure_residual": 1.1102230246251565e-16
+        },
+        {
+          "alpha": 1e-10,
+          "beta": 0.9999999999,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 1.3180420983877904e-16
+            },
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            2.220446049250313e-16,
+            2.220446049250313e-16,
+            3.2311742677852644e-26
+          ],
+          "pressure_residual": 0.0
+        },
+        {
+          "alpha": 0.01,
+          "beta": 0.99,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 2.9103830456733706e-16,
+              "rho": 1.3180420983877904e-16
+            },
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            1.1102230246251565e-16,
+            2.220446049250313e-16,
+            1.3010426069826053e-18
+          ],
+          "pressure_residual": 3.3306690738754696e-16
+        },
+        {
+          "alpha": 0.37,
+          "beta": 0.63,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 1.4551915228366853e-16,
+              "rho": 0.0
+            },
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 0.0,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            1.1102230246251565e-16,
+            0.0,
+            6.245004513516506e-17
+          ],
+          "pressure_residual": 1.1102230246251565e-16
+        },
+        {
+          "alpha": 0.9,
+          "beta": 0.1,
+          "environment_errors": [
+            {
+              "T": 1.6763044641265879e-09,
+              "e": 1.8432644187998307e-10,
+              "p": 1.6763043822720647e-09,
+              "rho": 0.0
+            },
+            {
+              "T": 9.81379081657416e-09,
+              "e": 2.407156247294174e-09,
+              "p": 9.813790820771828e-09,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            4.068740788731873e-09,
+            2.0697754621323838e-10,
+            1.1236644115175665e-09
+          ],
+          "pressure_residual": 1.1490095319643956e-08
+        },
+        {
+          "alpha": 0.9999999999,
+          "beta": 1e-10,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 1.4551915228366853e-16,
+              "rho": 0.0
+            },
+            {
+              "T": 1.1835011789046873e-08,
+              "e": 2.9029277206029532e-09,
+              "p": 1.1835011828225107e-08,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            5.917505041530546e-09,
+            4.440892098500626e-16,
+            1.3146550336472503e-18
+          ],
+          "pressure_residual": 1.1835011859417932e-08
+        },
+        {
+          "alpha": 1,
+          "beta": 1e-20,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 1.4551915228366853e-16,
+              "rho": 0.0
+            },
+            {
+              "T": 1.1835011789046873e-08,
+              "e": 2.9029277206029532e-09,
+              "p": 1.1835011828225107e-08,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            5.917504486419034e-09,
+            6.661338147750939e-16,
+            1.3146550332534235e-28
+          ],
+          "pressure_residual": 1.1835011859417932e-08
+        },
+        {
+          "alpha": 1,
+          "beta": 0,
+          "environment_errors": [
+            {
+              "T": 0.0,
+              "e": 0.0,
+              "p": 1.4551915228366853e-16,
+              "rho": 0.0
+            }
+          ],
+          "errors": [
+            1.5543122344752192e-15,
+            6.661338147750939e-16,
+            0.0
+          ],
+          "pressure_residual": 0.0
+        }
+      ]
+    },
+    {
+      "errors": [
+        8.653266991842656e-11,
+        6.254330386923357e-12,
+        4.013911425460037e-11
+      ],
+      "name": "bounded-energy-split-one-sided-derivative",
+      "passed": true,
+      "seconds": 0.001060797999798524
+    },
+    {
+      "analysis": {
+        "advection_amplitude_ratio": 0.934600835332278,
+        "advection_phase_error": 3.439059876361029e-17,
+        "advection_speed_relative_error": 5.473433789118602e-17,
+        "alpha_profile_L1": 0.0900004606390881,
+        "checks": {
+          "advected_profile_amplitude": true,
+          "advection_speed": true
+        },
+        "environment_T_errors_K": [
+          4.251170366842416e-07,
+          3.4615055710673914e-07
+        ],
+        "environment_volume_sum_error": 4.440892098500626e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32-0-.1/0.0003293432182351",
+        "inventory_volume_error": 8.010103691447057e-11,
+        "minimum_species": 0.0,
+        "passed": true,
+        "pressure_L1_final": 1.0786131016127243e-10,
+        "pressure_peak_all_steps": 4.3268777449867457e-10,
+        "residual_maxima": {
+          "energyResidual": 2.4969821236931446e-16,
+          "globalElementResidual": 3.427381108863164e-16,
+          "massResidual": 3.8882889109899423e-16,
+          "maxMechanicalResidual": 1.999517884598845e-09,
+          "maxUVResidual": 9.917065128627133e-13,
+          "maxVolumeResidual": 7.902567489281864e-13,
+          "momentumResidual": 1.5209407750137881e-18,
+          "speciesResidual": 3.456256809768838e-16
+        },
+        "retries": 0,
+        "steps": 30,
+        "temperature_peak_final": 2.393639420006366e-07,
+        "velocity_error": 6.47770075084877e-08
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32-0-.1",
+      "name": "contact:32:0:.1",
+      "passed": true,
+      "seconds": 3.3944033759999,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "advection_amplitude_ratio": 0.9403589139801449,
+        "advection_phase_error": 0.004007003544961847,
+        "advection_speed_relative_error": 0.006377344211674256,
+        "alpha_profile_L1": 0.07401345558101947,
+        "checks": {
+          "advected_profile_amplitude": true,
+          "advection_speed": true
+        },
+        "environment_T_errors_K": [
+          4.307116228119412e-07,
+          3.469305056569283e-07
+        ],
+        "environment_volume_sum_error": 4.440892098500626e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32-2-.1/0.00016467160911755",
+        "inventory_volume_error": 4.116651464158849e-11,
+        "minimum_species": 0.0,
+        "passed": true,
+        "pressure_L1_final": 1.6672932132144602e-10,
+        "pressure_peak_all_steps": 6.935066965141345e-10,
+        "residual_maxima": {
+          "energyResidual": 3.8462328552459366e-16,
+          "globalElementResidual": 3.427381108863164e-16,
+          "massResidual": 2.8082086579371806e-16,
+          "maxMechanicalResidual": 1.998120890966959e-09,
+          "maxUVResidual": 9.837180829975421e-13,
+          "maxVolumeResidual": 9.945377854592152e-13,
+          "momentumResidual": 1.942689690924798e-16,
+          "speciesResidual": 3.456256809768838e-16
+        },
+        "retries": 0,
+        "steps": 42,
+        "temperature_peak_final": 2.2686879219691036e-07,
+        "velocity_error": 8.637061860968686e-11
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32-2-.1",
+      "name": "contact:32:2:.1",
+      "passed": true,
+      "seconds": 4.30432358500002,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "advection_amplitude_ratio": 0.9696514703471237,
+        "advection_phase_error": 0.0010029999492701654,
+        "advection_speed_relative_error": 0.0015963239984726708,
+        "alpha_profile_L1": 0.04988826353108837,
+        "checks": {
+          "advected_profile_amplitude": true,
+          "advection_speed": true
+        },
+        "environment_T_errors_K": [
+          4.3071224808954867e-07,
+          3.488548259156232e-07
+        ],
+        "environment_volume_sum_error": 6.661338147750939e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-64-2-.1/0.00016467160911755",
+        "inventory_volume_error": 6.837552746219444e-11,
+        "minimum_species": 0.0,
+        "passed": true,
+        "pressure_L1_final": 1.6816074054071262e-10,
+        "pressure_peak_all_steps": 7.732268159088562e-10,
+        "residual_maxima": {
+          "energyResidual": 2.5641552368306234e-16,
+          "globalElementResidual": 2.5705358316473724e-16,
+          "massResidual": 2.5921926073266274e-16,
+          "maxMechanicalResidual": 2.036595003751529e-09,
+          "maxUVResidual": 9.985537385990247e-13,
+          "maxVolumeResidual": 9.989786775577159e-13,
+          "momentumResidual": 5.828069072774391e-16,
+          "speciesResidual": 2.5921926073266274e-16
+        },
+        "retries": 0,
+        "steps": 84,
+        "temperature_peak_final": 2.589000018815568e-07,
+        "velocity_error": 1.2586105883442513e-10
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-64-2-.1",
+      "name": "contact:64:2:.1",
+      "passed": true,
+      "seconds": 14.411676648999673,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "advection_amplitude_ratio": 0.9403589139801452,
+        "advection_phase_error": 0.004007003544962037,
+        "advection_speed_relative_error": 0.006377344211674558,
+        "alpha_profile_L1": 0.07401345558101924,
+        "checks": {
+          "advected_profile_amplitude": true,
+          "advection_speed": true
+        },
+        "environment_T_errors_K": [
+          4.307157155380992e-07,
+          3.4692942563196993e-07
+        ],
+        "environment_volume_sum_error": 4.440892098500626e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32--2-.1/0.00016467160911755",
+        "inventory_volume_error": 4.116673668619342e-11,
+        "minimum_species": 0.0,
+        "passed": true,
+        "pressure_L1_final": 1.667297133689516e-10,
+        "pressure_peak_all_steps": 6.935136909191897e-10,
+        "residual_maxima": {
+          "energyResidual": 2.5641552368306244e-16,
+          "globalElementResidual": 2.570535831647373e-16,
+          "massResidual": 3.024224708547733e-16,
+          "maxMechanicalResidual": 1.99813987578068e-09,
+          "maxUVResidual": 9.837180829975496e-13,
+          "maxVolumeResidual": 9.945377854592152e-13,
+          "momentumResidual": 2.914034536387197e-16,
+          "speciesResidual": 2.5921926073266283e-16
+        },
+        "retries": 0,
+        "steps": 42,
+        "temperature_peak_final": 2.2686487000100897e-07,
+        "velocity_error": 8.637099302957693e-11
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/contact-32--2-.1",
+      "name": "contact:32:-2:.1",
+      "passed": true,
+      "seconds": 4.305417226999907,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "alpha_amplitude_ratio": 0.9144750472407607,
+        "amplitude_ratio": 0.9144420558786738,
+        "environment_volume_sum_error": 6.661338147750939e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/acoustic-64-0-.1/0.000571945217528734",
+        "minimum_species": 0.0,
+        "passed": true,
+        "residual_maxima": {
+          "energyResidual": 7.598636363775203e-16,
+          "globalElementResidual": 3.6310212397384375e-16,
+          "massResidual": 6.185727757345678e-16,
+          "maxMechanicalResidual": 1.9993443789445564e-08,
+          "maxUVResidual": 3.0109702631051364e-13,
+          "maxVolumeResidual": 4.440892098500626e-16,
+          "momentumResidual": 4.294618723741634e-18,
+          "speciesResidual": 3.8660798483410487e-16
+        },
+        "retries": 0,
+        "speed_error": 0.0018224191348582552,
+        "speed_expected": 437.1048001418776,
+        "speed_measured": 436.30821199016066,
+        "steps": 157
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/acoustic-64-0-.1",
+      "name": "acoustic:64:0:.1",
+      "passed": true,
+      "seconds": 1.1689481989997148,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "alpha_amplitude_ratio": 0.9258475189729962,
+        "amplitude_ratio": 0.92585258709773,
+        "environment_volume_sum_error": 5.551115123125783e-16,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/acoustic-64-2-.1/0.000190648405842911",
+        "minimum_species": 0.0,
+        "passed": true,
+        "residual_maxima": {
+          "energyResidual": 5.445819617044281e-16,
+          "globalElementResidual": 4.357225487686125e-16,
+          "massResidual": 4.639295818009259e-16,
+          "maxMechanicalResidual": 1.9967861364378336e-08,
+          "maxUVResidual": 5.316705617590913e-15,
+          "maxVolumeResidual": 4.440892098500626e-16,
+          "momentumResidual": 5.92866562988781e-16,
+          "speciesResidual": 4.639295818009259e-16
+        },
+        "retries": 0,
+        "speed_error": 0.0016098594472041539,
+        "speed_expected": 1311.3144004256328,
+        "speed_measured": 1309.2033685498527,
+        "steps": 142
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/acoustic-64-2-.1",
+      "name": "acoustic:64:2:.1",
+      "passed": true,
+      "seconds": 1.1251295110000683,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "alpha_amplitude_ratio": null,
+        "amplitude_ratio": 0.8444031487403035,
+        "environment_volume_sum_error": 0.0,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/pure-acoustic-32-0-.1/0.00061333913043703",
+        "minimum_species": 0.0,
+        "passed": true,
+        "residual_maxima": {
+          "energyResidual": 5.851896248586026e-16,
+          "globalElementResidual": 5.027931588698543e-16,
+          "massResidual": 5.027931588698543e-16,
+          "maxMechanicalResidual": 0.0,
+          "maxUVResidual": 5.316631995130024e-15,
+          "maxVolumeResidual": 2.220446049250313e-16,
+          "momentumResidual": 2.981987830237585e-18,
+          "speciesResidual": 5.027931588698543e-16
+        },
+        "retries": 0,
+        "speed_error": 0.006341896089384624,
+        "speed_expected": 407.60484305291993,
+        "speed_measured": 405.0198554927484,
+        "steps": 75
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/pure-acoustic-32-0-.1",
+      "name": "pure-acoustic:32:0:.1",
+      "passed": true,
+      "seconds": 0.8732821600001444,
+      "transport_backend": "cuda"
+    },
+    {
+      "analysis": {
+        "environment_volume_sum_error": 0.0,
+        "final_directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/uniform-16-2-.1/0.000190648405842911",
+        "minimum_species": 0.0,
+        "passed": true,
+        "residual_maxima": {
+          "energyResidual": 0.0,
+          "globalElementResidual": 0.0,
+          "massResidual": 0.0,
+          "maxMechanicalResidual": 1.1102230246251565e-16,
+          "maxUVResidual": 1.3291707098080435e-15,
+          "maxVolumeResidual": 2.220446049250313e-16,
+          "momentumResidual": 0.0,
+          "speciesResidual": 0.0
+        },
+        "retries": 0,
+        "steps": 36,
+        "uniform_error": 0.0
+      },
+      "directory": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-mechanical-cuda-final/uniform-16-2-.1",
+      "name": "uniform:16:2:.1",
+      "passed": true,
+      "seconds": 0.8681694550000429,
+      "transport_backend": "cuda"
+    }
+  ]
+}

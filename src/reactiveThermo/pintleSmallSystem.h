@@ -37,18 +37,16 @@ Eigen::VectorXd solve(const Eigen::VectorXd& b,double* rcond=nullptr,double* res
 inline Eigen::VectorXd pintleSmallSolve(const Eigen::MatrixXd& D,const Eigen::VectorXd& b,
                                       double* rcond=nullptr,double* residual=nullptr)
 {return PintleSmallFactor(D).solve(b,rcond,residual);}
-// Flash retains its previous FP64 pivoted reference solve if equilibration is
-// rejected. A new tangent screening threshold must not silently remove an old
-// entropy candidate. The flash still applies its original nonlinear acceptance.
+// Keep the established flash correction and candidate ordering. Equilibration
+// here changes roundoff in phase recovery enough to trigger expensive dense
+// reintegration of trace species. Tangent/Jv APIs still use the scaled factor
+// above; flash keeps its original nonlinear acceptance and pivoted solve.
 inline Eigen::VectorXd pintleFlashSolve(const Eigen::MatrixXd& D,const Eigen::VectorXd& b)
 {
-    try {return pintleSmallSolve(D,b);}
-    catch(const std::exception&) {
-        const auto lu=D.fullPivLu();
-        if(!lu.isInvertible())throw std::runtime_error("Singular reference flash system");
-        const Eigen::VectorXd x=lu.solve(b);
-        if(!x.allFinite())throw std::runtime_error("Nonfinite reference flash correction");
-        return x;
-    }
+    const auto lu=D.fullPivLu();
+    if(!lu.isInvertible())throw std::runtime_error("Singular reference flash system");
+    const Eigen::VectorXd x=lu.solve(b);
+    if(!x.allFinite())throw std::runtime_error("Nonfinite reference flash correction");
+    return x;
 }
 #endif

@@ -64,10 +64,13 @@ def main():
                 if stage=='cuda-sanitizer':cmd=[env['compute-sanitizer'],'--tool','memcheck','--error-exitcode','99',*cmd,'--backend','cuda','--checks','V5-V6','legacy-gas','V6-recompute']
                 row.update(execute(cmd,ROOT,out/(stage+'.log'),a.timeout));row['tested_library_sha256']=digest(library)
                 evidence=out/(stage+'.json')
+                required={'V1','V2-V4','V3','V5-V6','legacy-gas','V6-recompute','internal-contract'} if stage=='smoke' else {'V2-V4','internal-contract'} if stage=='cpu-integration' else {'V5-V6','legacy-gas','V6-recompute'}
                 if evidence.exists():
                     tests=json.loads(evidence.read_text())['tests'];row['checks']=[{'name':t['name'],'status':t['status']} for t in tests]
-                    required={'V1','V2-V4','V3','V5-V6','legacy-gas','V6-recompute','internal-contract'} if stage=='smoke' else {'V2-V4','internal-contract'} if stage=='cpu-integration' else {'V5-V6','legacy-gas','V6-recompute'}
-                    if row['status']=='PASSED' and any(t['name'] in required and t['status']!='PASSED' for t in tests):row.update(status='BLOCKED',reason='required check skipped or unavailable')
+                    completed={t['name'] for t in tests if t['status']=='PASSED'}
+                    if row['status']=='PASSED' and (not required<=completed or any(t['name'] in required and t['status']!='PASSED' for t in tests)):
+                        row.update(status='BLOCKED',reason='required check missing, skipped or unavailable')
+                elif row['status']=='PASSED':row.update(status='FAILED',reason='required evidence file missing')
         else:
             if not a.local_plan:row['reason']='supply existing Flow cases, expected end time and comparison group in --local-plan'
             else:
