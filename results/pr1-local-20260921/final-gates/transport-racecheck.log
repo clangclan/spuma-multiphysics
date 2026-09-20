@@ -1,0 +1,3 @@
+========= COMPUTE-SANITIZER
+{"passed": true, "tests": 21, "backend": "cuda"}
+========= RACECHECK SUMMARY: 0 hazards displayed (0 errors, 0 warnings)

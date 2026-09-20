@@ -1,8 +1,14 @@
+> 2026-09-19: [실유체 최적화 v2 구현 보고서](docs/real-fluid-optimization/implementation-status.md) — 이번 변경·간단한 코드 검증·미구현 후속 단계.
+
 # Pintle용 SPUMA GPU 다중물리 솔버
 
 실제 3,094,455셀 Pintle 체크포인트에서 실행하는 압축성·비등온 3상 VOF 개발판이다. 액체 IPA, Peng–Robinson N₂O, 이상기체 air의 공통 속도·온도를 풀고 WALE LES를 사용한다. N₂O와 air는 별도 체적분율로 수송하고 가스–가스 계면 압축은 끈다. 분자 확산, 증발·응축, 화학종 수송, 연소는 구현하지 않았다. 여기서 3상은 수치적으로 구분한 세 재료를 뜻한다. 고정 격자·global Euler·단일 NVIDIA GPU가 현재 검증 범위다.
 
 핵심 CUDA 연산과 물성 포트는 메인 에이전트가 작성했다. 별도 GPT 5.6 Sol xHigh 에이전트가 작성한 벤치마크 도구는 메인이 전체 검토하고 실제 실행 중 발견한 CLI·진단 문제를 수정했다. 원본 Pintle 및 SPUMA 설치는 수정하지 않고 이 디렉터리에 별도 소스·라이브러리·실행파일을 둔다.
+
+별도 반응·상변화 연구 솔버는 [ReactiveFoam 문서](README.reactive-phase.ko.md)에 설명한다. [2026-09-12 GPU 수송·희소 화학 포팅](README.reactive-gpu-sparse.ko.md)은 선택 가능한 새 경로이며, 아래 ColdFoam의 기존 GPU 성능 측정과 구분한다.
+
+ReactiveFoam의 최신 변경은 [MFC·PeleC 구조를 참고한 GPU 수송 물성 계산](README.reactive-mfc-pele.ko.md)에 있다. 앞선 [컴파일 오류 수정](README.reactive-error-fixes.ko.md)과 [준비 비용 개선](README.reactive-review.ko.md)은 당시 기록으로 구분했다.
 
 ## 실행
 

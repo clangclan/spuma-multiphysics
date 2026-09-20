@@ -35,6 +35,18 @@ class PhaseProperties(C.Structure):
         return {name: getattr(self, name) for name, _ in self._fields_}
 
 
+class GasThermoSpecies(C.Structure):
+    _fields_ = [("regionOffset",C.c_uint64),("regionCount",C.c_uint64),("gasConstant",C.c_double),("polynomial",C.c_int)]
+
+
+class GasThermoRegion(C.Structure):
+    _fields_ = [("minimumTemperature",C.c_double),("maximumTemperature",C.c_double),("coefficient",C.c_double*9)]
+
+
+class GasPartition(C.Structure):
+    _fields_ = [("liquidMass", C.c_double*2)]
+
+
 class ChemicalStats(C.Structure):
     _fields_ = [(name, C.c_ulonglong) for name in (
         "rhsCalls", "uvCalls", "fixedStateCalls", "jacobianCalls", "structuredCalls", "fallbackCalls")]
@@ -46,6 +58,21 @@ class MechanicalState(C.Structure):
 
     def copy(self):
         return MechanicalState.from_buffer_copy(self)
+
+
+class SparseStats(C.Structure):
+    _fields_ = [(name, C.c_ulonglong) for name in (
+        "setups", "products", "preconditioners", "preconditionerSolves",
+        "sparseIntegrations", "denseIntegrations", "denseFallbacks", "nonzeros")]
+
+
+class ChemicalProfile(C.Structure):
+    _fields_ = [(n, C.c_ulonglong) for n in (
+        "jvSetups", "preconditionerSetups", "jacobianCacheHits", "patternBuilds",
+        "preconditionerReuses", "symbolicAnalyses", "numericFactorizations",
+        "workspaceCreates", "workspaceReinitializations", "factorNonzeros")] + [
+        (n, C.c_double) for n in ("thermoSeconds", "kineticsSeconds", "csrSeconds",
+                                  "symbolicSeconds", "factorSeconds", "solveSeconds")]
 
 
 class Backend:
@@ -70,6 +97,9 @@ class Backend:
             "recover": ([void, ptr, double, C.c_int, C.POINTER(State)], C.c_int),
             "recover_mechanical": ([void, ptr, ptr, double, double, double, C.POINTER(MechanicalState)], C.c_int),
             "set_chemical_jacobian": ([void, C.c_int], C.c_int),
+            "set_chemical_linear_solver": ([void, C.c_int], C.c_int),
+            "sparse_stats": ([void, C.c_int, C.POINTER(SparseStats)], C.c_int),
+            "chemical_sparse_jvp": ([void, ptr, double, C.POINTER(State), ptr, ptr], C.c_int),
             "chemical_stats": ([void, C.c_int, C.POINTER(ChemicalStats)], C.c_int),
             "chemical_integration_fallbacks": ([void], C.c_ulonglong),
             "chemical_jacobian": ([void, ptr, double, C.c_int, C.POINTER(State), ptr, C.POINTER(C.c_int)], C.c_int),
@@ -79,6 +109,13 @@ class Backend:
         for name, (args, result) in specs.items():
             function = getattr(self.lib, f"pintle_rt_{name}")
             function.argtypes, function.restype = args, result
+        if hasattr(self.lib, "pintle_rt_chemical_profile"):
+            self.lib.pintle_rt_chemical_profile.argtypes = [void, C.c_int, C.POINTER(ChemicalProfile)]
+            self.lib.pintle_rt_chemical_profile.restype = C.c_int
+        if hasattr(self.lib, "pintle_rt_export_gas_thermo"):
+            self.lib.pintle_rt_export_gas_thermo.argtypes = [void, C.POINTER(GasThermoSpecies), C.c_size_t,
+                C.POINTER(GasThermoRegion), C.c_size_t, C.POINTER(C.c_size_t)]
+            self.lib.pintle_rt_export_gas_thermo.restype = C.c_int
         error = C.create_string_buffer(8192)
         self.handle = self.lib.pintle_rt_create(str(self.configuration).encode(), error, len(error))
         if not self.handle:
@@ -162,8 +199,35 @@ class Backend:
         self.check(self.lib.pintle_rt_gas_enthalpies(self.handle, self.pointer(q), C.byref(state), self.pointer(values)))
         return values
 
+    def export_gas_thermo(self):
+        count=C.c_size_t()
+        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,None,0,None,0,C.byref(count)))
+        records=(GasThermoSpecies*self.ns)();regions=(GasThermoRegion*count.value)()
+        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,records,self.ns,regions,len(regions),C.byref(count)))
+        return records,regions
+
     def set_chemical_jacobian(self, structured=True):
         self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))
+
+    def set_chemical_linear_solver(self, mode="dense"):
+        modes = {"dense": 0, "sparse": 1, "auto": 2, "matrixFree": 3, "matrixFreeWoodbury": 4}
+        self.check(self.lib.pintle_rt_set_chemical_linear_solver(self.handle, modes[mode]))
+
+    def chemical_profile(self, reset=False):
+        result = ChemicalProfile()
+        self.check(self.lib.pintle_rt_chemical_profile(self.handle, int(reset), C.byref(result)))
+        return {name: getattr(result, name) for name, _ in result._fields_}
+
+    def sparse_stats(self, reset=False):
+        result = SparseStats()
+        self.check(self.lib.pintle_rt_sparse_stats(self.handle, int(reset), C.byref(result)))
+        return {name: getattr(result, name) for name, _ in result._fields_}
+
+    def chemical_sparse_jvp(self, q, energy, guess, direction):
+        q, direction, result = self.vector(q), self.vector(direction), np.empty(self.ns)
+        self.check(self.lib.pintle_rt_chemical_sparse_jvp(self.handle, self.pointer(q), energy,
+                   C.byref(guess), self.pointer(direction), self.pointer(result)))
+        return result
 
     def chemical_stats(self, reset=False):
         result = ChemicalStats()

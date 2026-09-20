@@ -1,0 +1,303 @@
+{
+  "schema": "spuma-rf21-local-1",
+  "environment": {
+    "WM_PROJECT_DIR": "/home/jsw/cae-gpu-pr1-compatible/spuma",
+    "WM_OPTIONS": "linux64NvidiaDPInt32Opt",
+    "CUDA_HOME": "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/cuda",
+    "CUDA_VISIBLE_DEVICES": null,
+    "nvcc": "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/compilers/bin/nvcc",
+    "wmake": "/home/jsw/cae-gpu-pr1-compatible/spuma/wmake/wmake",
+    "compute-sanitizer": "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/compilers/bin/compute-sanitizer",
+    "gpu_query": {
+      "returncode": 0,
+      "stdout": "NVIDIA GeForce RTX 5080, 12.0, 595.91.07\n",
+      "stderr": ""
+    }
+  },
+  "libraries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so": "40bf3a7b1b230881bdabfea8e8814305ae9c7ca8db29f70efbe7ba6c5fe33158",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so": "733db21bb64ad8432324f7d86ddbf338e95b53eecd142f366501963f4c4934c3"
+  },
+  "tests": [
+    {
+      "stage": "smoke",
+      "status": "PASSED",
+      "returncode": 0,
+      "wall_seconds": 4.577494183999988,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/smoke.json",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract"
+      ],
+      "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/smoke.log",
+      "log_sha256": "95fd4c7691f8565f16fe777e3499b5f8cfcc8b73d6fc4a4741ccba71647201a0",
+      "tested_library_sha256": "733db21bb64ad8432324f7d86ddbf338e95b53eecd142f366501963f4c4934c3",
+      "checks": [
+        {
+          "name": "V1",
+          "status": "PASSED"
+        },
+        {
+          "name": "V2-V4",
+          "status": "PASSED"
+        },
+        {
+          "name": "V3",
+          "status": "PASSED"
+        },
+        {
+          "name": "V5-V6",
+          "status": "PASSED"
+        },
+        {
+          "name": "legacy-gas",
+          "status": "PASSED"
+        },
+        {
+          "name": "V6-recompute",
+          "status": "PASSED"
+        },
+        {
+          "name": "internal-contract",
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "stage": "cpu-integration",
+      "status": "PASSED",
+      "returncode": 0,
+      "wall_seconds": 0.16438985600007072,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/cpu-integration.json",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--checks",
+        "V2-V4",
+        "internal-contract"
+      ],
+      "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/cpu-integration.log",
+      "log_sha256": "86b43671d04867f261bb055357ec70d9bbe09d1a3da6dd45da23a03e869e491c",
+      "tested_library_sha256": "733db21bb64ad8432324f7d86ddbf338e95b53eecd142f366501963f4c4934c3",
+      "checks": [
+        {
+          "name": "V1",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V2-V4",
+          "status": "PASSED"
+        },
+        {
+          "name": "V3",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V5-V6",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "legacy-gas",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V6-recompute",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "internal-contract",
+          "status": "PASSED"
+        }
+      ]
+    },
+    {
+      "stage": "cuda-sanitizer",
+      "status": "PASSED",
+      "returncode": 0,
+      "wall_seconds": 6.23423379299993,
+      "command": [
+        "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/compilers/bin/compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/cuda-sanitizer.json",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute"
+      ],
+      "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/cuda-sanitizer.log",
+      "log_sha256": "9c142c4e9718f791c51d848c13bffc333ea770fd4ff388c2bdc3e3d533aac0bb",
+      "tested_library_sha256": "ef91a2255d1a5ae1743d1537088e21d5d1b56c1983a91e7730af17d413c3ebb6",
+      "checks": [
+        {
+          "name": "V1",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V2-V4",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V3",
+          "status": "SKIPPED"
+        },
+        {
+          "name": "V5-V6",
+          "status": "PASSED"
+        },
+        {
+          "name": "legacy-gas",
+          "status": "PASSED"
+        },
+        {
+          "name": "V6-recompute",
+          "status": "PASSED"
+        },
+        {
+          "name": "internal-contract",
+          "status": "SKIPPED"
+        }
+      ]
+    },
+    {
+      "stage": "flow",
+      "status": "PASSED",
+      "runs": [
+        {
+          "status": "PASSED",
+          "returncode": 0,
+          "wall_seconds": 0.36513344000013603,
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cpu"
+          ],
+          "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+          "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/flow-0.log",
+          "log_sha256": "eba058c8054f82493c1372eeff1c80bb9ce237a0bc38e15ca492744fcb785749",
+          "physical_end_time": 4.756701824977414e-05,
+          "source_executable_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+          "profile_lines": [
+            "REACTIVE_PROFILE_V21 scope=\"prototype\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_PROFILE_V21 scope=\"combined\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0"
+          ],
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cpu"
+        },
+        {
+          "status": "PASSED",
+          "returncode": 0,
+          "wall_seconds": 0.3651638380001714,
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+          ],
+          "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+          "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/flow-1.log",
+          "log_sha256": "a67d47ba8fed71ce790d1fb8dde7d650bcb9a3a546ceb5f98558fe4783d95dfc",
+          "physical_end_time": 4.756701824977414e-05,
+          "source_executable_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+          "profile_lines": [
+            "REACTIVE_PROFILE_V21 scope=\"prototype\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_PROFILE_V21 scope=\"combined\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_TRANSPORT_V21 layoutTiles=48 layoutLaunches=48 memcpyCalls=104 payloadBytes=19688 nasaValidationEvaluations=0 nasaFaceEvaluations=0 detailedGasCounters=0 temperatureBasisBuilds=0 temperatureBasisBytes=0 pinnedBytes=128 deviceStagingBytes=128 slotCells=2 slots=1 blockThreads=256 eventWaits=48 failedCalls=0 stageBarrier=full closureDownloadsPerRK=2 overlapValidated=0",
+            "REACTIVE_MEMORY liveBytes=3864 peakBytes=3864 bridgeBytes=128 conservedWorkspaceBytes=1024 gasWorkspaceBytes=0 rhsWorkspaceBytes=0 d2dBytes=0 synchronizations=37",
+            "REACTIVE_TRANSPORT allocatedBytes=3864 uploadedBytes=14984 downloadedBytes=4704 kernelLaunches=124 stages=8 stepQueries=12"
+          ],
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+        }
+      ]
+    },
+    {
+      "stage": "benchmark",
+      "status": "PASSED",
+      "runs": [
+        {
+          "status": "PASSED",
+          "returncode": 0,
+          "wall_seconds": 0.36499150200006625,
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cpu"
+          ],
+          "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+          "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/benchmark-0.log",
+          "log_sha256": "7dc1f4acfb14cea5909449a8b57982fc109cebfa976506757dc19388e5e8738f",
+          "physical_end_time": 4.756701824977414e-05,
+          "source_executable_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+          "profile_lines": [
+            "REACTIVE_PROFILE_V21 scope=\"prototype\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_PROFILE_V21 scope=\"combined\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0"
+          ],
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cpu"
+        },
+        {
+          "status": "PASSED",
+          "returncode": 0,
+          "wall_seconds": 0.3646670040002391,
+          "command": [
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+            "-case",
+            "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+          ],
+          "cwd": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1",
+          "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/final-gates/acceptance/benchmark-1.log",
+          "log_sha256": "5884db1dd33d4105b01f99956e9a4f6213f6ebd3af5b4e82fc9e55c4077704cb",
+          "physical_end_time": 4.756701824977414e-05,
+          "source_executable_sha256": "cf0fd4a51e2e37dbee3a87febf010dd0f64cc31fe31d014f5359d7bd9096a671",
+          "profile_lines": [
+            "REACTIVE_PROFILE_V21 scope=\"prototype\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_PROFILE_V21 scope=\"combined\" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0",
+            "REACTIVE_TRANSPORT_V21 layoutTiles=48 layoutLaunches=48 memcpyCalls=104 payloadBytes=19688 nasaValidationEvaluations=0 nasaFaceEvaluations=0 detailedGasCounters=0 temperatureBasisBuilds=0 temperatureBasisBytes=0 pinnedBytes=128 deviceStagingBytes=128 slotCells=2 slots=1 blockThreads=256 eventWaits=48 failedCalls=0 stageBarrier=full closureDownloadsPerRK=2 overlapValidated=0",
+            "REACTIVE_MEMORY liveBytes=3864 peakBytes=3864 bridgeBytes=128 conservedWorkspaceBytes=1024 gasWorkspaceBytes=0 rhsWorkspaceBytes=0 d2dBytes=0 synchronizations=37",
+            "REACTIVE_TRANSPORT allocatedBytes=3864 uploadedBytes=14984 downloadedBytes=4704 kernelLaunches=124 stages=8 stepQueries=12"
+          ],
+          "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+        }
+      ]
+    }
+  ],
+  "physics_changed": false,
+  "known_unresolved": [
+    "HEM contact campaign must retain its known-failure classification; no automatic waiver",
+    "413-species high-pressure PR and nonideal diffusion remain unsupported without physical data"
+  ],
+  "all_requested_gates_passed": true
+}

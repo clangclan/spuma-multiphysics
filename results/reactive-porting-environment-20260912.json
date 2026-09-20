@@ -1,0 +1,61 @@
+{
+  "baseline_commit": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "baseline_tree": "17c09d52cd349b7a63396a8d3386b1368c7160cf",
+  "date": "2026-09-12",
+  "system": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "original_experiment_host": false,
+  "spuma_build_available": false,
+  "cuda_device_available": false,
+  "cuda_runtime_probe_error": "CUDA driver version is insufficient for CUDA runtime version",
+  "gpu_performance_measured": false,
+  "transport_cuda_compilation": "passed; CUDA 13.4.59, compute_80 + sm_80, no device execution",
+  "chemistry_local_test_runtime": {
+    "cantera": "3.2.0 PyPI wheel",
+    "sundials": "7.4.0; wheel exports plus upstream Dense solver and dense factorization compiled locally",
+    "eigen": "3.4.1",
+    "fmt_headers": "11.2.0",
+    "coolprop": "6.7.0"
+  },
+  "original_pinned_environment_reproduced": false,
+  "share_links": [
+    "https://chatgpt.com/share/6aa4e705-b7bc-83e8-b246-28524ed275d0",
+    "https://chatgpt.com/share/6aa4e72b-b6a0-83e8-a457-27baae3eed0f"
+  ],
+  "share_retrieval": "Both conversations read from public HTML payload; Personal Context and web text fetch were unavailable",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "new_source_sha256": {
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "3211eb071f08a495be92de6edf5b6dfc19a0c3531cd9045b6c2c83793c39bbfc",
+    "src/reactiveTransport/pintleReactiveTransport.h": "421a240670599fe8877a90af44379c4fc53f65370eae57fbd7dff328673419f0",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleTransportKernels.h": "0370ee051ee9045371cb45a94c9bbedd4472f7f66412961025b2992920a97b9e",
+    "src/reactiveThermo/pintleSparseJacobian.h": "c49d75c3594d4d1dc3007dcffa1ef87eb65184505902f3a6f01b28650d91048b",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "e7dc5fc1db1d42d30419c1c6034f31d13dafa8e2e209e0c0cf8eb4c5d62d42bd",
+    "src/reactiveThermo/pintleReactiveThermo.h": "17fe6e1ce28b18156c357bb39c51ca712097bb2c5a2f9c2b4021d0a99d58d7c3",
+    "src/reactiveFoam/pintleReactiveFoam.C": "45d72c4e79501a58181e2cd4a41665e5d0805187561bc515fbce44fbeb2454b9",
+    "src/reactiveFoam/Make/files": "cc1b95bef3146eb427824871dd3d98bf08776c74b0c89c5fd634e4110ecd1df3",
+    "src/reactiveFoam/Make/options": "8bf5dce561755e6049d1f9cd7ee3926ae6e750c85afd3d181d1959366db356d3"
+  },
+  "original_lock_versions": {
+    "eigen": "5.0.1",
+    "sundials": "7.5.0",
+    "reproduced": false
+  },
+  "mechanism_revision": "640d5b492d849e33c08bfbbd9d3de25dd074c9a4",
+  "input_sha256": {
+    "research/reactive-thermo/chemistry-config.yaml": "49ed8348a9ceb5eec7dfe07fc834e6e33764fa78f7b5c6f7e1a56b67fa239e0e",
+    "research/reactive-thermo/chemistry-ideal.yaml": "a951a70b92c126e4603bc60860cda5dbc28b6ad354f665578a747a3097588038",
+    "research/reactive-thermo/cold-pr-config.yaml": "4e3986407afc1306e25d65320bc5b37f9f6b97dd04dea96982abb2afbb733aaa",
+    "research/reactive-thermo/cold-pr.yaml": "6fece55c8f17c4f195d00394d3097bab585e8d80a2e9dc5c5fca0d8615fce563",
+    "research/reactive-thermo/reactive-dilute-config.yaml": "5074538f218316c65aedc1b17b0b8295c6f699d5c0904963854bab05d1cb51a6",
+    "research/reactive-thermo/manifest.json": "02a3518d133d0e4587c64b376b2de9abf1ada339b8c3af175f71f8737d318286",
+    "research/creck-converted/mechanism.yaml": "133e4b6beff3c7bcf5d15bdd1603d68de605d6cd24db0a57b912ef7a3b96f124"
+  },
+  "validation_script_sha256": {
+    "tools/validate_reactive_transport.py": "74124a19eab347367b765660587fb1c3e1fb7c11a20a700223a112039b2779a9",
+    "tools/validate_sparse_chemistry.py": "0b2923a2c207ea03a70040f5da384795e52f27f4dd7408e8e94241d9d5b801b9",
+    "tools/validate_chemical_jacobian.py": "363b3adf47fc6321f68138fe94eea24e066a319b6d44b4a657c08f7e6e127f3b"
+  },
+  "timings_are_performance_benchmarks": false,
+  "source_validation_note": "No production source changed between recorded numerical tests and final review; initial and final sparse tests used the same library. Final sparse checks explicitly assess strict rejection and auto reintegration at 1 bar."
+}

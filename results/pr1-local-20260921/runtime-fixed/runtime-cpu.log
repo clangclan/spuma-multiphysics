@@ -1,0 +1,18 @@
+{"name": "negative_inventory", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE UV recovery cell 0: Negative or non-finite conserved chemical species mass"]}
+{"name": "wrong_dimensions", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"]}
+{"name": "changed_identity", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"]}
+{"name": "missing_schema2_closure", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"]}
+{"name": "nonideal_fick", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"]}
+{"name": "invalid_end_time", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Require finite endTime strictly after start time"]}
+{"name": "unsupported_runtime_edit", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"]}
+{"name": "nonequilibrium_fixed_state", "passed": true, "returncode": 1, "last_lines": ["Create time", "", "Create mesh for time = 0", "", "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"]}
+{"name": "checkpoint_hashes_quoted", "passed": true}
+{"name": "conserved_restart_and_clock", "passed": true, "field_relative_errors": {"q0": 0.0, "q1": 0.0, "q2": 6.561395470850595e-16, "q3": 0.0, "rhoMomentum": 1.0329914016177882e-14, "rhoTotalEnergy": 6.773584995517539e-16, "p": 1.0677327905820083e-14, "T": 1.6842630501321886e-15, "alphaGas": 3.0753177782116836e-14}, "continuous_steps": 20, "final_time": 2e-05}
+Traceback (most recent call last):
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_reactive_runtime.py", line 157, in <module>
+    if __name__=="__main__":main()
+                            ^^^^^^
+  File "/home/jsw/문서/analysis/spuma-multiphysics-pr-1/tools/validate_reactive_runtime.py", line 128, in main
+    if rc or rz:raise RuntimeError("Graded flux run failed; inspect retained logs")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Graded flux run failed; inspect retained logs

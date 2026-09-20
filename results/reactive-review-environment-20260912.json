@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-12",
+  "baseline_commit": "fad4ecfd4d627c8903ee71dde25941a63268a767",
+  "original_experiment_baseline": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "review_sha256": "4c18275c363c06e1407c050d108a2fbe71959dd877eb21276dd990b313f8db30",
+  "original_experiment_host": false,
+  "system": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "spuma_build_available": false,
+  "cuda_compilation": "passed, CUDA 13.4.59, compute_80 + sm_80",
+  "cuda_execution_verified": false,
+  "cuda_probe_exit_code": 1,
+  "cuda_probe_error": "CUDA driver version is insufficient for CUDA runtime version",
+  "gpu_timings_measured": false,
+  "performance_benchmark": false,
+  "test_runtime": "Same separate Cantera 3.2.0/SUNDIALS 7.4.0/Eigen 3.4.1 environment as the initial PR, not the original pinned host",
+  "source_sha256": {
+    "src/reactiveFoam/Make/files": "cc1b95bef3146eb427824871dd3d98bf08776c74b0c89c5fd634e4110ecd1df3",
+    "src/reactiveFoam/Make/options": "8bf5dce561755e6049d1f9cd7ee3926ae6e750c85afd3d181d1959366db356d3",
+    "src/reactiveFoam/pintleReactiveFoam.C": "2e0ee28d089747292f18829f499d24fb17267c0b661c45c4c407e64747217e3d",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "8c8dc28c4fc71c65d3a7603743f756bf5c4ea7fa0b997192509df500f440e575",
+    "src/reactiveThermo/pintleReactiveThermo.h": "f81a30292bc91ede88d69b180505dc0c6f6eae3613e16424ce494e9189523de0",
+    "src/reactiveThermo/pintleSparseJacobian.h": "20033058c4e9497356f4c6120164cbb6a192d39e0069e4a2f275d4119c4b3aed",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "2a14f3877f46ec034171acfa47679ba3ae869257e9aa2364fa38735cc017ecef",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleReactiveTransport.h": "a4d1be99a4dd7bd11b1ea427c816c7dff165befe42ac1fcabb671ac0c3de9f56",
+    "src/reactiveTransport/pintleTransportKernels.h": "7c9d13a99258a47fb9680bb042560c184472431a2a637ed5e9070c567e820859",
+    "tools/build_reactive_backend.sh": "d85c8442144e37cd09a1a149aaa4f1832a67a1f9297582671bc3c124d8a4e89f",
+    "tools/reactive_backend.py": "482a5cbab19e6fc947717303823367e463c30b8ac96e146e91bd44961962964e",
+    "tools/test_reactive_sparse_cache.cpp": "d8693b3d5efdc74a81113013021a8eb6654473de349712a25ef5ed535e537b20",
+    "tools/validate_reactive_review.py": "6e628f19f408d9c0ccc2177fa93c78221d2980baf213aa6acca75202ae12605c",
+    "tools/validate_reactive_transport.py": "1a44e008e60c8b50e5022fecec1a141870c3bd60fb6cd6d68f898a69ddef9a02",
+    "tools/validate_sparse_chemistry.py": "1678587d59cee3e94ab1cf3cd1b4feb5d08a82835bc62cc7220744af54fb36b7"
+  },
+  "evidence_sha256": {
+    "reactive-review-transport-final-20260912.json": "73207135ba69c71c9718fcd8fc6af0fbd72083baa33ed680f5593b1444110240",
+    "reactive-review-sparse-20260912.json": "596b556bdc0cb64000a034473dfc69bdf63157f7e6f510196d5835f761ea40a9",
+    "reactive-review-expanded-final-20260912.json": "479d75bb8ea69b1455cf3c399a7d7b6fea9b7708f5634027f09aa1346ac227bc",
+    "reactive-review-chemical-regression-20260912.json": "0d99dee31d42f3db40196d4cdee93bba30c9dc700272caf3cc8a39938a9ce1e6"
+  }
+}

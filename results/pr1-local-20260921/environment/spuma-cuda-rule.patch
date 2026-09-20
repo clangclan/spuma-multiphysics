@@ -1,0 +1,11 @@
+--- /home/jsw/cae-gpu/src/spuma/wmake/rules/General/cuda	2026-09-09 19:24:12.201465845 +0900
++++ /home/jsw/cae-gpu-pr1-compatible/spuma/wmake/rules/General/cuda	2026-09-21 03:03:10.642772169 +0900
+@@ -37,7 +37,7 @@
+ 
+ cuFLAGS    = \
+     $(cuARCH) $(GFLAGS) $(cuWARN) $(cuOPT) $(cuDBUG) $(ptFLAGS) \
+-    $(FOAM_EXTRA_CXXFLAGS) $(CU_LIB_HEADER_DIRS)
++    $(filter-out -tp=%,$(FOAM_EXTRA_CXXFLAGS)) $(CU_LIB_HEADER_DIRS)
+ 
+ cutoo       = $(WM_SCHEDULER) $(NVCC) $(cuFLAGS) -c $< -o $@
+ 

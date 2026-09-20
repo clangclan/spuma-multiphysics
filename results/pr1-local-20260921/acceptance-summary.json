@@ -1,0 +1,132 @@
+{
+  "status": "READY_TO_MERGE_WITH_EXISTING_BASELINE_LIMITATIONS",
+  "base_sha": "50512cecdc7f8047f3ccbb8c60e05a43222e1cc3",
+  "initial_pr_sha": "ad2e178d6a9409094a891466a683051514f39bf1",
+  "latest_api_commands_passed": true,
+  "latest_api_commands": 8,
+  "whole_solver_runs": 81,
+  "whole_solver_comparisons": 63,
+  "paired_diffusion_checks": 12,
+  "whole_solver_regression_passed": true,
+  "maximum_field_scaled_error": 9.315522569188606e-08,
+  "maximum_species_Y_Linf": 3.265613075092988e-10,
+  "runtime_and_rollback": {
+    "runtime-cpu": {
+      "passed": true,
+      "checks": 14
+    },
+    "runtime-cuda": {
+      "passed": true,
+      "checks": 14
+    },
+    "mechanical-runtime-cpu": {
+      "passed": true,
+      "checks": 8
+    },
+    "mechanical-runtime-cuda": {
+      "passed": true,
+      "checks": 8
+    },
+    "mechanical-cpu": {
+      "passed": true,
+      "checks": 10
+    },
+    "mechanical-cuda": {
+      "passed": true,
+      "checks": 10
+    },
+    "rollback-acoustic": {
+      "passed": true,
+      "checks": 6
+    },
+    "rollback-chemistry": {
+      "passed": true,
+      "checks": 6
+    }
+  },
+  "coupled_repeated_performance": {
+    "main": {
+      "seconds": [
+        10.24184007599979,
+        8.286861270999907,
+        8.337814771000012
+      ],
+      "median_seconds": 8.337814771000012,
+      "integration_fallbacks": [
+        0,
+        0,
+        0
+      ]
+    },
+    "cpu": {
+      "seconds": [
+        8.184566799000095,
+        8.186011185000098,
+        8.18513970999993
+      ],
+      "median_seconds": 8.18513970999993,
+      "integration_fallbacks": [
+        0,
+        0,
+        0
+      ]
+    },
+    "cuda": {
+      "seconds": [
+        8.786644840000008,
+        8.738219390000268,
+        8.938362040000357
+      ],
+      "median_seconds": 8.786644840000008,
+      "integration_fallbacks": [
+        0,
+        0,
+        0
+      ]
+    },
+    "cuda-workers": {
+      "seconds": [
+        6.833148610000535,
+        6.833907496000393,
+        6.832813525000347
+      ],
+      "median_seconds": 6.833148610000535,
+      "integration_fallbacks": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "acceptance_runner_passed": true,
+  "full_app_explicit_api_and_memory_passed": true,
+  "standalone_transport_sanitizers": {
+    "tools": [
+      "memcheck",
+      "initcheck",
+      "synccheck",
+      "racecheck"
+    ],
+    "error_count": 0,
+    "evidence": "final-gates/run.json"
+  },
+  "known_baseline_limitations": {
+    "HEM_contact": {
+      "physical_accuracy_passed": false,
+      "baseline_reproduced": true,
+      "candidate_matches_baseline": true
+    },
+    "SPUMA_extended_CUDA_diagnostics": {
+      "unfiltered_passed": false,
+      "errors": 15,
+      "same_diagnostics_as_main": true,
+      "classification": "EXISTING_BASELINE_LIMITATION",
+      "evidence": "flow-sanitizer/validation.json"
+    }
+  },
+  "superseded_failures": {
+    "verified-final/rollback-chemistry.json": "The test shim targeted stage 1, but chemistry occupies that stage. Corrected the shim to inject into the second recovery batch and verified stage 2 and the chemical half-step rollback in rollback-final/chemistry.json.",
+    "verified-final/flow-memcheck.log": "Unfiltered extended diagnostics fail identically on main. Full memory and explicit API checks pass with no kernel filter; see flow-sanitizer/validation.json."
+  },
+  "required_PR_regression_gates_passed": true
+}

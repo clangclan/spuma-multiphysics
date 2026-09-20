@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "baseline_commit": "3c3cd49b33ba090b746ce787ca11181f18c50a55",
+  "branch": "codex/reactive-gpu-sparse-20260912",
+  "dirty_at_start": "",
+  "system": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "inputs": {
+    "/workspace/scratch/fc8943a4b789/upload/SPUMA_real_fluid_optimization_instructions_v2.ko(1).md": "c5b8ab654f14b0f43cc951b480c4c45134fa1ac6cc7b4e1eb5fd04facccdd18e",
+    "/workspace/scratch/fc8943a4b789/project_sources/01-report-1-.html": "6fd80e25c08ceaec8721f28fd767fc15e9ceb81d70e62fd5e6adba89c9e82486",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/chemistry-config.yaml": "49ed8348a9ceb5eec7dfe07fc834e6e33764fa78f7b5c6f7e1a56b67fa239e0e",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/chemistry-ideal.yaml": "a951a70b92c126e4603bc60860cda5dbc28b6ad354f665578a747a3097588038",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/cold-pr-config.yaml": "4e3986407afc1306e25d65320bc5b37f9f6b97dd04dea96982abb2afbb733aaa",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/cold-pr.yaml": "6fece55c8f17c4f195d00394d3097bab585e8d80a2e9dc5c5fca0d8615fce563",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/reactive-dilute-config.yaml": "5074538f218316c65aedc1b17b0b8295c6f699d5c0904963854bab05d1cb51a6"
+  },
+  "validation_scope": "User requests only brief mathematical/code checks. Full physics/GPU/campaign validation deferred to local environment."
+}

@@ -6,15 +6,21 @@ from pathlib import Path
 from decimal import Decimal
 import numpy as np
 import benchmark as b
-from prepare_mechanical_case import prepare,state_from_dict
+from prepare_mechanical_case import prepare as prepare_case,state_from_dict
 from reactive_backend import Backend,MechanicalState
 from run_reactive_campaign import read
 from validate_reactive_runtime import replace,internal
 
 
-def run(output,thermo_dir):
+def run(output,thermo_dir,transport_backend='cpu'):
     output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),
-        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so')};env=b.sourced_environment()
+        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),
+        'transport_backend':transport_backend};env=b.sourced_environment()
+    def prepare(*args,**kwargs):
+        result=prepare_case(*args,**kwargs)
+        with (Path(args[0])/'constant/reactiveProperties').open('a') as f:
+            f.write('\ntransportBackend '+transport_backend+';\n')
+        return result
     def record(name,passed,**details):
         entry=dict(name=name,passed=bool(passed),**details);report['tests'].append(entry)
         b.atomic_json(output/'validation.json',report);print(json.dumps(entry),flush=True)
@@ -35,7 +41,7 @@ def run(output,thermo_dir):
         ('mass_without_volume',lambda c:(internal(c/'0/alphaEnvironment',np.zeros(16)),internal(c/'0/betaEnvironment',np.ones(16))),'Absent environment must have exactly zero mass and volume'),
         ('unsupported_chemistry',lambda c:replace(c/'constant/reactiveProperties','chemistry false;','chemistry true;'),'require nonreacting inviscid'),
         ('unsupported_heat_transfer',lambda c:replace(c/'constant/reactiveProperties','thermalConductivity 0;','thermalConductivity 1;'),'require nonreacting inviscid'),
-        ('closure_restart_mismatch',lambda c:replace(c/'0/reactiveStateIdentity','closure mechanicalEquilibrium;','closure HEM;'),'fingerprint differs'),
+        ('closure_restart_mismatch',lambda c:replace(c/'0/reactiveStateIdentity','closure mechanicalEquilibrium;','closure HEM;'),'Legacy fingerprint/species/closure mismatch'),
     ]
     for name,modify,marker in guards:
         case=clone(base,name);modify(case);rc,log=execute(case)
@@ -68,6 +74,7 @@ def run(output,thermo_dir):
     report['passed']=all(e['passed'] for e in report['tests']);b.atomic_json(output/'validation.json',report);return report
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--thermo-dir',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--thermo-dir',type=Path,required=True)
+    p.add_argument('--transport-backend',choices=('cpu','cuda'),default='cpu');a=p.parse_args()
     if a.output.exists():raise SystemExit('Refusing to overwrite evidence')
-    report=run(a.output.resolve(),a.thermo_dir.resolve());raise SystemExit(0 if report['passed'] else 1)
+    report=run(a.output.resolve(),a.thermo_dir.resolve(),a.transport_backend);raise SystemExit(0 if report['passed'] else 1)

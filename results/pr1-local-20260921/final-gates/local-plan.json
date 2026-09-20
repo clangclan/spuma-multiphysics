@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cpu",
+      "executable": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+      "expected_end_time": 4.756701824977414e-05,
+      "comparison_group": "uniform-8-identical-model"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda",
+      "executable": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+      "expected_end_time": 4.756701824977414e-05,
+      "comparison_group": "uniform-8-identical-model"
+    }
+  ]
+}

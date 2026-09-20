@@ -1,0 +1,310 @@
+{
+  "head": "ad2e178d6a9409094a891466a683051514f39bf1",
+  "tests": [
+    {
+      "name": "rf21-cpu-fixed",
+      "returncode": 0,
+      "wall_seconds": 4.729449479999971,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cpu-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cpu-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cpu-fixed.json"
+    },
+    {
+      "name": "rf21-cuda-fixed",
+      "returncode": 0,
+      "wall_seconds": 4.628348646999939,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cuda-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cuda-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf21-cuda-fixed.json"
+    },
+    {
+      "name": "transport-cpu-fixed",
+      "returncode": 0,
+      "wall_seconds": 1.0174537760000248,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_transport.py",
+        "--library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cpu-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cpu-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cpu-fixed.json"
+    },
+    {
+      "name": "transport-cuda-fixed",
+      "returncode": 0,
+      "wall_seconds": 1.067339430000061,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_transport.py",
+        "--library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cuda-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cuda-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/transport-cuda-fixed.json"
+    },
+    {
+      "name": "thermo-fixed",
+      "returncode": 0,
+      "wall_seconds": 19.877751389999958,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_thermo.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/thermo-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/thermo-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/thermo-fixed.json"
+    },
+    {
+      "name": "chemical-jacobian-fixed",
+      "returncode": 0,
+      "wall_seconds": 38.68906034700012,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_chemical_jacobian.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/chemical-jacobian-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/chemical-jacobian-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/chemical-jacobian-fixed.json"
+    },
+    {
+      "name": "sparse-fixed",
+      "returncode": 0,
+      "wall_seconds": 43.039414554999894,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_sparse_chemistry.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/sparse-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/sparse-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/sparse-fixed.json"
+    },
+    {
+      "name": "review-cuda-fixed",
+      "returncode": 0,
+      "wall_seconds": 29.80594628699987,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_review.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--backend",
+        "cuda",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/review-cuda-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/review-cuda-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/review-cuda-fixed.json"
+    },
+    {
+      "name": "rf2-fixed",
+      "returncode": 0,
+      "wall_seconds": 0.5658165029999509,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v2.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf2-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf2-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/rf2-fixed.json"
+    },
+    {
+      "name": "flow-contract-fixed",
+      "returncode": 0,
+      "wall_seconds": 0.11405728099998669,
+      "command": [
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/validate_reactive_flow_contract.py",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/flow-contract-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/flow-contract-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/flow-contract-fixed.json"
+    },
+    {
+      "name": "cuda-memcheck-fixed",
+      "returncode": 0,
+      "wall_seconds": 6.231721698999991,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-memcheck-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-memcheck-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-memcheck-fixed.json"
+    },
+    {
+      "name": "cuda-initcheck-fixed",
+      "returncode": 0,
+      "wall_seconds": 5.533025389000159,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "initcheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-initcheck-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-initcheck-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-initcheck-fixed.json"
+    },
+    {
+      "name": "cuda-synccheck-fixed",
+      "returncode": 0,
+      "wall_seconds": 4.728630563000024,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "synccheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-synccheck-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-synccheck-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-synccheck-fixed.json"
+    },
+    {
+      "name": "cuda-racecheck-fixed",
+      "returncode": 0,
+      "wall_seconds": 30.4354149589999,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "racecheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env/bin/python",
+        "tools/check_real_fluid_v21.py",
+        "--thermo-dir",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-thermo",
+        "--thermo-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so",
+        "--contract-executable",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/check-real-fluid-v21-contract",
+        "--transport-library",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cuda.so",
+        "--backend",
+        "cuda",
+        "--checks",
+        "V5-V6",
+        "legacy-gas",
+        "V6-recompute",
+        "--output",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-racecheck-fixed.json"
+      ],
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-racecheck-fixed.log",
+      "output": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/results/pr1-local-20260921/fixed/cuda-racecheck-fixed.json"
+    }
+  ],
+  "environment": {
+    "cantera_prefix": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/reactive-env",
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2026 NVIDIA Corporation\nBuilt on Thu_Mar_19_11:12:51_PM_PDT_2026\nCuda compilation tools, release 13.2, V13.2.78\nBuild cuda_13.2.r13.2/compiler.37668154_0\n",
+    "gpu": "NVIDIA GeForce RTX 5080, 12.0, 595.91.07\n"
+  }
+}

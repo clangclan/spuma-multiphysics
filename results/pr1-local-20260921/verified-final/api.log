@@ -1,0 +1,8 @@
+{"name": "rf21-cpu-final", "returncode": 0, "wall_seconds": 4.579034443000182}
+{"name": "rf21-cuda-final", "returncode": 0, "wall_seconds": 4.5291305109999485}
+{"name": "thermo-final", "returncode": 0, "wall_seconds": 19.575420399999985}
+{"name": "chemical-jacobian-final", "returncode": 0, "wall_seconds": 37.1842196030002}
+{"name": "sparse-final", "returncode": 0, "wall_seconds": 42.895415354000306}
+{"name": "review-cuda-final", "returncode": 0, "wall_seconds": 29.313408299000457}
+{"name": "rf2-final", "returncode": 0, "wall_seconds": 0.5661842539993813}
+{"name": "flow-contract-final", "returncode": 0, "wall_seconds": 0.11458809099985956}

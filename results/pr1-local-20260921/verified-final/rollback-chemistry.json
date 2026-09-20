@@ -1,0 +1,80 @@
+{
+  "fault_shim_sha256": "5ca94db8e4b4c4cbf0f2514a87f8c640c63a2ed759d1cc97ed44175bbb2a40a7",
+  "kind": "chemistry",
+  "passed": false,
+  "solver_sha256": "94815c916934a12e564b8c5cc9af7a73d089dc452f22c808258416543f743b69",
+  "tests": [
+    {
+      "error": "Expected one partial-batch failure and retry",
+      "name": "cpu-full-step-rollback",
+      "passed": false
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cuda"
+    },
+    {
+      "error": "Expected one partial-batch failure and retry",
+      "name": "cuda-full-step-rollback",
+      "passed": false
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cpu"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASSED",
+  "scope": "source call-path review plus compiled extracted parser; NOT full Flow compile/run",
+  "source_sha256": "121e871a613b9b897b29cfcce85e81312d928bdba98c78b898b50743be7f9ca3",
+  "checks": {
+    "new_solver_parser": true,
+    "schema_helper_wired": true,
+    "pool_combined_profile": true,
+    "v21_transport_create": true,
+    "source_worker_path": true,
+    "attempt_costs_and_rollback": true,
+    "explicit_flash_download": true,
+    "preserved_nonideal_guard": true
+  },
+  "extracted_parser_test": true,
+  "full_flow_compile": "NOT_RUN"
+}

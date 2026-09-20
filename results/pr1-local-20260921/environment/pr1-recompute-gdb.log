@@ -1,0 +1,31 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+{"name": "V1", "status": "SKIPPED", "error": null}
+{"name": "V2-V4", "status": "SKIPPED", "error": null}
+{"name": "V3", "status": "SKIPPED", "error": null}
+{"name": "V5-V6", "status": "SKIPPED", "error": null}
+{"name": "legacy-gas", "status": "SKIPPED", "error": null}
+
+Program received signal SIGSEGV, Segmentation fault.
+___pthread_mutex_trylock (mutex=0x5a766290) at ./nptl/pthread_mutex_trylock.c:33
+warning: 33	./nptl/pthread_mutex_trylock.c: No such file or directory
+#0  ___pthread_mutex_trylock (mutex=0x5a766290) at ./nptl/pthread_mutex_trylock.c:33
+#1  0x00007fffe84f920a in pintle_transport_set_gas_thermo () from /home/jsw/문서/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so
+#2  0x00007ffff7fa5e52 in ffi_call_unix64 () from /home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env/lib/python3.12/lib-dynload/../../libffi.so.8
+#3  0x00007ffff7fa48ff in ffi_call_int () from /home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env/lib/python3.12/lib-dynload/../../libffi.so.8
+#4  0x00007ffff7fa5561 in ffi_call () from /home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env/lib/python3.12/lib-dynload/../../libffi.so.8
+#5  0x00007ffff76e66dd in _call_function_pointer (flags=<optimized out>, pProc=0x7fffe84f91b0 <pintle_transport_set_gas_thermo>, avalues=<optimized out>, atypes=<optimized out>, restype=<optimized out>, resmem=0x7fffffffbcf0, argcount=7, argtypecount=<optimized out>) at /usr/local/src/conda/python-split-3.12.14/Modules/_ctypes/callproc.c:932
+#6  _ctypes_callproc (pProc=0x7fffe84f91b0 <pintle_transport_set_gas_thermo>, argtuple=argtuple@entry=0x7fffe7792ec0, flags=<optimized out>, argtypes=<optimized out>, restype=<optimized out>, checker=0x0) at /usr/local/src/conda/python-split-3.12.14/Modules/_ctypes/callproc.c:1274
+#7  0x00007ffff76f05c6 in PyCFuncPtr_call (self=<optimized out>, inargs=<optimized out>, kwds=<optimized out>) at /usr/local/src/conda/python-split-3.12.14/Modules/_ctypes/_ctypes.c:4219
+#8  0x000055555574e7fb in _PyObject_MakeTpCall (tstate=0x555555bee5d0 <_PyRuntime+458992>, callable=0x7fffe7759a90, args=<optimized out>, nargs=<optimized out>, keywords=<optimized out>) at /usr/local/src/conda/python-split-3.12.14/Objects/call.c:240
+#9  0x0000555555758dc1 in _PyEval_EvalFrameDefault (tstate=<optimized out>, frame=<optimized out>, throwflag=<optimized out>) at Python/bytecodes.c:2715
+#10 0x000055555575166a in _PyObject_FastCallDictTstate (tstate=0x555555bee5d0 <_PyRuntime+458992>, callable=0x7fffe77367a0, args=<optimized out>, nargsf=<optimized out>, kwargs=<optimized out>) at /usr/local/src/conda/python-split-3.12.14/Objects/call.c:144
+#11 0x0000555555788d98 in _PyObject_Call_Prepend (tstate=0x555555bee5d0 <_PyRuntime+458992>, callable=0x7fffe77367a0, obj=0x7fffe778d2e0, args=0x7fffe7773ba0, kwargs=0x7fffe7777480) at /usr/local/src/conda/python-split-3.12.14/Objects/call.c:508
+#12 slot_tp_init (self=0x7fffe778d2e0, args=<optimized out>, kwds=0x7fffe7777480) at /usr/local/src/conda/python-split-3.12.14/Objects/typeobject.c:9035
+#13 0x000055555574e7ab in type_call (type=<optimized out>, args=0x7fffe7773ba0, kwds=0x7fffe7777480) at /usr/local/src/conda/python-split-3.12.14/Objects/typeobject.c:1679

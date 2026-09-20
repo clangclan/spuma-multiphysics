@@ -1,0 +1,33 @@
+Full local log: /home/jsw/문서/analysis/spuma-multiphysics-pr-1/logs/pr1-spuma-compatible-final-build.log
+SHA256: 961639eaa038d97178eb2af3ba6fea00ef0b7fe76b7b124a6bee68cad5c6c54d
+Only final 30 lines follow.
+  -verbose          Force verbose output. (Can be used multiple times)
+  -write-vtk        Write topology as VTU file and exit
+  -doc              Display documentation in browser
+  -help             Display short help and exit
+  -help-compat      Display compatibility options and exit
+  -help-full        Display full help and exit
+
+Block mesh generator.
+
+  The ordering of vertex and face labels within a block as shown below.
+  For the local vertex numbering in the sequence 0 to 7:
+    Faces 0, 1 (x-direction) are left, right.
+    Faces 2, 3 (y-direction) are front, back.
+    Faces 4, 5 (z-direction) are bottom, top.
+
+                        7 ---- 6
+                 f5     |\     :\     f3
+                 |      | 4 ---- 5     \
+                 |      3.|....2 |      \
+                 |       \|     \|      f2
+                 f4       0 ---- 1
+    Y  Z
+     \ |                f0 ------ f1
+      \|
+       o--- X
+
+Using: OpenFOAM-v2512 (2512) - visit www.openfoam.com
+Build: 5916a466-20260728
+Arch:  LSB;label=32;scalar=64
+

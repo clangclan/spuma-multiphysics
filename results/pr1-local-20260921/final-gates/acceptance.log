@@ -1,0 +1,5 @@
+{"stage": "smoke", "status": "PASSED", "reason": null}
+{"stage": "cpu-integration", "status": "PASSED", "reason": null}
+{"stage": "cuda-sanitizer", "status": "PASSED", "reason": null}
+{"stage": "flow", "status": "PASSED", "reason": null}
+{"stage": "benchmark", "status": "PASSED", "reason": null}

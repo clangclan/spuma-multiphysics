@@ -1,0 +1,85 @@
+{
+  "baseline": "3c3cd49b33ba090b746ce787ca11181f18c50a55",
+  "scope": "brief mathematical/code smoke checks; full G0-G10 campaigns deferred",
+  "libraries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveBackend.so": "4f15b10ec842f817f4bb618c77b2018a4cdee8c48cd5cf16bb634e84c879e154",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/lib/libpintleReactiveTransport-cpu.so": "733db21bb64ad8432324f7d86ddbf338e95b53eecd142f366501963f4c4934c3"
+  },
+  "tests": [
+    {
+      "name": "same-EOS-thermo-policy-tangent",
+      "passed": true,
+      "result": {
+        "direct_scaled_error": 0.0,
+        "derivative_scaled_error": 1.4395086310869375e-11,
+        "e_residual_J_per_kg": [
+          -4599.429820226622,
+          -4891.908217052376
+        ],
+        "profile": {
+          "eosEvaluations": 10,
+          "referenceEvaluations": 2,
+          "derivativeEvaluations": 2,
+          "scalarAttempts": 4,
+          "scalarAccepted": 4,
+          "scalarFallbacks": 0,
+          "scalarIterations": 6,
+          "flashResiduals": 9,
+          "tangentBuilds": 1,
+          "tangentSolves": 1,
+          "sourceJv": 0,
+          "sourceJvFallbacks": 0
+        },
+        "capabilities": {
+          "abiVersion": 1,
+          "structBytes": 40,
+          "realEOS": 1,
+          "phaseEquilibrium": 1,
+          "partialMolarEnthalpy": 1,
+          "thermoJvp": 1,
+          "nonidealDiffusion": 0,
+          "deviceClosure": 0,
+          "deviceKinetics": 0,
+          "mixtureLiquid": 0
+        },
+        "physicalModelHash": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05"
+      }
+    },
+    {
+      "name": "same-EOS-Jv-worker-transactions",
+      "passed": true,
+      "result": {
+        "jvp_scaled_error": 7.421747789539317e-11,
+        "fixed_branch": true,
+        "batch": {
+          "workers": 2,
+          "capacity": 3,
+          "scratchBytes": 2208,
+          "batches": 3,
+          "cells": 9,
+          "failures": 1
+        },
+        "fixture": "synthetic balanced PR source, not physical combustion validation"
+      }
+    },
+    {
+      "name": "resident-memory-RK-transactions",
+      "passed": true,
+      "result": {
+        "rk_scaled_error": 0.0,
+        "memory": {
+          "liveBytes": 163348,
+          "peakBytes": 163348,
+          "bridgeBytes": 6672,
+          "conservedWorkspaceBytes": 53376,
+          "gasWorkspaceBytes": 6608,
+          "rhsWorkspaceBytes": 0,
+          "deviceToDeviceBytes": 3336,
+          "synchronizations": 12
+        },
+        "backend": "CPU common kernels; no GPU execution"
+      }
+    }
+  ],
+  "passed": true
+}

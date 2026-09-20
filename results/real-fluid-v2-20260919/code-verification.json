@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-19",
+  "baseline_commit": "3c3cd49b33ba090b746ce787ca11181f18c50a55",
+  "execution_revision": "working changes atop baseline, identified by source_sha256 and linked library hashes",
+  "validation_scope": "brief mathematical/code checks as requested; no full G0-G10 campaign",
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "bfc15266ed2dfe6ce59381e7bdcfb3b155c8fa9a3a1ab9c5c8ea9dd3339275da",
+    "src/reactiveThermo/pintleGasThermo.h": "c81bafe41dfaab0df27f459a4f2cc549c9d647f293b6ec1b3a62b19c8c5147c1",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "fb14f64ce677243e772c3c2d98aaadc104dcc037982dd45f6657b90c66418b00",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "252920192afd60c33e3db0726af9d1caa01bb2ffb196882a9a223cff2a399a8a",
+    "src/reactiveTransport/pintleReactiveTransport.h": "85a7b52b118127f8c478c582ad6ea90bba7a180ed257c1dbace9abff4361dd6e",
+    "src/reactiveTransport/pintleTransportKernels.h": "427917eb9ae7705b88ec2291b3f47922c59948efd94f21c0c33ef80982f35727",
+    "tools/build_reactive_backend.sh": "b79625a33e44e800d03cf10c68e85c825cae9995730b6a2960e53f874c9f5f44",
+    "tools/prepare_reactive_case.py": "373fe464380cde2a0a5d0eb13a4f810139b11e7d20d50ccc921ab39a633031ac",
+    "policies/real-fluid-optimization-v2.yaml": "bfdba73bdd8d9cae4e86cd866dbfc3a437acc284e8bd9fc02a56748dc114a3e1",
+    "src/reactiveThermo/pintleReactivePool.inc": "eb194d24fd10135a33f660ccc4d503005b2d46c8cc64347d30241d975a0285ee",
+    "src/reactiveThermo/pintleRealFluid.h": "3391bec4cfa64780f5babf5614a77d43ad5a2c27c6eaa8a0843b79d465e2fe0e",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "da2b62dc624312e601c92e30900d12a2d15ab81ad1662cc2d3ee11571905624c",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "bf48799aa70205780136e5c099c8057f5aff43dbc9aed1ea8d7d1265fd8b35ae",
+    "src/reactiveThermo/pintleSmallSystem.h": "4372f78c073554272c577ffe153e98454b41d462978fd4b12f742d47f8e30bc1",
+    "tools/check_real_fluid_v2.py": "3e6f4cec00d51e9209cbf31dfb5d8611b4042e9c9c419f0ba37658d737e09992",
+    "tools/real_fluid_backend.py": "41976d8df32fc1037fd5d485aaa95845973e80697dc80cb532c4dc540448a547",
+    "tools/write_real_fluid_manifest.py": "0042c75874317bf941093c8794ff491f8a776d4c96f86cbbe5787b05cf398811"
+  },
+  "library_sha256": {
+    "libpintleReactiveBackend-rf-v2.so": "704673463f92705af8467434391fccbbe24d5258d98de411a2e206c75ddfaeda",
+    "libpintleReactiveTransport-rf-v2.so": "20fd33ffd27ffc22381555252313f576282535b1ab7f7c2e0d23a96a3706a784",
+    "libpintleReactiveTransport-cuda-rf-v2.so": "845771c6cb143216a19717418ff7450002143192dcc56e97c1de068b2a43e1c0"
+  },
+  "checks": {
+    "thermo_compile_link": "passed, g++ 13.3 C++17 O1 Wall Wextra Werror fno-fast-math pthread",
+    "transport_compile_link": "passed, g++ C++17 O2 Wall Wextra fno-fast-math",
+    "cuda_compile_link": "passed, nvcc 13.4.59 C++17 compute_80/sm_80; FP64 fmad=false prec-div=true prec-sqrt=true",
+    "C11_abi": "passed: existing state 176 bytes, existing transport profile 64 bytes, new token 24 bytes",
+    "python_shell_syntax": "passed",
+    "git_diff_check": "passed",
+    "code_smoke_groups": 3,
+    "small_legacy_api_cases": 2,
+    "flow": "source-derived step mutation contract only; full SPUMA build not run",
+    "GPU_execution": "not run, deferred to user local environment",
+    "full_physics_campaign": "not run, deferred to user local environment",
+    "performance_benchmark": "not run"
+  },
+  "test_environment": {
+    "Cantera": "3.2.0",
+    "SUNDIALS": "7.4.0",
+    "Eigen": "3.4.1"
+  },
+  "evidence_sha256": {
+    "baseline-manifest.json": "477c035c94eaf16c88857b1347f74e9a1689dc922efee4e971f8a30ee2051524",
+    "capability-matrix.json": "12cc4fef8b2486aa95e2926b61adea58689200104eafceca55e5a74226e2e1ec",
+    "code-smoke-final.json": "a6fd73358bfd6928cd31e99c2b6ca86802897503d2806a15cab70acf67691603",
+    "code-smoke-initial.json": "fe6834746dc415875a75c81ede1b57f5d611e0ea778f42e84a25c0e757d0e569",
+    "code-smoke-second.json": "4d63769570d413a1dad3fb5098932f1ed520c813d401e92bad9ab4a674fe8696",
+    "flow-contract.json": "784a29f69abd0815eabea2848b25d62a114250e2cbd79cab7f7c3b07fdd9834e",
+    "legacy-api-smoke.json": "0ec5fe7813af781ab9b6c624d15f310b0f77af133641f0981ba0d84f747c8aac",
+    "physical-model-manifest.json": "cc9069956b5f9dcf03ac876e39cd847b8e1de42e8a1bef106fa6ac2d26b53e54"
+  },
+  "initial_check_corrections": [
+    "Python test Fixture used closing() after context-manager failure; no solver tolerance changed",
+    "C header smoke corrected expected legacy state size from 184 to actual 176; ABI unchanged",
+    "Manifest species extraction uses Cantera input_data to preserve YAML 1.2 species name NO"
+  ],
+  "remaining": [
+    "P2 NASA aggregate and exact PR mixing compression",
+    "P3 tangent predictor wiring",
+    "P4 compact host flash/pinned overlap/domain decomposition",
+    "P5 full worker memory counters and asynchronous scheduler",
+    "P6 CVODE matrix-free integration/Woodbury/third-body grouping",
+    "P7 bounded tables/mixed precision",
+    "P8 nonideal diffusion with required data",
+    "P9 same-model device chemistry",
+    "P10 MUSCL/APEC",
+    "P11 DAE/multi-GPU/reduced mechanism"
+  ]
+}

@@ -14,7 +14,7 @@ import numpy as np
 import yaml
 
 import benchmark as b
-from prepare_reactive_case import prepare
+from prepare_reactive_case import prepare as prepare_case
 from reactive_backend import Backend
 from run_reactive_campaign import read
 
@@ -38,9 +38,15 @@ def internal(path, values):
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--output",type=Path,required=True);ap.add_argument("--thermo-dir",type=Path,required=True)
+    ap.add_argument("--transport-backend",choices=("cpu","cuda"),default="cpu")
+    ap.add_argument("--thermo-workers",type=int,default=1)
     a=ap.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    def prepare(*args,**kwargs):
+        return prepare_case(*args,transport_backend=a.transport_backend,thermo_workers=a.thermo_workers,
+                            thermo_batch_cells=3,transport_bridge_cells=2,**kwargs)
     env=b.sourced_environment();exe=b.PROJECT_ROOT/"bin/pintleReactiveFoam"
-    report={"solver_sha256":b.sha256(exe),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libpintleReactiveBackend.so"),"tests":[]}
+    report={"solver_sha256":b.sha256(exe),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libpintleReactiveBackend.so"),
+            "transport_backend":a.transport_backend,"thermo_workers":a.thermo_workers,"tests":[]}
     def record(name,passed,**data):
         report["tests"].append(dict(name=name,passed=bool(passed),**data))
         b.atomic_json(out/"validation.json",report)
@@ -63,7 +69,8 @@ def main():
         for name,change,needle in [
             ("negative_inventory",lambda c:internal(c/"0/q0",np.full(16,-1.)),"Negative or non-finite conserved chemical species mass"),
             ("wrong_dimensions",lambda c:replace(c/"0/q0","[1 -3 0 0 0 0 0]","[0 0 0 0 0 0 0]"),"requires mass/volume dimensions"),
-            ("changed_identity",lambda c:replace(c/"0/reactiveStateIdentity",d["model_fingerprint"],"0"*64),"fingerprint differs"),
+            ("changed_identity",lambda c:replace(c/"0/reactiveStateIdentity",d["model_fingerprint"],"0"*64),"Legacy fingerprint/species/closure mismatch"),
+            ("missing_schema2_closure",lambda c:replace(c/"0/reactiveStateIdentity","closure HEM;",""),"Schema 2 requires"),
             ("nonideal_fick",lambda c:replace(c/"constant/reactiveProperties","molecularDiffusivity 0.0;","molecularDiffusivity 1;"),"requires the ideal-gas model"),
             ("invalid_end_time",lambda c:control(c,"endTime","-1"),"strictly after start time"),
             ("unsupported_runtime_edit",lambda c:control(c,"runTimeModifiable","true"),"dictionary rereading")]:
@@ -75,10 +82,24 @@ def main():
                 "left { type fixedState; T 270; p 3000000; U (0 0 0); Y (0 0 1 0); liquidFractions (0.7 0); }")
         rc,log=run(release)
         record("nonequilibrium_fixed_state",rc!=0 and "must be in equilibrium" in log,returncode=rc,last_lines=log.splitlines()[-5:])
+        for blocked_field in ("q0","reactiveStateIdentity"):
+            case=clone(base,"failed-write-"+blocked_field)
+            control(case,"endTime","1e-6");control(case,"writeInterval","1e-6")
+            (case/"1e-06"/blocked_field).mkdir(parents=True)
+            rc,log=run(case)
+            record("failed_checkpoint_write_"+blocked_field,
+                   rc!=0 and "REACTIVE_FAILURE Failed to write checkpoint" in log and blocked_field in log,
+                   returncode=rc,last_lines=log.splitlines()[-12:])
         continuous=clone(base,"continuous");split=clone(base,"restart")
         control(continuous,"writeControl","adjustableRunTime");control(continuous,"writeInterval","7e-6")
         control(split,"endTime","1e-5");control(split,"writeInterval","1e-5")
         rc1,log1=run(continuous);rc2,log2=run(split)
+        checkpoint=split/'1e-05/reactiveStateIdentity'
+        if checkpoint.exists():
+            identity=checkpoint.read_text()
+            quoted=all(re.search(r'\b'+key+r'\s+"[0-9a-f]{64}"\s*;',identity)
+                       for key in ('fingerprint','physicalModelHash','numericalPolicyHash'))
+            record("checkpoint_hashes_quoted",quoted)
         shutil.copyfile(split/"solver.log",split/"first-leg.log")
         control(split,"startTime","1e-5");control(split,"endTime","2e-5")
         rc3,log3=run(split)
@@ -111,6 +132,11 @@ def main():
         internal(active/"0/T",temps);internal(active/"0/rhoTotalEnergy",energies)
         zero=clone(active,"graded-zero")
         replace(zero/"constant/reactiveProperties","molecularDiffusivity 500.0;","molecularDiffusivity 0;")
+        # This is a distinct initial physical model, not a restart of the
+        # diffusive model. Generate its matching schema-2 identity explicitly.
+        identity_source=out/"graded-zero-identity"
+        prepare(identity_source,a.thermo_dir,"diffusion-zero",4,0,end=1e-10)
+        shutil.copyfile(identity_source/"0/reactiveStateIdentity",zero/"0/reactiveStateIdentity")
         rc,log=run(active);rz,logz=run(zero)
         if rc or rz:raise RuntimeError("Graded flux run failed; inspect retained logs")
         final=lambda c:b.expected_final_directory(c,Decimal("1e-10"))

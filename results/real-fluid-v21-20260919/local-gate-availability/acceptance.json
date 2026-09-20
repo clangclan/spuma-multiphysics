@@ -1,0 +1,43 @@
+{
+  "schema": "spuma-rf21-local-1",
+  "environment": {
+    "WM_PROJECT_DIR": null,
+    "WM_OPTIONS": null,
+    "CUDA_HOME": null,
+    "CUDA_VISIBLE_DEVICES": null,
+    "nvcc": null,
+    "wmake": null,
+    "compute-sanitizer": null,
+    "gpu_query": {
+      "status": "BLOCKED",
+      "reason": "nvidia-smi missing"
+    }
+  },
+  "libraries": {
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveBackend-rf-v21.so": "bcddf818bf55880024cc047575b8cb3a340f42c24930ebb2fd56bd3615267036",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveTransport-rf-v21.so": "92e6d3c36bd6ad167c3ccebc4a16c0394405e04482125fd6413836f3dc985959"
+  },
+  "tests": [
+    {
+      "stage": "cuda-sanitizer",
+      "status": "BLOCKED",
+      "reason": "working CUDA device or Compute Sanitizer missing"
+    },
+    {
+      "stage": "flow",
+      "status": "BLOCKED",
+      "reason": "supply existing Flow cases, expected end time and comparison group in --local-plan"
+    },
+    {
+      "stage": "benchmark",
+      "status": "BLOCKED",
+      "reason": "supply existing Flow cases, expected end time and comparison group in --local-plan"
+    }
+  ],
+  "physics_changed": false,
+  "known_unresolved": [
+    "HEM contact campaign must retain its known-failure classification; no automatic waiver",
+    "413-species high-pressure PR and nonideal diffusion remain unsupported without physical data"
+  ],
+  "all_requested_gates_passed": false
+}

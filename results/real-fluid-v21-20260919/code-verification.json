@@ -1,0 +1,241 @@
+{
+  "schema": "spuma-rf21-code-verification-1",
+  "recorded_at_utc": "2026-09-19T06:20:26.471351+00:00",
+  "baseline": "0517be936c1a5f4720bd8c3703ffb38ba4289045",
+  "code_revision": "e37a771005dafd2627fb9f5caefacd87f5567ca2",
+  "code_tree": "f45c10d2248b76836d6aa7978251e198ddd76412",
+  "status": "PASSED_LIMITED_SCOPE",
+  "scope": "Small mathematical/API/CPU integration checks and compilation; no complete SPUMA Flow build, real CUDA execution, or performance acceptance",
+  "commits": [
+    {
+      "part": 1,
+      "sha": "5595a93ed0ea6d351d84c441d41cd23837a7f240",
+      "parent": "0517be936c1a5f4720bd8c3703ffb38ba4289045",
+      "tree": "c8e8a95533a74d9d94602ed52ff418717465a3b1",
+      "message": "RF21: harden contracts, account workers and wire exact-EOS matrix-free chemistry"
+    },
+    {
+      "part": 2,
+      "sha": "8e7375d03337dd53df6254f86f0ed16b31b9dbbf",
+      "parent": "5595a93ed0ea6d351d84c441d41cd23837a7f240",
+      "tree": "5b146148752fa96734756924a40af70a5008802c",
+      "message": "RF21: add snapshot-safe thermodynamic Woodbury preconditioning"
+    },
+    {
+      "part": 3,
+      "sha": "3ef8ced9061945fc37d80884883962677fff4a12",
+      "parent": "8e7375d03337dd53df6254f86f0ed16b31b9dbbf",
+      "tree": "8ae068ef7fad97838644be4f3d12c1c877585126",
+      "message": "RF21: budget pinned staging and reuse NASA temperature bases"
+    },
+    {
+      "part": 4,
+      "sha": "e37a771005dafd2627fb9f5caefacd87f5567ca2",
+      "parent": "3ef8ced9061945fc37d80884883962677fff4a12",
+      "tree": "f45c10d2248b76836d6aa7978251e198ddd76412",
+      "message": "RF21: wire Flow profiles and ship small checks and local acceptance runner"
+    }
+  ],
+  "toolchain": {
+    "cxx": "GNU g++ 13.3.0",
+    "CUDA": "13.4.59",
+    "Cantera": "3.2.0",
+    "SUNDIALS": "7.4.0",
+    "Eigen": "3.4.1",
+    "CPU_precision": "FP64, no fast math",
+    "link_note": "This environment links the Cantera Python wheel shared library plus separately built SUNLinSolDense support objects. The committed prefix-based local build script is supplied for the original environment.",
+    "cuda_discovery_note": "nvcc was invoked by explicit path; it is absent from PATH in the local runner environment. Compilation succeeds, but nvidia-smi/device/compute-sanitizer and SPUMA/wmake are unavailable."
+  },
+  "compilation": {
+    "thermo_host": {
+      "status": "PASSED",
+      "compile_and_link_context": {
+        "base": "-std=c++17 -O1 -Wall -Wextra -Werror -fmax-errors=5 -fno-fast-math -pthread -isystem /workspace/scratch/fc8943a4b789/compiler-deps/cantera-3.2.0/include -isystem /workspace/scratch/fc8943a4b789/compiler-deps/sundials/include -isystem /workspace/scratch/fc8943a4b789/compiler-deps/fmt/include -isystem /workspace/scratch/fc8943a4b789/test-deps/cmeel.prefix/include/eigen3",
+        "link": "/workspace/scratch/fc8943a4b789/compiler-deps/sundials/sunlinsol_dense.o /workspace/scratch/fc8943a4b789/compiler-deps/sundials/sundials_dense.o -L/workspace/scratch/fc8943a4b789/test-deps/cantera -Wl,-rpath,/workspace/scratch/fc8943a4b789/test-deps/cantera -l:_cantera.cpython-312-x86_64-linux-gnu.so -lcrypto"
+      },
+      "extra_compile_flags": [
+        "-fPIC",
+        "-shared"
+      ],
+      "warnings_as_errors": true
+    },
+    "transport_host": {
+      "status": "PASSED",
+      "language": "C++17",
+      "precision": "no fast math",
+      "entry": "src/reactiveTransport/pintleReactiveTransport.cpp"
+    },
+    "transport_CUDA": {
+      "status": "PASSED_COMPILE_AND_LINK_ONLY",
+      "compiler": "/workspace/scratch/fc8943a4b789/cuda-deps/nvidia/cu13/bin/nvcc",
+      "compute_capability": 80,
+      "architectures": [
+        "compute_80",
+        "sm_80"
+      ],
+      "precision_flags": [
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true"
+      ],
+      "entry": "src/reactiveTransport/pintleReactiveTransport.cu",
+      "device_execution": false
+    },
+    "C11_ABI": {
+      "status": "PASSED",
+      "PintleThermoState_bytes": 176,
+      "PintleTransportProfile_bytes": 64,
+      "PintleBatchToken_bytes": 24,
+      "source": "#include \"/workspace/scratch/fc8943a4b789/spuma-multiphysics/src/reactiveThermo/pintleRealFluidV21.h\"\n#include \"/workspace/scratch/fc8943a4b789/spuma-multiphysics/src/reactiveTransport/pintleTransportV21.h\"\n_Static_assert(sizeof(PintleThermoState)==176,\"Legacy state ABI\");\n_Static_assert(sizeof(PintleTransportProfile)==64,\"Legacy transport profile ABI\");\n_Static_assert(sizeof(PintleBatchToken)==24,\"Token ABI\");\nint main(void){return 0;}\n"
+    },
+    "contract_harness": {
+      "status": "PASSED",
+      "source": "tools/check_real_fluid_v21_contract.cpp",
+      "source_sha256": "05271e39b31dc9b8fcf8c9e4d9dd3b2ddcafcd5fe392348c4d6db0c2a576fd7d"
+    },
+    "Flow": {
+      "full_compile": "NOT_RUN",
+      "extracted_solver_parser_compile": "PASSED",
+      "source_call_path_review": "PASSED",
+      "evidence": "results/real-fluid-v21-20260919/flow-contract.json"
+    },
+    "Python_and_shell_syntax": "PASSED",
+    "git_diff_check": "PASSED"
+  },
+  "final_checks": [
+    {
+      "name": "V1",
+      "status": "PASSED"
+    },
+    {
+      "name": "V2-V4",
+      "status": "PASSED"
+    },
+    {
+      "name": "V3",
+      "status": "PASSED"
+    },
+    {
+      "name": "V5-V6",
+      "status": "PASSED"
+    },
+    {
+      "name": "legacy-gas",
+      "status": "PASSED"
+    },
+    {
+      "name": "V6-recompute",
+      "status": "PASSED"
+    },
+    {
+      "name": "internal-contract",
+      "status": "PASSED"
+    }
+  ],
+  "final_checks_evidence": "results/real-fluid-v21-20260919/final-verification/smoke.json",
+  "legacy_413_species": {
+    "status": "PASSED",
+    "model": "existing ideal-gas 413 species / 14922 reactions at 2 MPa",
+    "evidence": "results/real-fluid-v21-20260919/legacy-sparse-2MPa.json",
+    "scope_note": "Run before the final opt-in Woodbury K condition screening change. The earlier exact source/library hashes are retained in that evidence; this is not presented as an additional execution on the final binary."
+  },
+  "source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "121e871a613b9b897b29cfcce85e81312d928bdba98c78b898b50743be7f9ca3",
+    "src/reactiveThermo/pintleCaloricFast.h": "0556f02fa802670af4326417d7b6089909ccb4367f8b852e11029a8351817ee2",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "3f0270485c892b0850c938b2e907f14c74f1ef120a9cae35df23a4836d4bb4dc",
+    "src/reactiveThermo/pintleDirectional.inc": "cb161f706bac11923ace4a821a3805007ebe0f20238bb775e4e0f22b66950d7b",
+    "src/reactiveThermo/pintleProfilesV21.inc": "71dd6057f59c41a0b8a767d8f16572b287e20db53c50c3b44867654942f02e97",
+    "src/reactiveThermo/pintleReactivePool.inc": "1016d2be08e3d8e0c6e81ce1459a2319f2e05c314d2e88d2b9990e2de2d717ba",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "2cb7faca43f5866c1eadb7206664a6d0abb18d0de0309ee77141d95aa8d64aed",
+    "src/reactiveThermo/pintleReactiveThermo.h": "3de03e253a095ac72fb4554d124d2c4120d0cc3e51bf032d374aaff473ae78da",
+    "src/reactiveThermo/pintleRealFluid.h": "aa9631db19230df06e81e3b3e902f6689238de85599fed6af7339dbfa7116e97",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "8008b07e740136ac49096dc20059b992218ca3406b562b1eeb023c25ce726672",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "f3637ea26074e856029dc9dfd8f11ee31844f3871d78dda2a4ef6441c18b995c",
+    "src/reactiveThermo/pintleRealFluidV21.h": "fec35b5cf4e98ad69d53442f3dd3fc3d275950556678460250b1e4e3aebb7861",
+    "src/reactiveThermo/pintleSmallSystem.h": "5f7e21dd7c953d85de0ad97a370ee5ae19c72f0a2611f185963cd797351b6d61",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "5ab7f121fd8b020be2738222b977eeb922a339f66d1f19b68a9dd44f77d775ff",
+    "src/reactiveTransport/pintleTransportKernels.h": "4a0cb55363c0fea76e8f96649b1f0334ecb1363d4bad979ed62e250859190e47",
+    "src/reactiveTransport/pintleTransportV21.h": "d59cdb48f63eaf524cd997699490464646ced353f006e4a5109191bea00f7216",
+    "tools/build_reactive_backend.sh": "f0d5bf55c6e5cb5bf2855fe060267844c78de9d06451b0e9545302de53364ab8",
+    "tools/check_real_fluid_v21.py": "b4fdb440407374d824436c257665fad69c591715d69d957f56c76e198175739e",
+    "tools/check_real_fluid_v21_contract.cpp": "05271e39b31dc9b8fcf8c9e4d9dd3b2ddcafcd5fe392348c4d6db0c2a576fd7d",
+    "tools/prepare_reactive_case.py": "2eda4904c0edfc762a5d32a74f77c8b3b99c97050735cb5d12670a85fcee67a6",
+    "tools/reactive_backend.py": "b7a53297e402b9ae48c700c2b37484df56fa27e6ab6a15cbaf7ff8b1db8e1c76",
+    "tools/real_fluid_backend.py": "043310745ef77d187925b12694b9733ba6910025ace5f4b664d3fa5a7d247a1f",
+    "tools/real_fluid_v21.py": "94d8019d76f476f36e13c6172ef5e574e9521e2fd4c772d715349927b8311355",
+    "tools/run_real_fluid_v21_local.py": "250d5e6361e8f534cee52c46d1a83ca1001291db015439dd27199a411f761551"
+  },
+  "final_smoke_source_sha256": {
+    "src/reactiveFoam/pintleReactiveFoam.C": "121e871a613b9b897b29cfcce85e81312d928bdba98c78b898b50743be7f9ca3",
+    "src/reactiveThermo/pintleCaloricFast.h": "0556f02fa802670af4326417d7b6089909ccb4367f8b852e11029a8351817ee2",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "3f0270485c892b0850c938b2e907f14c74f1ef120a9cae35df23a4836d4bb4dc",
+    "src/reactiveThermo/pintleDirectional.inc": "cb161f706bac11923ace4a821a3805007ebe0f20238bb775e4e0f22b66950d7b",
+    "src/reactiveThermo/pintleGasThermo.h": "c81bafe41dfaab0df27f459a4f2cc549c9d647f293b6ec1b3a62b19c8c5147c1",
+    "src/reactiveThermo/pintleProfilesV21.inc": "71dd6057f59c41a0b8a767d8f16572b287e20db53c50c3b44867654942f02e97",
+    "src/reactiveThermo/pintleReactivePool.inc": "1016d2be08e3d8e0c6e81ce1459a2319f2e05c314d2e88d2b9990e2de2d717ba",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "2cb7faca43f5866c1eadb7206664a6d0abb18d0de0309ee77141d95aa8d64aed",
+    "src/reactiveThermo/pintleReactiveThermo.h": "3de03e253a095ac72fb4554d124d2c4120d0cc3e51bf032d374aaff473ae78da",
+    "src/reactiveThermo/pintleRealFluid.h": "aa9631db19230df06e81e3b3e902f6689238de85599fed6af7339dbfa7116e97",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "8008b07e740136ac49096dc20059b992218ca3406b562b1eeb023c25ce726672",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "f3637ea26074e856029dc9dfd8f11ee31844f3871d78dda2a4ef6441c18b995c",
+    "src/reactiveThermo/pintleRealFluidV21.h": "fec35b5cf4e98ad69d53442f3dd3fc3d275950556678460250b1e4e3aebb7861",
+    "src/reactiveThermo/pintleSmallSystem.h": "5f7e21dd7c953d85de0ad97a370ee5ae19c72f0a2611f185963cd797351b6d61",
+    "src/reactiveThermo/pintleSparseJacobian.h": "20033058c4e9497356f4c6120164cbb6a192d39e0069e4a2f275d4119c4b3aed",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "5ab7f121fd8b020be2738222b977eeb922a339f66d1f19b68a9dd44f77d775ff",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleReactiveTransport.h": "85a7b52b118127f8c478c582ad6ea90bba7a180ed257c1dbace9abff4361dd6e",
+    "src/reactiveTransport/pintleTransportKernels.h": "4a0cb55363c0fea76e8f96649b1f0334ecb1363d4bad979ed62e250859190e47",
+    "src/reactiveTransport/pintleTransportV21.h": "d59cdb48f63eaf524cd997699490464646ced353f006e4a5109191bea00f7216",
+    "tools/check_real_fluid_v21.py": "b4fdb440407374d824436c257665fad69c591715d69d957f56c76e198175739e"
+  },
+  "binary_sha256": {
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveBackend-rf-v21.so": "b807047854107d0ab9b60446f0cd6a9ec40b3e6d5329a55718e2abfd638de82f",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveTransport-rf-v21.so": "92e6d3c36bd6ad167c3ccebc4a16c0394405e04482125fd6413836f3dc985959",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/lib/libpintleReactiveTransport-cuda-rf-v21.so": "7615f7c50e2702706ac26a0b999dab12b35072c511fdbae1ce0efab16539d0f4",
+    "/workspace/scratch/fc8943a4b789/compiler-tmp/rf21-contract": "c5d62bab506dadaeb00ff8a9e757ecf0381f0f31f49fdf1c9d289d2af90b56e5",
+    "/workspace/scratch/fc8943a4b789/compiler-tmp/rf21-abi": "2d5af8020e338eb77d3007dfbe87a43e20858333c67dc21503bf390729d0233e",
+    "/workspace/scratch/fc8943a4b789/compiler-tmp/rf21-flow-parser": "1a5a1c3ee3116521b8efb25d9a3c53bcff53e4e913148c37cf882a9f3330915a"
+  },
+  "input_sha256": {
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/cold-pr-config.yaml": "4e3986407afc1306e25d65320bc5b37f9f6b97dd04dea96982abb2afbb733aaa",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/cold-pr.yaml": "6fece55c8f17c4f195d00394d3097bab585e8d80a2e9dc5c5fca0d8615fce563",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/reactive-dilute-config.yaml": "5074538f218316c65aedc1b17b0b8295c6f699d5c0904963854bab05d1cb51a6",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/chemistry-config.yaml": "49ed8348a9ceb5eec7dfe07fc834e6e33764fa78f7b5c6f7e1a56b67fa239e0e",
+    "/workspace/scratch/fc8943a4b789/spuma-multiphysics/research/reactive-thermo/chemistry-ideal.yaml": "a951a70b92c126e4603bc60860cda5dbc28b6ad354f665578a747a3097588038"
+  },
+  "evidence_sha256": {
+    "results/real-fluid-v21-20260919/baseline.json": "71b44f4adff0d4d6fd6455241ff915d31f6d60ee43dec804ceb7c3c83d595562",
+    "results/real-fluid-v21-20260919/counter-and-memory-scope.json": "d9e70d8bb473fec66fe463bf4239205d00be170d63c79395988ab8c41a92fc4c",
+    "results/real-fluid-v21-20260919/development-failures.json": "604d45dc8d83111b35b88874eb1e9ddbf6b0125d4148e21307b152a1bb9467a7",
+    "results/real-fluid-v21-20260919/final-smoke/acceptance.json": "b8361c5665224407cd3bf9c3e5d49b79c1276d055232ef72e65fcbd429e16f4e",
+    "results/real-fluid-v21-20260919/final-smoke/smoke.json": "a3352755989437849f936b032097026e56a6dd4ca772dbc68dc12824c76fe626",
+    "results/real-fluid-v21-20260919/final-smoke/smoke.log": "95fd4c7691f8565f16fe777e3499b5f8cfcc8b73d6fc4a4741ccba71647201a0",
+    "results/real-fluid-v21-20260919/final-verification/acceptance.json": "3391a11973a46aba759d4db88b2fba536bad2e5b3ac685bd471bc43664b5b84d",
+    "results/real-fluid-v21-20260919/final-verification/smoke.json": "f209f4d993fdc01062deb03fc32fbbeec2f6237f4654f6186c4f862ee7630028",
+    "results/real-fluid-v21-20260919/final-verification/smoke.log": "95fd4c7691f8565f16fe777e3499b5f8cfcc8b73d6fc4a4741ccba71647201a0",
+    "results/real-fluid-v21-20260919/flow-contract.json": "cb644723f3bedcf5da3c4c5d93fd528699627684e1930bd022c3bbcc221c1e07",
+    "results/real-fluid-v21-20260919/legacy-sparse-2MPa.json": "d792d6122068b95877eb0aa688c4a2d7da5981f4b570b72b0673cecfe0361384",
+    "results/real-fluid-v21-20260919/legacy-v2-initial.json": "c72ea84021d773af99b9d56ded0366e221fadd9faa399b7f0874fbf98e6d0fb3",
+    "results/real-fluid-v21-20260919/local-gate-availability/acceptance.json": "fb4ed1487bb6630884343c307a978c458fcdc81d4548c4e80fcc696c3069750c",
+    "results/real-fluid-v21-20260919/smoke-initial.json": "4ae02caf1d529e318b910fc4e60e9bfa416053a0dcd1f2140b52956deb4f29a4",
+    "results/real-fluid-v21-20260919/smoke-second.json": "09b3d01cef44b7396cc6231e7cbfa833c606d3f154e28945d57daffd97d311a7",
+    "results/real-fluid-v21-20260919/smoke-third.json": "a2b0daa38589b0989fd77f7d253db51ed464206d7d5fb0dff83e97b180915442"
+  },
+  "local_gates": {
+    "gpu_execution": "BLOCKED",
+    "compute_sanitizer": "BLOCKED",
+    "full_Flow_campaign": "BLOCKED",
+    "benchmark": "BLOCKED",
+    "evidence": "results/real-fluid-v21-20260919/local-gate-availability/acceptance.json"
+  },
+  "known_limits": [
+    "Woodbury thermodynamic correction uses S=0; no completed kinetic sparse-core preconditioner claim",
+    "413-species high-pressure PR data and nonideal diffusion remain unsupported",
+    "HEM contact known failure remains unresolved",
+    "RF21-07/08/09 solver features remain follow-up scope",
+    "External library/thread/CUDA context memory is unmeasured, not a guaranteed total memory budget"
+  ],
+  "physical_model_changed": false,
+  "full_local_validation": false,
+  "performance_speedup_claimed": false
+}

@@ -1,0 +1,81 @@
+{
+  "runs": [
+    {
+      "name": "main-all",
+      "returncode": 99,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "99",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/research/main-baseline/bin/pintleReactiveFoam",
+        "-case",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-memcheck-main"
+      ],
+      "diagnostics": [
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_5FieldIdEmLERKdEUliE_EEvT_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_8multiplyIdEEvRNS_5FieldIT_EERKdRKNS_5UListIS4_EEEUliE_EEvS4_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_8subtractINS_6VectorIdEES4_EEvRNS_5FieldINS_9typeOfSumIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda24reductionLambdaSumKernelIdZNS_3sumIdEET_RKNS_5UListIS3_EEEUliE_EEvPS3_T0_Pii\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_7cmptMagINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda24reductionLambdaSumKernelINS_6VectorIdEEZNS_3sumIS3_EET_RKNS_5UListIS5_EEEUliE_EEvPS5_T0_Pii\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldIdE19patchNeighbourFieldERNS_5UListIdEEEUliE0_EEvT_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldIdEEvRKNS_5UListIT_EERKNS4_IiEERS6_EUliE_EEvS5_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_3magINS_6VectorIdEEEEvRNS_5FieldINS_9typeOfMagIT_E4typeEEERKNS_5UListIS7_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_6divideINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EERKNS9_IdEEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldINS_6VectorIdEEEEvRKNS_5UListIT_EERKNS6_IiEERS8_EUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_3dotINS_6VectorIdEES4_EEvRNS_5FieldINS_12innerProductIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_4lerpIdEEvRNS_5FieldIT_EERKNS_5UListIS4_EESA_RKNS7_IdEEEUliE_EEvS4_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldINS_6VectorIdEEE19patchNeighbourFieldERNS_5UListIS4_EEEUliE0_EEvT_i\" detected. The Runtime will use the one that was registered first",
+        "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_4lerpINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EESC_RKNS9_IdEEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first"
+      ],
+      "summary": [
+        "15"
+      ]
+    },
+    {
+      "name": "candidate-explicit",
+      "returncode": 0,
+      "command": [
+        "compute-sanitizer",
+        "--tool",
+        "memcheck",
+        "--error-exitcode",
+        "99",
+        "--report-api-errors",
+        "explicit",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam",
+        "-case",
+        "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda"
+      ],
+      "diagnostics": [],
+      "summary": [
+        "0"
+      ]
+    }
+  ],
+  "candidate_all_errors": [
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_5FieldIdEmLERKdEUliE_EEvT_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_8multiplyIdEEvRNS_5FieldIT_EERKdRKNS_5UListIS4_EEEUliE_EEvS4_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_8subtractINS_6VectorIdEES4_EEvRNS_5FieldINS_9typeOfSumIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda24reductionLambdaSumKernelIdZNS_3sumIdEET_RKNS_5UListIS3_EEEUliE_EEvPS3_T0_Pii\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_7cmptMagINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda24reductionLambdaSumKernelINS_6VectorIdEEZNS_3sumIS3_EET_RKNS_5UListIS5_EEEUliE_EEvPS5_T0_Pii\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldIdE19patchNeighbourFieldERNS_5UListIdEEEUliE0_EEvT_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldIdEEvRKNS_5UListIT_EERKNS4_IiEERS6_EUliE_EEvS5_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_3magINS_6VectorIdEEEEvRNS_5FieldINS_9typeOfMagIT_E4typeEEERKNS_5UListIS7_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_6divideINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EERKNS9_IdEEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_7fvPatch18patchInternalFieldINS_6VectorIdEEEEvRKNS_5UListIT_EERKNS6_IiEERS8_EUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_3dotINS_6VectorIdEES4_EEvRNS_5FieldINS_12innerProductIT_T0_E4typeEEERKNS_5UListIS7_EERKNSD_IS8_EEEUliE_EEvS7_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_4lerpIdEEvRNS_5FieldIT_EERKNS_5UListIS4_EESA_RKNS7_IdEEEUliE_EEvS4_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNKS_18cyclicFvPatchFieldINS_6VectorIdEEE19patchNeighbourFieldERNS_5UListIS4_EEEUliE0_EEvT_i\" detected. The Runtime will use the one that was registered first",
+    "Duplicate entry kernels named \"_ZN4Foam4cuda12lambdaKernelIZNS_4lerpINS_6VectorIdEEEEvRNS_5FieldIT_EERKNS_5UListIS6_EESC_RKNS9_IdEEEUliE_EEvS6_i\" detected. The Runtime will use the one that was registered first"
+  ],
+  "same_duplicate_kernel_diagnostics_as_main": true,
+  "explicit_api_and_memory_passed": true,
+  "candidate_all_summary": [
+    "15"
+  ],
+  "scope": "Full-app memory checks and explicit CUDA API checks; extended duplicate kernel registration diagnostics remain a reproduced SPUMA baseline limitation. No kernel filter used."
+}

@@ -1,0 +1,61 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2512                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5916a466-20260728 OPENFOAM=2512 version=v2512
+Arch   : "LSB;label=32;scalar=64"
+Exec   : /home/jsw/문서/analysis/spuma-multiphysics-pr-1/bin/pintleReactiveFoam -case /home/jsw/문서/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda
+Date   : Sep 21 2026
+Time   : 04:04:29
+Host   : jsw-ubuntu
+PID    : 249069
+I/O    : uncollated
+Case   : /home/jsw/문서/analysis/spuma-multiphysics-pr-1/cases/pr1-acceptance-cuda
+nProcs : 1
+memory pool : not available
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Initializing CUDA devices
+
+CUDA Driver Version / Runtime Version:  13.2 / 13.2
+Number of threads per block: 128
+
+Create dummyMemoryPool
+ 
+Create time
+
+Create mesh for time = 0
+
+REACTIVE_RESTART_POLICY previous="807432afcd4200ff084ef03005b04d4166d2430c3208b76831101ff264d20acd" current="ead766ca925ec88de8b78f1fd5f065f902f5e7bfd863269b4d2c972aebcab381" decision=supported_current_settings physicalModelUnchanged=1 legacyFingerprintRetained=1
+REACTIVE_PHYSICAL_MODEL hash=d52430b67a052d06950ecd3e4e632ee05fc27d2519af2549a6901c7cbb419722 numericalPolicyHash=ead766ca925ec88de8b78f1fd5f065f902f5e7bfd863269b4d2c972aebcab381 eos=Peng-Robinson realEOS=1 phaseEquilibrium=1 nonidealDiffusion=0 deviceClosure=0 deviceKinetics=0 mixtureLiquid=0
+REACTIVE_BACKENDS transport=cuda thermodynamics=cpu chemistry=cpu chemicalLinearSolver=dense transportGasProperties=disabled
+REACTIVE_MODEL cells=8 species=4 reactions=0 liquids=2 estimatedHostBytes=24320 chemistry=0
+REACTIVE_SPECIES index=0 name=N2
+REACTIVE_SPECIES index=1 name=O2
+REACTIVE_SPECIES index=2 name=N2O
+REACTIVE_SPECIES index=3 name=IC3H7OH
+REACTIVE_ATTEMPT_PROFILE attempt=2 accepted=1 retry=0 sourceCalls=0 fullPhaseEvaluations=32 scalarProbes=16 rootChecks=16 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0
+REACTIVE_STEP time=1.1891754562443536e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.00075322500000000005
+REACTIVE_ATTEMPT_PROFILE attempt=3 accepted=1 retry=0 sourceCalls=0 fullPhaseEvaluations=32 scalarProbes=16 rootChecks=16 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0
+REACTIVE_STEP time=2.3783509124887071e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.000288523
+REACTIVE_ATTEMPT_PROFILE attempt=4 accepted=1 retry=0 sourceCalls=0 fullPhaseEvaluations=32 scalarProbes=16 rootChecks=16 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0
+REACTIVE_STEP time=3.567526368733061e-05 dt=1.1891754562443536e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.00028588499999999999
+REACTIVE_ATTEMPT_PROFILE attempt=5 accepted=1 retry=0 sourceCalls=0 fullPhaseEvaluations=32 scalarProbes=16 rootChecks=16 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0
+REACTIVE_STEP time=4.7567018249774142e-05 dt=1.1891754562443532e-05 retries=0 massResidual=0 energyResidual=0 momentumResidual=0 globalElementResidual=0 speciesResidual=0 elementDrift=0 minP=1999999.9999999998 maxP=1999999.9999999998 minT=300 maxT=300 maxMach=2 minAlphaGas=1 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=3.178275314487694e-17 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.00028824699999999999
+REACTIVE_PROFILE_V21 scope="prototype" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0
+REACTIVE_PROFILE_V21 scope="combined" jobElapsedSeconds=0 integrationFallbacks=0 chemical_rhsCalls=0 chemical_uvCalls=0 chemical_fixedStateCalls=0 chemical_jacobianCalls=0 chemical_structuredCalls=0 chemical_fallbackCalls=0 sparse_setups=0 sparse_products=0 sparse_preconditioners=0 sparse_preconditionerSolves=0 sparse_sparseIntegrations=0 sparse_denseIntegrations=0 sparse_denseFallbacks=0 sparse_nonzeros=0 timing_jvSetups=0 timing_preconditionerSetups=0 timing_jacobianCacheHits=0 timing_patternBuilds=0 timing_preconditionerReuses=0 timing_symbolicAnalyses=0 timing_numericFactorizations=0 timing_workspaceCreates=0 timing_workspaceReinitializations=0 timing_factorNonzeros=0 timing_thermoSeconds=0 timing_kineticsSeconds=0 timing_csrSeconds=0 timing_symbolicSeconds=0 timing_factorSeconds=0 timing_solveSeconds=0 realFluid_eosEvaluations=72 realFluid_referenceEvaluations=0 realFluid_derivativeEvaluations=0 realFluid_scalarAttempts=72 realFluid_scalarAccepted=72 realFluid_scalarFallbacks=0 realFluid_scalarIterations=0 realFluid_flashResiduals=0 realFluid_tangentBuilds=0 realFluid_tangentSolves=0 realFluid_sourceJv=0 realFluid_sourceJvFallbacks=0 trhoStateEvaluations=72 densityRootChecks=72 fullPhaseEvaluations=144 energyCvEvaluations=72 selectedMuEvaluations=144 partialHEvaluations=0 scalarProbes=72 bracketRejects=0 branchFallbacks=0 flashCandidates=0 linearizationBuilds=0 linearizationApplies=0 FzFactorizations=0 sourceRhsCalls=0 sourceDirectionProbes=0 RzBuilds=0 JvFallbacks=0 nasaCoefficientVisits=144 nasaAggregateBuilds=72 nasaAggregateEvaluations=72 exactMixingEvaluations=72 branchCertificates=72 matrixFreeSetups=0 matrixFreeProducts=0 matrixFreeIntegrations=0 matrixFreeIntegrationFallbacks=0 woodburySetups=0 woodburyFactors=0 woodburySolves=0 woodburyFallbacks=0 diagnosticJvCalls=0 oneSidedProbes=0 derivativeRetries=0 sourceAttempts=0 sourceAccepted=0 sourceFailed=0
+REACTIVE_CHEMISTRY scope=combined rhsCalls=0 uvCalls=0 fixedStateCalls=0 structuredCalls=0 fallbackCalls=0 integrationFallbacks=0
+REACTIVE_SPARSE scope=combined nnzMeaning=last_snapshot_sum setups=0 products=0 nonzeros=0 sparseIntegrations=0 denseIntegrations=0 denseFallbacks=0
+REACTIVE_CHEMICAL_PROFILE scope=combined factorNnzMeaning=last_snapshot_sum jvSetups=0 preconditionerSetups=0 jacobianCacheHits=0 preconditionerReuses=0 patternBuilds=0 symbolicAnalyses=0 numericFactorizations=0 factorNonzeros=0 workspaceCreates=0 workspaceReinitializations=0 thermoSeconds=0 kineticsSeconds=0 csrSeconds=0 symbolicSeconds=0 factorSeconds=0 solveSeconds=0
+REACTIVE_REAL_FLUID scope=combined eosEvaluations=72 scalarAttempts=72 scalarAccepted=72 scalarFallbacks=0 scalarIterations=0
+REACTIVE_TRANSPORT_V21 layoutTiles=48 layoutLaunches=48 memcpyCalls=104 payloadBytes=19688 nasaValidationEvaluations=0 nasaFaceEvaluations=0 detailedGasCounters=0 temperatureBasisBuilds=0 temperatureBasisBytes=0 pinnedBytes=128 deviceStagingBytes=128 slotCells=2 slots=1 blockThreads=256 eventWaits=48 failedCalls=0 stageBarrier=full closureDownloadsPerRK=2 overlapValidated=0
+REACTIVE_MEMORY liveBytes=3864 peakBytes=3864 bridgeBytes=128 conservedWorkspaceBytes=1024 gasWorkspaceBytes=0 rhsWorkspaceBytes=0 d2dBytes=0 synchronizations=37
+REACTIVE_TRANSPORT allocatedBytes=3864 uploadedBytes=14984 downloadedBytes=4704 kernelLaunches=124 stages=8 stepQueries=12
+REACTIVE_TRANSFER conservedUploads=4 conservedUploadBytes=2048 conservedDownloadBytes=4096 stateUploadBytes=8960 primitiveUploadBytes=3072 gasUploadBytes=0 boundaryPartitions=1
+REACTIVE_DEVICE_PROPERTIES builds=0 cells=0 partitionUploadBytes=0 thermoTableBytes=0 gasStatusChecks=0 cflFaceLaunches=12 transportFaceLaunches=8 faceWorkspaceBytes=896
+End
