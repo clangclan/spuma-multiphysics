@@ -1,0 +1,36 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2512                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5916a466-20260728 OPENFOAM=2512 version=v2512
+Arch   : "LSB;label=32;scalar=64"
+Exec   : /home/jsw/문서/analysis/spuma-multiphysics-recovery/logs/r04-continued-run/runtime/ReactiveFoam -case /home/jsw/문서/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-formats-v2/cpu-ascii-compression-on
+Date   : Sep 21 2026
+Time   : 14:31:17
+Host   : jsw-ubuntu
+PID    : 593107
+I/O    : uncollated
+Case   : /home/jsw/문서/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-formats-v2/cpu-ascii-compression-on
+nProcs : 1
+memory pool : not available
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Initializing CUDA devices
+
+CUDA Driver Version / Runtime Version:  13.2 / 13.2
+Number of threads per block: 128
+
+Create dummyMemoryPool
+ 
+Create time
+
+Create mesh for time = 2e-06
+
+REACTIVE_RECOVERY mode=reference baseline=reference_candidate_search fallback=none
+REACTIVE_RUNTIME runId="593107-42530775724291" solverSha256="172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858" manifest={"schema":1,"backendPath":"/home/jsw/문서/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveBackend.so","backendSha256":"3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201","thermoConfiguration":"/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-thermo-v4/cold-pr-config.yaml","physicalModelHash":"d52430b67a052d06950ecd3e4e632ee05fc27d2519af2549a6901c7cbb419722","numericalPolicyHash":"186b725b0dc58ebed1295825e3bd05ebe92d4aee56bd7d7746e0178f9d886c27","modelFingerprint":"b0ae19b9a882c150e81311dd26c2eef6d5e22363543972d61bd280e9d3c8c060","eos":"Peng-Robinson","closureBackend":"cpu","chemistryBackend":"cpu","deviceFullClosure":false,"deviceChemistryIntegration":false}
+REACTIVE_FAILURE Incomplete checkpoint manifest

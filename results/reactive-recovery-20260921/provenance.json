@@ -1,0 +1,45 @@
+{
+  "base": "7d95bd50b5934f41099218d308a57559d2e2f2bd",
+  "sourceSha256": {
+    "src/reactiveFoam/reactiveDiagnostics.H": "d662730976689b8b10dea6daee04a94d52a1b04fb9310ddedab56763788b64c9",
+    "src/reactiveFoam/reactiveCheckpoint.H": "b99b09cfeab572a13dd6149335f591ab42bdbe62d68e73f371df4fcdc54f3552",
+    "src/reactiveFoam/reactivePhysics.H": "e08bfb3d7d56afb21dc6316f88c3ea3578ac270fe82fa77380ae48f2bc420026",
+    "src/reactiveFoam/ReactiveFoam.C": "4a44d0aaba16afd02049eff601cc9e243570740bd8f33013efe6227b7732eba1",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "c3f646498c42574c0377ad9895a37fb77d7a5fab45cabc7fa70e739be4f81799",
+    "src/reactiveThermo/pintleReactivePool.inc": "80c2484c774633cceec81ce0d4ea1b9b6cb5b346029520a43612a556a2c0d347",
+    "src/reactiveThermo/pintleRecovery.h": "c252c1a70f9109124084ab3f0b1fc244b07af90db5e979801b506777ff67650b",
+    "src/reactiveThermo/pintleRecoveryDiagnostics.inc": "3016c0c0b51825a7a5d42874fd9192a4c1140e5910d34c7b98e80971a35114d9",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "d26b7344c18ed48685c1d9ee28de88a1247cc932635ee3c8111df33a44170291",
+    "tools/validate_reactive_recovery.py": "1c1df089e4e82bb50d1dd54880bd70c30bedd52a925fe840b75b5567a377bcf0",
+    "tools/validate_reactive_checkpoint.py": "745f55a876f67a3c781abc3a73ddad7aeff86d882ac0c2fed371f772baffa3eb",
+    "tools/validate_reactive_run.py": "d5c296ac6d9153065600cf5dff49a70c3a4ef22686b64ace55f446b1e0a6b79b",
+    "tools/reactive_run.py": "b9c29eedea5c4cc5c5a52654a42e1e0b93eda6afc04a2972e956daf10663f2fe",
+    "tools/replay_reactive_recovery.py": "c5dbb6be6b24ba78c8926ceb0fd1ac1c577a8042d1917c4dff2c638d1593822b",
+    "tools/test_reactive_recovery_failure.cpp": "4c7c7305bd2e029e3535775ad7e702502e6f4e69532c0d42ff93ac3b1ebfbd73"
+  },
+  "binarySha256": {
+    "bin/ReactiveFoam": "1f1f941cd6da24904bb78f511e3a2d56d5f07748287182d630d0833da0a21319",
+    "lib/libpintleReactiveBackend.so": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+    "lib/libpintleReactiveTransport.so": "23e4b4735b110a95be042910b058916ee342b5c510e153f1f860d87d66d24ffb"
+  },
+  "specSha256": {
+    "REACTIVEFOAM_IMPROVEMENT_SPEC.md": "1b7bbf1c96649ad35f5f7996a431839fe2907e23377a68f109597f7fbeee918e",
+    "SPUMA_postmerge_GPU_physics_spec_v3.ko.md": "3b58ebe2f58b539504a98faed53ae10117da59c94af142859b50df6fd6e064f5"
+  },
+  "validationNote": "The 21-step full-mesh run used the recorded immutable solver and unchanged thermodynamic/transport libraries. The only subsequent solver change accepts reactiveStateIdentity.gz in the checkpoint manifest. The final solver passed all 24 checkpoint/rollback/encoding tests. Detailed-chemistry rollback/restart passed on the preceding solver; its uncompressed path and numerical algorithms are unchanged. Final-build full-mesh restart verification is recorded separately.",
+  "fullMeshSourceCommit": "7e7a023a9231c0f12b7b9fc5f68bea639314590a",
+  "fullMeshSolverSha256": "172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858",
+  "supersededHarnessAttempts": [
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-formats/validation.json",
+      "sha256": "1feaea2db174df8e383eca803e405ce2519b75ea31d6eda1488a51746447340c",
+      "reason": "Test assumption corrected: OpenFOAM disables binary compression; the solver output was valid."
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-build-restart/solver.log",
+      "sha256": "4c344d5425b47d3cc8cc6de9c5f27f62323c2ea95f3d778a50a699e06b4cdc5a",
+      "reason": "Test setup corrected: the existing solver contract rejects endTime equal to startTime."
+    }
+  ],
+  "historicalEvidenceUnchanged": true
+}

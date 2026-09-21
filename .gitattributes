@@ -1,0 +1,2 @@
+# Preserve solver evidence verbatim, including upstream whitespace.
+results/reactive-recovery-20260921/*.log -text -whitespace

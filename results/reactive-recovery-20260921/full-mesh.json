@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "passed": true,
+  "scope": "R04 nonreacting HEM continuation; numerical acceptance only",
+  "requirements": {
+    "cells": 1042500,
+    "minSteps": 20,
+    "workers": 24,
+    "hostBudgetGB": 24,
+    "deviceBudgetGB": 4
+  },
+  "acceptedStepsThisRun": 21,
+  "startTime": 2.3586601282321316e-09,
+  "endTime": 1.2e-08,
+  "retries": 0,
+  "dt": {
+    "min": 2.0669935883933714e-10,
+    "max": 4.717320256464264e-10,
+    "regularMin": 4.717320256464263e-10,
+    "finalStep": 2.0669935883933714e-10
+  },
+  "maxResiduals": {
+    "massResidual": 1.985936938297236e-14,
+    "energyResidual": 1.0670061526741713e-13,
+    "momentumResidual": 7.81993605173691e-21,
+    "globalElementResidual": 1.805958368571121e-14,
+    "speciesResidual": 1.557611380884678e-14,
+    "maxVolumeResidual": 1.7504375726673516e-10,
+    "maxUVResidual": 9.999915808499928e-10,
+    "maxMuResidual": 9.989358318307495e-08
+  },
+  "checkpoint": {
+    "cells": 1042500,
+    "variables": 8,
+    "acceptedSteps": 26,
+    "retries": 0,
+    "time": 1.2e-08,
+    "lastDt": 2.0669935883933714e-10,
+    "negativeSpeciesValues": 0,
+    "nonfiniteValues": 0,
+    "verifiedFiles": 17,
+    "stateSha256": "31a56f44c5bcd7591252a76affddaaeb3dea085f2383da871d92cf526e577d3e",
+    "initialSha256": "829d2b7783a6e68cb7a7c04d1260dfba06f1bdb44720cfdd832a731e2bdbba95"
+  },
+  "initialCheckpoint": {
+    "cells": 1042500,
+    "variables": 8,
+    "acceptedSteps": 5,
+    "retries": 0,
+    "time": 2.3586601282321316e-09,
+    "lastDt": 4.717320256464264e-10,
+    "negativeSpeciesValues": 0,
+    "nonfiniteValues": 0,
+    "verifiedFiles": 17,
+    "stateSha256": "e961aa75b55b700fe0762d0cc8f12d1e2427d1b1d8f5d9471eaf9ad8c92b7e7c",
+    "initialSha256": "829d2b7783a6e68cb7a7c04d1260dfba06f1bdb44720cfdd832a731e2bdbba95"
+  },
+  "resources": {
+    "observedPeakRssBytes": 4342841344,
+    "lastRssBytes": 3583897600,
+    "observedPeakDeviceBytes": 1197473792,
+    "samples": 683,
+    "scope": "Per-process /proc VmHWM and nvidia-smi residency sampled every 5 seconds; exit gap is unobserved.",
+    "cpuTimeSeconds": 79617.79,
+    "lastDeviceBytes": 1197473792,
+    "sampledAt": "2026-09-21T05:28:12.520869+00:00",
+    "cpuCores": 22.015
+  },
+  "runtime": {
+    "ReactiveFoam": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/bin/ReactiveFoam",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-continued-run/runtime/ReactiveFoam",
+      "sha256": "172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858"
+    },
+    "libpintleReactiveBackend.so": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveBackend.so",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-continued-run/runtime/libpintleReactiveBackend.so",
+      "sha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201"
+    },
+    "libpintleReactiveTransport.so": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveTransport.so",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-continued-run/runtime/libpintleReactiveTransport.so",
+      "sha256": "23e4b4735b110a95be042910b058916ee342b5c510e153f1f860d87d66d24ffb"
+    }
+  },
+  "manifest": {
+    "schema": 1,
+    "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-continued-run/runtime/libpintleReactiveBackend.so",
+    "backendSha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+    "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/r04_reactive_ambient_20260921/case/thermo/cold-pr-config.yaml",
+    "physicalModelHash": "d52430b67a052d06950ecd3e4e632ee05fc27d2519af2549a6901c7cbb419722",
+    "numericalPolicyHash": "9a4847793eb11af2d4009df428b70816970f533c35bc074aa38e5fa28435b2d1",
+    "modelFingerprint": "c3bbca5b6d6d99e6a838eade9f023a44e704736e6d29ef201cc699f5f4f53494",
+    "eos": "Peng-Robinson",
+    "closureBackend": "cpu",
+    "chemistryBackend": "cpu",
+    "deviceFullClosure": false,
+    "deviceChemistryIntegration": false
+  },
+  "transport": {
+    "allocatedBytes": "915060728",
+    "uploadedBytes": "8027981608",
+    "downloadedBytes": "2802243024",
+    "kernelLaunches": "1429",
+    "stages": "42",
+    "stepQueries": "42"
+  },
+  "transportProfile": {
+    "layoutTiles": "1009",
+    "layoutLaunches": "1009",
+    "memcpyCalls": "1234",
+    "payloadBytes": "10830538232",
+    "nasaValidationEvaluations": "0",
+    "nasaFaceEvaluations": "0",
+    "detailedGasCounters": "0",
+    "temperatureBasisBuilds": "0",
+    "temperatureBasisBytes": "0",
+    "pinnedBytes": "4194304",
+    "deviceStagingBytes": "4194304",
+    "slotCells": "65536",
+    "slots": "1",
+    "blockThreads": "256",
+    "eventWaits": "1009",
+    "failedCalls": "0",
+    "stageBarrier": "full",
+    "closureDownloadsPerRK": "2",
+    "overlapValidated": "0"
+  },
+  "performance": {
+    "samples": 21,
+    "medianStepSeconds": 149.509258554,
+    "p95StepSeconds": 214.000235153,
+    "totalStepSeconds": 3363.0261750210007,
+    "elapsedSeconds": 3434.261911,
+    "workerJobSecondsMin": 3390.1324150322303,
+    "workerJobSecondsMax": 3390.700648531321,
+    "workerJobSecondsSum": 81370.39540071561,
+    "sourceCalls": 0,
+    "performanceComparison": false
+  },
+  "evidence": {
+    "logSha256": "53abbe8b9dce5e906e6630f1e89665ba2a6aa1ebcc1f79f8e05f40d373cef100",
+    "statusSha256": "9ef9e092e3fbf446544610bdea45634e811df58ece16ed7a1a6d333dfcbf55fb",
+    "inputSha256": {
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/system/controlDict": "1ae59be364f023ca63c672d787dda4c70b2b2511104de8f4f97db84003c9e83b",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/reactiveProperties": "62209e3f6a0eaa1bb7a4f375a6ad81cb46ecc022931b986ba9a745d72f2f7706",
+      "/home/jsw/\ubb38\uc11c/analysis/runs/r04_reactive_ambient_20260921/case/thermo/cold-pr-config.yaml": "1814558edf986348a63c34e966945971111144b9b00eff33f2c53501e7e7f7d7",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/boundary": "6e9450385f23b1820e5952b4ebab15f130991604267e6c70d89242f0aa7e7f83",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/cellZones": "8b6e1842faf62e87c2feda5b11450cb96587cd8e3a6867eeb4a59f00ec646ee2",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/faces": "aa1ad7f26e292dcf24d503a97489d00679f3961e045659ddcb4bd689b2abbc40",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/neighbour": "65d64bfe730c9a56aebfa43ce57ae6d1aa38f55cf8c4adde87317b132a0279ac",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/owner": "40e5e7202e6ff3a56e8d5398f90bf935ac8f6e82449660752eeed4de7cf15825",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-case/constant/polyMesh/points": "7140b16a17df98177b0e6adb5cd6e6ca58426083f2603dcdf87467bae8987b17"
+    }
+  }
+}

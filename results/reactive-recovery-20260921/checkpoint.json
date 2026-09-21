@@ -1,0 +1,227 @@
+{
+  "backendSha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+  "passed": true,
+  "solverSha256": "1f1f941cd6da24904bb78f511e3a2d56d5f07748287182d630d0833da0a21319",
+  "tests": [
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "batch",
+      "name": "cpu-batch",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "rk2",
+      "name": "cpu-rk2",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 1,
+      "failedAttempts": 13,
+      "name": "cpu-persistent-last-accepted",
+      "passed": true,
+      "qBitwise": true
+    },
+    {
+      "files": 18,
+      "name": "cpu-atomic-write-failure",
+      "passed": true,
+      "previousCheckpointBitwise": true
+    },
+    {
+      "name": "cpu-missing-marker",
+      "passed": true,
+      "rejected": true
+    },
+    {
+      "name": "cpu-corrupt-state",
+      "passed": true,
+      "rejected": true
+    },
+    {
+      "acceptedSteps": 40,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "continuationSteps": 20,
+      "name": "cpu-20-step-restart",
+      "passed": true,
+      "qMaxScaled": 1.6872162677051115e-14,
+      "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 40,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "boundaryMaximum": 0.00016000000000003278,
+      "name": "cpu-open-boundary-history",
+      "passed": true,
+      "qMaxScaled": 6.794580520877909e-15,
+      "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "binary",
+      "name": "cpu-binary-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "ascii",
+      "name": "cpu-ascii-compression-off",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "off",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": true,
+      "encoding": "ascii",
+      "name": "cpu-ascii-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "batch",
+      "name": "cuda-batch",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "rk2",
+      "name": "cuda-rk2",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "cuda",
+      "name": "cuda-cuda",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "fault": "conservation",
+      "name": "cuda-conservation",
+      "passed": true,
+      "qMaxScaled": 1.8765969628696136e-14,
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 1,
+      "failedAttempts": 13,
+      "name": "cuda-persistent-last-accepted",
+      "passed": true,
+      "qBitwise": true
+    },
+    {
+      "files": 18,
+      "name": "cuda-atomic-write-failure",
+      "passed": true,
+      "previousCheckpointBitwise": true
+    },
+    {
+      "name": "cuda-missing-marker",
+      "passed": true,
+      "rejected": true
+    },
+    {
+      "name": "cuda-corrupt-state",
+      "passed": true,
+      "rejected": true
+    },
+    {
+      "acceptedSteps": 40,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "continuationSteps": 20,
+      "name": "cuda-20-step-restart",
+      "passed": true,
+      "qMaxScaled": 1.670093254717004e-14,
+      "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 40,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "boundaryMaximum": 0.0001600000000000328,
+      "name": "cuda-open-boundary-history",
+      "passed": true,
+      "qMaxScaled": 6.367160063552803e-16,
+      "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "binary",
+      "name": "cuda-binary-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "ascii",
+      "name": "cuda-ascii-compression-off",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "off",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": true,
+      "encoding": "ascii",
+      "name": "cuda-ascii-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    }
+  ],
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-formats-v2/validation.json",
+  "rawReportSha256": "ed9deac6fa8a07542f49f9df9645ab120af562560636574f570a9e4832df95d6"
+}

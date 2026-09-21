@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pintleReactiveThermo.h"
+#include "pintleRecovery.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleSmallSystem.h"
@@ -23,6 +24,8 @@
 #include <sunlinsol/sunlinsol_dense.h>
 #include <sunlinsol/sunlinsol_spgmr.h>
 #include <openssl/sha.h>
+#include <openssl/evp.h>
+#include <dlfcn.h>
 #include <Eigen/Dense>
 #include <Eigen/SparseLU>
 #include <algorithm>
@@ -103,7 +106,8 @@ struct Evaluation {
     PintleThermoState state{};
     double volume = 0, energy = 0, entropyDensity = 0;
     double Vp = 0, VT = 0, Ep = 0, ET = 0, cpDensity = 0;
-    std::array<double,2> muGas{}, muLiquid{};
+    std::array<double,2> muGas{}, muLiquid{},gasCondensable{};
+    bool explicitGasPartition=false;
 };
 
 struct ProfileTimer {
@@ -112,6 +116,8 @@ struct ProfileTimer {
     ~ProfileTimer() {seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();}
 };
 #include "pintleCaloricFast.h"
+
+#include "pintleRecoveryDiagnostics.inc"
 
 class ChemicalODE;
 class Model {
@@ -127,6 +133,8 @@ public:
     std::vector<std::string> names,elementNames;
     std::string fingerprint,configuration,physicalHash,policyHash,eosName,basePhysicalHash,physicalContext,numericalContext;
     bool scalarRecovery=true;
+    int recoveryMode=0;bool adaptiveRecovery=false;
+    RecoveryTrace recoveryTrace;std::string recoveryDiagnostic,runtimeManifest;
     std::unique_ptr<PintleCaloricData> caloric;
     PintleRealFluidProfile realProfile{};
     PintleCostProfileV21 cost{};double jobSeconds=0;
@@ -236,6 +244,7 @@ public:
     void refreshPolicyHash() {
         std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1.1:reference-flash:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
             <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
+        if(recoveryMode)policy<<":boundary-recovery-v1";
         policyHash=hashText(policy.str());
     }
 #include "pintleRealFluidModel.inc"
@@ -249,6 +258,7 @@ public:
     PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected,bool chemicalPotential=true)
     {
         ++cost.fullPhaseEvaluations;
+        if(recoveryTrace.current){auto& t=*recoveryTrace.current;t.phase=index;t.p=p;t.T=T;t.branch=-99;t.density=0;}
         bounds(p,T);
         Cantera::ThermoPhase* phase;
         if(index<0) {
@@ -272,6 +282,7 @@ public:
             // pressure argument to a saturation estimate before solving.
             const double density=fluid->densityCalc(T,p,index<0?FLUID_GAS:FLUID_LIQUID_0,phase->density());
             require(std::isfinite(density),"Non-finite cubic EOS density");
+            if(recoveryTrace.current)recoveryTrace.current->density=density;
             if(density<=0) throw PhaseUnavailable("Requested EOS root is unavailable");
             phase->setDensity(density);
             phase->setTemperature(T);
@@ -284,6 +295,7 @@ public:
         result.branch=FLUID_GAS;
         if(auto* fluid=dynamic_cast<Cantera::MixtureFugacityTP*>(phase)) {
             result.branch=fluid->reportSolnBranchActual();
+            if(recoveryTrace.current)recoveryTrace.current->branch=result.branch;
             if(!(index<0 ? result.branch<0 : result.branch>=0))
                 throw PhaseUnavailable("The requested gas/liquid EOS branch does not exist at this state");
         }
@@ -317,14 +329,19 @@ public:
                     "Liquid mass is outside the conserved condensable species inventory");
     }
 
-    Evaluation evaluate(const Vector& q,const Liquids& mass,double p,double T,bool virtualLiquids=false)
+    Evaluation evaluate(const Vector& q,const Liquids& mass,double p,double T,bool virtualLiquids=false,const Liquids* vapor=nullptr)
     {
         checkMass(q,mass); bounds(p,T);
         Evaluation value;
         auto& state=value.state;
         state.p=p;state.T=T;state.rho=std::accumulate(q.begin(),q.end(),0.0);
         Vector gasMass=q;
-        for(size_t i=0;i<nl;++i) gasMass[condensable[i]]-=mass[i];
+        for(size_t i=0;i<nl;++i) {
+            gasMass[condensable[i]]=vapor?(*vapor)[i]:q[condensable[i]]-mass[i];
+            if(vapor)require(std::isfinite((*vapor)[i])&&(*vapor)[i]>=0&&(*vapor)[i]<=q[condensable[i]],"Invalid explicit vapor inventory");
+            value.gasCondensable[i]=gasMass[condensable[i]];
+        }
+        value.explicitGasPartition=vapor!=nullptr;
         const double mg=std::accumulate(gasMass.begin(),gasMass.end(),0.0);
         state.gasMass=mg;
         auto accumulate=[&](double m,const PintlePhaseProperties& phase) {
@@ -418,13 +435,23 @@ public:
                              const Eigen::VectorXd& x,double scale,Evaluation* result=nullptr)
     {
         ++realProfile.flashResiduals;
-        Liquids mass{};
+        Liquids mass{},vapor{};
+        for(size_t i=0;i<nl;++i)vapor[i]=q[condensable[i]];
         for(size_t j=0;j<active.size();++j) {
             const size_t i=active[j];
-            require(x[2+j]>=0 && x[2+j]<1,"Flash liquid fraction leaves its bounded inventory");
-            mass[i]=x[2+j]*q[condensable[i]];
+            if(adaptiveRecovery) {
+                // Log vapor inventory avoids subtracting nearly equal q/liquid
+                // masses when the noncondensable inventory approaches zero.
+                require(std::isfinite(x[2+j])&&x[2+j]<=0,"Flash log vapor fraction leaves its bounded inventory");
+                vapor[i]=std::exp(x[2+j])*q[condensable[i]];
+                require(vapor[i]>0,"Flash vapor inventory underflow");
+                mass[i]=-std::expm1(x[2+j])*q[condensable[i]];
+            } else {
+                require(x[2+j]>=0 && x[2+j]<1,"Flash liquid fraction leaves its bounded inventory");
+                mass[i]=x[2+j]*q[condensable[i]];
+            }
         }
-        Evaluation value=evaluate(q,mass,std::exp(x[0]),std::exp(x[1]),true);
+        Evaluation value=evaluate(q,mass,std::exp(x[0]),std::exp(x[1]),true,adaptiveRecovery?&vapor:nullptr);
         require(value.state.gasMass>0,"An active-set gas flash requires a nonzero gas phase");
         Eigen::VectorXd f(x.size());f[0]=value.volume-1;f[1]=(value.energy-energy)/scale;
         for(size_t j=0;j<active.size();++j) {
@@ -441,12 +468,26 @@ public:
         Eigen::MatrixXd jac(x.size(),x.size());
         for(Eigen::Index j=0;j<x.size();++j) {
             double h=j<2 ? 2e-6 : 2e-5;
+            // In fallback mode, log vapor coordinates use relative perturbations.
+            // The reference liquid-fraction stencil remains unchanged.
             bool success=false;
             for(int attempt=0;attempt<12 && !success;++attempt,h*=0.5) {
                 Eigen::VectorXd xp=x,xm=x;xp[j]+=h;xm[j]-=h;
+                if(adaptiveRecovery) {
+                    if(xp[j]==x[j])xp[j]=std::nextafter(x[j],std::numeric_limits<double>::infinity());
+                    if(xm[j]==x[j])xm[j]=std::nextafter(x[j],-std::numeric_limits<double>::infinity());
+                }
                 Eigen::VectorXd fp,fm;bool plus=false,minus=false;
                 try {fp=residual(q,energy,active,xp,scale);plus=true;} catch(const std::exception&) {}
                 try {fm=residual(q,energy,active,xm,scale);minus=true;} catch(const std::exception&) {}
+                if(adaptiveRecovery) {
+                    const double hp=xp[j]-x[j],hm=x[j]-xm[j];
+                    if(plus&&minus)jac.col(j)=(hm/(hp+hm))*((fp-f)/hp)+(hp/(hp+hm))*((f-fm)/hm);
+                    else if(plus)jac.col(j)=(fp-f)/hp;
+                    else if(minus)jac.col(j)=(f-fm)/hm;
+                    success=(plus||minus)&&jac.col(j).allFinite()&&jac.col(j).cwiseAbs().maxCoeff()>0;
+                    continue;
+                }
                 if(plus&&minus) {jac.col(j)=(fp-fm)/(2*h);success=true;}
                 else if(plus) {jac.col(j)=(fp-f)/h;success=true;}
                 else if(minus) {jac.col(j)=(f-fm)/h;success=true;}
@@ -457,7 +498,7 @@ public:
     }
 
     Evaluation activeFlash(const Vector& q,double energy,const std::vector<size_t>& active,
-                           const PintleThermoState& guess,double seed)
+                           const PintleThermoState& guess,double seed,double secondSeed=-2)
     {
         ++cost.flashCandidates;
         const double rho=std::accumulate(q.begin(),q.end(),0.0);
@@ -466,12 +507,29 @@ public:
         x[0]=std::log(std::clamp(guess.p,pmin,pmax));x[1]=std::log(std::clamp(guess.T,Tmin,Tmax));
         for(size_t j=0;j<active.size();++j) {
             const size_t i=active[j];
+            const double selectedSeed=j==1&&secondSeed!=-2?secondSeed:seed;
             const double previous=guess.liquidMass[i]/q[condensable[i]];
-            x[2+j]=seed<0 ? std::clamp(previous,1e-8,1-1e-8) : seed;
+            x[2+j]=selectedSeed<0 ? std::clamp(previous,1e-8,1-1e-8) : selectedSeed;
+            if(adaptiveRecovery) {
+                double vaporFraction=selectedSeed<0?1-previous:1-selectedSeed;
+                if(selectedSeed==-3||(selectedSeed<0&&vaporFraction<1e-6)) {
+                    double other=0;
+                    for(size_t k=0;k<ns;++k) {
+                        bool activeCondensable=false;for(size_t a:active)activeCondensable|=k==condensable[a];
+                        if(!activeCondensable)other+=q[k];
+                    }
+                    // This is a search seed, not a floor on accepted inventories.
+                    vaporFraction=other>0?std::min(1e-6,0.01*(other/q[condensable[i]])):1e-8;
+                }
+                require(vaporFraction>0&&std::isfinite(vaporFraction),"Invalid inventory-aware vapor seed");
+                x[2+j]=std::log(std::min(1.0,vaporFraction));
+            }
         }
         Evaluation value;
+        recoveryTrace.initial(x);
         auto f=residual(q,energy,active,x,scale,&value);
         for(int iteration=0;iteration<90;++iteration) {
+            recoveryTrace.iterate(x,f,iteration);
             const double chemical=active.empty()?0:f.tail(active.size()).cwiseAbs().maxCoeff();
             if(std::abs(f[0])<=vtol && std::abs(f[1])<=etol && chemical<=mutol) {
                 value.state.volumeResidual=std::abs(f[0]);value.state.energyResidual=std::abs(f[1]);
@@ -492,7 +550,7 @@ public:
             require(jac.fullPivLu().isInvertible(),"Singular active-set flash Jacobian");
             Eigen::VectorXd step=pintleFlashSolve(jac,-f);
             double limiter=std::max({1.0,std::abs(step[0])/0.7,std::abs(step[1])/0.18});
-            for(Eigen::Index j=2;j<step.size();++j) limiter=std::max(limiter,std::abs(step[j])/0.3);
+            for(Eigen::Index j=2;j<step.size();++j) limiter=std::max(limiter,std::abs(step[j])/(adaptiveRecovery?2.0:0.3));
             step/=limiter;
             bool accepted=false;const double norm=f.lpNorm<Eigen::Infinity>();
             for(double fraction=1;fraction>1e-9;fraction*=0.5) {
@@ -515,7 +573,7 @@ public:
         const double p=value.state.p,T=value.state.T;
         if(value.state.gasMass>0) {
             Liquids mass{};for(size_t i=0;i<nl;++i) mass[i]=value.state.liquidMass[i];
-            const auto comparison=evaluate(q,mass,p,T,true);
+            const auto comparison=evaluate(q,mass,p,T,true,value.explicitGasPartition?&value.gasCondensable:nullptr);
             for(size_t i=0;i<nl;++i) {
                 if(q[condensable[i]]==0) continue;
                 const double affinity=comparison.muLiquid[i]-comparison.muGas[i];
@@ -562,23 +620,28 @@ public:
         return best>=-mutol;
     }
 
-    Evaluation equilibrium(const Vector& q,double energy,const PintleThermoState& guess)
+    Evaluation equilibriumSearch(const Vector& q,double energy,const PintleThermoState& guess)
     {
         checkMass(q,{});
         if(nl==0) return frozen(q,{},energy,guess);
         std::vector<Evaluation> candidates;
         std::string failure;
         auto consider=[&](Evaluation result) {
-            if(stable(result,q)) candidates.push_back(result);
+            const bool accepted=stable(result,q);
+            if(accepted)candidates.push_back(result);
+            recoveryTrace.finish(accepted,accepted?"accepted":"stability check failed");
         };
-        try {consider(frozen(q,{},energy,guess));} catch(const std::exception& ex) {failure=ex.what();}
+        auto rejected=[&](const std::exception& ex){failure=ex.what();recoveryTrace.finish(false,failure);};
+        recoveryTrace.begin(0,0,adaptiveRecovery);
+        try {consider(frozen(q,{},energy,guess));} catch(const std::exception& ex) {rejected(ex);}
         Liquids allLiquid{};double noncondensable=std::accumulate(q.begin(),q.end(),0.0);
         for(size_t i=0;i<nl;++i) {allLiquid[i]=q[condensable[i]];noncondensable-=allLiquid[i];}
         if(noncondensable<=1e-14*std::accumulate(q.begin(),q.end(),0.0)) {
             // Require exact zero gas inventory; do not erase small gas masses.
             Vector gasInventory=q;for(size_t i=0;i<nl;++i) gasInventory[condensable[i]]=0;
             if(std::accumulate(gasInventory.begin(),gasInventory.end(),0.0)==0)
-                try {consider(frozen(q,allLiquid,energy,guess));} catch(const std::exception& ex) {failure=ex.what();}
+                {recoveryTrace.begin((1<<nl)-1,1,adaptiveRecovery);
+                try {consider(frozen(q,allLiquid,energy,guess));} catch(const std::exception& ex) {rejected(ex);}}
         }
         for(unsigned mask=1;mask<(1u<<nl);++mask) {
             std::vector<size_t> active;bool possible=true;
@@ -589,15 +652,50 @@ public:
             // All valid candidates are compared by entropy; equal chemical
             // potentials alone do not constitute the acceptance criterion.
             for(double seed:{-1.0,0.5,0.95,0.1,0.9999}) {
-                try {
-                    auto result=activeFlash(q,energy,active,guess,seed);
-                    if(stable(result,q)) candidates.push_back(result);
-                } catch(const std::exception& ex) {failure=ex.what();}
+                recoveryTrace.begin(mask,seed,adaptiveRecovery);
+                try {consider(activeFlash(q,energy,active,guess,seed));}
+                catch(const std::exception& ex) {rejected(ex);}
+            }
+            if(adaptiveRecovery) {
+                recoveryTrace.begin(mask,-3,true);
+                try {consider(activeFlash(q,energy,active,guess,-3));}
+                catch(const std::exception& ex){rejected(ex);}
+            }
+            if(adaptiveRecovery&&active.size()==2) {
+                // Different condensables need independent partitions: diagonal
+                // liquid-fraction seeds can all start on an unavailable gas root.
+                for(double first:{0.1,0.5,0.95,0.9999})for(double second:{0.1,0.5,0.95,0.9999}) {
+                    if(first==second)continue;
+                    recoveryTrace.begin(mask,first,true);
+                    try {consider(activeFlash(q,energy,active,guess,first,second));}
+                    catch(const std::exception& ex){rejected(ex);}
+                }
             }
         }
         require(!candidates.empty(),"No stable UV flash candidate: "+failure);
         return *std::max_element(candidates.begin(),candidates.end(),
             [](const Evaluation& a,const Evaluation& b){return a.entropyDensity<b.entropyDensity;});
+    }
+    Evaluation equilibrium(const Vector& q,double energy,const PintleThermoState& guess)
+    {
+        recoveryTrace.count=0;recoveryTrace.omitted=0;recoveryTrace.current=nullptr;
+        Evaluation reference;bool haveReference=false;
+        try {
+            reference=equilibriumSearch(q,energy,guess);haveReference=true;
+            if(!recoveryMode)return reference;
+            bool boundary=false;
+            for(size_t i=0;i<nl;++i)if(q[condensable[i]]>0&&reference.state.gasMass>0)
+                boundary|=reference.state.liquidMass[i]/q[condensable[i]]>1-1e-4;
+            if(!boundary)return reference;
+        } catch(const std::exception&) {if(!recoveryMode)throw;}
+        struct Reset {bool& flag;~Reset(){flag=false;}} reset{adaptiveRecovery};adaptiveRecovery=true;
+        try {
+            const auto recovered=equilibriumSearch(q,energy,guess);
+            // Near a phase boundary, a successful reference search may still
+            // have missed a higher-entropy root because its seeds lose vapor.
+            return haveReference&&reference.entropyDensity>=recovered.entropyDensity?reference:recovered;
+        } catch(const std::exception&) {if(haveReference)return reference;throw;}
+
     }
 };
 
@@ -1198,13 +1296,52 @@ int pintle_rt_make_state(void* model,double T,double p,const double* Y,const dou
         std::copy(mass.begin(),mass.end(),q);*energy=result.energy;*state=result.state;
     });
 }
+int pintle_rt_file_sha256_v1(const char* path,char* output,size_t capacity) {
+    try {
+        require(path&&output&&capacity>=65,"Invalid SHA256 output");
+        std::ifstream input(path,std::ios::binary);require(bool(input),"Cannot open identity file");
+        std::unique_ptr<EVP_MD_CTX,decltype(&EVP_MD_CTX_free)> ctx(EVP_MD_CTX_new(),&EVP_MD_CTX_free);
+        require(bool(ctx)&&EVP_DigestInit_ex(ctx.get(),EVP_sha256(),nullptr)==1,"SHA256 initialization failed");
+        std::array<char,65536> buffer{};
+        while(input){input.read(buffer.data(),buffer.size());require(EVP_DigestUpdate(ctx.get(),buffer.data(),input.gcount())==1,"SHA256 update failed");}
+        require(input.eof()&&!input.bad(),"Identity file read failed");
+        unsigned char digest[EVP_MAX_MD_SIZE];unsigned length=0;
+        require(EVP_DigestFinal_ex(ctx.get(),digest,&length)==1&&length==32,"SHA256 finalization failed");
+        for(unsigned i=0;i<length;++i)std::snprintf(output+2*i,3,"%02x",digest[i]);
+        return 0;
+    }catch(...){if(output&&capacity)output[0]=0;return 1;}
+}
+const char* pintle_rt_runtime_manifest_v1(void* model) {
+    if(!model)return nullptr;
+    auto& m=*static_cast<Model*>(model);
+    try {
+        Dl_info info{};require(dladdr(reinterpret_cast<void*>(&pintle_rt_set_recovery_v1),&info)&&info.dli_fname,"Cannot locate loaded backend");
+        char digest[65];require(pintle_rt_file_sha256_v1(info.dli_fname,digest,sizeof(digest))==0,"Cannot hash loaded backend");
+        std::ostringstream out;out<<"{\"schema\":1,\"backendPath\":"<<recoveryQuote(info.dli_fname)
+            <<",\"backendSha256\":"<<recoveryQuote(digest)<<",\"thermoConfiguration\":"<<recoveryQuote(m.configuration)
+            <<",\"physicalModelHash\":"<<recoveryQuote(m.physicalHash)<<",\"numericalPolicyHash\":"<<recoveryQuote(m.policyHash)
+            <<",\"modelFingerprint\":"<<recoveryQuote(m.fingerprint)<<",\"eos\":"<<recoveryQuote(m.eosName)
+            <<",\"closureBackend\":\"cpu\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":false,\"deviceChemistryIntegration\":false}";
+        m.runtimeManifest=out.str();return m.runtimeManifest.c_str();
+    }catch(const std::exception& e){std::snprintf(m.error.data(),m.error.size(),"%s",e.what());return nullptr;}
+}
+int pintle_rt_set_recovery_v1(void* model,int mode,int diagnostics) {
+    return protect(model,[&](Model& m){require(mode==0||mode==1,"Unknown recovery mode");
+        m.recoveryMode=mode;m.recoveryTrace.enabled=diagnostics!=0;m.refreshPolicyHash();});
+}
+const char* pintle_rt_recovery_diagnostic_v1(void* model) {
+    return model?static_cast<Model*>(model)->recoveryDiagnostic.c_str():nullptr;
+}
 int pintle_rt_recover(void* model,const double* q,double energy,int equilibrium,PintleThermoState* state)
 {
     return protect(model,[&](Model& m){
+        m.recoveryDiagnostic.clear();m.recoveryTrace.count=0;m.recoveryTrace.omitted=0;m.recoveryTrace.current=nullptr;
         Vector masses(q,q+m.ns);Evaluation result;
-        if(equilibrium) result=m.equilibrium(masses,energy,*state);
-        else result=m.frozen(masses,{state->liquidMass[0],state->liquidMass[1]},energy,*state);
-        *state=result.state;
+        try {
+            if(equilibrium) result=m.equilibrium(masses,energy,*state);
+            else result=m.frozen(masses,{state->liquidMass[0],state->liquidMass[1]},energy,*state);
+            *state=result.state;
+        } catch(...) {if(m.recoveryTrace.enabled)m.recoveryDiagnostic=m.recoveryTrace.json();throw;}
     });
 }
 
@@ -1381,6 +1518,8 @@ int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibriu
                     double rtol,double atol,PintleThermoState* state,double* maxElementDrift)
 {
     return protect(model,[&](Model& m){
+        m.recoveryDiagnostic.clear();
+        require(m.recoveryMode==0,"Boundary recovery is not validated for chemical source integration");
         struct SourceAttempt {PintleCostProfileV21& c;bool accepted=false;
             explicit SourceAttempt(PintleCostProfileV21& cost):c(cost){++c.sourceAttempts;}
             ~SourceAttempt(){if(accepted)++c.sourceAccepted;else ++c.sourceFailed;}} attempt(m.cost);

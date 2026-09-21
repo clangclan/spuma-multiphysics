@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "groups": {
+    "recovery": {
+      "checks": 388,
+      "passed": true,
+      "report": "recovery.json"
+    },
+    "runtime-cpu": {
+      "checks": 14,
+      "passed": true,
+      "report": "runtime-cpu.json"
+    },
+    "runtime-cuda": {
+      "checks": 14,
+      "passed": true,
+      "report": "runtime-cuda.json"
+    },
+    "checkpoint": {
+      "checks": 24,
+      "passed": true,
+      "report": "checkpoint.json"
+    },
+    "mechanical-cpu": {
+      "checks": 8,
+      "passed": true,
+      "report": "mechanical-cpu.json"
+    },
+    "mechanical-cuda": {
+      "checks": 8,
+      "passed": true,
+      "report": "mechanical-cuda.json"
+    },
+    "physics": {
+      "checks": 44,
+      "passed": true,
+      "report": "physics.json"
+    },
+    "rollback": {
+      "checks": 6,
+      "passed": true,
+      "report": "rollback.json"
+    },
+    "rollback-chemistry": {
+      "checks": 6,
+      "passed": true,
+      "report": "rollback-chemistry.json"
+    }
+  },
+  "regression_passed": true,
+  "full_mesh_gate": "passed",
+  "physics_accuracy_passed": false,
+  "sourceScope": "R04 recovery and checkpoint foundations; no full GPU physics implementation",
+  "checks": 512,
+  "full_mesh_report": "full-mesh.json",
+  "final_build_restart": "passed",
+  "final_build_restart_reports": [
+    "final-build-continuation.json",
+    "restart-parity.json"
+  ],
+  "scoped_acceptance_passed": true,
+  "optimization_gate": "not_implemented"
+}

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "baselineCommit": "7d95bd50b5934f41099218d308a57559d2e2f2bd",
+  "mergedPr1Commit": "65aeb94d22ae8057e5a9c6b7ac2b080501484f7a",
+  "selectionCommit": "96a781cc6b6e6e61d45f714b3f67befcc12c7cda",
+  "immutableEvidence": {
+    "results/pr1-local-20260921/acceptance-summary.json": "527e8205e8d9378e0a7b8d989bab1752e73d48ca03b5525a259c421541efbffd",
+    "results/pr1-local-20260921/provenance.json": "496ceb5daabecb9a19e2ce7bded41390d4be779e31262686f4fee9e2de09d210",
+    "results/pr1-local-20260921/flow-sanitizer/validation.json": "d99525cd4689a6b56c8349b9f3d9c4c070b16c883b7590fedb1c7b7c34a99ab4",
+    "results/physics-selection-20260921/validation-summary.json": "5ba40028a1cb114c461bf76c8f7892b2213fcc232e777192dbb6b3b555bca320",
+    "results/physics-selection-20260921/provenance.json": "b5455f4b89ae7977c9cb3e0697461bd198787dcd8d8723f05c10c981e8140ce9"
+  },
+  "regression_passed": true,
+  "physics_accuracy_passed": false,
+  "meaning": "Historical main regression acceptance. Does not certify this new work or spray physics."
+}
