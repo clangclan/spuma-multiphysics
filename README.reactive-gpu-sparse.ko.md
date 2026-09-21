@@ -1,3 +1,5 @@
+> 이 문서는 2026-09-12 포팅 당시의 기록이다. 현재 기본 솔버는 ReactiveFoam이며 ColdFoam은 제거했다. 최신 빌드·실행 방법은 [프로젝트 안내](README.ko.md)를 따른다.
+
 # ReactiveFoam GPU 수송·희소 화학 포팅 — 2026-09-12
 
 > 이 문서는 작성 시점의 구현·검증 기록이다. 2026-09-21의 실제 GPU·SPUMA 검증 및 재시작 수정 결과는 [PR #1 로컬 검증 보고서](reports/pr1-local-validation-20260921.md)를 기준으로 한다.

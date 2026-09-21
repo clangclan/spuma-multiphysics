@@ -1,3 +1,0 @@
-pintleAsyncGaussSeidelSmoother.C
-
-LIB = $(PINTLE_GPU_ROOT)/lib/libpintleAsyncSmoother

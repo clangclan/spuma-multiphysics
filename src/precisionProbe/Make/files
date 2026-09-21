@@ -1,3 +1,0 @@
-pintlePrecisionProbe.C
-
-LIB = $(PINTLE_GPU_ROOT)/lib/libpintlePrecisionProbe

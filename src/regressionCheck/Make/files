@@ -1,3 +1,0 @@
-pintleRegressionCheck.C
-
-EXE = $(PINTLE_GPU_ROOT)/bin/pintleRegressionCheck

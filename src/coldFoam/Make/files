@@ -1,3 +1,0 @@
-compressibleMultiphaseInterFoam.C
-
-EXE = $(PINTLE_GPU_ROOT)/bin/spumaPintleColdFoam

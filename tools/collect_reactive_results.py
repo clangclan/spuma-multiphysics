@@ -5,7 +5,6 @@ import argparse
 from decimal import Decimal
 import json
 from pathlib import Path
-import subprocess
 
 import numpy as np
 
@@ -17,12 +16,12 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--campaign",type=Path,required=True);p.add_argument("--refined",type=Path,required=True)
     p.add_argument("--runtime",type=Path,required=True);p.add_argument("--thermo",type=Path,required=True)
-    p.add_argument("--legacy",type=Path,required=True);p.add_argument("--output",type=Path,required=True)
+    p.add_argument("--output",type=Path,required=True)
     a=p.parse_args()
     if a.output.exists():raise SystemExit("Refusing to overwrite collected evidence")
     load=lambda p:json.loads(p.read_text())
     campaign=load(a.campaign/"campaign.json");fine=load(a.refined/"campaign.json")
-    runtime=load(a.runtime/"validation.json");thermo=load(a.thermo);legacy=load(a.legacy/"checks.json")
+    runtime=load(a.runtime/"validation.json");thermo=load(a.thermo)
     def compact(run):
         definition=load(Path(run["directory"])/"run-definition.json") if (Path(run["directory"])/"run-definition.json").exists() else None
         result={k:v for k,v in run.items() if k!="analysis"}
@@ -63,7 +62,6 @@ def main():
             "runs":[compact(r) for r in campaign["runs"]],"refined_runs":[compact(r) for r in fine["runs"]],
             "time_sensitivity":comparisons,
             "paired_transport":{k:campaign[k] for k in ("viscous_paired","conduction_paired","diffusion_paired")},
-            "legacy_regression":legacy,
             "retained_development_failures":[]}
     for directory in ("reactive-campaign-v1","reactive-campaign-v2","reactive-campaign-v3"):
         path=root/"cases"/directory/"campaign.json"
@@ -72,11 +70,6 @@ def main():
                 report["retained_development_failures"].append({"campaign":directory,"spec":r["spec"],"error":r.get("error"),
                                                                "checks":r.get("analysis",{}).get("checks"),"report_sha256":b.sha256(path)})
     report["retained_development_failures"].append({"campaign":"reactive-runtime-v8","reason":"Negative inventory was correctly rejected; test expected the wrong message text. Corrected harness passes in v9.","report_sha256":b.sha256(root/"cases/reactive-runtime-v8/validation.json")})
-    baseline="40a86e96dcd3713d0ac0afc3b8b162188eb67624"
-    old_paths=subprocess.check_output(["git","ls-tree","-r","--name-only",baseline,"--","src","Allwmake","env.sh"],cwd=root,text=True).splitlines()
-    report["legacy_tracked_sources_unchanged"]=not subprocess.check_output(["git","diff",baseline,"--",*old_paths],cwd=root).strip()
-    previous=load(root/"benchmarks/gas-legacy-regressions/checks.json")
-    report["legacy_binaries_identical_to_prior_campaign"]=previous["protected_after"]==legacy["protected_after"]
     b.atomic_json(a.output,report)
     print(json.dumps({"output":str(a.output),"campaign_passed":report["campaign_passed"],"production_ready":False,"time_sensitivity":comparisons},indent=2))
 

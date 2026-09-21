@@ -1,0 +1,55 @@
+{
+  "base_commit": "49d476ce7ec3289458d97387902daac7fb110b4a",
+  "selection_commit": "96a781cc6b6e6e61d45f714b3f67befcc12c7cda",
+  "selection_core_source_unchanged": true,
+  "builds": {
+    "cpu": "passed via ./Allwmake",
+    "cuda": "passed via ./Allwmake; PINTLE_CUDA_ARCH=120"
+  },
+  "solver_checks": {
+    "physics-cpu-cuda": {
+      "passed": true,
+      "checks": 44
+    },
+    "default-cpu-physics": {
+      "passed": true,
+      "checks": 27
+    },
+    "reactive-cpu": {
+      "passed": true,
+      "checks": 14
+    },
+    "reactive-cuda": {
+      "passed": true,
+      "checks": 14
+    },
+    "mechanical-cpu": {
+      "passed": true,
+      "checks": 8
+    },
+    "mechanical-cuda": {
+      "passed": true,
+      "checks": 8
+    }
+  },
+  "solver_check_count": 115,
+  "unit_tests": {
+    "passed": true,
+    "count": 8
+  },
+  "python_imports": {
+    "passed": true,
+    "count": 31
+  },
+  "retained_common_functions_classes_ast_unchanged": 16,
+  "collector_without_legacy_input": {
+    "passed": true,
+    "known_campaign_failure_preserved": true
+  },
+  "scope": "Repository cleanup and default entry point only; no new physical models or numerical-method changes. Historical HEM accuracy failures remain.",
+  "readme_frozen_cpu_example": {
+    "passed": true,
+    "cells": 32,
+    "returncode": 0
+  }
+}

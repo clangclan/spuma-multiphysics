@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 set -eo pipefail
 cd -- "$(dirname -- "$0")"
-source ./env.sh
-mkdir -p bin lib logs
-wmake -j2 libso src/coldFoam/multiphaseMixtureThermo 2>&1 | tee logs/build-thermo.log
-wmake -j1 src/coldFoam 2>&1 | tee logs/build-solver.log
-wmake -j1 src/thermoCheck 2>&1 | tee logs/build-thermo-check.log
-wmake -j1 src/prIdentityCheck 2>&1 | tee logs/build-pr-identity-check.log
+mkdir -p logs
+bash tools/build_reactive_solver.sh 2>&1 | tee logs/build-reactive.log
