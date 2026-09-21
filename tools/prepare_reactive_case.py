@@ -12,7 +12,7 @@ import numpy as np
 from scipy.optimize import root
 
 import benchmark as common
-from prepare_minicase import header
+from benchmark import header
 from real_fluid_backend import RealFluidBackend as Backend
 from write_real_fluid_manifest import model_manifest
 from validate_reactive_thermo import saturation

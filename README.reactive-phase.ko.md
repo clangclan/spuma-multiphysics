@@ -2,7 +2,7 @@
 
 실행 명령은 `ReactiveFoam`이다(이전 이름: `pintleReactiveFoam`). 다시 빌드한 뒤 기존 케이스의 `system/controlDict`에서도 `application ReactiveFoam;`으로 변경한다. 솔버 소스는 `src/reactiveFoam/ReactiveFoam.C`에 있다.
 
-`ReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
+`ReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 저장소의 기본 솔버이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
 최신 GPU·SPUMA 실행 검증과 재시작·쓰기·성능 회귀 수정은 [PR #1 로컬 검증 보고서](reports/pr1-local-validation-20260921.md)에 있다. 기존 물리 모델 검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 이 보고서들의 구현·실행 검증은 MAIN이 수행했다.
 
@@ -112,7 +112,7 @@ HLL의 계면 확산은 남아 있다. 압력이 일정한 접촉면 시험 통�
 micromamba create -y -p "$PWD/research/reactive-env" -c conda-forge \
   --strict-channel-priority python=3.12 cantera=3.2 libcantera-devel=3.2 \
   coolprop=6.7 scipy numpy pyyaml
-flock /home/jsw/cae-benchmark/run.lock bash tools/build_reactive_solver.sh
+flock /home/jsw/cae-benchmark/run.lock ./Allwmake
 ```
 
 실제 검사에 사용한 패키지의 고정 목록은 `tools/reactive-env-linux64.lock`이다. `micromamba create -p <새 경로> --file tools/reactive-env-linux64.lock`으로 복원할 수 있으나, 이 목록은 **linux-64/x86-64-v4 CPU용**이다. 다른 CPU·SPUMA 빌드의 호환성은 별도로 확인해야 한다. 백엔드는 호스트 C++ 라이브러리이며 GPU 가속 화학 계산이나 MPI 성능을 주장하지 않는다.

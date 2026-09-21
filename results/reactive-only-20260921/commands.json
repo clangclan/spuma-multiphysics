@@ -1,0 +1,97 @@
+[
+  {
+    "name": "reactive-cuda",
+    "command": [
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-env/bin/python",
+      "tools/validate_reactive_runtime.py",
+      "--thermo-dir",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4",
+      "--output",
+      "logs/reactive-only-final-reactive-cuda",
+      "--transport-backend",
+      "cuda"
+    ],
+    "returncode": 0,
+    "seconds": 12.573175134995836,
+    "passed": true,
+    "checks": 14
+  },
+  {
+    "name": "mechanical-cuda",
+    "command": [
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-env/bin/python",
+      "tools/validate_mechanical_runtime.py",
+      "--thermo-dir",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4",
+      "--output",
+      "logs/reactive-only-final-mechanical-cuda",
+      "--transport-backend",
+      "cuda"
+    ],
+    "returncode": 0,
+    "seconds": 6.242380941002921,
+    "passed": true,
+    "checks": 8
+  },
+  {
+    "name": "default-build",
+    "command": [
+      "flock",
+      "/home/jsw/cae-benchmark/run.lock",
+      "./Allwmake"
+    ],
+    "returncode": 0,
+    "seconds": 11.13640674600174
+  },
+  {
+    "name": "default-physics",
+    "command": [
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-env/bin/python",
+      "tools/validate_reactive_physics.py",
+      "--thermo-dir",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4",
+      "--output",
+      "logs/reactive-only-final-default-physics",
+      "--backends",
+      "cpu"
+    ],
+    "returncode": 0,
+    "seconds": 60.218790282000555,
+    "passed": true,
+    "checks": 27
+  },
+  {
+    "name": "reactive-cpu",
+    "command": [
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-env/bin/python",
+      "tools/validate_reactive_runtime.py",
+      "--thermo-dir",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4",
+      "--output",
+      "logs/reactive-only-final-reactive-cpu",
+      "--transport-backend",
+      "cpu"
+    ],
+    "returncode": 0,
+    "seconds": 12.434916849997535,
+    "passed": true,
+    "checks": 14
+  },
+  {
+    "name": "mechanical-cpu",
+    "command": [
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-env/bin/python",
+      "tools/validate_mechanical_runtime.py",
+      "--thermo-dir",
+      "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4",
+      "--output",
+      "logs/reactive-only-final-mechanical-cpu",
+      "--transport-backend",
+      "cpu"
+    ],
+    "returncode": 0,
+    "seconds": 6.3418325259990525,
+    "passed": true,
+    "checks": 8
+  }
+]

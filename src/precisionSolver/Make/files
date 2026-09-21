@@ -1,3 +1,0 @@
-pintleMixedTemperature.C
-
-LIB = $(PINTLE_GPU_ROOT)/lib/libpintleMixedTemperature

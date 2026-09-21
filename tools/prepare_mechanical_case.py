@@ -7,7 +7,7 @@ import numpy as np
 import cantera as ct
 import yaml
 import benchmark as common
-from prepare_minicase import header
+from benchmark import header
 from prepare_reactive_case import prepare as prepare_hem
 from reactive_backend import Backend, State, MechanicalState
 
