@@ -76,11 +76,12 @@
       "model_supported": true,
       "gpu_validated": null,
       "physics_validated": false,
-      "performance_measured": false,
+      "performance_measured": true,
       "default_enabled": false,
       "evidence": [
         "../../reports/reactive-recovery-20260921.md"
-      ]
+      ],
+      "performanceEvidence": "One 21-step full-mesh continuation; no repeated optimization OFF/ON comparison or speedup claim."
     },
     {
       "name": "atomic-checkpoint",

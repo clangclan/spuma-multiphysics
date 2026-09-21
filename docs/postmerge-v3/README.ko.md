@@ -66,6 +66,10 @@ python tools/validate_reactive_run.py /absolute/path/new-run-directory \
   --output full-mesh-validation.json
 ```
 
+## 현재 검증
+
+[검증 보고서](../../reports/reactive-recovery-20260921.md): 회귀 512개 통과, R04 1,042,500셀에서 재시작 후 21스텝 연속 승인·재시도 0회·12 ns 정상 종료. 최종 빌드는 같은 체크포인트의 보존량/수지 이력을 그대로 읽고 12.1 ns까지 한 스텝 더 진행했다. binary/ASCII 및 ASCII gzip 재시작도 검사했다. 이 OpenFOAM은 binary 압축 요청을 경고 후 해제한다. P2 최적화 OFF/ON 비교와 확장 물리 인수는 수행하지 않았다.
+
 ## 후속 범위
 
 | v3 기능 | 현재 상태 |

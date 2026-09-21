@@ -134,7 +134,9 @@ def launch(a):
                     state['residuals']={k:float(v) for k,v in fields.items() if k.endswith('Residual')}
                 if line.startswith('REACTIVE_RETRY '):
                     state['phase']='retrying';state['lastRejection']=line.strip();state['retryEvents']=state.get('retryEvents',0)+1
-                if line.startswith('REACTIVE_CHECKPOINT '):state['lastCheckpoint']=line.strip()
+                if line.startswith('REACTIVE_CHECKPOINT '):
+                    state['lastCheckpoint']=line.strip()
+                    state['physicalTime']=float(dict(re.findall(r'(\w+)=([^ ]+)',line))['time'])
                 if line.startswith('REACTIVE_FAILURE '):state['failure']=line.strip()
                 if line.startswith('REACTIVE_'):
                     state['lastSolverEventAt']=now();save(status,state)

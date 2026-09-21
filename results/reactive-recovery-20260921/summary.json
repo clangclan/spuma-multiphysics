@@ -17,7 +17,7 @@
       "report": "runtime-cuda.json"
     },
     "checkpoint": {
-      "checks": 18,
+      "checks": 24,
       "passed": true,
       "report": "checkpoint.json"
     },
@@ -48,8 +48,16 @@
     }
   },
   "regression_passed": true,
-  "full_mesh_gate": "pending",
+  "full_mesh_gate": "passed",
   "physics_accuracy_passed": false,
   "sourceScope": "R04 recovery and checkpoint foundations; no full GPU physics implementation",
-  "checks": 506
+  "checks": 512,
+  "full_mesh_report": "full-mesh.json",
+  "final_build_restart": "passed",
+  "final_build_restart_reports": [
+    "final-build-continuation.json",
+    "restart-parity.json"
+  ],
+  "scoped_acceptance_passed": true,
+  "optimization_gate": "not_implemented"
 }

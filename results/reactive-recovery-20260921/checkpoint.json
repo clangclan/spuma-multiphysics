@@ -1,7 +1,7 @@
 {
   "backendSha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
   "passed": true,
-  "solverSha256": "172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858",
+  "solverSha256": "1f1f941cd6da24904bb78f511e3a2d56d5f07748287182d630d0833da0a21319",
   "tests": [
     {
       "acceptedSteps": 3,
@@ -65,6 +65,42 @@
       "passed": true,
       "qMaxScaled": 6.794580520877909e-15,
       "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "binary",
+      "name": "cpu-binary-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "ascii",
+      "name": "cpu-ascii-compression-off",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "off",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": true,
+      "encoding": "ascii",
+      "name": "cpu-ascii-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
     },
     {
       "acceptedSteps": 3,
@@ -148,8 +184,44 @@
       "passed": true,
       "qMaxScaled": 6.367160063552803e-16,
       "time": 3.999999999999998e-05
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "binary",
+      "name": "cuda-binary-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": false,
+      "encoding": "ascii",
+      "name": "cuda-ascii-compression-off",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "off",
+      "time": 4e-06
+    },
+    {
+      "acceptedSteps": 3,
+      "baselineBitwise": true,
+      "boundaryMaxScaled": 0.0,
+      "compressedIdentity": true,
+      "encoding": "ascii",
+      "name": "cuda-ascii-compression-on",
+      "passed": true,
+      "qMaxScaled": 0.0,
+      "requestedCompression": "on",
+      "time": 4e-06
     }
   ],
-  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-ownership/validation.json",
-  "rawReportSha256": "9f9884c64b5abe5e7b53eb4139315554632cb6add9a09dce3e12f4d8c549da27"
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-formats-v2/validation.json",
+  "rawReportSha256": "ed9deac6fa8a07542f49f9df9645ab120af562560636574f570a9e4832df95d6"
 }

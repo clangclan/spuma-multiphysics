@@ -53,7 +53,8 @@ void verify(const fs::path& dir) {
         demand(pintleIdentityHash(hash)&&name.find('/')==std::string::npos&&name!="."&&name!="..",
                "Invalid checkpoint manifest entry");
         demand(fs::is_regular_file(dir/name)&&sha(dir/name)==hash,"Checkpoint checksum mismatch: "+name);
-        state|=name=="reactiveState.bin";identity|=name=="reactiveStateIdentity";++count;
+        state|=name=="reactiveState.bin";
+        identity|=name=="reactiveStateIdentity"||name=="reactiveStateIdentity.gz";++count;
     }
     demand(marker.eof()&&state&&identity&&count>2,"Incomplete checkpoint manifest");
 }

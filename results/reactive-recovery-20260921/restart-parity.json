@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "passed": true,
+  "scope": "Exact conserved/history reload before the final build advances one further accepted step",
+  "original": {
+    "cells": 1042500,
+    "variables": 8,
+    "acceptedSteps": 26,
+    "retries": 0,
+    "time": 1.2e-08,
+    "lastDt": 2.0669935883933714e-10,
+    "negativeSpeciesValues": 0,
+    "nonfiniteValues": 0,
+    "verifiedFiles": 17,
+    "stateSha256": "31a56f44c5bcd7591252a76affddaaeb3dea085f2383da871d92cf526e577d3e",
+    "initialSha256": "829d2b7783a6e68cb7a7c04d1260dfba06f1bdb44720cfdd832a731e2bdbba95"
+  },
+  "loaded": {
+    "cells": 1042500,
+    "variables": 8,
+    "acceptedSteps": 26,
+    "retries": 0,
+    "time": 1.2e-08,
+    "lastDt": 2.0669935883933714e-10,
+    "negativeSpeciesValues": 0,
+    "nonfiniteValues": 0,
+    "verifiedFiles": 17,
+    "stateSha256": "7246563bdbcc4c2df2fd087c0500338563807e641bf29187651096559fb255cc",
+    "initialSha256": "829d2b7783a6e68cb7a7c04d1260dfba06f1bdb44720cfdd832a731e2bdbba95"
+  },
+  "final": {
+    "cells": 1042500,
+    "variables": 8,
+    "acceptedSteps": 27,
+    "retries": 0,
+    "time": 1.21e-08,
+    "lastDt": 1.000000000000009e-10,
+    "negativeSpeciesValues": 0,
+    "nonfiniteValues": 0,
+    "verifiedFiles": 17,
+    "stateSha256": "4ad2a17fecc9183d2d4d60b94f4f761b0b4554d7e4649095d4ab573778f1201f",
+    "initialSha256": "829d2b7783a6e68cb7a7c04d1260dfba06f1bdb44720cfdd832a731e2bdbba95"
+  },
+  "qBitwise": true,
+  "historyBitwise": true,
+  "pMaxScaled": 2.584995250539708e-09,
+  "TMaxScaled": 4.3265049760902126e-10,
+  "pTLimit": 1e-08,
+  "acceptedContinuationSteps": 1,
+  "runtime": {
+    "ReactiveFoam": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/bin/ReactiveFoam",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-build-restart-v2/runtime/ReactiveFoam",
+      "sha256": "1f1f941cd6da24904bb78f511e3a2d56d5f07748287182d630d0833da0a21319"
+    },
+    "libpintleReactiveBackend.so": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveBackend.so",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-build-restart-v2/runtime/libpintleReactiveBackend.so",
+      "sha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201"
+    },
+    "libpintleReactiveTransport.so": {
+      "source": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveTransport.so",
+      "snapshot": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/r04-final-build-restart-v2/runtime/libpintleReactiveTransport.so",
+      "sha256": "23e4b4735b110a95be042910b058916ee342b5c510e153f1f860d87d66d24ffb"
+    }
+  },
+  "compressedIdentityNegativeControl": "The preceding solver rejects the same ASCII-gzip checkpoint with Incomplete checkpoint manifest; see compressed-previous-build.log"
+}

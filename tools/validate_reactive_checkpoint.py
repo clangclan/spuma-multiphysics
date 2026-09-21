@@ -120,6 +120,23 @@ def main():
                 boundary=checkpoint(final(split,'4e-5'))['boundary'];require(float(np.max(np.abs(boundary)))>1e-6,'Boundary history test has negligible net flux')
                 return dict(**compare(continuous,split,'4e-5'),boundaryMaximum=float(np.max(np.abs(boundary))))
             record(backend+'-open-boundary-history',boundary_restart)
+            for encoding,compression in [('binary','on'),('ascii','off'),('ascii','on')]:
+                name=backend+'-'+encoding+'-compression-'+compression
+                def encoded_restart(encoding=encoding,compression=compression,name=name):
+                    case=clone(base,name)
+                    edit(case,'system/controlDict','writeFormat',encoding)
+                    edit(case,'system/controlDict','writeCompression',compression)
+                    edit(case,'system/controlDict','endTime','2e-6');text=good(case,'first')
+                    saved=final(case,'2e-6')
+                    compressed=compression=='on' and encoding=='ascii'
+                    if compression=='on' and encoding=='binary':
+                        require('Disabled output compression for non-ascii format' in text,'Missing OpenFOAM compression downgrade warning')
+                    identity='reactiveStateIdentity'+('.gz' if compressed else '')
+                    require((saved/identity).is_file(),'Missing selected identity encoding')
+                    edit(case,'system/controlDict','startTime','2e-6');edit(case,'system/controlDict','endTime','4e-6')
+                    edit(case,'system/controlDict','maxDeltaT','1e-6');good(case,'second')
+                    return dict(**compare(reference,case,'4e-6'),encoding=encoding,requestedCompression=compression,compressedIdentity=compressed)
+                record(name,encoded_restart)
 
     report['passed']=all(x['passed'] for x in report['tests']);b.atomic_json(out/'validation.json',report)
     raise SystemExit(0 if report['passed'] else 1)

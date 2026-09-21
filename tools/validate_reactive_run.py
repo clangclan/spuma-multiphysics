@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit a completed nonreacting HEM run and its final schema-3 checkpoint.
+"""Audit a completed nonreacting HEM/CUDA run and its schema-3 checkpoint.
 
 The default cell/step/budget requirements are the R04 G3 gate. This does not
 certify physical accuracy or a performance improvement against a baseline.
@@ -38,7 +38,9 @@ def checkpoint(path,nc,ns):
         digest,name=shlex.split(line)
         require(Path(name).name==name and name not in ('.','..') and name not in names,'Invalid manifest filename')
         require(sha(path/name)==digest,'Checkpoint checksum mismatch: '+name);names.add(name)
-    require({'reactiveState.bin','reactiveStateIdentity','p','T','rhoMomentum','rhoTotalEnergy'}|{f'q{k}' for k in range(ns)}<=names,'Incomplete checkpoint manifest')
+    require('reactiveState.bin' in names,'Missing binary state')
+    fields_required={'reactiveStateIdentity','p','T','rhoMomentum','rhoTotalEnergy'}|{f'q{k}' for k in range(ns)}
+    require(all(name in names or name+'.gz' in names for name in fields_required),'Incomplete checkpoint manifest')
     binary=path/'reactiveState.bin'
     with binary.open('rb') as stream:header=struct.unpack('=8Q4d',stream.read(96))
     magic,endian,width,cells,nv,state_bytes,steps,retries,time,last_dt,velocity,energy=header
@@ -88,6 +90,11 @@ def audit(a):
         require(maxima[key]<=limit,'Residual exceeded its unchanged limit: '+key)
     attempt=[fields(line) for line in lines if line.startswith('REACTIVE_ATTEMPT_PROFILE ')]
     require(len(attempt)==len(step) and all(x['accepted']=='1' and x['sourceCalls']=='0' for x in attempt),'Attempt/source count mismatch')
+    transport=[fields(line) for line in lines if line.startswith('REACTIVE_TRANSPORT ')]
+    transport_v21=[fields(line) for line in lines if line.startswith('REACTIVE_TRANSPORT_V21 ')]
+    require(len(transport)==1 and len(transport_v21)==1,'Missing CUDA transport profiles')
+    require(int(transport[0]['kernelLaunches'])>0 and int(transport[0]['stages'])>=2*len(step),'Missing actual device transport execution')
+    require(int(transport_v21[0]['failedCalls'])==0,'CUDA transport reported failed calls')
     manifest_lines=[line for line in lines if line.startswith('REACTIVE_RUNTIME ')]
     require(len(manifest_lines)==1,'Missing actual runtime manifest')
     manifest=json.loads(manifest_lines[0].split(' manifest=',1)[1])
@@ -124,6 +131,7 @@ def audit(a):
         acceptedStepsThisRun=len(step),startTime=float(saves[0]['time']),endTime=float(time[-1]),retries=0,
         dt=dict(min=float(delta.min()),max=float(delta.max()),regularMin=float(regular.min()),finalStep=float(delta[-1])),
         maxResiduals=maxima,checkpoint=final,initialCheckpoint=initial,resources=resources,runtime=status['runtime'],manifest=manifest,
+        transport=transport[0],transportProfile=transport_v21[0],
         performance=dict(samples=len(step),medianStepSeconds=float(np.median(seconds)),p95StepSeconds=float(np.percentile(seconds,95)),
                          totalStepSeconds=float(seconds.sum()),elapsedSeconds=(dt.datetime.fromisoformat(status['endedAt'])-dt.datetime.fromisoformat(status['startedAt'])).total_seconds(),
                          workerJobSecondsMin=float(jobs.min()),workerJobSecondsMax=float(jobs.max()),workerJobSecondsSum=float(jobs.sum()),
