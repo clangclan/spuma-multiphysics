@@ -47,3 +47,10 @@ extern "C" int pintle_rt_file_sha256_v1(const char* path,char* output,size_t cap
     }
     return real(path,output,capacity);
 }
+
+extern "C" int pintle_transport_end_attempt(void* transport,uint64_t id,int commit) {
+    static auto real=reinterpret_cast<decltype(&pintle_transport_end_attempt)>(dlsym(RTLD_NEXT,"pintle_transport_end_attempt"));
+    const int status=real(transport,id,commit);
+    if(!commit&&std::getenv("REACTIVE_TEST_FAULT"))std::fprintf(stderr,"RECOVERY_TEST_CANCEL status=%d\n",status);
+    return status;
+}

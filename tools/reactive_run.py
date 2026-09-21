@@ -40,30 +40,47 @@ def monitor(path,once,interval):
             try:live=Path(f"/proc/{state['pid']}/stat").read_text().rsplit(')',1)[1].split()[19]==state.get('processStartTicks')
             except (FileNotFoundError,ProcessLookupError):live=False
         phase='process-missing-status-incomplete' if live is False else state['phase']
+        resources=state.get('resources',{})
+        resource_path=path.parent/'resources.json'
+        if resource_path.is_file():resources=json.loads(resource_path.read_text())
+        residuals=state.get('residuals',{})
         print(f"{now()} phase={phase} accepted={state.get('acceptedStepsThisRun',0)} "
               f"time={state.get('physicalTime','unknown')} dt={state.get('dt','unknown')} "
+              f"retries={state.get('retryEvents',0)} cpuCores={resources.get('cpuCores','unknown')} "
+              f"rssBytes={resources.get('lastRssBytes','unknown')} gpuBytes={resources.get('lastDeviceBytes','unknown')} "
+              f"maxV={residuals.get('maxVolumeResidual','unknown')} maxE={residuals.get('maxUVResidual','unknown')} "
+              f"maxMu={residuals.get('maxMuResidual','unknown')} "
               f"lastAcceptedAgeSeconds={age if age is not None else 'none'} exit={state.get('returncode','pending')}",flush=True)
         if once or live is False or state['phase'] in ('completed','failed','interrupted'):return
         time.sleep(interval)
 
 
-def sample_resources(pid,stop,metrics):
+def sample_resources(pid,stop,metrics,path):
+    previous=None;clock_ticks=os.sysconf('SC_CLK_TCK')
     while not stop.is_set():
         try:
             text=Path(f'/proc/{pid}/status').read_text()
+            stat=Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()
+            cpu_seconds=(int(stat[11])+int(stat[12]))/clock_ticks;sample_time=time.monotonic()
+            metrics['cpuTimeSeconds']=cpu_seconds
+            if previous:metrics['cpuCores']=round((cpu_seconds-previous[0])/(sample_time-previous[1]),3)
+            previous=cpu_seconds,sample_time
             values=dict(re.findall(r'^(VmRSS|VmHWM):\s+(\d+) kB',text,re.M))
             metrics['observedPeakRssBytes']=max(metrics['observedPeakRssBytes'],int(values.get('VmHWM',0))*1024)
             metrics['lastRssBytes']=int(values.get('VmRSS',0))*1024
             metrics['samples']+=1
         except (FileNotFoundError,ProcessLookupError):break
+        metrics['lastDeviceBytes']=None
         if shutil.which('nvidia-smi'):
             try:
                 output=subprocess.run(['nvidia-smi','--query-compute-apps=pid,used_memory','--format=csv,noheader,nounits'],capture_output=True,text=True,timeout=3)
                 for line in output.stdout.splitlines():
                     parts=line.split(',')
                     if len(parts)==2 and parts[0].strip()==str(pid):
-                        metrics['observedPeakDeviceBytes']=max(metrics['observedPeakDeviceBytes'],int(parts[1].strip())*1024*1024)
+                        metrics['lastDeviceBytes']=int(parts[1].strip())*1024*1024
+                        metrics['observedPeakDeviceBytes']=max(metrics['observedPeakDeviceBytes'],metrics['lastDeviceBytes'])
             except (ValueError,subprocess.TimeoutExpired):pass
+        metrics['sampledAt']=now();save(path,metrics)
         stop.wait(5)
 
 
@@ -102,7 +119,7 @@ def launch(a):
         except FileNotFoundError:state['processStartTicks']=None
         state['resources']={'observedPeakRssBytes':0,'lastRssBytes':0,'observedPeakDeviceBytes':0,'samples':0,
             'scope':'Per-process /proc VmHWM and nvidia-smi residency sampled every 5 seconds; exit gap is unobserved.'}
-        sampler=threading.Thread(target=sample_resources,args=(proc.pid,stop,state['resources']),daemon=True);sampler.start()
+        sampler=threading.Thread(target=sample_resources,args=(proc.pid,stop,state['resources'],output/'resources.json'),daemon=True);sampler.start()
         save(status,state)
         with (output/'solver.log').open('w') as log:
             for line in proc.stdout:
@@ -114,7 +131,9 @@ def launch(a):
                     state.update(phase='integrating',acceptedStepsThisRun=state['acceptedStepsThisRun']+1,
                         physicalTime=float(fields['time']),dt=float(fields['dt']),lastAcceptedAt=now(),
                         lastStepSeconds=float(fields['seconds']),lastStepRetries=int(fields['retries']))
-                if line.startswith('REACTIVE_RETRY '):state['phase']='retrying';state['lastRejection']=line.strip()
+                    state['residuals']={k:float(v) for k,v in fields.items() if k.endswith('Residual')}
+                if line.startswith('REACTIVE_RETRY '):
+                    state['phase']='retrying';state['lastRejection']=line.strip();state['retryEvents']=state.get('retryEvents',0)+1
                 if line.startswith('REACTIVE_CHECKPOINT '):state['lastCheckpoint']=line.strip()
                 if line.startswith('REACTIVE_FAILURE '):state['failure']=line.strip()
                 if line.startswith('REACTIVE_'):

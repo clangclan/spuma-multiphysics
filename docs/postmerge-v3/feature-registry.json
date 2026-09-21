@@ -1,102 +1,243 @@
 {
-  "schema": 1,
+  "schema": 2,
   "scope": "Static implementation registry; actual selections and binary hashes are emitted at startup. This is not a physical-validation certificate.",
   "features": [
     {
       "name": "host-hem-pr",
       "status": "implemented",
       "backend": "cpu",
-      "constraints": "same EOS, pure immiscible liquids; known contact/branch limits"
+      "constraints": "same EOS, pure immiscible liquids; known contact/branch limits",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": null,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/pr1-local-validation-20260921.md"
+      ]
     },
     {
       "name": "host-chemistry",
       "status": "implemented",
       "backend": "cpu",
-      "constraints": "CVODE dense baseline; opt-in sparse/matrix-free/Woodbury restrictions remain"
+      "constraints": "CVODE dense baseline; opt-in sparse/matrix-free/Woodbury restrictions remain",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": null,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/pr1-local-validation-20260921.md"
+      ]
     },
     {
       "name": "resident-rk2",
       "status": "implemented",
       "backend": "cuda",
-      "constraints": "CPU closure/source barriers remain"
+      "constraints": "CPU closure/source barriers remain",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": true,
+      "physics_validated": false,
+      "performance_measured": true,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/pr1-local-validation-20260921.md"
+      ]
     },
     {
       "name": "transport-device-nasa",
       "status": "implemented",
       "backend": "cuda",
-      "constraints": "ideal-gas diffusion provider only; not PR closure"
+      "constraints": "ideal-gas diffusion provider only; not PR closure",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": true,
+      "physics_validated": false,
+      "performance_measured": true,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/pr1-local-validation-20260921.md"
+      ]
     },
     {
       "name": "boundary-recovery",
       "status": "implemented-opt-in",
       "backend": "cpu",
-      "constraints": "nonreacting HEM equilibrium, no species diffusion"
+      "constraints": "nonreacting HEM equilibrium, no species diffusion",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": null,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/reactive-recovery-20260921.md"
+      ]
     },
     {
       "name": "atomic-checkpoint",
       "status": "implemented",
       "backend": "host",
-      "constraints": "schema 3 native FP64; Linux atomic directory exchange"
+      "constraints": "schema 3 native FP64; Linux atomic directory exchange",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": null,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": true,
+      "evidence": [
+        "../../reports/reactive-recovery-20260921.md"
+      ]
     },
     {
       "name": "device-conservation-reduction",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "device-full-pr-closure",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "device-multiphase-flash",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "device-stiff-chemistry",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "nonideal-multicomponent-diffusion",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "muscl-reconstruction",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "surface-tension",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "droplet-breakup-coalescence-slip",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "wale-les-rans",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     },
     {
       "name": "mpi-domain-decomposition",
       "status": "not-implemented",
       "backend": null,
-      "constraints": null
+      "constraints": null,
+      "implemented": false,
+      "wired_to_flow": false,
+      "model_supported": false,
+      "gpu_validated": false,
+      "physics_validated": false,
+      "performance_measured": false,
+      "default_enabled": false,
+      "evidence": []
     }
-  ]
+  ],
+  "fieldSemantics": "Independent implementation/integration/model/GPU/physics/performance/default flags. null means not applicable. physics_validated requires the feature-specific physical-accuracy gate, not only CPU/device or regression agreement. default_enabled describes an automatic selection; required explicit model/closure choices are false."
 }

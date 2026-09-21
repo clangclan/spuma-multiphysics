@@ -1,7 +1,7 @@
 {
   "backendSha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
   "passed": true,
-  "solverSha256": "b584c16ea0443653c01b2a69a402a4a30aee61207e648f1be4ff343474e7bd99",
+  "solverSha256": "172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858",
   "tests": [
     {
       "acceptedSteps": 3,
@@ -150,6 +150,6 @@
       "time": 3.999999999999998e-05
     }
   ],
-  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-open/validation.json",
-  "rawReportSha256": "8b701ba49847932f1eda4be018d8da6b4b887f70149d1ef27f86225b6849a2d8"
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-checkpoint-ownership/validation.json",
+  "rawReportSha256": "9f9884c64b5abe5e7b53eb4139315554632cb6add9a09dce3e12f4d8c549da27"
 }

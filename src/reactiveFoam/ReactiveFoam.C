@@ -557,7 +557,6 @@ public:
     {
         ++attemptId;workerStage=0;
         if(transport)checkTransport(pintle_transport_begin_attempt(transport.get(),pintle_rt_physical_model_hash(thermo),attemptId));
-        try {
         recoveryStage="source-first";react(q,states,.5*dt,drift);
         // Without a source, q/states still match the initial CFL query.
         if(chemistry)demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
@@ -591,11 +590,8 @@ public:
         recoveryStage="source-second";react(q,states,.5*dt,drift);
         boundaryIntegral.resize(nv);
         for(size_t k=0;k<nv;++k) boundaryIntegral[k]=.5*dt*(boundaryA[k]+boundaryB[k]);
-        // Device commit follows global conservation validation in the caller.
-        } catch(...) {
-            if(transport)pintle_transport_end_attempt(transport.get(),attemptId,0);
-            boundaryIntegral.clear();throw;
-        }
+        // The caller owns both commit and rollback, including global checks.
+        // Cancelling here as well would complete failed GPU attempts twice.
     }
 };
 } // namespace
@@ -971,10 +967,13 @@ int main(int argc,char** argv)
                     if(flow.transport)flow.checkTransport(pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,1));
                     flow.reportAttempt(attemptProfile,true,retries);break;
                 }
-                catch(const PersistentIOError&) {q=previous;states=previousStates;if(checkpointFailure)writeState();throw;}
+                catch(const PersistentIOError&) {
+                    if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
+                    q=previous;states=previousStates;boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
+                }
                 catch(const std::exception& failure) {
                     if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
-                    q=previous;states=previousStates;flow.reportAttempt(attemptProfile,false,retries);
+                    q=previous;states=previousStates;boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
                     ++history.retries;
                     if(++retries>12||dt*.5<=1e-15){if(checkpointFailure)writeState();throw;}

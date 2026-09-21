@@ -6,7 +6,7 @@ RF21-01~06은 PR #1에서 구현·로컬 회귀 인수를 마쳤다. 여기에�
 
 `regression_passed`는 기준 동작의 보존이고 `physics_accuracy_passed`는 물리 문제별 별도 판정이다. 기존 HEM 접촉면 정확도 실패, 상세 고압 PR 반응 자료 부족, 비이상 확산 미지원은 남아 있다. SPUMA 확장 CUDA 진단의 기존 15개 중복 등록 이름은 [known-cuda-diagnostics.json](known-cuda-diagnostics.json)에 고정했다. 임의의 CUDA 오류를 이 예외로 분류하지 않는다.
 
-지원 기능의 정적 목록은 [feature-registry.json](feature-registry.json)에 있다. 실제 활성 설정은 실행 시작 로그와 바이너리 해시로 확인한다.
+지원 기능의 정적 목록은 [feature-registry.json](feature-registry.json)에 있다. 구현·Flow 연결·지원 모델·GPU 검사·물리 정확도·성능 측정·기본 활성화를 각각 기록한다. 실제 활성 설정은 실행 시작 로그와 바이너리 해시로 확인한다.
 
 ## 이번 변경
 
@@ -56,6 +56,15 @@ python tools/reactive_run.py watch /absolute/path/new-run-directory/status.json
 ```
 
 `--end-time`은 controlDict의 명시적 endTime과 일치해야 한다. 실행 디렉터리는 새로 만들며 기존 결과를 덮어쓰지 않는다. 종료 코드 0, 목표 시각 도달, 완료 체크포인트가 모두 있어야 `completed`다. 프로세스 생존이나 첫 스텝 성공은 연속 진행 인수의 대체가 아니다.
+
+감시 화면은 실제 프로세스 CPU 코어 사용량, RAM·GPU 메모리, 최근 승인 시점과 열역학 잔차를 함께 표시한다. 리소스는 5초마다 표본을 기록하며 프로세스 종료 직전의 짧은 최대값은 놓칠 수 있다. `cpuCores=23`은 약 23개 코어 사용이며 worker별 작업 시간 합계와 다르다.
+
+완료한 R04 실행은 다음 명령으로 스텝·수지·자원 예산과 모든 최종 셀의 유한성/종 재고, 체크포인트 해시를 확인한다. 기본 인수 조건은 1,042,500셀, worker 24개, 해당 프로세스에서 연속 20스텝 이상, 재시도 0회다. `passed`는 시작 구간의 수치 인수이며 분무 정확도 인증이 아니다.
+
+```bash
+python tools/validate_reactive_run.py /absolute/path/new-run-directory \
+  --output full-mesh-validation.json
+```
 
 ## 후속 범위
 

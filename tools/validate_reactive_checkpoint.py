@@ -68,11 +68,13 @@ def main():
                 def check_fault(fault=fault):
                     case=clone(base,backend+'-'+fault);text=good(case,fault=fault)
                     require(text.count('REACTIVE_RETRY ')==1 and text.count('RECOVERY_TEST_FAULT ')==1,'Expected one failed attempt')
+                    if backend=='cuda':require(text.count('RECOVERY_TEST_CANCEL status=0')==1 and 'RECOVERY_TEST_CANCEL status=1' not in text,'GPU attempt cancellation must occur exactly once')
                     return dict(**compare(reference,case,'4e-6'),fault=fault)
                 record(backend+'-'+fault,check_fault)
             def persistent():
                 case=clone(base,backend+'-persistent');rc,text=run(case,fault='persistent')
                 require(rc!=0 and text.count('REACTIVE_RETRY ')==13,'Persistent rejection not reported')
+                if backend=='cuda':require(text.count('RECOVERY_TEST_CANCEL status=0')==13 and 'RECOVERY_TEST_CANCEL status=1' not in text,'Repeated or missing GPU cancellation')
                 before=checkpoint(final(reference,'2e-6'));saved=checkpoint(final(case,'2e-6'))
                 require(saved['steps']==1 and saved['retries']==13 and saved['time']==before['time'],'Failed attempt committed clock/history')
                 require(np.array_equal(saved['q'],before['q']) and np.array_equal(saved['boundary'],before['boundary']),'Failed attempt changed last accepted q/boundary')

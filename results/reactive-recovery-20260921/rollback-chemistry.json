@@ -3,7 +3,7 @@
   "kind": "chemistry",
   "passed": true,
   "phase_change": "equilibrium",
-  "solver_sha256": "90d7b7c04e680b8996dfba79756e011ac6881888330e835ada882ec4029339f0",
+  "solver_sha256": "172262b77d243e6fee93c5259ceacb44980874b307cd27e32b22612eb0ba4858",
   "tests": [
     {
       "injected_stage": 2,
@@ -11,18 +11,21 @@
       "partial_batch_failure": true,
       "passed": true,
       "retries": 1,
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     },
     {
       "name": "cpu-schema1-compatibility",
       "passed": true,
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     },
     {
       "name": "cpu-cross-backend-restart",
       "passed": true,
       "resumed_backend": "cuda",
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     },
     {
       "injected_stage": 2,
@@ -30,20 +33,23 @@
       "partial_batch_failure": true,
       "passed": true,
       "retries": 1,
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     },
     {
       "name": "cuda-schema1-compatibility",
       "passed": true,
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     },
     {
       "name": "cuda-cross-backend-restart",
       "passed": true,
       "resumed_backend": "cpu",
-      "fieldMaximumScaledError": 0.0
+      "fieldMaximumScaledError": 0.0,
+      "comparedFields": 418
     }
   ],
-  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-rollback-chemistry/validation.json",
-  "rawReportSha256": "b8f67f14fccf47a604d4745f32b114c9b8e759ceb46437e0f264d406d7d23758"
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-rollback-chemistry-ownership/validation.json",
+  "rawReportSha256": "cf85c06fe7ee983e135c302a12ec434773e58819124b164c96845258b0f721e4"
 }
