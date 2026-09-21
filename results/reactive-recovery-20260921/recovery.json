@@ -1,0 +1,4816 @@
+{
+  "tests": [
+    {
+      "name": "normal-0",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-1",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-2",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-3",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-4",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-5",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-6",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-7",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-8",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-9",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-10",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-11",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-12",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-13",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-14",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-15",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-16",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-17",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-18",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-19",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-20",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-21",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-22",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-23",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-24",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-25",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-26",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-27",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-28",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-29",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-30",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-31",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-32",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-33",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-34",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "captured-0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006445370017900132,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4b669d120b4a4af5385f7a34fe8330dcca04f0870fa365a1d28bc7c240bf1e5d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.2789769243681803e-13,
+        "energyResidual": 1.430288610023796e-15,
+        "chemicalResidual": 3.666400516522117e-12
+      }
+    },
+    {
+      "name": "captured-1",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006243380048545077,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4cc24f306f81b30f0eaf8f6a7c610e74d2d1aab5245ad55bc8cc9357e523327c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.34781075189494e-13,
+        "energyResidual": 4.767628700079321e-16,
+        "chemicalResidual": 3.268496584496461e-12
+      }
+    },
+    {
+      "name": "captured-2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006051360032870434,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "5f4407570a9e7b964bd3c8393565e5712f35cb5ff53a6fd20f6ae9b2bf2dd5ee",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.3389289676979388e-13,
+        "energyResidual": 7.15144305011898e-16,
+        "chemicalResidual": 3.439026841078885e-12
+      }
+    },
+    {
+      "name": "captured-3",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006320690008578822,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d5296f71123ce91242c63b6819e5076336c09291ac3a7da6dffb4ebd9643f9d6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.3300471835009375e-13,
+        "energyResidual": 1.1919071750198301e-16,
+        "chemicalResidual": 3.410605131648481e-12
+      }
+    },
+    {
+      "name": "captured-4",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006269899968174286,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e195d955894917f712ded010482848c63483f6f99695ec0142cfa4de40e8bf60",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-5",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006265850024647079,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6917bb92715525477e73cff66ce45dfa6933400d538b44406c359d2b24920eb1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.270095140171179e-13,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.609557097661309e-12
+      }
+    },
+    {
+      "name": "captured-6",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006205809986568056,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d9f225dfd968c077ca0d3371659d49d0b900e64cfb2eee1c266127b86e0ff801",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.270095140171179e-13,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.609557097661309e-12
+      }
+    },
+    {
+      "name": "captured-7",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006052839962649159,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e195d955894917f712ded010482848c63483f6f99695ec0142cfa4de40e8bf60",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-8",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006286819989327341,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0aa6bdbc513432a0d0303f35a93122d39ce2d8b98c671b5885102a58d3c563ba",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.3877787807814457e-13,
+        "energyResidual": 4.767628700079321e-16,
+        "chemicalResidual": 3.183231456205249e-12
+      }
+    },
+    {
+      "name": "captured-9",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006326490038190968,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e195d955894917f712ded010482848c63483f6f99695ec0142cfa4de40e8bf60",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-10",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006239169961190782,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4917e143ae5caacc2200dcce61d56ec2d40b4bd67c78eaa6fd62648a8db768f3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.354472090042691e-13,
+        "energyResidual": 2.3838143500396603e-16,
+        "chemicalResidual": 3.296918293926865e-12
+      }
+    },
+    {
+      "name": "captured-11",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006345899964799173,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "97dd719684e513dd02cf8bda8718c79cd465079ab384a8807c14cfbe319fed80",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.325606291402437e-13,
+        "energyResidual": 1.1919071750198302e-15,
+        "chemicalResidual": 3.524291969370097e-12
+      }
+    },
+    {
+      "name": "captured-12",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006199219933478162,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "94087fcc9ffe52d4910ec979f923ae41dc0ddb8dec691dbc294cb94f5d5bf879",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1679546219056647e-13,
+        "energyResidual": 1.5494793275257792e-15,
+        "chemicalResidual": 3.979039320256561e-12
+      }
+    },
+    {
+      "name": "captured-13",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006299150045379065,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "94385557da16b310865df9b5f4255ea73294b96beb64747afde53e718ea7b4db",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-14",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0005924299985053949,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7f521b6b6d359baaf48927e75e785997b2a437840e1cc68a2dcd7193b9d7cf1e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1879386363489175e-13,
+        "energyResidual": 2.264623632537677e-15,
+        "chemicalResidual": 4.121147867408581e-12
+      }
+    },
+    {
+      "name": "captured-15",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006080489984015003,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "146e5e35c5891d6934f340443a8eaaedf702e50db9914c3050058b02b46582ca",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-16",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006066939968150109,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "842d728d2e2710072d0b4948144ca5003aaf74983f3db48dcb660c9f1e4bad2e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-17",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000629154994385317,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2cdfb537304739bb970b0b17e776fdd74b3ffe804c7384f63256e130355c1204",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.270095140171179e-13,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.609557097661309e-12
+      }
+    },
+    {
+      "name": "captured-18",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006249799989745952,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "16561f86d906653b0b557016849e2125515411bd4168fd6b8ccbe66d493be503",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.6253665080512292e-13,
+        "energyResidual": 3.2181493725535413e-15,
+        "chemicalResidual": 2.0179413695586845e-12
+      }
+    },
+    {
+      "name": "captured-19",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006201529977261089,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "460439e807b6ceaf4bbe3ecd98a462906ea45e7f52443cac1d732ef1d63e415c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.270095140171179e-13,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.609557097661309e-12
+      }
+    },
+    {
+      "name": "captured-20",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00063322699861601,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "de546514b764a6b3952847b015c1d7f3592c471ce65fa513b0dcf07163d840e9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1679546219056647e-13,
+        "energyResidual": 1.5494793275257792e-15,
+        "chemicalResidual": 3.979039320256561e-12
+      }
+    },
+    {
+      "name": "captured-21",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006052870012354106,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a93a64bedcb9d196100cebb14d26c21f93d31038fa0613163c5c04ceaaa1b5eb",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.467714838554457e-13,
+        "energyResidual": 2.0262421975337115e-15,
+        "chemicalResidual": 2.7284841053187847e-12
+      }
+    },
+    {
+      "name": "captured-22",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000603446998866275,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7a86d2853514de5ba977d1233aacd199b15890a25cff11fc9e2baff3c28ff509",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.270095140171179e-13,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.609557097661309e-12
+      }
+    },
+    {
+      "name": "captured-23",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0006185610036482103,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "946c35c6c99222c23cdc86276b8e08b3cf64118e9a03d84ea7e05866e92ad142",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.5587531265737198e-13,
+        "energyResidual": 1.907051480031728e-15,
+        "chemicalResidual": 2.4442670110147446e-12
+      }
+    },
+    {
+      "name": "captured-24",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0026329969987273216,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e1fb570f945b83f7e12b426173537b39e84ca6a8ac2608a12a8a7d2099046104",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.704148513061227e-14,
+        "energyResidual": 1.5432964850454606e-14,
+        "chemicalResidual": 6.724090440002328e-08
+      }
+    },
+    {
+      "name": "captured-25",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0022984179959166795,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "36e19f0d0d2691e739f269750e75e5a1d11208410ca0569a1fc41b89d3dfb6c6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.536815781530095e-14,
+        "energyResidual": 8.666203346009563e-15,
+        "chemicalResidual": 6.723900014549145e-08
+      }
+    },
+    {
+      "name": "captured-26",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023238549983943813,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2e838ee7216526fb737a5b5ff98cc2429633d39b30f1cae45150a020e22333a8",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.425793479067579e-14,
+        "energyResidual": 1.531424972520101e-14,
+        "chemicalResidual": 6.723649903506157e-08
+      }
+    },
+    {
+      "name": "captured-27",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023793889995431527,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c5b9df73d24b438227110841a3fb76a437e89852ac83e8a225fb656f483deff1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.0524914273446484e-13,
+        "energyResidual": 3.798883651966492e-15,
+        "chemicalResidual": 6.724039280925354e-08
+      }
+    },
+    {
+      "name": "captured-28",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0020890580053674057,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0a0d6667e36b2a4c2eb99265149700cd2c8cc3a839f5e670d1bb10e15c973155",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.084687895058778e-13,
+        "energyResidual": 3.442738305915975e-15,
+        "chemicalResidual": 6.724118861711759e-08
+      }
+    },
+    {
+      "name": "captured-29",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023219299982883967,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "18880aa33a1ac9090da8b2106bbc11082bce495bceeead30490a8214f6ffdeb6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.482103908136196e-14,
+        "energyResidual": 2.6710900723815798e-14,
+        "chemicalResidual": 6.724189915985335e-08
+      }
+    },
+    {
+      "name": "captured-30",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002147858998796437,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "94b63721ad3005d05f3ac45dc5a47990e8cbc2975e0aef8110dee350cae43b29",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.692247004977617e-14,
+        "energyResidual": 1.567039502235503e-14,
+        "chemicalResidual": 6.72390569889103e-08
+      }
+    },
+    {
+      "name": "captured-31",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0021975269992253743,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "fee0c390b18d1440873d59c7c4efe8cfa274f6981d84730327d518ddbf097c38",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.58202398035246e-14,
+        "energyResidual": 3.893855729075026e-14,
+        "chemicalResidual": 6.723911383232917e-08
+      }
+    },
+    {
+      "name": "captured-32",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0021833940045326017,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "759ac8764c83f432090491464aa964a7dcf2a0e5723f19f219e0e6a1edcca7c3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.792167077193881e-14,
+        "energyResidual": 4.15502898380105e-15,
+        "chemicalResidual": 6.723553269694094e-08
+      }
+    },
+    {
+      "name": "captured-33",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002049173999694176,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a4a04efaaf93bcdc1400eacd20d8c30646b95546d84870f6337e4430efcbede2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.681144774731365e-14,
+        "energyResidual": 2.6592185544623045e-14,
+        "chemicalResidual": 6.723911383232917e-08
+      }
+    },
+    {
+      "name": "captured-34",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0022676459993817843,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "9b36c7fa31e0083fd5f84c8ce815e4d896bc78740e9b65c5ff021ad9e77178ae",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.747758156208874e-14,
+        "energyResidual": 3.68016852038979e-15,
+        "chemicalResidual": 6.723973910993664e-08
+      }
+    },
+    {
+      "name": "captured-35",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023328410024987534,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "bfc70249ce72ab8e82896095e3c098028a21fc9cb5d91dc378201bebf9ffbdf6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.692247004977617e-14,
+        "energyResidual": 1.555167997215739e-14,
+        "chemicalResidual": 6.724090440002328e-08
+      }
+    },
+    {
+      "name": "captured-36",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0021368800007621758,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "902bf531e2e211f4fa5199d14bd74a304da830191a08f0eefae9fe8ba967a1fc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.0647038806155251e-13,
+        "energyResidual": 2.718576109151655e-14,
+        "chemicalResidual": 6.723831802446512e-08
+      }
+    },
+    {
+      "name": "captured-37",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023198380004032515,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "fb3686f8ad372f3d9a878ee00af2dcdf5625f766bd8e4f1937d518dc6990b3c4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.658940314238862e-14,
+        "energyResidual": 1.5195534629397962e-14,
+        "chemicalResidual": 6.724084755660442e-08
+      }
+    },
+    {
+      "name": "captured-38",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0023739919997751713,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e80ce787dd95c9de9f5e31a273eb4bc10460a9dc677b09e65cae29c1e4ea1463",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.042499420123022e-13,
+        "energyResidual": 8.310057988126912e-15,
+        "chemicalResidual": 6.723794854224252e-08
+      }
+    },
+    {
+      "name": "captured-39",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002127791005477775,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "abc8b763cb145641af6305d641afd006c7c0eb4d91417c4894cb7b29a45b7a7a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.592326932761353e-14,
+        "energyResidual": 1.5076819462525846e-14,
+        "chemicalResidual": 6.723834644617455e-08
+      }
+    },
+    {
+      "name": "captured-40",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002395732000877615,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e992b31cca2d4909567f9e6513e22e9327c23433cf1eee4bfe1f54188a269046",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.237055564881302e-14,
+        "energyResidual": 1.4127098591023451e-14,
+        "chemicalResidual": 6.723897172378202e-08
+      }
+    },
+    {
+      "name": "captured-41",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002323897999303881,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6d0069594b0f94551a7744d66109adb7615eca55ef98bdae6bca3c44268bd531",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.337774914934926e-14,
+        "energyResidual": 1.602654042187525e-14,
+        "chemicalResidual": 6.724067702634784e-08
+      }
+    },
+    {
+      "name": "captured-42",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00237236000248231,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a7290c0ed231420ffbbf5651220597ddfbaffbd90b32cf8ef12530863bfa9346",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.880984919163893e-14,
+        "energyResidual": 4.392459222701766e-15,
+        "chemicalResidual": 6.724042123096297e-08
+      }
+    },
+    {
+      "name": "captured-43",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0020550679982989095,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "5deb068c99982fe6ec0fdb03ea05154ab0ff3ee92e3d95070ed010c7cca96140",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.414691248821327e-14,
+        "energyResidual": 1.5551679938749745e-14,
+        "chemicalResidual": 6.724187073814392e-08
+      }
+    },
+    {
+      "name": "captured-44",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00232901699928334,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d625f02fc31176cdfe0411b46ea7e71ca3b6316dd226fd60d8822d8ab53e967c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.570921750106208e-14,
+        "energyResidual": 3.858241211578159e-14,
+        "chemicalResidual": 6.723672640873701e-08
+      }
+    },
+    {
+      "name": "captured-45",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002124128004652448,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "dc421150319b1714087adba954a979bba9c6c8ed54c84cb322a83fb4ee536558",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.615330671091215e-14,
+        "energyResidual": 2.7660621567478853e-14,
+        "chemicalResidual": 6.723982437506493e-08
+      }
+    },
+    {
+      "name": "captured-46",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0020994840015191585,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b4cf127d763bda60e8880fe2d5de1124880757e7d6e44c3153599c1ff10713b7",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.0691447727140257e-13,
+        "energyResidual": 3.324023189586362e-15,
+        "chemicalResidual": 6.72423254854948e-08
+      }
+    },
+    {
+      "name": "captured-47",
+      "passed": true,
+      "success": true,
+      "seconds": 0.002166924998164177,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ec7ec876643e0461d8667a2d63dc550cb586855efd9806ffb8e301571292be08",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.64863736182997e-14,
+        "energyResidual": 2.7423191284644776e-14,
+        "chemicalResidual": 6.723720957779733e-08
+      }
+    },
+    {
+      "name": "captured-48",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001950309961102903,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0594f1a7c6264fe72faee3c1700bc6ca2d508c125a1f8002847d096c25f70f60",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-49",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019485800294205546,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2256fefb89716a7534aece86fd75db2fc5a931828acddb09093782de5857e6b7",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-50",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018277599883731455,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c16739adbdec957bd5764fba2e5a1cdee3a194a8c20c38cbb7a4e2c3074843f4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-51",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018397300300421193,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "510cd0cd9e9d99d713e6a96c2880588cb34583272ee4e65826bea841a69ea560",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-52",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018897400150308385,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8b2fcabda758de1cc4b4df42b7fcf7b5d507755fba218a481d4c56f75281b34d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-53",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001846430022851564,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "144c16218bcc2efe123c19906e26506f9f3b969cbc8bd3c1da833064bfd5358c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-54",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001874369991128333,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "bd64ad6bd945e095f2c4be26ed7f2680299113ccdfbb218c2986e92da2227bf4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-55",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018937899585580453,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8581f4719f0cc9f1918660ee10f74cf68606a635ca4efb199c3a7a949781d0aa",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-56",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018663800437934697,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "50c3f18a8b96fdcd7b751cd86b3b62fa02536c4c6bc0dec44ef1decb7d5217b4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-57",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001995089987758547,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "76ed43873f0e7afd0b051ec64675fa68f984bf06608a8fc44b545b75d5f740ac",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-58",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001945690019056201,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8ebcfc1e29bbf08872277f6622f853e9c78a4353b2ac288b19148c244b21190e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-59",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019443000201135874,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "75a816752cccd9e22a6d3c167668dfcb47e19a8ce47cde1099d0b75f29565085",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-60",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019709699699888006,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a0d5d36cc85e4b99973a5ba54ef42ef7019065927b6aba2e2ba623c3204dc335",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-61",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019368700304767117,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "bc75fb080183706cf011ffa1b796a7b77de32374bb01b4fd6f981b50ca11abb3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-62",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019407599756959826,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d6115e9670f36fd0ac00126de0336f528e2e0325a4c8ab301569774ed4cc44ce",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-63",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018990399985341355,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2ddeb252869f0d5bf24e5079abbba016ff469ec88ff317ace2cce1fbf10e9e35",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-15,
+        "energyResidual": 2.3742597452038335e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-64",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019085699750576168,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "5c9184053488f532bb8439313a4bb6f3a58fb0ff011d0ad4abd381b4b2493393",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-65",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001931529986904934,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "660b1df56a923fa0a72cff69fe2dbef380907b929adc6936775c6f054d6d6470",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-66",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000191329003428109,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ab7e3276db44bbb570332a80c2b5ddc7537c96a9129906014959bc314cbdc190",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-67",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001932480008690618,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "24c8e6bbc645bbd231850873b151ca698dc4edf3080a59090d9a95ba66d9085d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-68",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019270399934612215,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8531278f42e1ec598b8ae31730efcc3b835e8b500c04d0a7a326bba746b46d00",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-69",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018869899940909818,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e596c91cdc5cf1ed10e8e2784e2ca686960c5e545a9982ea8c3baa2545ae7a93",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-70",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001928409983520396,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ba390c9dcb465ccf254d3e411d209eef667b1c25e8cf7004970d4c3b880f2d38",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-71",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019423500634729862,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4ad995e0a2ec4f6dff715b7de876b29c6548e4a71a848512d2d5a32545b2f260",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-72",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019852999685099348,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "70d1652f7e09a8aee918ad6c09b81549f7e73362180d4e160dfa2dddeee28b51",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-73",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019296899699838832,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8c6e558d1974f3244930d26b0e91d0862f7aeb0ba75276b2992cdea6a256b72c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-74",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018352599727222696,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "74e21ff446f9f6e9b3689f9525929d0bf873c3150123fa1b6849f803f1f88fa6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-75",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001889769991976209,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "40489c9bd7aae661066a79151c02cb69eb270af7e94d56b6a557461c46bc4122",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-76",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001871310014394112,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "26b9e3fc4b9e8423e91383af20bb7f2f4134cca99180b090dd3aa8100f8938d5",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-77",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018384400027571246,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "cc5195b7853c4e3caf02b751be7fdede9c964d77da4babd128b7a2ea1cdf9465",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-78",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001915379980346188,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8c2fe04a3770610e4af59b090c7821bfeb54ae4dd56e7fe939d8a60a9c0e3db4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-79",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001946519987541251,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "5a107245ffc0a8252b95b21c15aa29f87910dbf6e2203d017f30fbc16594f093",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.1871298452169346e-16,
+        "chemicalResidual": 6.760612336620397e-08
+      }
+    },
+    {
+      "name": "captured-80",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001944879986695014,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b94bbada7c5834f7a84d7ff19768ee7f36bba31f9d6f14bd207f0f97c8d3c8f5",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-81",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001955940024345182,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c154f71ca0d19522a90212a46769cb307f27cf9af40631c6af1fba063e5350b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-82",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001913070009322837,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1d4130df019e15a8f39d2ad02cce6e6a32202481798faac5144bb8fa354dfeda",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-83",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019070999405812472,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c496e26cdf1e25820bcc5447342682be31050b01c57749cc1888de23ad516c4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-84",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019230099860578775,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c496e26cdf1e25820bcc5447342682be31050b01c57749cc1888de23ad516c4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-85",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019021600019186735,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0b07c3dcfffe423fc9e5b33e136c2b61d01e019407b3f0f04e346f1b2e4474cf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-86",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001962629976333119,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "486444ac09e2502cc65ca6bc472e5b17deda1f0d4f0d1259c08f22091fb3fbd0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-87",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001994339982047677,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "aa97bc76387d4312a6304c6028f5d836cec93934d3d5fc8a7af65be4c5edb430",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-88",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019671700283652171,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ca29eb218201336a931f7174fbb117671efae4405c87835bb8752dd61ed6b68f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-89",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019445200450718403,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2a69dacc9dff561f0b3b90c74c6c29bd73fa8f726e178dd2a9c03293348d6c1a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-90",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001950980004039593,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "72b8d5a173915bc5d13ffd42680d090002722665d08be987df63e31b241f99f0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-91",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019825399795081466,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4f723ab86d6effd7ab5bd33678e43c2edf91e95af3737f09787b5bfefe458fb9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-92",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019192000036127865,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "42e8640fd8ac8c72c6faf1cdd530317d0213a8cbc4ebeb0177c1ff8dd0ab7412",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-93",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018709399591898546,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0294a4f562cf886f9b56f47831a8f31a065d50dd42b66c0100f88ec4891b0eb8",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-94",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001866429956862703,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7e533924d011b225c9b35d089014fb8ab1b0ce0724a120628f3991e14f11b325",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-95",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001834960057749413,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "358d5be165246f443eec2ed288624689844276f1f86f3cf1e27d9e9f0c2c0865",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.3742596630488873e-16,
+        "chemicalResidual": 6.760396331628726e-08
+      }
+    },
+    {
+      "name": "captured-96",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018635400192579255,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a2fc062249444fcc5af93efa2f0a320a7427ae45a7ab012694726603c523735e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-97",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001867199971457012,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0c7ca9d5756bba79ed584ef92560b375ed54bf73a8b49c15693051ccc5b65a57",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-98",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001850990011007525,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "41c660471d832d08ce1b5f6658aa99b85ed6f288c2046290c7ab1dc912c81292",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-99",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001826230000006035,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "92e2c3c8fd04ca39480fcef91f03e2baaca951b12af6c640ebb71bc5009512eb",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-100",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018780300160869956,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "92e2c3c8fd04ca39480fcef91f03e2baaca951b12af6c640ebb71bc5009512eb",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-101",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0002042599953711033,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4a7119f73bf69d2aae040b3832acc323830ad85555eb16e609a59ce1317977af",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-102",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019643999985419214,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "fd4b7e4950c8122a2604c3cb22f893f70cbd0d789702f2c4af3d68a7991ceece",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-103",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019323500600876287,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "41c660471d832d08ce1b5f6658aa99b85ed6f288c2046290c7ab1dc912c81292",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-104",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019056799646932632,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "14a5424981e9dadc9bdbcacf762e7f6025144bf1ab021c83e10938e6dea64a04",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-105",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001886790050775744,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1ab427baaabac567390c57bbc08121a11e41e4289d1d399f40ab02bb0b2d0c6c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-106",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018991899560205638,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "46ce937a7f874a0cb569f32396dd2714bfae4a1f91a540ec1193b4a1910d9542",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-107",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001954950057552196,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "60b43b041d9094b1fa43d36f65be9207a1e6f3757728106f0fba513888b9f730",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-108",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001947959972312674,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1ceb617458e10f33cb18fdda9741fe1bf1919e5d427469446499cc080ecaf31c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-109",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018979800370289013,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c731b23ae0610bc9719bc49f303fd06f5816b0d9a80d0f89b1c381f1a6b700f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-110",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019467899983283132,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ffb67d746bf10decff8db6d7cc66d1c837aec8d9b7615f1909c7467560a39d63",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-111",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019429100211709738,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b595fa7659e99c8cda4728485a7509715461b0119c6a362609e90b27b45258a2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 1.1871298246781984e-16,
+        "chemicalResidual": 6.760149062756682e-08
+      }
+    },
+    {
+      "name": "captured-112",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019752299704123288,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e773af4e4350e5a21f872a4c4e4e3146211a82da7220e6ef79230bffc187e60f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-113",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001910799983306788,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8795436ed0ef55e275a77d444338821f889fc56ca42e664c000e337bd2a97ed5",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-114",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019633600459201261,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "80126cddc9b2816fbbc97a14584dcc47a6c35c7a7e123878e3d650269b768dfa",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-115",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001966600029845722,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "11b1700481135111634b39f69a08964cd6fbd14fe125ff709943c64850d3e7b9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-116",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020011299784528092,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "674992d53a97a4f422cc7abadbd2ab32cf70514c9a02e59de2c6fc7b206b7a13",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-117",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019900799816241488,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0860ea1a00e9559451f4c44045d2c99ee34d17e02fa8925026e01ffa421d5f40",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-118",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019273799989605322,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c0401e9dec506c2c1768565e61988f4efdb0ae04ee2ecef4fdf8ff4aa2af13e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-119",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001871860004030168,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "80126cddc9b2816fbbc97a14584dcc47a6c35c7a7e123878e3d650269b768dfa",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-120",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001843330028350465,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d1dee79f2af8b903724af876a62fbcfe22fa69bd594cc1035503338d397d1651",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-121",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018761899991659448,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6a3e16b4f6cd2b6b9a1d6fa7a3b9e0a5c1918d65d94b05b901c897e7857cef1b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-122",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018987800285685807,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e7dafa78c122e4fc377011e03b8d72ab98549d165293955e5dbbb9f320932f91",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-123",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018754600023385137,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "84431867d33a3acd29e27f3402b751024cff90f02aec2bae81d1361eb5b62ef1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-124",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018746700516203418,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d72941ef0954768df586f0251c89739667f41d4e65680d2b2d528edc097e24f5",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-125",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019065399828832597,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "61a4ae8923298f89bbed8c41063c4ea19602f124527647e1ff2b683d882a74b2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-126",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019599500228650868,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "20e87e4f091f45887757ba28a42d75ce561410997d2fac6fdcb4bea7eb591e26",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-127",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019616600184235722,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c7a8944c4e4266eb055990d9919f221b757462a35b80cef24eef172c2ea026b4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.1871298212550758e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-128",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00023989799956325442,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "cefd9ecb09e25f06ac5e7fc5f5542ac88f70cb4fbce528473466f7f196087535",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-129",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020081600086996332,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "da78a566c4fccad5a30be7bd3261e84ea24ebd72ff4d70bfadf526f6eb7044cc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-130",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018642500072019175,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ad8b78037f89523517fb14c5580f8c1e00cecd3efa4c78bac483b2e506355c9e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-131",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018459499551681802,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "83b55b5c037c2c357e0764f4032c6dac3726be09be4bb4c8ad7f10be438164be",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-132",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019046599481953308,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "af0ce0bf353585582f87fda8215d1f9ed4f101371974dd8000cdaa305b32c8c2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-133",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018784400162985548,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "38f7531a1c03730400120b6de4fc7780e34ee167e3b8370698ae1745221d571b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-134",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018835000082617626,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ec22884402c55b855de682dc905e1f5fa78b9eb686dd6697d3e57e1ff730dce0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-135",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019349299691384658,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ad8b78037f89523517fb14c5580f8c1e00cecd3efa4c78bac483b2e506355c9e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-136",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019187600264558569,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7bbe569f4a50e609cc9d5144c504b4dc01fc55d94c33c169dc35c1dc4ce9ec29",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-137",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019725099991774186,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f8bd8099b2fb225ff463d9e0310f7ea0bd63c11883dda4809f8dbcc9075ecbbd",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-138",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019019100000150502,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3ef8daf4c4316953a15589694b70fbcaac87039fa931b7831b71b25cbe600da4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760453175047587e-08
+      }
+    },
+    {
+      "name": "captured-139",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019227799930376932,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a6d1829c95b8601f82663c2192f4cbe22d2de458080e4a9620beec17acb1ecfc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-140",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019551200239220634,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f827b305acf7acec4efbdfba17d99df491c5cee6112d2d37998c58c316283e02",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-141",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000195186999917496,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3c242a4b82f4592967d7b7480f3f89a96c0db7b069a2b669ce77dd5aaa89b2a2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-142",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019319199782330543,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "bc1e50b2a7dd05760168d6f19a8d7ebabae9504d1d17356faeeeb31d762b8c2d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-143",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001915199973154813,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "13eade8fce4d8e73ffd6dba3358ef8f6e68be4abda599fadb2ec77afd1cc8585",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298195435144e-16,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-144",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019576000340748578,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "89771305ae5cd89770b9ed28cc0e6deed7d03e1c42b4526c411e726176ac356d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-145",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019578300270950422,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "9d9397833c7e17df55ad34ecf692a933eb510ffb11f99c77ec015e42e1181948",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-146",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018972199904965237,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0c0d562e3d2fd4f1b662c6940baaf976d973b70bec9cfa16e567861c49cdc00d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-147",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019590499869082123,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "3ceb6d43ed7a4b3be241244330b0c22f4afdde2e28f7a67ef202f01dd8c62d20",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-148",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019693899957928807,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "06e0f0d743d82a63b33147eba398dbc4418cb540a195b7be2ef564d036a58b6c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-149",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019498899928294122,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "eb2082bd8975b3302055b7600e322f0d26f9e3a63c7cb66663952d3a4f3a55cf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-150",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020545399456750602,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "38a15f2b72d34103e241fb24af7dd97014c71f3d74f92e71804078e1e11359a4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-151",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019684099970618263,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0c0d562e3d2fd4f1b662c6940baaf976d973b70bec9cfa16e567861c49cdc00d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-152",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000190610000572633,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ccc16801671ca11fd54729b5c1d9035db174f0712931b0e6b8ec80ac8f680963",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-153",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001919940041261725,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "89ca492917eac7e5d9e1b5c99098f2ac1bd21b9ff1a52778e49fc8e8c2edd511",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760606652278511e-08
+      }
+    },
+    {
+      "name": "captured-154",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019178399816155434,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "265c2809269f7b5a1dd36de89cd3bfc1f6bb4feae665576e9113fcda9ce6f7f2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-155",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019131800218019634,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d691656d3e4b5b3001c398f6ea7e0fb4fb5961552bfc2727962e376dc6044d71",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760606652278511e-08
+      }
+    },
+    {
+      "name": "captured-156",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000187135003216099,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "af3df78470f03e12e683c043ed7c9ce37187225dc3c2578890e486ab0cd596ff",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760606652278511e-08
+      }
+    },
+    {
+      "name": "captured-157",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018343700503464788,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d75373d2e8bad27760352ab0ef598defda9df6bde2e5c7f07d36f15421156fb0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-158",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018997299775946885,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c0946d60fc18f458c18fbd10dae258c489b528a4bb1484977b80f0ca8aecade1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760606652278511e-08
+      }
+    },
+    {
+      "name": "captured-159",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018620599439600483,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a31825b738a9cae5cf66ba340678938c320c0915b1822809d4fcaf2af70c834d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 2.374259637375468e-16,
+        "chemicalResidual": 6.760609494449454e-08
+      }
+    },
+    {
+      "name": "captured-160",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018313599866814911,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b4cf53042dbf44c0350f8eba30785b47ce761439f24de98264c90a9f6d84bf50",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-161",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018316099885851145,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "52f75615006b451a7058f9c46dc96d889a110a264e052fea7ff92ab8e1d368cb",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-162",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001850789994932711,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4e457d9154331f07a09e79409e74ebf665b91f7332d5487cf8910424adeb4edc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-163",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019311900541651994,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f8a3a46ffc8c99ef4ba85d777b35a88f322c1cc71815dfc0348ae010ac46a43d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-164",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001943059978657402,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2346b7b220cf8fa5b2b9e730903a105eb6a09b8ce7ef92c577bbcea893fd9a6a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-165",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020203000167384744,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2de9470a2cd7420f8775372cc157fe75c1934acb6cff44e866d6b86bc8cec6ac",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-166",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019155699555994943,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "978a4b18d0647c5b053ce9be2207beedf2e98421283040bb7567fcaedd8d3988",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-167",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001959669971256517,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4e457d9154331f07a09e79409e74ebf665b91f7332d5487cf8910424adeb4edc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-168",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019360100122867152,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4d6ccbac6f996800f51c011b28131439330d81e6ea0f0ff161735f719e27d4ab",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-169",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019483100186334923,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "49cffc8fce9d1d573a3ea3e190e74d677dd5cc9f81fb30fecf8da92c77c0822c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-170",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019055000302614644,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a908d21c7910cda6375dd6dd4c866cda338ee8bd3f41aba16fdc52626fe21021",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-171",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019978500495199114,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4c84df08deae96923edcf2c89654cb7f9d73116067bac6da6a9f248fadde2f48",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-172",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018909400387201458,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "813f34eadb40077e9315d24542baa42df662a4d7432d559a5c93de765eefc605",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-173",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019569700089050457,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7b16b0f5d6af7968450f36b67db5d2c9110c087633ea6558156d545665807496",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-174",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001962240057764575,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c825bd54e8f533790463e707727d98f123d281c302c72857a371c8dddce1dc6c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-175",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001906200050143525,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "324ae953c099ee5bdcb8c635a0cf87dec709a92c3728df2b9c9f2a21b91d6513",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760262749594403e-08
+      }
+    },
+    {
+      "name": "captured-176",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019507500110194087,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "37598d20f7226040b371a42ceea86dece0973b44f09d810025f967c219cc3565",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-177",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019312700169393793,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "baf357b42f03d64997b3b320ad069aa20629cf6ce61fde4a9e506475b5412a96",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-178",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018363499839324504,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "aa351bef8a7614971a0a3cf1481baf6e789c13877acff839eb925f17c1b140f0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-179",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019801600137725472,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7513b31ead9d2f63c23df607d3092608ae49e004a44140abfe517d6dd709c466",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-180",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018272899615112692,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "57c7071f81d7ad45d19f06d6907e92270ecd527feecb2bf6d591611c8439091c",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-181",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001910089995362796,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "5dfcba72af5544936e4f39abaa9b8ebedf3eb2e1e2bee1272afb74271d427961",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-182",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019575299666030332,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c8793712b9a6b7db1e8ed517867d5e1808a6c835eb70177cb5aed53d48f2fa2e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-183",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019071799761150032,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e76712c72bf699b8bba3dc40fa93710769fe6b39a0ddc65dda3698296751588e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-184",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019677100499393418,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "270d9c47bde37f1264e0a6e65d8b139e8f0d999408d6f2d7cd1ba1a9e9d3faaf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-185",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019064699881710112,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a3f3662454e33df2a4f14de75a7f81d247ae9e0fc37991b97ea68e9262455b61",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-186",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019599500228650868,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c37feaff71c1c63579a45895475a3e1d27aee14a7007f532c50bdfd72e96bda9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-187",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019182600226486102,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2c8fb7989f88a41804b6375284de3c5cfeb1bd44bf4c127bc10e968ac32cf724",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-188",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019661799888126552,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ac8ddec8fa52581144cc894be447ac1626e7fb28dc747774925f9840621cd4cc",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-189",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019491100101731718,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "9a34cff5c540cd73b9ee352cdf0749167c4ef43b501d91cb3f597e17b657a1da",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-190",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019057100143982098,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8867889dd5db89bc2e866418c7654f83738023ad65bfd8c7e9b96169dbcbbcc7",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-191",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019088600674876943,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "09bea4bf2628a0ce40084714db04d213d3aef47035fe42b0abb49bef46698c8f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 2.374259636091797e-16,
+        "chemicalResidual": 6.760365067748353e-08
+      }
+    },
+    {
+      "name": "captured-192",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001959369983524084,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b73c6eb918b02a55bcbe7cb159e2267961776f7c8488390a1322027da895e960",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-193",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019128700660075992,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "da8a42ae72dd988e9979e0cf898a47e7a05f481101840b1fe87afd2cc28aed74",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-194",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001996950013563037,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f10ca95991ed9cf9f8b11c66b045b35991f21dc3b829fdfb6c94c41d5386d124",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-195",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018515099509386346,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2a66b844f59675f9d08b484ebe4b8d26790ca3b26be6be07eb172fb2646508fa",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-196",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018466999608790502,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e54b4fb3eba057bce8d3141d7717dde4261f88ef6504ba9e26211ba4738fadcf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-197",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018395599909126759,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d9ef4631334048f0592dd7b41d24b5ba3696575f28918ae20f3e631ed558f6de",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-198",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000188967002031859,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2655c36825be797307e337e675ef9a03bfbd0e90c1a50976367502d6612c8e0b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-199",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001983760012080893,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f10ca95991ed9cf9f8b11c66b045b35991f21dc3b829fdfb6c94c41d5386d124",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-200",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019286599854240194,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "84973e94e45414575fded8b77d7eda786ede36e69c0dfc3810d99643614befa7",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-201",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018981200264533982,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "80543d127f45a085d9f174aba62bace754fa25313a7996d4aebeec0687fdb78a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-202",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019318699924042448,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "478f192f25e4977d6b6acf0bf5d78009d851c034da6bdff20a9f0c39e05bc6b2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-203",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019289299962110817,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8a6b0ce432ed17bd1f1cab91001ef9b1572fe87fbc62c8016595cec51895d582",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-204",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001956650012289174,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c04a78eaf11fd8174c150ca7bd2f156ef14cff437a5cdb5a1aa2250283cdcb1d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-205",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001957990025402978,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0c6b9080faee4e01dbb85edcf7b5b909f6102a7b83fcd4be0ff1a1c07100a941",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-206",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019614399934653193,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b50cbf43cd09fbf1af9471522d9a4f80d00695ae91197c1057615907a3d6d237",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760697601748689e-08
+      }
+    },
+    {
+      "name": "captured-207",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019119700300507247,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a604405fa26f64ea58f3c83635ed583a69e371227f10fb3a7a86b8581145274e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 1.1871298179389257e-16,
+        "chemicalResidual": 6.760413384654385e-08
+      }
+    },
+    {
+      "name": "captured-208",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019304099987493828,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "88684b05eee04c341a7454e23c5f6969668b9adadca27d3e6e47cfe1dd5807a0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-209",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020527000015135854,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0c4993c9718abd6de6ec7768519b94cf6d74526e5e0854f1fc2b46c27ca70701",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-210",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018789000023389235,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e53f793180fa1d8bf7fd5b3da7decf32463101ac02a584e27e0a6941997f88d3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-211",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018785900465445593,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "11c66c7d673bacb44e92c0bd26b9100de192f758a5e630b9236274fc1c279edd",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-212",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018766299763228744,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "11c66c7d673bacb44e92c0bd26b9100de192f758a5e630b9236274fc1c279edd",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-213",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018548299703979865,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7b375882fd054b62e7a4b3f6d214f46f6e1b9de98e7fb644cc96257fcc6bc663",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-214",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018648999684955925,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c3300f506dd75e9aca8b6aeec1ebf79915e2161f1996606450d351497d861c46",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-215",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001883429940789938,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e53f793180fa1d8bf7fd5b3da7decf32463101ac02a584e27e0a6941997f88d3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-216",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018359100067755207,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d01fe1f2d95030b0c6777fc961a175ae5fd481f8ec673f777250f30edc380387",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-217",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001961050002137199,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d27f87f5cb7672e76afcdbf58fce89e0a07595e664a29c2e88b1749b2a12e121",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-218",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019584500114433467,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "cce1eb7f9435605e71b79602eaf27d2648853c08766fdb5db2c7c147da3f609f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-219",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018890899809775874,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "85db9e4112a0b9461c7492652665623d40610da7b089fea3962f427ff1cacd6a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-220",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001975150007638149,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "b3500983518bdf07ef48e3ab129f42a1e47d2a9840ffe35fe2a389a04856d6db",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-221",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019086199608864263,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e02e6ee47132590bc9e301137baadde477d4abbdd8bfd6c8f92f777e740c65e1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-222",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019220799731556326,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c025454e731dddbc0cb0635673374f6ac82edc9b4a4a715d766e81e93b71fb45",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-223",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00021002200082875788,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "52e61e4922ad83e12984df3e4b8f8b34a3f2c0cb54b829b1ada746c87d71216a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 5.935649089427197e-16,
+        "chemicalResidual": 6.760163273611397e-08
+      }
+    },
+    {
+      "name": "captured-224",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0002036180012510158,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c310b50731824ce6aacec8ef2405e9dbce00ee9bc9a90a87fbfe786cd856c13d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760171800124226e-08
+      }
+    },
+    {
+      "name": "captured-225",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019538400374585763,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a00f81ce778fbb98109582fa6fe38b040d8e175522b4c4332dc4a2ec55e018e0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-226",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019109599816147238,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8418308249ad81c2a5ef30e185630eb09d7e632a165bc812447d2c18267c6ae3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-227",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019398099539102986,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c0ddfcd61d8236e6671d61d7b53244857806fffc5eef351944ed718ee42cdf01",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-228",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001923909949255176,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "c0ddfcd61d8236e6671d61d7b53244857806fffc5eef351944ed718ee42cdf01",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-229",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019078299374086782,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6ca9dd0a7a26906987500f1422298e28d99c550de98a6865bb813d14568054b1",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-230",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019257199892308563,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2fd3bcce91e56cad5b569e5687ef3405eb8ae0fe7ef6bd43870b3bd7f96274d9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-231",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019117500050924718,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d298c9efa12cb233f3b02310d6e1701cd779947dd2bb58e09153ff126ef2343a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-232",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018699199426919222,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d94a7fe72ca69d6610e95209c7ea68ef3450ca1ace454a25474ce860b58bdfd9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-233",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018839800031855702,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "be1a074df3d2f8b3489f655ea25074dda07d72c287790f398581efdfaf85bebf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-234",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018476400146028027,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "25513c799d1a2e004e78ce56482deb90bd8228931b59ea71d1580b8e5b92933a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-235",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018721300148172304,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "48ab7e823e8c3f80ae6b1d0978a4c74038bbb1d4a8fd918cde890342e908643d",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-236",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018405500304652378,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7b447deb3faa99ba08ea9fbcaa3c002be7cca828ded14923f11794652fe5e13f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-237",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019212900224374607,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "8389e1c71ae9cebfcfe500fd9d686e7244baba6dbb09dbabc988b4551b361388",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760174642295169e-08
+      }
+    },
+    {
+      "name": "captured-238",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00020183100423309952,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d320494d92bfd3a5da7f668ceba9cea334ebe460752d39a790e7d454c4e177c9",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-239",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019590000010794029,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a1549de0e95288695f1b48246d6c060dad7644d1507ff4c6197ee601ac049ffe",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.76045601721853e-08
+      }
+    },
+    {
+      "name": "captured-240",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019513000006554648,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "137a3ba55d9e35307498bbedc588f0548908aefb92695cddb2ff6334a84a5794",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-241",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019102000078419223,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a6eaad5692fce91075ed13de5c21e3aadf287d816b7150aa7925025815ebf9a0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-242",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001942790040629916,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "f5abdae524b7e6f197941dac2d4a0bb5f54d06901e8765e92efd6179a8916378",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-243",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019272499775979668,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "35a325229c008d64dfec378c0e903a5e6adb38a52a85e7000ed3dc1c6e998863",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-244",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001947819982888177,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "4f63782095af792ab2d70d2826b7a93b3c6cd30f1930bf2d0f7e76a084773d94",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-245",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019461700139800087,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "eb920cc28670d23e3542b7439a559de588f2b193acf915934b90d4a28e9a0c4a",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-246",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019456200243439525,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "64b006a6a1b654dd0396a122e12f43165d743cea886ad588f6e550641098ed21",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-247",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018971299869008362,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6ac757146ab8dc862785d61142d25fa1af0dcdb85e475aad78135f9fe6196e7b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-248",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001841630000853911,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a237fded46df54a7692b8189f56aa63d6ca13873940601af3295ef60e0cbf7e3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-249",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018654000450624153,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "7926964a87c877924cd208ef2ebf4caf47db2c66a237b2799e97e98e5b0e6922",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-250",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001872770008048974,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6fbdba9e49bbeda340f8d0184e33f5d9c9a9447865b7ae78e7235b19f1525824",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-251",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018836200615623966,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "da90e2bf2c5264bd889e764a5e9108bcfa99a6f1c23d2b97425ab9d2673e75e5",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-252",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018018700211541727,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d757d817f78133763a829dbad1875f5ba0bac5e0e5130d3f73f97aea74f0e5e6",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-253",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019110699940938503,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "a75f65ef7bf044465af011705e9c32bece153dd0feeb2f00b289f08c6539feba",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-254",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019013899873243645,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e47aed162c16ec40e7209b54e64c75fd0248f71f5ae08982d9e347ceee8dd4ad",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "captured-255",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019267199968453497,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ae6756c3cec303a0a192ee8cf6c4ab5b3a19f90e0f2fe2e59e769130201b0eb0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 7.771561172376096e-16,
+        "energyResidual": 1.1871298178453246e-16,
+        "chemicalResidual": 6.760183168807998e-08
+      }
+    },
+    {
+      "name": "trace-air-0.0-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 2.6498993975110352e-05,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "30baa272b7a772437a7f89ae6b89b5431786411b17a96da1c8f3a2f1292ee5d3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 0.0,
+        "chemicalResidual": 0.0
+      }
+    },
+    {
+      "name": "acoustic-direction-0.0-0.0",
+      "passed": true,
+      "relativeError": 5.467168939787825e-09,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.0-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.884323568083346e-08
+    },
+    {
+      "name": "trace-seed-0.0-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6924533527344466e-08
+    },
+    {
+      "name": "trace-air-0.0-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0016901290000532754,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2d4d770e192353ca7ba2a0ffe7cd6c1a716e833ffdd9222f97d7b1da3b099664",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 1.8400379147932634e-16,
+        "chemicalResidual": 2.660272002685815e-10
+      }
+    },
+    {
+      "name": "acoustic-direction-0.0-0.2",
+      "passed": true,
+      "relativeError": 4.55422452305676e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.0-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.1277074983295473e-10
+    },
+    {
+      "name": "trace-seed-0.0-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.127713975703419e-10
+    },
+    {
+      "name": "trace-air-0.01-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008740889970795251,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d2429994fa1307b19404fc0de576589014c83f03668ca0bbb3431f355d29721b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 0.0,
+        "chemicalResidual": 3.6494895994110266e-08
+      }
+    },
+    {
+      "name": "acoustic-direction-0.01-0.0",
+      "passed": true,
+      "relativeError": 1.5010594109576836e-05,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.01-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 6.468649599420378e-10
+    },
+    {
+      "name": "trace-seed-0.01-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 7.661546116376268e-06
+    },
+    {
+      "name": "trace-air-0.01-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.003628841004683636,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "63c5e5560d547e5b6bb7053a891f3f125945fef7529770b6f6b2739ecd4401cf",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.4424906541753444e-15,
+        "energyResidual": 4.00575976422331e-16,
+        "chemicalResidual": 2.39822384173749e-10
+      }
+    },
+    {
+      "name": "acoustic-direction-0.01-0.2",
+      "passed": true,
+      "relativeError": 3.0091446145963374e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.01-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.7296002897241073e-10
+    },
+    {
+      "name": "trace-seed-0.01-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.60472572447011e-10
+    },
+    {
+      "name": "trace-air-0.001-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.007829419999325182,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0ddb79507f8134b295b7e7f0fa1b6593be12c8791b2f6288fe6a1e8741ceeadd",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 2.411651365772746e-16,
+        "chemicalResidual": 2.842170943040401e-14
+      }
+    },
+    {
+      "name": "trace-seed-0.001-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.114022383029319e-09
+    },
+    {
+      "name": "trace-seed-0.001-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.233723075521004e-09
+    },
+    {
+      "name": "trace-air-0.001-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0032886850021895953,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6d345ebb8a9f21ceb4e56271f07e8a9ca6a23f517e364f955775aa20d794b246",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.1102230246251565e-15,
+        "energyResidual": 3.7135549009317207e-16,
+        "chemicalResidual": 2.6213342607661616e-10
+      }
+    },
+    {
+      "name": "trace-seed-0.001-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.396885892812133e-11
+    },
+    {
+      "name": "trace-seed-0.001-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.3219976991000256e-11
+    },
+    {
+      "name": "trace-air-0.0001-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.010562486997514497,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "64f3ff9eab2fd88762b1208a1d03da91bcaadde7835941b338a5ecaf5a6c0fb3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.9233282461404997e-12,
+        "energyResidual": 2.6581233765915612e-12,
+        "chemicalResidual": 7.585416028632608e-08
+      }
+    },
+    {
+      "name": "trace-seed-0.0001-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 8.016896370170145e-08
+    },
+    {
+      "name": "trace-seed-0.0001-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 8.382914712178587e-09
+    },
+    {
+      "name": "trace-air-0.0001-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0019409460001043044,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1bba331a576cf5ee8f395277a3f7632387faae0d848cb32cec86ac63a8f686b3",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 0.0,
+        "chemicalResidual": 2.6562929633655585e-10
+      }
+    },
+    {
+      "name": "trace-seed-0.0001-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.5226459033550486e-10
+    },
+    {
+      "name": "trace-seed-0.0001-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.5226459033550486e-10
+    },
+    {
+      "name": "trace-air-1e-05-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.005914672998187598,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "af557601b427d6f1e1bab2e62545bd6c65544c965e20a81298275e51c796691b",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.290701044988964e-13,
+        "energyResidual": 2.24402836426778e-14,
+        "chemicalResidual": 6.807874797232216e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-05-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.3969111998447506e-08
+    },
+    {
+      "name": "trace-seed-1e-05-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.833984437439695e-08
+    },
+    {
+      "name": "trace-air-1e-05-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000863337998453062,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6f5efb53846a79c55d352fc6972b2cc16392e44dd140112fecf4a00fec1cd816",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.8402059587677928e-16,
+        "chemicalResidual": 2.659703568497207e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-05-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.086759637852424e-10
+    },
+    {
+      "name": "trace-seed-1e-05-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.935786063230508e-10
+    },
+    {
+      "name": "trace-air-1e-06-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00033335199987050146,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "871912e794240ab8756f48bf25e9abeef34722d87091a28822e79a0e6545b4f4",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.325873406851315e-14,
+        "energyResidual": 1.4483211643500186e-14,
+        "chemicalResidual": 6.763451665392495e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-06-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.7407603395192147e-08
+    },
+    {
+      "name": "trace-seed-1e-06-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.7838408387746596e-08
+    },
+    {
+      "name": "trace-air-1e-06-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000838400999782607,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "74fb42216e3d1c2244a80efa2b7a24295573a64836760038ac2b9f997666904e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 5.551115123125783e-16,
+        "energyResidual": 1.8400547197974562e-16,
+        "chemicalResidual": 2.659135134308599e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-06-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.318389555613441e-10
+    },
+    {
+      "name": "trace-seed-1e-06-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.075933166914899e-10
+    },
+    {
+      "name": "trace-air-1e-07-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.004520269998465665,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "aad8bf3eea2ff6b9b056116bd0f07e3ae5c5fe4b197f4c1ad03393ed5adb8328",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.4210854715202004e-14,
+        "energyResidual": 8.547348136204765e-15,
+        "chemicalResidual": 6.76039064728684e-08
+      }
+    },
+    {
+      "name": "acoustic-direction-1e-07-0.0",
+      "passed": true,
+      "relativeError": 3.923794755777976e-08,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-07-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.2324616930119315e-08
+    },
+    {
+      "name": "trace-seed-1e-07-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 6.081348155535065e-08
+    },
+    {
+      "name": "trace-air-1e-07-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008486009974149056,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1fb214b20d9eafbdc93d6b17ed1c3aa3fca3dbd60afcd4f7b405df0e765026c7",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.992007221626409e-16,
+        "energyResidual": 3.6800791905995037e-16,
+        "chemicalResidual": 2.660840436874423e-10
+      }
+    },
+    {
+      "name": "acoustic-direction-1e-07-0.2",
+      "passed": true,
+      "relativeError": 4.557546603445317e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-07-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.828592101897641e-10
+    },
+    {
+      "name": "trace-seed-1e-07-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 7.134852767236288e-10
+    },
+    {
+      "name": "trace-air-1e-08-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.004188544997305144,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "80fb3694d2ad2512277e7483995da37af5f6ebe12dad56cc54645fdadd3a9e82",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.1086244689504383e-15,
+        "energyResidual": 1.1396448044228553e-14,
+        "chemicalResidual": 6.76026843393629e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-08-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.3706016293950347e-08
+    },
+    {
+      "name": "trace-seed-1e-08-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6886257853080566e-08
+    },
+    {
+      "name": "trace-air-1e-08-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008556610046071,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "2a454743151201191f95b748ec4aa0e7034360f5bdba5f384a58481f86b823a8",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 4.440892098500626e-16,
+        "energyResidual": 1.8400380828439725e-16,
+        "chemicalResidual": 2.660840436874423e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-08-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.1730967973792495e-11
+    },
+    {
+      "name": "trace-seed-1e-08-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.4757328533753476e-10
+    },
+    {
+      "name": "trace-air-1e-09-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019641400285763666,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "bcabcab9e0a3449be458c66852c70bd383763d241faeb479b6cf3be0cf32de63",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 9.325873406851315e-15,
+        "energyResidual": 2.374259673018944e-15,
+        "chemicalResidual": 6.760470228073245e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-09-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.7529476539590495e-08
+    },
+    {
+      "name": "trace-seed-1e-09-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.364582896057351e-08
+    },
+    {
+      "name": "trace-air-1e-09-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000846445000206586,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "e9e36c8218ee3709cca4fa48158637853c2f372f1005c2e00ac6b1165e074fee",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 5.520113794795004e-16,
+        "chemicalResidual": 2.660272002685815e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-09-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.2843287881419196e-10
+    },
+    {
+      "name": "trace-seed-1e-09-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.2843287881419196e-10
+    },
+    {
+      "name": "trace-air-1e-10-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001956330015673302,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6b4b96b46f2e02b14d5a9f38460e9c45eb31397276c7778c54aa0df27f798454",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.5654144647214707e-14,
+        "energyResidual": 5.935649098498525e-16,
+        "chemicalResidual": 6.760461701560416e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-10-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.8856601778338023e-08
+    },
+    {
+      "name": "trace-seed-1e-10-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.7878824178529715e-08
+    },
+    {
+      "name": "trace-air-1e-10-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.000850219999847468,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "fbb83d76bd0d58f8fcc8dce3c57a3e9275ae5b4df466e8d2f18581a92b23f439",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.220446049250313e-16,
+        "energyResidual": 0.0,
+        "chemicalResidual": 2.659987785591511e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-10-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.440942931722646e-10
+    },
+    {
+      "name": "trace-seed-1e-10-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.6968442451203034e-10
+    },
+    {
+      "name": "trace-air-1e-11-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0001915909961098805,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "da5a1429eedd4aba19fff501503406c63c0f8a55de58702ccb88581e8a179a57",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.0325074129013956e-14,
+        "energyResidual": 2.374259636037457e-16,
+        "chemicalResidual": 6.760473070244188e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-11-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.9389188083032427e-08
+    },
+    {
+      "name": "trace-seed-1e-11-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6938207437130214e-08
+    },
+    {
+      "name": "trace-air-1e-11-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008480960023007356,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "ffdd564ed6bcd73f128277470250cc92642c0d7d0d021e05278dc664f000e42f",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 1.8400379149613145e-16,
+        "chemicalResidual": 2.659987785591511e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-11-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.671194144962048e-10
+    },
+    {
+      "name": "trace-seed-1e-11-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 6.696776776691565e-10
+    },
+    {
+      "name": "trace-air-1e-12-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019642800180008635,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "0b820c7103139c78f8dc1b2bfeadc9e99f8884822c0e200ac2019b3f8e7409e0",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 0.0,
+        "energyResidual": 2.3742596357012614e-16,
+        "chemicalResidual": 6.760186010978941e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-12-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 7.865824146543362e-08
+    },
+    {
+      "name": "trace-seed-1e-12-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.8625911213797776e-08
+    },
+    {
+      "name": "trace-air-1e-12-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008464580023428425,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "9fd0ed37e22a27fa4dd8480b4dc3be287f126fd671083c62cec82a6d8e5d66a8",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 1.4432899320127035e-15,
+        "energyResidual": 1.8400379148100686e-16,
+        "chemicalResidual": 2.658850917214295e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-12-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.1556998197538785e-10
+    },
+    {
+      "name": "trace-seed-1e-12-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.508820926732605e-10
+    },
+    {
+      "name": "trace-air-1e-13-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00019129199790768325,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "22b035a52f28539b5145996674499ee27f9e49f3e91b8c2041c48dff1442cac2",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 8.881784197001252e-16,
+        "energyResidual": 1.1871298178338208e-16,
+        "chemicalResidual": 6.760464543731359e-08
+      }
+    },
+    {
+      "name": "trace-seed-1e-13-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.8818013952100457e-08
+    },
+    {
+      "name": "trace-seed-1e-13-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 9.18407837599613e-08
+    },
+    {
+      "name": "trace-air-1e-13-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008387970010517165,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "d11c8ef35050ac1f529dff3c3e6f43206867bee50380514ffa22afc5a850406e",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 2.4424906541753444e-15,
+        "energyResidual": 1.8400379147949432e-16,
+        "chemicalResidual": 2.659703568497207e-10
+      }
+    },
+    {
+      "name": "trace-seed-1e-13-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.5328436184265257e-10
+    },
+    {
+      "name": "trace-seed-1e-13-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.96304447632067e-11
+    },
+    {
+      "name": "trace-air-1e-14-n2o-0.0",
+      "passed": true,
+      "success": true,
+      "seconds": 0.00018599099712446332,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "1862c6ad8edb844e0340de7a60213689f2fee22d354557e1e743ba54241fda16",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 3.3306690738754696e-16,
+        "energyResidual": 0.0,
+        "chemicalResidual": 6.760188853149884e-08
+      }
+    },
+    {
+      "name": "acoustic-direction-1e-14-0.0",
+      "passed": true,
+      "relativeError": 4.897908278955754e-08,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-14-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.133391374399833e-08
+    },
+    {
+      "name": "trace-seed-1e-14-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.1185207149105305e-08
+    },
+    {
+      "name": "trace-air-1e-14-n2o-0.2",
+      "passed": true,
+      "success": true,
+      "seconds": 0.0008518969989381731,
+      "inputUnchanged": true,
+      "failureSeedUnchanged": true,
+      "stateBitPatternSha256": "6cae9b5bcd01053b6210bb0255cfe4914fba86e464670ee29b0099897513a928",
+      "residualsPass": true,
+      "residuals": {
+        "volumeResidual": 6.661338147750939e-16,
+        "energyResidual": 0.0,
+        "chemicalResidual": 2.660840436874423e-10
+      }
+    },
+    {
+      "name": "acoustic-direction-1e-14-0.2",
+      "passed": true,
+      "relativeError": 4.552546413183478e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-14-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.6683671209319028e-11
+    },
+    {
+      "name": "trace-seed-1e-14-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.129808056178845e-11
+    },
+    {
+      "name": "negative",
+      "passed": true,
+      "error": "Negative or non-finite conserved chemical species mass"
+    },
+    {
+      "name": "nonfinite",
+      "passed": true,
+      "error": "No stable UV flash candidate: Non-finite conserved internal energy"
+    },
+    {
+      "name": "pool-1",
+      "passed": true,
+      "count": 319,
+      "bitwiseIdentical": true,
+      "error": ""
+    },
+    {
+      "name": "pool-24",
+      "passed": true,
+      "count": 319,
+      "bitwiseIdentical": true,
+      "error": ""
+    },
+    {
+      "name": "pool-failure-id-budget-rollback",
+      "passed": true,
+      "failedCells": 30,
+      "details": 16,
+      "omittedDetails": 14
+    }
+  ],
+  "runtime": {
+    "schema": 1,
+    "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/lib/libpintleReactiveBackend.so",
+    "backendSha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+    "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/r04_reactive_ambient_20260921/case/thermo/cold-pr-config.yaml",
+    "physicalModelHash": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+    "numericalPolicyHash": "f65618ce7d54804e4adce780dd05fc71f587715f168b9415a2c293be532b55ba",
+    "modelFingerprint": "c3bbca5b6d6d99e6a838eade9f023a44e704736e6d29ef201cc699f5f4f53494",
+    "eos": "Peng-Robinson",
+    "closureBackend": "cpu",
+    "chemistryBackend": "cpu",
+    "deviceFullClosure": false,
+    "deviceChemistryIntegration": false
+  },
+  "passed": true,
+  "testCount": 388,
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-recovery-bits.json",
+  "rawReportSha256": "e09ee88d212ec23e4829ffe50333603fbbb426fda0ec357bfd58d007936f96a3"
+}

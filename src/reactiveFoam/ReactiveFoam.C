@@ -2,12 +2,21 @@
 // Conservative HEM reference: host thermodynamics, full chemical inventories,
 // total formation+thermal+kinetic energy. This is a separate research solver.
 #include "fvCFD.H"
+#include "fileOperation.H"
 #include "cyclicPolyPatch.H"
 #include "pintleReactiveThermo.h"
+#include "pintleRecovery.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleCheckpointIdentity.h"
 #include <cstring>
+#include <fstream>
+#include <unistd.h>
+#include <filesystem>
+#include <fcntl.h>
+#include <sys/syscall.h>
+#include <linux/fs.h>
+#include <type_traits>
 #include <sstream>
 #include "pintleReactiveTransport.h"
 #include "pintleTransportV21.h"
@@ -55,6 +64,8 @@ struct Face {
 };
 
 #include "reactivePhysics.H"
+#include "reactiveDiagnostics.H"
+#include "reactiveCheckpoint.H"
 
 class Flow {
 public:
@@ -75,6 +86,9 @@ public:
     uint64_t attemptId=1;
     mutable uint64_t workerVersion=0,workerStage=0;
     std::unique_ptr<void,decltype(&pintle_rt_pool_destroy)> pool{nullptr,&pintle_rt_pool_destroy};
+    std::string diagnosticPath,runtimeManifest,executableHash,runId,requestedTransport;
+    mutable std::string recoveryStage="initial";
+    double physicalTime=0,attemptDt=0;int retryIndex=0;
     size_t batchCells=64;
     mutable Array batchQ,batchEnergy;
     mutable std::vector<PintleThermoState> batchStates;
@@ -89,10 +103,18 @@ public:
        chemistry(physics.chemistry),mechanical(physics.mechanical),frozen(physics.frozen)
     {
         demand(ns>0&&nc>0,"Empty model/mesh");
+        requestedTransport=dict.getOrDefault<word>("transportBackend","cpu");
         if(dict.found("optimizationPolicy")) {
             fileName policy(dict.get<fileName>("optimizationPolicy"));policy.expand();
             check(pintle_rt_load_optimization_policy(t,policy.c_str()),"Optimization policy");
         }
+        const word recoveryMode=dict.getOrDefault<word>("recoveryMode","reference");
+        demand(recoveryMode=="reference"||recoveryMode=="boundaryFallback","Unknown recoveryMode");
+        demand(recoveryMode=="reference"||(!mechanical&&!frozen&&!chemistry&&diffusivity==0),
+               "boundaryFallback currently requires nonreacting HEM equilibrium without species diffusion");
+        check(pintle_rt_set_recovery_v1(t,recoveryMode=="boundaryFallback",dict.getOrDefault<bool>("recoveryDiagnostics",false)),"Recovery policy");
+        Info<<"REACTIVE_RECOVERY mode="<<recoveryMode<<" baseline=reference_candidate_search fallback="
+            <<(recoveryMode=="boundaryFallback"?"same_eos_boundary_aware":"none")<<nl;
         demand(!mechanical||(!chemistry&&viscosity==0&&conductivity==0&&diffusivity==0),
                "Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange");
         if(chemistry) {
@@ -253,6 +275,33 @@ public:
         // Explicit host consumer: current same-EOS full-composition flash.
         checkTransport(pintle_transport_download_conserved(transport.get(),after,q.data()));
     }
+    void failureRecord(size_t cell,size_t offset,size_t localCell,size_t worker,const double* input,
+                       const PintleThermoState& guess,const std::string& message,const char* category,
+                       const char* details,bool detailed,int operation=0,double sourceDt=0) const
+    {
+        if(diagnosticPath.empty())return;
+        std::ofstream out(diagnosticPath,std::ios::app);
+        if(!out)throw PersistentIOError("Cannot write recovery diagnostics: "+diagnosticPath);
+        out<<std::setprecision(17)<<"{\"schema\":1,\"runId\":"<<jsonQuote(runId)
+           <<",\"runtime\":"<<runtimeManifest<<",\"solverSha256\":"<<jsonQuote(executableHash)
+           <<",\"transportBackendRequested\":"<<jsonQuote(requestedTransport)
+           <<",\"transportBackendActive\":"<<jsonQuote(transport?"cuda":"host")<<",\"time\":"<<physicalTime
+           <<",\"dt\":"<<attemptDt<<",\"retry\":"<<retryIndex<<",\"attemptId\":"<<attemptId
+           <<",\"stage\":"<<jsonQuote(recoveryStage)<<",\"batchStage\":"<<workerStage<<",\"contentVersion\":"<<workerVersion
+           <<",\"globalCell\":"<<cell<<",\"cellIdBase\":0,\"batchOffset\":"<<offset<<",\"localCell\":"<<localCell<<",\"worker\":"<<worker
+           <<",\"operation\":"<<jsonQuote(operation?"source":"recover")<<",\"sourceDt\":"<<sourceDt
+           <<",\"chemicalRtol\":"<<chemicalRtol<<",\"chemicalAtol\":"<<chemicalAtol
+           <<",\"category\":"<<jsonQuote(category)<<",\"error\":"<<jsonQuote(message)<<",\"detailed\":"<<(detailed?"true":"false");
+        if(detailed) {
+            out<<",\"equilibrium\":"<<(!frozen?"true":"false")<<",\"q\":[";
+            for(size_t k=0;k<physicalSpecies;++k){if(k)out<<',';jsonNumber(out,input[k]);}
+            out<<"],\"momentum\":[";for(int i=0;i<3;++i){if(i)out<<',';jsonNumber(out,input[ns+i]);}
+            out<<"],\"totalEnergy\":";jsonNumber(out,input[ns+3]);out<<",\"energy\":";jsonNumber(out,internalEnergy(input));
+            out<<",\"kineticEnergy\":";jsonNumber(out,input[ns+3]-internalEnergy(input));
+            out<<",\"guess\":";jsonState(out,guess);out<<",\"search\":"<<(details&&details[0]?details:"null");
+        }
+        out<<"}\n";out.flush();if(!out)throw PersistentIOError("Failed to flush recovery diagnostics: "+diagnosticPath);
+    }
     void runBatch(const Array& input,Array* output,States& states,int op,double dt,double& drift) const
     {
         ++workerStage;
@@ -264,7 +313,20 @@ public:
             double localDrift=0;const PintleBatchToken token{attemptId,workerStage,++workerVersion};
             const int status=pintle_rt_pool_batch(pool.get(),token,op+(frozen?2:0),count,physicalSpecies,batchQ.data(),batchEnergy.data(),batchStates.data(),
                 dt,chemicalRtol,chemicalAtol,&localDrift);
-            demand(status==0,pintle_rt_pool_error(pool.get()));
+            if(status) {
+                const std::string message=pintle_rt_pool_error(pool.get());size_t failed=0,detailed=0;
+                for(size_t c=0;c<count;++c) {
+                    PintleRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);const char* details=nullptr;
+                    if(pintle_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
+                        ++failed;const bool keep=details||detailed==0;if(keep)++detailed;
+                        failureRecord(start+c,start,c,failure.worker,&input[(start+c)*nv],batchStates[c],
+                            failure.message,failure.category,details,keep,op,dt);
+                    }
+                }
+                Info<<"REACTIVE_RECOVERY_FAILURE batchOffset="<<start<<" failedCells="<<failed<<" detailed="<<detailed
+                    <<" omittedDetails="<<(failed-detailed)<<nl;
+                demand(false,message);
+            }
             for(size_t c=0;c<count;++c) {static_cast<PintleThermoState&>(states[start+c])=batchStates[c];
                 if(output)std::copy(batchQ.data()+c*physicalSpecies,batchQ.data()+(c+1)*physicalSpecies,output->data()+(start+c)*nv);}
             drift=std::max(drift,localDrift);
@@ -284,7 +346,11 @@ public:
                 check(pintle_rt_recover_mechanical(thermo,local,local+physicalSpecies,local[ns+4],
                     local[ns+5],internalEnergy(local),&states[c].mechanical),"Mechanical recovery cell "+std::to_string(c));
                 static_cast<PintleThermoState&>(states[c])=states[c].mechanical.mixture;
-            } else check(pintle_rt_recover(thermo,local,internalEnergy(local),!frozen,&states[c]),"UV recovery cell "+std::to_string(c));
+            } else {
+                const auto previous=states[c];const int status=pintle_rt_recover(thermo,local,internalEnergy(local),!frozen,&states[c]);
+                if(status)failureRecord(c,0,c,0,local,previous,pintle_rt_error(thermo),"recovery_failed",pintle_rt_recovery_diagnostic_v1(thermo),true);
+                check(status,"UV recovery cell "+std::to_string(c));
+            }
         }
     }
     void react(Array& q,States& states,double dt,double& drift) const
@@ -293,8 +359,10 @@ public:
         if(pool){runBatch(q,&q,states,1,dt,drift);recover(q,states);return;}
         for(size_t c=0;c<nc;++c) {
             double localDrift=0;double* local=&q[c*nv];
-            check(pintle_rt_react(thermo,local,internalEnergy(local),dt,!frozen,chemicalRtol,chemicalAtol,
-                                 &states[c],&localDrift),"Chemical source cell "+std::to_string(c));
+            const auto previous=states[c];
+            const int status=pintle_rt_react(thermo,local,internalEnergy(local),dt,!frozen,chemicalRtol,chemicalAtol,&states[c],&localDrift);
+            if(status)failureRecord(c,0,c,0,local,previous,pintle_rt_error(thermo),"source_failed",nullptr,true,1,dt);
+            check(status,"Chemical source cell "+std::to_string(c));
             drift=std::max(drift,localDrift);
         }
         // Momentum and total energy are untouched. Recompute the kinetic
@@ -490,7 +558,7 @@ public:
         ++attemptId;workerStage=0;
         if(transport)checkTransport(pintle_transport_begin_attempt(transport.get(),pintle_rt_physical_model_hash(thermo),attemptId));
         try {
-        react(q,states,.5*dt,drift);
+        recoveryStage="source-first";react(q,states,.5*dt,drift);
         // Without a source, q/states still match the initial CFL query.
         if(chemistry)demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
         const States oldStates=states;
@@ -508,7 +576,7 @@ public:
             initial=q;flux(q,states,rhs,boundaryA);
             for(size_t j=0;j<q.size();++j) q[j]=initial[j]+dt*rhs[j];
         }
-        recover(q,states);
+        recoveryStage="rk1";recover(q,states);
         demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
         if(transport) {
             packTransport(q,states,true);boundaryB.resize(nv);
@@ -519,11 +587,11 @@ public:
             flux(q,states,rhs,boundaryB);
             for(size_t j=0;j<q.size();++j) q[j]=.5*initial[j]+.5*(q[j]+dt*rhs[j]);
         }
-        states=oldStates;recover(q,states);
-        react(q,states,.5*dt,drift);
+        recoveryStage="rk2";states=oldStates;recover(q,states);
+        recoveryStage="source-second";react(q,states,.5*dt,drift);
         boundaryIntegral.resize(nv);
         for(size_t k=0;k<nv;++k) boundaryIntegral[k]=.5*dt*(boundaryA[k]+boundaryB[k]);
-        if(transport)checkTransport(pintle_transport_end_attempt(transport.get(),attemptId,1));
+        // Device commit follows global conservation validation in the caller.
         } catch(...) {
             if(transport)pintle_transport_end_attempt(transport.get(),attemptId,0);
             boundaryIntegral.clear();throw;
@@ -576,6 +644,12 @@ int main(int argc,char** argv)
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
                "Conservative species/stage allocation exceeds configured host memory budget");
         Flow flow(model.get(),nc,host(mesh.V().field()),dict,physics);
+        const char* manifest=pintle_rt_runtime_manifest_v1(model.get());demand(manifest,pintle_rt_error(model.get()));
+        flow.runtimeManifest=manifest;char solverHash[65];
+        demand(pintle_rt_file_sha256_v1("/proc/self/exe",solverHash,sizeof(solverHash))==0,"Cannot hash solver executable");
+        flow.executableHash=solverHash;flow.runId=std::to_string(getpid())+"-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
+        flow.diagnosticPath=std::string((runTime.path()/"reactiveFailures.jsonl").c_str());flow.physicalTime=runTime.value();
+        Info<<"REACTIVE_RUNTIME runId="<<flow.runId<<" solverSha256="<<flow.executableHash<<" manifest="<<manifest<<nl;
         Array q(nc*nv,0);States states(nc);
         volScalarField p(IOobject("p",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
         volScalarField T(IOobject("T",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
@@ -587,17 +661,17 @@ int main(int argc,char** argv)
         const word initialization=dict.get<word>("initialization");
         demand(initialization=="primitive"||initialization=="conserved","Unknown initialization mode");
         demand(!mechanical||initialization=="conserved","Mechanical environments require explicit conserved initial data");
-        std::string restartPolicyHash;
+        std::string restartPolicyHash;int checkpointSchema=0;CheckpointHistory history;
         if(initialization=="conserved") {
             IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE));
             PintleCheckpointIdentity oldIdentity,currentIdentity;
-            oldIdentity.schema=identity.getOrDefault<label>("identitySchema",1);
+            oldIdentity.schema=identity.getOrDefault<label>("identitySchema",1);checkpointSchema=oldIdentity.schema;
             oldIdentity.speciesCount=identity.get<label>("speciesCount");
             oldIdentity.fingerprint=identity.get<word>("fingerprint");
             oldIdentity.closure=identity.getOrDefault<word>("closure","");
             oldIdentity.physicalModelHash=identity.getOrDefault<word>("physicalModelHash","");
             oldIdentity.numericalPolicyHash=identity.getOrDefault<word>("numericalPolicyHash","");
-            currentIdentity={2,label(physicalSpecies),pintle_rt_fingerprint(model.get()),identityClosure,
+            currentIdentity={3,label(physicalSpecies),pintle_rt_fingerprint(model.get()),identityClosure,
                 pintle_rt_physical_model_hash(model.get()),pintle_rt_numerical_policy_hash(model.get())};
             if(pintleValidateIdentity(oldIdentity,currentIdentity)) {
                 restartPolicyHash=oldIdentity.numericalPolicyHash;
@@ -668,6 +742,10 @@ int main(int argc,char** argv)
             }
             // Equilibrium derives the partition from q/E; frozen transport also
             // requires the conserved liquid inventories, never alpha guesses.
+            if(checkpointSchema==3) {
+                checkpoint::load(std::string((runTime.path()/runTime.timeName()).c_str()),q,states,mechanical,nv,history);
+                runTime.setTime(history.time,runTime.timeIndex());flow.physicalTime=history.time;
+            }
             flow.recover(q,states);
         }
         const auto owner=host(mesh.faceOwner()),neighbour=host(mesh.faceNeighbour());
@@ -749,17 +827,28 @@ int main(int argc,char** argv)
             <<" transportGasProperties="<<(flow.diffusivity==0?"disabled":(flow.deviceGasProperties?"deviceNasa":"host"))<<nl;
         wordList outputTypes(mesh.boundary().size(),"calculated");
         forAll(mesh.boundary(),patchi) if(mesh.boundary()[patchi].type()=="empty") outputTypes[patchi]="empty";
+        fileName outputInstance=runTime.timeName();checkpoint::Transaction* transaction=nullptr;
+        IOstream::defaultPrecision(17);
+        auto writeCheckpointObject=[&](const regIOobject& object) {
+            // regIOobject::write resets non-time instances to the live time.
+            // Bypass that reset so no field escapes the hidden transaction.
+            return fileHandler().writeObject(object,IOstreamOption(runTime.writeFormat(),runTime.writeCompression()),true);
+        };
         auto writeScalar=[&](const word& name,const dimensionSet& dimensions,const Array& values) {
-            volScalarField field(IOobject(name,runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedScalar(dimensions,0),outputTypes);
+            transaction->checkField(name.c_str());
+            volScalarField field(IOobject(name,outputInstance,mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedScalar(dimensions,0),outputTypes);
             assign(field.primitiveFieldRef(),values);
-            demand(field.write(),"Failed to write checkpoint field "+std::string(name.c_str()));
+            demand(writeCheckpointObject(field),"Failed to write checkpoint field "+std::string(name.c_str()));
         };
         auto writeVector=[&](const word& name,const dimensionSet& dimensions,const std::vector<vector>& values) {
-            volVectorField field(IOobject(name,runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedVector(dimensions,vector::zero),outputTypes);
+            transaction->checkField(name.c_str());
+            volVectorField field(IOobject(name,outputInstance,mesh,IOobject::NO_READ,IOobject::NO_WRITE,false),mesh,dimensionedVector(dimensions,vector::zero),outputTypes);
             assign(field.primitiveFieldRef(),values);
-            demand(field.write(),"Failed to write checkpoint field "+std::string(name.c_str()));
+            demand(writeCheckpointObject(field),"Failed to write checkpoint field "+std::string(name.c_str()));
         };
         auto writeState=[&]() {
+            checkpoint::Transaction tx(runTime.path().c_str(),runTime.timeName().c_str(),flow.runId);
+            transaction=&tx;outputInstance=tx.instance();
             Array values(nc);std::vector<vector> vectors(nc);
             for(size_t k=0;k<ns;++k) {
                 for(label c=0;c<nc;++c) values[c]=q[c*nv+k];
@@ -794,18 +883,24 @@ int main(int argc,char** argv)
                     writeScalar("environmentE"+Foam::name(a),dimEnergy/dimMass,values);
                 }
             }
-            IOdictionary identity(IOobject("reactiveStateIdentity",runTime.timeName(),mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
+            tx.checkField("reactiveStateIdentity");
+            IOdictionary identity(IOobject("reactiveStateIdentity",outputInstance,mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
             // Hex hashes may begin with digits. A word is written unquoted
             // and can be tokenized as a number when the checkpoint is read.
             identity.add("fingerprint",Foam::string(pintle_rt_fingerprint(model.get())));
-            identity.add("identitySchema",label(2));
+            identity.add("identitySchema",label(3));
             identity.add("physicalModelHash",Foam::string(pintle_rt_physical_model_hash(model.get())));
             identity.add("numericalPolicyHash",Foam::string(pintle_rt_numerical_policy_hash(model.get())));
             if(!restartPolicyHash.empty())identity.add("restartNumericalPolicyHash",Foam::string(restartPolicyHash));
             identity.add("speciesCount",label(physicalSpecies));identity.add("closure",identityClosure);
-            demand(identity.regIOobject::write(),"Failed to write checkpoint reactiveStateIdentity");
+            demand(writeCheckpointObject(identity),"Failed to write checkpoint reactiveStateIdentity");
+            history.time=runTime.value();
+            tx.checkField("reactiveState.bin");
+            checkpoint::save(tx.path()/"reactiveState.bin",q,states,mechanical,history);tx.commit();
+            Info<<"REACTIVE_CHECKPOINT time="<<history.time<<" acceptedSteps="<<double(history.steps)<<" complete=1 schema=3"<<nl;
         };
-        const Array initial=flow.totals(q);Array accumulatedBoundary(nv,0);
+        if(!history.loaded){history.initial=flow.totals(q);history.boundary.assign(nv,0);}
+        const Array& initial=history.initial;Array& accumulatedBoundary=history.boundary;
         const double mass0=std::accumulate(initial.begin(),initial.begin()+ns,0.0);
         const size_t ne=pintle_rt_element_count(model.get());
         Array atomCoefficients(ns*ne),initialAtoms(ne,0);
@@ -818,6 +913,12 @@ int main(int argc,char** argv)
         for(label c=0;c<nc;++c) velocityScale=std::max(velocityScale,mag(flow.velocity(&q[c*nv]))+states[c].soundFrozen);
         double energyScale=0;for(label c=0;c<nc;++c) energyScale+=std::abs(q[c*nv+ns+3])*flow.volume[c];
         energyScale=std::max(energyScale,mass0*1e5);
+        if(history.loaded){velocityScale=history.velocityScale;energyScale=history.energyScale;}
+        else {history.velocityScale=velocityScale;history.energyScale=energyScale;}
+        const label checkpointEvery=dict.getOrDefault<label>("checkpointEverySteps",0);
+        demand(checkpointEvery>=0,"checkpointEverySteps must be nonnegative");
+        const bool checkpointFirst=dict.getOrDefault<bool>("checkpointFirstStep",true);
+        const bool checkpointFailure=dict.getOrDefault<bool>("checkpointOnFailure",true);
         Info().precision(17);
         Info<<"REACTIVE_MODEL cells="<<nc<<" species="<<ns<<" reactions="<<pintle_rt_reaction_count(model.get())
             <<" liquids="<<pintle_rt_liquid_count(model.get())<<" estimatedHostBytes="<<memoryEstimate<<" chemistry="<<flow.chemistry<<nl;
@@ -836,43 +937,52 @@ int main(int argc,char** argv)
             demand(cfl>0&&cfl<=.5&&maxDt>0,"Require 0<maxCo<=0.5 and maxDeltaT>0");
             double dt=flow.stableStep(q,states,.95*cfl,std::min(double(maxDt),double(runTime.endTime().value()-runTime.value())));
             const Array previous=q;const States previousStates=states;
-            Array boundaryIntegral;double drift=0;int retries=0;
+            Array boundaryIntegral,nextBoundary;double drift=0;int retries=0;
+            double massError=0,momentumError=0,elementError=0,speciesError=0,liquidError=0,energyError=0;
             for(;;) {
                 const auto attemptProfile=flow.profiles();
-                try {flow.step(q,states,dt,cfl,boundaryIntegral,drift);flow.reportAttempt(attemptProfile,true,retries);break;}
+                flow.physicalTime=runTime.value();flow.attemptDt=dt;flow.retryIndex=retries;
+                try {
+                    flow.step(q,states,dt,cfl,boundaryIntegral,drift);
+                    nextBoundary=accumulatedBoundary;
+                    for(size_t k=0;k<nv;++k)nextBoundary[k]+=boundaryIntegral[k];
+                    const Array final=flow.totals(q);
+                    massError=momentumError=elementError=speciesError=liquidError=0;
+                    for(size_t k=0;k<ns;++k) massError+=final[k]-initial[k]+nextBoundary[k];
+                    for(size_t k=0;k<ns;++k) speciesError=std::max(speciesError,std::abs(final[k]-initial[k]+nextBoundary[k])/mass0);
+                    for(int i=0;i<3;++i) momentumError=std::max(momentumError,
+                        std::abs(final[ns+i]-initial[ns+i]+nextBoundary[ns+i])/(mass0*velocityScale));
+                    for(size_t e=0;e<ne;++e) {
+                        double difference=0;
+                        for(size_t k=0;k<ns;++k) difference+=(final[k]-initial[k]+nextBoundary[k])*atomCoefficients[e*ns+k];
+                        elementError=std::max(elementError,std::abs(difference)/atomScale);
+                    }
+                    energyError=(final[ns+3]-initial[ns+3]+nextBoundary[ns+3])/energyScale;
+                    massError/=mass0;
+                    demand(std::isfinite(massError)&&std::isfinite(energyError)&&std::abs(massError)<1e-7&&std::abs(energyError)<1e-9,
+                           "Global boundary-corrected mass/total-energy balance failed");
+                    demand(momentumError<1e-9&&elementError<1e-7&&(flow.chemistry||speciesError<1e-9),
+                           "Global boundary-corrected momentum/element/species balance failed");
+                    if(flow.frozen)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
+                        const size_t k=ns+4+i;
+                        liquidError=std::max(liquidError,std::abs(final[k]-initial[k]+nextBoundary[k])/mass0);
+                    }
+                    demand(liquidError<1e-9,"Global boundary-corrected frozen liquid inventory balance failed");
+                    if(flow.transport)flow.checkTransport(pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,1));
+                    flow.reportAttempt(attemptProfile,true,retries);break;
+                }
+                catch(const PersistentIOError&) {q=previous;states=previousStates;if(checkpointFailure)writeState();throw;}
                 catch(const std::exception& failure) {
+                    if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
                     q=previous;states=previousStates;flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
-                    if(++retries>12) throw;
+                    ++history.retries;
+                    if(++retries>12||dt*.5<=1e-15){if(checkpointFailure)writeState();throw;}
                     dt*=.5;drift=0;
-                    demand(dt>1e-15,"Rejected step fell below the minimum timestep");
                 }
             }
             runTime.setDeltaT(dt,false);++runTime;
-            for(size_t k=0;k<nv;++k) accumulatedBoundary[k]+=boundaryIntegral[k];
-            const Array final=flow.totals(q);
-            double massError=0,momentumError=0,elementError=0,speciesError=0;
-            for(size_t k=0;k<ns;++k) massError+=final[k]-initial[k]+accumulatedBoundary[k];
-            for(size_t k=0;k<ns;++k) speciesError=std::max(speciesError,std::abs(final[k]-initial[k]+accumulatedBoundary[k])/mass0);
-            for(int i=0;i<3;++i) momentumError=std::max(momentumError,
-                std::abs(final[ns+i]-initial[ns+i]+accumulatedBoundary[ns+i])/(mass0*velocityScale));
-            for(size_t e=0;e<ne;++e) {
-                double difference=0;
-                for(size_t k=0;k<ns;++k) difference+=(final[k]-initial[k]+accumulatedBoundary[k])*atomCoefficients[e*ns+k];
-                elementError=std::max(elementError,std::abs(difference)/atomScale);
-            }
-            const double energyError=(final[ns+3]-initial[ns+3]+accumulatedBoundary[ns+3])/energyScale;
-            massError/=mass0;
-            demand(std::isfinite(massError)&&std::isfinite(energyError)&&std::abs(massError)<1e-7&&std::abs(energyError)<1e-9,
-                   "Global boundary-corrected mass/total-energy balance failed");
-            demand(momentumError<1e-9&&elementError<1e-7&&(flow.chemistry||speciesError<1e-9),
-                   "Global boundary-corrected momentum/element/species balance failed");
-            double liquidError=0;
-            if(flow.frozen)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
-                const size_t k=ns+4+i;
-                liquidError=std::max(liquidError,std::abs(final[k]-initial[k]+accumulatedBoundary[k])/mass0);
-            }
-            demand(liquidError<1e-9,"Global boundary-corrected frozen liquid inventory balance failed");
+            accumulatedBoundary=std::move(nextBoundary);++history.steps;history.lastDt=dt;
             double minP=GREAT,maxP=0,minT=GREAT,maxT=0,maxMach=0,minGas=1,maxGas=0,maxV=0,maxE=0,maxMu=0,maxME=0;
             for(label c=0;c<nc;++c) {
                 const auto& s=states[c];minP=std::min(minP,s.p);minT=std::min(minT,s.T);maxT=std::max(maxT,s.T);
@@ -887,7 +997,8 @@ int main(int argc,char** argv)
                 <<" frozenLiquidResidual="<<liquidError<<" speciesResidual="<<speciesError<<" elementDrift="<<drift<<" minP="<<minP<<" maxP="<<maxP<<" minT="<<minT<<" maxT="<<maxT
                 <<" maxMach="<<maxMach<<" minAlphaGas="<<minGas<<" maxAlphaGas="<<maxGas
                 <<" maxVolumeResidual="<<maxV<<" maxUVResidual="<<maxE<<" maxMuResidual="<<maxMu<<" maxMechanicalResidual="<<maxME<<" seconds="<<seconds<<nl;
-            if(runTime.writeTime()||!beforeEnd()) writeState();
+            if(runTime.writeTime()||!beforeEnd()||(checkpointFirst&&history.steps==1)
+                ||(checkpointEvery>0&&history.steps%checkpointEvery==0))writeState();
         }
         PintleModelProfilesV21 prototypeProfile{},workerTotal{},combined{};
         flow.check(pintle_rt_profiles_v21(model.get(),&prototypeProfile),"Prototype profile");combined=prototypeProfile;

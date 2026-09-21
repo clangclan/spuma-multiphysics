@@ -15,15 +15,15 @@ inline bool pintleIdentityHash(const std::string& s) {
 // Identity-only old checkpoints cannot describe an old policy's individual
 // fields: report both hashes, never fabricate a detailed policy delta.
 inline bool pintleValidateIdentity(const PintleCheckpointIdentity& old,const PintleCheckpointIdentity& now) {
-    if(old.schema!=1&&old.schema!=2)throw std::runtime_error("Unsupported checkpoint identity schema");
-    if(old.schema==2&&(!pintleIdentityHash(old.fingerprint)||!pintleIdentityHash(old.physicalModelHash)
+    if(old.schema!=1&&old.schema!=2&&old.schema!=3)throw std::runtime_error("Unsupported checkpoint identity schema");
+    if(old.schema>=2&&(!pintleIdentityHash(old.fingerprint)||!pintleIdentityHash(old.physicalModelHash)
         ||!pintleIdentityHash(old.numericalPolicyHash)||old.speciesCount<=0||old.closure.empty()))
-        throw std::runtime_error("Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash");
+        throw std::runtime_error("Schema "+std::to_string(old.schema)+" requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash");
     const auto closure=old.schema==1&&old.closure.empty()?"HEM":old.closure;
     if(old.fingerprint!=now.fingerprint||old.speciesCount!=now.speciesCount||closure!=now.closure)
         throw std::runtime_error("Legacy fingerprint/species/closure mismatch; explicit migration required");
-    if((old.schema==2||!old.physicalModelHash.empty())&&old.physicalModelHash!=now.physicalModelHash)
+    if((old.schema>=2||!old.physicalModelHash.empty())&&old.physicalModelHash!=now.physicalModelHash)
         throw std::runtime_error("Restart physical model hash differs");
-    return old.schema==2&&old.numericalPolicyHash!=now.numericalPolicyHash;
+    return old.schema>=2&&old.numericalPolicyHash!=now.numericalPolicyHash;
 }
 #endif

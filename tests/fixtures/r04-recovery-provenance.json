@@ -1,0 +1,26 @@
+{
+  "species": [
+    "N2",
+    "O2",
+    "N2O",
+    "IC3H7OH"
+  ],
+  "sources": [
+    {
+      "file": "flash_failure_inputs.jsonl",
+      "sha256": "e4d44543e026c9f84f42f05b052765fabbf1f8ac54613dc5acd6f6c4c30d1162"
+    },
+    {
+      "file": "r04-second-failure-inputs.jsonl",
+      "sha256": "5b63a7cde1d6c2677f54932f23564aac141c5589e51f8885acce852504a1097b"
+    },
+    {
+      "file": "reactiveFailures.jsonl",
+      "sha256": "a9ace07c5d5b0f499ab4ccd12bd988f54a020c9349f832f551c37d5b6379906e"
+    }
+  ],
+  "records": 256,
+  "originalMeshCells": 1042500,
+  "closure": "HEM PR4",
+  "changes": "No changes to q, energy, guess or EOS; detailed inputs only."
+}

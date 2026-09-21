@@ -1,0 +1,120 @@
+{
+  "backend_sha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+  "passed": true,
+  "solver_sha256": "90d7b7c04e680b8996dfba79756e011ac6881888330e835ada882ec4029339f0",
+  "thermo_workers": 2,
+  "transport_backend": "cuda",
+  "tests": [
+    {
+      "name": "negative_inventory",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Batch cell 0: Negative or non-finite conserved chemical species mass"
+    },
+    {
+      "name": "wrong_dimensions",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Conserved chemical inventory requires mass/volume dimensions"
+    },
+    {
+      "name": "changed_identity",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+    },
+    {
+      "name": "missing_schema2_closure",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Schema 2 requires valid fingerprint/speciesCount/closure/physicalModelHash/numericalPolicyHash"
+    },
+    {
+      "name": "nonideal_fick",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented"
+    },
+    {
+      "name": "invalid_end_time",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Require finite endTime strictly after start time"
+    },
+    {
+      "name": "unsupported_runtime_edit",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Runtime dictionary rereading, function objects and non-endTime stop controls are unsupported"
+    },
+    {
+      "name": "nonequilibrium_fixed_state",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE fixedState liquid fractions must be in equilibrium at the prescribed pressure and temperature"
+    },
+    {
+      "name": "failed_checkpoint_write_q0",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Failed to write checkpoint q0 is not a regular file"
+    },
+    {
+      "name": "failed_checkpoint_write_reactiveStateIdentity",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Failed to write checkpoint reactiveStateIdentity is not a regular file"
+    },
+    {
+      "name": "checkpoint_hashes_quoted",
+      "passed": true
+    },
+    {
+      "continuous_steps": 20,
+      "field_relative_errors": {
+        "T": 3.579001173976017e-15,
+        "alphaGas": 3.5638159090467525e-14,
+        "p": 1.2455290186210366e-14,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 5.249504575129679e-16,
+        "q3": 0.0,
+        "rhoMomentum": 8.264845758383893e-15,
+        "rhoTotalEnergy": 5.080790687838746e-16
+      },
+      "final_time": 2e-05,
+      "name": "conserved_restart_and_clock",
+      "passed": true
+    },
+    {
+      "dx": [
+        0.10980271233968018,
+        0.17430094107696992,
+        0.2766854972246291,
+        0.4392108493587208
+      ],
+      "expected": [
+        -586.2764921274174,
+        -2152.674884669671,
+        -436.56994606679194,
+        1275.880549549904
+      ],
+      "measured": [
+        -586.2779417498132,
+        -2152.671783051119,
+        -436.56990911244975,
+        1275.879668583002
+      ],
+      "name": "graded_gas_diffusion_resistance",
+      "passed": true,
+      "relative_error": 1.4408207083312477e-06
+    },
+    {
+      "name": "unhashed_import_rejected",
+      "passed": true,
+      "reason": "External species imports are unsupported; export a self-contained mechanism first"
+    }
+  ],
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-runtime-cuda/validation.json",
+  "rawReportSha256": "939365143af9320a9a9d25045300856ce293cac9a68e2b9622bc230e81e34674"
+}

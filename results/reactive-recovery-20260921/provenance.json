@@ -1,0 +1,24 @@
+{
+  "base": "7d95bd50b5934f41099218d308a57559d2e2f2bd",
+  "sourceSha256": {
+    "src/reactiveFoam/reactiveDiagnostics.H": "d662730976689b8b10dea6daee04a94d52a1b04fb9310ddedab56763788b64c9",
+    "src/reactiveFoam/reactiveCheckpoint.H": "342e645e6a73340c9b18170725785b178a741cf22ac00803f9250335d84936ea",
+    "src/reactiveFoam/reactivePhysics.H": "e08bfb3d7d56afb21dc6316f88c3ea3578ac270fe82fa77380ae48f2bc420026",
+    "src/reactiveFoam/ReactiveFoam.C": "2db33032141eb869d8c33cd740b494cb25eb501315d580c7c62af4dd0a0e9ac8",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "c3f646498c42574c0377ad9895a37fb77d7a5fab45cabc7fa70e739be4f81799",
+    "src/reactiveThermo/pintleReactivePool.inc": "80c2484c774633cceec81ce0d4ea1b9b6cb5b346029520a43612a556a2c0d347",
+    "src/reactiveThermo/pintleRecovery.h": "7e78204b3e9d097aa432a7a6e66cd6452f7f608f2274fbf186f92cce6872b4d6",
+    "src/reactiveThermo/pintleRecoveryDiagnostics.inc": "3016c0c0b51825a7a5d42874fd9192a4c1140e5910d34c7b98e80971a35114d9",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "d26b7344c18ed48685c1d9ee28de88a1247cc932635ee3c8111df33a44170291"
+  },
+  "binarySha256": {
+    "bin/ReactiveFoam": "b584c16ea0443653c01b2a69a402a4a30aee61207e648f1be4ff343474e7bd99",
+    "lib/libpintleReactiveBackend.so": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+    "lib/libpintleReactiveTransport.so": "23e4b4735b110a95be042910b058916ee342b5c510e153f1f860d87d66d24ffb"
+  },
+  "specSha256": {
+    "REACTIVEFOAM_IMPROVEMENT_SPEC.md": "1b7bbf1c96649ad35f5f7996a431839fe2907e23377a68f109597f7fbeee918e",
+    "SPUMA_postmerge_GPU_physics_spec_v3.ko.md": "3b58ebe2f58b539504a98faed53ae10117da59c94af142859b50df6fd6e064f5"
+  },
+  "validationNote": "Runtime/physics regressions preceded the filename quoting-only checkpoint writer adjustment. The final binary passed the 18 checkpoint tests including open-boundary history; no numerical algorithm changed between them."
+}

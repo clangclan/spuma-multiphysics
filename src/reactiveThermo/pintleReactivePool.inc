@@ -11,22 +11,32 @@ public:
     PintlePoolSummaryV21 summary{};
     PintleBatchProfile profile{};PintleBatchToken last{};
     Vector mass,drifts;std::vector<PintleThermoState> states;std::vector<std::array<char,512>> failures;
+    std::vector<size_t> workerIds;
+    static constexpr size_t detailLimit=16;
+    std::array<std::string,detailLimit> failureDetails;
+    std::array<size_t,detailLimit> detailCells{};
+    std::atomic<size_t> detailCount{0};
     std::vector<size_t> order;const double* energies=nullptr;size_t count=0,ns=0;
     int operation=0;double dt=0,rtol=0,atol=0;
     ThermoPool(Model& source,size_t workers,size_t capacity,size_t budget) {
         prototype=&source;auto& prototype=source;
         require(workers>0&&workers<=64&&capacity>0&&workers<=capacity,"Invalid bounded worker pool size");ns=prototype.ns;
-        require(capacity<=std::numeric_limits<size_t>::max()/(ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+sizeof(size_t)+sizeof(std::array<char,512>)),"Batch allocation overflow");
-        const size_t scratch=capacity*(ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+sizeof(size_t)+sizeof(std::array<char,512>));
+        require(capacity<=std::numeric_limits<size_t>::max()/(ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+2*sizeof(size_t)+sizeof(std::array<char,512>)),"Batch allocation overflow");
+        const size_t detailBudget=prototype.recoveryTrace.enabled?detailLimit*65536:0;
+        const size_t perCell=ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+2*sizeof(size_t)+sizeof(std::array<char,512>);
+        require(capacity<=(SIZE_MAX-detailBudget)/perCell,"Batch diagnostic allocation overflow");
+        const size_t scratch=detailBudget+capacity*(ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+2*sizeof(size_t)+sizeof(std::array<char,512>));
         require(scratch<=budget,"Batch scratch exceeds configured budget");
-        mass.resize(capacity*ns);states.resize(capacity);drifts.resize(capacity);failures.resize(capacity);order.resize(capacity);
+        mass.resize(capacity*ns);states.resize(capacity);drifts.resize(capacity);failures.resize(capacity);order.resize(capacity);workerIds.resize(capacity);
+        if(detailBudget)for(auto& d:failureDetails)d.reserve(65536);
         for(size_t i=0;i<workers;++i) {
             auto model=std::make_unique<Model>(prototype.configuration);
             model->physicalContext=prototype.physicalContext;model->numericalContext=prototype.numericalContext;
             if(!model->physicalContext.empty())model->physicalHash=Model::hashText("pintle-case-physics-v1:"+model->basePhysicalHash+":"+model->physicalContext);
             require(model->physicalHash==prototype.physicalHash,"Worker physical model hash mismatch");
             model->scalarRecovery=prototype.scalarRecovery;model->structuredChemicalJacobian=prototype.structuredChemicalJacobian;
-            model->chemicalLinearSolver=prototype.chemicalLinearSolver;model->refreshPolicyHash();
+            model->chemicalLinearSolver=prototype.chemicalLinearSolver;model->recoveryMode=prototype.recoveryMode;
+            model->recoveryTrace.enabled=prototype.recoveryTrace.enabled;model->refreshPolicyHash();
             require(model->policyHash==prototype.policyHash,"Worker numerical policy hash mismatch");models.push_back(std::move(model));
         }
         profile={workers,capacity,scratch,0,0,0};summary.poolScratchBytes=scratch;
@@ -47,7 +57,7 @@ public:
                 seen=generation;}
             auto* model=models[worker].get();
             for(size_t job=next.fetch_add(1);job<count;job=next.fetch_add(1)) {
-                const size_t c=order[job];ProfileTimer timer(model->jobSeconds);
+                const size_t c=order[job];workerIds[c]=worker;ProfileTimer timer(model->jobSeconds);
                 // Error buffers are preallocated: even allocation failure in a
                 // C API error string cannot escape this thread or skip the join.
                 try {
@@ -56,6 +66,14 @@ public:
                     if(status)std::snprintf(failures[c].data(),failures[c].size(),"%.511s",model->error.data());
                 }catch(const std::exception& ex){std::snprintf(failures[c].data(),failures[c].size(),"%s",ex.what());}
                 catch(...){std::snprintf(failures[c].data(),failures[c].size(),"Unknown worker exception");}
+                if(failures[c][0]&&model->recoveryTrace.enabled) {
+                    const size_t slot=detailCount.fetch_add(1);
+                    if(slot<detailLimit) {
+                        detailCells[slot]=c;
+                        try {failureDetails[slot]=model->recoveryDiagnostic.size()<=65536?model->recoveryDiagnostic:"{\"detailBudgetExceeded\":true}";}
+                        catch(...) {failureDetails[slot]="{\"detailUnavailable\":true}";}
+                    }
+                }
             }
             {std::lock_guard<std::mutex> lock(jobMutex);if(--remaining==0)complete.notify_one();}
         }
@@ -69,6 +87,7 @@ public:
             &&(token.attemptId>last.attemptId||token.stageId>=last.stageId),"Stale batch attempt/stage/content token");
         require((op>=0&&op<=3)&&cells&&cells<=profile.capacity&&stride>=ns&&q&&e&&output&&drift,"Invalid batch buffers/count/operation");
         require(models[0]->physicalHash==prototype->physicalHash&&models[0]->policyHash==prototype->policyHash,"Pool model/policy changed after creation");
+        detailCount=0;for(auto& d:failureDetails)d.clear();
         last=token;count=cells;summary.attemptedCells+=count;operation=op;energies=e;dt=interval;rtol=relative;atol=absolute;
         for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);states[c]=output[c];
             drifts[c]=0;failures[c][0]=0;order[c]=c;}
@@ -81,7 +100,9 @@ public:
         workReady.notify_all();
         {std::unique_lock<std::mutex> lock(jobMutex);complete.wait(lock,[&]{return remaining==0;});}
         ++profile.batches;profile.cells+=count;
-        for(size_t c=0;c<count;++c)if(failures[c][0]) {++profile.failures;throw std::runtime_error("Batch cell "+std::to_string(c)+": "+failures[c].data());}
+        size_t first=count;
+        for(size_t c=0;c<count;++c)if(failures[c][0]) {++profile.failures;if(first==count)first=c;}
+        if(first<count)throw std::runtime_error("Batch cell "+std::to_string(first)+": "+failures[first].data());
         double maximum=0;for(size_t c=0;c<count;++c)maximum=std::max(maximum,drifts[c]);
         for(size_t c=0;c<count;++c) {std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);output[c]=states[c];}
         *drift=maximum;outcome.success=true;
@@ -89,6 +110,18 @@ public:
 };
 }
 extern "C" {
+int pintle_rt_pool_failure_v1(void* pool,size_t cell,PintleRecoveryFailureV1* out,const char** details) {
+    if(!pool||!out||!details||out->abiVersion!=1||out->structBytes!=sizeof(*out))return -1;
+    auto& p=*static_cast<ThermoPool*>(pool);std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
+    if(!lock.owns_lock()||cell>=p.count)return -1;
+    *details=nullptr;if(!p.failures[cell][0])return 1;
+    out->localCell=cell;out->worker=p.workerIds[cell];
+    std::snprintf(out->message,sizeof(out->message),"%s",p.failures[cell].data());
+    std::snprintf(out->category,sizeof(out->category),"%s",recoveryCategory(out->message));
+    for(size_t i=0;i<std::min(p.detailCount.load(),p.detailLimit);++i)
+        if(p.detailCells[i]==cell&&!p.failureDetails[i].empty())*details=p.failureDetails[i].c_str();
+    return 0;
+}
 void* pintle_rt_pool_create(void* p,size_t workers,size_t capacity,size_t budget,char* error,size_t size) {
     try {require(p,"Null pool prototype");return new ThermoPool(*static_cast<Model*>(p),workers,capacity,budget);}
     catch(const std::exception& e) {if(error&&size){std::strncpy(error,e.what(),size-1);error[size-1]=0;}return nullptr;}

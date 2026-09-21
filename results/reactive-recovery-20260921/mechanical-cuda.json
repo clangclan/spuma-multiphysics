@@ -1,0 +1,83 @@
+{
+  "backend_sha256": "3f84bc8c0e1cb733eb3f7d177167b8cb0dc76bb204eaca2f750ca381ab8b7201",
+  "passed": true,
+  "solver_sha256": "90d7b7c04e680b8996dfba79756e011ac6881888330e835ada882ec4029339f0",
+  "transport_backend": "cuda",
+  "tests": [
+    {
+      "name": "negative_environment_mass",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid environment species mass"
+    },
+    {
+      "name": "invalid_volume_sum",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Mechanical recovery cell 0: Invalid mechanical environment volume or total energy"
+    },
+    {
+      "name": "mass_without_volume",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Mechanical recovery cell 0: Absent environment must have exactly zero mass and volume"
+    },
+    {
+      "name": "unsupported_chemistry",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+    },
+    {
+      "name": "unsupported_heat_transfer",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Mechanical environments currently require nonreacting inviscid transport without heat or mass exchange"
+    },
+    {
+      "name": "closure_restart_mismatch",
+      "passed": true,
+      "returncode": 1,
+      "lastLine": "REACTIVE_FAILURE Legacy fingerprint/species/closure mismatch; explicit migration required"
+    },
+    {
+      "continuous_steps": 20,
+      "field_relative_errors": {
+        "T": 0.0,
+        "alphaEnvironment": 0.0,
+        "betaEnvironment": 4.235164736271502e-22,
+        "environmentE0": 0.0,
+        "environmentE1": 2.1534885877600138e-15,
+        "environmentT0": 0.0,
+        "environmentT1": 6.252776073091095e-15,
+        "p": 6.984919307642816e-15,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "q4": 4.1359030627651384e-25,
+        "q5": 0.0,
+        "q6": 0.0,
+        "q7": 0.0,
+        "rhoMomentum": 1.3000713097717888e-16,
+        "rhoTotalEnergy": 1.316018261541623e-16
+      },
+      "final_time": 2e-05,
+      "name": "moving_contact_conserved_restart",
+      "passed": true
+    },
+    {
+      "common_total_energy": -5610301.29207471,
+      "homogeneous_T": 293.8057068073994,
+      "homogeneous_pressure": 99393.9656710273,
+      "meaning": "HEM thermally and molecularly equilibrates the inventories; ME keeps the two spatial environments separate",
+      "mechanical_T": 300.00000000000665,
+      "mechanical_pressure": 99999.99999999939,
+      "name": "unmixed_ME_versus_molecular_HEM",
+      "passed": true,
+      "separate_energy_error": 6.640089550492373e-16
+    }
+  ],
+  "rawReportPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-recovery/logs/final-mechanical-cuda/validation.json",
+  "rawReportSha256": "1209dafca7708b2c38c31a8b039d3e07145adae6d6d7fbf37b19f034e3ae22aa"
+}

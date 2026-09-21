@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "scope": "Static implementation registry; actual selections and binary hashes are emitted at startup. This is not a physical-validation certificate.",
+  "features": [
+    {
+      "name": "host-hem-pr",
+      "status": "implemented",
+      "backend": "cpu",
+      "constraints": "same EOS, pure immiscible liquids; known contact/branch limits"
+    },
+    {
+      "name": "host-chemistry",
+      "status": "implemented",
+      "backend": "cpu",
+      "constraints": "CVODE dense baseline; opt-in sparse/matrix-free/Woodbury restrictions remain"
+    },
+    {
+      "name": "resident-rk2",
+      "status": "implemented",
+      "backend": "cuda",
+      "constraints": "CPU closure/source barriers remain"
+    },
+    {
+      "name": "transport-device-nasa",
+      "status": "implemented",
+      "backend": "cuda",
+      "constraints": "ideal-gas diffusion provider only; not PR closure"
+    },
+    {
+      "name": "boundary-recovery",
+      "status": "implemented-opt-in",
+      "backend": "cpu",
+      "constraints": "nonreacting HEM equilibrium, no species diffusion"
+    },
+    {
+      "name": "atomic-checkpoint",
+      "status": "implemented",
+      "backend": "host",
+      "constraints": "schema 3 native FP64; Linux atomic directory exchange"
+    },
+    {
+      "name": "device-conservation-reduction",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "device-full-pr-closure",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "device-multiphase-flash",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "device-stiff-chemistry",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "nonideal-multicomponent-diffusion",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "muscl-reconstruction",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "surface-tension",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "droplet-breakup-coalescence-slip",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "wale-les-rans",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    },
+    {
+      "name": "mpi-domain-decomposition",
+      "status": "not-implemented",
+      "backend": null,
+      "constraints": null
+    }
+  ]
+}
