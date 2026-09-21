@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "case": "chemistry-off-cpu",
+      "passed": true,
+      "checks": {
+        "nonnegative_species": true,
+        "positive_primitives": true,
+        "phase_volume": true,
+        "species_density": true,
+        "mass": true,
+        "total_energy": true,
+        "momentum": true,
+        "global_elements": true,
+        "elements": true,
+        "UV_volume": true,
+        "UV_energy": true,
+        "source_T": true,
+        "source_Y": true,
+        "supersonic": true
+      },
+      "source_comparison": {
+        "T_reference": 2200.0,
+        "T_relative_error": 0.0,
+        "Y_Linf_error": 0.0,
+        "alpha_gas_change": 0.0,
+        "reference_element_drift": 0.0
+      }
+    },
+    {
+      "case": "chemistry-off-cuda",
+      "passed": true,
+      "checks": {
+        "nonnegative_species": true,
+        "positive_primitives": true,
+        "phase_volume": true,
+        "species_density": true,
+        "mass": true,
+        "total_energy": true,
+        "momentum": true,
+        "global_elements": true,
+        "elements": true,
+        "UV_volume": true,
+        "UV_energy": true,
+        "source_T": true,
+        "source_Y": true,
+        "supersonic": true
+      },
+      "source_comparison": {
+        "T_reference": 2200.0,
+        "T_relative_error": 0.0,
+        "Y_Linf_error": 0.0,
+        "alpha_gas_change": 0.0,
+        "reference_element_drift": 0.0
+      }
+    },
+    {
+      "case": "coupled-cpu-False",
+      "passed": true,
+      "checks": {
+        "nonnegative_species": true,
+        "positive_primitives": true,
+        "phase_volume": true,
+        "species_density": true,
+        "mass": true,
+        "total_energy": true,
+        "momentum": true,
+        "global_elements": true,
+        "elements": true,
+        "UV_volume": true,
+        "UV_energy": true,
+        "source_T": true,
+        "source_Y": true,
+        "supersonic": true
+      },
+      "source_comparison": {
+        "T_reference": 300.00121607489814,
+        "T_relative_error": 1.2712608743470355e-11,
+        "Y_Linf_error": 1.3014034294656085e-12,
+        "alpha_gas_change": -1.301486141080943e-09,
+        "reference_element_drift": 1.1432468276722941e-16
+      }
+    },
+    {
+      "case": "coupled-cuda-False",
+      "passed": true,
+      "checks": {
+        "nonnegative_species": true,
+        "positive_primitives": true,
+        "phase_volume": true,
+        "species_density": true,
+        "mass": true,
+        "total_energy": true,
+        "momentum": true,
+        "global_elements": true,
+        "elements": true,
+        "UV_volume": true,
+        "UV_energy": true,
+        "source_T": true,
+        "source_Y": true,
+        "supersonic": true
+      },
+      "source_comparison": {
+        "T_reference": 300.00121607489814,
+        "T_relative_error": 1.2712608743470355e-11,
+        "Y_Linf_error": 1.3014034294656085e-12,
+        "alpha_gas_change": -1.301486141080943e-09,
+        "reference_element_drift": 1.1432468276722941e-16
+      }
+    }
+  ]
+}

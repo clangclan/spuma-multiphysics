@@ -31,6 +31,8 @@ def analyze(case, definition, log):
     directory=b.expected_final_directory(case,Decimal(str(t)))
     fields={name:read(directory,name,n) for name in ("p","T","rho","U","rhoMomentum","rhoTotalEnergy","alphaGas","alphaLiquid0","alphaLiquid1","soundEquilibrium","soundFrozen")}
     q=np.column_stack([read(directory,"q"+str(k),n)[:,0] for k in range(ns)]+[fields["rhoMomentum"][:,j] for j in range(3)]+[fields["rhoTotalEnergy"][:,0]])
+    if definition.get("frozen_liquids",0):
+        q=np.column_stack([q,*[read(directory,f"rhoLiquid{i}",n)[:,0] for i in range(definition["frozen_liquids"])]])
     initial=np.load(case/"initial-conserved.npz");q0=initial["q"];x=initial["x"]
     p,T,rho=[fields[name][:,0] for name in ("p","T","rho")];u=fields["U"]
     records=[{key:float(value) for key,value in re.findall(r"(\w+)=([-+0-9.eE]+)",line)} for line in log.splitlines() if line.startswith("REACTIVE_STEP ")]
@@ -86,7 +88,7 @@ def analyze(case, definition, log):
         else:
             idx=definition["species"].index("N2O")
             result["shock"]["N2O_max_mass_fraction_change"]=float(np.max(np.abs(q[:,idx]/rho-q0[:,idx]/q0[:,:ns].sum(axis=1))))
-            checks["reaction_active"]=result["shock"]["N2O_max_mass_fraction_change"]>1e-7
+            if definition.get("chemistry",True):checks["reaction_active"]=result["shock"]["N2O_max_mass_fraction_change"]>1e-7
             result["shock"]["scope"]="Reactive evolution from an independently computed frozen shock; frozen jumps are not a reacting steady-state reference"
     elif kind in ("viscous","viscous-zero","conduction","conduction-zero","diffusion","diffusion-zero"):
         if kind.startswith("diffusion"):
@@ -103,16 +105,20 @@ def analyze(case, definition, log):
             s0=definition["initial_states"][0]
             _,_,guess=backend.make_state(s0["T"],s0["p"],q0[0,:ns]/s0["rho"],
                                          [s0["liquidMass"][j]/q0[0,idx] if q0[0,idx]>0 else 0 for j,idx in enumerate(backend.liquid_indices)])
-            E0=q0[0,-1]-.5*np.dot(q0[0,ns:ns+3],q0[0,ns:ns+3])/s0["rho"]
-            target,refstate,drift=backend.react(q0[0,:ns],E0,t,guess,rtol=1e-10,atol=1e-17)
+            E0=q0[0,ns+3]-.5*np.dot(q0[0,ns:ns+3],q0[0,ns:ns+3])/s0["rho"]
+            phase_change=definition.get('phase_change',True)
+            if definition.get('chemistry',True):
+                target,refstate,drift=backend.react(q0[0,:ns],E0,t,guess,equilibrium=phase_change,rtol=1e-10,atol=1e-17)
+            else:
+                target=q0[0,:ns];refstate=backend.recover(target,E0,guess,equilibrium=phase_change);drift=0.
             result["source_comparison"]={"T_reference":refstate.T,"T_relative_error":float(np.max(np.abs(T/refstate.T-1))),
                                          "Y_Linf_error":float(np.max(np.abs(q[:,:ns]/rho[:,None]-target/target.sum()))),
                                          "alpha_gas_change":float(fields["alphaGas"][0,0]-s0["alphaGas"]),
                                          "reference_element_drift":drift}
             checks.update(source_T=result["source_comparison"]["T_relative_error"]<1e-5,
                           source_Y=result["source_comparison"]["Y_Linf_error"]<1e-7,
-                          supersonic=result["max_mach"]>1)
-            if kind=="coupled":checks["phase_partition_changed"]=abs(result["source_comparison"]["alpha_gas_change"])>1e-7
+                          supersonic=result["max_mach"]>1 if reference["mean_mach_requested"]>1 else True)
+            if kind=="coupled" and phase_change and definition.get("chemistry",True):checks["phase_partition_changed"]=abs(result["source_comparison"]["alpha_gas_change"])>1e-7
     result["checks"]={k:bool(v) for k,v in checks.items()};result["passed"]=all(checks.values())
     b.atomic_json(case/"analysis.json",result)
     return result

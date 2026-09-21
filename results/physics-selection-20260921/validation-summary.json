@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "base_commit": "99957031b9a8ca0b9e0a4ef8ce34c6256642e743",
+  "physics_checks": 44,
+  "legacy_runs": 30,
+  "legacy_field_comparisons": 23,
+  "legacy_max_field_scaled_error": 4.4651987933147217e-10,
+  "runtime_checks": 28,
+  "mechanical_checks": 16,
+  "frozen_rollback_restart_checks": 6,
+  "transport_checks_per_backend": {
+    "cpu": 29,
+    "cuda": 29
+  },
+  "thermo_checks": 5,
+  "jacobian_checks": 6,
+  "analysis_compatibility_checks": 4,
+  "cuda_sanitizers": {
+    "memcheck": 0,
+    "initcheck": 0
+  },
+  "disabled_work": {
+    "chemistry": "source/RHS/workspace creation = 0",
+    "phaseChange": "flash candidates/selected chemical-potential evaluations = 0 in frozen transport",
+    "nonreacting_cuda_cfl_queries_per_20_steps": 40,
+    "before_cfl_queries_per_20_steps": 60
+  },
+  "known_limitations": [
+    "HEM contact pressure accuracy fails identically in baseline and candidate",
+    "Frozen liquid mechanicalEquilibrium is rejected",
+    "Frozen phase EOS roots must exist; the pre-existing pure-liquid depressurization fixture cannot simply be reused with phase change disabled"
+  ]
+}

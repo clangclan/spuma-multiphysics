@@ -23,12 +23,20 @@ KINDS = ("uniform", "acoustic", "contact", "release", "shock", "reacting-shock",
 
 def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.,
             transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto",
-            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=0, optimization_policy=None):
+            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=0, optimization_policy=None, physics=None):
+    physics=dict(physics or {})
+    known={'chemistry','combustion','phaseChange','viscosity','heatConduction','speciesDiffusion'}
+    if set(physics)-known or any(type(v) is not bool for v in physics.values()):
+        raise ValueError('Unknown physics option or non-boolean switch')
+    if 'combustion' in physics and 'chemistry' in physics and physics['combustion'] != physics['chemistry']:
+        raise ValueError('combustion and chemistry must agree')
+    chemistry=physics.get('combustion',physics.get('chemistry',kind in ('chemistry','coupled','reacting-shock')))
+    phase_change=physics.get('phaseChange',True)
     if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto", "matrixFree", "matrixFreeWoodbury"):
         raise ValueError("Unknown reactive execution backend")
     if transport_gas_properties not in ("auto", "host", "deviceNasa"):
         raise ValueError("Unknown transport gas property mode")
-    if transport_gas_properties == "deviceNasa" and (transport_backend != "cuda" or kind not in ("diffusion", "coupled")):
+    if physics.get("speciesDiffusion",True) and transport_gas_properties == "deviceNasa" and (transport_backend != "cuda" or kind not in ("diffusion", "coupled")):
         raise ValueError("deviceNasa requires CUDA and an active diffusion case")
     if not (1<=thermo_workers<=64 and thermo_workers<=min(cells,thermo_batch_cells) and transport_bridge_cells>=0):
         raise ValueError("Invalid worker/batch/bridge limits")
@@ -45,7 +53,7 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
                                    "chemistry-config.yaml" if kind in ("chemistry","reacting-shock","diffusion","diffusion-zero") else "cold-pr-config.yaml")
     with Backend(configuration) as backend:
         backend.check(backend.lib.pintle_rt_load_optimization_policy(backend.handle,str(policy).encode()))
-        backend.set_chemical_linear_solver(chemical_linear_solver)
+        if chemistry:backend.set_chemical_linear_solver(chemical_linear_solver)
         put("constant/realFluidPolicy.yaml",policy.read_text())
         ns, nv = backend.ns, backend.ns+4
         q = np.zeros((cells, nv)); states = []
@@ -59,11 +67,19 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
         diffusivity = 500. if kind == "diffusion" else 0.
         if kind == "reacting-shock":
             viscosity,conductivity,diffusivity=3e-5,.1,1e-5
-        backend.bind_case(kind in ("chemistry","coupled","reacting-shock"),viscosity,conductivity,diffusivity,transport_backend,transport_gas_properties)
+        coefficients=[viscosity,conductivity,diffusivity]
+        for i,option in enumerate(('viscosity','heatConduction','speciesDiffusion')):
+            if physics.get(option,coefficients[i]>0):
+                if coefficients[i]<=0:raise ValueError(f'{option} requires a case with a positive coefficient')
+            else:coefficients[i]=0.
+        viscosity,conductivity,diffusivity=coefficients
+        frozen=not phase_change and backend.nl>0
+        identity_closure='HEM-frozen' if frozen else 'HEM'
+        backend.bind_case(chemistry,viscosity,conductivity,diffusivity,transport_backend,transport_gas_properties,phase_change=phase_change)
         reference = {"kind": kind, "mean_mach_requested": mach}
         def pack(T, p, Y, liquid=(0, 0), u=None):
             mass, E, state = backend.make_state(T, p, Y, liquid)
-            state = backend.recover(mass, E, state)
+            state = backend.recover(mass, E, state,equilibrium=phase_change)
             velocity = np.array(u if u is not None else [mach*state.soundEquilibrium, 0, 0.])
             conserved = np.r_[mass, state.rho*velocity, E+.5*state.rho*velocity.dot(velocity)]
             return conserved, state
@@ -80,7 +96,10 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
                 drho = state.rho*1e-4*wave
                 mass = base[:ns]*(1+1e-4*wave)
                 E = (state.rho+drho)*(state.e+state.p/state.rho**2*drho)
-                s = backend.recover(mass, E, state)
+                guess=state.copy()
+                if frozen:
+                    for j in range(backend.nl):guess.liquidMass[j]*=1+1e-4*wave
+                s = backend.recover(mass, E, guess,equilibrium=phase_change)
                 u = u0+state.soundEquilibrium*drho/state.rho
                 q[i] = np.r_[mass, s.rho*u, 0, 0, E+.5*s.rho*u*u]; states.append(s)
             duration = 1/(4*(u0+state.soundEquilibrium))
@@ -196,7 +215,7 @@ interpolationSchemes { default linear; } snGradSchemes { default uncorrected; }
                 bc+=f'{side} {{ type fixedState; p {s.p:.17g}; T {s.T:.17g}; U ('+" ".join(f"{v:.17g}" for v in u)+'); Y ('+" ".join(f"{v:.17g}" for v in Y)+'); liquidFractions ('+" ".join(f"{v:.17g}" for v in liquid)+"); }\n"
         put("constant/reactiveProperties",header("reactiveProperties")+f'''closure HEM;
 thermoConfiguration "{configuration}"; initialization conserved;
-chemistry {str(kind in ("chemistry","coupled","reacting-shock")).lower()}; dynamicViscosity {viscosity}; thermalConductivity {conductivity}; molecularDiffusivity {diffusivity};
+chemistry {str(chemistry).lower()}; dynamicViscosity {viscosity}; thermalConductivity {conductivity}; molecularDiffusivity {diffusivity};
 chemicalRelativeTolerance 1e-8; chemicalAbsoluteTolerance 1e-14;
 transportBackend {transport_backend}; chemicalLinearSolver {chemical_linear_solver}; maxDeviceMemoryGB 2;
 transportGasProperties {transport_gas_properties};
@@ -205,6 +224,7 @@ thermoWorkers {thermo_workers}; thermoBatchCells {thermo_batch_cells}; maxThermo
 transportBridgeCells {transport_bridge_cells};
 transportStagingBytes 1048576; maxPinnedTransportBytes 1048576; transportBlockThreads 256; transportDetailedGasCounters false;
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
+physics {{ {" ".join(k+" "+str(v).lower()+";" for k,v in physics.items())} }}
 ''')
         def field(name, values, dimensions):
             vector=values.ndim==2
@@ -218,7 +238,11 @@ waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
         for k in range(ns):field(f"q{k}",q[:,k],"1 -3 0 0 0 0 0")
         field("rhoMomentum",q[:,ns:ns+3],"1 -2 -1 0 0 0 0")
         field("rhoTotalEnergy",q[:,-1],"1 -1 -2 0 0 0 0")
-        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'identitySchema 2; fingerprint "{backend.fingerprint}"; speciesCount {ns}; closure HEM; physicalModelHash "{backend.physical_hash}"; numericalPolicyHash "{backend.policy_hash}";\n')
+        if frozen:
+            liquid_mass=np.array([[s.liquidMass[j] for j in range(backend.nl)] for s in states])
+            for j in range(backend.nl):field(f'rhoLiquid{j}',liquid_mass[:,j],'1 -3 0 0 0 0 0')
+            q=np.column_stack((q,liquid_mass))
+        put("0/reactiveStateIdentity",header("reactiveStateIdentity")+f'identitySchema 2; fingerprint "{backend.fingerprint}"; speciesCount {ns}; closure {identity_closure}; physicalModelHash "{backend.physical_hash}"; numericalPolicyHash "{backend.policy_hash}";\n')
         put("physical-model-manifest.json",json.dumps(model_manifest(configuration,backend),indent=2)+"\n")
         put("capability-matrix.json",json.dumps(backend.capabilities(),indent=2)+"\n")
         np.savez_compressed(case/"initial-conserved.npz",q=q,x=x)
@@ -228,7 +252,7 @@ waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
                     "model_fingerprint":backend.fingerprint,"physicalModelHash":backend.physical_hash,"numericalPolicyHash":backend.policy_hash,
                     "thermo_workers":thermo_workers,"thermo_batch_cells":thermo_batch_cells,"transport_bridge_cells":transport_bridge_cells,"policy_sha256":common.sha256(policy),
                     "transport_backend":transport_backend,"chemical_linear_solver":chemical_linear_solver,
-                    "transport_gas_properties":transport_gas_properties,
+                    "transport_gas_properties":transport_gas_properties,"physics":physics,"chemistry":chemistry,"phase_change":phase_change,"frozen_liquids":backend.nl if frozen else 0,
                     "initial_states":[s.as_dict() for s in states],"generator_sha256":common.sha256(Path(__file__))}
     env=common.sourced_environment()
     with (case/"blockMesh.log").open("w") as log:
@@ -252,7 +276,15 @@ if __name__ == "__main__":
     parser.add_argument("--thermo-batch-cells",type=int,default=64)
     parser.add_argument("--transport-bridge-cells",type=int,default=0)
     parser.add_argument("--optimization-policy",type=Path)
+    parser.add_argument('--chemistry',choices=('on','off'))
+    parser.add_argument('--phase-change',choices=('equilibrium','frozen'))
+    parser.add_argument('--viscosity',choices=('on','off'))
+    parser.add_argument('--heat-conduction',choices=('on','off'))
+    parser.add_argument('--species-diffusion',choices=('on','off'))
     args=parser.parse_args()
+    physics={key:getattr(args,attr)=='on' for attr,key in [('chemistry','chemistry'),('viscosity','viscosity'),
+        ('heat_conduction','heatConduction'),('species_diffusion','speciesDiffusion')] if getattr(args,attr) is not None}
+    if args.phase_change is not None:physics['phaseChange']=args.phase_change=='equilibrium'
     print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale,
                              args.transport_backend,args.chemical_linear_solver,args.transport_gas_properties,args.thermo_workers,
-                             args.thermo_batch_cells,args.transport_bridge_cells,args.optimization_policy),indent=2))
+                             args.thermo_batch_cells,args.transport_bridge_cells,args.optimization_policy,physics),indent=2))

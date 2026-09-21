@@ -74,7 +74,8 @@ typedef struct PintleBatchProfile {
 int pintle_rt_pool_profile(void* pool,PintleBatchProfile* result);
 // Synchronous batch: joins all workers before return, and writes no caller
 // output if any cell fails. Count <= capacity; input q is cell-major with stride.
-// op=0 recover, op=1 react; each cell has an independent CVODE error norm.
+// op=0 equilibrium recover, op=1 equilibrium react; op=2 frozen recover,
+// op=3 frozen react (liquid masses from the state). Independent cell error norms.
 int pintle_rt_pool_batch(void* pool,PintleBatchToken token,int op,size_t count,
     size_t stride,double* q,const double* energies,PintleThermoState* states,
     double dt,double rtol,double atol,double* maxElementDrift);

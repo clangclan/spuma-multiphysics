@@ -22,7 +22,7 @@ CODE=[
     'Allwmake','src/coldFoam/compressibleMultiphaseInterFoam.C','src/coldFoam/pintleThermoRestart.H',
     'src/coldFoam/multiphaseMixtureThermo/pintlePengRobinsonGasI.H',
     'src/prIdentityCheck/prIdentityCheck.C','src/prIdentityCheck/Make/files','src/prIdentityCheck/Make/options',
-    'src/thermoCheck/thermoCheck.C','src/reactiveFoam/ReactiveFoam.C',
+    'src/thermoCheck/thermoCheck.C','src/reactiveFoam/ReactiveFoam.C','src/reactiveFoam/reactivePhysics.H',
     'src/reactiveThermo/pintleReactiveThermo.cpp','src/reactiveThermo/pintleReactiveThermo.h',
     'tools/reactive_backend.py','tools/prepare_reactive_case.py','tools/prepare_mechanical_case.py',
     'tools/validate_mechanical.py','tools/validate_mechanical_runtime.py','tools/validate_chemical_jacobian.py',

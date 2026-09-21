@@ -146,13 +146,14 @@ def load(path):
     return lib
 
 
-def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, spatial=False, boundary_count=0):
-    rng = np.random.default_rng(401+ns+nc); nv = ns+4+2*mechanical
+def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, spatial=False, boundary_count=0, frozen_liquids=0):
+    rng = np.random.default_rng(401+ns+nc); nv = ns+4+2*mechanical+frozen_liquids
     q = np.zeros((nc, nv)); q[:, :ns] = rng.uniform(.001, 1, (nc, ns)); q[:, :ns] /= q[:, :ns].sum(axis=1)[:, None]
     q[:, :ns] *= rng.uniform(.8, 1.3, (nc, 1)); rho = q[:, :ns].sum(axis=1)
     velocity = rng.normal(0, 12, (nc, 3)); q[:, ns:ns+3] = rho[:, None]*velocity
     q[:, ns+3] = rng.uniform(8e4, 12e4, nc)/.4 + .5*rho*np.sum(velocity**2, axis=1)
     if mechanical: q[:, ns+4] = rng.uniform(.1, .9, nc); q[:, ns+5] = 1-q[:, ns+4]
+    for i in range(frozen_liquids):q[:,ns+4+i]=q[:,i]*rng.uniform(.1,.9,nc)
     states, gy, gh = recovered(q, ns, mechanical)
     volumes = rng.uniform(.1, .3, nc)
     faces = [Face(i, i+1, -1, (C.c_double*3)(1, 0, 0), 1, .2, .37, 0) for i in range(nc-1)]
@@ -221,7 +222,7 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, 
         q[:] = original
         check(lib.pintle_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step/2, 0, ptr(br)))
         compare(q, original+step/2*expected)
-        # Three CFL queries + two RK stages, exactly as in Flow::step. Only
+        # Three CFL queries + two RK stages, as in a reacting Flow::step. Only
         # one conserved upload is allowed. Same pointer, changed version must
         # refresh data; wrong input version and rollback are checked below.
         q[:] = original
@@ -265,7 +266,7 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, 
         delta={n:getattr(after,n)-getattr(before,n) for n,_ in Profile._fields_ if n!='boundaryPartitions'}
         stats = Stats(); check(lib.pintle_transport_stats(handle, C.byref(stats)))
         return dict(species=ns, cells=nc, boundary_kind=boundary_kind, transport=transport,
-            mechanical=mechanical, spatial=spatial, boundary_faces=sum(f.neighbour<0 for f in faces),
+            mechanical=mechanical, frozen_liquids=frozen_liquids, spatial=spatial, boundary_faces=sum(f.neighbour<0 for f in faces),
             scaled_error=err, resident_cycle=delta, boundary_partitions=after.boundaryPartitions,
             stats={n: getattr(stats, n) for n, _ in stats._fields_})
     finally:
@@ -314,6 +315,8 @@ def main():
         rows.append(run(lib, int(args.backend=="cuda"), ns, nc, bc, tr, mech))
     for ns,nc,boundary_count in [(4,255,0),(4,256,0),(4,257,4097),(413,17,513)]:
         rows.append(run(lib,int(args.backend=="cuda"),ns,nc,3,True,False,True,boundary_count))
+    for nl in (1,2):
+        for bc in range(4):rows.append(run(lib,int(args.backend=="cuda"),4,7,bc,True,frozen_liquids=nl))
     for nc in (65535,65536,65537):rows.append(run_large_cfl(lib,int(args.backend=="cuda"),nc))
     report = dict(passed=True, backend=args.backend, gpu_execution_verified=args.backend=="cuda", tests=rows,
         library_sha256=hashlib.sha256(args.library.read_bytes()).hexdigest())
