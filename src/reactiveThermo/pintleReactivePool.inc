@@ -1,5 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 namespace {
+struct ClosureDeviceClient {
+    void* library=nullptr;void* handle=nullptr;
+    decltype(&pintle_closure_scalar_destroy_v1) destroy=nullptr;
+    decltype(&pintle_closure_scalar_run_v1) run=nullptr;
+    ~ClosureDeviceClient(){if(handle)destroy(handle);if(library)dlclose(library);}
+};
 class ThermoPool {
 public:
     Model* prototype=nullptr;
@@ -18,6 +24,13 @@ public:
     std::atomic<size_t> detailCount{0};
     std::vector<size_t> order;const double* energies=nullptr;size_t count=0,ns=0;
     int operation=0;double dt=0,rtol=0,atol=0;
+    size_t jobCount=0;
+    std::vector<size_t> representative,hashSlots,gpuIndex;
+    std::vector<PintleClosureScalarInputV1> gpuInput;
+    std::vector<PintleClosureScalarOutputV1> gpuOutput;
+    std::unique_ptr<ClosureDeviceClient> device;
+    PintleClosureAccelerationProfileV1 acceleration{};
+#include "pintleClosurePool.inc"
     ThermoPool(Model& source,size_t workers,size_t capacity,size_t budget) {
         prototype=&source;auto& prototype=source;
         require(workers>0&&workers<=64&&capacity>0&&workers<=capacity,"Invalid bounded worker pool size");ns=prototype.ns;
@@ -25,9 +38,27 @@ public:
         const size_t detailBudget=prototype.recoveryTrace.enabled?detailLimit*65536:0;
         const size_t perCell=ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+2*sizeof(size_t)+sizeof(std::array<char,512>);
         require(capacity<=(SIZE_MAX-detailBudget)/perCell,"Batch diagnostic allocation overflow");
-        const size_t scratch=detailBudget+capacity*(ns*sizeof(double)+sizeof(PintleThermoState)+sizeof(double)+2*sizeof(size_t)+sizeof(std::array<char,512>));
+        require(capacity<=SIZE_MAX/4,"Batch capacity overflow");
+        size_t slots=1;while(slots<capacity*2)slots*=2;
+        const size_t extraPerCell=sizeof(size_t)+(source.exactBatchReuse?4*sizeof(size_t):0)
+            +(source.cudaScalar?sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1)+sizeof(size_t):0);
+        require(capacity<=(SIZE_MAX-detailBudget)/(perCell+extraPerCell),"Acceleration budget overflow");
+        const size_t extra=capacity*sizeof(size_t)+(source.exactBatchReuse?slots*sizeof(size_t):0)
+            +(source.cudaScalar?capacity*(sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1)+sizeof(size_t)):0);
+        const size_t scratch=detailBudget+capacity*perCell+extra;
         require(scratch<=budget,"Batch scratch exceeds configured budget");
         mass.resize(capacity*ns);states.resize(capacity);drifts.resize(capacity);failures.resize(capacity);order.resize(capacity);workerIds.resize(capacity);
+        representative.resize(capacity);if(source.exactBatchReuse)hashSlots.resize(slots);
+        acceleration.abiVersion=1;acceleration.structBytes=sizeof(acceleration);acceleration.hostBytes=extra;
+        if(source.cudaScalar){gpuInput.resize(capacity);gpuOutput.resize(capacity);gpuIndex.resize(capacity,SIZE_MAX);
+            device=std::make_unique<ClosureDeviceClient>();device->library=dlopen(source.scalarLibrary.c_str(),RTLD_NOW|RTLD_LOCAL);
+            require(device->library,"Cannot open CUDA scalar library for pool");
+            auto create=reinterpret_cast<decltype(&pintle_closure_scalar_create_v1)>(dlsym(device->library,"pintle_closure_scalar_create_v1"));
+            device->destroy=reinterpret_cast<decltype(device->destroy)>(dlsym(device->library,"pintle_closure_scalar_destroy_v1"));
+            device->run=reinterpret_cast<decltype(device->run)>(dlsym(device->library,"pintle_closure_scalar_run_v1"));
+            require(create&&device->destroy&&device->run,"Incomplete CUDA scalar ABI");char failure[1024]{};
+            device->handle=create(capacity,failure,sizeof(failure));require(device->handle,failure);
+            acceleration.deviceBytes=capacity*(sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1));}
         if(detailBudget)for(auto& d:failureDetails)d.reserve(65536);
         for(size_t i=0;i<workers;++i) {
             auto model=std::make_unique<Model>(prototype.configuration);
@@ -36,6 +67,7 @@ public:
             require(model->physicalHash==prototype.physicalHash,"Worker physical model hash mismatch");
             model->scalarRecovery=prototype.scalarRecovery;model->structuredChemicalJacobian=prototype.structuredChemicalJacobian;
             model->chemicalLinearSolver=prototype.chemicalLinearSolver;model->recoveryMode=prototype.recoveryMode;
+            model->exactBatchReuse=prototype.exactBatchReuse;model->cudaScalar=prototype.cudaScalar;model->scalarLibrary=prototype.scalarLibrary;
             model->recoveryTrace.enabled=prototype.recoveryTrace.enabled;model->refreshPolicyHash();
             require(model->policyHash==prototype.policyHash,"Worker numerical policy hash mismatch");models.push_back(std::move(model));
         }
@@ -56,8 +88,10 @@ public:
                 if(stopping)return;
                 seen=generation;}
             auto* model=models[worker].get();
-            for(size_t job=next.fetch_add(1);job<count;job=next.fetch_add(1)) {
+            for(size_t job=next.fetch_add(1);job<jobCount;job=next.fetch_add(1)) {
                 const size_t c=order[job];workerIds[c]=worker;ProfileTimer timer(model->jobSeconds);
+                model->scalarCandidate={};
+                if(device&&operation==0&&gpuIndex[c]!=SIZE_MAX)model->scalarCandidate=gpuOutput[gpuIndex[c]];
                 // Error buffers are preallocated: even allocation failure in a
                 // C API error string cannot escape this thread or skip the join.
                 try {
@@ -92,13 +126,19 @@ public:
         for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);states[c]=output[c];
             drifts[c]=0;failures[c][0]=0;order[c]=c;}
         // Scheduling only: each cell retains its own source interval and norm.
-        std::sort(order.begin(),order.begin()+count,[&](size_t a,size_t b){
+        classify(output);prepareDevice();
+        std::sort(order.begin(),order.begin()+jobCount,[&](size_t a,size_t b){
             if(states[a].activeLiquids!=states[b].activeLiquids)return states[a].activeLiquids>states[b].activeLiquids;
             if(states[a].iterations!=states[b].iterations)return states[a].iterations>states[b].iterations;
             return a<b;});
-        {std::lock_guard<std::mutex> lock(jobMutex);next=0;remaining=models.size();++generation;}
-        workReady.notify_all();
-        {std::unique_lock<std::mutex> lock(jobMutex);complete.wait(lock,[&]{return remaining==0;});}
+        dispatch();
+        // Reuse successes only. Failed duplicates execute independently to
+        // retain each original cell's failure provenance and bounded details.
+        jobCount=0;
+        for(size_t c=0;c<count;++c)if(representative[c]!=c){const size_t r=representative[c];
+            if(failures[r][0]){order[jobCount++]=c;++acceleration.failedRepresentativeRetries;}
+            else {states[c]=states[r];workerIds[c]=workerIds[r];++acceleration.reusedCells;}}
+        dispatch();
         ++profile.batches;profile.cells+=count;
         size_t first=count;
         for(size_t c=0;c<count;++c)if(failures[c][0]) {++profile.failures;if(first==count)first=c;}
@@ -110,6 +150,14 @@ public:
 };
 }
 extern "C" {
+int pintle_rt_pool_acceleration_profile_v1(void* pool,PintleClosureAccelerationProfileV1* out) {
+    if(!pool||!out||out->abiVersion!=1||out->structBytes!=sizeof(*out))return -1;
+    auto& p=*static_cast<ThermoPool*>(pool);std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
+    if(!lock.owns_lock())return 2;
+    auto result=p.acceleration;for(const auto& m:p.models){result.gpuApproved+=m->gpuApproved;result.gpuRejected+=m->gpuRejected;
+        result.liquidCacheHits+=m->liquidCacheHits;result.liquidCacheMisses+=m->liquidCacheMisses;}
+    *out=result;return 0;
+}
 int pintle_rt_pool_failure_v1(void* pool,size_t cell,PintleRecoveryFailureV1* out,const char** details) {
     if(!pool||!out||!details||out->abiVersion!=1||out->structBytes!=sizeof(*out))return -1;
     auto& p=*static_cast<ThermoPool*>(pool);std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);

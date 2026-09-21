@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pintleReactiveThermo.h"
 #include "pintleRecovery.h"
+#include "pintleClosureAcceleration.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleSmallSystem.h"
@@ -133,6 +134,15 @@ public:
     std::vector<std::string> names,elementNames;
     std::string fingerprint,configuration,physicalHash,policyHash,eosName,basePhysicalHash,physicalContext,numericalContext;
     bool scalarRecovery=true;
+    bool exactBatchReuse=false,cudaScalar=false;
+    std::string scalarLibrary;
+    PintleClosureScalarOutputV1 scalarCandidate{};
+    uint64_t gpuApproved=0,gpuRejected=0;
+    struct LiquidMemo {double p=0,T=0;bool valid=false,mu=false;PintlePhaseProperties value{};};
+    std::array<std::array<LiquidMemo,16>,2> liquidMemo{};
+    std::array<size_t,2> liquidMemoNext{};
+    uint64_t liquidCacheHits=0,liquidCacheMisses=0;
+    Vector chemicalScratch;
     int recoveryMode=0;bool adaptiveRecovery=false;
     RecoveryTrace recoveryTrace;std::string recoveryDiagnostic,runtimeManifest;
     std::unique_ptr<PintleCaloricData> caloric;
@@ -166,6 +176,7 @@ public:
         gasSolution=Cantera::newSolution(mechanism,input["gas-phase"].asString(),"none");
         gas=gasSolution->thermo();eosName=gas->type();
         ns=gas->nSpecies();
+        chemicalScratch.resize(ns);
         require(ns>0,"Empty gas species list");
         if (auto* phase=dynamic_cast<Cantera::MixtureFugacityTP*>(gas.get()))
             phase->setForcedSolutionBranch(FLUID_GAS);
@@ -245,6 +256,8 @@ public:
         std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1.1:reference-flash:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
             <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
         if(recoveryMode)policy<<":boundary-recovery-v1";
+        if(exactBatchReuse)policy<<":exact-batch-reuse-v1";
+        if(cudaScalar)policy<<":cuda-caloric-candidate-v1";
         policyHash=hashText(policy.str());
     }
 #include "pintleRealFluidModel.inc"
@@ -257,9 +270,21 @@ public:
 
     PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected,bool chemicalPotential=true)
     {
-        ++cost.fullPhaseEvaluations;
+        ++cost.fullPhaseEvaluations; // legacy logical requests, including failures/cache hits
         if(recoveryTrace.current){auto& t=*recoveryTrace.current;t.phase=index;t.p=p;t.T=T;t.branch=-99;t.density=0;}
         bounds(p,T);
+        if(exactBatchReuse&&index>=0&&size_t(index)<nl){
+            for(const auto& cached:liquidMemo[index])if(cached.valid&&(!chemicalPotential||cached.mu)
+                &&std::memcmp(&p,&cached.p,sizeof(p))==0&&std::memcmp(&T,&cached.T,sizeof(T))==0){
+                // Restore mutable public Cantera state, preserving callers that
+                // inspect it after a property query. Never reuse failures.
+                liquids[index]->setTemperature(T);liquids[index]->setDensity(cached.value.rho);
+                auto value=cached.value;if(!chemicalPotential)value.chemicalPotential=0;
+                if(recoveryTrace.current){recoveryTrace.current->density=value.rho;recoveryTrace.current->branch=value.branch;}
+                ++liquidCacheHits;return value;
+            }
+            ++liquidCacheMisses;
+        }
         Cantera::ThermoPhase* phase;
         if(index<0) {
             require(Y.size()==ns && selected<ns,"Wrong gas composition/selected species size");
@@ -306,8 +331,8 @@ public:
         result.compressibility=phase->isothermalCompressibility();
         result.sound=phase->soundSpeed();
         if(chemicalPotential) {
-            ++cost.selectedMuEvaluations;Vector mu(phase->nSpecies());phase->getChemPotentials(mu.data());
-            result.chemicalPotential=mu[selected]/phase->molecularWeight(selected);
+            ++cost.selectedMuEvaluations;phase->getChemPotentials(chemicalScratch.data());
+            result.chemicalPotential=chemicalScratch[selected]/phase->molecularWeight(selected);
         }
         const double values[]={result.rho,result.e,result.h,result.s,result.cp,result.cv,
                                result.expansion,result.compressibility,result.sound,result.chemicalPotential};
@@ -316,6 +341,8 @@ public:
                 "Mechanically or thermally unstable phase state");
         require(std::abs(result.h-result.e-p/result.rho)<1e-9*std::max(1.0,std::abs(result.h)),
                 "Phase enthalpy/internal-energy identity failed");
+        if(exactBatchReuse&&index>=0){auto& cached=liquidMemo[index][liquidMemoNext[index]++%16];
+            cached={p,T,true,chemicalPotential,result};}
         return result;
     }
 
@@ -357,8 +384,8 @@ public:
             const auto properties=phaseProperties(-1,p,T,Y,0,false);
             accumulate(mg,properties);state.alphaGas=mg/properties.rho;state.rhoGas=properties.rho;
             if(virtualLiquids&&nl) {
-                ++cost.selectedMuEvaluations;Vector mu(ns);gas->getChemPotentials(mu.data());
-                for(size_t i=0;i<nl;++i)value.muGas[i]=mu[condensable[i]]/(R*T);
+                ++cost.selectedMuEvaluations;gas->getChemPotentials(chemicalScratch.data());
+                for(size_t i=0;i<nl;++i)value.muGas[i]=chemicalScratch[condensable[i]]/(R*T);
             }
         }
         for(size_t i=0;i<nl;++i) {
@@ -1321,7 +1348,13 @@ const char* pintle_rt_runtime_manifest_v1(void* model) {
             <<",\"backendSha256\":"<<recoveryQuote(digest)<<",\"thermoConfiguration\":"<<recoveryQuote(m.configuration)
             <<",\"physicalModelHash\":"<<recoveryQuote(m.physicalHash)<<",\"numericalPolicyHash\":"<<recoveryQuote(m.policyHash)
             <<",\"modelFingerprint\":"<<recoveryQuote(m.fingerprint)<<",\"eos\":"<<recoveryQuote(m.eosName)
-            <<",\"closureBackend\":\"cpu\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":false,\"deviceChemistryIntegration\":false}";
+            <<",\"closureBackend\":\"cpu\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":false,\"deviceChemistryIntegration\":false"
+            <<",\"exactBatchReuse\":"<<(m.exactBatchReuse?"true":"false")
+            <<",\"deviceCaloricCandidates\":"<<(m.cudaScalar?"true":"false")
+            <<",\"deviceCaloricScope\":\"no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval\"";
+        if(m.cudaScalar){char gpuDigest[65];require(pintle_rt_file_sha256_v1(m.scalarLibrary.c_str(),gpuDigest,sizeof(gpuDigest))==0,"Cannot hash scalar CUDA library");
+            out<<",\"scalarLibrary\":"<<recoveryQuote(m.scalarLibrary)<<",\"scalarLibrarySha256\":"<<recoveryQuote(gpuDigest);}
+        out<<"}";
         m.runtimeManifest=out.str();return m.runtimeManifest.c_str();
     }catch(const std::exception& e){std::snprintf(m.error.data(),m.error.size(),"%s",e.what());return nullptr;}
 }
@@ -1332,10 +1365,25 @@ int pintle_rt_set_recovery_v1(void* model,int mode,int diagnostics) {
 const char* pintle_rt_recovery_diagnostic_v1(void* model) {
     return model?static_cast<Model*>(model)->recoveryDiagnostic.c_str():nullptr;
 }
+int pintle_rt_set_closure_acceleration_v1(void* model,int reuse,int cuda,const char* library) {
+    return protect(model,[&](Model& m){require((reuse==0||reuse==1)&&(cuda==0||cuda==1),"Invalid closure acceleration mode");
+        std::string path;
+        if(cuda){require(library&&library[0],"CUDA scalar library is required");
+            void* handle=dlopen(library,RTLD_NOW|RTLD_LOCAL);const char* failure=handle?nullptr:dlerror();
+            require(handle,failure?failure:"Cannot load CUDA scalar library");
+            auto symbol=dlsym(handle,"pintle_closure_scalar_create_v1");Dl_info info{};
+            const bool found=symbol&&dladdr(symbol,&info)&&info.dli_fname;
+            if(found)path=info.dli_fname;
+            dlclose(handle);require(found,"CUDA scalar library has no version 1 entry point");
+            require(m.caloric->supported&&m.scalarRecovery,"CUDA scalar requires supported NASA/PR scalar recovery");}
+        m.exactBatchReuse=reuse;m.cudaScalar=cuda;m.scalarLibrary=path;m.refreshPolicyHash();});
+}
 int pintle_rt_recover(void* model,const double* q,double energy,int equilibrium,PintleThermoState* state)
 {
     return protect(model,[&](Model& m){
         m.recoveryDiagnostic.clear();m.recoveryTrace.count=0;m.recoveryTrace.omitted=0;m.recoveryTrace.current=nullptr;
+        for(auto& phase:m.liquidMemo)for(auto& entry:phase)entry.valid=false;
+        m.liquidMemoNext={};
         Vector masses(q,q+m.ns);Evaluation result;
         try {
             if(equilibrium) result=m.equilibrium(masses,energy,*state);

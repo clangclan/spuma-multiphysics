@@ -6,6 +6,7 @@
 #include "cyclicPolyPatch.H"
 #include "pintleReactiveThermo.h"
 #include "pintleRecovery.h"
+#include "pintleClosureAcceleration.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleCheckpointIdentity.h"
@@ -72,6 +73,7 @@ public:
     void* thermo;
     size_t physicalSpecies,ns,nv,nc;
     Array volume;
+    size_t closureDeviceBytes=0;
     std::vector<Face> faces;
     double viscosity,conductivity,diffusivity,waveFactor,chemicalRtol,chemicalAtol;
     std::vector<size_t> liquidSpecies;
@@ -144,7 +146,16 @@ public:
         check(pintle_rt_set_case_context(t,physical.str().c_str(),numerical.str().c_str()),"Case model/policy identity");
         const label workers=dict.getOrDefault<label>("thermoWorkers",1),batch=dict.getOrDefault<label>("thermoBatchCells",64);
         demand(workers>0&&workers<=64&&batch>0,"Invalid thermo worker/batch limits");batchCells=std::min(nc,size_t(batch));
-        if(workers>1) {
+        const bool reuse=dict.getOrDefault<bool>("thermoExactReuse",!mechanical&&!chemistry&&!frozen);
+        const word scalarBackend=dict.getOrDefault<word>("closureScalarBackend","cpu");
+        demand(scalarBackend=="cpu"||scalarBackend=="cuda","Unknown closureScalarBackend");
+        demand(!(reuse||scalarBackend=="cuda")||(!mechanical&&!chemistry&&!frozen),
+            "Closure acceleration currently requires nonreacting HEM equilibrium");
+        fileName scalarLibrary(dict.getOrDefault<fileName>("closureScalarLibrary","libpintleReactiveTransport.so"));scalarLibrary.expand();
+        check(pintle_rt_set_closure_acceleration_v1(t,reuse,scalarBackend=="cuda",scalarLibrary.c_str()),"Closure acceleration policy");
+        Info<<"REACTIVE_CLOSURE_ACCELERATION exactBatchReuse="<<reuse<<" scalarBackend="<<scalarBackend
+            <<" deviceFullClosure=0 hostApproval=1"<<nl;
+        if(workers>1||reuse||scalarBackend=="cuda") {
             demand(!mechanical,"Parallel mechanical-environment recovery is not implemented");
             demand(size_t(workers)<=batchCells,"Worker count exceeds batch capacity");
             const double budget=dict.getOrDefault<scalar>("maxThermoBatchMemoryMB",64)*1e6;
@@ -152,6 +163,11 @@ public:
             const size_t flowStagingBytes=batchCells*(physicalSpecies*sizeof(double)+sizeof(double)+sizeof(PintleThermoState));
             demand(double(flowStagingBytes)<budget,"Flow staging exceeds thermo batch budget");
             pool.reset(pintle_rt_pool_create(t,workers,batchCells,size_t(budget)-flowStagingBytes,error,sizeof(error)));demand(bool(pool),error);
+            PintleClosureAccelerationProfileV1 acceleration{};acceleration.abiVersion=1;acceleration.structBytes=sizeof(acceleration);
+            demand(pintle_rt_pool_acceleration_profile_v1(pool.get(),&acceleration)==0,"Closure memory query failed");
+            closureDeviceBytes=acceleration.deviceBytes;
+            if(closureDeviceBytes){const double deviceBudget=dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9;
+                demand(std::isfinite(deviceBudget)&&double(closureDeviceBytes)<deviceBudget,"Closure CUDA memory exceeds device budget");}
         }
     }
     PintleModelProfilesV21 profiles() const {
@@ -242,7 +258,7 @@ public:
             geometry.push_back(f);
         }
         PintleTransportConfig config{nc,ns,nv,faces.size(),fixedStates.size(),viscosity,conductivity,diffusivity,
-            waveFactor,dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9,int(mechanical)};
+            waveFactor,dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9-closureDeviceBytes,int(mechanical)};
         char message[8192]{};
         PintleTransportOptionsV21 options{};options.abiVersion=1;options.structBytes=sizeof(options);
         const label bridgeCells=dict.getOrDefault<label>("transportBridgeCells",0);
@@ -633,8 +649,14 @@ int main(int argc,char** argv)
         const label nc=mesh.nCells();const size_t physicalSpecies=pintle_rt_species_count(model.get());
         const size_t ns=physicalSpecies*(mechanical?2:1),nv=ns+4+(mechanical?2:(physics.frozen?pintle_rt_liquid_count(model.get()):0));
         const double batchCapacity=std::min(double(nc),double(dict.getOrDefault<label>("thermoBatchCells",64)));
-        const double batchKnown=dict.getOrDefault<label>("thermoWorkers",1)>1?
-            batchCapacity*(2*physicalSpecies*sizeof(double)+2*sizeof(PintleThermoState)+2*sizeof(double)+sizeof(size_t)+512):0;
+        const bool defaultReuse=!mechanical&&!physics.chemistry&&!physics.frozen;
+        const bool batchAccelerated=dict.getOrDefault<bool>("thermoExactReuse",defaultReuse)
+            ||dict.getOrDefault<word>("closureScalarBackend","cpu")=="cuda";
+        const double accelerationPerCell=sizeof(size_t)+(dict.getOrDefault<bool>("thermoExactReuse",defaultReuse)?4*sizeof(size_t):0)
+            +(dict.getOrDefault<word>("closureScalarBackend","cpu")=="cuda"?
+                sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1)+sizeof(size_t):0);
+        const double batchKnown=dict.getOrDefault<label>("thermoWorkers",1)>1||batchAccelerated?
+            batchCapacity*(2*physicalSpecies*sizeof(double)+2*sizeof(PintleThermoState)+2*sizeof(double)+sizeof(size_t)+512+accelerationPerCell):0;
         const double memoryEstimate=8.0*nc*(7.0*nv+160)+8.0*mesh.nFaces()*32+batchKnown;
         const double memoryLimit=dict.getOrDefault<scalar>("maxHostMemoryGB",2)*1e9;
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
@@ -1058,6 +1080,19 @@ int main(int argc,char** argv)
             demand(pintle_rt_pool_profiles_v21(flow.pool.get(),workers.data(),workers.size(),&workerTotal,&combined,&memory)==0,"Worker profiles failed");
             for(size_t i=0;i<workers.size();++i)printProfile("worker_"+std::to_string(i),workers[i]);
             printProfile("workers",workerTotal);
+            PintleClosureAccelerationProfileV1 acceleration{};acceleration.abiVersion=1;acceleration.structBytes=sizeof(acceleration);
+            demand(pintle_rt_pool_acceleration_profile_v1(flow.pool.get(),&acceleration)==0,"Closure acceleration profile failed");
+            Info<<"REACTIVE_CLOSURE_PROFILE eligibleCells="<<double(acceleration.eligibleCells)
+                <<" uniqueCells="<<double(acceleration.uniqueCells)<<" reusedCells="<<double(acceleration.reusedCells)
+                <<" failedRepresentativeRetries="<<double(acceleration.failedRepresentativeRetries)
+                <<" gpuSubmitted="<<double(acceleration.gpuSubmitted)<<" gpuConverged="<<double(acceleration.gpuConverged)
+                <<" gpuApproved="<<double(acceleration.gpuApproved)<<" gpuRejected="<<double(acceleration.gpuRejected)
+                <<" gpuUnsupported="<<double(acceleration.gpuUnsupported)<<" gpuLaunches="<<double(acceleration.gpuLaunches)
+                <<" gpuTransferBytes="<<double(acceleration.gpuTransferBytes)<<" hostBytes="<<double(acceleration.hostBytes)
+                <<" liquidCacheHits="<<double(acceleration.liquidCacheHits)<<" liquidCacheMisses="<<double(acceleration.liquidCacheMisses)
+                <<" deviceBytes="<<double(acceleration.deviceBytes)<<" classifySeconds="<<acceleration.classifySeconds
+                <<" prepareSeconds="<<acceleration.prepareSeconds<<" gpuWallSeconds="<<acceleration.gpuWallSeconds
+                <<" gpuKernelSeconds="<<acceleration.gpuKernelSeconds<<" gpuCopySeconds="<<acceleration.gpuCopySeconds<<nl;
             Info<<"REACTIVE_BATCH_V21 attempted="<<double(memory.attemptedBatches)<<" accepted="<<double(memory.acceptedBatches)
                 <<" failed="<<double(memory.failedBatches)<<" batchWallSeconds="<<memory.batchWallSeconds
                 <<" workerJobSecondsSum="<<memory.workerJobSecondsSum<<" workerJobSecondsMax="<<memory.workerJobSecondsMax

@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "invalid-mode-does-not-change-policy",
+      "passed": true
+    },
+    {
+      "name": "missing-GPU-library-explicit-error",
+      "passed": true
+    },
+    {
+      "name": "host-only-library-rejects-CUDA-selection",
+      "passed": true,
+      "error": "Transport library was built without CUDA scalar closure"
+    },
+    {
+      "name": "device-error-preserves-input-and-does-not-fallback",
+      "passed": true,
+      "error": "CUDA caloric execution failed: injected device failure"
+    },
+    {
+      "name": "bad-device-candidate-rejected-by-same-EOS-host-check",
+      "passed": true,
+      "profile": {
+        "abiVersion": 1,
+        "structBytes": 168,
+        "eligibleCells": 64,
+        "uniqueCells": 2,
+        "reusedCells": 31,
+        "failedRepresentativeRetries": 0,
+        "gpuSubmitted": 1,
+        "gpuConverged": 1,
+        "gpuApproved": 0,
+        "gpuRejected": 1,
+        "gpuUnsupported": 0,
+        "gpuLaunches": 0,
+        "gpuTransferBytes": 0,
+        "hostBytes": 8192,
+        "deviceBytes": 0,
+        "liquidCacheHits": 0,
+        "liquidCacheMisses": 0,
+        "classifySeconds": 9.43e-06,
+        "prepareSeconds": 1.883e-06,
+        "gpuWallSeconds": 0.0,
+        "gpuKernelSeconds": 0.0,
+        "gpuCopySeconds": 0.0
+      }
+    },
+    {
+      "name": "bounded-memory-rejection",
+      "passed": true,
+      "error": "Batch scratch exceeds configured budget"
+    },
+    {
+      "name": "versioned-profile-rejects-without-write",
+      "passed": true
+    },
+    {
+      "name": "changed-policy-rejects-stale-pool",
+      "passed": true,
+      "error": "Pool model/policy changed after creation"
+    },
+    {
+      "name": "deduplicated-failure-original-ids-and-detail-budget",
+      "passed": true,
+      "detailed": 16,
+      "profile": {
+        "abiVersion": 1,
+        "structBytes": 168,
+        "eligibleCells": 32,
+        "uniqueCells": 1,
+        "reusedCells": 0,
+        "failedRepresentativeRetries": 31,
+        "gpuSubmitted": 0,
+        "gpuConverged": 0,
+        "gpuApproved": 0,
+        "gpuRejected": 0,
+        "gpuUnsupported": 0,
+        "gpuLaunches": 0,
+        "gpuTransferBytes": 0,
+        "hostBytes": 768,
+        "deviceBytes": 0,
+        "liquidCacheHits": 0,
+        "liquidCacheMisses": 0,
+        "classifySeconds": 4.75e-06,
+        "prepareSeconds": 0.0,
+        "gpuWallSeconds": 0.0,
+        "gpuKernelSeconds": 0.0,
+        "gpuCopySeconds": 0.0
+      }
+    }
+  ]
+}

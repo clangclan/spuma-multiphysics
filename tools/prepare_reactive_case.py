@@ -23,7 +23,8 @@ KINDS = ("uniform", "acoustic", "contact", "release", "shock", "reacting-shock",
 
 def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=None, dt_scale=1.,
             transport_backend="cpu", chemical_linear_solver="dense", transport_gas_properties="auto",
-            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=0, optimization_policy=None, physics=None):
+            thermo_workers=1, thermo_batch_cells=64, transport_bridge_cells=0, optimization_policy=None, physics=None,
+            thermo_exact_reuse=False, closure_scalar_backend="cpu"):
     physics=dict(physics or {})
     known={'chemistry','combustion','phaseChange','viscosity','heatConduction','speciesDiffusion'}
     if set(physics)-known or any(type(v) is not bool for v in physics.values()):
@@ -32,6 +33,8 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
         raise ValueError('combustion and chemistry must agree')
     chemistry=physics.get('combustion',physics.get('chemistry',kind in ('chemistry','coupled','reacting-shock')))
     phase_change=physics.get('phaseChange',True)
+    if closure_scalar_backend not in ('cpu','cuda') or ((thermo_exact_reuse or closure_scalar_backend=='cuda') and (chemistry or not phase_change)):
+        raise ValueError('Closure acceleration requires nonreacting HEM equilibrium and cpu/cuda scalar backend')
     if transport_backend not in ("cpu", "cuda") or chemical_linear_solver not in ("dense", "sparse", "auto", "matrixFree", "matrixFreeWoodbury"):
         raise ValueError("Unknown reactive execution backend")
     if transport_gas_properties not in ("auto", "host", "deviceNasa"):
@@ -76,6 +79,8 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
         frozen=not phase_change and backend.nl>0
         identity_closure='HEM-frozen' if frozen else 'HEM'
         backend.bind_case(chemistry,viscosity,conductivity,diffusivity,transport_backend,transport_gas_properties,phase_change=phase_change)
+        if thermo_exact_reuse or closure_scalar_backend=='cuda':
+            backend.closure_acceleration(thermo_exact_reuse,closure_scalar_backend=='cuda',common.PROJECT_ROOT/'lib/libpintleReactiveTransport.so')
         reference = {"kind": kind, "mean_mach_requested": mach}
         def pack(T, p, Y, liquid=(0, 0), u=None):
             mass, E, state = backend.make_state(T, p, Y, liquid)
@@ -221,6 +226,7 @@ transportBackend {transport_backend}; chemicalLinearSolver {chemical_linear_solv
 transportGasProperties {transport_gas_properties};
 optimizationPolicy "{case/'constant/realFluidPolicy.yaml'}";
 thermoWorkers {thermo_workers}; thermoBatchCells {thermo_batch_cells}; maxThermoBatchMemoryMB 64;
+thermoExactReuse {str(thermo_exact_reuse).lower()}; closureScalarBackend {closure_scalar_backend};
 transportBridgeCells {transport_bridge_cells};
 transportStagingBytes 1048576; maxPinnedTransportBytes 1048576; transportBlockThreads 256; transportDetailedGasCounters false;
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ {bc} }}
@@ -252,6 +258,7 @@ physics {{ {" ".join(k+" "+str(v).lower()+";" for k,v in physics.items())} }}
                     "model_fingerprint":backend.fingerprint,"physicalModelHash":backend.physical_hash,"numericalPolicyHash":backend.policy_hash,
                     "thermo_workers":thermo_workers,"thermo_batch_cells":thermo_batch_cells,"transport_bridge_cells":transport_bridge_cells,"policy_sha256":common.sha256(policy),
                     "transport_backend":transport_backend,"chemical_linear_solver":chemical_linear_solver,
+                    "thermo_exact_reuse":thermo_exact_reuse,"closure_scalar_backend":closure_scalar_backend,
                     "transport_gas_properties":transport_gas_properties,"physics":physics,"chemistry":chemistry,"phase_change":phase_change,"frozen_liquids":backend.nl if frozen else 0,
                     "initial_states":[s.as_dict() for s in states],"generator_sha256":common.sha256(Path(__file__))}
     env=common.sourced_environment()
@@ -274,6 +281,8 @@ if __name__ == "__main__":
     parser.add_argument("--transport-gas-properties",choices=("auto","host","deviceNasa"),default="auto")
     parser.add_argument("--thermo-workers",type=int,default=1)
     parser.add_argument("--thermo-batch-cells",type=int,default=64)
+    parser.add_argument("--thermo-exact-reuse",action='store_true')
+    parser.add_argument("--closure-scalar-backend",choices=('cpu','cuda'),default='cpu')
     parser.add_argument("--transport-bridge-cells",type=int,default=0)
     parser.add_argument("--optimization-policy",type=Path)
     parser.add_argument('--chemistry',choices=('on','off'))
@@ -287,4 +296,5 @@ if __name__ == "__main__":
     if args.phase_change is not None:physics['phaseChange']=args.phase_change=='equilibrium'
     print(json.dumps(prepare(args.output,args.thermo_dir,args.kind,args.cells,args.mach,args.cfl,args.end,args.dt_scale,
                              args.transport_backend,args.chemical_linear_solver,args.transport_gas_properties,args.thermo_workers,
-                             args.thermo_batch_cells,args.transport_bridge_cells,args.optimization_policy,physics),indent=2))
+                             args.thermo_batch_cells,args.transport_bridge_cells,args.optimization_policy,physics,
+                             args.thermo_exact_reuse,args.closure_scalar_backend),indent=2))
