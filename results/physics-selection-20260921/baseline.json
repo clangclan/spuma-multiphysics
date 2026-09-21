@@ -1,0 +1,10 @@
+{
+  "commit": "99957031b9a8ca0b9e0a4ef8ce34c6256642e743",
+  "solver_origin": "Retained pre-rename executable; solver source is byte-identical at 9995703. Backend rebuilt from that commit.",
+  "sha256": {
+    "src/reactiveFoam/ReactiveFoam.C": "29d1c5d5e9b441ee75d67de5187d008ebc19f2d4e6c815eb50778e2eac8c46d3",
+    "bin/ReactiveFoam": "94815c916934a12e564b8c5cc9af7a73d089dc452f22c808258416543f743b69",
+    "lib/libpintleReactiveBackend.so": "e707170375916068bda6b17af5e8931be863cb80b24bebf6bddbea072730cbf7",
+    "lib/libpintleReactiveTransport.so": "ef91a2255d1a5ae1743d1537088e21d5d1b56c1983a91e7730af17d413c3ebb6"
+  }
+}

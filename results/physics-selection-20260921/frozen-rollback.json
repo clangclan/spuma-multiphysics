@@ -1,0 +1,119 @@
+{
+  "fault_shim_sha256": "6e1c5e9a1ffcdaaff79c72e4868e09a55fbfd40b0ca41deeb57cb35ee03d60fc",
+  "kind": "acoustic",
+  "passed": true,
+  "phase_change": "frozen",
+  "solver_sha256": "8ba06a3e4ff43ff86b89864e7f018925b079872ee669807ab62746d79de0fefb",
+  "tests": [
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "injected_stage": 1,
+      "name": "cpu-full-step-rollback",
+      "partial_batch_failure": true,
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cpu-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cuda"
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "injected_stage": 1,
+      "name": "cuda-full-step-rollback",
+      "partial_batch_failure": true,
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-schema1-compatibility",
+      "passed": true
+    },
+    {
+      "field_max_scaled": {
+        "T": 0.0,
+        "alphaGas": 0.0,
+        "p": 0.0,
+        "q0": 0.0,
+        "q1": 0.0,
+        "q2": 0.0,
+        "q3": 0.0,
+        "rhoLiquid0": 0.0,
+        "rhoLiquid1": 0.0,
+        "rhoMomentum": 0.0,
+        "rhoTotalEnergy": 0.0
+      },
+      "name": "cuda-cross-backend-restart",
+      "passed": true,
+      "resumed_backend": "cpu"
+    }
+  ]
+}

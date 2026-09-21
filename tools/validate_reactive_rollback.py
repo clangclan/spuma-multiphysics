@@ -25,10 +25,11 @@ def main():
     p.add_argument('--thermo-dir',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--kind',choices=('acoustic','chemistry'),default='acoustic')
+    p.add_argument('--phase-change',choices=('equilibrium','frozen'),default='equilibrium')
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     env=b.sourced_environment();exe=b.PROJECT_ROOT/'bin/ReactiveFoam'
     shim=b.PROJECT_ROOT/'lib/libpintleTestBatchFailure.so'
-    report={'solver_sha256':b.sha256(exe),'fault_shim_sha256':b.sha256(shim),'kind':a.kind,'tests':[]}
+    report={'solver_sha256':b.sha256(exe),'fault_shim_sha256':b.sha256(shim),'kind':a.kind,'phase_change':a.phase_change,'tests':[]}
     def save():b.atomic_json(out/'validation.json',report)
     def set_entry(case,file,key,value):
         path=case/file;text,n=re.subn(r'\b'+key+r'\s+[^;]+;',key+' '+str(value)+';',path.read_text())
@@ -45,7 +46,7 @@ def main():
         return text
     def compare(left,right):
         errors={}
-        for name in [f'q{i}' for i in range(species_count)]+['rhoMomentum','rhoTotalEnergy','p','T','alphaGas']:
+        for name in [f'q{i}' for i in range(species_count)]+['rhoMomentum','rhoTotalEnergy','p','T','alphaGas']+[f'rhoLiquid{i}' for i in range(definition.get('frozen_liquids',0))]:
             get=lambda path:read(b.expected_final_directory(path,Decimal('2e-6')),name,8)
             ref=get(left);errors[name]=float(np.max(np.abs(get(right)-ref)/np.maximum(1,np.abs(ref))))
         if max(errors.values())>1e-8:raise AssertionError('State did not recover: '+str(errors))
@@ -59,7 +60,7 @@ def main():
         for backend in ('cpu','cuda'):
             base=out/(backend+'-input')
             definition=prepare(base,a.thermo_dir,a.kind,8,2,end=2e-6,transport_backend=backend,
-                    thermo_workers=2,thermo_batch_cells=3,transport_bridge_cells=2)
+                    thermo_workers=2,thermo_batch_cells=3,transport_bridge_cells=2,physics={'phaseChange':a.phase_change=='equilibrium'})
             species_count=len(definition['species'])
             set_entry(base,'system/controlDict','deltaT','1e-6')
             set_entry(base,'system/controlDict','maxDeltaT','1e-6')

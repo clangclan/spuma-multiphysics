@@ -1,0 +1,35 @@
+{
+  "base_commit": "99957031b9a8ca0b9e0a4ef8ce34c6256642e743",
+  "source_sha256": {
+    "src/reactiveFoam/ReactiveFoam.C": "2c3f0252a2235f3a0936bee36f721dd9d9a596d395170860a432ca4f83ba33b8",
+    "src/reactiveThermo/pintleReactivePool.inc": "d71919560ddcad15899e4b2aa2693d2e11b003241b2d03d73d56f3e2214d77bf",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "3f548bf7e7962f5c884f97747abfb45f19cc041fc5e7f57ea3c933df00f30ed3",
+    "src/reactiveThermo/pintleRealFluid.h": "483b0a47f0a007e7331aa0c80bc0f0d68118248fbfffc4b563c9aa99a948f8d7",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "14adb0a1a9057d82a5aceb6ef247de17c2e4c5968d3d20deb4f269c00dab7224",
+    "src/reactiveTransport/pintleReactiveTransport.h": "bf350bb3cb77ada8739150d5d92b30c0accc9403d7d7c8b847ab812c253368a5",
+    "tools/check_real_fluid_v21.py": "3b4191f7e167df827dbc35c7c6a48ca097895d015c0603b304d5257b02c6c2dd",
+    "tools/collect_multiphase_review_results.py": "659a8542af75f8d754b70e99ff54b4cc3ceacb6ead73f981a2ac72bae862d061",
+    "tools/collect_reactive_results.py": "cfd1c14dd23c5b48df9632b12add12bca290b5ef0557c5c3ac855edd140db5e8",
+    "tools/prepare_reactive_case.py": "bd7f630ae6c9ac4c9833b756a9940bd8b0a02bdcaecd1d28cea80e72ba0e1dce",
+    "tools/real_fluid_backend.py": "21ddead3b3babd2f0eaeac474fb01d7acdee827ffc167fe470e4011d78a7c93c",
+    "tools/run_reactive_campaign.py": "e4b29e4a0e344998786502ee09583f1a4ad50b18e7af7508b09d4663cb229a96",
+    "tools/test_reactive_batch_failure.cpp": "a646a8e962c233ece3b779791d4542bd535c2dafb386d4846b9a83def1284fde",
+    "tools/validate_reactive_rollback.py": "d04adca408882d2d49c875363e0f62a112ddac5d79bf40e7497bc901448e7974",
+    "tools/validate_reactive_transport.py": "20848d9cdf57f4740ea736bfd5bc836cafeea7031a9aea1cda0f16e084f9fa3f",
+    "src/reactiveFoam/reactivePhysics.H": "e08bfb3d7d56afb21dc6316f88c3ea3578ac270fe82fa77380ae48f2bc420026",
+    "tools/validate_reactive_physics.py": "0a6a7a34a24545086c022de5ab19c34c0e48e536d8f7c398948bda647148683b"
+  },
+  "artifacts_sha256": {
+    "bin/ReactiveFoam": "8ba06a3e4ff43ff86b89864e7f018925b079872ee669807ab62746d79de0fefb",
+    "lib/libpintleReactiveBackend.so": "691b1bccbd6c972e921fc1b6fb80fe380bf7c1c7235e7090c41f0b4979283e4f",
+    "lib/libpintleReactiveTransport.so": "8a495d562b1bf7b4abf854c2836a82d4459a27f4675e75502fbbba595714403b",
+    "lib/libpintleTestBatchFailure.so": "6e1c5e9a1ffcdaaff79c72e4868e09a55fbfd40b0ca41deeb57cb35ee03d60fc"
+  },
+  "build_logs": {
+    "build.log": "05793cfcd9057b005311bf00a35cfd065235e8758099389209e7e6a7666889d8",
+    "backend-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "solver-final-build.log": "05793cfcd9057b005311bf00a35cfd065235e8758099389209e7e6a7666889d8",
+    "baseline-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "environment": "SPUMA v2512, NVHPC 26.5, CUDA 13.2, RTX 5080 sm_120, FP64; PINTLE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh"
+}

@@ -1,0 +1,20 @@
+{
+  "memcheck": {
+    "errors": 0,
+    "log_sha256": "7f9cadd8357c3355a24474cddf7c613a2081aa544d8e4c4463c8822414a1b814",
+    "log_tail": [
+      "========= COMPUTE-SANITIZER",
+      "{\"passed\": true, \"tests\": 29, \"backend\": \"cuda\"}",
+      "========= ERROR SUMMARY: 0 errors"
+    ]
+  },
+  "initcheck": {
+    "errors": 0,
+    "log_sha256": "7f9cadd8357c3355a24474cddf7c613a2081aa544d8e4c4463c8822414a1b814",
+    "log_tail": [
+      "========= COMPUTE-SANITIZER",
+      "{\"passed\": true, \"tests\": 29, \"backend\": \"cuda\"}",
+      "========= ERROR SUMMARY: 0 errors"
+    ]
+  }
+}

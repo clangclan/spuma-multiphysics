@@ -232,7 +232,9 @@ public:
         cost.slotCells=bridgeCells;cost.slots=1;cost.blockThreads=execution.blockThreads;
         require(cfg.cells&&cfg.species&&cfg.faces,"Empty transport mesh/model");
         require(cfg.cells<=size_t(INT64_MAX)&&cfg.faces<size_t(INT64_MAX)&&cfg.fixed<=size_t(INT64_MAX),"Transport index overflow");
-        require(cfg.variables==cfg.species+4+(cfg.mechanical?2:0),"Wrong transport conserved-variable count");
+        // Non-mechanical models may append up to two conservative liquid inventories.
+        require(cfg.mechanical?cfg.variables==cfg.species+6:
+            (cfg.variables>=cfg.species+4&&cfg.variables<=cfg.species+6),"Wrong transport conserved-variable count");
         require(std::isfinite(cfg.maxBytes)&&cfg.maxBytes>0,"Invalid transport memory budget");
         require(std::isfinite(cfg.waveFactor)&&cfg.waveFactor>=1,"Invalid transport wave factor");
         require(std::isfinite(cfg.viscosity)&&std::isfinite(cfg.conductivity)&&std::isfinite(cfg.diffusivity)

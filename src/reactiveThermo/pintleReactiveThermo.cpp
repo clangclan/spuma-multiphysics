@@ -246,7 +246,7 @@ public:
                 "Pressure/temperature is outside the explicitly configured thermodynamic domain");
     }
 
-    PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected)
+    PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected,bool chemicalPotential=true)
     {
         ++cost.fullPhaseEvaluations;
         bounds(p,T);
@@ -293,8 +293,10 @@ public:
         result.expansion=phase->thermalExpansionCoeff();
         result.compressibility=phase->isothermalCompressibility();
         result.sound=phase->soundSpeed();
-        ++cost.selectedMuEvaluations;Vector mu(phase->nSpecies()); phase->getChemPotentials(mu.data());
-        result.chemicalPotential=mu[selected]/phase->molecularWeight(selected);
+        if(chemicalPotential) {
+            ++cost.selectedMuEvaluations;Vector mu(phase->nSpecies());phase->getChemPotentials(mu.data());
+            result.chemicalPotential=mu[selected]/phase->molecularWeight(selected);
+        }
         const double values[]={result.rho,result.e,result.h,result.s,result.cp,result.cv,
                                result.expansion,result.compressibility,result.sound,result.chemicalPotential};
         for(double value:values) require(std::isfinite(value),"Non-finite phase thermodynamic property");
@@ -335,16 +337,18 @@ public:
         };
         if(mg>0) {
             Vector Y=gasMass;for(double& number:Y) number/=mg;
-            const auto properties=phaseProperties(-1,p,T,Y,0);
+            const auto properties=phaseProperties(-1,p,T,Y,0,false);
             accumulate(mg,properties);state.alphaGas=mg/properties.rho;state.rhoGas=properties.rho;
-            Vector mu(ns);gas->getChemPotentials(mu.data());
-            for(size_t i=0;i<nl;++i) value.muGas[i]=mu[condensable[i]]/(R*T);
+            if(virtualLiquids&&nl) {
+                ++cost.selectedMuEvaluations;Vector mu(ns);gas->getChemPotentials(mu.data());
+                for(size_t i=0;i<nl;++i)value.muGas[i]=mu[condensable[i]]/(R*T);
+            }
         }
         for(size_t i=0;i<nl;++i) {
             state.liquidMass[i]=mass[i];
             if(mass[i]>0 || (virtualLiquids && q[condensable[i]]>0)) {
                 try {
-                    const auto properties=phaseProperties(int(i),p,T,{},0);
+                    const auto properties=phaseProperties(int(i),p,T,{},0,virtualLiquids);
                     value.muLiquid[i]=properties.chemicalPotential*weights[condensable[i]]/(R*T);
                     if(mass[i]>0) {
                         accumulate(mass[i],properties);state.rhoLiquid[i]=properties.rho;
@@ -1364,7 +1368,7 @@ int pintle_rt_gas_enthalpies(void* model,const double* q,const PintleThermoState
         const double mg=std::accumulate(gasMass.begin(),gasMass.end(),0.0);
         require(mg>0,"Gas enthalpies require a present gas phase");
         for(double& y:gasMass) y/=mg;
-        m.phaseProperties(-1,state->p,state->T,gasMass,0);
+        m.phaseProperties(-1,state->p,state->T,gasMass,0,false);
         Vector h(m.ns);m.gas->getPartialMolarEnthalpies(h.data());
         for(size_t k=0;k<m.ns;++k) {
             h[k]/=m.weights[k];require(std::isfinite(h[k]),"Non-finite gas partial mass enthalpy");

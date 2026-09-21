@@ -16,6 +16,7 @@ typedef struct PintleTransportState {
     double p, T, rho, cv, sound, gasMass, dilatation;
 } PintleTransportState;
 typedef struct PintleTransportConfig {
+    // Non-mechanical variables: species, momentum(3), energy, optional liquid inventories(0..2).
     size_t cells, species, variables, faces, fixed;
     double viscosity, conductivity, diffusivity, waveFactor, maxBytes;
     int mechanical;

@@ -21,6 +21,53 @@
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
 
+## 실행할 연산 선택
+
+구현 의존관계와 검증 결과는 [연산 선택 검토 보고서](reports/reactive-physics-selection-20260921.md)에 정리했다.
+
+`constant/reactiveProperties`의 `physics`에서 필요한 연산을 선택한다. 설정은 **실행을 시작할 때** 읽으며 계산 도중 바꾸지 않는다. 이 사전을 생략하면 기존 `chemistry`와 수송계수에 따른 동작을 유지한다.
+
+```foam
+physics
+{
+    chemistry       false;
+    phaseChange     false;
+    viscosity       false;
+    heatConduction  false;
+    speciesDiffusion false;
+}
+```
+
+| 선택 항목 | 활성화할 때의 의존관계 | 끄면 제외되는 연산 |
+|---|---|---|
+| `chemistry` | 반응이 있는 기구, 종 보존량, EOS와 총에너지 | 반응률, CVODE, 화학 Jacobian·선형계 및 작업공간 |
+| `combustion` | `chemistry`의 별칭. 둘을 쓰면 같은 값이어야 함 | 화학반응과 함께 비활성화 |
+| `phaseChange` | 응축성 종과 액상 EOS | 활성 상 탐색·안정성 검사·화학퍼텐셜 평형 계산 |
+| `viscosity` | 양의 `dynamicViscosity` | 속도 구배·점성 응력·점성 일 |
+| `heatConduction` | 양의 `thermalConductivity` | Fourier 전도 유속 |
+| `speciesDiffusion` | 양의 `molecularDiffusivity`, 지원되는 이상기체 모델 | 기상 조성·종 엔탈피 준비, Fick 확산·확산 엔탈피 유속 |
+
+`physics`의 명시적 선택이 기존 최상위 `chemistry`와 수송계수의 자동 선택보다 우선한다. 예를 들어 `viscosity false`이면 양의 점성계수가 남아 있어도 적용하지 않는다. 생략한 선택은 기존 동작을 따른다. 상전이는 기본적으로 액상이 있으면 켜지고, 액상이 없는 기체 구성에서는 연산할 상전이가 없다. 기구 파일 로딩과 필요한 EOS 상태 복원은 계속 수행한다.
+
+여기서 액상 유무는 물성 구성에 액상 모델이 있는지를 뜻한다. 현재 셀의 액체량이 0이어도 이후 응축 가능성이 있으므로, 평형 모드의 상 안정성 검사를 임의로 생략하지 않는다.
+
+연소의 발열은 화학반응에 따른 조성 변화와 생성에너지를 포함한 총에너지로 처리한다. 반응열만 별도로 끄거나 `Qdot`를 다시 더하는 스위치는 없다. 점성을 켜면 점성 일도, 종 확산을 켜면 종 엔탈피 수송도 함께 계산한다. 따라서 `heatConduction false`가 이 두 에너지 수송을 없애지는 않는다. 압축성 유동의 운동량·총에너지·상태 복원은 항상 필요하다.
+
+`phaseChange false`와 액상 모델을 함께 쓰면 **상 질량 동결(frozen) 모드**다. 액체를 기체로 바꾸거나 셀별 액상 질량을 고정하지 않는다. `rhoLiquid0/1`을 별도 보존장으로 대류시키고, 고정된 상별 질량에서 공통 압력·온도를 복원한다. 증발·응축 질량 교환만 없으며 압축, 열전도, 기상 화학에 따른 온도 변화는 가능하다. 반응은 남아 있는 기상 질량에만 작용한다. 액상 EOS의 유효 범위와 상 존재 조건은 계속 검사한다.
+
+이 모드는 `closure HEM`에서 CPU/CUDA 수송과 `thermoWorkers`를 지원한다. 액상이 있는 `mechanicalEquilibrium`의 상 질량 동결은 아직 지원하지 않는다. 비이상기체 종 확산 등 기존 미지원 조합도 자동으로 다른 물리 모델로 바꾸지 않고 거부한다.
+
+```bash
+# 화학·상전이를 끈 압축성 다상 유동 예제
+flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python tools/prepare_reactive_case.py cases/frozen-example \
+  --thermo-dir research/reactive-thermo --kind acoustic --cells 32 \
+  --chemistry off --phase-change frozen --transport-backend cuda
+source env.sh
+flock /home/jsw/cae-benchmark/run.lock ReactiveFoam -case cases/frozen-example
+```
+
+생성기는 선택에 맞는 초기 보존장과 식별값을 만든다. 직접 원시량으로 초기화할 때는 `liquidFraction0/1`로 액상 질량 비율을 지정한다. 재시작에는 실제 저장된 `rhoLiquid0/1`이 필요하며 `alphaLiquid`로 재구성하지 않는다. 평형/동결 모드 또는 유효 물리 연산을 바꾼 기존 체크포인트는 거부한다. 다른 물리 모델로 시작하려면 초기 케이스를 새로 준비한다. 실행 로그의 `REACTIVE_PHYSICS`에서 최종 선택을 확인할 수 있다.
+
 ## 비혼합 접촉면 모드
 
 `closure mechanicalEquilibrium;`에서는 셀 안의 두 공간적 환경 A/B가 압력과 속도만 공유한다. 각 환경 안에서는 기존 HEM flash를 사용하지만 환경 사이 온도·조성은 같게 만들지 않는다. `q0 … q(N−1)`와 `qN … q(2N−1)`가 각 환경의 화학종 질량이고, `alphaEnvironment`, `betaEnvironment`가 환경 체적분율이다. 환경 내부 액상 체적분율과는 다른 변수다. 총에너지는 하나이며 압력 보존을 위해 에너지를 덮어쓰지 않는다.

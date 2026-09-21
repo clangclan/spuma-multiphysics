@@ -47,8 +47,9 @@ class RealFluidBackend(Backend):
     @property
     def policy_hash(self):return self.lib.pintle_rt_numerical_policy_hash(self.handle).decode()
     def bind_case(self,chemistry,viscosity,conductivity,diffusivity,transport_backend="cpu",gas_properties="auto",
-                  rtol=1e-8,atol=1e-14,wave_factor=1.1,closure="HEM"):
+                  rtol=1e-8,atol=1e-14,wave_factor=1.1,closure="HEM",phase_change=True):
         physical=f"closure={closure};chemistry={int(chemistry)};viscosity={viscosity:.17g};conductivity={conductivity:.17g};commonD={diffusivity:.17g}"
+        if not phase_change and self.nl:physical+=";phaseChange=frozen"
         numerical=f"chemicalRtol={rtol:.17g};chemicalAtol={atol:.17g};waveFactor={wave_factor:.17g};transportBackend={transport_backend};transportGasProperties={gas_properties}"
         self.check(self.lib.pintle_rt_set_case_context(self.handle,physical.encode(),numerical.encode()))
     def capabilities(self):

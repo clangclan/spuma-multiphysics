@@ -51,8 +51,8 @@ public:
                 // Error buffers are preallocated: even allocation failure in a
                 // C API error string cannot escape this thread or skip the join.
                 try {
-                    const int status=operation==0?pintle_rt_recover(model,mass.data()+c*ns,energies[c],1,&states[c])
-                        :pintle_rt_react(model,mass.data()+c*ns,energies[c],dt,1,rtol,atol,&states[c],&drifts[c]);
+                    const int status=operation%2==0?pintle_rt_recover(model,mass.data()+c*ns,energies[c],operation<2,&states[c])
+                        :pintle_rt_react(model,mass.data()+c*ns,energies[c],dt,operation<2,rtol,atol,&states[c],&drifts[c]);
                     if(status)std::snprintf(failures[c].data(),failures[c].size(),"%.511s",model->error.data());
                 }catch(const std::exception& ex){std::snprintf(failures[c].data(),failures[c].size(),"%s",ex.what());}
                 catch(...){std::snprintf(failures[c].data(),failures[c].size(),"Unknown worker exception");}
@@ -67,7 +67,7 @@ public:
         require(token.attemptId&&token.contentVersion&&token.attemptId>=last.attemptId
             &&token.contentVersion>last.contentVersion
             &&(token.attemptId>last.attemptId||token.stageId>=last.stageId),"Stale batch attempt/stage/content token");
-        require((op==0||op==1)&&cells&&cells<=profile.capacity&&stride>=ns&&q&&e&&output&&drift,"Invalid batch buffers/count/operation");
+        require((op>=0&&op<=3)&&cells&&cells<=profile.capacity&&stride>=ns&&q&&e&&output&&drift,"Invalid batch buffers/count/operation");
         require(models[0]->physicalHash==prototype->physicalHash&&models[0]->policyHash==prototype->policyHash,"Pool model/policy changed after creation");
         last=token;count=cells;summary.attemptedCells+=count;operation=op;energies=e;dt=interval;rtol=relative;atol=absolute;
         for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);states[c]=output[c];
