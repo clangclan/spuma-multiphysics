@@ -27,14 +27,18 @@ def main():
     p.add_argument('--thermo-dir', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--baseline-root', type=Path, required=True)
+    p.add_argument('--baseline-executable', default='ReactiveFoam',
+                   help='Executable filename in baseline-root/bin (use pintleReactiveFoam for pre-rename baselines)')
     p.add_argument('--case', action='append')
     a = p.parse_args()
     out = a.output.resolve(); out.mkdir(parents=True, exist_ok=False)
     baseline = a.baseline_root.resolve()
+    baseline_exe = baseline/'bin'/a.baseline_executable
+    candidate_exe = b.PROJECT_ROOT/'bin/ReactiveFoam'
     env = b.sourced_environment()
     report = {'thresholds': {'state_max_scaled': 1e-6, 'species_Y_Linf': 1e-7},
-              'candidate_executable_sha256': b.sha256(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),
-              'baseline_executable_sha256': b.sha256(baseline/'bin/pintleReactiveFoam'),
+              'candidate_executable_sha256': b.sha256(candidate_exe),
+              'baseline_executable_sha256': b.sha256(baseline_exe),
               'runs': [], 'comparisons': [], 'paired_diffusion': [], 'default_cpu_performance': []}
     def save(): b.atomic_json(out/'validation.json', report)
     def fields(case, d):
@@ -84,7 +88,7 @@ def main():
                                 chemical_linear_solver=linear, thermo_workers=workers,
                                 thermo_batch_cells=3, transport_bridge_cells=2,
                                 transport_gas_properties=gas)
-                    exe = (baseline if label == 'main' else b.PROJECT_ROOT)/'bin/pintleReactiveFoam'
+                    exe = baseline_exe if label == 'main' else candidate_exe
                     runenv = dict(env)
                     if label == 'main': runenv['LD_LIBRARY_PATH'] = str(baseline/'lib')+os.pathsep+env['LD_LIBRARY_PATH']
                     start = time.monotonic()

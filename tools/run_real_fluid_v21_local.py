@@ -80,7 +80,7 @@ def main():
                 else:
                     runs=[]
                     for i,c in enumerate(cases):
-                        case=Path(c['case']).resolve();exe=shutil.which(c.get('executable','pintleReactiveFoam'))
+                        case=Path(c['case']).resolve();exe=shutil.which(c.get('executable','ReactiveFoam'))
                         if not exe or not case.is_dir() or 'expected_end_time' not in c:r={'status':'BLOCKED','reason':'missing Flow executable/case/expected_end_time'}
                         else:
                             r=execute([exe,'-case',str(case)],ROOT,out/f'{stage}-{i}.log',a.timeout)

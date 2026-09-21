@@ -1,3 +1,3 @@
-pintleReactiveFoam.C
+ReactiveFoam.C
 
-EXE = $(PINTLE_GPU_ROOT)/bin/pintleReactiveFoam
+EXE = $(PINTLE_GPU_ROOT)/bin/ReactiveFoam

@@ -253,7 +253,7 @@ def main():
     a=p.parse_args();a.backend=int(a.backend=='cuda')
     for key in ('thermo_dir','thermo_library','transport_library','output'):setattr(a,key,getattr(a,key).resolve())
     if a.output.exists():p.error('Refusing to overwrite evidence')
-    source_files=sorted([*ROOT.glob('src/reactiveThermo/*'),*ROOT.glob('src/reactiveTransport/*'),ROOT/'src/reactiveFoam/pintleReactiveFoam.C',Path(__file__)])
+    source_files=sorted([*ROOT.glob('src/reactiveThermo/*'),*ROOT.glob('src/reactiveTransport/*'),ROOT/'src/reactiveFoam/ReactiveFoam.C',Path(__file__)])
     report={'baseline':'0517be936c1a5f4720bd8c3703ffb38ba4289045','scope':'small mathematical/API checks','backend':'cuda' if a.backend else 'cpu',
         'thresholds':THRESHOLDS,'source_sha256':{str(f.relative_to(ROOT)):sha(f) for f in source_files if f.is_file()},
         'libraries':{str(f):sha(f) for f in (a.thermo_library,a.transport_library)},'cantera':ct.__version__,

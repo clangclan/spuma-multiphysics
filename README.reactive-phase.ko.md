@@ -1,6 +1,8 @@
 # N₂O/IPA 상변화·반응 열유동 연구 솔버
 
-`pintleReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
+실행 명령은 `ReactiveFoam`이다(이전 이름: `pintleReactiveFoam`). 다시 빌드한 뒤 기존 케이스의 `system/controlDict`에서도 `application ReactiveFoam;`으로 변경한다. 솔버 소스는 `src/reactiveFoam/ReactiveFoam.C`에 있다.
+
+`ReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 기존 `spumaPintleColdFoam`과 별도 실행 경로이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
 최신 GPU·SPUMA 실행 검증과 재시작·쓰기·성능 회귀 수정은 [PR #1 로컬 검증 보고서](reports/pr1-local-validation-20260921.md)에 있다. 기존 물리 모델 검증 수치는 [다상 검토 반영 보고서](reports/multiphase-review-fixes-20260911.md)에 있다. [이전 개발 보고서](reports/reactive-phase-development-20260911.md)는 HEM 기준 결과를 보존한다. 이 보고서들의 구현·실행 검증은 MAIN이 수행했다.
 
@@ -30,7 +32,7 @@ flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
   tools/prepare_mechanical_case.py --output cases/mechanical-example \
   --thermo-dir research/reactive-thermo --kind contact --cells 32 --mach 2
 source env.sh
-flock /home/jsw/cae-benchmark/run.lock pintleReactiveFoam -case cases/mechanical-example
+flock /home/jsw/cae-benchmark/run.lock ReactiveFoam -case cases/mechanical-example
 flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
   tools/validate_mechanical.py --output cases/mechanical-check \
   --thermo-dir research/reactive-thermo
@@ -94,7 +96,7 @@ flock /home/jsw/cae-benchmark/run.lock research/reactive-env/bin/python \
   tools/prepare_reactive_case.py cases/reactive-example \
   --thermo-dir research/reactive-thermo --kind acoustic --cells 32 --mach 2
 source env.sh
-flock /home/jsw/cae-benchmark/run.lock pintleReactiveFoam -case cases/reactive-example
+flock /home/jsw/cae-benchmark/run.lock ReactiveFoam -case cases/reactive-example
 ```
 
 `constant/reactiveProperties`의 `thermoConfiguration`과 `initialization conserved`를 사용한다. 시간 디렉터리에 전체 `q*`, `rhoMomentum`, `rhoTotalEnergy`, 추정치 `p/T`, 출력용 `U`, 그리고 `reactiveStateIdentity`가 필요하다. 재시작은 이 보존장을 읽어 상분배를 다시 계산한다. `p/T`로 총에너지를 재생성하지 않는다. 출력은 시작 시간에도 생성하므로 원본에서 복사한 별도 케이스로 작업한다.

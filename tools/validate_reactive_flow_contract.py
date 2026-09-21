@@ -18,7 +18,7 @@ import tempfile
 def main():
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source", type=Path, default=root / "src/reactiveFoam/pintleReactiveFoam.C")
+    parser.add_argument("--source", type=Path, default=root / "src/reactiveFoam/ReactiveFoam.C")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():

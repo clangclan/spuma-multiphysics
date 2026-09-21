@@ -13,7 +13,7 @@ from validate_reactive_runtime import replace,internal
 
 
 def run(output,thermo_dir,transport_backend='cpu'):
-    output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),
+    output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/ReactiveFoam'),
         'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),
         'transport_backend':transport_backend};env=b.sourced_environment()
     def prepare(*args,**kwargs):
@@ -25,7 +25,7 @@ def run(output,thermo_dir,transport_backend='cpu'):
         entry=dict(name=name,passed=bool(passed),**details);report['tests'].append(entry)
         b.atomic_json(output/'validation.json',report);print(json.dumps(entry),flush=True)
     def execute(case,label='solver'):
-        with (case/(label+'.log')).open('w') as log:proc=subprocess.run([str(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),'-case',str(case)],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)
+        with (case/(label+'.log')).open('w') as log:proc=subprocess.run([str(b.PROJECT_ROOT/'bin/ReactiveFoam'),'-case',str(case)],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=300)
         return proc.returncode,(case/(label+'.log')).read_text(errors='replace')
     def control(case,key,value):
         path=case/'system/controlDict';text,count=re.subn(r'\b'+key+r'\s+[^;]+;',key+' '+str(value)+';',path.read_text())

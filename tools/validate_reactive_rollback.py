@@ -26,7 +26,7 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--kind',choices=('acoustic','chemistry'),default='acoustic')
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
-    env=b.sourced_environment();exe=b.PROJECT_ROOT/'bin/pintleReactiveFoam'
+    env=b.sourced_environment();exe=b.PROJECT_ROOT/'bin/ReactiveFoam'
     shim=b.PROJECT_ROOT/'lib/libpintleTestBatchFailure.so'
     report={'solver_sha256':b.sha256(exe),'fault_shim_sha256':b.sha256(shim),'kind':a.kind,'tests':[]}
     def save():b.atomic_json(out/'validation.json',report)

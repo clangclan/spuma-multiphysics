@@ -173,7 +173,7 @@ blocks (hex (0 1 2 3 4 5 6 7) ({cells} 1 1) simpleGrading (1 1 1)); edges ();
 boundary (left {{ {lefttype} faces ((0 3 7 4)); }} right {{ {righttype} faces ((1 5 6 2)); }}
 walls {{ type wall; faces (); }} frontAndBack {{ type empty; faces ((0 1 2 3) (4 7 6 5) (0 4 5 1) (3 2 6 7)); }}); mergePatchPairs ();
 ''')
-        put("system/controlDict",header("controlDict")+f'''application pintleReactiveFoam;
+        put("system/controlDict",header("controlDict")+f'''application ReactiveFoam;
 startFrom startTime; startTime 0; stopAt endTime; endTime {duration:.17g}; deltaT {max_dt:.17g};
 maxDeltaT {max_dt:.17g}; maxCo {cfl:.17g}; writeControl runTime; writeInterval {duration:.17g};
 writeFormat binary; writePrecision 17; writeCompression off; timeFormat general; timePrecision 15;

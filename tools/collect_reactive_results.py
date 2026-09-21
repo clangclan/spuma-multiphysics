@@ -49,7 +49,7 @@ def main():
                                 scope="Two time resolutions measure sensitivity; they do not establish asymptotic order or experimental accuracy"))
     root=b.PROJECT_ROOT
     source_files=[*sorted((root/"src/reactiveThermo").glob("*.h")),*sorted((root/"src/reactiveThermo").glob("*.cpp")),
-                  root/"src/reactiveFoam/pintleReactiveFoam.C",root/"src/reactiveFoam/Make/files",root/"src/reactiveFoam/Make/options",
+                  root/"src/reactiveFoam/ReactiveFoam.C",root/"src/reactiveFoam/Make/files",root/"src/reactiveFoam/Make/options",
                   *sorted((root/"tools").glob("*reactive*.py")),*sorted((root/"tools").glob("build_reactive*.sh")),root/"tools/reactive-env-linux64.lock"]
     conversion=load(root/"research/creck-reactive-converted/manifest.json")
     report={"assessment":"Research HEM solver implemented; full high-pressure N2O/IPA end-to-end prediction NOT validated",

@@ -100,7 +100,7 @@ def analyze_existing(output,source):
 
 
 def run(output,thermo_dir,specs,transport_backend='cpu'):
-    output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),
+    output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/ReactiveFoam'),
         'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so')};env=b.sourced_environment()
     def record(name,fn):
         start=time.monotonic()
@@ -151,7 +151,7 @@ def run(output,thermo_dir,specs,transport_backend='cpu'):
             d=prepare(case,thermo_dir,kind,int(n),float(mach),float(travel))
             with (case/'constant/reactiveProperties').open('a') as f:
                 f.write('\ntransportBackend '+transport_backend+';\n')
-            with (case/'solver.log').open('w') as log:proc=subprocess.run([str(b.PROJECT_ROOT/'bin/pintleReactiveFoam'),'-case',str(case)],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1200)
+            with (case/'solver.log').open('w') as log:proc=subprocess.run([str(b.PROJECT_ROOT/'bin/ReactiveFoam'),'-case',str(case)],env=env,stdout=log,stderr=subprocess.STDOUT,timeout=1200)
             text=(case/'solver.log').read_text(errors='replace');require(proc.returncode==0,'Solver failed: '+'\n'.join(text.splitlines()[-6:]))
             require('REACTIVE_BACKENDS transport='+transport_backend+' ' in text,'Requested transport backend was not selected')
             analysis=analyze(case,d,text)

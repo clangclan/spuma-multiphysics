@@ -107,7 +107,7 @@ thermoConfiguration "{config}"; initialization conserved;
 chemistry false; dynamicViscosity 0; thermalConductivity 0; molecularDiffusivity 0;
 waveSpeedFactor 1.1; maxHostMemoryGB 2; boundaryConditions {{ walls {{ type slipWall; }} }}
 ''')
-        (case/'system/controlDict').write_text(header('controlDict')+f'''application pintleReactiveFoam;
+        (case/'system/controlDict').write_text(header('controlDict')+f'''application ReactiveFoam;
 startFrom startTime; startTime 0; stopAt endTime; endTime {duration:.17g}; deltaT {duration/8:.17g};
 maxDeltaT {duration/8:.17g}; maxCo .25; writeControl runTime; writeInterval {duration:.17g};
 writeFormat binary; writePrecision 17; writeCompression off; timeFormat general; timePrecision 15;
