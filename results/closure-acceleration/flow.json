@@ -1,0 +1,309 @@
+{
+  "maximumCells": 16,
+  "passed": true,
+  "tests": [
+    {
+      "closureProfile": {
+        "classifySeconds": "4.3969999999999987e-06",
+        "deviceBytes": "0",
+        "eligibleCells": "0",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "64",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0",
+        "reusedCells": "0",
+        "uniqueCells": "0"
+      },
+      "comparison": null,
+      "name": "uniform-0-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.00010290800000000004",
+        "deviceBytes": "0",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "192",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0",
+        "reusedCells": "574",
+        "uniqueCells": "82"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 0.0
+      },
+      "name": "uniform-1-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.000101023",
+        "deviceBytes": "1792",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "82",
+        "gpuConverged": "82",
+        "gpuCopySeconds": "0.0016098879957571622",
+        "gpuKernelSeconds": "0.0012701120097190132",
+        "gpuLaunches": "82",
+        "gpuRejected": "0",
+        "gpuSubmitted": "82",
+        "gpuTransferBytes": "18368",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0.0033273309999999993",
+        "hostBytes": "2048",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "4.7250999999999992e-05",
+        "reusedCells": "574",
+        "uniqueCells": "82"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 0.0
+      },
+      "name": "uniform-2-20steps",
+      "passed": true
+    },
+    {
+      "maxScaledBoundary": 0.0,
+      "maxScaledQ": 0.0,
+      "name": "nonreacting-HEM-default-reuse-CPU-zero-device-budget",
+      "passed": true
+    },
+    {
+      "maxScaledBoundary": 0.0,
+      "maxScaledQ": 0.0,
+      "name": "uniform-restart-parity",
+      "passed": true
+    },
+    {
+      "acceptedSteps": 21,
+      "name": "uniform-rollback-conservation",
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "2.3789999999999992e-06",
+        "deviceBytes": "0",
+        "eligibleCells": "0",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "64",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0",
+        "reusedCells": "0",
+        "uniqueCells": "0"
+      },
+      "comparison": null,
+      "name": "conduction-zero-0-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.00010334399999999998",
+        "deviceBytes": "0",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "192",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0",
+        "reusedCells": "8",
+        "uniqueCells": "648"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 0.0
+      },
+      "name": "conduction-zero-1-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.00010050600000000002",
+        "deviceBytes": "1792",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "648",
+        "gpuConverged": "648",
+        "gpuCopySeconds": "0.0011920959958806637",
+        "gpuKernelSeconds": "0.0029939200133085246",
+        "gpuLaunches": "82",
+        "gpuRejected": "0",
+        "gpuSubmitted": "648",
+        "gpuTransferBytes": "145152",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0.0045988409999999993",
+        "hostBytes": "2048",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0.00021673300000000004",
+        "reusedCells": "8",
+        "uniqueCells": "648"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 4.609674818584077e-11
+      },
+      "name": "conduction-zero-2-20steps",
+      "passed": true
+    },
+    {
+      "maxScaledBoundary": 0.0,
+      "maxScaledQ": 0.0,
+      "name": "conduction-zero-restart-parity",
+      "passed": true
+    },
+    {
+      "acceptedSteps": 21,
+      "name": "conduction-zero-rollback-conservation",
+      "passed": true,
+      "retries": 1
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "6.1440000000000025e-06",
+        "deviceBytes": "0",
+        "eligibleCells": "0",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "64",
+        "liquidCacheHits": "0",
+        "liquidCacheMisses": "0",
+        "prepareSeconds": "0",
+        "reusedCells": "0",
+        "uniqueCells": "0"
+      },
+      "comparison": null,
+      "name": "acoustic-0-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.00024112799999999993",
+        "deviceBytes": "0",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "0",
+        "gpuWallSeconds": "0",
+        "hostBytes": "192",
+        "liquidCacheHits": "29299",
+        "liquidCacheMisses": "198357",
+        "prepareSeconds": "0",
+        "reusedCells": "8",
+        "uniqueCells": "648"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 0.0
+      },
+      "name": "acoustic-1-20steps",
+      "passed": true
+    },
+    {
+      "closureProfile": {
+        "classifySeconds": "0.00018832900000000002",
+        "deviceBytes": "1792",
+        "eligibleCells": "656",
+        "failedRepresentativeRetries": "0",
+        "gpuApproved": "0",
+        "gpuConverged": "0",
+        "gpuCopySeconds": "0",
+        "gpuKernelSeconds": "0",
+        "gpuLaunches": "0",
+        "gpuRejected": "0",
+        "gpuSubmitted": "0",
+        "gpuTransferBytes": "0",
+        "gpuUnsupported": "648",
+        "gpuWallSeconds": "0",
+        "hostBytes": "2048",
+        "liquidCacheHits": "29299",
+        "liquidCacheMisses": "198357",
+        "prepareSeconds": "9.5960000000000027e-06",
+        "reusedCells": "8",
+        "uniqueCells": "648"
+      },
+      "comparison": {
+        "maxScaledBoundary": 0.0,
+        "maxScaledQ": 0.0
+      },
+      "name": "acoustic-2-20steps",
+      "passed": true
+    },
+    {
+      "maxScaledBoundary": 0.0,
+      "maxScaledQ": 1.763047263103403e-14,
+      "name": "acoustic-restart-parity",
+      "passed": true
+    },
+    {
+      "acceptedSteps": 21,
+      "name": "acoustic-rollback-conservation",
+      "passed": true,
+      "retries": 1
+    }
+  ]
+}

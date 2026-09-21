@@ -1,0 +1,228 @@
+{
+  "backend_sha256": "f8b1b19bc851aef6164e9e2353c42b09ab735564340240e1419bd06dcb9fb98d",
+  "passed": true,
+  "solver_sha256": "dc583c91a4e2861467dfd2dfb9fb86aafbae1cf9ecef207619ad0f82ad2b2849",
+  "tests": [
+    {
+      "chemical_potential_evaluations": 0.0,
+      "flash_candidates": 0.0,
+      "fraction_error": 7.771561172376096e-16,
+      "liquid_mass_error": 2.220446049250313e-16,
+      "liquid_transport_change": 0.0006167767464830831,
+      "name": "frozen-cpu-1",
+      "passed": true
+    },
+    {
+      "name": "frozen-cpu-1-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "frozen-cpu-1-restart-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "chemical_potential_evaluations": 0.0,
+      "flash_candidates": 0.0,
+      "fraction_error": 7.771561172376096e-16,
+      "liquid_mass_error": 2.220446049250313e-16,
+      "liquid_transport_change": 0.0006167767464830831,
+      "name": "frozen-cpu-2",
+      "passed": true
+    },
+    {
+      "name": "frozen-cpu-2-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "frozen-cpu-2-restart-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "chemistry-off-cpu",
+      "passed": true,
+      "scaled_error": 0.0,
+      "source_attempts": 0.0
+    },
+    {
+      "name": "viscous-off-cpu",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "conduction-off-cpu",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "diffusion-off-cpu",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "diffusion-off-cpu-gas-work",
+      "passed": true
+    },
+    {
+      "energy_error": 0.0,
+      "flash_candidates": 83280.0,
+      "liquid_inventory_error": 0,
+      "name": "coupled-cpu-True",
+      "passed": true,
+      "source_calls": 5468.0,
+      "species_change": 2.809103129886026e-06
+    },
+    {
+      "energy_error": 0.0,
+      "flash_candidates": 0.0,
+      "liquid_inventory_error": 0.0,
+      "name": "coupled-cpu-False",
+      "passed": true,
+      "source_calls": 3620.0,
+      "species_change": 1.2531892771283637e-06
+    },
+    {
+      "chemical_potential_evaluations": 0.0,
+      "flash_candidates": 0.0,
+      "fraction_error": 7.771561172376096e-16,
+      "liquid_mass_error": 0.0,
+      "liquid_transport_change": 0.0006167767464830831,
+      "name": "frozen-cuda-1",
+      "passed": true
+    },
+    {
+      "name": "frozen-cuda-1-fields",
+      "passed": true,
+      "scaled_error": 1.9412229336535137e-15
+    },
+    {
+      "name": "frozen-cuda-1-restart-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "chemical_potential_evaluations": 0.0,
+      "flash_candidates": 0.0,
+      "fraction_error": 7.771561172376096e-16,
+      "liquid_mass_error": 0.0,
+      "liquid_transport_change": 0.0006167767464830831,
+      "name": "frozen-cuda-2",
+      "passed": true
+    },
+    {
+      "name": "frozen-cuda-2-fields",
+      "passed": true,
+      "scaled_error": 1.9412229336535137e-15
+    },
+    {
+      "name": "frozen-cuda-2-restart-fields",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "chemistry-off-cuda",
+      "passed": true,
+      "scaled_error": 0.0,
+      "source_attempts": 0.0
+    },
+    {
+      "name": "viscous-off-cuda",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "conduction-off-cuda",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "diffusion-off-cuda",
+      "passed": true,
+      "scaled_error": 0.0
+    },
+    {
+      "name": "diffusion-off-cuda-gas-work",
+      "passed": true
+    },
+    {
+      "energy_error": 0.0,
+      "flash_candidates": 83280.0,
+      "liquid_inventory_error": 0,
+      "name": "coupled-cuda-True",
+      "passed": true,
+      "source_calls": 5468.0,
+      "species_change": 2.809103129886026e-06
+    },
+    {
+      "energy_error": 0.0,
+      "flash_candidates": 0.0,
+      "liquid_inventory_error": 0.0,
+      "name": "coupled-cuda-False",
+      "passed": true,
+      "source_calls": 3620.0,
+      "species_change": 1.2531892771283637e-06
+    },
+    {
+      "expected": "Unknown physics option",
+      "name": "unknown",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "combustion and chemistry must agree",
+      "name": "contradictory",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "viscosity requires a finite positive",
+      "name": "missing-coefficient",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "nonreacting mechanism",
+      "name": "no-reactions",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "name": "unused-chemical-settings",
+      "passed": true
+    },
+    {
+      "expected": "Liquid mass is outside",
+      "name": "negative-liquid",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "Liquid mass is outside",
+      "name": "excess-liquid",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "Legacy fingerprint/species/closure mismatch",
+      "name": "phase-restart-mismatch",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "rhoLiquid0",
+      "name": "missing-liquid",
+      "passed": true,
+      "returncode": 1
+    },
+    {
+      "expected": "phaseChange off with liquid mechanical environments is not implemented",
+      "name": "unsupported-mechanical",
+      "passed": true,
+      "returncode": 1
+    }
+  ],
+  "transport_sha256": "b075e375eded2288261fdd891aa996b26ef06e84abcec7025d901b832c56d526"
+}

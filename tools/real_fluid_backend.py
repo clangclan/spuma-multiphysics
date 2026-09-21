@@ -44,6 +44,10 @@ class RealFluidBackend(Backend):
             f=getattr(self.lib,'pintle_rt_'+n);f.argtypes,f.restype=args,ret
     @property
     def physical_hash(self):return self.lib.pintle_rt_physical_model_hash(self.handle).decode()
+    def closure_acceleration(self,reuse=False,cuda=False,library='libpintleReactiveTransport.so'):
+        f=self.lib.pintle_rt_set_closure_acceleration_v1
+        f.argtypes=[C.c_void_p,C.c_int,C.c_int,C.c_char_p];f.restype=C.c_int
+        self.check(f(self.handle,int(reuse),int(cuda),str(library).encode()))
     @property
     def policy_hash(self):return self.lib.pintle_rt_numerical_policy_hash(self.handle).decode()
     def bind_case(self,chemistry,viscosity,conductivity,diffusivity,transport_backend="cpu",gas_properties="auto",

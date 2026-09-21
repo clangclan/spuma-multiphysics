@@ -238,6 +238,38 @@
       "performance_measured": false,
       "default_enabled": false,
       "evidence": []
+    },
+    {
+      "name": "exact-hem-reuse",
+      "status": "implemented",
+      "backend": "cpu",
+      "constraints": "Nonreacting HEM equilibrium; exact batch q/E/full seed; bounded per-recovery pure-liquid p/T memo; all reference candidate/stability/entropy checks retained",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": null,
+      "physics_validated": false,
+      "performance_measured": true,
+      "default_enabled": true,
+      "evidence": [
+        "../../reports/closure-acceleration-20260921.md"
+      ]
+    },
+    {
+      "name": "device-caloric-candidate",
+      "status": "implemented",
+      "backend": "cuda + host approval",
+      "constraints": "NASA7/9 ideal gas / supported Peng-Robinson; zero condensable inventory; one NASA/alpha interval; host same-EOS approval; not device full HEM closure",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": true,
+      "physics_validated": false,
+      "performance_measured": true,
+      "default_enabled": false,
+      "evidence": [
+        "../../reports/closure-acceleration-20260921.md"
+      ]
     }
   ],
   "fieldSemantics": "Independent implementation/integration/model/GPU/physics/performance/default flags. null means not applicable. physics_validated requires the feature-specific physical-accuracy gate, not only CPU/device or regression agreement. default_enabled describes an automatic selection; required explicit model/closure choices are false."

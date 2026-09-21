@@ -27,6 +27,8 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 
 ## 물리 연산 선택과 검증
 
+비반응 HEM 평형에서는 정확한 입력 중복 제거를 기본 사용한다. PR/NASA 온도 후보의 CUDA 경로는 선택 옵션이다. [상평형 탐색 최적화·GPU 범위와 설정](docs/closure-acceleration.ko.md), [검증 및 성능](reports/closure-acceleration-20260921.md)을 참고한다.
+
 [연산 선택 및 의존관계](README.reactive-phase.ko.md#실행할-연산-선택), [selection 검증 보고서](reports/reactive-physics-selection-20260921.md), [검증 집계](results/physics-selection-20260921/validation-summary.json)를 참고한다.
 
 ```bash

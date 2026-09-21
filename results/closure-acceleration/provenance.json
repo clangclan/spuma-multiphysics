@@ -1,0 +1,43 @@
+{
+  "performanceBinaryHashes": {
+    "bin/ReactiveFoam": "dc583c91a4e2861467dfd2dfb9fb86aafbae1cf9ecef207619ad0f82ad2b2849",
+    "lib/libpintleReactiveBackend.so": "be5c19486534ff5d990f15f62c1ba29a825be2547e75321c2e0de884e224b8e3",
+    "lib/libpintleReactiveTransport.so": "b075e375eded2288261fdd891aa996b26ef06e84abcec7025d901b832c56d526"
+  },
+  "note": "Performance samples used identical OFF/ON numerical code. Subsequent changes preserve legacy property-call counts, count only successful reuse, enable reuse by default for supported nonreacting HEM, and allow zero device budget for CPU-only reuse. Final core/contracts and flow/restart/rollback/default tests were rerun; saved R04 performance sample was not rerun.",
+  "finalBinaryHashes": {
+    "bin/ReactiveFoam": "c15ff9b3b457ba28880ca0dea24888c81445329e003ef9d63fc14bd23c815e7f",
+    "lib/libpintleReactiveBackend.so": "3d2cb5c1548c2fccedbbe03c99242d666b616badb118dd8ae87c417d3309fe92",
+    "lib/libpintleReactiveTransport.so": "b075e375eded2288261fdd891aa996b26ef06e84abcec7025d901b832c56d526"
+  },
+  "sourceHashes": {
+    "src/reactiveThermo/pintleCaloricFast.h": "0556f02fa802670af4326417d7b6089909ccb4367f8b852e11029a8351817ee2",
+    "src/reactiveThermo/pintleReactivePool.inc": "c82f769b15574b2bfc4ef5b3e1bf765fb5aaddbab0566f73e42a955658c73d61",
+    "src/reactiveThermo/pintleSparseJacobian.h": "20033058c4e9497356f4c6120164cbb6a192d39e0069e4a2f275d4119c4b3aed",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "999bbc25660f81ab7c3732df8faf0abf533045e7b4b405f75d7e5a7831aed646",
+    "src/reactiveThermo/pintleRecovery.h": "c252c1a70f9109124084ab3f0b1fc244b07af90db5e979801b506777ff67650b",
+    "src/reactiveThermo/pintleRealFluid.h": "483b0a47f0a007e7331aa0c80bc0f0d68118248fbfffc4b563c9aa99a948f8d7",
+    "src/reactiveThermo/pintleClosureAcceleration.h": "877b7a728670372bed5976186b7411175f87a5c99ba2fafb88be6d1c470be0d1",
+    "src/reactiveThermo/pintleCheckpointIdentity.h": "d26b7344c18ed48685c1d9ee28de88a1247cc932635ee3c8111df33a44170291",
+    "src/reactiveThermo/pintleProfilesV21.inc": "71dd6057f59c41a0b8a767d8f16572b287e20db53c50c3b44867654942f02e97",
+    "src/reactiveThermo/pintleSmallSystem.h": "c468c1977bafe1feca1609da9277f8cbc477ec0e5843cbb90cb33b157c5f6d50",
+    "src/reactiveThermo/pintleDirectional.inc": "cb161f706bac11923ace4a821a3805007ebe0f20238bb775e4e0f22b66950d7b",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "2e04de04b7bb00c6918c8c61d6bbbc4576cce4e20e98a97353463fadbac68d12",
+    "src/reactiveThermo/pintleRealFluidAPI.inc": "8008b07e740136ac49096dc20059b992218ca3406b562b1eeb023c25ce726672",
+    "src/reactiveThermo/pintleClosurePool.inc": "15ae9a1208fd7474967ca414bb6c9d7ab78d2bf72d64a77f1e253f61a2b8190c",
+    "src/reactiveThermo/pintleRealFluidV21.h": "fec35b5cf4e98ad69d53442f3dd3fc3d275950556678460250b1e4e3aebb7861",
+    "src/reactiveThermo/pintleGasThermo.h": "c81bafe41dfaab0df27f459a4f2cc549c9d647f293b6ec1b3a62b19c8c5147c1",
+    "src/reactiveThermo/pintleReactiveThermo.h": "3de03e253a095ac72fb4554d124d2c4120d0cc3e51bf032d374aaff473ae78da",
+    "src/reactiveThermo/pintleRecoveryDiagnostics.inc": "3016c0c0b51825a7a5d42874fd9192a4c1140e5910d34c7b98e80971a35114d9",
+    "src/reactiveTransport/pintleReactiveTransport.h": "bf350bb3cb77ada8739150d5d92b30c0accc9403d7d7c8b847ab812c253368a5",
+    "src/reactiveTransport/pintleReactiveTransport.cu": "eb0c299157148b539652dca464b7dd189c38cbaafdcd8699d0283fe0ea93797e",
+    "src/reactiveTransport/pintleClosureScalar.cuh": "d69025bc82f785d153bba98fe52fb6586f2ed2a2713f92e07675a8f98c71c1ac",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "be25d283fa2a760dca4fd5f135a11600b31934d206fe4132bc538dea2de5abc0",
+    "src/reactiveTransport/pintleTransportKernels.h": "4a0cb55363c0fea76e8f96649b1f0334ecb1363d4bad979ed62e250859190e47",
+    "src/reactiveTransport/pintleTransportV21.h": "d59cdb48f63eaf524cd997699490464646ced353f006e4a5109191bea00f7216",
+    "src/reactiveFoam/reactiveDiagnostics.H": "d662730976689b8b10dea6daee04a94d52a1b04fb9310ddedab56763788b64c9",
+    "src/reactiveFoam/reactiveCheckpoint.H": "b99b09cfeab572a13dd6149335f591ab42bdbe62d68e73f371df4fcdc54f3552",
+    "src/reactiveFoam/reactivePhysics.H": "e08bfb3d7d56afb21dc6316f88c3ea3578ac270fe82fa77380ae48f2bc420026",
+    "src/reactiveFoam/ReactiveFoam.C": "154d3d331b2a55382694172a5a7a3f586c601185a80d86f4931ab3c5fb06b805"
+  }
+}

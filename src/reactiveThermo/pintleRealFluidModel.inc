@@ -79,6 +79,21 @@
         ++realProfile.scalarAttempts;checkMass(q,{});
         const double rho=std::accumulate(q.begin(),q.end(),0.);
         Vector Y=q;for(double& y:Y)y/=rho;
+        if(scalarCandidate.success) {
+            const auto candidate=scalarCandidate;scalarCandidate={};
+            try {
+                // Device temperature is only a candidate. Preserve the initial
+                // branch check and the complete public same-EOS approval.
+                setTRho(std::clamp(guess.T,Tmin,Tmax),rho,Y,-1);
+                auto result=evaluate(q,{},candidate.p,candidate.T);
+                result.state.volumeResidual=std::abs(result.volume-1);
+                result.state.energyResidual=std::abs(result.energy-energy)/energyScale(result);
+                result.state.iterations=candidate.iterations;
+                require(result.state.volumeResidual<=vtol&&result.state.energyResidual<=etol,
+                    "Device caloric candidate failed full same-EOS approval");
+                ++gpuApproved;++realProfile.scalarAccepted;return result;
+            } catch(const std::exception&) {++gpuRejected;}
+        }
         std::unique_ptr<PintleFixedCaloric> fast;
         if(caloric->supported)fast=std::make_unique<PintleFixedCaloric>(*caloric,Y,weights,cost);
         auto probe=[&](double T) {

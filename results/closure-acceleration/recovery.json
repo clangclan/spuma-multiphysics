@@ -1,0 +1,1695 @@
+{
+  "tests": [
+    {
+      "name": "normal-0",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-1",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-2",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-3",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-4",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-5",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-6",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-7",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-8",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-9",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-10",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-11",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-12",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-13",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-14",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-15",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-16",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-17",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-18",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-19",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-20",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-21",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-22",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-23",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-24",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-25",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-26",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-27",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-28",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-29",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-30",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-31",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-32",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-33",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "normal-34",
+      "passed": true,
+      "bitwiseIdentical": true
+    },
+    {
+      "name": "captured-0",
+      "passed": true
+    },
+    {
+      "name": "captured-1",
+      "passed": true
+    },
+    {
+      "name": "captured-2",
+      "passed": true
+    },
+    {
+      "name": "captured-3",
+      "passed": true
+    },
+    {
+      "name": "captured-4",
+      "passed": true
+    },
+    {
+      "name": "captured-5",
+      "passed": true
+    },
+    {
+      "name": "captured-6",
+      "passed": true
+    },
+    {
+      "name": "captured-7",
+      "passed": true
+    },
+    {
+      "name": "captured-8",
+      "passed": true
+    },
+    {
+      "name": "captured-9",
+      "passed": true
+    },
+    {
+      "name": "captured-10",
+      "passed": true
+    },
+    {
+      "name": "captured-11",
+      "passed": true
+    },
+    {
+      "name": "captured-12",
+      "passed": true
+    },
+    {
+      "name": "captured-13",
+      "passed": true
+    },
+    {
+      "name": "captured-14",
+      "passed": true
+    },
+    {
+      "name": "captured-15",
+      "passed": true
+    },
+    {
+      "name": "captured-16",
+      "passed": true
+    },
+    {
+      "name": "captured-17",
+      "passed": true
+    },
+    {
+      "name": "captured-18",
+      "passed": true
+    },
+    {
+      "name": "captured-19",
+      "passed": true
+    },
+    {
+      "name": "captured-20",
+      "passed": true
+    },
+    {
+      "name": "captured-21",
+      "passed": true
+    },
+    {
+      "name": "captured-22",
+      "passed": true
+    },
+    {
+      "name": "captured-23",
+      "passed": true
+    },
+    {
+      "name": "captured-24",
+      "passed": true
+    },
+    {
+      "name": "captured-25",
+      "passed": true
+    },
+    {
+      "name": "captured-26",
+      "passed": true
+    },
+    {
+      "name": "captured-27",
+      "passed": true
+    },
+    {
+      "name": "captured-28",
+      "passed": true
+    },
+    {
+      "name": "captured-29",
+      "passed": true
+    },
+    {
+      "name": "captured-30",
+      "passed": true
+    },
+    {
+      "name": "captured-31",
+      "passed": true
+    },
+    {
+      "name": "captured-32",
+      "passed": true
+    },
+    {
+      "name": "captured-33",
+      "passed": true
+    },
+    {
+      "name": "captured-34",
+      "passed": true
+    },
+    {
+      "name": "captured-35",
+      "passed": true
+    },
+    {
+      "name": "captured-36",
+      "passed": true
+    },
+    {
+      "name": "captured-37",
+      "passed": true
+    },
+    {
+      "name": "captured-38",
+      "passed": true
+    },
+    {
+      "name": "captured-39",
+      "passed": true
+    },
+    {
+      "name": "captured-40",
+      "passed": true
+    },
+    {
+      "name": "captured-41",
+      "passed": true
+    },
+    {
+      "name": "captured-42",
+      "passed": true
+    },
+    {
+      "name": "captured-43",
+      "passed": true
+    },
+    {
+      "name": "captured-44",
+      "passed": true
+    },
+    {
+      "name": "captured-45",
+      "passed": true
+    },
+    {
+      "name": "captured-46",
+      "passed": true
+    },
+    {
+      "name": "captured-47",
+      "passed": true
+    },
+    {
+      "name": "captured-48",
+      "passed": true
+    },
+    {
+      "name": "captured-49",
+      "passed": true
+    },
+    {
+      "name": "captured-50",
+      "passed": true
+    },
+    {
+      "name": "captured-51",
+      "passed": true
+    },
+    {
+      "name": "captured-52",
+      "passed": true
+    },
+    {
+      "name": "captured-53",
+      "passed": true
+    },
+    {
+      "name": "captured-54",
+      "passed": true
+    },
+    {
+      "name": "captured-55",
+      "passed": true
+    },
+    {
+      "name": "captured-56",
+      "passed": true
+    },
+    {
+      "name": "captured-57",
+      "passed": true
+    },
+    {
+      "name": "captured-58",
+      "passed": true
+    },
+    {
+      "name": "captured-59",
+      "passed": true
+    },
+    {
+      "name": "captured-60",
+      "passed": true
+    },
+    {
+      "name": "captured-61",
+      "passed": true
+    },
+    {
+      "name": "captured-62",
+      "passed": true
+    },
+    {
+      "name": "captured-63",
+      "passed": true
+    },
+    {
+      "name": "captured-64",
+      "passed": true
+    },
+    {
+      "name": "captured-65",
+      "passed": true
+    },
+    {
+      "name": "captured-66",
+      "passed": true
+    },
+    {
+      "name": "captured-67",
+      "passed": true
+    },
+    {
+      "name": "captured-68",
+      "passed": true
+    },
+    {
+      "name": "captured-69",
+      "passed": true
+    },
+    {
+      "name": "captured-70",
+      "passed": true
+    },
+    {
+      "name": "captured-71",
+      "passed": true
+    },
+    {
+      "name": "captured-72",
+      "passed": true
+    },
+    {
+      "name": "captured-73",
+      "passed": true
+    },
+    {
+      "name": "captured-74",
+      "passed": true
+    },
+    {
+      "name": "captured-75",
+      "passed": true
+    },
+    {
+      "name": "captured-76",
+      "passed": true
+    },
+    {
+      "name": "captured-77",
+      "passed": true
+    },
+    {
+      "name": "captured-78",
+      "passed": true
+    },
+    {
+      "name": "captured-79",
+      "passed": true
+    },
+    {
+      "name": "captured-80",
+      "passed": true
+    },
+    {
+      "name": "captured-81",
+      "passed": true
+    },
+    {
+      "name": "captured-82",
+      "passed": true
+    },
+    {
+      "name": "captured-83",
+      "passed": true
+    },
+    {
+      "name": "captured-84",
+      "passed": true
+    },
+    {
+      "name": "captured-85",
+      "passed": true
+    },
+    {
+      "name": "captured-86",
+      "passed": true
+    },
+    {
+      "name": "captured-87",
+      "passed": true
+    },
+    {
+      "name": "captured-88",
+      "passed": true
+    },
+    {
+      "name": "captured-89",
+      "passed": true
+    },
+    {
+      "name": "captured-90",
+      "passed": true
+    },
+    {
+      "name": "captured-91",
+      "passed": true
+    },
+    {
+      "name": "captured-92",
+      "passed": true
+    },
+    {
+      "name": "captured-93",
+      "passed": true
+    },
+    {
+      "name": "captured-94",
+      "passed": true
+    },
+    {
+      "name": "captured-95",
+      "passed": true
+    },
+    {
+      "name": "captured-96",
+      "passed": true
+    },
+    {
+      "name": "captured-97",
+      "passed": true
+    },
+    {
+      "name": "captured-98",
+      "passed": true
+    },
+    {
+      "name": "captured-99",
+      "passed": true
+    },
+    {
+      "name": "captured-100",
+      "passed": true
+    },
+    {
+      "name": "captured-101",
+      "passed": true
+    },
+    {
+      "name": "captured-102",
+      "passed": true
+    },
+    {
+      "name": "captured-103",
+      "passed": true
+    },
+    {
+      "name": "captured-104",
+      "passed": true
+    },
+    {
+      "name": "captured-105",
+      "passed": true
+    },
+    {
+      "name": "captured-106",
+      "passed": true
+    },
+    {
+      "name": "captured-107",
+      "passed": true
+    },
+    {
+      "name": "captured-108",
+      "passed": true
+    },
+    {
+      "name": "captured-109",
+      "passed": true
+    },
+    {
+      "name": "captured-110",
+      "passed": true
+    },
+    {
+      "name": "captured-111",
+      "passed": true
+    },
+    {
+      "name": "captured-112",
+      "passed": true
+    },
+    {
+      "name": "captured-113",
+      "passed": true
+    },
+    {
+      "name": "captured-114",
+      "passed": true
+    },
+    {
+      "name": "captured-115",
+      "passed": true
+    },
+    {
+      "name": "captured-116",
+      "passed": true
+    },
+    {
+      "name": "captured-117",
+      "passed": true
+    },
+    {
+      "name": "captured-118",
+      "passed": true
+    },
+    {
+      "name": "captured-119",
+      "passed": true
+    },
+    {
+      "name": "captured-120",
+      "passed": true
+    },
+    {
+      "name": "captured-121",
+      "passed": true
+    },
+    {
+      "name": "captured-122",
+      "passed": true
+    },
+    {
+      "name": "captured-123",
+      "passed": true
+    },
+    {
+      "name": "captured-124",
+      "passed": true
+    },
+    {
+      "name": "captured-125",
+      "passed": true
+    },
+    {
+      "name": "captured-126",
+      "passed": true
+    },
+    {
+      "name": "captured-127",
+      "passed": true
+    },
+    {
+      "name": "captured-128",
+      "passed": true
+    },
+    {
+      "name": "captured-129",
+      "passed": true
+    },
+    {
+      "name": "captured-130",
+      "passed": true
+    },
+    {
+      "name": "captured-131",
+      "passed": true
+    },
+    {
+      "name": "captured-132",
+      "passed": true
+    },
+    {
+      "name": "captured-133",
+      "passed": true
+    },
+    {
+      "name": "captured-134",
+      "passed": true
+    },
+    {
+      "name": "captured-135",
+      "passed": true
+    },
+    {
+      "name": "captured-136",
+      "passed": true
+    },
+    {
+      "name": "captured-137",
+      "passed": true
+    },
+    {
+      "name": "captured-138",
+      "passed": true
+    },
+    {
+      "name": "captured-139",
+      "passed": true
+    },
+    {
+      "name": "captured-140",
+      "passed": true
+    },
+    {
+      "name": "captured-141",
+      "passed": true
+    },
+    {
+      "name": "captured-142",
+      "passed": true
+    },
+    {
+      "name": "captured-143",
+      "passed": true
+    },
+    {
+      "name": "captured-144",
+      "passed": true
+    },
+    {
+      "name": "captured-145",
+      "passed": true
+    },
+    {
+      "name": "captured-146",
+      "passed": true
+    },
+    {
+      "name": "captured-147",
+      "passed": true
+    },
+    {
+      "name": "captured-148",
+      "passed": true
+    },
+    {
+      "name": "captured-149",
+      "passed": true
+    },
+    {
+      "name": "captured-150",
+      "passed": true
+    },
+    {
+      "name": "captured-151",
+      "passed": true
+    },
+    {
+      "name": "captured-152",
+      "passed": true
+    },
+    {
+      "name": "captured-153",
+      "passed": true
+    },
+    {
+      "name": "captured-154",
+      "passed": true
+    },
+    {
+      "name": "captured-155",
+      "passed": true
+    },
+    {
+      "name": "captured-156",
+      "passed": true
+    },
+    {
+      "name": "captured-157",
+      "passed": true
+    },
+    {
+      "name": "captured-158",
+      "passed": true
+    },
+    {
+      "name": "captured-159",
+      "passed": true
+    },
+    {
+      "name": "captured-160",
+      "passed": true
+    },
+    {
+      "name": "captured-161",
+      "passed": true
+    },
+    {
+      "name": "captured-162",
+      "passed": true
+    },
+    {
+      "name": "captured-163",
+      "passed": true
+    },
+    {
+      "name": "captured-164",
+      "passed": true
+    },
+    {
+      "name": "captured-165",
+      "passed": true
+    },
+    {
+      "name": "captured-166",
+      "passed": true
+    },
+    {
+      "name": "captured-167",
+      "passed": true
+    },
+    {
+      "name": "captured-168",
+      "passed": true
+    },
+    {
+      "name": "captured-169",
+      "passed": true
+    },
+    {
+      "name": "captured-170",
+      "passed": true
+    },
+    {
+      "name": "captured-171",
+      "passed": true
+    },
+    {
+      "name": "captured-172",
+      "passed": true
+    },
+    {
+      "name": "captured-173",
+      "passed": true
+    },
+    {
+      "name": "captured-174",
+      "passed": true
+    },
+    {
+      "name": "captured-175",
+      "passed": true
+    },
+    {
+      "name": "captured-176",
+      "passed": true
+    },
+    {
+      "name": "captured-177",
+      "passed": true
+    },
+    {
+      "name": "captured-178",
+      "passed": true
+    },
+    {
+      "name": "captured-179",
+      "passed": true
+    },
+    {
+      "name": "captured-180",
+      "passed": true
+    },
+    {
+      "name": "captured-181",
+      "passed": true
+    },
+    {
+      "name": "captured-182",
+      "passed": true
+    },
+    {
+      "name": "captured-183",
+      "passed": true
+    },
+    {
+      "name": "captured-184",
+      "passed": true
+    },
+    {
+      "name": "captured-185",
+      "passed": true
+    },
+    {
+      "name": "captured-186",
+      "passed": true
+    },
+    {
+      "name": "captured-187",
+      "passed": true
+    },
+    {
+      "name": "captured-188",
+      "passed": true
+    },
+    {
+      "name": "captured-189",
+      "passed": true
+    },
+    {
+      "name": "captured-190",
+      "passed": true
+    },
+    {
+      "name": "captured-191",
+      "passed": true
+    },
+    {
+      "name": "captured-192",
+      "passed": true
+    },
+    {
+      "name": "captured-193",
+      "passed": true
+    },
+    {
+      "name": "captured-194",
+      "passed": true
+    },
+    {
+      "name": "captured-195",
+      "passed": true
+    },
+    {
+      "name": "captured-196",
+      "passed": true
+    },
+    {
+      "name": "captured-197",
+      "passed": true
+    },
+    {
+      "name": "captured-198",
+      "passed": true
+    },
+    {
+      "name": "captured-199",
+      "passed": true
+    },
+    {
+      "name": "captured-200",
+      "passed": true
+    },
+    {
+      "name": "captured-201",
+      "passed": true
+    },
+    {
+      "name": "captured-202",
+      "passed": true
+    },
+    {
+      "name": "captured-203",
+      "passed": true
+    },
+    {
+      "name": "captured-204",
+      "passed": true
+    },
+    {
+      "name": "captured-205",
+      "passed": true
+    },
+    {
+      "name": "captured-206",
+      "passed": true
+    },
+    {
+      "name": "captured-207",
+      "passed": true
+    },
+    {
+      "name": "captured-208",
+      "passed": true
+    },
+    {
+      "name": "captured-209",
+      "passed": true
+    },
+    {
+      "name": "captured-210",
+      "passed": true
+    },
+    {
+      "name": "captured-211",
+      "passed": true
+    },
+    {
+      "name": "captured-212",
+      "passed": true
+    },
+    {
+      "name": "captured-213",
+      "passed": true
+    },
+    {
+      "name": "captured-214",
+      "passed": true
+    },
+    {
+      "name": "captured-215",
+      "passed": true
+    },
+    {
+      "name": "captured-216",
+      "passed": true
+    },
+    {
+      "name": "captured-217",
+      "passed": true
+    },
+    {
+      "name": "captured-218",
+      "passed": true
+    },
+    {
+      "name": "captured-219",
+      "passed": true
+    },
+    {
+      "name": "captured-220",
+      "passed": true
+    },
+    {
+      "name": "captured-221",
+      "passed": true
+    },
+    {
+      "name": "captured-222",
+      "passed": true
+    },
+    {
+      "name": "captured-223",
+      "passed": true
+    },
+    {
+      "name": "captured-224",
+      "passed": true
+    },
+    {
+      "name": "captured-225",
+      "passed": true
+    },
+    {
+      "name": "captured-226",
+      "passed": true
+    },
+    {
+      "name": "captured-227",
+      "passed": true
+    },
+    {
+      "name": "captured-228",
+      "passed": true
+    },
+    {
+      "name": "captured-229",
+      "passed": true
+    },
+    {
+      "name": "captured-230",
+      "passed": true
+    },
+    {
+      "name": "captured-231",
+      "passed": true
+    },
+    {
+      "name": "captured-232",
+      "passed": true
+    },
+    {
+      "name": "captured-233",
+      "passed": true
+    },
+    {
+      "name": "captured-234",
+      "passed": true
+    },
+    {
+      "name": "captured-235",
+      "passed": true
+    },
+    {
+      "name": "captured-236",
+      "passed": true
+    },
+    {
+      "name": "captured-237",
+      "passed": true
+    },
+    {
+      "name": "captured-238",
+      "passed": true
+    },
+    {
+      "name": "captured-239",
+      "passed": true
+    },
+    {
+      "name": "captured-240",
+      "passed": true
+    },
+    {
+      "name": "captured-241",
+      "passed": true
+    },
+    {
+      "name": "captured-242",
+      "passed": true
+    },
+    {
+      "name": "captured-243",
+      "passed": true
+    },
+    {
+      "name": "captured-244",
+      "passed": true
+    },
+    {
+      "name": "captured-245",
+      "passed": true
+    },
+    {
+      "name": "captured-246",
+      "passed": true
+    },
+    {
+      "name": "captured-247",
+      "passed": true
+    },
+    {
+      "name": "captured-248",
+      "passed": true
+    },
+    {
+      "name": "captured-249",
+      "passed": true
+    },
+    {
+      "name": "captured-250",
+      "passed": true
+    },
+    {
+      "name": "captured-251",
+      "passed": true
+    },
+    {
+      "name": "captured-252",
+      "passed": true
+    },
+    {
+      "name": "captured-253",
+      "passed": true
+    },
+    {
+      "name": "captured-254",
+      "passed": true
+    },
+    {
+      "name": "captured-255",
+      "passed": true
+    },
+    {
+      "name": "trace-air-0.0-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-0.0-0.0",
+      "passed": true,
+      "relativeError": 5.467168939787825e-09,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.0-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.884323568083346e-08
+    },
+    {
+      "name": "trace-seed-0.0-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6924533527344466e-08
+    },
+    {
+      "name": "trace-air-0.0-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-0.0-0.2",
+      "passed": true,
+      "relativeError": 4.55422452305676e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.0-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.1277074983295473e-10
+    },
+    {
+      "name": "trace-seed-0.0-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.127713975703419e-10
+    },
+    {
+      "name": "trace-air-0.01-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-0.01-0.0",
+      "passed": true,
+      "relativeError": 1.5010594109576836e-05,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.01-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 6.468649599420378e-10
+    },
+    {
+      "name": "trace-seed-0.01-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 7.661546116376268e-06
+    },
+    {
+      "name": "trace-air-0.01-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-0.01-0.2",
+      "passed": true,
+      "relativeError": 3.0091446145963374e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-0.01-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.7296002897241073e-10
+    },
+    {
+      "name": "trace-seed-0.01-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.60472572447011e-10
+    },
+    {
+      "name": "trace-air-0.001-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-0.001-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.114022383029319e-09
+    },
+    {
+      "name": "trace-seed-0.001-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.233723075521004e-09
+    },
+    {
+      "name": "trace-air-0.001-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-0.001-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.396885892812133e-11
+    },
+    {
+      "name": "trace-seed-0.001-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.3219976991000256e-11
+    },
+    {
+      "name": "trace-air-0.0001-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-0.0001-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 8.016896370170145e-08
+    },
+    {
+      "name": "trace-seed-0.0001-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 8.382914712178587e-09
+    },
+    {
+      "name": "trace-air-0.0001-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-0.0001-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.5226459033550486e-10
+    },
+    {
+      "name": "trace-seed-0.0001-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.5226459033550486e-10
+    },
+    {
+      "name": "trace-air-1e-05-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-05-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.3969111998447506e-08
+    },
+    {
+      "name": "trace-seed-1e-05-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.833984437439695e-08
+    },
+    {
+      "name": "trace-air-1e-05-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-05-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.086759637852424e-10
+    },
+    {
+      "name": "trace-seed-1e-05-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.935786063230508e-10
+    },
+    {
+      "name": "trace-air-1e-06-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-06-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.7407603395192147e-08
+    },
+    {
+      "name": "trace-seed-1e-06-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.7838408387746596e-08
+    },
+    {
+      "name": "trace-air-1e-06-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-06-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.318389555613441e-10
+    },
+    {
+      "name": "trace-seed-1e-06-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.075933166914899e-10
+    },
+    {
+      "name": "trace-air-1e-07-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-1e-07-0.0",
+      "passed": true,
+      "relativeError": 3.923794755777976e-08,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-07-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.2324616930119315e-08
+    },
+    {
+      "name": "trace-seed-1e-07-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 6.081348155535065e-08
+    },
+    {
+      "name": "trace-air-1e-07-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-1e-07-0.2",
+      "passed": true,
+      "relativeError": 4.557546603445317e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-07-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.828592101897641e-10
+    },
+    {
+      "name": "trace-seed-1e-07-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 7.134852767236288e-10
+    },
+    {
+      "name": "trace-air-1e-08-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-08-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.3706016293950347e-08
+    },
+    {
+      "name": "trace-seed-1e-08-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6886257853080566e-08
+    },
+    {
+      "name": "trace-air-1e-08-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-08-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.1730967973792495e-11
+    },
+    {
+      "name": "trace-seed-1e-08-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.4757328533753476e-10
+    },
+    {
+      "name": "trace-air-1e-09-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-09-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.7529476539590495e-08
+    },
+    {
+      "name": "trace-seed-1e-09-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 3.364582896057351e-08
+    },
+    {
+      "name": "trace-air-1e-09-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-09-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.2843287881419196e-10
+    },
+    {
+      "name": "trace-seed-1e-09-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.2843287881419196e-10
+    },
+    {
+      "name": "trace-air-1e-10-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-10-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.8856601778338023e-08
+    },
+    {
+      "name": "trace-seed-1e-10-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.7878824178529715e-08
+    },
+    {
+      "name": "trace-air-1e-10-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-10-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.440942931722646e-10
+    },
+    {
+      "name": "trace-seed-1e-10-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.6968442451203034e-10
+    },
+    {
+      "name": "trace-air-1e-11-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-11-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 5.9389188083032427e-08
+    },
+    {
+      "name": "trace-seed-1e-11-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 1.6938207437130214e-08
+    },
+    {
+      "name": "trace-air-1e-11-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-11-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 3.671194144962048e-10
+    },
+    {
+      "name": "trace-seed-1e-11-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 6.696776776691565e-10
+    },
+    {
+      "name": "trace-air-1e-12-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-12-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 7.865824146543362e-08
+    },
+    {
+      "name": "trace-seed-1e-12-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.8625911213797776e-08
+    },
+    {
+      "name": "trace-air-1e-12-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-12-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.1556998197538785e-10
+    },
+    {
+      "name": "trace-seed-1e-12-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 4.508820926732605e-10
+    },
+    {
+      "name": "trace-air-1e-13-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-13-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 1.8818013952100457e-08
+    },
+    {
+      "name": "trace-seed-1e-13-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 9.18407837599613e-08
+    },
+    {
+      "name": "trace-air-1e-13-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "trace-seed-1e-13-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.5328436184265257e-10
+    },
+    {
+      "name": "trace-seed-1e-13-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.96304447632067e-11
+    },
+    {
+      "name": "trace-air-1e-14-n2o-0.0",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-1e-14-0.0",
+      "passed": true,
+      "relativeError": 4.897908278955754e-08,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-14-0.0-0.98",
+      "passed": true,
+      "maxScaledDifference": 4.133391374399833e-08
+    },
+    {
+      "name": "trace-seed-1e-14-0.0-1.02",
+      "passed": true,
+      "maxScaledDifference": 2.1185207149105305e-08
+    },
+    {
+      "name": "trace-air-1e-14-n2o-0.2",
+      "passed": true
+    },
+    {
+      "name": "acoustic-direction-1e-14-0.2",
+      "passed": true,
+      "relativeError": 4.552546413183478e-07,
+      "step": 1e-05
+    },
+    {
+      "name": "trace-seed-1e-14-0.2-0.98",
+      "passed": true,
+      "maxScaledDifference": 2.6683671209319028e-11
+    },
+    {
+      "name": "trace-seed-1e-14-0.2-1.02",
+      "passed": true,
+      "maxScaledDifference": 5.129808056178845e-11
+    },
+    {
+      "name": "negative",
+      "passed": true,
+      "error": "Negative or non-finite conserved chemical species mass"
+    },
+    {
+      "name": "nonfinite",
+      "passed": true,
+      "error": "No stable UV flash candidate: Non-finite conserved internal energy"
+    },
+    {
+      "name": "pool-1",
+      "passed": true,
+      "count": 319,
+      "bitwiseIdentical": true,
+      "error": ""
+    },
+    {
+      "name": "pool-24",
+      "passed": true,
+      "count": 319,
+      "bitwiseIdentical": true,
+      "error": ""
+    },
+    {
+      "name": "pool-failure-id-budget-rollback",
+      "passed": true,
+      "failedCells": 30,
+      "details": 16,
+      "omittedDetails": 14
+    }
+  ],
+  "runtime": {
+    "schema": 1,
+    "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-acceleration/lib/libpintleReactiveBackend.so",
+    "backendSha256": "be5c19486534ff5d990f15f62c1ba29a825be2547e75321c2e0de884e224b8e3",
+    "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/r04_reactive_ambient_20260921/case/thermo/cold-pr-config.yaml",
+    "physicalModelHash": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+    "numericalPolicyHash": "f65618ce7d54804e4adce780dd05fc71f587715f168b9415a2c293be532b55ba",
+    "modelFingerprint": "c3bbca5b6d6d99e6a838eade9f023a44e704736e6d29ef201cc699f5f4f53494",
+    "eos": "Peng-Robinson",
+    "closureBackend": "cpu",
+    "chemistryBackend": "cpu",
+    "deviceFullClosure": false,
+    "deviceChemistryIntegration": false,
+    "exactBatchReuse": false,
+    "deviceCaloricCandidates": false,
+    "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval"
+  },
+  "passed": true,
+  "testCount": 388,
+  "rawReportSha256": "bad369e370627e5a99daff97973aea89bc1e6bc6e111bb64129f87859b16df9a",
+  "rawReportLocalPath": "logs/closure-recovery-full.json"
+}

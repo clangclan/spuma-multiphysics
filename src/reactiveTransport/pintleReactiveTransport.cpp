@@ -660,3 +660,5 @@ extern "C" int pintle_transport_profile_v21(void* handle,PintleTransportProfileV
         if(t.v.gasCounters){t.execution.download(&result.nasaFaceEvaluations,t.v.gasCounters,1);t.execution.finish();}
         *out=result;});
 }
+
+#include "pintleClosureScalar.cuh"
