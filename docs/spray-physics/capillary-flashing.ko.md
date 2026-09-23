@@ -2,7 +2,9 @@
 
 `physics.surfaceTension true`는 독립 액체 질량 수송, 계면 기하, 모세관 응력,
 곡률을 반영한 상평형, 표면에너지 회계를 함께 활성화한다. 상수 표면장력을
-사용하는 1차 diffuse-interface 모델이다. PLIC VOF 또는 이미 검증된 액주 분열
+사용하며 기본값은 1차 diffuse-interface 모델이다. 균일 Cartesian 메시에서는
+`capillaryGeometry cartesianImplicit`로 [GPU C² 계면 복원 모델](../../reports/implicit-static-drop-20260923.ko.md)을
+선택할 수 있다. 해당 모델의 면적은 sharp 계면 적분으로 계산하며 별도의 검증 범위를 갖는다. PLIC VOF 또는 이미 검증된 액주 분열
 모델이라는 의미는 아니다. 실제 시험 결과는 별도 검증 기록과 함께 판단한다.
 
 ## 사용 조건

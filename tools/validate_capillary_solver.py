@@ -88,8 +88,12 @@ def drop_quadrupole(color: np.ndarray, grid: CartesianGrid) -> float:
     return float(np.sum(color * (2 * z * z - x * x - y * y)) * np.prod(grid.spacing))
 
 
-def pressure_jump(color: np.ndarray, p: np.ndarray, grid: CartesianGrid, radius: float) -> dict:
-    r = np.linalg.norm(grid.centers - np.asarray(grid.lengths) / 2, axis=1)
+def pressure_jump(color: np.ndarray, p: np.ndarray, grid: CartesianGrid, radius: float,
+                  center: list[float] | None = None) -> dict:
+    center = np.asarray(grid.lengths) / 2 if center is None else np.asarray(center)
+    if center.shape != (3,) or not np.isfinite(center).all():
+        raise ValueError('invalid drop center')
+    r = np.linalg.norm(grid.centers - center, axis=1)
     interior = (r < .65 * radius) & (color > .99)
     exterior = (r > 1.5 * radius) & (color < .01)
     if not np.any(interior) or not np.any(exterior):
@@ -258,7 +262,7 @@ def analyze(case: Path, sigma: float, surface_energy_field: str | None,
                         "maxErrorPerM": float(np.max(abs(defect))),
                     }
         if definition["kind"] == "sphere":
-            row["pressure"] = pressure_jump(color, p, grid, float(definition["radiusM"]))
+            row["pressure"] = pressure_jump(color, p, grid, float(definition["radiusM"]), definition.get("centerM"))
         elif definition["kind"] == "wave":
             row["waveAmplitudeM"] = wave_amplitude(color, grid)
         elif definition["kind"] == "drop":
@@ -322,7 +326,7 @@ def summarize_series(results: list[dict]) -> dict:
     base = spheres[0]
     mismatches = []
     for r in spheres[1:]:
-        for key in ("lengthsM", "radiusM", "temperatureK", "pressurePa", "phaseChange", "surfaceTension"):
+        for key in ("lengthsM", "radiusM", "centerM", "temperatureK", "pressurePa", "phaseChange", "surfaceTension", "primitivePhasePressure", "geometry"):
             if r["geometry"].get(key) != base["geometry"].get(key):
                 mismatches.append(f"{key}: {r.get('case', 'case')}")
         if r["sigmaNPerM"] != base["sigmaNPerM"]:

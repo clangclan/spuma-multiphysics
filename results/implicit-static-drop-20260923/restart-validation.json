@@ -1,0 +1,19 @@
+{
+  "reference": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/static-convergence-20260923/solver-metric-n16",
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/static-convergence-20260923/solver-metric-restart-n16",
+  "matchingHistory": false,
+  "fields": [
+    "q0",
+    "q1",
+    "q2",
+    "q3",
+    "rhoMomentum",
+    "rhoTotalEnergy",
+    "rhoLiquid0"
+  ],
+  "bitwiseEqual": true,
+  "differences": [],
+  "restartTimeS": 1.87549209497544e-08,
+  "implicitCoefficientsBitwise": true,
+  "geometryFieldsBitwise": true
+}

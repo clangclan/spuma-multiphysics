@@ -526,5 +526,30 @@ PINTLE_HD inline Output recoverCapillary(const Model& model,const Input& input,
     if(ok){out.state=result.state;out.success=1;}else out.status=1;
     return out;
 }
+// Primitive initialization at prescribed mechanical p,T. Preserve total
+// species fractions and condensed fractions while normalizing phase volumes
+// at pg=p-cJ and pl=p+(1-c)J. This is initialization, not a time-step source.
+PINTLE_HD inline Output initializeCapillaryTP(const Model& model,const Input& input,
+    double color,double pressureJump,double* massDensity,double& energyDensity,
+    const PintleDevicePRPurePhaseCache::PureReportedPhaseCache* cache=nullptr){
+    Output out{};
+    if(model.nl!=1||model.condensedKind[0]!=0||!finite(color)||color<0||color>1
+       ||!finite(pressureJump)){out.status=2;return out;}
+    Input normalized=input;
+    double liquid[2]{input.guess.liquidMass[0],0};
+    Flash first(model,input,out.counters,cache,color,pressureJump);
+    Evaluation unit{};
+    if(!first.evaluate(liquid,input.guess.p,input.guess.T,unit)
+       ||!finite(unit.volume)||!(unit.volume>0)){out.status=1;return out;}
+    for(int k=0;k<model.ns;++k)normalized.q[k]/=unit.volume;
+    liquid[0]/=unit.volume;
+    Flash second(model,normalized,out.counters,cache,color,pressureJump);
+    Evaluation value{};
+    if(!second.evaluate(liquid,input.guess.p,input.guess.T,value)
+       ||!finite(value.energy)||::fabs(value.volume-1)>model.vtol){out.status=1;return out;}
+    value.state.volumeResidual=::fabs(value.volume-1);
+    for(int k=0;k<model.ns;++k)massDensity[k]=normalized.q[k];
+    energyDensity=value.energy;out.state=value.state;out.success=1;return out;
+}
 }
 #endif

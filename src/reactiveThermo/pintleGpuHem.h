@@ -49,11 +49,21 @@ typedef struct PintleGpuHemCapillaryInputV2 {
 int pintle_gpu_hem_run_v2(void*,const double* q,const double* energy,
     const PintleGpuHemCapillaryInputV2* capillary,size_t count,
     PintleThermoState* state,int* success,PintleGpuHemProfileV1* profile,char* error,size_t errorSize);
+// Initialize primitive p,T (from state), preserving the input mass fractions
+// and liquid partition. q/energy become normalized bulk densities. Requires
+// capillary.equilibrium=0. All q/energy/states remain unchanged unless every
+// cell succeeds; success flags and profile still report failed evaluations.
+int pintle_gpu_hem_initialize_tp_v1(void*,double* q,double* energy,
+    const PintleGpuHemCapillaryInputV2* capillary,size_t count,
+    PintleThermoState* state,int* success,PintleGpuHemProfileV1* profile,char* error,size_t errorSize);
 // Transactional public pool bridge for an already configured strict CUDA HEM
 // pool. `q` is cell-major with stride, and color/jump are contiguous per cell.
 // On any cell failure, states stay unchanged. The pool has no CPU fallback.
 int pintle_rt_pool_capillary_batch_v1(void* pool,PintleBatchToken token,int equilibrium,
     size_t count,size_t stride,const double* q,const double* bulkEnergy,
+    const double* color,const double* pressureJump,PintleThermoState* state);
+int pintle_rt_pool_capillary_initialize_tp_v1(void* pool,PintleBatchToken token,
+    size_t count,size_t stride,double* q,double* bulkEnergy,
     const double* color,const double* pressureJump,PintleThermoState* state);
 #ifdef __cplusplus
 }

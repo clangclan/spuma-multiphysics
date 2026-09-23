@@ -1,0 +1,104 @@
+[
+  {
+    "label": "full local spline before quadratic nullspace",
+    "sourceSha256": "dac62594f0a0fc0824fa0c8da89d9cdcf090df24fe6e181a86479487688856b1",
+    "convergence": {
+      "absoluteLaplaceErrorsPa": [
+        2.7688074055731704e-10,
+        2.7688074055731704e-10,
+        2.7688074055731704e-10
+      ],
+      "cellLengthsM": [
+        0.00025,
+        0.00016666666666666666,
+        0.000125
+      ],
+      "comparisonProblems": [],
+      "comparisonValid": true,
+      "finalMaxSpeedMPerS": [
+        2.255127853836265e-12,
+        3.1072619078462775e-11,
+        8.687576134404666e-11
+      ],
+      "finalVolumeWeightedL2SpeedMPerS": [
+        1.1823871546747468e-13,
+        7.990534928149912e-13,
+        1.504967388023885e-12
+      ],
+      "fullPhysicsAccuracyValidated": false,
+      "note": "Velocity trend is necessary, not sufficient: pressure/curvature convergence, time convergence and dynamic interface tests are separate gates.",
+      "pressureErrorStrictlyDecreasing": false,
+      "spuriousCurrentStrictlyDecreasing": false,
+      "staticVelocityGatePassed": false,
+      "volumeWeightedL2StrictlyDecreasing": false
+    }
+  },
+  {
+    "label": "quadratic nullspace before pressure split",
+    "sourceSha256": "dafa882043c9c1c37bfe6f9211c31863cf0b4d5be2b8685949904aa4a3273d3a",
+    "convergence": {
+      "absoluteLaplaceErrorsPa": [
+        2.7688074055731704e-10,
+        2.7688074055731704e-10,
+        2.7688074055731704e-10
+      ],
+      "cellLengthsM": [
+        0.00025,
+        0.00016666666666666666,
+        0.000125
+      ],
+      "comparisonProblems": [],
+      "comparisonValid": true,
+      "finalMaxSpeedMPerS": [
+        7.810444273937509e-14,
+        2.625193579604702e-13,
+        4.5341846010612807e-13
+      ],
+      "finalVolumeWeightedL2SpeedMPerS": [
+        9.77996493926225e-15,
+        3.2922502067680294e-14,
+        3.8102031675571496e-14
+      ],
+      "fullPhysicsAccuracyValidated": false,
+      "note": "Velocity trend is necessary, not sufficient: pressure/curvature convergence, time convergence and dynamic interface tests are separate gates.",
+      "pressureErrorStrictlyDecreasing": false,
+      "spuriousCurrentStrictlyDecreasing": false,
+      "staticVelocityGatePassed": false,
+      "volumeWeightedL2StrictlyDecreasing": false
+    }
+  },
+  {
+    "label": "diagnostic candidate omitting metric closure; not final",
+    "sourceSha256": "2f8f9e1dec69fc865f2335398ba84a249aebf48163cc059a47a9d895cb6e2056",
+    "convergence": {
+      "absoluteLaplaceErrorsPa": [
+        2.7688074055731704e-10,
+        2.7688074055731704e-10,
+        2.7688074055731704e-10
+      ],
+      "cellLengthsM": [
+        0.00025,
+        0.00016666666666666666,
+        0.000125
+      ],
+      "comparisonProblems": [],
+      "comparisonValid": true,
+      "finalMaxSpeedMPerS": [
+        4.04319276184799e-15,
+        5.805692792548648e-15,
+        7.257136417120432e-15
+      ],
+      "finalVolumeWeightedL2SpeedMPerS": [
+        3.7546043271764826e-16,
+        3.938587446524101e-16,
+        4.793944760934028e-16
+      ],
+      "fullPhysicsAccuracyValidated": false,
+      "note": "Velocity trend is necessary, not sufficient: pressure/curvature convergence, time convergence and dynamic interface tests are separate gates.",
+      "pressureErrorStrictlyDecreasing": false,
+      "spuriousCurrentStrictlyDecreasing": false,
+      "staticVelocityGatePassed": false,
+      "volumeWeightedL2StrictlyDecreasing": false
+    }
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "surface": {"buildExit": 0, "runExit": 0, "buildLog": "implicit-surface-cpu-build.log", "runLog": "implicit-surface-cpu-run.log"},
+  "volume": {"buildExit": 0, "runExit": 0, "buildLog": "implicit-volume-cpu-build.log", "runLog": "implicit-volume-cpu-run.log"},
+  "face16": {"buildExit": 0, "runExit": 0, "buildLog": "implicit-face-cpu-build.log", "runLog": "implicit-face-cpu-run.log"},
+  "fitLinear": {"buildExit": 0, "runExit": 0, "buildLog": "implicit-fit-linear-cpu-build.log", "runLog": "implicit-fit-linear-cpu-run.log"},
+  "capillaryAcceptance": {"runExit": 0, "runLog": "capillary-acceptance-cpu-run.log", "tests": 7}
+}

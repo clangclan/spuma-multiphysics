@@ -21,7 +21,7 @@
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
 
-이 개발 브랜치는 CUDA WALE 응력·열/종 혼합과 실험적인 [표면장력–flashing 결합](docs/spray-physics/capillary-flashing.ko.md)을 포함한다. 새 경로는 독립 액체 질량 수송과 벌크·표면 총에너지 보존을 연결하며, 단일 액체 모세관 경로의 계면 기하·응력·곡률 UV 복원과 WALE PR 종 엔탈피 준비를 GPU에서 수행한다. 다만 [정적 액적의 기생 유속 수렴 시험](docs/spray-physics/capillary-static-balance-review.md)을 통과하지 못했으므로 검증된 액주·액막 분열 솔버로 취급하지 않는다. 후속 [기하 유량 구현·검증](reports/geometric-balance-review-20260923.ko.md)은 GPU 면 점유면적·적분 traction 연산자를 제공하지만, 실제 재구성·계면 이동 모델의 활성화는 아직 완료되지 않았다.
+이 개발 브랜치는 CUDA WALE 응력·열/종 혼합과 실험적인 [표면장력–flashing 결합](docs/spray-physics/capillary-flashing.ko.md)을 포함한다. 새 경로는 독립 액체 질량 수송과 벌크·표면 총에너지 보존을 연결하며, 단일 액체 모세관 경로의 계면 기하·응력·곡률 UV 복원과 WALE PR 종 엔탈피 준비를 GPU에서 수행한다. 다만 [정적 액적의 기생 유속 수렴 시험](docs/spray-physics/capillary-static-balance-review.md)을 통과하지 못했으므로 검증된 액주·액막 분열 솔버로 취급하지 않는다. 후속 [Cartesian implicit 구현·검증](reports/implicit-static-drop-20260923.ko.md)은 선택 가능한 GPU C² 계면 복원과 공유 면 점유면적·적분 traction을 실제 RK 수송에 연결한다. swept PLIC와 검증된 분열·합체 모델을 제공한다는 뜻은 아니며, 기본 diffuse 모델은 유지한다.
 
 ## 상평형 실패 진단과 안전한 재시작
 

@@ -6,6 +6,7 @@
 #include "../reactiveInterface/pintleUnstructuredInterface.h"
 #include "../reactiveInterface/pintleGeometricCapillary.h"
 #include "pintleGeometricTransport.h"
+#include "../reactiveInterface/pintleCartesianMesh.h"
 #include <cmath>
 #ifdef __CUDACC__
 #define PINTLE_HD __host__ __device__
@@ -57,9 +58,11 @@ struct View {
     double* capillarySurfaceEnergy=nullptr;
     uint32_t* capillaryError=nullptr;
     PintleUnstructuredInterface::View interface{};
-    // Non-null only in the isolated, one-shot geometric diagnostic view.
-    // The production stepper cannot install caller-supplied oracle geometry.
+    PintleCartesianMesh::View cartesian{};
+    // Diagnostic geometry is caller supplied only in isolated scratch views.
+    // Runtime geometry is reconstructed from the transported material color.
     const PintleGeometricFaceV1* geometricFace=nullptr;
+    bool implicitGeometry=false;
     PINTLE_HD void failCapillary() const {
 #ifdef __CUDA_ARCH__
         atomicExch(capillaryError,1u);
@@ -174,11 +177,11 @@ struct View {
         const double fl=sl>0?ml/sl:0,fr=sr>0?mr/sr:0;
         return (f.ownerWeight*fl+(1-f.ownerWeight)*fr)*sgsSpeciesFlux(fi,species);
     }
-    PINTLE_HD double faceFlux(size_t fi,size_t k) const {
+    PINTLE_HD double faceFlux(size_t fi,size_t k,double pressureReference=0) const {
         const auto& f=faces[fi];const auto& w=work[fi];
         const double ql=q[qi(f.owner,k)],qr=rightValue(f,k);
         double flux=w.advectL*ql+w.advectR*qr;
-        if(k>=cfg.species&&k<cfg.species+3) flux+=w.pressureMomentum*f.normal[k-cfg.species];
+        if(k>=cfg.species&&k<cfg.species+3) flux+=(w.pressureMomentum-pressureReference)*f.normal[k-cfg.species];
         if(k==cfg.species+3) flux+=w.pressureEnergy;
         if(k<cfg.species) flux+=speciesDiffusion(fi,k);
         else if(capillary&&k==cfg.species+4) flux+=liquidSgsFlux(fi);
@@ -368,7 +371,9 @@ struct Faces {
                 gl.pressure=csL.pressure;gr.pressure=csR.pressure;
                 gl.sound=csL.sound;gr.sound=csR.sound;
                 gl.color=csL.color;gr.color=csR.color;
-                const double esL=v.capillarySurfaceEnergy[l],esR=v.capillarySurfaceEnergy[r];
+                const double esL=v.capillarySurfaceEnergy[l];
+                // Pure fixed reservoirs carry bulk/kinetic energy only.
+                const double esR=r<v.cfg.cells?v.capillarySurfaceEnergy[r]:0;
                 gl.bulkEnergy=csL.totalEnergy-esL;gr.bulkEnergy=csR.totalEnergy-esR;
                 PintleGeometricCapillary::Face cf{};
                 cf.area=f.area;cf.liquidArea=gf.liquidArea;
@@ -391,6 +396,11 @@ struct Faces {
                 // geometric surface advection was supplied independently.
                 capFlux.capillaryEnergy=flux.geometricWorkEnergy+flux.surfaceEnergyAdvectionPerArea
                     -flux.advectLeft*esL-flux.advectRight*esR;
+                // Runtime mode advects surface-energy density with the same
+                // conservative HLLC coefficients as the material inventory.
+                // This is a finite-volume energy flux, not a swept-PLIC flux;
+                // static equilibrium needs neither of those advective terms.
+                if(v.implicitGeometry)capFlux.capillaryEnergy=flux.geometricWorkEnergy;
             } else {
                 PintleBalancedCapillary::Face cf{};
                 if(!PintleUnstructuredInterface::faceGeometry(fi,v.interface,cf)
@@ -492,12 +502,24 @@ struct Faces {
 struct Rhs {
     PINTLE_HD double value(size_t index,View v) const {
         const size_t c=index%v.cfg.cells,k=index/v.cfg.cells;double rate=0,div=0;
+        const bool splitPressure=v.implicitGeometry&&k>=v.cfg.species&&k<v.cfg.species+3;
+        const double reference=splitPressure?v.state[c].p:0;
+        double metric=0,metricCorrection=0;
         for(size_t j=v.row[c];j<v.row[c+1];++j) {
             const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
             const double sign=entry<0?-1:1;
-            rate+=sign*v.faceFlux(fi,k)*v.inverseVolume[c];
+            // Separate background pressure BEFORE adding small capillary
+            // forces. Keep its stored-metric divergence below: even an almost
+            // closed Cartesian mesh must retain the shared-face equation.
+            rate+=sign*v.faceFlux(fi,k,reference)*v.inverseVolume[c];
+            if(splitPressure){
+                const double area=sign*v.faces[fi].area*v.faces[fi].normal[k-v.cfg.species];
+                const double corrected=area-metricCorrection,next=metric+corrected;
+                metricCorrection=(next-metric)-corrected;metric=next;
+            }
             if(v.cfg.mechanical&&k>=v.cfg.species+4) div-=sign*v.work[fi].faceVelocity*v.faces[fi].area*v.inverseVolume[c];
         }
+        if(splitPressure)rate+=reference*metric*v.inverseVolume[c];
         if(v.cfg.mechanical&&k>=v.cfg.species+4)
             rate+=(v.q[v.qi(c,k)]+(k==v.cfg.species+4?1:-1)*v.state[c].dilatation)*div;
         return rate;

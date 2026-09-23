@@ -85,6 +85,11 @@ maxDeviceMemoryGB 1; maxHostMemoryGB 2; boundaryConditions {{}} waleCw .325;
 turbulentPrandtl .85; turbulentSchmidt .7;
 physics {{ turbulence WALE; {switches} }}
 ''')
+        if label == 'implicit-surface-off':
+            with (case/'constant/reactiveProperties').open('a') as stream:
+                stream.write('capillaryGeometry cartesianImplicit;\n'
+                             'capillaryInitialColorField unusedMissingColor;\n'
+                             'capillaryFitIterations 0;\n')
         field(case, 'p', np.full(64, 3e6 if mixture else 101325.), '1 -1 -2 0 0 0 0')
         field(case, 'T', 270+3*np.sin(phase[:, 2]) if mixture else temperature, '0 0 0 1 0 0 0')
         field(case, 'U', velocity, '0 1 -1 0 0 0 0')
@@ -133,6 +138,7 @@ physics {{ turbulence WALE; {switches} }}
     cases, logs, data = {}, {}, {}
     for label, options, transport, mixture in [
             ('omitted', '', False, False), ('surface-off', 'surfaceTension false;', False, False),
+            ('implicit-surface-off', 'surfaceTension false;', False, False),
             ('all-scalars-off', 'surfaceTension false; turbulentHeatFlux false; turbulentSpeciesMixing false;', False, False),
             ('heat-only', 'surfaceTension false; turbulentHeatFlux true; turbulentSpeciesMixing false;', False, False),
             ('species-only', 'surfaceTension false; turbulentHeatFlux false; turbulentSpeciesMixing true;', False, False),
@@ -152,7 +158,7 @@ physics {{ turbulence WALE; {switches} }}
             record(label+'-flash-active', hem['flashCandidates'] > 0)
         report['cases'][label] = {'gpuClosure': hem, 'scalars': scalar, 'memory': profile(text, 'REACTIVE_MEMORY'),
                                   'stepTimings': [profile(line, 'REACTIVE_STEP_TIMINGS') for line in text.splitlines() if line.startswith('REACTIVE_STEP_TIMINGS ')]}
-    for label in ('surface-off', 'all-scalars-off'):
+    for label in ('surface-off', 'implicit-surface-off', 'all-scalars-off'):
         record(label+'-bitwise', np.array_equal(data['omitted'], data[label]))
         record(label+'-memory', report['cases']['omitted']['memory'] == report['cases'][label]['memory'])
         record(label+'-zero-scalar-work', report['cases'][label]['scalars']['workspaceBytes'] == 0 and

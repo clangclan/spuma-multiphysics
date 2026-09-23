@@ -1,0 +1,26 @@
+{
+  "backend": 1,
+  "n": 12,
+  "seconds": 46.026187757001026,
+  "converged": true,
+  "nonlinearIterations": 0,
+  "linearIterations": 0,
+  "rejectedTrials": 0,
+  "rmsVolumeError": 3.829806361551811e-17,
+  "regularizerNorm": 1.4028293993604418e-12,
+  "coarseIterations": 7,
+  "coarseConverged": true,
+  "audit": {
+    "unresolvedCells": [],
+    "mixedCells": 144,
+    "maxSharpMixedVolumeError": 3.3306690738754696e-16,
+    "rmsSharpMixedVolumeError": 1.2220787340435604e-16,
+    "maxPureCellSharpLeakage": 0.0,
+    "totalVolume": 90.02182211610125,
+    "totalArea": 97.77114007880857,
+    "meanCurvatureCellUnits": 0.7194043441033179,
+    "rmsCurvatureVariation": 0.07921941984920464,
+    "maxCurvatureVariation": 0.17118425053341157,
+    "maxAbsCoefficient": 25.93168033696188
+  }
+}

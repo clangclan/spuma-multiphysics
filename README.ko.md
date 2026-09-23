@@ -38,7 +38,7 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 # CUDA 수송을 빌드했다면 --backends cpu cuda로 두 경로를 검사한다.
 ```
 
-현재는 고정 메시·단일 MPI rank·FP64 연구 솔버다. 이 개발 브랜치에는 실험적 CUDA WALE 운동량 응력·총에너지 결합을 추가했다. SGS 열/종 유속·TCI 및 난류 통계 검증은 남아 있다. 표면장력 기초 함수와 액적 식별은 독립 모듈이며 실제 계면 수송·1차 분열은 아직 연결하지 않았다. 액적 합체·슬립과 MPI 영역 분할도 지원하지 않는다. [구현 및 검증 현황](docs/spray-physics/implementation-status.ko.md)을 참고한다. 기본 HEM 접촉면 정확도와 고압 반응 모델에도 알려진 한계가 있다. 전체 범위와 제약은 [상세 사용 설명](README.reactive-phase.ko.md)에 명시한다.
+현재는 고정 메시·단일 MPI rank·FP64 연구 솔버다. 이 개발 브랜치는 CUDA WALE 응력·열/종 혼합과 실험적인 표면장력·flashing 결합을 포함한다. 추가로 `capillaryGeometry cartesianImplicit`를 선택하면 액체 체적분율에서 C² 계면을 GPU로 복원하고 공유 면 유량을 실제 RK 수송에 연결한다. [구현과 검증 한계](reports/implicit-static-drop-20260923.ko.md)에 정적 액적 결과를 기록했다. TCI, 난류 통계·1차 분열 정확도, 액적 슬립과 MPI 영역 분할은 검증 또는 구현이 남아 있다. [구현 및 검증 현황](docs/spray-physics/implementation-status.ko.md)을 참고한다. 기본 HEM 접촉면 정확도와 고압 반응 모델에도 알려진 한계가 있다. 전체 범위와 제약은 [상세 사용 설명](README.reactive-phase.ko.md)에 명시한다.
 
 ## 저장소 구성
 

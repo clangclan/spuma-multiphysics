@@ -159,7 +159,8 @@ def prepare(output: Path, grid: CartesianGrid, kind: str, interface_field: str,
             configuration: Path | None = None, sigma: float = 0.01,
             surface_tension: str = "true", phase_change: bool = False,
             temperature: float = 270., pressure: float = 3e6,
-            end_time: float = 6e-8, delta_t: float = 3e-8) -> dict:
+            end_time: float = 6e-8, delta_t: float = 3e-8,
+            color_override: np.ndarray | None = None, curved_primitive: bool = False) -> dict:
     case = output.resolve()
     if case.exists():
         raise ValueError("output must be a new directory")
@@ -173,7 +174,10 @@ def prepare(output: Path, grid: CartesianGrid, kind: str, interface_field: str,
         raise ValueError("surface tension coefficient must be finite and nonnegative")
     case.mkdir(parents=True)
     write_mesh(case, grid)
-    color = geometric_color(grid, kind, radius, amplitude, samples_per_axis)
+    color = geometric_color(grid, kind, radius, amplitude, samples_per_axis) if color_override is None \
+        else np.asarray(color_override, dtype=np.float64).reshape(-1).copy()
+    if color.shape != (grid.cells,) or not np.isfinite(color).all() or np.any((color < 0) | (color > 1)):
+        raise ValueError("independent cell volume fractions must be finite, bounded and match the mesh")
     np.savez_compressed(case / "initial-color.npz", color=color)
     if configuration is None:
         write_field(case, interface_field, color, "0 0 0 0 0 0 0")
@@ -201,18 +205,29 @@ def prepare(output: Path, grid: CartesianGrid, kind: str, interface_field: str,
                 indices = np.flatnonzero(color == value)
                 index = int(indices[0])
                 p_local = float(pressure_field[index])
-                liquid_q, _, liquid_local = backend.make_state(temperature, p_local, {"N2O": 1}, (1, 0))
-                gas_q, _, gas_local = backend.make_state(temperature, p_local, gas_y, (0, 0))
+                jump = 2 * sigma / (.25 * min(grid.lengths) if radius is None else radius) \
+                    if kind in ("sphere", "drop") and surface_tension == "true" else 0.
+                pg = p_local - float(value) * jump if curved_primitive else p_local
+                pl = p_local + (1 - float(value)) * jump if curved_primitive else p_local
+                liquid_q, _, liquid_local = backend.make_state(temperature, pl, {"N2O": 1}, (1, 0))
+                gas_q, _, gas_local = backend.make_state(temperature, pg, gas_y, (0, 0))
                 rho = float(value) * liquid_local.rho + (1 - float(value)) * gas_local.rho
                 composition = (float(value) * liquid_q + (1 - float(value)) * gas_q) / rho
                 y[indices] = composition
-                _, _, reconstructed = backend.make_state(temperature, p_local, composition, (1, 0))
-                color_construction_error = max(color_construction_error,
-                                               abs(reconstructed.alphaLiquid[0] - float(value)))
+                if curved_primitive:
+                    liquid_volume = rho * composition[2] / liquid_local.rho
+                    gas_volume = rho * (1 - composition[2]) / gas_local.rho
+                    recovered_color = liquid_volume / (liquid_volume + gas_volume)
+                else:
+                    _, _, reconstructed = backend.make_state(temperature, p_local, composition, (1, 0))
+                    recovered_color = reconstructed.alphaLiquid[0]
+                color_construction_error = max(color_construction_error, abs(recovered_color - float(value)))
             if color_construction_error > 1e-9:
                 raise ValueError(f"thermo state does not reproduce geometric color: {color_construction_error}")
             for i in range(backend.ns):
                 write_field(case, f"Y{i}", y[:, i], "0 0 0 0 0 0 0")
+            if curved_primitive:
+                write_field(case, interface_field, color, "0 0 0 0 0 0 0")
             for i in range(backend.nl):
                 write_field(case, f"liquidFraction{i}", np.ones(grid.cells) if i == 0 else np.zeros(grid.cells),
                             "0 0 0 0 0 0 0")
@@ -237,6 +252,7 @@ writeCompression off; timeFormat general; timePrecision 15; runTimeModifiable fa
     radius = .25 * min(grid.lengths) if radius is None else radius
     amplitude = (.025 * radius if kind == "drop" else .01 * grid.lengths[0]) if amplitude is None else amplitude
     reference = {"kind": kind, "shape": grid.shape, "lengthsM": grid.lengths,
+                 "cellIntegration": "independent supplied volumes" if color_override is not None else "midpoint subcells",
                  "spacingM": grid.spacing.tolist(), "interfaceField": interface_field,
                  "samplesPerAxis": samples_per_axis, "initialColorVolumeM3": float(color.sum() * np.prod(grid.spacing)),
                  "radiusM": radius if kind in ("sphere", "drop") else None,
@@ -255,6 +271,7 @@ writeCompression off; timeFormat general; timePrecision 15; runTimeModifiable fa
                  "pureLiquidDensityKgPerM3": float(liquid.rho) if configuration else None,
                  "pureGasDensityKgPerM3": float(gas.rho) if configuration else None,
                  "colorConstructionMaxAbsoluteError": color_construction_error if configuration else None,
+                 "primitivePhasePressure": "curved" if curved_primitive else "common",
                  "endTimeS": end_time if configuration else None}
     if run_block_mesh:
         # A stock OpenFOAM blockMesh writes the same native polyMesh and does

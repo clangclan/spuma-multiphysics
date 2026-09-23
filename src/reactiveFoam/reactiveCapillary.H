@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Included inside Flow. The independent liquid inventory is advected with the
 // chemical inventory. Its EOS volume defines a diffuse, finite-volume material
-// interface. This is not a PLIC/geometric VOF reconstruction.
+// interface. The optional Cartesian reconstruction uses sharp phase volumes;
+// neither mode is a swept PLIC transport scheme.
     Array liquidColor(const States& states) const {
         Array color(nc);
         for(size_t c=0;c<nc;++c) {
@@ -82,15 +83,20 @@
             }
             const Array candidate=liquidColor(states);
             interfaceGeometry(candidate);
-            double residual=0;
+            double residual=0;bool surfaceConsistent=true;
             for(size_t c=0;c<nc;++c) {
                 const double bulkScale=std::max(std::abs(internalEnergy(&q[c*nv])),states[c].rho*1e5);
                 residual=std::max({residual,std::abs(candidate[c]-colorBefore[c]),
                     std::abs(surfaceEnergy[c]-energyBefore[c])/bulkScale,
                     std::abs(interfaceJump[c]-jumpBefore[c])/std::max(states[c].p,1.0)});
+                if(capillaryGeometryMode=="cartesianImplicit") {
+                    const double roundoff=64*std::numeric_limits<double>::epsilon()*bulkScale;
+                    surfaceConsistent=surfaceConsistent&&std::abs(surfaceEnergy[c]-energyBefore[c])
+                        <=roundoff+1e-9*std::max(surfaceEnergy[c],energyBefore[c]);
+                }
             }
             capillaryClosureResidual=residual;
-            if(residual<=1e-9) {
+            if(residual<=1e-9&&surfaceConsistent) {
                 // Phase change is an internal source: only the liquid/gas
                 // partition changes. Total species, momentum and H stay fixed.
                 if(!frozen)for(size_t c=0;c<nc;++c)q[c*nv+ns+4]=states[c].liquidMass[0];
@@ -105,9 +111,77 @@
         }
         demand(false,"Surface-energy / curved UV closure did not converge (residual "+std::to_string(capillaryClosureResidual)+")");
     }
-    void initializeCapillary(Array& q,States& states,bool restart) const {
+    void saveImplicitSurface(const std::filesystem::path& directory) const {
+        size_t count=0;checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&count));
+        Array coefficients(count);checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),coefficients.data(),nullptr,count,&count));
+        PintleCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
+        checkTransport(pintle_transport_cartesian_info_v1(transport.get(),&grid));
+        std::ofstream out(directory/"implicitSurface.bin",std::ios::binary|std::ios::trunc);
+        checkpoint::requireIO(bool(out),"implicit surface");checkpoint::put(out,uint64_t(0x5246494d504c5331ULL));
+        checkpoint::put(out,uint64_t(count));
+        for(int d=0;d<3;++d){checkpoint::put(out,grid.dims[d]);checkpoint::put(out,grid.origin[d]);checkpoint::put(out,grid.spacing[d]);}
+        for(double value:coefficients)checkpoint::put(out,value);
+        out.flush();checkpoint::requireIO(bool(out),"implicit surface flush");out.close();checkpoint::requireIO(!out.fail(),"implicit surface close");
+    }
+    void restoreImplicitSurface(const std::filesystem::path& directory) const {
+        size_t required=0;checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&required));
+        PintleCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
+        checkTransport(pintle_transport_cartesian_info_v1(transport.get(),&grid));
+        std::ifstream in(directory/"implicitSurface.bin",std::ios::binary);uint64_t magic,count;
+        checkpoint::get(in,magic);checkpoint::get(in,count);
+        demand(magic==0x5246494d504c5331ULL&&count==required,"Implicit surface checkpoint layout mismatch");
+        for(int d=0;d<3;++d){uint64_t n;double origin,spacing;checkpoint::get(in,n);checkpoint::get(in,origin);checkpoint::get(in,spacing);
+            demand(n==grid.dims[d]&&origin==grid.origin[d]&&spacing==grid.spacing[d],"Implicit surface checkpoint mesh mismatch");}
+        Array coefficients(required);for(double& value:coefficients)checkpoint::get(in,value);
+        demand(in.peek()==std::char_traits<char>::eof(),"Implicit surface checkpoint has trailing data");
+        checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,coefficients.data(),required,&required));
+    }
+    void initializeCurvedPrimitive(Array& q,States& states,const Array* seed) const {
+        demand(pool&&transport,"Curved primitive initialization requires CUDA closure and transport");
+        Array pressure(nc),temperature(nc),velocities(3*nc);
+        for(size_t c=0;c<nc;++c){
+            pressure[c]=states[c].p;temperature[c]=states[c].T;
+            const auto u=velocity(&q[c*nv]);for(int d=0;d<3;++d)velocities[3*c+d]=u[d];
+        }
+        if(seed)interfaceGeometry(*seed);else refreshInterface(states);
+        for(int iteration=0;iteration<20;++iteration){
+            const Array previousColor=interfaceColor,previousJump=interfaceJump;
+            for(size_t start=0;start<nc;start+=batchCells){
+                const size_t count=std::min(batchCells,nc-start);
+                batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
+                for(size_t c=0;c<count;++c){const size_t cell=start+c;
+                    std::copy(q.data()+cell*nv,q.data()+cell*nv+physicalSpecies,batchQ.data()+c*physicalSpecies);
+                    batchEnergy[c]=internalEnergy(&q[cell*nv]);batchStates[c]=states[cell];
+                    batchStates[c].p=pressure[cell];batchStates[c].T=temperature[cell];
+                    batchStates[c].liquidMass[0]=q[cell*nv+ns+4];
+                }
+                const PintleBatchToken token{attemptId,++workerStage,++workerVersion};
+                const int status=pintle_rt_pool_capillary_initialize_tp_v1(pool.get(),token,count,physicalSpecies,
+                    batchQ.data(),batchEnergy.data(),previousColor.data()+start,previousJump.data()+start,batchStates.data());
+                demand(!status,std::string("Curved primitive GPU initialization: ")+pintle_rt_pool_error(pool.get()));
+                for(size_t c=0;c<count;++c){const size_t cell=start+c;double* local=&q[cell*nv];
+                    std::copy(batchQ.data()+c*physicalSpecies,batchQ.data()+(c+1)*physicalSpecies,local);
+                    states[cell]=batchStates[c];double kinetic=0;
+                    for(int d=0;d<3;++d){const double u=velocities[3*cell+d];
+                        local[ns+d]=states[cell].rho*u;kinetic+=.5*states[cell].rho*u*u;}
+                    local[ns+3]=batchEnergy[c]+kinetic;local[ns+4]=states[cell].liquidMass[0];
+                }
+            }
+            refreshInterface(states);double residual=0;
+            for(size_t c=0;c<nc;++c)residual=std::max({residual,
+                std::abs(interfaceColor[c]-previousColor[c]),
+                std::abs(interfaceJump[c]-previousJump[c])/std::max(pressure[c],1.)});
+            if(residual<=1e-10){
+                Info<<"REACTIVE_CAPILLARY_INITIALIZATION backend=cuda method=curved-TP iterations="
+                    <<iteration+1<<" geometryResidual="<<residual<<nl;return;
+            }
+        }
+        demand(false,"Curved primitive TP/geometry initialization did not converge");
+    }
+    void initializeCapillary(Array& q,States& states,bool restart,const Array* initialColor=nullptr) const {
         if(!capillary)return;
-        refreshInterface(states);
+        if(!restart&&capillaryGeometryMode=="cartesianImplicit")initializeCurvedPrimitive(q,states,initialColor);
+        else refreshInterface(states);
         if(!restart) {
             for(size_t c=0;c<nc;++c)q[c*nv+ns+3]+=surfaceEnergy[c];
             recoverCapillary(q,states);

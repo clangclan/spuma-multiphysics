@@ -1,0 +1,9 @@
+{
+  "maxColorChange": 2.1871393585115584e-14,
+  "maxPressureChangePa": 4.656612873077393e-10,
+  "rmsPressureChangePa": 4.533920030026754e-10,
+  "phaseChange": false,
+  "cudaClosure": true,
+  "curvedTPInitialization": true,
+  "initializationAtomicFailureVerified": true
+}

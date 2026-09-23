@@ -1,0 +1,826 @@
+{
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/bin/ReactiveFoam": "4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so": "7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_physics_switches.py": "d3f291c61e9942ba25b564365f47f0846b65af71c35f7ed710477b9cae46f111"
+  },
+  "cases": {
+    "all-scalars-off": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.367999829351903e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.0038457601666450503,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003953269
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 70812.0,
+        "peakBytes": 70812.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 35.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 0.0,
+        "fieldUploads": 0.0,
+        "hostEnthalpyCells": 0.0,
+        "hostPropertySeconds": 0.0,
+        "propertyStageSeconds": 0.0,
+        "workspaceBytes": 0.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 3.623e-06,
+          "cflSeconds": 0.000157897,
+          "conservationSeconds": 3.92e-07,
+          "diagnosticsSeconds": 3.45e-07,
+          "nestedBatchCallSeconds": 0.0028446089999999997,
+          "nestedBatchPackSeconds": 8.419999999999999e-07,
+          "nestedBatchScatterSeconds": 4.85e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 1.9368000000000296e-05,
+          "recoverySeconds": 0.0028493259999999997,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000334441
+        },
+        {
+          "backupSeconds": 1.077e-06,
+          "cflSeconds": 0.000123697,
+          "conservationSeconds": 3.02e-07,
+          "diagnosticsSeconds": 3.4e-07,
+          "nestedBatchCallSeconds": 0.001126317,
+          "nestedBatchPackSeconds": 8.5e-07,
+          "nestedBatchScatterSeconds": 4.4e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 8.593000000000016e-06,
+          "recoverySeconds": 0.001127863,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000191182
+        }
+      ]
+    },
+    "heat-only": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.147200010716915e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.003851103961467743,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.0039570180000000005
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 71324.0,
+        "peakBytes": 71324.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 46.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 5632.0,
+        "fieldUploads": 11.0,
+        "hostEnthalpyCells": 0.0,
+        "hostPropertySeconds": 1.5680000000000003e-06,
+        "propertyStageSeconds": 1.5680000000000003e-06,
+        "workspaceBytes": 512.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 3.052e-06,
+          "cflSeconds": 0.00016870900000000001,
+          "conservationSeconds": 3.38e-07,
+          "diagnosticsSeconds": 3.42e-07,
+          "nestedBatchCallSeconds": 0.002847621,
+          "nestedBatchPackSeconds": 8.34e-07,
+          "nestedBatchScatterSeconds": 5.84e-07,
+          "nestedScalarPropertySeconds": 7.57e-07,
+          "otherSeconds": 1.9119000000000465e-05,
+          "recoverySeconds": 0.002852936,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000353418
+        },
+        {
+          "backupSeconds": 1.065e-06,
+          "cflSeconds": 0.00013120299999999998,
+          "conservationSeconds": 3.47e-07,
+          "diagnosticsSeconds": 3.43e-07,
+          "nestedBatchCallSeconds": 0.001127937,
+          "nestedBatchPackSeconds": 9.7e-07,
+          "nestedBatchScatterSeconds": 4.15e-07,
+          "nestedScalarPropertySeconds": 5.09e-07,
+          "otherSeconds": 8.30000000000017e-06,
+          "recoverySeconds": 0.001129563,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000197432
+        }
+      ]
+    },
+    "implicit-surface-off": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.297599852085112e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.0038679681420326233,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003975084
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 70812.0,
+        "peakBytes": 70812.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 35.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 0.0,
+        "fieldUploads": 0.0,
+        "hostEnthalpyCells": 0.0,
+        "hostPropertySeconds": 0.0,
+        "propertyStageSeconds": 0.0,
+        "workspaceBytes": 0.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 2.947e-06,
+          "cflSeconds": 0.000174097,
+          "conservationSeconds": 3.82e-07,
+          "diagnosticsSeconds": 3.43e-07,
+          "nestedBatchCallSeconds": 0.0028664389999999997,
+          "nestedBatchPackSeconds": 8.520000000000001e-07,
+          "nestedBatchScatterSeconds": 7.4e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 2.01689999999996e-05,
+          "recoverySeconds": 0.0028717919999999997,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000336321
+        },
+        {
+          "backupSeconds": 9.84e-07,
+          "cflSeconds": 0.000121614,
+          "conservationSeconds": 3.1e-07,
+          "diagnosticsSeconds": 3.33e-07,
+          "nestedBatchCallSeconds": 0.0011256109999999999,
+          "nestedBatchPackSeconds": 8.71e-07,
+          "nestedBatchScatterSeconds": 4.1900000000000003e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 8.250999999999959e-06,
+          "recoverySeconds": 0.0011271200000000001,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000195373
+        }
+      ]
+    },
+    "n2o-mixture-on": {
+      "gpuClosure": {
+        "analyticJacobians": 2562.0,
+        "batches": 4.0,
+        "copySeconds": 8.400000259280204e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 320.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.4052434463500976,
+        "phaseEvaluations": 45319.0,
+        "residualEvaluations": 15553.0,
+        "stableCandidates": 280.0,
+        "submitted": 64.0,
+        "succeeded": 64.0,
+        "transferBytes": 26048.0,
+        "wallSeconds": 0.405354104
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 73372.0,
+        "peakBytes": 73372.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 46.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 13824.0,
+        "fieldUploads": 11.0,
+        "hostEnthalpyCells": 256.0,
+        "hostPropertySeconds": 0.000837896,
+        "propertyStageSeconds": 0.000837896,
+        "workspaceBytes": 2560.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 4.12e-06,
+          "cflSeconds": 0.000174148,
+          "conservationSeconds": 6.67e-07,
+          "diagnosticsSeconds": 4.28e-07,
+          "nestedBatchCallSeconds": 0.18945616999999998,
+          "nestedBatchPackSeconds": 1.225e-06,
+          "nestedBatchScatterSeconds": 7.14e-07,
+          "nestedScalarPropertySeconds": 0.00041899600000000004,
+          "otherSeconds": 3.285800000000323e-05,
+          "recoverySeconds": 0.189462069,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000830017
+        },
+        {
+          "backupSeconds": 1.5010000000000001e-06,
+          "cflSeconds": 0.00013443100000000001,
+          "conservationSeconds": 3.6e-07,
+          "diagnosticsSeconds": 3.94e-07,
+          "nestedBatchCallSeconds": 0.215921253,
+          "nestedBatchPackSeconds": 9.99e-07,
+          "nestedBatchScatterSeconds": 5.319999999999999e-07,
+          "nestedScalarPropertySeconds": 0.000418386,
+          "otherSeconds": 1.7984000000045885e-05,
+          "recoverySeconds": 0.215923241,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.0006734499999999999
+        }
+      ]
+    },
+    "omitted": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.265599980950355e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.0038520959019660954,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003961737
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 70812.0,
+        "peakBytes": 70812.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 35.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 0.0,
+        "fieldUploads": 0.0,
+        "hostEnthalpyCells": 0.0,
+        "hostPropertySeconds": 0.0,
+        "propertyStageSeconds": 0.0,
+        "workspaceBytes": 0.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 2.7320000000000003e-06,
+          "cflSeconds": 0.000157658,
+          "conservationSeconds": 3.71e-07,
+          "diagnosticsSeconds": 3.44e-07,
+          "nestedBatchCallSeconds": 0.0028553600000000004,
+          "nestedBatchPackSeconds": 1.203e-06,
+          "nestedBatchScatterSeconds": 6.26e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 1.926399999999983e-05,
+          "recoverySeconds": 0.002861819,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.00033636500000000004
+        },
+        {
+          "backupSeconds": 1.0390000000000001e-06,
+          "cflSeconds": 0.000122172,
+          "conservationSeconds": 3.2e-07,
+          "diagnosticsSeconds": 3.33e-07,
+          "nestedBatchCallSeconds": 0.001127579,
+          "nestedBatchPackSeconds": 9.13e-07,
+          "nestedBatchScatterSeconds": 4.32e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 8.53399999999991e-06,
+          "recoverySeconds": 0.0011291790000000001,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000183044
+        }
+      ]
+    },
+    "scalar-on": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.601599745452403e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.003853119969367981,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003962148
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 73372.0,
+        "peakBytes": 73372.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 46.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 13824.0,
+        "fieldUploads": 11.0,
+        "hostEnthalpyCells": 256.0,
+        "hostPropertySeconds": 0.000654871,
+        "propertyStageSeconds": 0.000654871,
+        "workspaceBytes": 2560.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 2.8440000000000002e-06,
+          "cflSeconds": 0.000165893,
+          "conservationSeconds": 4.1e-07,
+          "diagnosticsSeconds": 3.25e-07,
+          "nestedBatchCallSeconds": 0.002851384,
+          "nestedBatchPackSeconds": 9.030000000000001e-07,
+          "nestedBatchScatterSeconds": 5.19e-07,
+          "nestedScalarPropertySeconds": 0.000334066,
+          "otherSeconds": 1.8254999999999977e-05,
+          "recoverySeconds": 0.002857285,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000731104
+        },
+        {
+          "backupSeconds": 9.85e-07,
+          "cflSeconds": 0.00013126499999999998,
+          "conservationSeconds": 3.23e-07,
+          "diagnosticsSeconds": 3.36e-07,
+          "nestedBatchCallSeconds": 0.001127545,
+          "nestedBatchPackSeconds": 1.1819999999999999e-06,
+          "nestedBatchScatterSeconds": 4.25e-07,
+          "nestedScalarPropertySeconds": 0.00032045300000000006,
+          "otherSeconds": 8.389999999999906e-06,
+          "recoverySeconds": 0.001129383,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000566678
+        }
+      ]
+    },
+    "species-only": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 7.955200038850307e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.003865664064884186,
+        "phaseEvaluations": 512.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 64.0,
+        "submitted": 64.0,
+        "succeeded": 64.0,
+        "transferBytes": 26048.0,
+        "wallSeconds": 0.003969693
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 72860.0,
+        "peakBytes": 72860.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 46.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 8192.0,
+        "fieldUploads": 11.0,
+        "hostEnthalpyCells": 256.0,
+        "hostPropertySeconds": 0.00065797,
+        "propertyStageSeconds": 0.00065797,
+        "workspaceBytes": 2048.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 3.459e-06,
+          "cflSeconds": 0.000160286,
+          "conservationSeconds": 4.3e-07,
+          "diagnosticsSeconds": 3.4e-07,
+          "nestedBatchCallSeconds": 0.002861767,
+          "nestedBatchPackSeconds": 8.13e-07,
+          "nestedBatchScatterSeconds": 6.17e-07,
+          "nestedScalarPropertySeconds": 0.00033241200000000003,
+          "otherSeconds": 1.7816000000000122e-05,
+          "recoverySeconds": 0.002866543,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.000727384
+        },
+        {
+          "backupSeconds": 1.179e-06,
+          "cflSeconds": 0.000127932,
+          "conservationSeconds": 3.09e-07,
+          "diagnosticsSeconds": 3.29e-07,
+          "nestedBatchCallSeconds": 0.001125402,
+          "nestedBatchPackSeconds": 8.43e-07,
+          "nestedBatchScatterSeconds": 4.72e-07,
+          "nestedScalarPropertySeconds": 0.00032560900000000003,
+          "otherSeconds": 8.621999999999868e-06,
+          "recoverySeconds": 0.001126986,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000566754
+        }
+      ]
+    },
+    "surface-off": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.224000222980976e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.0038754559755325314,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003982036
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 70812.0,
+        "peakBytes": 70812.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 35.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 0.0,
+        "fieldUploads": 0.0,
+        "hostEnthalpyCells": 0.0,
+        "hostPropertySeconds": 0.0,
+        "propertyStageSeconds": 0.0,
+        "workspaceBytes": 0.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 3.5780000000000003e-06,
+          "cflSeconds": 0.00017104,
+          "conservationSeconds": 3.7e-07,
+          "diagnosticsSeconds": 3.47e-07,
+          "nestedBatchCallSeconds": 0.0028717210000000003,
+          "nestedBatchPackSeconds": 9.07e-07,
+          "nestedBatchScatterSeconds": 6.42e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 2.1319000000000017e-05,
+          "recoverySeconds": 0.002877025,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.0003366
+        },
+        {
+          "backupSeconds": 1.062e-06,
+          "cflSeconds": 0.000121436,
+          "conservationSeconds": 3.04e-07,
+          "diagnosticsSeconds": 3.38e-07,
+          "nestedBatchCallSeconds": 0.0011280819999999999,
+          "nestedBatchPackSeconds": 8.04e-07,
+          "nestedBatchScatterSeconds": 3.8999999999999997e-07,
+          "nestedScalarPropertySeconds": 0.0,
+          "otherSeconds": 8.234000000000108e-06,
+          "recoverySeconds": 0.001129509,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.00018709100000000002
+        }
+      ]
+    },
+    "transport-on": {
+      "gpuClosure": {
+        "analyticJacobians": 0.0,
+        "batches": 4.0,
+        "copySeconds": 8.508800156414508e-05,
+        "cpuFallbacks": 0.0,
+        "deviceBytes": 76968.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "flashCandidates": 0.0,
+        "hostBytes": 98904.0,
+        "kernelSeconds": 0.0038678719401359554,
+        "phaseEvaluations": 520.0,
+        "residualEvaluations": 0.0,
+        "stableCandidates": 65.0,
+        "submitted": 65.0,
+        "succeeded": 65.0,
+        "transferBytes": 26452.0,
+        "wallSeconds": 0.003978025
+      },
+      "memory": {
+        "bridgeBytes": 4096.0,
+        "conservedWorkspaceBytes": 8192.0,
+        "d2dBytes": 0.0,
+        "gasWorkspaceBytes": 0.0,
+        "liveBytes": 73372.0,
+        "peakBytes": 73372.0,
+        "rhsWorkspaceBytes": 0.0,
+        "synchronizations": 46.0
+      },
+      "scalars": {
+        "fieldUploadBytes": 13824.0,
+        "fieldUploads": 11.0,
+        "hostEnthalpyCells": 256.0,
+        "hostPropertySeconds": 0.0006550540000000001,
+        "propertyStageSeconds": 0.0006550540000000001,
+        "workspaceBytes": 2560.0
+      },
+      "stepTimings": [
+        {
+          "backupSeconds": 3.73e-06,
+          "cflSeconds": 0.000169356,
+          "conservationSeconds": 3.82e-07,
+          "diagnosticsSeconds": 3.47e-07,
+          "nestedBatchCallSeconds": 0.002868655,
+          "nestedBatchPackSeconds": 1.165e-06,
+          "nestedBatchScatterSeconds": 6.41e-07,
+          "nestedScalarPropertySeconds": 0.000330591,
+          "otherSeconds": 1.794299999999996e-05,
+          "recoverySeconds": 0.0028742330000000003,
+          "sourceSeconds": 0.0,
+          "time": 3e-08,
+          "transportSeconds": 0.00072742
+        },
+        {
+          "backupSeconds": 1.165e-06,
+          "cflSeconds": 0.000133241,
+          "conservationSeconds": 4.19e-07,
+          "diagnosticsSeconds": 3.44e-07,
+          "nestedBatchCallSeconds": 0.0011267529999999999,
+          "nestedBatchPackSeconds": 8.97e-07,
+          "nestedBatchScatterSeconds": 4.6299999999999995e-07,
+          "nestedScalarPropertySeconds": 0.000323891,
+          "otherSeconds": 8.504999999999992e-06,
+          "recoverySeconds": 0.001128353,
+          "sourceSeconds": 0.0,
+          "time": 6e-08,
+          "transportSeconds": 0.000573343
+        }
+      ]
+    }
+  },
+  "checks": [
+    {
+      "name": "omitted-gpu",
+      "passed": true
+    },
+    {
+      "name": "omitted-conservation",
+      "passed": true,
+      "relativeResidual": 3.552713678800501e-15
+    },
+    {
+      "name": "surface-off-gpu",
+      "passed": true
+    },
+    {
+      "name": "surface-off-conservation",
+      "passed": true,
+      "relativeResidual": 3.552713678800501e-15
+    },
+    {
+      "name": "implicit-surface-off-gpu",
+      "passed": true
+    },
+    {
+      "name": "implicit-surface-off-conservation",
+      "passed": true,
+      "relativeResidual": 3.552713678800501e-15
+    },
+    {
+      "name": "all-scalars-off-gpu",
+      "passed": true
+    },
+    {
+      "name": "all-scalars-off-conservation",
+      "passed": true,
+      "relativeResidual": 3.552713678800501e-15
+    },
+    {
+      "name": "heat-only-gpu",
+      "passed": true
+    },
+    {
+      "name": "heat-only-conservation",
+      "passed": true,
+      "relativeResidual": 1.5007307376567315e-14
+    },
+    {
+      "name": "species-only-gpu",
+      "passed": true
+    },
+    {
+      "name": "species-only-conservation",
+      "passed": true,
+      "relativeResidual": 1.1596555700074745e-14
+    },
+    {
+      "name": "scalar-on-gpu",
+      "passed": true
+    },
+    {
+      "name": "scalar-on-conservation",
+      "passed": true,
+      "relativeResidual": 8.881784197001252e-15
+    },
+    {
+      "name": "transport-on-gpu",
+      "passed": true
+    },
+    {
+      "name": "transport-on-conservation",
+      "passed": true,
+      "relativeResidual": 8.881784197001252e-15
+    },
+    {
+      "name": "n2o-mixture-on-gpu",
+      "passed": true
+    },
+    {
+      "name": "n2o-mixture-on-conservation",
+      "passed": true,
+      "relativeResidual": 7.958078640513122e-13
+    },
+    {
+      "name": "n2o-mixture-on-flash-active",
+      "passed": true
+    },
+    {
+      "name": "surface-off-bitwise",
+      "passed": true
+    },
+    {
+      "name": "surface-off-memory",
+      "passed": true
+    },
+    {
+      "name": "surface-off-zero-scalar-work",
+      "passed": true
+    },
+    {
+      "name": "surface-off-identity",
+      "passed": true
+    },
+    {
+      "name": "implicit-surface-off-bitwise",
+      "passed": true
+    },
+    {
+      "name": "implicit-surface-off-memory",
+      "passed": true
+    },
+    {
+      "name": "implicit-surface-off-zero-scalar-work",
+      "passed": true
+    },
+    {
+      "name": "implicit-surface-off-identity",
+      "passed": true
+    },
+    {
+      "name": "all-scalars-off-bitwise",
+      "passed": true
+    },
+    {
+      "name": "all-scalars-off-memory",
+      "passed": true
+    },
+    {
+      "name": "all-scalars-off-zero-scalar-work",
+      "passed": true
+    },
+    {
+      "name": "all-scalars-off-identity",
+      "passed": true
+    },
+    {
+      "name": "scalar-operator-active",
+      "passed": true
+    },
+    {
+      "name": "heat-only-no-species-properties",
+      "passed": true
+    },
+    {
+      "name": "species-only-no-cp-array",
+      "passed": true
+    },
+    {
+      "name": "molecular-operators-active",
+      "passed": true
+    },
+    {
+      "name": "surface-missing-coefficient-fails-before-transport",
+      "passed": true
+    },
+    {
+      "name": "scalar-without-wale-rejected",
+      "passed": true
+    },
+    {
+      "name": "invalid-prandtl-rejected",
+      "passed": true
+    },
+    {
+      "name": "frozen-species-mixing-rejected",
+      "passed": true
+    },
+    {
+      "name": "scalar-restart-bitwise",
+      "passed": true
+    },
+    {
+      "name": "changed-scalar-restart-rejected",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Small actual CUDA solver runs: capillary off parity and WALE scalar wiring.\n\nThis is an operator/integration check, not flashing-interface validation.\nEach periodic 64-cell case advances two 30 ns steps and retains its logs.\n"
+}

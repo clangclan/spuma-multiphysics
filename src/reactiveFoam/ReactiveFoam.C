@@ -22,6 +22,7 @@
 #include <sstream>
 #include "pintleReactiveTransport.h"
 #include "pintleTransportV21.h"
+#include "pintleCartesianTransport.h"
 #include "pintleTurbulence.h"
 #include "pintleCapillary.h"
 #include <algorithm>
@@ -30,6 +31,7 @@
 #include <cmath>
 #include <iomanip>
 #include <memory>
+#include <limits>
 #include <numeric>
 #include <stdexcept>
 #include <string>
@@ -92,12 +94,15 @@ template<class T> void assign(UList<T>& output,const std::vector<T>& input)
 }
 struct Face {
     label owner=-1, neighbour=-1;
+    label meshFace=-1,meshPeerFace=-1;
     vector normal=vector::zero;
     double area=0, distance=0,ownerWeight=.5;
     word type;
     Array fixed;
     PintleThermoState fixedState{};
 };
+
+#include "reactiveCartesian.H"
 
 #include "reactivePhysics.H"
 #include "reactiveDiagnostics.H"
@@ -115,6 +120,7 @@ public:
     std::vector<int> condensedKinds;
     std::vector<std::string> condensedNames;
     bool chemistry,mechanical,frozen,wale,capillary,liquidInventory;
+    word capillaryGeometryMode;
     double waleCw,turbulentPrandtl,turbulentSchmidt;
     double sigma,capillaryCfl,capillaryGeometryTolerance;
     mutable Array interfaceColor,interfaceCurvature,surfaceEnergy,interfaceJump;
@@ -152,11 +158,17 @@ public:
        chemicalRtol(dict.getOrDefault<scalar>("chemicalRelativeTolerance",1e-8)),
        chemicalAtol(dict.getOrDefault<scalar>("chemicalAbsoluteTolerance",1e-14)),
        chemistry(physics.chemistry),mechanical(physics.mechanical),frozen(physics.frozen),
-       wale(physics.wale),capillary(physics.surfaceTension),liquidInventory(physics.frozen||physics.surfaceTension),waleCw(physics.waleCw),
+       wale(physics.wale),capillary(physics.surfaceTension),liquidInventory(physics.frozen||physics.surfaceTension),
+       capillaryGeometryMode(physics.surfaceTension?dict.getOrDefault<word>("capillaryGeometry","diffuse"):word("diffuse")),waleCw(physics.waleCw),
        turbulentPrandtl(physics.turbulentPrandtl),turbulentSchmidt(physics.turbulentSchmidt),
        sigma(physics.sigma),capillaryCfl(physics.capillaryCfl),capillaryGeometryTolerance(physics.capillaryGeometryTolerance)
     {
         demand(ns>0&&nc>0,"Empty model/mesh");
+        demand(capillaryGeometryMode=="diffuse"||capillaryGeometryMode=="cartesianImplicit",
+            "Unknown capillaryGeometry mode");
+        demand(capillaryGeometryMode!="cartesianImplicit"||(capillary
+            &&dict.getOrDefault<word>("transportBackend","cpu")=="cuda"),
+            "cartesianImplicit requires surface tension and CUDA transport");
         requestedTransport=dict.getOrDefault<word>("transportBackend","cpu");
         if(dict.found("optimizationPolicy")) {
             fileName policy(dict.get<fileName>("optimizationPolicy"));policy.expand();
@@ -199,7 +211,9 @@ public:
         std::ostringstream physical,numerical;physical<<std::setprecision(17)<<"closure="<<(mechanical?"mechanicalEquilibrium":"HEM")
             <<";chemistry="<<chemistry<<";viscosity="<<viscosity<<";conductivity="<<conductivity<<";commonD="<<diffusivity;
         if(frozen)physical<<";phaseChange=frozen";
-        if(capillary)physical<<";interface=diffuse-liquid-inventory-v1;surfaceEnergy=constant-sigma-area;capillaryPressure=phase-split-v1;sigma="<<sigma;
+        if(capillary)physical<<";interface="<<(capillaryGeometryMode=="cartesianImplicit"?
+            "implicit-liquid-inventory-v1":"diffuse-liquid-inventory-v1")
+            <<";surfaceEnergy=constant-sigma-area;capillaryPressure=phase-split-v1;sigma="<<sigma;
         if(wale) {
             physical<<";turbulence=WALE-stress-v1;Cw="<<waleCw<<";filter=cubeRootVolume";
             if(turbulentPrandtl>0||turbulentSchmidt>0)
@@ -210,8 +224,17 @@ public:
         numerical<<std::setprecision(17)<<"chemicalRtol="<<chemicalRtol<<";chemicalAtol="<<chemicalAtol<<";waveFactor="<<waveFactor
             <<";transportBackend="<<dict.getOrDefault<word>("transportBackend","cpu")
             <<";transportGasProperties="<<dict.getOrDefault<word>("transportGasProperties","auto");
-        if(capillary)numerical<<";capillaryFlux=contact-conservative-stress-v1;capillaryCfl="<<capillaryCfl
+        if(capillary)numerical<<";capillaryFlux="<<(capillaryGeometryMode=="cartesianImplicit"?
+            "shared-implicit-face-v1":"contact-conservative-stress-v1")<<";capillaryCfl="<<capillaryCfl
             <<";capillaryGeometryTolerance="<<capillaryGeometryTolerance;
+        if(capillaryGeometryMode=="cartesianImplicit")
+            numerical<<";capillaryGeometry=cartesian-implicit-v1;primitiveInitialization=curved-TP-v1;implicitReconstruction=quadratic-nullspace-GN-v1;implicitMomentum=metric-reference-v1"
+                <<";implicitQuadrature="<<dict.getOrDefault<scalar>("capillaryQuadratureTolerance",1e-8)
+                <<";implicitVolume="<<dict.getOrDefault<scalar>("capillaryVolumeTolerance",1e-7)
+                <<";implicitSmoothness="<<dict.getOrDefault<scalar>("capillaryFitSmoothness",.01)
+                <<";implicitLinearTolerance="<<dict.getOrDefault<scalar>("capillaryFitLinearTolerance",1e-9)
+                <<";implicitIterations="<<dict.getOrDefault<label>("capillaryFitIterations",32)
+                <<";implicitLinearIterations="<<dict.getOrDefault<label>("capillaryFitLinearIterations",1600);
         check(pintle_rt_set_case_context(t,physical.str().c_str(),numerical.str().c_str()),"Case model/policy identity");
         const label workers=dict.getOrDefault<label>("thermoWorkers",1),batch=dict.getOrDefault<label>("thermoBatchCells",64);
         demand(workers>0&&workers<=64&&batch>0,"Invalid thermo worker/batch limits");batchCells=std::min(nc,size_t(batch));
@@ -346,7 +369,7 @@ public:
             }
         }
     }
-    void startTransport(const dictionary& dict)
+    void startTransport(const dictionary& dict,const CartesianHostGeometry* cartesian=nullptr)
     {
         const word backend=dict.getOrDefault<word>("transportBackend","cpu");
         demand(backend=="cpu"||backend=="cuda","Unknown reactive transport backend");
@@ -382,6 +405,8 @@ public:
                     const double vl=s.liquidMass[0]>0?s.liquidMass[0]/s.rhoLiquid[0]:0;
                     const double vg=s.gasMass>0?s.gasMass/s.rhoGas:0;
                     fixedColor.push_back(vl/(vl+vg));
+                    demand(capillaryGeometryMode!="cartesianImplicit"||fixedColor.back()==0||fixedColor.back()==1,
+                        "Cartesian implicit fixed reservoirs must be pure phases; mixed curved ghost states are unsupported");
                 }
                 if(turbulentPrandtl>0)fixedScalarCp.push_back(face.fixedState.cp);
                 if(turbulentSchmidt>0) {
@@ -418,6 +443,31 @@ public:
             const PintleCapillaryOptionsV1 capillaryOptions{1,sizeof(PintleCapillaryOptionsV1),sigma,
                 capillaryCfl,capillaryGeometryTolerance,int64_t(liquidSpecies[0])};
             checkTransport(pintle_transport_set_capillary_v1(transport.get(),&capillaryOptions));
+        }
+        if(cartesian) {
+            demand(capillary&&capillaryGeometryMode=="cartesianImplicit",
+                "Cartesian mesh is only valid for the selected capillary mode");
+            PintleCartesianMeshV1 descriptor{};
+            descriptor.abiVersion=1;descriptor.structBytes=sizeof(descriptor);
+            for(int d=0;d<3;++d) {
+                descriptor.dims[d]=cartesian->dims[d];descriptor.origin[d]=cartesian->origin[d];
+                descriptor.spacing[d]=cartesian->spacing[d];
+            }
+            descriptor.cellFromLogical=cartesian->cellFromLogical.data();
+            descriptor.cellCenterXYZ=cartesian->cellCenterXYZ.data();
+            descriptor.faceCenterXYZ=cartesian->faceCenterXYZ.data();
+            descriptor.volume=volume.data();descriptor.faces=geometry.data();
+            checkTransport(pintle_transport_install_cartesian_v1(transport.get(),&descriptor));
+            const label nonlinear=dict.getOrDefault<label>("capillaryFitIterations",32);
+            const label linear=dict.getOrDefault<label>("capillaryFitLinearIterations",1600);
+            demand(nonlinear>0&&nonlinear<=100&&linear>0&&linear<=10000,"Invalid capillary fit iteration limits");
+            const PintleImplicitOptionsV1 implicit{1,sizeof(PintleImplicitOptionsV1),
+                dict.getOrDefault<scalar>("capillaryQuadratureTolerance",1e-8),
+                dict.getOrDefault<scalar>("capillaryVolumeTolerance",1e-7),
+                dict.getOrDefault<scalar>("capillaryFitSmoothness",.01),
+                dict.getOrDefault<scalar>("capillaryFitLinearTolerance",1e-9),
+                uint32_t(nonlinear),uint32_t(linear)};
+            checkTransport(pintle_transport_set_implicit_v1(transport.get(),&implicit));
         }
         if(wale) {
             const PintleWaleOptionsV1 options{1,sizeof(PintleWaleOptionsV1),waleCw};
@@ -575,13 +625,16 @@ public:
         // subtraction with the final density, including source roundoff.
         recover(q,states);
     }
-    Array make(double T,double p,const vector& u,const Array& Y,const double* liquid,PintleThermoState& s) const
+    Array make(double T,double p,const vector& u,const Array& Y,const double* liquid,PintleThermoState& s,
+               bool curvedPrimitive=false) const
     {
         Array result(nv);double e=0;
         check(pintle_rt_make_state(thermo,T,p,Y.data(),liquid,result.data(),&e,&s),"State initialization");
         for(int d=0;d<3;++d) result[ns+d]=s.rho*u[d];
         result[ns+3]=e+.5*s.rho*magSqr(u);
-        check(pintle_rt_recover(thermo,result.data(),e,!frozen,&s),"Initial UV recovery");
+        // Curved primitive states receive their prescribed phase split only
+        // after the actual interface geometry is available on the GPU.
+        if(!curvedPrimitive)check(pintle_rt_recover(thermo,result.data(),e,!frozen,&s),"Initial UV recovery");
         if(liquidInventory)for(size_t i=0;i<liquidSpecies.size();++i)result[ns+4+i]=s.liquidMass[i];
         return result;
     }
@@ -910,6 +963,9 @@ int main(int argc,char** argv)
             oldIdentity.numericalPolicyHash=identity.getOrDefault<word>("numericalPolicyHash","");
             currentIdentity={3,label(physicalSpecies),pintle_rt_fingerprint(model.get()),identityClosure,
                 pintle_rt_physical_model_hash(model.get()),pintle_rt_numerical_policy_hash(model.get())};
+            if(flow.capillaryGeometryMode=="cartesianImplicit")
+                demand(oldIdentity.numericalPolicyHash==currentIdentity.numericalPolicyHash,
+                    "Implicit geometry restart requires the saved numerical policy");
             if(pintleValidateIdentity(oldIdentity,currentIdentity)) {
                 restartPolicyHash=oldIdentity.numericalPolicyHash;
                 Info<<"REACTIVE_RESTART_POLICY previous="<<restartPolicyHash<<" current="<<currentIdentity.numericalPolicyHash
@@ -933,7 +989,8 @@ int main(int argc,char** argv)
             for(label c=0;c<nc;++c) {
                 const Array Y(q.begin()+c*nv,q.begin()+c*nv+ns);
                 const double liquid[]={fractions[0][c],fractions[1][c]};
-                const Array local=flow.make(temperature[c],pressure[c],velocity[c],Y,liquid,states[c]);
+                const Array local=flow.make(temperature[c],pressure[c],velocity[c],Y,liquid,states[c],
+                    flow.capillaryGeometryMode=="cartesianImplicit");
                 std::copy(local.begin(),local.end(),q.begin()+c*nv);
             }
         } else {
@@ -988,8 +1045,9 @@ int main(int argc,char** argv)
         }
         const auto owner=host(mesh.faceOwner()),neighbour=host(mesh.faceNeighbour());
         const auto centres=host(mesh.C().primitiveField()),faceCentres=host(mesh.faceCentres()),areas=host(mesh.faceAreas());
-        auto addFace=[&](label facei,label left,label right,const word& type,const vector& separation) {
+        auto addFace=[&](label facei,label left,label right,const word& type,const vector& separation,label peer) {
             Face face;face.owner=left;face.neighbour=right;face.type=type;
+            face.meshFace=facei;face.meshPeerFace=peer;
             face.area=mag(areas[facei]);face.normal=areas[facei]/face.area;
             face.distance=separation&face.normal;
             demand(face.area>0&&face.distance>0,"Degenerate face geometry");
@@ -1008,7 +1066,7 @@ int main(int argc,char** argv)
             flow.faces.push_back(std::move(face));
         };
         for(label f=0;f<mesh.nInternalFaces();++f)
-            addFace(f,owner[f],neighbour[f],"internal",centres[neighbour[f]]-centres[owner[f]]);
+            addFace(f,owner[f],neighbour[f],"internal",centres[neighbour[f]]-centres[owner[f]],-1);
         const dictionary& boundaries=dict.subDict("boundaryConditions");
         forAll(mesh.boundaryMesh(),patchi) {
             const polyPatch& patch=mesh.boundaryMesh()[patchi];
@@ -1023,7 +1081,7 @@ int main(int argc,char** argv)
                     const label f=patch.start()+j,fr=other.start()+j;
                     demand(mag(areas[f]+areas[fr])<=1e-8*mag(areas[f]),"Nonmatching periodic face areas/order");
                     const vector translation=faceCentres[f]-faceCentres[fr];
-                    addFace(f,owner[f],owner[fr],"internal",centres[owner[fr]]+translation-centres[owner[f]]);
+                    addFace(f,owner[f],owner[fr],"internal",centres[owner[fr]]+translation-centres[owner[f]],fr);
                 }
                 continue;
             }
@@ -1043,24 +1101,42 @@ int main(int argc,char** argv)
             }
             forAll(patch,j) {
                 const label f=patch.start()+j;
-                addFace(f,owner[f],-1,type,faceCentres[f]-centres[owner[f]]);
+                addFace(f,owner[f],-1,type,faceCentres[f]-centres[owner[f]],-1);
                 flow.faces.back().fixed=fixed;flow.faces.back().fixedState=fixedState;
             }
         }
-        flow.startTransport(dict);
-        flow.initializeCapillary(q,states,history.loaded);
+        std::unique_ptr<CartesianHostGeometry> cartesian;
+        if(flow.capillaryGeometryMode=="cartesianImplicit")
+            cartesian=std::make_unique<CartesianHostGeometry>(
+                makeCartesianHostGeometry(mesh,flow.faces,flow.volume));
+        flow.startTransport(dict,cartesian.get());
+        if(history.loaded&&flow.capillaryGeometryMode=="cartesianImplicit")
+            flow.restoreImplicitSurface(std::filesystem::path(runTime.path().c_str())/runTime.timeName().c_str());
+        Array initialColor;
+        if(flow.capillary&&!history.loaded&&dict.found("capillaryInitialColorField")) {
+            demand(initialization=="primitive"&&flow.capillaryGeometryMode=="cartesianImplicit",
+                "An initial interface color is only a primitive Cartesian geometry seed");
+            const word fieldName=dict.get<word>("capillaryInitialColorField");
+            volScalarField field(IOobject(fieldName,runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
+            demand(field.dimensions()==dimless,"Initial interface color must be dimensionless");
+            initialColor=host(field.primitiveField());
+        }
+        flow.initializeCapillary(q,states,history.loaded,initialColor.empty()?nullptr:&initialColor);
         Info<<"REACTIVE_PHYSICS chemistry="<<flow.chemistry<<" combustion="<<flow.chemistry
             <<" phaseChange="<<(physics.phaseChange?"equilibrium":(flow.frozen?"frozen":"none"))
             <<" viscosity="<<(flow.viscosity>0)<<" heatConduction="<<(flow.conductivity>0)
             <<" speciesDiffusion="<<(flow.diffusivity>0)<<" turbulence="<<(flow.wale?"WALE-stress-v1":"none")
             <<" turbulentHeatFlux="<<(flow.turbulentPrandtl>0)<<" turbulentSpeciesMixing="<<(flow.turbulentSchmidt>0)
-            <<" surfaceTension="<<physics.surfaceTension<<" interfaceModel="<<(flow.capillary?"diffuse-liquid-inventory-v1":"none")
+            <<" surfaceTension="<<physics.surfaceTension<<" interfaceModel="<<(flow.capillary?
+                (flow.capillaryGeometryMode=="cartesianImplicit"?"implicit-liquid-inventory-v1":"diffuse-liquid-inventory-v1"):"none")
             <<" totalEnergy=1 thermodynamicRecovery=1"
             <<" frozenLiquidFields="<<(flow.frozen?flow.liquidSpecies.size():0)
             <<" transportedLiquidFields="<<(flow.liquidInventory?flow.liquidSpecies.size():0)<<nl;
         if(flow.capillary)Info<<"REACTIVE_CAPILLARY sigma="<<flow.sigma<<" geometryBackend=cuda tractionBackend=cuda"
             <<" closureBackend=cuda pressureModel=curved-phase-split surfaceEnergyInTotal=1"
-            <<" capillaryCfl="<<flow.capillaryCfl<<" geometryScheme=Gauss-diffuse noPLIC=1"<<nl;
+            <<" capillaryCfl="<<flow.capillaryCfl<<" geometryScheme="
+            <<(flow.capillaryGeometryMode=="cartesianImplicit"?"C2-sharp-volume":"Gauss-diffuse")
+            <<" noPLIC=1"<<nl;
         PintleRealFluidCapabilities capabilities{};flow.check(pintle_rt_capabilities(model.get(),&capabilities),"Capabilities");
         Info<<"REACTIVE_PHYSICAL_MODEL hash="<<pintle_rt_physical_model_hash(model.get())
             <<" numericalPolicyHash="<<pintle_rt_numerical_policy_hash(model.get())<<" eos="<<pintle_rt_eos_name(model.get())
@@ -1133,6 +1209,9 @@ int main(int argc,char** argv)
                 writeScalar("interfaceColor",dimless,flow.interfaceColor);
                 writeScalar("interfaceCurvature",dimless/dimLength,flow.interfaceCurvature);
                 writeScalar("surfaceEnergyDensity",dimPressure,flow.surfaceEnergy);
+                if(flow.capillaryGeometryMode=="cartesianImplicit"){
+                    tx.checkField("implicitSurface.bin");flow.saveImplicitSurface(tx.path());
+                }
             }
             if(mechanical) {
                 for(label c=0;c<nc;++c) values[c]=q[c*nv+ns+4];writeScalar("alphaEnvironment",dimless,values);
@@ -1253,11 +1332,11 @@ int main(int argc,char** argv)
                     flow.reportAttempt(attemptProfile,true,retries);break;
                 }
                 catch(const PersistentIOError&) {
-                    if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
+                    if(flow.transport)flow.checkTransport(pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0));
                     q=previous;previousStates.restore(states);boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
                 }
                 catch(const std::exception& failure) {
-                    if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
+                    if(flow.transport)flow.checkTransport(pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0));
                     q=previous;previousStates.restore(states);boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
                     ++history.retries;

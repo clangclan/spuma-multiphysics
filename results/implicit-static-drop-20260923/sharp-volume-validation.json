@@ -1,0 +1,9 @@
+{
+  "cells": 379,
+  "finiteDifferenceCases": 30,
+  "maxJacobianAbsoluteError": 1.124924153828033e-09,
+  "cudaChecked": true,
+  "maxScaleInvarianceError": 2.220446049250313e-16,
+  "maxCudaGeometryDifference": 0.0,
+  "maxCudaJacobianDifference": 0.0
+}

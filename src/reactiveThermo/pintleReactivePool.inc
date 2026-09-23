@@ -11,6 +11,7 @@ struct HemDeviceClient {
     decltype(&pintle_gpu_hem_destroy_v1) destroy=nullptr;
     decltype(&pintle_gpu_hem_run_v1) run=nullptr;
     decltype(&pintle_gpu_hem_run_v2) runV2=nullptr;
+    decltype(&pintle_gpu_hem_initialize_tp_v1) initializeTP=nullptr;
     ~HemDeviceClient(){if(handle)destroy(handle);if(library)dlclose(library);}
 };
 class ThermoPool {
@@ -90,6 +91,7 @@ public:
             hemDevice->destroy=reinterpret_cast<decltype(hemDevice->destroy)>(dlsym(hemDevice->library,"pintle_gpu_hem_destroy_v1"));
             hemDevice->run=reinterpret_cast<decltype(hemDevice->run)>(dlsym(hemDevice->library,"pintle_gpu_hem_run_v1"));
             hemDevice->runV2=reinterpret_cast<decltype(hemDevice->runV2)>(dlsym(hemDevice->library,"pintle_gpu_hem_run_v2"));
+            hemDevice->initializeTP=reinterpret_cast<decltype(hemDevice->initializeTP)>(dlsym(hemDevice->library,"pintle_gpu_hem_initialize_tp_v1"));
             require(create&&hemDevice->destroy&&hemDevice->run&&hemDevice->runV2,"Incomplete CUDA HEM ABI");char failure[1024]{};
             const auto image=source.deviceHemModel();hemDevice->handle=create(&image,sizeof(image),capacity,failure,sizeof(failure));require(hemDevice->handle,failure);
             hemProfile.deviceBytes=sizeof(image)+PINTLE_GPU_HEM_PHASE_CACHE_BYTES_V1
@@ -284,5 +286,46 @@ int pintle_rt_pool_capillary_batch_v1(void* pool,PintleBatchToken token,int equi
         p.error[0]=0;return 0;
     }catch(const std::exception& ex){std::snprintf(p.error.data(),p.error.size(),"%s",ex.what());return 1;}
     catch(...){std::snprintf(p.error.data(),p.error.size(),"Unknown capillary batch failure");return 1;}
+}
+int pintle_rt_pool_capillary_initialize_tp_v1(void* pool,PintleBatchToken token,
+    size_t count,size_t stride,double* q,double* energy,const double* color,
+    const double* pressureJump,PintleThermoState* state) {
+    if(!pool||!q||!energy||!color||!pressureJump||!state)return -1;
+    auto& p=*static_cast<ThermoPool*>(pool);
+    std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
+    if(!lock.owns_lock())return 2;
+    try {
+        require(p.hemDevice&&p.hemDevice->initializeTP&&!p.prototype->hemCpuFallback,
+            "Primitive capillary initialization requires strict CUDA TP support");
+        require(count&&count<=p.profile.capacity&&stride>=p.ns,"Invalid primitive capillary batch size");
+        require(token.attemptId&&token.contentVersion&&token.attemptId>=p.last.attemptId
+            &&token.contentVersion>p.last.contentVersion
+            &&(token.attemptId>p.last.attemptId||token.stageId>=p.last.stageId),"Stale initialization token");
+        require(p.models[0]->physicalHash==p.prototype->physicalHash
+            &&p.models[0]->policyHash==p.prototype->policyHash,"Pool model/policy changed after creation");
+        p.last=token;
+        for(size_t c=0;c<count;++c){
+            std::copy(q+c*stride,q+c*stride+p.ns,p.hemMass.begin()+c*p.ns);
+            p.hemEnergy[c]=energy[c];p.hemState[c]=state[c];
+            p.hemCapillary[c]={color[c],pressureJump[c],0};
+        }
+        PintleGpuHemProfileV1 profile{};profile.abiVersion=1;profile.structBytes=sizeof(profile);char failure[1024]{};
+        const int status=p.hemDevice->initializeTP(p.hemDevice->handle,p.hemMass.data(),p.hemEnergy.data(),
+            p.hemCapillary.data(),count,p.hemState.data(),p.hemSuccess.data(),&profile,failure,sizeof(failure));
+        require(status==0,std::string("CUDA capillary TP execution failed: ")+failure);
+#define HEM_INIT_ADD(name) p.hemProfile.name+=profile.name
+        HEM_INIT_ADD(batches);HEM_INIT_ADD(submitted);HEM_INIT_ADD(succeeded);HEM_INIT_ADD(deviceFailures);
+        HEM_INIT_ADD(phaseEvaluations);HEM_INIT_ADD(transferBytes);HEM_INIT_ADD(wallSeconds);
+        HEM_INIT_ADD(kernelSeconds);HEM_INIT_ADD(copySeconds);
+#undef HEM_INIT_ADD
+        p.hemProfile.deviceBytes=profile.deviceBytes;
+        for(size_t c=0;c<count;++c)require(p.hemSuccess[c],"CUDA capillary TP failed at batch cell "+std::to_string(c));
+        for(size_t c=0;c<count;++c){
+            std::copy(p.hemMass.begin()+c*p.ns,p.hemMass.begin()+(c+1)*p.ns,q+c*stride);
+            energy[c]=p.hemEnergy[c];state[c]=p.hemState[c];
+        }
+        p.error[0]=0;return 0;
+    }catch(const std::exception& ex){std::snprintf(p.error.data(),p.error.size(),"%s",ex.what());return 1;}
+    catch(...){std::snprintf(p.error.data(),p.error.size(),"Unknown capillary TP failure");return 1;}
 }
 }

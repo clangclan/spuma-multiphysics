@@ -4,6 +4,8 @@
 
 [기하학적 균형 후속 구현](../../reports/geometric-balance-review-20260923.ko.md)은 별도 GPU 면 연산자와 실제 수송 커널을 사용하는 일회성 진단 API를 추가했다. 해석 기하 시험과 제한된 VOF 재구성 탐색을 수행했으며, 기존 runtime 모델과 미통과 정적 액적 기준은 유지한다.
 
+[Cartesian implicit 후속 통합](../../reports/implicit-static-drop-20260923.ko.md)은 액체 체적에서 C² 계면을 GPU로 복원하고 공유 면 유량을 실제 RK·curved UV·체크포인트에 연결한다. 선택값은 `capillaryGeometry cartesianImplicit`이며 기본 diffuse와 구분한다. 아래 초기 단계 표는 당시의 구현 범위이고 후속 모델의 정확도 판정은 링크한 최신 보고서를 따른다.
+
 2026-09-22. 우선 목표는 사용자가 선택한 **액주·액막 분열과 액적 생성**이다. 성능 최적화 작업은 중단한 상태로 유지했다. 조사는 GPT-5.6 Sol 에이전트 3개가 수행했다.
 
 작업 경로는 `spuma-multiphysics-spray-physics`, 브랜치는 `codex/reactive-spray-physics`다. `main`의 `9ff04ff`에 이미 수용한 compact-active-state GPU 소스 48개를 옮긴 뒤 물리 기능을 추가했다. [기준 소스](../../results/spray-physics/gpu-baseline-source.json)와 [기준 실행 파일](../../results/spray-physics/gpu-baseline-runtime.json)을 기록했다. 기존 `spuma-multiphysics-gpu-hem`의 중단된 최적화 후보는 승격하지 않았다.

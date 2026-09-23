@@ -2,12 +2,16 @@
 // Compile as C++ for portable operator checks, or via .cu for CUDA execution.
 #include "pintleTransportKernels.h"
 #include "pintleTransportV21.h"
+#include "pintleCartesianTransport.h"
+#include "pintleImplicitTransportKernels.h"
+#include "../reactiveInterface/pintleImplicitFit.h"
 #include "pintleTurbulence.h"
 #include "../reactiveThermo/pintleDeviceWalePr.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
 #include <mutex>
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <limits>
@@ -178,6 +182,38 @@ struct Execution {
 #else
 #define RT_HD
 #endif
+template<class Op> struct ImplicitInvoke {
+    Op op;
+    RT_HD void operator()(size_t i,View)const{op(i);}
+};
+template<class Op> struct ImplicitSum {
+    Op op;size_t count,groups;
+    RT_HD double operator()(size_t group,size_t lane,View)const {
+        double value=0;for(size_t i=group*256+lane;i<count;i+=groups*256)value+=op(i);return value;
+    }
+    RT_HD double combine(double a,double b)const{return a+b;}
+};
+struct ImplicitRead {const double* x;RT_HD double operator()(size_t i)const{return x[i];}};
+class ImplicitRuntime {
+    Execution& execution;double limit;double *partial,*answer;
+public:
+    ImplicitRuntime(Execution& ex,double maximumBytes):execution(ex),limit(maximumBytes) {
+        partial=allocate<double>(4096);answer=allocate<double>(1);
+    }
+    template<class T>T* allocate(size_t n){return execution.allocate<T>(n,limit);}
+    template<class T>void upload(T* destination,const T* source,size_t n) {
+        execution.upload(destination,source,n);
+        // The caller's ten-element coarse vector is stack storage.
+        execution.finish();
+    }
+    template<class Op>void launch(size_t n,Op op){execution.launch(n,View{},ImplicitInvoke<Op>{op});}
+    template<class Op>double sum(size_t n,Op op) {
+        const size_t groups=std::min(size_t(4096),(n+255)/256);
+        execution.reduce(groups,View{},ImplicitSum<Op>{op,n,groups},partial);
+        execution.reduce(1,View{},ImplicitSum<ImplicitRead>{{partial},groups,1},answer);
+        double value;execution.download(&value,answer,1);execution.finish();return value;
+    }
+};
 struct Minimum {
     const double* input;size_t count;
     RT_HD double operator()(size_t group,size_t lane,View) const {
@@ -258,10 +294,19 @@ public:
     PintleThermoState* walePrStates=nullptr;
     unsigned long long* walePrFailure=nullptr;
     std::vector<double> walePrHostQ;
+    PintleCartesianInfoV1 cartesianInfo{};
+    std::unique_ptr<ImplicitRuntime> implicitRuntime;
+    std::unique_ptr<PintleImplicitFit::Workspace<ImplicitRuntime>> implicitFit;
+    PintleImplicitFit::Settings implicitSettings{};
+    ImplicitCell* implicitCells=nullptr;
+    PintleGeometricFaceV1 *implicitFaces=nullptr,*implicitFaceScratch=nullptr;
+    bool implicitReady=false,implicitRestored=false,implicitBackupReady=false;
+    double* implicitBackup=nullptr;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
               const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,
               const PintleTransportOptionsV2* options=nullptr,const PintleTransportOptionsV21* options21=nullptr)
       :execution(backend),slot(execution) {
+        cartesianInfo.abiVersion=1;cartesianInfo.structBytes=sizeof(cartesianInfo);
         v.cfg=cfg;
         if(options) {
             require(options->abiVersion==1&&options->structBytes==sizeof(*options)&&options->bridgeCells>0,"Invalid transport options ABI");
@@ -704,13 +749,51 @@ public:
             "Invalid material color");
         for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedColor[c])&&fixedColor[c]>=0&&fixedColor[c]<=1,
             "Invalid fixed material color");
+        if(implicitFit)for(size_t c=0;c<v.cfg.fixed;++c)require(fixedColor[c]==0||fixedColor[c]==1,
+            "Implicit fixed reservoirs must be pure phases");
         colorReady=false;capillaryStatus=0;
         if(walePrInstalled){walePrReady=false;v.scalarCpFields=false;v.scalarHFields=false;}
         execution.upload(v.capillaryError,&capillaryStatus,1);
         execution.upload(v.capillaryColor,cellColor,v.cfg.cells);
         execution.upload(v.capillaryColor+v.cfg.cells,fixedColor,v.cfg.fixed);
-        execution.launch(v.cfg.cells,v,InterfaceGradient{});
-        execution.launch(v.cfg.cells,v,InterfaceCurvature{});
+        const uint64_t previousKernels=execution.stats.kernelLaunches;
+        if(implicitFit) {
+            execution.launch(v.cfg.cells,v,ImplicitTarget{implicitFit->target()});
+            const bool cached=implicitReady&&implicitFit->targetMatches(implicitSettings.volumeTolerance)
+                &&implicitRuntime->sum(v.cfg.cells,ImplicitVolumeMismatch{v,implicitCells,implicitSettings.volumeTolerance})==0;
+            if(!cached){
+            const bool reuse=implicitReady;implicitReady=false;
+            PintleImplicitFit::Progress fit{};
+            if(implicitRestored){
+                require(implicitFit->certifyRestored(implicitSettings),
+                    "Restored implicit surface does not satisfy current cell volumes/tolerance");
+                fit.converged=true;implicitRestored=false;
+            }else fit=implicitFit->fit(implicitSettings,reuse);
+            if(!fit.converged) {
+                char detail[512];std::snprintf(detail,sizeof(detail),
+                    "Cartesian implicit volume reconstruction did not converge: build=%llu reused=%d nonlinear=%u linear=%u rmsCellVolume=%.12g regularizer=%.12g volumeTolerance=%.12g",
+                    static_cast<unsigned long long>(capillaryProfile.geometryBuilds+1),int(reuse),
+                    fit.nonlinearIterations,fit.linearIterations,fit.rmsVolumeError,fit.regularizerNorm,implicitSettings.volumeTolerance);
+                throw std::runtime_error(detail);
+            }
+            execution.launch(v.cfg.cells,v,ImplicitCells{implicitFit->coefficients(),
+                implicitSettings.quadratureTolerance,implicitSettings.volumeTolerance,implicitCells});
+            execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
+            require(!capillaryStatus,"Unresolved Cartesian implicit cell geometry");
+            execution.launch(v.cfg.faces,v,ImplicitFaces{implicitFit->coefficients(),implicitCells,
+                implicitSettings.quadratureTolerance,implicitFaceScratch});
+            execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
+            require(!capillaryStatus,"Unresolved Cartesian implicit shared-face geometry or periodic seam");
+            // Publish the matching cell and face geometry only after the
+            // entire reconstruction and all quadratures have succeeded.
+            execution.copy(implicitFaces,implicitFaceScratch,v.cfg.faces);
+            execution.launch(v.cfg.cells,v,ImplicitCommit{implicitCells});
+            v.geometricFace=implicitFaces;v.implicitGeometry=true;implicitReady=true;
+            }
+        } else {
+            execution.launch(v.cfg.cells,v,InterfaceGradient{});
+            execution.launch(v.cfg.cells,v,InterfaceCurvature{});
+        }
         execution.download(energy,v.capillarySurfaceEnergy,v.cfg.cells);
         if(curvature)execution.download(curvature,v.interface.curvature,v.cfg.cells);
         if(normal)execution.download(normal,v.interface.normal,product(v.cfg.cells,3));
@@ -718,7 +801,7 @@ public:
         require(!capillaryStatus,"Invalid capillary geometry");
         colorReady=true;++capillaryProfile.geometryBuilds;
         capillaryProfile.geometryCells+=v.cfg.cells;
-        capillaryProfile.geometryKernels+=2;
+        capillaryProfile.geometryKernels+=execution.stats.kernelLaunches-previousKernels;
         capillaryProfile.colorUploadBytes+=(v.cfg.cells+v.cfg.fixed)*sizeof(double);
         capillaryProfile.geometryDownloadBytes+=v.cfg.cells*sizeof(double)*(1+(curvature?1:0)+(normal?3:0));
     }
@@ -799,6 +882,178 @@ public:
         for(size_t c=0;c<n;++c)for(size_t k=0;k<nv;++k)rhs[c*nv+k]=packed[k*n+c];
         std::fill(boundary,boundary+nv,0.0);
         if(residual)std::copy(hostResidual.begin(),hostResidual.end(),residual);
+    }
+    void installCartesian(const PintleCartesianMeshV1& mesh) {
+        require(mesh.abiVersion==1&&mesh.structBytes==sizeof(mesh),"Invalid Cartesian mesh ABI");
+        require(v.capillary&&!cartesianInfo.installed&&!attemptOpen&&!haveInitial&&!haveResident
+                &&!execution.stats.stages,"Cartesian mesh must be installed once before capillary stepping");
+        require(mesh.cellFromLogical&&mesh.cellCenterXYZ&&mesh.faceCenterXYZ
+                &&mesh.volume&&mesh.faces,"Missing Cartesian mesh arrays");
+        size_t count=1;
+        for(int d=0;d<3;++d) {
+            require(mesh.dims[d]>=8&&mesh.dims[d]<=size_t(INT64_MAX)
+                &&std::isfinite(mesh.origin[d])&&std::isfinite(mesh.spacing[d])
+                &&mesh.spacing[d]>0,"Invalid Cartesian mesh dimensions or spacing");
+            count=product(count,size_t(mesh.dims[d]));
+        }
+        require(count==v.cfg.cells,"Cartesian logical cell count differs from transport");
+        const double expectedVolume=mesh.spacing[0]*mesh.spacing[1]*mesh.spacing[2];
+        require(std::isfinite(expectedVolume)&&expectedVolume>0,"Invalid Cartesian cell volume");
+        std::vector<int64_t> cellToLogical(count,-1);
+        for(size_t logical=0;logical<count;++logical) {
+            const int64_t physical=mesh.cellFromLogical[logical];
+            require(physical>=0&&size_t(physical)<count&&cellToLogical[size_t(physical)]<0,
+                "Cartesian cell mapping is not a bijection");
+            cellToLogical[size_t(physical)]=int64_t(logical);
+        }
+        std::vector<PintleTransportFace> installedFaces(v.cfg.faces);
+        std::vector<double> installedInverse(count);
+        execution.download(installedFaces.data(),v.faces,v.cfg.faces);
+        execution.download(installedInverse.data(),v.inverseVolume,count);execution.finish();
+        auto near=[](double actual,double expected,double scale) {
+            return std::isfinite(actual)&&std::abs(actual-expected)<=1e-8*scale;
+        };
+        for(size_t c=0;c<count;++c) {
+            const uint64_t logical=uint64_t(cellToLogical[c]);
+            const uint64_t ijk[3]{logical%mesh.dims[0],
+                (logical/mesh.dims[0])%mesh.dims[1],logical/(mesh.dims[0]*mesh.dims[1])};
+            require(near(mesh.volume[c],expectedVolume,expectedVolume)
+                &&near(mesh.volume[c]*installedInverse[c],1.,1.),
+                "Cartesian cell volume differs from installed transport volume");
+            for(int d=0;d<3;++d)
+                require(near(mesh.cellCenterXYZ[3*c+d],
+                    mesh.origin[d]+(double(ijk[d])+.5)*mesh.spacing[d],mesh.spacing[d]),
+                    "Cartesian cell centre is off the uniform grid");
+        }
+        std::vector<int8_t> axisSign(v.cfg.faces);
+        std::vector<uint8_t> seen(product(count,size_t(6)),0);
+        size_t boundaries=0,periodics=0;
+        for(size_t fi=0;fi<v.cfg.faces;++fi) {
+            const auto& f=mesh.faces[fi];const auto& original=installedFaces[fi];
+            require(f.owner==original.owner&&f.neighbour==original.neighbour
+                &&f.fixed==original.fixed&&f.kind==original.kind
+                &&f.area==original.area&&f.distance==original.distance
+                &&f.ownerWeight==original.ownerWeight,
+                "Cartesian face differs from installed transport face");
+            int axis=0;for(int d=1;d<3;++d)if(std::abs(f.normal[d])>std::abs(f.normal[axis]))axis=d;
+            const int sign=f.normal[axis]>=0?1:-1;
+            for(int d=0;d<3;++d)require(f.normal[d]==original.normal[d]
+                &&near(f.normal[d],d==axis?double(sign):0.,1.),
+                "Cartesian face normal is not axis aligned");
+            const size_t owner=size_t(f.owner),logical=size_t(cellToLogical[owner]);
+            const uint64_t ijk[3]{uint64_t(logical)%mesh.dims[0],
+                (uint64_t(logical)/mesh.dims[0])%mesh.dims[1],
+                uint64_t(logical)/(mesh.dims[0]*mesh.dims[1])};
+            double area=1.;for(int d=0;d<3;++d)if(d!=axis)area*=mesh.spacing[d];
+            require(near(f.area,area,area),"Cartesian face area differs from rectangle");
+            for(int d=0;d<3;++d) {
+                const double expected=mesh.origin[d]+
+                    (double(ijk[d])+(d==axis?(sign>0?1.:0.):.5))*mesh.spacing[d];
+                require(near(mesh.faceCenterXYZ[3*fi+d],expected,mesh.spacing[d]),
+                    "Cartesian face centre differs from owner-side rectangle");
+            }
+            const size_t side=owner*6+size_t(2*axis+(sign>0));
+            require(!seen[side],"Duplicate Cartesian cell side");seen[side]=1;
+            if(f.neighbour>=0) {
+                require(f.kind==0&&near(f.distance,mesh.spacing[axis],mesh.spacing[axis]),
+                    "Invalid Cartesian internal/periodic face distance");
+                uint64_t other[3]{ijk[0],ijk[1],ijk[2]};
+                const bool wrap=sign>0?ijk[axis]+1==mesh.dims[axis]:ijk[axis]==0;
+                other[axis]=sign>0?(ijk[axis]+1)%mesh.dims[axis]:
+                    (ijk[axis]+mesh.dims[axis]-1)%mesh.dims[axis];
+                const uint64_t otherLogical=other[0]+mesh.dims[0]*(other[1]+mesh.dims[1]*other[2]);
+                require(mesh.cellFromLogical[otherLogical]==f.neighbour,
+                    "Cartesian neighbour is not adjacent or periodically wrapped");
+                const size_t opposite=size_t(f.neighbour)*6+size_t(2*axis+(sign<0));
+                require(!seen[opposite],"Duplicate Cartesian neighbour side");seen[opposite]=1;
+                if(wrap)++periodics;
+            } else {
+                require((sign>0?ijk[axis]+1==mesh.dims[axis]:ijk[axis]==0)
+                    &&near(f.distance,.5*mesh.spacing[axis],mesh.spacing[axis]),
+                    "Cartesian boundary is not on its box face");
+                ++boundaries;
+            }
+            axisSign[fi]=int8_t(sign*(axis+1));
+        }
+        for(uint8_t s:seen)require(s==1,"Missing Cartesian cell side");
+        const size_t mapBytes=product(count,2*sizeof(int64_t))+v.cfg.faces*sizeof(int8_t);
+        require(double(execution.stats.allocatedBytes)+double(mapBytes)<=v.cfg.maxBytes,
+            "Cartesian map exceeds transport memory budget");
+        auto* memory=execution.allocate<unsigned char>(mapBytes,v.cfg.maxBytes);
+        auto* logicalToCell=reinterpret_cast<int64_t*>(memory);
+        auto* physicalToLogical=logicalToCell+count;
+        auto* faceCodes=reinterpret_cast<int8_t*>(physicalToLogical+count);
+        execution.upload(logicalToCell,mesh.cellFromLogical,count);
+        execution.upload(physicalToLogical,cellToLogical.data(),count);
+        execution.upload(faceCodes,axisSign.data(),v.cfg.faces);execution.finish();
+        PintleCartesianMesh::View view{};
+        for(int d=0;d<3;++d) {
+            view.dims[d]=mesh.dims[d];view.origin[d]=mesh.origin[d];view.spacing[d]=mesh.spacing[d];
+        }
+        view.logicalToCell=logicalToCell;view.cellToLogical=physicalToLogical;
+        view.faceAxisSign=faceCodes;
+        v.cartesian=view;
+        cartesianInfo.abiVersion=1;cartesianInfo.structBytes=sizeof(cartesianInfo);
+        cartesianInfo.installed=1;cartesianInfo.cells=count;cartesianInfo.faces=v.cfg.faces;
+        cartesianInfo.boundaryFaces=boundaries;cartesianInfo.periodicFaces=periodics;
+        cartesianInfo.deviceBytes=mapBytes;
+        for(int d=0;d<3;++d) {
+            cartesianInfo.dims[d]=mesh.dims[d];cartesianInfo.origin[d]=mesh.origin[d];
+            cartesianInfo.spacing[d]=mesh.spacing[d];
+        }
+    }
+    void setImplicit(const PintleImplicitOptionsV1& options) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options)
+            &&cartesianInfo.installed&&!implicitFit&&!colorReady&&!attemptOpen
+            &&!haveInitial&&!haveResident&&!execution.stats.stages,
+            "Implicit geometry must be selected once after the Cartesian descriptor and before stepping");
+        require(std::isfinite(options.quadratureTolerance)&&options.quadratureTolerance>0&&options.quadratureTolerance<.01
+            &&std::isfinite(options.volumeTolerance)&&options.volumeTolerance>0&&options.volumeTolerance<.01
+            &&std::isfinite(options.smoothness)&&options.smoothness>0
+            &&std::isfinite(options.linearTolerance)&&options.linearTolerance>0&&options.linearTolerance<1
+            &&options.nonlinearIterations>0&&options.nonlinearIterations<=100
+            &&options.linearIterations>0&&options.linearIterations<=10000,"Invalid implicit geometry controls");
+        PintleImplicitFit::Grid grid{};size_t controls=1;
+        for(int d=0;d<3;++d){require(cartesianInfo.dims[d]<=1024,"Implicit grid axis exceeds 1024 cells");
+            grid.cells[d]=int64_t(cartesianInfo.dims[d]);controls=product(controls,size_t(grid.cells[d]+3));}
+        const size_t fitDoubles=product(v.cfg.cells,size_t(82))+product(controls,size_t(21))+4107;
+        const size_t bytes=product(fitDoubles,sizeof(double))+product(v.cfg.cells,sizeof(ImplicitCell))
+            +product(v.cfg.faces,2*sizeof(PintleGeometricFaceV1));
+        require(double(execution.stats.allocatedBytes)+double(bytes)<=v.cfg.maxBytes,
+            "Implicit reconstruction exceeds transport workspace budget");
+        implicitSettings.quadratureTolerance=options.quadratureTolerance;
+        implicitSettings.volumeTolerance=options.volumeTolerance;
+        implicitSettings.smoothness=options.smoothness;implicitSettings.linearTolerance=options.linearTolerance;
+        implicitSettings.nonlinearIterations=options.nonlinearIterations;implicitSettings.linearIterations=options.linearIterations;
+        if(std::getenv("PINTLE_IMPLICIT_TRACE"))implicitSettings.observer=[](unsigned iteration,double rms,double smooth,double lambda) {
+            std::fprintf(stderr,"REACTIVE_IMPLICIT_FIT iteration=%u rmsVolume=%.12g regularizer=%.12g lambda=%.12g\n",
+                iteration,rms,smooth,lambda);
+        };
+        implicitRuntime=std::make_unique<ImplicitRuntime>(execution,v.cfg.maxBytes);
+        implicitFit=std::make_unique<PintleImplicitFit::Workspace<ImplicitRuntime>>(*implicitRuntime,grid);
+        implicitBackup=execution.allocate<double>(controls,v.cfg.maxBytes);
+        implicitCells=execution.allocate<ImplicitCell>(v.cfg.cells,v.cfg.maxBytes);
+        implicitFaces=execution.allocate<PintleGeometricFaceV1>(v.cfg.faces,v.cfg.maxBytes);
+        implicitFaceScratch=execution.allocate<PintleGeometricFaceV1>(v.cfg.faces,v.cfg.maxBytes);
+        capillaryProfile.capillaryWorkspaceBytes+=bytes;
+    }
+    void implicitCoefficients(double* output,const double* restore,size_t count,size_t* required) {
+        require(implicitFit&&required,"Implicit coefficient query needs an installed model");
+        *required=implicitFit->coefficientCount();
+        if(!output&&!restore){require(count==0,"Invalid implicit size query");return;}
+        require(count==*required&&!(output&&restore),"Wrong implicit coefficient buffer");
+        if(restore){
+            require(!colorReady&&!implicitReady&&!implicitRestored&&!attemptOpen&&!haveResident&&!highestVersion,
+                "Implicit coefficients may only be restored before geometry initialization");
+            for(size_t i=0;i<count;++i)require(std::isfinite(restore[i]),"Nonfinite restored implicit coefficient");
+            execution.upload(implicitFit->initialCoefficients(),restore,count);
+            // The public caller owns this host buffer and may release it as
+            // soon as the synchronous ABI returns (checkpoint reader does).
+            execution.finish();implicitRestored=true;
+        }else{
+            require(implicitReady&&colorReady,"No committed implicit surface to checkpoint");
+            execution.download(output,implicitFit->coefficients(),count);execution.finish();
+        }
     }
     void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport,
                          bool generated=false,const PintleGasPartition* partition=nullptr) {
@@ -996,6 +1251,21 @@ int pintle_transport_geometric_diagnostic_v1(void* t,const PintleGeometricDiagno
     return protect(t,[&](Transport& x){require(options,"Null geometric diagnostic options");
         x.geometricDiagnostic(*options,q,states,color,cells,faces,rhs,boundary,residual);},false);
 }
+int pintle_transport_install_cartesian_v1(void* t,const PintleCartesianMeshV1* mesh) {
+    return protect(t,[&](Transport& x){require(mesh,"Null Cartesian mesh descriptor");
+        x.installCartesian(*mesh);},false);
+}
+int pintle_transport_cartesian_info_v1(void* t,PintleCartesianInfoV1* info) {
+    return protect(t,[&](Transport& x){require(info&&info->abiVersion==1
+        &&info->structBytes==sizeof(*info),"Invalid Cartesian info ABI");
+        *info=x.cartesianInfo;},false);
+}
+int pintle_transport_set_implicit_v1(void* t,const PintleImplicitOptionsV1* options) {
+    return protect(t,[&](Transport& x){require(options,"Null implicit geometry options");x.setImplicit(*options);});
+}
+int pintle_transport_implicit_coefficients_v1(void* t,double* output,const double* restore,size_t count,size_t* required) {
+    return protect(t,[&](Transport& x){x.implicitCoefficients(output,restore,count,required);},restore!=nullptr);
+}
 int pintle_transport_capillary_geometry_v1(void* t,const double* color,const double* fixedColor,
     double* surfaceEnergy,double* curvature,double* normalXYZ) {
     return protect(t,[&](Transport& x){x.capillaryGeometry(color,fixedColor,surfaceEnergy,curvature,normalXYZ);});
@@ -1117,12 +1387,23 @@ int pintle_transport_memory_v2(void* handle,PintleTransportMemoryV2* out) {
 int pintle_transport_begin_attempt(void* handle,const char* hash,uint64_t id) {
     return protect(handle,[&](Transport& t){require(hash&&t.physicalHash==hash,"Transport physical model hash mismatch");
         require(!t.attemptOpen&&id>t.lastAttempt,"Stale/open transport attempt");
+        if(t.implicitFit){
+            if(t.implicitReady){t.execution.copy(t.implicitBackup,t.implicitFit->coefficients(),t.implicitFit->coefficientCount());
+                t.implicitBackupReady=true;}
+            else require(t.implicitRestored&&t.implicitBackupReady,"No accepted implicit geometry for RK attempt");
+        }
         t.attemptId=t.lastAttempt=id;t.tokenStage=0;t.attemptOpen=true;t.haveResident=t.haveInitial=false;
         if(t.walePrInstalled){t.walePrReady=false;t.v.scalarCpFields=false;t.v.scalarHFields=false;}});
 }
 int pintle_transport_end_attempt(void* handle,uint64_t id,int commit) {
     return protect(handle,[&](Transport& t){require((commit==0||commit==1)&&t.attemptOpen&&id==t.attemptId,"Wrong transport attempt completion");
         require(!commit||t.tokenStage==2,"Cannot commit incomplete transport RK");t.execution.finish();
+        if(!commit&&t.implicitFit){
+            require(t.implicitBackupReady,"No implicit geometry rollback snapshot");
+            t.execution.copy(t.implicitFit->initialCoefficients(),t.implicitBackup,t.implicitFit->coefficientCount());
+            t.execution.finish();
+            t.implicitReady=false;t.colorReady=false;t.implicitRestored=true;
+        }
         t.attemptOpen=false;t.haveInitial=false;if(!commit)t.haveResident=false;
         if(t.walePrInstalled){t.walePrReady=false;t.v.scalarCpFields=false;t.v.scalarHFields=false;}});
 }

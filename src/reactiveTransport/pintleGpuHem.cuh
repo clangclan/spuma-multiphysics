@@ -40,6 +40,16 @@ static_assert(PINTLE_HEM_BLOCK_THREADS>=32&&PINTLE_HEM_BLOCK_THREADS<=256
 // same zero-filled inactive species and byte-identical active fields.
 struct HemCompactOutput {PintleThermoState state{};int success=0;};
 static_assert(sizeof(HemCompactOutput)==184,"Unexpected compact HEM output layout");
+__global__ void hemInitializeTPKernel(const HemModel* model,double* q,double* energy,
+    const PintleThermoState* guesses,const PintleGpuHemCapillaryInputV2* capillary,
+    size_t count,HemCompactOutput* outputs,HemCounters* counters,const HemPhaseCache* cache){
+    const size_t c=blockIdx.x*blockDim.x+threadIdx.x;
+    if(c<count){HemInput in{};for(int k=0;k<model->ns;++k)in.q[k]=q[c*model->ns+k];
+        in.guess=guesses[c];
+        const auto out=PintleDeviceFlash::initializeCapillaryTP(*model,in,
+            capillary[c].color,capillary[c].pressureJump,q+c*model->ns,energy[c],cache);
+        outputs[c].state=out.state;outputs[c].success=out.success;counters[c]=out.counters;}
+}
 __global__ __launch_bounds__(PINTLE_HEM_BLOCK_THREADS,PINTLE_HEM_MIN_BLOCKS)
 void hemKernel(const HemModel* model,const double* q,const double* energy,
     const PintleThermoState* guesses,const PintleGpuHemCapillaryInputV2* capillary,
@@ -158,14 +168,19 @@ extern "C" void* pintle_gpu_hem_create_v1(const void* raw,size_t bytes,size_t ca
 extern "C" void pintle_gpu_hem_destroy_v1(void* raw){delete static_cast<HemDevice*>(raw);}
 static int hemRun(void* raw,const double* q,const double* energy,
     const PintleGpuHemCapillaryInputV2* capillary,size_t count,
-    PintleThermoState* states,int* success,PintleGpuHemProfileV1* profile,char* error,size_t size){
+    PintleThermoState* states,int* success,PintleGpuHemProfileV1* profile,char* error,size_t size,
+    double* initializedQ=nullptr,double* initializedEnergy=nullptr){
     try{if(!raw||!q||!energy||!states||!success||!profile||profile->abiVersion!=1||profile->structBytes!=sizeof(*profile))throw std::runtime_error("Invalid CUDA HEM batch arguments");
         auto& d=*static_cast<HemDevice*>(raw);if(!count||count>d.capacity)throw std::runtime_error("CUDA HEM batch exceeds capacity");
+        const bool initialize=initializedQ!=nullptr;
+        if(initialize&&(!initializedEnergy||!capillary))throw std::runtime_error("Missing CUDA primitive initialization buffers");
+        std::vector<double> normalized(initialize?count*(d.ns+1):0);
         if(capillary){
             for(size_t c=0;c<count;++c)if(!PintleDeviceFlash::finite(capillary[c].color)
                 ||capillary[c].color<0||capillary[c].color>1
                 ||!PintleDeviceFlash::finite(capillary[c].pressureJump)
-                ||(capillary[c].equilibrium!=0&&capillary[c].equilibrium!=1))
+                ||(capillary[c].equilibrium!=0&&capillary[c].equilibrium!=1)
+                ||(initialize&&capillary[c].equilibrium!=0))
                 throw std::runtime_error("Invalid CUDA HEM capillary cell input");
             if(!d.capillary)closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.capillary),
                 d.capacity*sizeof(PintleGpuHemCapillaryInputV2)));
@@ -189,7 +204,9 @@ static int hemRun(void* raw,const double* q,const double* energy,
         if(d.bucketOrder)closureCuda(cudaMemcpyAsync(d.order,d.hostOrder.data(),count*sizeof(uint32_t),cudaMemcpyHostToDevice,d.stream));
 #endif
         closureCuda(cudaEventRecord(d.events[1],d.stream));
-        hemKernel<<<(count+PINTLE_HEM_BLOCK_THREADS-1)/PINTLE_HEM_BLOCK_THREADS,
+        if(initialize)hemInitializeTPKernel<<<(count+63)/64,64,0,d.stream>>>(d.model,d.mass,d.energy,
+            d.guess,d.capillary,count,d.output,d.counters,d.phaseCache);
+        else hemKernel<<<(count+PINTLE_HEM_BLOCK_THREADS-1)/PINTLE_HEM_BLOCK_THREADS,
             PINTLE_HEM_BLOCK_THREADS,0,d.stream>>>(d.model,d.mass,d.energy,d.guess,
                 capillary?d.capillary:nullptr,
 #if PINTLE_HEM_PHASE_BUCKETS
@@ -201,6 +218,10 @@ static int hemRun(void* raw,const double* q,const double* energy,
         closureCuda(cudaGetLastError());
         closureCuda(cudaEventRecord(d.events[2],d.stream));
         closureCuda(cudaMemcpyAsync(d.hostOutput.data(),d.output,count*sizeof(HemCompactOutput),cudaMemcpyDeviceToHost,d.stream));
+        if(initialize){
+            closureCuda(cudaMemcpyAsync(normalized.data(),d.mass,count*d.ns*sizeof(double),cudaMemcpyDeviceToHost,d.stream));
+            closureCuda(cudaMemcpyAsync(normalized.data()+count*d.ns,d.energy,count*sizeof(double),cudaMemcpyDeviceToHost,d.stream));
+        }
         closureCuda(cudaEventRecord(d.events[3],d.stream));
         // The compact output has already reached its host commit buffer when
         // this ordered memset runs, so its first bytes can hold batch totals.
@@ -220,19 +241,24 @@ static int hemRun(void* raw,const double* q,const double* energy,
         PintleGpuHemProfileV1 p{};p.abiVersion=1;p.structBytes=sizeof(p);p.batches=1;p.submitted=count;
         const size_t inputBytes=count*(d.ns*sizeof(double)+sizeof(double)+sizeof(PintleThermoState)
             +(capillary?sizeof(PintleGpuHemCapillaryInputV2):0));
-        p.transferBytes=inputBytes+count*sizeof(HemCompactOutput)+sizeof(totals);
+        p.transferBytes=inputBytes+count*sizeof(HemCompactOutput)+sizeof(totals)+normalized.size()*sizeof(double);
         p.deviceBytes=sizeof(HemModel)+PINTLE_GPU_HEM_PHASE_CACHE_BYTES_V1
             +d.capacity*(d.ns*sizeof(double)+sizeof(double)+sizeof(PintleThermoState)
                 +sizeof(HemCompactOutput)+sizeof(HemCounters)
                 +(d.capillary?sizeof(PintleGpuHemCapillaryInputV2):0));
-        p.hostBytes=d.capacity*sizeof(HemCompactOutput);
+        p.hostBytes=d.capacity*sizeof(HemCompactOutput)+normalized.size()*sizeof(double);
 #if PINTLE_HEM_PHASE_BUCKETS
         if(d.bucketOrder){p.transferBytes+=count*sizeof(uint32_t);p.deviceBytes+=d.capacity*sizeof(uint32_t);
             p.hostBytes+=d.capacity*(sizeof(uint32_t)+sizeof(uint8_t));}
 #endif
         for(size_t c=0;c<count;++c){const auto& out=d.hostOutput[c];
             const size_t target=c;
-            success[target]=out.success;if(out.success){states[target]=out.state;++p.succeeded;}else ++p.deviceFailures;
+            success[target]=out.success;if(out.success){if(!initialize)states[target]=out.state;++p.succeeded;}else ++p.deviceFailures;
+        }
+        if(initialize&&!p.deviceFailures){
+            std::copy(normalized.begin(),normalized.begin()+count*d.ns,initializedQ);
+            std::copy(normalized.begin()+count*d.ns,normalized.end(),initializedEnergy);
+            for(size_t c=0;c<count;++c)states[c]=d.hostOutput[c].state;
         }
         p.phaseEvaluations=totals.phases;p.residualEvaluations=totals.residuals;
         p.flashCandidates=totals.candidates;p.stableCandidates=totals.stable;
@@ -253,10 +279,17 @@ extern "C" int pintle_gpu_hem_run_v2(void* raw,const double* q,const double* ene
     if(!capillary){if(error&&size)std::snprintf(error,size,"Null CUDA HEM capillary input");return 1;}
     return hemRun(raw,q,energy,capillary,count,states,success,profile,error,size);
 }
+extern "C" int pintle_gpu_hem_initialize_tp_v1(void* raw,double* q,double* energy,
+    const PintleGpuHemCapillaryInputV2* capillary,size_t count,PintleThermoState* states,
+    int* success,PintleGpuHemProfileV1* profile,char* error,size_t size){
+    if(!q||!energy||!capillary){if(error&&size)std::snprintf(error,size,"Null CUDA primitive input");return 1;}
+    return hemRun(raw,q,energy,capillary,count,states,success,profile,error,size,q,energy);
+}
 #else
 extern "C" void* pintle_gpu_hem_create_v1(const void*,size_t,size_t,char* error,size_t size){
     if(error&&size)std::snprintf(error,size,"Transport library was built without CUDA HEM");return nullptr;}
 extern "C" void pintle_gpu_hem_destroy_v1(void*){}
 extern "C" int pintle_gpu_hem_run_v1(void*,const double*,const double*,size_t,PintleThermoState*,int*,PintleGpuHemProfileV1*,char*,size_t){return 1;}
 extern "C" int pintle_gpu_hem_run_v2(void*,const double*,const double*,const PintleGpuHemCapillaryInputV2*,size_t,PintleThermoState*,int*,PintleGpuHemProfileV1*,char*,size_t){return 1;}
+extern "C" int pintle_gpu_hem_initialize_tp_v1(void*,double*,double*,const PintleGpuHemCapillaryInputV2*,size_t,PintleThermoState*,int*,PintleGpuHemProfileV1*,char*,size_t){return 1;}
 #endif
