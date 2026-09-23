@@ -56,3 +56,36 @@ Neither fixed quadrature nor curvature alone explains away the pressure/stress m
 maximum or volume-weighted L2 velocity, missing refinements, or unequal physical conditions/times.
 It reports interface-area-weighted curvature errors without hiding cells with poor curvature.
 A passing velocity trend would still be only one gate; it does not certify dynamic area/work or breakup.
+
+
+## Geometric pressure/traction follow-up (2026-09-23)
+
+The [geometric proposal implementation report](../../reports/geometric-balance-review-20260923.ko.md)
+adds a separate host/device `PintleGeometricCapillary::faceFlux` and the one-shot
+`pintle_transport_geometric_diagnostic_v1` API. The latter uses the production
+`Faces` and `Rhs` kernels with caller-supplied liquid face apertures and integrated
+surface tractions. It reports cell volume mismatch, vector-area closure, traction
+closure and geometric surface energy. It cannot install geometry into the stepper.
+
+The new momentum restoration is `(DeltaP*A_liquid*n - T)/A_face`. HLLC uses
+`E_total - sigma*A_interface/V`; the gather removes the corresponding advected
+surface contribution before adding the separately supplied surface-energy flux.
+Both restoration terms are replaced together. The old diffuse stress is not added.
+
+Exact sphere geometry supplied to CPU and CUDA tests substantially reduces the
+static operator residual. This is an analytic-geometry test, not a reconstruction
+or time-integrated static-drop convergence result. Finite background-pressure
+roundoff remains in the full finite-volume gather. A deliberately wrong pressure
+jump leaves a nonzero force, and a separate inconsistent cell-pressure test leaves
+a nonzero Riemann mass flux.
+
+The VOF-column spline probe demonstrates compatible aperture/traction identities
+on a restricted smooth graph patch, but excludes horizontal face crossings and
+chart transitions and still has nonzero cell-volume defects. Current transport
+mesh records do not contain the face polygons needed by a general geometric
+reconstruction. The runtime remains on v1 until all-face, volume-constrained
+reconstruction and consistent swept liquid/surface-energy transport exist.
+Phase-change-induced interface motion needs its own area/energy contribution.
+No analytic sphere parameters enter the production solver; no checkpoint or
+physical-model identity is silently converted, and the static convergence gate
+remains unresolved.

@@ -4,6 +4,8 @@
 #include "pintleReactiveTransport.h"
 #include "pintleWale.h"
 #include "../reactiveInterface/pintleUnstructuredInterface.h"
+#include "../reactiveInterface/pintleGeometricCapillary.h"
+#include "pintleGeometricTransport.h"
 #include <cmath>
 #ifdef __CUDACC__
 #define PINTLE_HD __host__ __device__
@@ -55,6 +57,9 @@ struct View {
     double* capillarySurfaceEnergy=nullptr;
     uint32_t* capillaryError=nullptr;
     PintleUnstructuredInterface::View interface{};
+    // Non-null only in the isolated, one-shot geometric diagnostic view.
+    // The production stepper cannot install caller-supplied oracle geometry.
+    const PintleGeometricFaceV1* geometricFace=nullptr;
     PINTLE_HD void failCapillary() const {
 #ifdef __CUDA_ARCH__
         atomicExch(capillaryError,1u);
@@ -200,6 +205,41 @@ struct InterfaceCurvature {
         v.capillarySurfaceEnergy[c]=v.interface.sigma*v.interface.areaDensity[c];
     }
 };
+struct GeometricDiagnosticCells {
+    const PintleGeometricCellV1* geometry;
+    PintleGeometricResidualV1* residual;
+    double sigma;
+    PINTLE_HD void operator()(size_t c,View v) const {
+        const auto& g=geometry[c];
+        const double volume=1/v.inverseVolume[c];
+        // reciprocal volume round trips can differ by an ulp in a pure cell.
+        if(!std::isfinite(g.liquidVolume)||g.liquidVolume<0
+           ||g.liquidVolume>volume*(1+16*DBL_EPSILON)
+           ||!std::isfinite(g.interfaceArea)||g.interfaceArea<0) {
+            v.failCapillary();return;
+        }
+        PintleGeometricResidualV1 r{};
+        r.volumeMismatch=g.liquidVolume-v.capillaryColor[c]*volume;
+        r.surfaceEnergy=sigma*g.interfaceArea*v.inverseVolume[c];
+        for(int d=0;d<3;++d) {
+            r.volumeClosure[d]=g.normalIntegral[d];
+            r.tractionClosure[d]=sigma*g.curvatureNormalIntegral[d];
+        }
+        for(size_t j=v.row[c];j<v.row[c+1];++j) {
+            const auto entry=v.incidence[j];const size_t fi=size_t(entry<0?-entry-1:entry-1);
+            const double sign=entry<0?1:-1;
+            for(int d=0;d<3;++d) {
+                r.volumeClosure[d]+=sign*v.geometricFace[fi].liquidArea*v.faces[fi].normal[d];
+                r.tractionClosure[d]+=sign*v.geometricFace[fi].integratedTraction[d];
+            }
+        }
+        if(!std::isfinite(r.volumeMismatch)||!std::isfinite(r.surfaceEnergy))v.failCapillary();
+        for(int d=0;d<3;++d)
+            if(!std::isfinite(g.normalIntegral[d])||!std::isfinite(g.curvatureNormalIntegral[d])
+               ||!std::isfinite(r.volumeClosure[d])||!std::isfinite(r.tractionClosure[d]))v.failCapillary();
+        v.capillarySurfaceEnergy[c]=r.surfaceEnergy;residual[c]=r;
+    }
+};
 PINTLE_HD inline void gasFailure(View v) {
 #ifdef __CUDA_ARCH__
     atomicExch(v.gasError,1u); // Rare error flag only; no floating-point atomics.
@@ -321,10 +361,42 @@ struct Faces {
             csR.totalEnergy=v.rightValue(f,v.cfg.species+3);
             csL.color=v.capillaryColor[l];csR.color=v.capillaryColor[r];
             for(int d=0;d<3;++d){csL.velocity[d]=ul[d];csR.velocity[d]=ur[d];}
-            PintleBalancedCapillary::Face cf{};
-            if(!PintleUnstructuredInterface::faceGeometry(fi,v.interface,cf)
-               ||!PintleBalancedCapillary::faceFlux(csL,csR,cf,capFlux)) {
-                v.failCapillary();return;
+            if(v.geometricFace) {
+                const auto& gf=v.geometricFace[fi];
+                PintleGeometricCapillary::State gl{},gr{};
+                gl.rho=csL.rho;gr.rho=csR.rho;
+                gl.pressure=csL.pressure;gr.pressure=csR.pressure;
+                gl.sound=csL.sound;gr.sound=csR.sound;
+                gl.color=csL.color;gr.color=csR.color;
+                const double esL=v.capillarySurfaceEnergy[l],esR=v.capillarySurfaceEnergy[r];
+                gl.bulkEnergy=csL.totalEnergy-esL;gr.bulkEnergy=csR.totalEnergy-esR;
+                PintleGeometricCapillary::Face cf{};
+                cf.area=f.area;cf.liquidArea=gf.liquidArea;
+                cf.pressureJump=gf.pressureJump;cf.surfaceEnergyAdvection=gf.surfaceEnergyAdvection;
+                for(int d=0;d<3;++d) {
+                    gl.velocity[d]=ul[d];gr.velocity[d]=ur[d];
+                    cf.normal[d]=f.normal[d];cf.integratedTraction[d]=gf.integratedTraction[d];
+                }
+                PintleGeometricCapillary::Flux flux{};
+                if(!PintleGeometricCapillary::faceFlux(gl,gr,cf,flux)) {
+                    v.failCapillary();return;
+                }
+                capFlux.contactSpeed=flux.contactSpeed;
+                capFlux.advectLeft=flux.advectLeft;capFlux.advectRight=flux.advectRight;
+                capFlux.pressureMomentum=flux.pressureMomentum;
+                capFlux.pressureEnergy=flux.pressureEnergy;
+                for(int d=0;d<3;++d)capFlux.capillaryMomentum[d]=flux.geometricMomentum[d];
+                // faceFlux(k=energy) later multiplies TOTAL q_E by the core
+                // coefficients. Remove that surface contribution exactly once;
+                // geometric surface advection was supplied independently.
+                capFlux.capillaryEnergy=flux.geometricWorkEnergy+flux.surfaceEnergyAdvectionPerArea
+                    -flux.advectLeft*esL-flux.advectRight*esR;
+            } else {
+                PintleBalancedCapillary::Face cf{};
+                if(!PintleUnstructuredInterface::faceGeometry(fi,v.interface,cf)
+                   ||!PintleBalancedCapillary::faceFlux(csL,csR,cf,capFlux)) {
+                    v.failCapillary();return;
+                }
             }
             w.faceVelocity=capFlux.contactSpeed;
             w.advectL=capFlux.advectLeft;

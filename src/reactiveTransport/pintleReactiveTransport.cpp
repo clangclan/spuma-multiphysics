@@ -722,6 +722,84 @@ public:
         capillaryProfile.colorUploadBytes+=(v.cfg.cells+v.cfg.fixed)*sizeof(double);
         capillaryProfile.geometryDownloadBytes+=v.cfg.cells*sizeof(double)*(1+(curvature?1:0)+(normal?3:0));
     }
+    void geometricDiagnostic(const PintleGeometricDiagnosticV1& options,const double* q,
+        const PintleTransportState* states,const double* color,
+        const PintleGeometricCellV1* cells,const PintleGeometricFaceV1* faces,
+        double* rhs,double* boundary,PintleGeometricResidualV1* residual) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options)
+            &&std::isfinite(options.sigma)&&options.sigma>0,
+            "Invalid geometric diagnostic ABI or surface tension");
+        require(!attemptOpen&&!haveInitial,"Geometric diagnostic is unavailable inside an RK attempt");
+        require(!v.cfg.mechanical&&v.cfg.variables==v.cfg.species+5
+            &&!v.cfg.fixed&&!v.nBoundary&&!v.wale&&!v.recomputeGas
+            &&v.cfg.viscosity==0&&v.cfg.conductivity==0&&v.cfg.diffusivity==0,
+            "Geometric diagnostic requires a closed, inviscid single-liquid face graph");
+        require(options.condensableSpecies>=0&&size_t(options.condensableSpecies)<v.cfg.species
+            &&(!v.capillary||v.capillarySpecies==size_t(options.condensableSpecies)),
+            "Invalid geometric diagnostic condensable mapping");
+        require(q&&states&&color&&cells&&faces&&rhs&&boundary,"Missing geometric diagnostic input/output");
+        const size_t n=v.cfg.cells,nv=v.cfg.variables,ns=v.cfg.species;
+        const size_t count=product(n,nv);
+        validateStates(states,n);
+        std::vector<double> packed(count);
+        for(size_t c=0;c<n;++c) {
+            require(std::isfinite(color[c])&&color[c]>=0&&color[c]<=1,"Invalid geometric cell color");
+            double rho=0;
+            for(size_t k=0;k<nv;++k) {
+                const double value=q[c*nv+k];
+                require(std::isfinite(value),"Nonfinite geometric conserved input");
+                if(k<ns){require(value>=0,"Negative geometric species inventory");rho+=value;}
+                packed[k*n+c]=value;
+            }
+            require(std::isfinite(rho)&&rho>0&&std::abs(rho-states[c].rho)<=1e-10*rho,
+                "Geometric conserved and recovered densities disagree");
+            require(q[c*nv+ns+4]>=0&&q[c*nv+ns+4]<=q[c*nv+size_t(options.condensableSpecies)],
+                "Invalid geometric liquid inventory");
+        }
+        // Separate stream and allocations; only the immutable face graph is
+        // borrowed. Even failed evaluation cannot alter resident q/RK buffers,
+        // installed geometry, version tokens, or cached WALE properties.
+        execution.finish();
+        Execution run(execution.cuda?1:0);
+        run.blockThreads=execution.blockThreads;
+        const double limit=v.cfg.maxBytes-double(execution.stats.allocatedBytes);
+        require(limit>0,"No memory budget remaining for geometric diagnostic");
+        View d{};d.cfg=v.cfg;d.faces=v.faces;d.row=v.row;d.incidence=v.incidence;
+        d.inverseVolume=v.inverseVolume;d.capillary=true;
+        d.capillarySpecies=size_t(options.condensableSpecies);
+        d.q=run.allocate<double>(count,limit);
+        d.state=run.allocate<PintleTransportState>(n,limit);
+        d.primitive=run.allocate<Primitive>(n,limit);
+        d.work=run.allocate<FaceWork>(v.cfg.faces,limit);
+        d.rhs=run.allocate<double>(count,limit);
+        d.capillaryColor=run.allocate<double>(n,limit);
+        d.capillarySurfaceEnergy=run.allocate<double>(n,limit);
+        d.capillaryError=run.allocate<uint32_t>(1,limit);
+        auto* cellGeometry=run.allocate<PintleGeometricCellV1>(n,limit);
+        auto* faceGeometry=run.allocate<PintleGeometricFaceV1>(v.cfg.faces,limit);
+        auto* cellResidual=run.allocate<PintleGeometricResidualV1>(n,limit);
+        d.geometricFace=faceGeometry;
+        uint32_t failed=0;
+        run.upload(d.q,packed.data(),count);run.upload(d.state,states,n);
+        run.upload(d.capillaryColor,color,n);run.upload(d.capillaryError,&failed,1);
+        run.upload(cellGeometry,cells,n);run.upload(faceGeometry,faces,v.cfg.faces);
+        run.launch(n,d,Cells{});
+        run.launch(n,d,GeometricDiagnosticCells{cellGeometry,cellResidual,options.sigma});
+        run.download(&failed,d.capillaryError,1);run.finish();
+        require(!failed,"Invalid geometric cell integrals");
+        run.launch(v.cfg.faces,d,Faces{});
+        run.download(&failed,d.capillaryError,1);run.finish();
+        require(!failed,"Invalid geometric face flux");
+        run.launch(count,d,Rhs{});
+        std::vector<PintleGeometricResidualV1> hostResidual(n);
+        run.download(packed.data(),d.rhs,count);
+        run.download(hostResidual.data(),cellResidual,n);run.finish();
+        for(double value:packed)require(std::isfinite(value),"Nonfinite geometric diagnostic RHS");
+        // Commit public outputs only after every cell/face and transfer passed.
+        for(size_t c=0;c<n;++c)for(size_t k=0;k<nv;++k)rhs[c*nv+k]=packed[k*n+c];
+        std::fill(boundary,boundary+nv,0.0);
+        if(residual)std::copy(hostResidual.begin(),hostResidual.end(),residual);
+    }
     void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport,
                          bool generated=false,const PintleGasPartition* partition=nullptr) {
         require(!v.capillary||colorReady,"Capillary geometry must be uploaded for this stage");
@@ -813,7 +891,7 @@ public:
     }
 
 };
-template<class F> int protect(void* handle,F f) {
+template<class F> int protect(void* handle,F f,bool invalidateOnFailure=true) {
     if(!handle) return -1;
     auto& t=*static_cast<Transport*>(handle);
     std::unique_lock<std::mutex> use(t.entry,std::defer_lock);
@@ -823,12 +901,14 @@ template<class F> int protect(void* handle,F f) {
         // Even failed calls must release any outstanding use of caller-owned
         // host arrays before returning control to rollback/destruction.
         try {t.execution.finish();} catch(...) {}
-        t.slot.state=StagingSlot::FREE;++t.cost.failedCalls;
-        std::snprintf(t.error.data(),t.error.size(),"%s",ex.what());t.haveInitial=false;t.haveResident=false;return 1;
+        if(invalidateOnFailure){t.slot.state=StagingSlot::FREE;t.haveInitial=false;t.haveResident=false;}
+        ++t.cost.failedCalls;
+        std::snprintf(t.error.data(),t.error.size(),"%s",ex.what());return 1;
     }catch(...) {
         if(!use.owns_lock())return 2;
         try{t.execution.finish();}catch(...){}
-        t.slot.state=StagingSlot::FREE;++t.cost.failedCalls;t.haveInitial=t.haveResident=false;
+        if(invalidateOnFailure){t.slot.state=StagingSlot::FREE;t.haveInitial=t.haveResident=false;}
+        ++t.cost.failedCalls;
         std::snprintf(t.error.data(),t.error.size(),"Unknown transport failure");return 1;
     }
 }
@@ -908,6 +988,13 @@ int pintle_transport_upload_conserved(void* t,const double* q,uint64_t version) 
 }
 int pintle_transport_set_capillary_v1(void* t,const PintleCapillaryOptionsV1* options) {
     return protect(t,[&](Transport& x){require(options,"Null capillary options");x.setCapillary(*options);});
+}
+int pintle_transport_geometric_diagnostic_v1(void* t,const PintleGeometricDiagnosticV1* options,
+    const double* q,const PintleTransportState* states,const double* color,
+    const PintleGeometricCellV1* cells,const PintleGeometricFaceV1* faces,
+    double* rhs,double* boundary,PintleGeometricResidualV1* residual) {
+    return protect(t,[&](Transport& x){require(options,"Null geometric diagnostic options");
+        x.geometricDiagnostic(*options,q,states,color,cells,faces,rhs,boundary,residual);},false);
 }
 int pintle_transport_capillary_geometry_v1(void* t,const double* color,const double* fixedColor,
     double* surfaceEnergy,double* curvature,double* normalXYZ) {

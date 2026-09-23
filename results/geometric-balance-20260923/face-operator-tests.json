@@ -1,0 +1,268 @@
+{
+  "scope": "Test-only analytic 3D sphere face apertures and independent conormal line integrals passed through the actual reduced-pressure HLLC-backed geometric face operator and shared-face assembly. This is not numerical interface reconstruction, PR EOS/flash validation, swept surface-energy transport, or full solver acceptance.",
+  "commands": {
+    "cpuBuild": "g++ -std=c++17 -O2 -Wall -Wextra -Werror tools/capillary_geometric_test.cpp -o /tmp/capillary_geometric_test",
+    "cpuRun": "/tmp/capillary_geometric_test",
+    "cudaBuild": "flock /home/jsw/cae-benchmark/run.lock -c '/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/cuda/bin/nvcc -std=c++17 -O2 -arch=sm_120 tools/capillary_geometric_cuda_test.cu -o /tmp/capillary_geometric_cuda_test'",
+    "cudaRun": "flock /home/jsw/cae-benchmark/run.lock /tmp/capillary_geometric_cuda_test"
+  },
+  "sourceSha256": {
+    "src/reactiveInterface/pintleGeometricCapillary.h": "2436d375d833e9486438e2376ea434c12e9c186e65ac7f10bade104321d00bfa",
+    "src/reactiveInterface/pintleBalancedCapillary.h": "e5727d8350e290e6cb79d6afb605d7fbde932239183c764b377d659bdd8b7ce2",
+    "tools/capillary_geometric_oracle.h": "5f83350dc7d78caaa59e8a8238c8fa29c82382e6c1937f6760ce8ec9aa7660f8",
+    "tools/capillary_geometric_test.cpp": "fd0e9c02e0356833b9706033ab65e8c8441b57badb7c82f38cbb6b51870443a8",
+    "tools/capillary_geometric_cuda_test.cu": "b4b573305ab9f082ac215a31d1e37f05949f60d551a9d955871ae8f1db0dd165"
+  },
+  "executableSha256": {
+    "cpu": "f1d6b2a0871e07f3b39bb8c43a4b3c890d0ae9208351d767bcb751afed90ab41",
+    "cuda": "08f88faef249a78f832133eee2ba53af47aa8d0f864efe2ed7da402edd93e4e3"
+  },
+  "cpuSphereRows": [
+    {
+      "n": 16,
+      "center_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 1.58654236e-11,
+      "maxForce_N": 2.41685375e-17,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 1.08303781e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 4.00532123e-20
+    },
+    {
+      "n": 16,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.26412954e-11,
+      "maxForce_N": 3.704173e-17,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 2.21474126e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 2.16503469e-19
+    },
+    {
+      "n": 24,
+      "center_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.00709483e-11,
+      "maxForce_N": 1.40835022e-17,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 1.71163305e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 1.09536788e-20
+    },
+    {
+      "n": 24,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.11552256e-11,
+      "maxForce_N": 1.57198734e-17,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 5.35049382e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 7.59226929e-20
+    },
+    {
+      "n": 32,
+      "center_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 1.75201605e-11,
+      "maxForce_N": 7.17999838e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 1.79058228e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 3.25055969e-20
+    },
+    {
+      "n": 32,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.31638259e-11,
+      "maxForce_N": 9.90229196e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 8.66866147e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 1.60096246e-20
+    },
+    {
+      "n": 48,
+      "center_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 1.73258625e-11,
+      "maxForce_N": 3.15262867e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 2.15843994e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 2.90219177e-20
+    },
+    {
+      "n": 48,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.39758244e-11,
+      "maxForce_N": 4.66572878e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 8.14550705e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 2.32527619e-20
+    },
+    {
+      "n": 64,
+      "center_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.15018434e-11,
+      "maxForce_N": 2.22100202e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 2.70080003e-20,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 8.0913713e-21
+    },
+    {
+      "n": 64,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.0,
+      "scaledResidual": 2.21910602e-11,
+      "maxForce_N": 2.38746277e-18,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 1.60219634e-19,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 4.35464998e-20
+    },
+    {
+      "n": 24,
+      "center_m": [
+        0.000173,
+        -0.000117,
+        8.3e-05
+      ],
+      "pressureFactor": 1.01,
+      "scaledResidual": 0.00990099009,
+      "maxForce_N": 7.43072833e-09,
+      "maxMassFace": 0.0,
+      "maxEnergyFace": 0.0,
+      "maxGeometryResidual_N": 7.43072833e-09,
+      "maxCorePressureDeviation_Pa": 0.0,
+      "globalForce_N": 7.59226953e-20
+    }
+  ],
+  "cudaSphereRows": [
+    {
+      "n": 16,
+      "center": "centered",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 1.586542e-11,
+      "cudaScaledResidual": 2.289093e-11
+    },
+    {
+      "n": 16,
+      "center": "shifted",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 2.26413e-11,
+      "cudaScaledResidual": 2.679198e-11
+    },
+    {
+      "n": 24,
+      "center": "centered",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 2.007095e-11,
+      "cudaScaledResidual": 2.866261e-11
+    },
+    {
+      "n": 24,
+      "center": "shifted",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 2.115523e-11,
+      "cudaScaledResidual": 2.809043e-11
+    },
+    {
+      "n": 32,
+      "center": "centered",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 1.752016e-11,
+      "cudaScaledResidual": 2.816101e-11
+    },
+    {
+      "n": 32,
+      "center": "shifted",
+      "pressureFactor": 1.0,
+      "cpuScaledResidual": 2.316383e-11,
+      "cudaScaledResidual": 3.281266e-11
+    },
+    {
+      "n": 24,
+      "center": "shifted",
+      "pressureFactor": 1.01,
+      "cpuScaledResidual": 0.00990099,
+      "cudaScaledResidual": 0.00990099
+    }
+  ],
+  "negativeControls": {
+    "wrongPressureJump": "For pressureFactor=1.01, cell p and face Δp both rise 1%, keeping reduced HLLC pressure balanced and mass flux zero; physical pressure-aperture force no longer balances unchanged true surface traction.",
+    "interpolatedCellColorAsApertureScaledResidual": 0.473118794,
+    "fixedFaceJumpPerturbedCellPressure": "Separate CPU and CUDA face cases hold face Δp fixed and perturb one cell p by 1 Pa; nonzero HLLC contact speed and mass flux asserted."
+  },
+  "unitChecks": [
+    "bulk-only HLLC energy plus separate supplied surface advection",
+    "moving asymmetric face same-velocity traction work",
+    "unequal left/right normal reversal antisymmetry",
+    "HLL fallback",
+    "invalid input output unchanged",
+    "GPU per-cell gather"
+  ],
+  "testExitCodes": {
+    "cpu": 0,
+    "cuda": 0
+  },
+  "cpuLog": "n=16 center=0.00000000e+00,0.00000000e+00,0.00000000e+00 pressureFactor=1.00000000e+00 scaledResidual=1.58654236e-11 maxForce=2.41685375e-17 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=1.08303781e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=4.00532123e-20\nn=16 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.00000000e+00 scaledResidual=2.26412954e-11 maxForce=3.70417300e-17 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=2.21474126e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=2.16503469e-19\nn=24 center=0.00000000e+00,0.00000000e+00,0.00000000e+00 pressureFactor=1.00000000e+00 scaledResidual=2.00709483e-11 maxForce=1.40835022e-17 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=1.71163305e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=1.09536788e-20\nn=24 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.00000000e+00 scaledResidual=2.11552256e-11 maxForce=1.57198734e-17 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=5.35049382e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=7.59226929e-20\nn=32 center=0.00000000e+00,0.00000000e+00,0.00000000e+00 pressureFactor=1.00000000e+00 scaledResidual=1.75201605e-11 maxForce=7.17999838e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=1.79058228e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=3.25055969e-20\nn=32 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.00000000e+00 scaledResidual=2.31638259e-11 maxForce=9.90229196e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=8.66866147e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=1.60096246e-20\nn=48 center=0.00000000e+00,0.00000000e+00,0.00000000e+00 pressureFactor=1.00000000e+00 scaledResidual=1.73258625e-11 maxForce=3.15262867e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=2.15843994e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=2.90219177e-20\nn=48 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.00000000e+00 scaledResidual=2.39758244e-11 maxForce=4.66572878e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=8.14550705e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=2.32527619e-20\nn=64 center=0.00000000e+00,0.00000000e+00,0.00000000e+00 pressureFactor=1.00000000e+00 scaledResidual=2.15018434e-11 maxForce=2.22100202e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=2.70080003e-20 maxCorePressureDeviation=0.00000000e+00 globalForce=8.09137130e-21\nn=64 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.00000000e+00 scaledResidual=2.21910602e-11 maxForce=2.38746277e-18 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=1.60219634e-19 maxCorePressureDeviation=0.00000000e+00 globalForce=4.35464998e-20\nn=24 center=1.73000000e-04,-1.17000000e-04,8.30000000e-05 pressureFactor=1.01000000e+00 scaledResidual=9.90099009e-03 maxForce=7.43072833e-09 maxMassFace=0.00000000e+00 maxEnergyFace=0.00000000e+00 maxGeometryResidual=7.43072833e-09 maxCorePressureDeviation=0.00000000e+00 globalForce=7.59226953e-20\ninterpolatedColorAperture scaledResidual=4.73118794e-01\ngeometric capillary CPU tests passed",
+  "cudaLog": "CUDA sphere n=16 pressureFactor=1.00 CPU/GPU scaled residual 1.586542e-11 / 2.289093e-11\nCUDA sphere n=16 pressureFactor=1.00 CPU/GPU scaled residual 2.264130e-11 / 2.679198e-11\nCUDA sphere n=24 pressureFactor=1.00 CPU/GPU scaled residual 2.007095e-11 / 2.866261e-11\nCUDA sphere n=24 pressureFactor=1.00 CPU/GPU scaled residual 2.115523e-11 / 2.809043e-11\nCUDA sphere n=32 pressureFactor=1.00 CPU/GPU scaled residual 1.752016e-11 / 2.816101e-11\nCUDA sphere n=32 pressureFactor=1.00 CPU/GPU scaled residual 2.316383e-11 / 3.281266e-11\nCUDA sphere n=24 pressureFactor=1.01 CPU/GPU scaled residual 9.900990e-03 / 9.900990e-03\ngeometric capillary CUDA tests passed"
+}
