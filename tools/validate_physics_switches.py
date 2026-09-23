@@ -13,6 +13,7 @@ import shutil
 import subprocess
 
 import numpy as np
+import yaml
 import benchmark as common
 from reactive_backend import Backend
 
@@ -26,6 +27,16 @@ def main():
     args = ap.parse_args()
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
+    # The backend identity reader expects a resolved mechanism path. Keep a
+    # local configuration so repository examples also work from another cwd.
+    source_configuration = args.configuration.resolve()
+    settings = yaml.safe_load(source_configuration.read_text())
+    mechanism = Path(settings["mechanism"])
+    if not mechanism.is_absolute():
+        mechanism = source_configuration.parent / mechanism
+    settings["mechanism"] = str(mechanism.resolve())
+    args.configuration = out / "thermo-config.yaml"
+    args.configuration.write_text(yaml.safe_dump(settings, sort_keys=False))
     env = common.sourced_environment()
     with Backend(args.configuration) as backend:
         names, liquids = backend.names, backend.nl

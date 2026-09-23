@@ -1,0 +1,21 @@
+{
+  "cpuPassed": true,
+  "cudaPassed": true,
+  "cudaArchitecture": "sm_120",
+  "scope": [
+    "moving face traction work",
+    "owner-weighted face color",
+    "HLL fallback",
+    "invalid-input output preservation",
+    "CPU/CUDA face-flux parity"
+  ],
+  "staticDropConvergenceClaim": false,
+  "sha256": {
+    "tools/capillary_balanced_test.cpp": "8655cd7f06bd9c568185af0bf596f7ee51c4a784a6d574cab1db8673f230c213",
+    "tools/capillary_balanced_cuda_test.cu": "4015407475c21c32effb636273729b8315ac33d861bb2efea82c213df2002df1",
+    "src/reactiveInterface/pintleBalancedCapillary.h": "e5727d8350e290e6cb79d6afb605d7fbde932239183c764b377d659bdd8b7ce2",
+    "src/reactiveInterface/pintleUnstructuredInterface.h": "b8e4053a5f20a0f23c5160d4db1235f77f465dc9b652304d3e663fc596ad0a41",
+    "/tmp/capillary-review-balanced-cpu": "aae4e9b292e638f10624856d989208683e3154e38a43ce5e7cbd8894b17d50bf",
+    "/tmp/capillary-review-balanced-cuda": "caf6301827a89538c21ac8f10f37147ed9f3ab23584aeb094218d5af0f250c4f"
+  }
+}

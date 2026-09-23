@@ -123,6 +123,7 @@ public:
     mutable double capillaryClosureResidual=0;
     std::unique_ptr<void,decltype(&pintle_transport_destroy)> transport{nullptr,&pintle_transport_destroy};
     mutable std::vector<PintleTransportState> transportStates;
+    mutable std::vector<PintleThermoState> walePrStates;
     mutable Array transportGasY,transportGasH;
     mutable Array transportScalarCp,transportScalarH;
     Array fixedScalarCp,fixedScalarH;
@@ -286,18 +287,40 @@ public:
         for(size_t k=0;k<ns;++k) y[k]/=s.gasMass;
         check(pintle_rt_gas_enthalpies(thermo,q,&s,h),"GPU transport gas enthalpies");
     }
-    void packTransport(const Array& q,const States& states,bool includeGas) const
+    void packTransport(const Array& q,const States& states,bool includeGas,int rkStage=-1,
+                       bool cflWithinAttempt=false) const
     {
         transportStates.resize(nc);
         for(size_t c=0;c<nc;++c) transportStates[c]=compact(states[c],(mechanical?states.mechanical(c).dilatationK:0));
         if(turbulentPrandtl>0||turbulentSchmidt>0) {
             {
                 AddElapsed stageTiming(timings.scalarProperties),totalTiming(scalarPropertySeconds);
-                if(turbulentPrandtl>0) {
+                if(capillary) {
+                    walePrStates.resize(nc);
+                    for(size_t c=0;c<nc;++c)walePrStates[c]=states[c];
+                    PintleCapillaryProfileV1 geometry{};
+                    geometry.abiVersion=1;geometry.structBytes=sizeof(geometry);
+                    checkTransport(pintle_transport_capillary_profile_v1(transport.get(),&geometry));
+                    const bool enthalpies=includeGas&&turbulentSchmidt>0;
+                    demand(!enthalpies||(rkStage==0||rkStage==1),
+                        "WALE PR enthalpy preparation needs an explicit RK stage");
+                    PintleWalePrEpochV1 epoch{};
+                    epoch.abiVersion=1;epoch.structBytes=sizeof(epoch);
+                    epoch.nextConserved=rkStage>=0
+                        ?PintleTransportToken{attemptId,uint64_t(rkStage),transportVersion+1}
+                        :(cflWithinAttempt
+                            ?PintleTransportToken{attemptId,std::numeric_limits<uint64_t>::max(),0}
+                            :PintleTransportToken{});
+                    epoch.thermoVersion=std::max<uint64_t>(1,workerVersion);
+                    epoch.geometryVersion=geometry.geometryBuilds;
+                    epoch.boundaryVersion=1;epoch.enthalpies=enthalpies;
+                    checkTransport(pintle_transport_wale_pr_properties_v1(transport.get(),&epoch,
+                        enthalpies?q.data():nullptr,nv,walePrStates.data()));
+                } else if(turbulentPrandtl>0) {
                     transportScalarCp.resize(nc);
                     for(size_t c=0;c<nc;++c)transportScalarCp[c]=states[c].cp;
                 }
-                if(includeGas&&turbulentSchmidt>0) {
+                if(!capillary&&includeGas&&turbulentSchmidt>0) {
                     transportScalarH.resize(nc*ns);
                     for(size_t c=0;c<nc;++c) {
                         check(capillary?pintle_rt_total_species_enthalpies_capillary_v1(thermo,&q[c*nv],&states[c],
@@ -308,7 +331,7 @@ public:
                     }
                 }
             }
-            checkTransport(pintle_transport_wale_scalar_fields_v1(transport.get(),transportScalarCp.data(),
+            if(!capillary)checkTransport(pintle_transport_wale_scalar_fields_v1(transport.get(),transportScalarCp.data(),
                 includeGas?transportScalarH.data():nullptr,fixedScalarCp.data(),includeGas?fixedScalarH.data():nullptr));
         }
         if(includeGas&&diffusivity>0) {
@@ -402,11 +425,24 @@ public:
             if(turbulentPrandtl>0||turbulentSchmidt>0) {
                 const PintleWaleScalarOptionsV1 scalars{1,sizeof(PintleWaleScalarOptionsV1),turbulentPrandtl,turbulentSchmidt};
                 checkTransport(pintle_transport_set_wale_scalars_v1(transport.get(),&scalars));
+                if(capillary) {
+                    size_t imageBytes=0;
+                    check(pintle_rt_export_gpu_hem_v1(thermo,nullptr,0,&imageBytes),"WALE PR model size");
+                    std::vector<unsigned char> image(imageBytes);
+                    check(pintle_rt_export_gpu_hem_v1(thermo,image.data(),image.size(),&imageBytes),
+                        "WALE PR model export");
+                    PintleWalePrModelV1 pr{};pr.abiVersion=1;pr.structBytes=sizeof(pr);
+                    pr.modelImage=image.data();pr.modelBytes=image.size();
+                    std::strncpy(pr.physicalModelHash,pintle_rt_physical_model_hash(thermo),64);
+                    pr.fixedCp=fixedScalarCp.data();pr.fixedSpeciesH=fixedScalarH.data();
+                    checkTransport(pintle_transport_set_wale_pr_model_v1(transport.get(),&pr));
+                }
             }
             Info<<"REACTIVE_TURBULENCE model=WALE-stress-v1 backend=cuda Cw="<<waleCw
                 <<" filter=cubeRootVolume stressWork=1 sgsHeatFlux="<<(turbulentPrandtl>0)
                 <<" sgsSpeciesMixing="<<(turbulentSchmidt>0)<<" Prt="<<turbulentPrandtl<<" Sct="<<turbulentSchmidt
-                <<" scalarPropertyBackend="<<(turbulentSchmidt>0?"host-same-eos":(turbulentPrandtl>0?"recovered-cp":"disabled"))
+                <<" scalarPropertyBackend="<<(capillary&&(turbulentPrandtl>0||turbulentSchmidt>0)?"device-pr":
+                    turbulentSchmidt>0?"host-same-eos":(turbulentPrandtl>0?"recovered-cp":"disabled"))
                 <<" scalarFluxBackend="<<(turbulentSchmidt>0||turbulentPrandtl>0?"cuda":"disabled")
                 <<" sgsK=none TCI=0"<<nl;
         }
@@ -564,12 +600,13 @@ public:
             qr=storage.data();
         }
     }
-    double stableStep(const Array& q,const States& states,double cfl,double maximum) const
+    double stableStep(const Array& q,const States& states,double cfl,double maximum,
+                      bool withinAttempt=false) const
     {
         AddElapsed timing(timings.cfl);
         if(transport) {
             refreshInterface(states);
-            packTransport(q,states,false);double dt=0;transportPrimitive.resize(nc);
+            packTransport(q,states,false,-1,withinAttempt);double dt=0;transportPrimitive.resize(nc);
             for(size_t c=0;c<nc;++c) {
                 auto& p=transportPrimitive[c];p.rho=states[c].rho;
                 for(int d=0;d<3;++d) p.u[d]=q[c*nv+ns+d]/p.rho;
@@ -733,7 +770,7 @@ public:
         if(transport)checkTransport(pintle_transport_begin_attempt(transport.get(),pintle_rt_physical_model_hash(thermo),attemptId));
         recoveryStage="source-first";react(q,states,.5*dt,drift);
         // Without a source, q/states still match the initial CFL query.
-        if(chemistry)demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
+        if(chemistry)demand(dt<=stableStep(q,states,cfl,dt,true)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
         const auto backupStart=std::chrono::steady_clock::now();
         // With no source, the caller's rollback state is also the RK2 seed.
         std::unique_ptr<SavedStates> postSource;
@@ -745,7 +782,7 @@ public:
         if(transport) {
             AddElapsed timing(timings.transport);
             refreshInterface(states);
-            packTransport(q,states,true);boundaryA.resize(nv);
+            packTransport(q,states,true,0);boundaryA.resize(nv);
             // CPU chemistry (or rollback) may have changed q. A fresh content
             // version forces one upload; the two RK stages then share device q.
             const uint64_t input=++transportVersion;
@@ -758,11 +795,11 @@ public:
             for(size_t j=0;j<q.size();++j) q[j]=initial[j]+dt*rhs[j];
         }
         recoveryStage="rk1";recover(q,states);
-        demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
+        demand(dt<=stableStep(q,states,cfl,dt,true)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
         if(transport) {
             AddElapsed timing(timings.transport);
-            packTransport(q,states,true);boundaryB.resize(nv);
-            if(capillary&&!frozen) {
+            packTransport(q,states,true,1);boundaryB.resize(nv);
+            if(capillary) {
                 const PintleTransportToken before{attemptId,1,transportVersion};
                 const uint64_t updated=++transportVersion;
                 checkTransport(pintle_transport_replace_stage_state_v1(transport.get(),before,updated,q.data()));
@@ -1457,8 +1494,19 @@ int main(int argc,char** argv)
                 Info<<"REACTIVE_WALE_SCALARS fieldUploads="<<double(scalar.fieldUploads)
                     <<" fieldUploadBytes="<<double(scalar.fieldUploadBytes)<<" workspaceBytes="<<double(scalar.workspaceBytes)
                     <<" hostEnthalpyCells="<<double(flow.scalarPropertyCells)
-                    <<" hostPropertySeconds="<<flow.scalarPropertySeconds
+                    <<" hostPropertySeconds="<<(flow.capillary?0.:flow.scalarPropertySeconds)
+                    <<" propertyStageSeconds="<<flow.scalarPropertySeconds
                     <<" fluxBackend="<<(flow.turbulentSchmidt>0||flow.turbulentPrandtl>0?"cuda":"disabled")<<nl;
+                if(flow.capillary) {
+                    PintleWalePrProfileV1 pr{1,sizeof(PintleWalePrProfileV1),0,0,0,0,0,0,0};
+                    flow.checkTransport(pintle_transport_wale_pr_profile_v1(flow.transport.get(),&pr));
+                    Info<<"REACTIVE_WALE_PR backend=device-pr"
+                        <<" builds="<<double(pr.builds)<<" cells="<<double(pr.cells)
+                        <<" kernels="<<double(pr.kernels)<<" failures="<<double(pr.failures)
+                        <<" inputUploadBytes="<<double(pr.inputUploadBytes)
+                        <<" scratchBytes="<<double(pr.scratchBytes)
+                        <<" wallSeconds="<<pr.wallSeconds<<nl;
+                }
             }
             PintleTransportStats stats{};flow.checkTransport(pintle_transport_stats(flow.transport.get(),&stats));
             Info<<"REACTIVE_TRANSPORT allocatedBytes="<<double(stats.allocatedBytes)<<" uploadedBytes="<<double(stats.uploadedBytes)

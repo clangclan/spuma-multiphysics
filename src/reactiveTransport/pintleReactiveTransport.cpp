@@ -3,8 +3,10 @@
 #include "pintleTransportKernels.h"
 #include "pintleTransportV21.h"
 #include "pintleTurbulence.h"
+#include "../reactiveThermo/pintleDeviceWalePr.h"
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <mutex>
 #include <cstdio>
 #include <cstdlib>
@@ -24,6 +26,35 @@ size_t product(size_t a,size_t b) {
 }
 #ifdef __CUDACC__
 void cudaCheck(cudaError_t status) {if(status!=cudaSuccess) throw std::runtime_error(cudaGetErrorString(status));}
+__global__ void walePrPropertiesKernel(const PintleDeviceFlash::Model* model,
+    const double* q,const PintleThermoState* states,const double* color,
+    const double* curvature,double sigma,size_t cells,size_t species,
+    double* h,double* cp,unsigned long long* failure,bool enthalpies)
+{
+    const size_t c=size_t(blockIdx.x)*blockDim.x+threadIdx.x;
+    if(c>=cells)return;
+    double local[PintleDeviceFlash::maxSpecies]{};
+    double candidateCp=0;
+    const auto status=PintleDeviceWalePr::evaluate(*model,
+        enthalpies?q+c*species:nullptr,states[c],color[c],sigma*curvature[c],
+        local,candidateCp,enthalpies);
+    if(status!=PintleDeviceWalePr::Success){
+        atomicMin(failure,(static_cast<unsigned long long>(c)<<8)|unsigned(status));
+        return;
+    }
+    cp[c]=candidateCp;
+    if(enthalpies)for(size_t k=0;k<species;++k)h[c*species+k]=local[k];
+}
+__global__ void walePrCommitKernel(size_t cells,size_t species,size_t stride,
+    const double* sourceH,const double* sourceCp,double* destinationH,double* destinationCp,
+    bool enthalpies,bool heatFlux)
+{
+    const size_t c=size_t(blockIdx.x)*blockDim.x+threadIdx.x;
+    if(c>=cells)return;
+    if(heatFlux)destinationCp[c]=sourceCp[c];
+    if(enthalpies)for(size_t k=0;k<species;++k)
+        destinationH[k*stride+c]=sourceH[c*species+k];
+}
 template<class Operator> __global__ void execute(size_t n,View v,Operator op) {
     for(size_t j=size_t(blockIdx.x)*blockDim.x+threadIdx.x;j<n;j+=size_t(blockDim.x)*gridDim.x) op(j,v);
 }
@@ -212,12 +243,21 @@ public:
     PintleTransportProfile profile{};
     PintleWaleProfileV1 waleProfile{1,sizeof(PintleWaleProfileV1),0,0,0,0};
     PintleWaleScalarProfileV1 waleScalarProfile{1,sizeof(PintleWaleScalarProfileV1),0,0,0};
+    PintleWalePrProfileV1 walePrProfile{1,sizeof(PintleWalePrProfileV1),0,0,0,0,0,0,0};
     PintleCapillaryProfileV1 capillaryProfile{1,sizeof(PintleCapillaryProfileV1),0,0,0,0,0,0,0};
     uint32_t turbulenceStatus=0;
     PintleTransportDeviceProfile deviceProfile{};uint32_t gasStatus=0;
     uint64_t residentVersion=0,highestVersion=0;bool haveResident=false;
     bool haveInitial=false;double stageDt=0;std::array<char,1024> error{};size_t nonemptyGasCells=0;
     bool colorReady=false;uint32_t capillaryStatus=0;
+    bool walePrInstalled=false,walePrReady=false;
+    PintleWalePrEpochV1 walePrEpoch{};
+    uint64_t walePrLastThermoVersion=0;
+    PintleDeviceFlash::Model* walePrModel=nullptr;
+    double *walePrQ=nullptr,*walePrH=nullptr,*walePrCp=nullptr;
+    PintleThermoState* walePrStates=nullptr;
+    unsigned long long* walePrFailure=nullptr;
+    std::vector<double> walePrHostQ;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
               const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,
               const PintleTransportOptionsV2* options=nullptr,const PintleTransportOptionsV21* options21=nullptr)
@@ -455,6 +495,7 @@ public:
         v.waleScalars=true;waleScalarProfile.workspaceBytes=bytes;
     }
     void uploadWaleScalarFields(const double* cellCp,const double* cellH,const double* fixedCp,const double* fixedH) {
+        require(!walePrInstalled,"Host WALE scalar upload cannot replace installed PR device properties");
         require(v.waleScalars,"WALE scalar closure is not selected");
         const bool uploadH=cellH||fixedH;
         if(v.turbulentPrandtl>0) {
@@ -478,6 +519,136 @@ public:
         v.scalarHFields=v.turbulentSchmidt==0||uploadH;++waleScalarProfile.fieldUploads;
         waleScalarProfile.fieldUploadBytes+=(v.turbulentPrandtl>0?(v.cfg.cells+v.cfg.fixed)*sizeof(double):0)
             +(v.turbulentSchmidt>0&&uploadH?(v.cfg.cells+v.cfg.fixed)*v.cfg.species*sizeof(double):0);
+    }
+    void installWalePr(const PintleWalePrModelV1& options) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options)
+            &&options.modelImage&&options.modelBytes==sizeof(PintleDeviceFlash::Model),
+            "Invalid WALE PR model ABI or image size");
+        require(options.physicalModelHash[64]==0&&std::strlen(options.physicalModelHash)==64
+            &&physicalHash==options.physicalModelHash,
+            "WALE PR model identity differs from transport physical model");
+        require(execution.cuda&&v.capillary&&v.waleScalars&&!walePrInstalled
+            &&!highestVersion&&!execution.stats.stages&&!execution.stats.stepQueries,
+            "WALE PR device model must be installed on CUDA before stepping");
+        PintleDeviceFlash::Model host{};
+        std::memcpy(&host,options.modelImage,sizeof(host));
+        require(PintleDeviceFlash::validModel(host)&&host.nl==1&&host.condensedKind[0]==0
+            &&size_t(host.ns)==v.cfg.species&&v.capillarySpecies==size_t(host.condensable[0])
+            &&v.cfg.variables==v.cfg.species+5,
+            "WALE PR model does not match the single-liquid capillary transport layout");
+        if(v.turbulentPrandtl>0) {
+            require(!v.cfg.fixed||options.fixedCp,"Missing fixed WALE heat capacities");
+            for(size_t c=0;c<v.cfg.fixed;++c)
+                require(std::isfinite(options.fixedCp[c])&&options.fixedCp[c]>0,
+                    "Invalid fixed WALE heat capacity");
+        }
+        if(v.turbulentSchmidt>0) {
+            require(!v.cfg.fixed||options.fixedSpeciesH,"Missing fixed WALE species enthalpies");
+            for(size_t i=0;i<v.cfg.fixed*v.cfg.species;++i)
+                require(std::isfinite(options.fixedSpeciesH[i]),
+                    "Invalid fixed WALE species enthalpy");
+        }
+        const size_t n=v.cfg.cells,ns=v.cfg.species;
+        size_t bytes=sizeof(host)+sizeof(unsigned long long);
+        bytes+=product(n,sizeof(PintleThermoState)+sizeof(double));
+        if(v.turbulentSchmidt>0)bytes+=2*product(product(n,ns),sizeof(double));
+        require(double(execution.stats.allocatedBytes)+double(bytes)<=v.cfg.maxBytes,
+            "WALE PR property scratch exceeds transport memory budget");
+        walePrModel=execution.allocate<PintleDeviceFlash::Model>(1,v.cfg.maxBytes);
+        walePrStates=execution.allocate<PintleThermoState>(n,v.cfg.maxBytes);
+        if(v.turbulentSchmidt>0){
+            walePrQ=execution.allocate<double>(product(n,ns),v.cfg.maxBytes);
+            walePrH=execution.allocate<double>(product(n,ns),v.cfg.maxBytes);
+            walePrHostQ.resize(product(n,ns));
+        }
+        walePrCp=execution.allocate<double>(n,v.cfg.maxBytes);
+        walePrFailure=execution.allocate<unsigned long long>(1,v.cfg.maxBytes);
+        execution.upload(walePrModel,&host,1);
+        if(v.turbulentPrandtl>0)
+            execution.upload(v.mixtureCp+n,options.fixedCp,v.cfg.fixed);
+        if(v.turbulentSchmidt>0)
+            pack(v.speciesH,options.fixedSpeciesH,v.cfg.fixed,ns,n,n+v.cfg.fixed);
+        execution.finish();
+        // A prior host scalar upload is never a valid device PR property epoch.
+        v.scalarCpFields=false;v.scalarHFields=false;walePrReady=false;
+        walePrInstalled=true;walePrProfile.scratchBytes=bytes;
+        walePrProfile.inputUploadBytes=sizeof(host)
+            +v.cfg.fixed*(v.turbulentPrandtl>0?sizeof(double):0)
+            +v.cfg.fixed*ns*(v.turbulentSchmidt>0?sizeof(double):0);
+    }
+    void prepareWalePr(const PintleWalePrEpochV1& epoch,const double* q,size_t stride,
+                       const PintleThermoState* states) {
+        const auto begin=std::chrono::steady_clock::now();
+        require(epoch.abiVersion==1&&epoch.structBytes==sizeof(epoch)
+            &&(epoch.enthalpies==0||epoch.enthalpies==1)
+            &&epoch.thermoVersion>0&&epoch.thermoVersion>=walePrLastThermoVersion
+            &&epoch.boundaryVersion==1,
+            "Invalid WALE PR property epoch");
+        require(walePrInstalled&&execution.cuda&&colorReady&&states
+            &&epoch.geometryVersion==capillaryProfile.geometryBuilds,
+            "WALE PR properties require installed model and current capillary geometry");
+        if(attemptOpen) {
+            if(epoch.nextConserved.stageId==std::numeric_limits<uint64_t>::max())
+                require(!epoch.enthalpies&&epoch.nextConserved.attemptId==attemptId
+                    &&!epoch.nextConserved.contentVersion,
+                    "Invalid WALE PR in-attempt CFL token");
+            else
+                require(epoch.nextConserved.attemptId==attemptId
+                    &&epoch.nextConserved.stageId==tokenStage
+                    &&epoch.nextConserved.contentVersion>highestVersion,
+                    "Stale WALE PR next-conserved token");
+        } else {
+            require(!epoch.nextConserved.attemptId&&!epoch.nextConserved.stageId
+                &&!epoch.nextConserved.contentVersion,
+                "WALE PR CFL properties cannot claim an RK token");
+        }
+        if(epoch.enthalpies) {
+            require(v.turbulentSchmidt>0&&v.speciesH&&walePrQ&&walePrH,
+                "WALE PR enthalpies require species mixing scratch");
+            require(q&&stride==v.cfg.variables,"WALE PR enthalpies need full conserved rows");
+            require(attemptOpen,"WALE PR enthalpies require an open RK attempt");
+        }
+        v.scalarCpFields=false;v.scalarHFields=false;walePrReady=false;
+        const size_t n=v.cfg.cells,ns=v.cfg.species;
+        if(epoch.enthalpies)for(size_t c=0;c<n;++c)
+            for(size_t k=0;k<ns;++k)walePrHostQ[c*ns+k]=q[c*stride+k];
+        const unsigned long long noFailure=std::numeric_limits<unsigned long long>::max();
+        unsigned long long failure=noFailure;
+        execution.upload(walePrFailure,&noFailure,1);
+        execution.upload(walePrStates,states,n);
+        if(epoch.enthalpies)execution.upload(walePrQ,walePrHostQ.data(),product(n,ns));
+        walePrProfile.inputUploadBytes+=sizeof(noFailure)+n*sizeof(PintleThermoState)
+            +(epoch.enthalpies?product(n,ns)*sizeof(double):0);
+#ifdef __CUDACC__
+        const unsigned block=execution.blockThreads;
+        const unsigned grid=unsigned(std::min(size_t(65535),(n+block-1)/block));
+        walePrPropertiesKernel<<<grid,block,0,execution.stream>>>(walePrModel,walePrQ,
+            walePrStates,v.capillaryColor,v.interface.curvature,v.interface.sigma,n,ns,
+            walePrH,walePrCp,walePrFailure,epoch.enthalpies!=0);
+        cudaCheck(cudaGetLastError());
+        ++execution.stats.kernelLaunches;++walePrProfile.kernels;
+#endif
+        execution.download(&failure,walePrFailure,1);execution.finish();
+        walePrProfile.cells+=n;
+        if(failure!=noFailure){
+            ++walePrProfile.failures;
+            throw std::runtime_error("WALE PR GPU property cell "+std::to_string(failure>>8)
+                +" status "+std::to_string(failure&255));
+        }
+#ifdef __CUDACC__
+        walePrCommitKernel<<<grid,block,0,execution.stream>>>(n,ns,n+v.cfg.fixed,
+            walePrH,walePrCp,v.speciesH,v.mixtureCp,epoch.enthalpies!=0,
+            v.turbulentPrandtl>0);
+        cudaCheck(cudaGetLastError());
+        ++execution.stats.kernelLaunches;++walePrProfile.kernels;
+#endif
+        execution.finish();
+        v.scalarCpFields=true;v.scalarHFields=epoch.enthalpies!=0||v.turbulentSchmidt==0;
+        walePrReady=true;walePrEpoch=epoch;
+        walePrLastThermoVersion=epoch.thermoVersion;
+        ++walePrProfile.builds;
+        walePrProfile.wallSeconds+=std::chrono::duration<double>(
+            std::chrono::steady_clock::now()-begin).count();
     }
     void buildWale() {
         if(!v.wale)return;
@@ -534,6 +705,7 @@ public:
         for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedColor[c])&&fixedColor[c]>=0&&fixedColor[c]<=1,
             "Invalid fixed material color");
         colorReady=false;capillaryStatus=0;
+        if(walePrInstalled){walePrReady=false;v.scalarCpFields=false;v.scalarHFields=false;}
         execution.upload(v.capillaryError,&capillaryStatus,1);
         execution.upload(v.capillaryColor,cellColor,v.cfg.cells);
         execution.upload(v.capillaryColor+v.cfg.cells,fixedColor,v.cfg.fixed);
@@ -569,6 +741,13 @@ public:
             require(!v.waleScalars||((v.turbulentPrandtl==0||v.scalarCpFields)
                 &&(v.turbulentSchmidt==0||v.scalarHFields)),
                 "WALE scalar heat capacities/enthalpies were not uploaded for this thermodynamic stage");
+            require(!walePrInstalled
+                ||(walePrReady&&walePrEpoch.nextConserved.attemptId==attemptId
+                    &&walePrEpoch.nextConserved.stageId==tokenStage
+                    &&walePrEpoch.nextConserved.contentVersion==residentVersion
+                    &&walePrEpoch.geometryVersion==capillaryProfile.geometryBuilds
+                    &&(v.turbulentSchmidt==0||walePrEpoch.enthalpies==1)),
+                "WALE PR properties have a stale conserved or geometry epoch");
             if(v.capillary){capillaryStatus=0;execution.upload(v.capillaryError,&capillaryStatus,1);}
             execution.launch(v.cfg.faces,v,Faces{});++deviceProfile.transportFaceLaunches;
             if(v.capillary){execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
@@ -581,6 +760,17 @@ public:
         } else {
             require(!v.waleScalars||v.turbulentPrandtl==0||v.scalarCpFields,
                 "WALE scalar heat capacities were not uploaded for this thermodynamic stage");
+            require(!walePrInstalled||(walePrReady
+                &&walePrEpoch.geometryVersion==capillaryProfile.geometryBuilds
+                &&walePrEpoch.enthalpies==0
+                &&(attemptOpen
+                    ?walePrEpoch.nextConserved.attemptId==attemptId
+                        &&walePrEpoch.nextConserved.stageId==std::numeric_limits<uint64_t>::max()
+                        &&!walePrEpoch.nextConserved.contentVersion
+                    :!walePrEpoch.nextConserved.attemptId
+                        &&!walePrEpoch.nextConserved.stageId
+                        &&!walePrEpoch.nextConserved.contentVersion)),
+                "WALE PR CFL heat capacity has a stale geometry or attempt epoch");
             execution.launch(v.cfg.faces,v,FaceSpeeds{});++deviceProfile.cflFaceLaunches;
         }
     }
@@ -745,6 +935,17 @@ int pintle_transport_stable_step_primitives(void* t,const PintleTransportPrimiti
         x.uploadPrimitives(primitive,state);x.buildWale();
         require(!x.v.waleScalars||x.v.turbulentPrandtl==0||x.v.scalarCpFields,
             "WALE scalar heat capacities were not uploaded for this thermodynamic stage");
+        require(!x.walePrInstalled||(x.walePrReady
+            &&x.walePrEpoch.geometryVersion==x.capillaryProfile.geometryBuilds
+            &&x.walePrEpoch.enthalpies==0
+            &&(x.attemptOpen
+                ?x.walePrEpoch.nextConserved.attemptId==x.attemptId
+                    &&x.walePrEpoch.nextConserved.stageId==std::numeric_limits<uint64_t>::max()
+                    &&!x.walePrEpoch.nextConserved.contentVersion
+                :!x.walePrEpoch.nextConserved.attemptId
+                    &&!x.walePrEpoch.nextConserved.stageId
+                    &&!x.walePrEpoch.nextConserved.contentVersion)),
+            "WALE PR CFL heat capacity has a stale geometry or attempt epoch");
         x.execution.launch(x.v.cfg.faces,x.v,FaceSpeeds{});++x.deviceProfile.cflFaceLaunches;
         x.stableStep(cfl,maximumStep,dt);
     });
@@ -762,6 +963,19 @@ int pintle_transport_wale_scalar_profile_v1(void* t,PintleWaleScalarProfileV1* p
 int pintle_transport_wale_scalar_fields_v1(void* t,const double* cellCp,const double* cellH,
     const double* fixedCp,const double* fixedH) {
     return protect(t,[&](Transport& x){x.uploadWaleScalarFields(cellCp,cellH,fixedCp,fixedH);});
+}
+int pintle_transport_set_wale_pr_model_v1(void* t,const PintleWalePrModelV1* options) {
+    return protect(t,[&](Transport& x){require(options,"Null WALE PR model options");x.installWalePr(*options);});
+}
+int pintle_transport_wale_pr_properties_v1(void* t,const PintleWalePrEpochV1* epoch,
+    const double* q,size_t stride,const PintleThermoState* states) {
+    return protect(t,[&](Transport& x){require(epoch,"Null WALE PR property epoch");
+        x.prepareWalePr(*epoch,q,stride,states);});
+}
+int pintle_transport_wale_pr_profile_v1(void* t,PintleWalePrProfileV1* profile) {
+    return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1
+        &&profile->structBytes==sizeof(*profile),"Invalid WALE PR profile ABI");
+        *profile=x.walePrProfile;});
 }
 int pintle_transport_wale_profile_v1(void* t,PintleWaleProfileV1* profile) {
     return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1
@@ -816,12 +1030,14 @@ int pintle_transport_memory_v2(void* handle,PintleTransportMemoryV2* out) {
 int pintle_transport_begin_attempt(void* handle,const char* hash,uint64_t id) {
     return protect(handle,[&](Transport& t){require(hash&&t.physicalHash==hash,"Transport physical model hash mismatch");
         require(!t.attemptOpen&&id>t.lastAttempt,"Stale/open transport attempt");
-        t.attemptId=t.lastAttempt=id;t.tokenStage=0;t.attemptOpen=true;t.haveResident=t.haveInitial=false;});
+        t.attemptId=t.lastAttempt=id;t.tokenStage=0;t.attemptOpen=true;t.haveResident=t.haveInitial=false;
+        if(t.walePrInstalled){t.walePrReady=false;t.v.scalarCpFields=false;t.v.scalarHFields=false;}});
 }
 int pintle_transport_end_attempt(void* handle,uint64_t id,int commit) {
     return protect(handle,[&](Transport& t){require((commit==0||commit==1)&&t.attemptOpen&&id==t.attemptId,"Wrong transport attempt completion");
         require(!commit||t.tokenStage==2,"Cannot commit incomplete transport RK");t.execution.finish();
-        t.attemptOpen=false;t.haveInitial=false;if(!commit)t.haveResident=false;});
+        t.attemptOpen=false;t.haveInitial=false;if(!commit)t.haveResident=false;
+        if(t.walePrInstalled){t.walePrReady=false;t.v.scalarCpFields=false;t.v.scalarHFields=false;}});
 }
 int pintle_transport_advance_resident_v2(void* handle,PintleTransportToken input,PintleTransportToken output,
     const PintleTransportState* state,const PintleGasPartition* partition,const double* y,const double* h,double dt,double* boundary) {

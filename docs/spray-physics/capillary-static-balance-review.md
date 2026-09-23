@@ -27,3 +27,32 @@ Smoothing only the geometry worsened or left the mismatch because the test press
 A credible next implementation needs a better representation of the moving material interface and curvature, such as geometric volume-fraction transport with height-function curvature on supported meshes, and a pressure/capillary-force discretization that balances a static Laplace jump on the *same* faces. The resulting capillary momentum update must remain conservative across each shared face. The energy update must still account for surface-area work, and flashing must move or consume the resolved liquid interface consistently. Balanced-force and height-function methods are established for incompressible volume tracking; adapting them to this compressible HEM/EOS and total-energy formulation requires its own derivation and tests [François et al. (2006)](https://doi.org/10.1016/j.jcp.2005.08.004), [Popinet (2009)](https://doi.org/10.1016/j.jcp.2009.04.042). The present diffuse-stress model follows the continuum-surface-force idea of [Brackbill, Kothe, and Zemach (1992)](https://doi.org/10.1016/0021-9991(92)90240-Y); that model alone does not guarantee discrete balance.
 
 The static-drop gate should require decreasing parasitic velocity and converging Laplace pressure error over at least these three meshes, in addition to periodic momentum, species, and total-energy conservation. Capillary-wave and oscillating-drop comparisons need enough simulated time and samples to measure a period; the current 60 ns traces are too short. Flashing cases require a converged coupled surface-energy/phase closure and bounded liquid inventory. Until those gates pass, the current branch is reviewable as an integrated experimental implementation, with static-drop convergence explicitly failing.
+
+## Review follow-up: production face operator isolation
+
+The external 2026-09-23 review was a CPU prototype/design package, not a tested CUDA patch.
+Its [provenance](../../results/capillary-review-20260923/review-provenance.json) is recorded.
+The accepted consistency fixes use one owner-weighted face color for geometry/pressure restoration,
+and one face velocity (normal component equal to the Riemann contact speed) for capillary traction work.
+They preserve the shared-face momentum structure. They do **not** repair the uniform-mesh static balance.
+
+The new [production face-flux diagnostic](../../tools/capillary_face_decomposition.cpp) calls the
+actual graph geometry and `faceFlux`, separating Riemann pressure, capillary traction, mass flux,
+and final cell momentum RHS before time integration. Density, sound speed and total energy are
+synthetic fixtures: this isolates the spatial operator and is not another real-fluid solver run.
+With analytic constant curvature, mass flux and the Riemann-pressure RHS are zero, while
+maximum residual acceleration is 864, 1374, 1894, 3929 and 6788 m/s² on 16³, 24³, 32³, 48³ and 64³.
+The nonzero residual therefore survives even without curvature error or time-stepping error.
+Global momentum RHS remains approximately 10⁻²¹ N.
+
+Increasing initial sphere quadrature from 8³ to 32³ samples per intersected cell gives
+863, 1371 and 1879 m/s² on 16³/24³/32³, which does not reverse the trend.
+Zero normals outside the active band remain a separate geometry issue: 624/1392/2400 faces
+have only one active normal at those grids. The [full diagnostic data](../../results/capillary-review-20260923/face-decomposition.json)
+also retain numerical-curvature errors and RHS decomposition roundoff.
+Neither fixed quadrature nor curvature alone explains away the pressure/stress mismatch.
+
+`validate_capillary_solver.py --require-static-convergence` now returns failure for growing
+maximum or volume-weighted L2 velocity, missing refinements, or unequal physical conditions/times.
+It reports interface-area-weighted curvature errors without hiding cells with poor curvature.
+A passing velocity trend would still be only one gate; it does not certify dynamic area/work or breakup.

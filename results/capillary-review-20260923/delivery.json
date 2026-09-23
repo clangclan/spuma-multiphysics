@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "reviewBasedChangesImplemented": [
+    "GPU PR WALE interior species-enthalpy preparation for single-liquid capillary mode",
+    "stage-safe atomic GPU property publication and rollback",
+    "consistent face color and capillary traction work",
+    "production face flux zero-time decomposition",
+    "explicit nonconvergence acceptance gate"
+  ],
+  "gpuExecutionValidated": true,
+  "physicsAccuracyValidated": false,
+  "mergeEligible": false,
+  "remaining": [
+    "static pressure/capillary stress balance and mesh convergence",
+    "geometric interface transport and consistent area/work coupling",
+    "long-time oscillation and primary breakup validation",
+    "host flash outer-loop orchestration and array staging"
+  ],
+  "tests": {
+    "publicApiChecks": 64,
+    "physicsSwitchChecks": 35,
+    "traceInputs": 656,
+    "traceMaxRelativeHError": 3.930203538362558e-14,
+    "smallSolverCases": 9,
+    "smallInitialStateParity": true,
+    "fullPhysicsCells": 4096,
+    "fullPhysicsSteps": 4,
+    "fullPhysicsRestartBitwise": true,
+    "impingementCells": 256000,
+    "impingementStepsPerEnvironment": 2,
+    "staticVelocityGatePassed": false
+  },
+  "hostWorkRemaining": [
+    "fixed boundary initialization",
+    "file I/O",
+    "batch packing and outer iteration control",
+    "capillary OFF legacy WALE properties"
+  ],
+  "artifacts": {
+    "bin/ReactiveFoam": "e1baf097060be8d4832a5610f6aa5e7f28b013c2608c3d5fd433300e55da3a7c",
+    "lib/libpintleReactiveTransport.so": "e50c8f88423c4226c7cd4af2b551d473eb33161709a4e84a4d8aa02d3837580a",
+    "lib/libpintleReactiveBackend.so": "0ec736b1cae0b197501adf75171db47c0c588e925f35ff765146a24a30c573b8"
+  },
+  "sources": {
+    "src/reactiveFoam/ReactiveFoam.C": "521f627f0eaf0676d8fb380385fe394c6a7dac49ea2b1c40510bd043e783c3f9",
+    "src/reactiveInterface/pintleBalancedCapillary.h": "e5727d8350e290e6cb79d6afb605d7fbde932239183c764b377d659bdd8b7ce2",
+    "src/reactiveInterface/pintleUnstructuredInterface.h": "b8e4053a5f20a0f23c5160d4db1235f77f465dc9b652304d3e663fc596ad0a41",
+    "src/reactiveThermo/pintleDeviceWalePr.h": "ae4d7caa92a2749b760fad0e0dddee902ef3740f8844b8eec959f5a717dcae63",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "feab62ccfbf15d7ea684d8f6d1101b240d27641c542a7d3e7b1df948ced8687b",
+    "src/reactiveTransport/pintleTurbulence.h": "566e8059c81fd78efbdd7dca88980df65cf54781f7707226e28345b433099cf2",
+    "tools/capillary_balanced_cuda_test.cu": "4015407475c21c32effb636273729b8315ac33d861bb2efea82c213df2002df1",
+    "tools/capillary_balanced_test.cpp": "8655cd7f06bd9c568185af0bf596f7ee51c4a784a6d574cab1db8673f230c213",
+    "tools/capillary_face_decomposition.cpp": "b1082e017838ea21ce6d9b9cb5e91b899040980b9473a67fdc42c9b649747ba0",
+    "tools/summarize_capillary_performance.py": "1885d6efb39bf3440ecf77019ebd0523643fe6fa69a6479995d20dcb97321867",
+    "tools/test_capillary_acceptance.py": "f2d2c08e3b3ef3f0c300d38219107ba12d14bc8f176df208468062f2b60c3175",
+    "tools/validate_capillary_solver.py": "679d469ca375588c1d75deef05cbd057438550d480a08168864a7cf3311f0a90",
+    "tools/validate_physics_switches.py": "2f8b892ee974eeb780d6301e4d8a4884899498ff0b2dc340850b4dc63268453e",
+    "tools/validate_wale_pr_epochs.py": "e96fd887130c04fd69be5673f5f76183535d725eee1780d8b989a8678085cbec",
+    "tools/validate_wale_pr_properties.py": "3cf3ce0a981a9bd767ff1552fccf4a3c95513ad4d3e4e580d62d9c5c7ca44a14",
+    "tools/wale_pr_property_probe.cu": "f151599f47953b19314b5f771ed18e99a4469bc976316056510f2450ab59d91d"
+  },
+  "evidenceSha256": {
+    "baseline-static-gate.json": "d21d85fe13423da36fe1fff0ef012de34b3419e78436a80e05307ca708ea76d2",
+    "face-decomposition.json": "2dbe7c920ee4996ef84f5afc8664511fe0f82448f83dd1f1ee59698b019dbed0",
+    "face-tests.json": "5c413cd31e4768326af6fa4a00d696a3d9fa2e4c4b78c98d24d8e5bfec10b26a",
+    "flash-sphere.json": "7410ba5a8e94c508ca1cd66ceb06bb384a5b0e3b5e43f205f8a106c0745b1309",
+    "frozen-heat-only.json": "af598fdb7c01bf8aa8494bc3446fc06be8a9d49bd0964055f06bacc27fdfa4af",
+    "frozen-sgs-rejection.json": "dbfa1cdff58893f86fdc093bfad48c8783422740912fd8431fa19a05afb5702f",
+    "full-physics-checkpoint-gpu-pr.json": "a4117b8b17a83805566786ec89ef8ef4acc4bd691a5437c58e2fae8adde4edf8",
+    "full-physics-initial-parity.json": "f5d52ed117357b71080fb339f503aedd6d9ddbbf84473839a9c6448ca7ccac6e",
+    "full-physics-restart.json": "3dff56008838c20d3b2f3ec6b8a599ccc8915d89fc731d3019e27afaa8393bd1",
+    "impingement-256k.json": "a99eb4e3a3852cbbc81cbdade13fdcaed40e3324df4c2880395a6d12a62d2091",
+    "impingement-initial-parity.json": "822eae47ced0297edc7fc8f6f6c5e7458da8c2f63ea277d8af40bf0545c15083",
+    "physics-switches.json": "ea279870a083265e235a11d262ca325153cf09734f9a1ae8afe8e0a9de4e360f",
+    "review-provenance.json": "015433a1a3c45e34ed30447e13d30bbcfe1c4d47c214bbf82175c688955f19a0",
+    "solver-status.json": "983e72c23931f57618367d6abeddbdf1db3f0359f4176393738af4e758294cd9",
+    "solver-validation.json": "bb823bf74bfeb9abdb14072388bab032da2eea5c8e0f3720164526e4d00e12ae",
+    "wale-pr-epochs.json": "b1553cb356ba55e56b3f5cdd9eb75307a6a6c8e5cc7ab68c1b5ca21480106cce",
+    "wale-pr-trace-parity.json": "36bcfc865f883de2a4afdccf4c03844b983b64a86c168d0ba02c21da1c43f8df"
+  }
+}

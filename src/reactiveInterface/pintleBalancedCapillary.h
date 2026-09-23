@@ -22,7 +22,7 @@ struct State {
 // n points owner to neighbour; curvature and surfaceStress are reconstructed
 // once per shared face. Surface stress is row-major C=sigma*|grad c|*(I-nn).
 struct Face {
-    double normal[3], curvature, sigma, surfaceStress[9];
+    double normal[3], curvature, sigma, colorFace, surfaceStress[9];
 };
 
 struct Flux {
@@ -55,7 +55,8 @@ PINTLE_BC_HD inline bool valid(const State& s) {
 PINTLE_BC_HD inline bool faceFlux(const State& left,const State& right,
                                   const Face& face,Flux& result) {
     if(!valid(left)||!valid(right)||!finite(face.curvature)||!finite(face.sigma)
-       ||face.sigma<0) return false;
+       ||face.sigma<0||!finite(face.colorFace)
+       ||face.colorFace<0||face.colorFace>1) return false;
     double n2=0,unL=0,unR=0;
     for(int d=0;d<3;++d) {
         if(!finite(face.normal[d])) return false;
@@ -115,19 +116,23 @@ PINTLE_BC_HD inline bool faceFlux(const State& left,const State& right,
         +out.advectRight*right.totalEnergy;
     // The total-energy flux is (Et+p)u-Cu. The HLLC core transports
     // (Et+pi)u; restore (p-pi)u-Cu with a single shared face velocity.
-    const double color=0.5*(left.color+right.color);
-    double tractionDotVelocity=0;
+    double faceVelocity[3]{},averageNormalVelocity=0;
+    for(int d=0;d<3;++d) {
+        faceVelocity[d]=0.5*(left.velocity[d]+right.velocity[d]);
+        averageNormalVelocity+=faceVelocity[d]*face.normal[d];
+    }
+    for(int d=0;d<3;++d)
+        faceVelocity[d]+=(out.contactSpeed-averageNormalVelocity)*face.normal[d];
+    out.capillaryEnergy=0;
     for(int i=0;i<3;++i) {
         double traction=0;
         for(int j=0;j<3;++j) traction+=face.surfaceStress[3*i+j]*face.normal[j];
-        const double velocity=0.5*(left.velocity[i]+right.velocity[i]);
-        tractionDotVelocity+=traction*velocity;
-        out.capillaryMomentum[i]=face.sigma*face.curvature*color*face.normal[i]-traction;
+        out.capillaryMomentum[i]=face.sigma*face.curvature*face.colorFace*face.normal[i]-traction;
         out.momentum[i]=out.advectLeft*left.rho*left.velocity[i]
             +out.advectRight*right.rho*right.velocity[i]
             +out.pressureMomentum*face.normal[i]+out.capillaryMomentum[i];
+        out.capillaryEnergy+=faceVelocity[i]*out.capillaryMomentum[i];
     }
-    out.capillaryEnergy=face.sigma*face.curvature*color*out.contactSpeed-tractionDotVelocity;
     out.totalEnergy=advectiveEnergy+out.pressureEnergy+out.capillaryEnergy;
     if(!finite(out.mass)||!finite(out.pressureMomentum)||!finite(out.pressureEnergy)
        ||!finite(out.capillaryEnergy)||!finite(out.totalEnergy)) return false;

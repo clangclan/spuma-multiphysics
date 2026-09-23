@@ -1,0 +1,19 @@
+{
+  "reviewArchiveSha256": "1362a39f6c16e93aad4ade54f26147baf99bdae82820ca1bf8c9734de6b6d018",
+  "reviewedRemoteHead": "74a54c54d5578184efc3cbb2142be56641d0054c",
+  "reviewConversationId": "6ab3559e-976c-83e8-9a48-e70be20edae6",
+  "reviewStatus": "external CPU-only prototype and design review, independently checked before adoption",
+  "archiveMembers": {
+    "spuma_review/README.ko.md": "dd028f2975a73843da649a824d2d37fccdf727c60c4088581ddb6aab6e84921d",
+    "spuma_review/capillary_diagnostics.hpp": "37c2e0be35a1cceda230b0520db5a6590089a86e9f21d74da9405524eb2a323b",
+    "spuma_review/capillary_integral_design.ko.md": "1710d376d6bc876116f83bbe18faad7c6382967fe1e6f0c976ef1107c0ea273f",
+    "spuma_review/capillary_work_proposal.md": "66e5dfa96d9eaf4a9928a9a25a63a9866d601b0e62ea75ab89d80881bbdd95cf",
+    "spuma_review/core_c_api.cpp": "86799ed870d1d830cc1e69f38468963ab9d8308ce80ff165f30acf8aa03d41cf",
+    "spuma_review/pr_partial_h_core.hpp": "d5496635ee300c0f81cef46f1fb174c50a3842cd65564e2419eb4f4ede49d886",
+    "spuma_review/test_core.py": "59b36347a361ddc328cb9cc82c671ac6bc691dd4868167c742168f49697a7efd",
+    "spuma_review/validation.json": "cd9d0be0d6aec9cb7aa51028ecdc49445c2002332b41daf2db0a7b4639687e8b",
+    "spuma_review/wale_device_kernel.cu": "45221c7f30ece3b84c8f4bfd22bd3bb16f7ac000dce43604b546fb33982af288",
+    "spuma_review/wale_device_reuse.hpp": "8bfe3d124df0a89378f57d0e17cdea4d5e28a6d3b424baffca55a06a16417dd7",
+    "spuma_review/package_sha256.json": "9f0fb6e9d25c1f0e786fecced28dfb0c8d6cbd5e1bf0be9680a4e669dfe12547"
+  }
+}

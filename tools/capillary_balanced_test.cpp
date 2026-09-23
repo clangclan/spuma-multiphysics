@@ -40,6 +40,7 @@ static void staticDrop() {
         for(int d=0;d<2;++d) for(int sign : {-1,1}) {
             const State other=d==0?state(i+sign,j):state(i,j+sign);
             Face f{};f.normal[d]=sign;f.sigma=sigma;f.curvature=curvature;
+            f.colorFace=.5*(centre.color+other.color);
             Flux flux{};assert(faceFlux(centre,other,f,flux));
             largestMass=std::max(largestMass,std::abs(flux.mass));
             largestEnergy=std::max(largestEnergy,std::abs(flux.totalEnergy));
@@ -59,6 +60,7 @@ static void energyFluxAndColor() {
     f.surfaceStress[0]=.02;f.surfaceStress[4]=.03;f.surfaceStress[8]=.04;
     State s{};s.rho=1000;s.velocity[0]=2;s.velocity[1]=3;
     s.pressure=100000;s.sound=1500;s.totalEnergy=250000;s.color=.4;
+    f.colorFace=s.color;
     Flux flux{};assert(faceFlux(s,s,f,flux));
     const double expected=(s.totalEnergy+s.pressure)*s.velocity[0]
         -f.surfaceStress[0]*s.velocity[0];
@@ -75,6 +77,60 @@ static void energyFluxAndColor() {
     }
     double rate=0;assert(colorFaceRate(.25,.75,-1,1,1,1,rate));
     assert(close(rate,.5));
+}
+
+static void movingFaceWorkAndFallback() {
+    Face f=xFace(.1,2.0);f.colorFace=.35;
+    f.surfaceStress[0]=.4;f.surfaceStress[3]=f.surfaceStress[1]=.1;
+    State left{},right{};
+    left.rho=1;left.velocity[0]=1;left.velocity[1]=2;
+    left.pressure=1000;left.sound=20;left.totalEnergy=3000;left.color=.2;
+    right.rho=4;right.velocity[0]=5;right.velocity[1]=-1;
+    right.pressure=1100;right.sound=20;right.totalEnergy=5000;right.color=.8;
+    Flux flux{};assert(faceFlux(left,right,f,flux));
+    const double average[3]{3,.5,0};
+    const double faceVelocity[3]{flux.contactSpeed,average[1],average[2]};
+    const double expectedMomentum=.1*2*.35-.4;
+    const double expectedWork=faceVelocity[0]*expectedMomentum-average[1]*f.surfaceStress[3];
+    assert(close(flux.capillaryMomentum[0],expectedMomentum));
+    assert(close(flux.capillaryMomentum[1],-f.surfaceStress[3]));
+    assert(close(flux.capillaryEnergy,expectedWork));
+    const double oldMixedWork=.1*2*.35*flux.contactSpeed
+        -(average[0]*f.surfaceStress[0]+average[1]*f.surfaceStress[3]);
+    assert(std::abs(flux.capillaryEnergy-oldMixedWork)>1e-3);
+
+    Face fallback=xFace(0,0);fallback.colorFace=.5;
+    State a{},b{};a.rho=b.rho=1;a.pressure=100;b.pressure=1;
+    a.sound=b.sound=1;a.totalEnergy=b.totalEnergy=250;a.color=b.color=.5;
+    Flux hll{};assert(faceFlux(a,b,fallback,hll));
+    assert(hll.advectLeft>0&&hll.advectRight<0); // HLL fallback uses both states.
+    assert(close(hll.pressureMomentum,50.5));
+    assert(close(hll.capillaryEnergy,0));
+    Flux unchanged{};unchanged.mass=123;
+    fallback.colorFace=1.1;
+    assert(!faceFlux(a,b,fallback,unchanged));
+    assert(unchanged.mass==123);
+    fallback.colorFace=.5;fallback.normal[0]=2;
+    assert(!faceFlux(a,b,fallback,unchanged));
+    assert(unchanged.mass==123);
+}
+
+static void weightedFaceColor() {
+    PintleTransportFace raw{};raw.owner=0;raw.neighbour=1;
+    raw.kind=0;raw.ownerWeight=.8;raw.normal[0]=1;raw.area=1;raw.distance=1;
+    const double color[2]{.2,.8};
+    double area[2]{1,1},curvature[2]{2,2},normal[6]{1,0,0,1,0,0};
+    PintleUnstructuredInterface::View v{};v.cells=2;v.faces=&raw;
+    v.color=color;v.areaDensity=area;v.curvature=curvature;v.normal=normal;
+    v.sigma=.1;
+    Face f{};assert(PintleUnstructuredInterface::faceGeometry(0,v,f));
+    assert(close(f.colorFace,.32));
+    State left{},right{};left.rho=right.rho=1;
+    left.pressure=right.pressure=100;left.sound=right.sound=10;
+    left.totalEnergy=right.totalEnergy=1000;
+    left.color=color[0];right.color=color[1];
+    Flux flux{};assert(faceFlux(left,right,f,flux));
+    assert(close(flux.capillaryMomentum[0],.1*2*.32));
 }
 
 static void reconstructedDrop() {
@@ -144,6 +200,6 @@ static void reconstructedDrop() {
 }
 
 int main() {
-    staticDrop();energyFluxAndColor();reconstructedDrop();
+    staticDrop();energyFluxAndColor();movingFaceWorkAndFallback();weightedFaceColor();reconstructedDrop();
     std::cout << "balanced capillary face tests passed\n";
 }

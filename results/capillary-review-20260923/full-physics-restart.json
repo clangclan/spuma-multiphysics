@@ -1,0 +1,87 @@
+{
+  "bitwiseEqual": true,
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-review-20260923/solver/full-physics-restart",
+  "differences": [],
+  "fields": [
+    "q0",
+    "q1",
+    "q2",
+    "q3",
+    "rhoMomentum",
+    "rhoTotalEnergy",
+    "rhoLiquid0"
+  ],
+  "matchingHistory": false,
+  "profiles": {
+    "REACTIVE_CAPILLARY_PROFILE": {
+      "closureIterations": "10",
+      "enabled": "1",
+      "faceFluxBuilds": "49152",
+      "geometryBuilds": "23",
+      "geometryKernels": "46",
+      "workspaceBytes": "327684"
+    },
+    "REACTIVE_GPU_HEM": {
+      "analyticJacobians": "0",
+      "batches": "10",
+      "copySeconds": "0.0014268480092287064",
+      "cpuFallbacks": "0",
+      "deviceBytes": "2029992",
+      "deviceFailures": "0",
+      "finiteDifferenceJacobians": "2125989",
+      "flashCandidates": "150160",
+      "hostBytes": "3340632",
+      "kernelSeconds": "17.427563110351564",
+      "phaseEvaluations": "32383638",
+      "residualEvaluations": "42537272",
+      "stableCandidates": "54384",
+      "submitted": "40960",
+      "succeeded": "40960",
+      "transferBytes": "17531360",
+      "wallSeconds": "17.429538443000002"
+    },
+    "REACTIVE_PHYSICS": {
+      "chemistry": "0",
+      "combustion": "0",
+      "frozenLiquidFields": "0",
+      "heatConduction": "1",
+      "interfaceModel": "diffuse-liquid-inventory-v1",
+      "phaseChange": "equilibrium",
+      "speciesDiffusion": "0",
+      "surfaceTension": "1",
+      "thermodynamicRecovery": "1",
+      "totalEnergy": "1",
+      "transportedLiquidFields": "1",
+      "turbulence": "WALE-stress-v1",
+      "turbulentHeatFlux": "1",
+      "turbulentSpeciesMixing": "1",
+      "viscosity": "1"
+    },
+    "REACTIVE_WALE": {
+      "cellsEvaluated": "40960",
+      "gradientBuilds": "10",
+      "viscosityBuilds": "10",
+      "workspaceBytes": "32772"
+    },
+    "REACTIVE_WALE_PR": {
+      "backend": "device-pr",
+      "builds": "10",
+      "cells": "40960",
+      "failures": "0",
+      "inputUploadBytes": "7780776",
+      "kernels": "20",
+      "scratchBytes": "1063264",
+      "wallSeconds": "0.0028276939999999995"
+    },
+    "REACTIVE_WALE_SCALARS": {
+      "fieldUploadBytes": "0",
+      "fieldUploads": "0",
+      "fluxBackend": "cuda",
+      "hostEnthalpyCells": "0",
+      "hostPropertySeconds": "0",
+      "propertyStageSeconds": "0.003084832",
+      "workspaceBytes": "163840"
+    }
+  },
+  "reference": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-review-20260923/solver/full-physics-checkpoint-gpu-pr"
+}

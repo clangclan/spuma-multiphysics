@@ -1,0 +1,12 @@
+{
+  "ambient_1atm": {
+    "oldInitialSha256": "6106e1bb46bfb16a9ea7c1eca4193db25d8bd156b24577bddbf7a2f16453c6fe",
+    "newInitialSha256": "6106e1bb46bfb16a9ea7c1eca4193db25d8bd156b24577bddbf7a2f16453c6fe",
+    "initialCheckpointBitwiseEqual": true
+  },
+  "ambient_40bar_abs": {
+    "oldInitialSha256": "59b43b98af96c6b3dd6c872b2812272c0e8c94dc60313616b779112154c47d82",
+    "newInitialSha256": "59b43b98af96c6b3dd6c872b2812272c0e8c94dc60313616b779112154c47d82",
+    "initialCheckpointBitwiseEqual": true
+  }
+}

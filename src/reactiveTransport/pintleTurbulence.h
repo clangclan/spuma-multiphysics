@@ -2,6 +2,7 @@
 #ifndef PINTLE_TURBULENCE_H
 #define PINTLE_TURBULENCE_H
 #include "pintleReactiveTransport.h"
+#include "../reactiveThermo/pintleReactiveThermo.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,6 +41,39 @@ int pintle_transport_wale_scalar_profile_v1(void*,PintleWaleScalarProfileV1*);
 // a full refresh is required before the transport RHS.
 int pintle_transport_wale_scalar_fields_v1(void*,const double* cellCp,
     const double* cellSpeciesH,const double* fixedCp,const double* fixedSpeciesH);
+// Strict CUDA Peng-Robinson scalar preparation for the one-liquid capillary
+// model. The exported model image and fixed boundary properties are copied
+// into transport-owned buffers at installation; no opaque CUDA pointers are
+// shared with the HEM closure handle.
+typedef struct PintleWalePrModelV1 {
+    uint32_t abiVersion,structBytes;
+    const void* modelImage;
+    size_t modelBytes;
+    char physicalModelHash[65];
+    const double* fixedCp;
+    const double* fixedSpeciesH; // fixed-cell-major, ns values per cell
+} PintleWalePrModelV1;
+typedef struct PintleWalePrEpochV1 {
+    uint32_t abiVersion,structBytes;
+    // Exact next RK input for stage properties. A CFL-only Cp query outside
+    // an attempt uses {0,0,0}; inside an attempt uses {attemptId,UINT64_MAX,0}.
+    PintleTransportToken nextConserved;
+    uint64_t thermoVersion,geometryVersion,boundaryVersion;
+    int enthalpies; // 0: Cp-only CFL/diagnostic; 1: Cp and total-species H
+} PintleWalePrEpochV1;
+typedef struct PintleWalePrProfileV1 {
+    uint32_t abiVersion,structBytes;
+    uint64_t builds,cells,kernels,failures,inputUploadBytes,scratchBytes;
+    double wallSeconds;
+} PintleWalePrProfileV1;
+int pintle_transport_set_wale_pr_model_v1(void*,const PintleWalePrModelV1*);
+// q is cell-major with qStride conserved values per cell; only species are
+// read. State is the complete accepted PintleThermoState. Geometry is the
+// transport handle's current color/curvature, checked by geometryVersion.
+// On any failure active Cp/H buffers stay uncommitted for this stage.
+int pintle_transport_wale_pr_properties_v1(void*,const PintleWalePrEpochV1*,
+    const double* q,size_t qStride,const PintleThermoState* state);
+int pintle_transport_wale_pr_profile_v1(void*,PintleWalePrProfileV1*);
 #ifdef __cplusplus
 }
 #endif

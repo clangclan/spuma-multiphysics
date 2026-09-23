@@ -68,10 +68,22 @@ frozen-phase + SGS 종 혼합은 아직 입력 단계에서 거부한다.
 총에너지를 유지하면서 액체 질량만 갱신한다. 기하와 UV 복원을 반복 결합하며,
 실패한 스텝은 q·열역학 상태·기하를 되돌리고 시간 간격을 줄인다.
 
-계면 기하, 모세관 유량/CFL, 곡률 UV flash는 CUDA 실행이다. 파일 입출력, 배치 포장,
-외부 반복 제어와 WALE 종 혼합의 부분 엔탈피 준비는 호스트에서 수행한다.
-호스트 엔탈피 준비는 동일 PR EOS를 사용하며 `REACTIVE_WALE_SCALARS`에 계수된다.
-GPU UV 실패를 CPU flash로 대체하지 않는다.
+계면 기하, 모세관 유량/CFL, 곡률 UV flash는 CUDA 실행이다. 이 단일 액체 모세관 경로의
+WALE 종 혼합 엔탈피도 기존 GPU PR `phasePartials()`로 계산한다. 기상·액상 압력,
+미량 증기의 안정적 질량 분해, 상 체적·밀도·엔탈피 항등식 검사를 유지하며 이상기체로
+대체하지 않는다. Cp는 채택된 열역학 상태의 값을 GPU 작업 공간에 준비한다.
+`REACTIVE_WALE_PR`은 물성 커널과 실패·업로드·시간을 기록하며,
+`REACTIVE_WALE_SCALARS hostEnthalpyCells=0`은 내부 셀의 호스트 엔탈피 평가가 없음을 뜻한다.
+고정 경계의 초기 물성 준비, 파일 입출력, 배치 포장과 외부 반복 제어는 호스트에 남는다.
+표면장력 OFF의 기존 WALE 물성 경로는 유지한다. GPU 실패를 CPU 물성/flash로 대체하지 않는다.
+
+GPU 물성은 현재 RK 입력, 열역학·기하 버전과 묶인다. 모든 셀이 성공한 후에만 임시
+Cp/H를 수송 버퍼에 반영하며, 실패·재시도·기하 갱신 후에는 이전 버퍼를 재사용하지 않는다.
+열 혼합만 켜면 종 엔탈피용 Q/H 임시 배열을 만들지 않는다.
+
+모세관 traction과 일률에는 같은 면 속도를 사용한다. 속도의 법선 성분은 HLLC 접촉 속도이며,
+면 color는 기하 계산과 동일한 `ownerWeight`를 쓴다. 이 정합성 수정은 정적 액적의
+압력–응력 이산 균형이 해결됐다는 뜻이 아니다.
 
 상변화 후 RK1의 액체 질량을 GPU에 다시 올릴 때 RK0 보존 상태는 유지한다.
 재시작은 추가 액체 질량과 표면에너지 의미를 물리 모델 해시에 포함하며, 상수 σ가
@@ -87,6 +99,9 @@ GPU UV 실패를 CPU flash로 대체하지 않는다.
 - `tools/capillary_transport_test.cpp`: CPU/CUDA 모세관 수송, 전역 보존, RK1 교체, SGS 액체 유량.
 - `tools/prepare_capillary_case.py`, `tools/validate_capillary_solver.py`: 평면/액적/파/flash 실제 솔버 케이스와 수치 측정.
 - `tools/prepare_capillary_impingement.py`: 기존 256,000셀 분사 메시를 재사용하여 점성·열전도·WALE 혼합·표면장력·flashing 케이스 생성.
+- `tools/capillary_face_decomposition.cpp`: 시간 적분 없이 생산 면 유량의 압력·모세관·최종 운동량 RHS를 분리하고 정확/수치 곡률 및 초기 샘플링을 비교한다. 열역학을 제외한 연산자 진단이다.
+- `tools/validate_capillary_solver.py --require-static-convergence`: 비교 가능한 3개 이상 구형 액적 메시에서 최대/L2 유속이 감소하지 않으면 자료를 저장하고 종료 코드 2를 반환한다. 이 추세 조건만으로 전체 물리 정확도를 승인하지 않는다.
+- `tools/summarize_capillary_performance.py`: 두 스텝 계측과 GPU WALE 실행 증거를 기존 결과와 비교한다. 중첩 물성 시간은 총시간에 재합산하지 않는다.
 
 시간 간격은 음향·확산·모세관 제한 중 최솟값이다. `maxDeltaT=30 ns`는 상한이며
 안정성 제한을 무시하여 30 ns 이상으로 고정하지 않는다.

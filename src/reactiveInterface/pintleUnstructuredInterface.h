@@ -111,6 +111,7 @@ PINTLE_UI_HD inline bool faceGeometry(std::size_t fi,const View& v,
     PintleBalancedCapillary::Face candidate{};
     candidate.sigma=v.sigma;
     candidate.curvature=f.ownerWeight*v.curvature[l]+(1-f.ownerWeight)*v.curvature[r];
+    candidate.colorFace=faceColor(v,f);
     for(int d=0;d<3;++d) candidate.normal[d]=f.normal[d];
     double ni[3];faceNormal(v,f,ni);
     const double scale=v.sigma*(f.ownerWeight*v.areaDensity[l]
@@ -118,6 +119,8 @@ PINTLE_UI_HD inline bool faceGeometry(std::size_t fi,const View& v,
     for(int i=0;i<3;++i) for(int j=0;j<3;++j)
         candidate.surfaceStress[3*i+j]=scale*((i==j?1.0:0.0)-ni[i]*ni[j]);
     if(!PintleBalancedCapillary::finite(candidate.curvature)
+       ||!PintleBalancedCapillary::finite(candidate.colorFace)
+       ||candidate.colorFace<0||candidate.colorFace>1
        ||!PintleBalancedCapillary::finite(scale)) return false;
     out=candidate;return true;
 }

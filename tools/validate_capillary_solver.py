@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import sys
 
 import numpy as np
 
@@ -115,7 +116,8 @@ def _profiles(case: Path) -> dict:
         return {}
     result = {}
     for line in log.read_text(errors="replace").splitlines():
-        for label in ("REACTIVE_CAPILLARY_PROFILE", "REACTIVE_GPU_HEM", "REACTIVE_PHYSICS"):
+        for label in ("REACTIVE_CAPILLARY_PROFILE", "REACTIVE_GPU_HEM", "REACTIVE_PHYSICS",
+                      "REACTIVE_WALE", "REACTIVE_WALE_SCALARS", "REACTIVE_WALE_PR"):
             if line.startswith(label + " "):
                 result[label] = {name: value for name, value in re.findall(r"(\w+)=([^\s]+)", line)}
     return result
@@ -151,7 +153,7 @@ def fit_mode_frequency(history: list[dict], key: str, reference_omega: float) ->
     t = np.asarray([row["timeS"] for row in history])
     y = np.asarray([row[key] for row in history])
     period = 2 * math.pi / reference_omega
-    if len(t) < 10 or t[-1] - t[0] < .75 * period:
+    if len(t) < 20 or t[-1] - t[0] < 2 * period:
         return {"status": "insufficient duration or samples", "samples": len(t),
                 "durationS": float(t[-1] - t[0]), "referencePeriodS": period}
     centered = y - np.mean(y)
@@ -165,6 +167,9 @@ def fit_mode_frequency(history: list[dict], key: str, reference_omega: float) ->
         fit = np.linalg.lstsq(basis, y, rcond=None)[0]
         residual[i] = np.sum((basis @ fit - y)**2)
     best = int(np.argmin(residual))
+    if best in (0, len(frequencies) - 1):
+        return {"status": "fit reached search boundary", "samples": len(t),
+                "referencePeriodS": period, "durationS": float(t[-1] - t[0])}
     fitted = float(frequencies[best])
     return {"status": "fitted", "samples": len(t), "referencePeriodS": period,
             "referenceAngularFrequencyRadPerS": reference_omega,
@@ -219,15 +224,39 @@ def analyze(case: Path, sigma: float, surface_energy_field: str | None,
                "liquidInventoryKg": float(np.sum(liquid_mass_density) * dv),
                "interfaceNormalizationMaxError": float(np.max(abs(color - reconstructed_color))),
                "totalEnergyJ": float(np.sum(total_energy) * dv),
-               "maxSpeedMPerS": float(np.max(np.linalg.norm(velocity, axis=1)))}
+               "maxSpeedMPerS": float(np.max(np.linalg.norm(velocity, axis=1))),
+               # Cartesian fixtures have equal cell volumes. This is a
+               # volume-weighted norm over the full domain, not an interface
+               # mask that can change with curvature validity.
+               "volumeWeightedL2SpeedMPerS": float(np.sqrt(np.mean(np.sum(velocity**2, axis=1))))}
         if surface_energy_field:
             surface = field(case, path, surface_energy_field, grid.cells)[:, 0]
             if not np.isfinite(surface).all():
                 raise ValueError(f"{path}: nonfinite surface energy")
             row["surfaceEnergyJ"] = float(np.sum(surface) * dv)
             # rhoTotalEnergy already includes surface energy in this solver.
-            row["bulkEnergyJ"] = row["totalEnergyJ"] - row["surfaceEnergyJ"]
+            row["bulkPlusKineticEnergyJ"] = row["totalEnergyJ"] - row["surfaceEnergyJ"]
+            row["kineticEnergyJ"] = float(.5 * np.sum(np.sum(q, axis=1) * np.sum(velocity**2, axis=1)) * dv)
+            row["bulkInternalEnergyJ"] = row["bulkPlusKineticEnergyJ"] - row["kineticEnergyJ"]
             row["bulkPlusSurfaceEnergyJ"] = row["totalEnergyJ"]
+            if sigma > 0 and definition["kind"] == "sphere":
+                curvature = field(case, path, "interfaceCurvature", grid.cells)[:, 0]
+                if not np.isfinite(curvature).all() or np.any(surface < 0):
+                    raise ValueError(f"{path}: invalid curvature or negative interface area")
+                area = surface / sigma
+                active = area > 0
+                if not np.any(active):
+                    row["curvature"] = {"status": "no resolved interface", "areaM2": 0., "cells": 0}
+                else:
+                    defect = curvature[active] - 2 / float(definition["radiusM"])
+                    row["curvature"] = {
+                        "weight": "solver surfaceEnergyDensity / sigma; all positive-area cells",
+                        "cells": int(np.count_nonzero(active)),
+                        "areaM2": float(np.sum(area) * dv),
+                        "areaWeightedMeanPerM": float(np.average(curvature[active], weights=area[active])),
+                        "areaWeightedL2ErrorPerM": float(np.sqrt(np.average(defect**2, weights=area[active]))),
+                        "maxErrorPerM": float(np.max(abs(defect))),
+                    }
         if definition["kind"] == "sphere":
             row["pressure"] = pressure_jump(color, p, grid, float(definition["radiusM"]))
         elif definition["kind"] == "wave":
@@ -288,13 +317,38 @@ def summarize_series(results: list[dict]) -> dict:
     if len(spheres) < 3:
         return {"sphereGridConvergence": "not evaluated; requires at least three sphere meshes"}
     spheres.sort(key=lambda r: max(r["geometry"]["spacingM"]), reverse=True)
+    # A shorter fine-grid run or a different physical problem cannot establish
+    # spatial convergence. Keep this gate independent of process exit success.
+    base = spheres[0]
+    mismatches = []
+    for r in spheres[1:]:
+        for key in ("lengthsM", "radiusM", "temperatureK", "pressurePa", "phaseChange", "surfaceTension"):
+            if r["geometry"].get(key) != base["geometry"].get(key):
+                mismatches.append(f"{key}: {r.get('case', 'case')}")
+        if r["sigmaNPerM"] != base["sigmaNPerM"]:
+            mismatches.append("sigma differs")
+        if not math.isclose(r["history"][-1]["timeS"], base["history"][-1]["timeS"], rel_tol=1e-12, abs_tol=1e-18):
+            mismatches.append("final physical times differ")
+    lengths = [max(r["geometry"]["spacingM"]) for r in spheres]
+    if any(a <= b for a, b in zip(lengths, lengths[1:])):
+        mismatches.append("meshes are not distinct successive refinements")
     errors = [abs(r["finalLaplaceErrorPa"]) for r in spheres]
     currents = [r["history"][-1]["maxSpeedMPerS"] for r in spheres]
-    return {"sphereGridConvergence": {"cellLengthsM": [max(r["geometry"]["spacingM"]) for r in spheres],
+    l2 = [r["history"][-1].get("volumeWeightedL2SpeedMPerS") for r in spheres]
+    decreasing = all(a > b for a, b in zip(currents, currents[1:]))
+    l2_decreasing = all(x is not None for x in l2) and all(a > b for a, b in zip(l2, l2[1:]))
+    return {"sphereGridConvergence": {"cellLengthsM": lengths,
+                                      "comparisonValid": not mismatches,
+                                      "comparisonProblems": mismatches,
+                                      "staticVelocityGatePassed": not mismatches and decreasing and l2_decreasing,
+                                      "fullPhysicsAccuracyValidated": False,
+                                      "note": "Velocity trend is necessary, not sufficient: pressure/curvature convergence, time convergence and dynamic interface tests are separate gates.",
                                       "absoluteLaplaceErrorsPa": errors,
                                       "finalMaxSpeedMPerS": currents,
+                                      "finalVolumeWeightedL2SpeedMPerS": l2,
                                       "pressureErrorStrictlyDecreasing": all(a > b for a, b in zip(errors, errors[1:])),
-                                      "spuriousCurrentStrictlyDecreasing": all(a > b for a, b in zip(currents, currents[1:]))}}
+                                      "spuriousCurrentStrictlyDecreasing": decreasing,
+                                      "volumeWeightedL2StrictlyDecreasing": l2_decreasing}}
 
 
 def compare_conserved(reference: Path, candidate: Path, *, matching_history: bool) -> dict:
@@ -343,6 +397,7 @@ def main() -> None:
     ap.add_argument("--restart-reference", type=Path)
     ap.add_argument("--restart-candidate", type=Path)
     ap.add_argument("--run", action="store_true", help="run actual ReactiveFoam cases under the shared GPU lock")
+    ap.add_argument("--require-static-convergence", action="store_true", help="exit 2 unless comparable sphere refinements have decreasing max and volume-weighted L2 velocity; always writes evidence")
     ap.add_argument("--timeout-seconds", type=int, default=300)
     ap.add_argument("--output", type=Path, required=True)
     a = ap.parse_args()
@@ -366,6 +421,9 @@ def main() -> None:
     common.atomic_json(a.output.resolve(), report)
     print(json.dumps({"report": str(a.output.resolve()), "cases": len(results),
                       "sphereGridConvergence": report["sphereGridConvergence"]}))
+    gate = report["sphereGridConvergence"]
+    if a.require_static_convergence and (not isinstance(gate, dict) or not gate["staticVelocityGatePassed"]):
+        sys.exit(2)
 
 
 if __name__ == "__main__":

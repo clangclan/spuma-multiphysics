@@ -43,7 +43,7 @@ physics
 
 종 혼합은 전체 상을 합한 보존 종 질량분율을 사용한다. 종 플럭스의 합이 0이 되도록 보정하고 `sum(h_eff,k*J_k)`를 같은 면의 총에너지 플럭스에 더한다. PR 모델에서 이 SGS 혼합을 활성화해도 비이상 분자 확산을 구현했다고 표시하지 않는다. 기존 `physics.speciesDiffusion`의 비이상 EOS 제한은 유지한다.
 
-`h_eff,k`는 이미 복원된 압력·온도·상 분할에서 같은 EOS의 기상 부분 엔탈피와 응축상 엔탈피를 종 질량으로 가중한 값이다. `sum(q_k*h_eff,k)=rho*e+p`를 확인한다. 이 물성 준비는 현재 CPU에서 수행하고, 열·종 플럭스와 WALE는 CUDA에서 수행한다. 물성 준비를 CPU flash fallback에 숨기지 않고 `REACTIVE_WALE_SCALARS hostEnthalpyCells/hostPropertySeconds`와 단계별 `nestedScalarPropertySeconds`로 별도 기록한다. `nested` 시간은 기존 단계 시간에 이미 포함되어 있으므로 총시간에 다시 더하지 않는다.
+`h_eff,k`는 이미 복원된 압력·온도·상 분할에서 같은 EOS의 기상 부분 엔탈피와 응축상 엔탈피를 종 질량으로 가중한 값이다. 공통 압력 경로는 `sum(q_k*h_eff,k)=rho*e+p`를 확인한다. 표면장력 OFF의 기존 물성 준비는 CPU이고 열·종 플럭스와 WALE는 CUDA다. 후속 [단일 액체 모세관 경로](capillary-flashing.ko.md)는 이 엔탈피 준비도 GPU PR 함수로 수행하며 상별 압력 일 `p_g*alpha_g+p_l*alpha_l`을 검사한다. `REACTIVE_WALE_SCALARS hostEnthalpyCells/hostPropertySeconds`와 `REACTIVE_WALE_PR`로 호스트와 장치 물성을 구분한다. 단계별 `nestedScalarPropertySeconds`는 포장·GPU 호출 대기를 포함하는 중첩 물성 시간이며 기존 단계 시간에 이미 포함되므로 총시간에 다시 더하지 않는다.
 
 동결 응축상에 종 SGS를 적용하면 별도 응축상 질량장도 같은 플럭스로 움직여야 한다. 그 결합이 없는 구성은 명시적으로 거부한다. 반응/기계적 환경과 WALE의 기존 제한도 유지한다. 공간과 상에 따라 달라지는 N₂O/공기 분자 점성·열전도 상관식은 이번 상수계수 연산자 시험에 포함되지 않는다.
 

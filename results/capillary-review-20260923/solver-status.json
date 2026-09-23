@@ -1,0 +1,56 @@
+[
+  {
+    "name": "off-omitted",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 5.393136529999538
+  },
+  {
+    "name": "off-explicit",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 0.653023161999954
+  },
+  {
+    "name": "plane",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 0.6578051129999949
+  },
+  {
+    "name": "sphere-16",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 0.70768257599957
+  },
+  {
+    "name": "sphere-24",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 0.8076207619997149
+  },
+  {
+    "name": "sphere-32",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 1.0642543180001667
+  },
+  {
+    "name": "wave",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 0.8119076059992949
+  },
+  {
+    "name": "drop",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 1.0665047259990388
+  },
+  {
+    "name": "flash-sphere",
+    "passed": true,
+    "initialConservedBitwiseEqualToBaseline": true,
+    "wallSeconds": 24.321642217999397
+  }
+]
