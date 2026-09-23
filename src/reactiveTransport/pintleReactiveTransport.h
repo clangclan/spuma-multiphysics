@@ -32,6 +32,31 @@ typedef struct PintleTransportMemoryV2 {
     uint64_t rhsWorkspaceBytes,deviceToDeviceBytes,synchronizations;
 } PintleTransportMemoryV2;
 typedef struct PintleTransportToken {uint64_t attemptId,stageId,contentVersion;} PintleTransportToken;
+// Optional resolved-interface path. Install before the first step. Color is an
+// independent material field supplied by the coupled phase closure; it is not
+// the HEM thermal equilibrium alpha. All quantities use SI units.
+typedef struct PintleCapillaryOptionsV1 {
+    uint32_t abiVersion,structBytes;
+    double sigma,capillaryCfl,geometryEpsilon;
+    int64_t condensableSpecies; // single liquid-inventory slot species+4
+} PintleCapillaryOptionsV1;
+typedef struct PintleCapillaryProfileV1 {
+    uint32_t abiVersion,structBytes;
+    uint64_t geometryBuilds,geometryCells,geometryKernels,faceFluxBuilds;
+    uint64_t colorUploadBytes,geometryDownloadBytes,capillaryWorkspaceBytes;
+} PintleCapillaryProfileV1;
+int pintle_transport_set_capillary_v1(void* transport,const PintleCapillaryOptionsV1* options);
+// Each call replaces cell and fixed color and rebuilds device geometry.
+// surfaceEnergy [J/m^3] is required; curvature and normalXYZ may be null.
+// normalXYZ is packed XYZ per cell. The stage consumes this exact geometry.
+int pintle_transport_capillary_geometry_v1(void* transport,const double* cellColor,
+    const double* fixedColor,double* surfaceEnergy,double* curvature,double* normalXYZ);
+int pintle_transport_capillary_profile_v1(void* transport,PintleCapillaryProfileV1* profile);
+// Replace the post-RK1 conserved state after coupled flash while preserving
+// the resident RK0 snapshot needed by RK2. Only valid for an open attempt at
+// stageId=1, and the new content version must strictly increase.
+int pintle_transport_replace_stage_state_v1(void* transport,PintleTransportToken before,
+    uint64_t replacementVersion,const double* conserved);
 void* pintle_transport_create_v2(int backend,const PintleTransportConfig* config,
     const PintleTransportOptionsV2* options,const double* volume,const PintleTransportFace* faces,
     const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,

@@ -1,0 +1,104 @@
+mechanism: cold-pr-148K.yaml
+gas-phase: gas
+condensables:
+- species: N2O
+  phase: liquid_N2O
+  minimum-liquid-temperature: 182.34
+  critical-temperature: 309.52
+- species: N2O
+  phase: liquid_N2O
+  kind: solid
+  minimum-liquid-temperature: 148.0
+  critical-temperature: 183.0
+  solid:
+    reference-temperature: 182.408
+    reference-pressure: 87950.87143300277
+    maximum-pressure: 200000.0
+    molar-volume: 0.04
+    fusion-enthalpy: 6516000.0
+    temperature-table:
+    - 148
+    - 149
+    - 150
+    - 151
+    - 152
+    - 153
+    - 154
+    - 155
+    - 156
+    - 157
+    - 158
+    - 159
+    - 160
+    - 161
+    - 162
+    - 163
+    - 164
+    - 165
+    - 166
+    - 167
+    - 168
+    - 169
+    - 170
+    - 171
+    - 172
+    - 173
+    - 174
+    - 175
+    - 176
+    - 177
+    - 178
+    - 179
+    - 180
+    - 181
+    - 182
+    - 183
+    cp-molar-table:
+    - 50280
+    - 50490
+    - 50700
+    - 50920
+    - 51140
+    - 51360
+    - 51580
+    - 51800
+    - 52020
+    - 52250
+    - 52480
+    - 52710
+    - 52950
+    - 53190
+    - 53430
+    - 53680
+    - 53930
+    - 54180
+    - 54430
+    - 54690
+    - 54950
+    - 55210
+    - 55480
+    - 55750
+    - 56020
+    - 56290
+    - 56570
+    - 56850
+    - 57130
+    - 57410
+    - 57700
+    - 57990
+    - 58280
+    - 58580
+    - 58880
+    - 59180
+    table-units: Temperature K; Cp J/kmol/K; fusion enthalpy J/kmol; molar volume
+      m^3/kmol
+temperature-min: 148.0
+temperature-max: 3500.0
+pressure-min: 1000.0
+pressure-max: 50000000.0
+volume-tolerance: 1.0e-09
+energy-tolerance: 1.0e-09
+chemical-potential-tolerance: 1.0e-07
+model-scope: Nonreacting, homogeneous, common-p/U/T, immiscible pure liquids, PR gas
+  mixture; no surface tension or slip; provisional low-pressure solid N2O; slot 1
+  displaces condensed IC3H7OH; positive IPA below its thermo floor is rejected

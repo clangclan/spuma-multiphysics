@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "source": {
+    "configuration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr-config.yaml",
+    "configurationSha256": "5e05a91dd42c20364bdf323821e3358f515d4df138850aae9dbd3cc61fa0fc85",
+    "mechanism": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr.yaml",
+    "mechanismSha256": "7ea020c480bff27404a9ccb051c4940bac71631257e159084b93df2092a6ecdd"
+  },
+  "output": {
+    "mechanism": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/thermo/cold-pr-148K.yaml",
+    "mechanismSha256": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916",
+    "configuration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/thermo/cold-pr-148K-config.yaml",
+    "configurationSha256": "f2a6aa83c24633ca4a22566d35e140f5a00f31806d7cd556445ebc5a513aa4ae"
+  },
+  "temperatureMinK": 148.0,
+  "modifiedSpecies": [
+    "N2",
+    "O2",
+    "N2O"
+  ],
+  "preservedSpecies": [
+    "IC3H7OH"
+  ],
+  "validation": {
+    "N2": {
+      "fluid": "Nitrogen",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 6.3427966139264924e-12,
+      "relative_join_error": {
+        "Cp": 0.0038779075359321132,
+        "h": 0.0,
+        "s": 0.0
+      }
+    },
+    "O2": {
+      "fluid": "Oxygen",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 7.811864151963175e-11,
+      "relative_join_error": {
+        "Cp": 0.0008716575871851224,
+        "h": 1.9876593572295805e-16,
+        "s": 0.0
+      }
+    },
+    "N2O": {
+      "fluid": "NitrousOxide",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 1.1845641593509075e-09,
+      "relative_join_error": {
+        "Cp": 0.006941771451169461,
+        "h": 0.0,
+        "s": 0.0
+      }
+    }
+  },
+  "constraints": {
+    "belowOriginalMinimumRequiresZeroSpeciesInventory": [
+      "IC3H7OH"
+    ],
+    "solidN2OPhaseStabilityRequired": false,
+    "liquidMinimumTemperaturesUnchanged": false,
+    "condensedPhases": [
+      "liquid_N2O"
+    ],
+    "solidPhaseEnabled": false,
+    "sublimationEnabled": false,
+    "supercooledLiquidEnabled": true,
+    "condensedIpaDisplaced": true,
+    "physicalInterpretation": "metastable fluid-only PR continuation; not true equilibrium below the triple point"
+  },
+  "status": "supercooled-liquid-configured",
+  "physicalModelHashes": {
+    "source": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+    "output": "17d074a827716eb51f269ce2448cddb1a53ef4587b2c0ac89473268ba868acdb",
+    "different": true
+  }
+}

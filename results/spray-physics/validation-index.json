@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "generatedUtc": "2026-09-22T10:01:26.903483+00:00",
+  "baselineCommit": "f33f0f76666eba1f8a8641bbc788daaf89b3e042",
+  "branch": "codex/reactive-spray-physics",
+  "optimizationPaused": true,
+  "agentModels": [
+    "gpt-5.6-sol",
+    "gpt-5.6-sol",
+    "gpt-5.6-sol"
+  ],
+  "scope": "First implementation: integrated CUDA WALE stress; independent capillary primitives and component diagnostics. Full primary breakup remains unimplemented.",
+  "reports": {
+    "wale-transport-cpu.json": "1315adbea2cfb2e221634c5638111364637eb1f98a3f031764fedf66bab3cf5c",
+    "wale-transport-cuda.json": "4b293dcf847b2c31f05c40930bcfe7658d8518fadc770ac8d6c7653e3ec69ce6",
+    "transport-off-cpu-final.json": "566aa577f9bf308606a176490a809c8b8f53848d21ed25b2c92007dde32086a4",
+    "transport-off-cuda-final.json": "7439d30da43a1df2005651677714b7b517d2033f090b6b86520189f638c8f43e",
+    "wale-solver-integration.json": "327c607a73c5292d648fdc56626e489d348df07f77f2d7d186f25a961b881d79",
+    "interface-primitives.json": "b57740878a8485561214ec56c7a73069257374d65e19d2dbaf9405f521ed0efe"
+  },
+  "sourceHashes": {
+    "README.ko.md": "f94ebd3df3eeea386aee4cd8b858bece18ed194456e99563c93e717f70399168",
+    "README.md": "6ded8c81bcdece7d55ce480fb0fa7c4c995679ab3fa3d068497dabc211af5e98",
+    "README.reactive-phase.ko.md": "2c8a7ad6d37646c833959cef4d215126121c621956094080ad882424722e6e53",
+    "docs/spray-physics/capability-and-acceptance.md": "34a4e0affa11b5cb70df5eaa6558061359dc586ba736fe513a0ba5e313cc4783",
+    "docs/spray-physics/implementation-status.ko.md": "6c980794f15d8c6e21e7ea763062e387974e0cdf648ab829dae23aa56aec1306",
+    "docs/spray-physics/resolved-interface-design.md": "95bf989bfd2ceb90c1faed36fcc96dc2bb03c87f4c87af3322f5d83042363f69",
+    "docs/spray-physics/wale-research.md": "9c123696fbf1e21332e2ef4e79fdfb3932ef38714297878517cbc6a57e0c313d",
+    "src/reactiveFoam/ReactiveFoam.C": "0d2e3be502571d00f531a79514b070bb08a117ae656114ccb0c94d1c573559ba",
+    "src/reactiveFoam/reactivePhysics.H": "403be950d667f188e7b80461fd72abed4f73ecfb834ec36cac26f90e3f34a4c4",
+    "src/reactiveInterface/pintleResolvedInterface.h": "33101f560addaf5242263b2748f058ea136928a4f9cc2d036d02d6530e7ce925",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "ef817a2fc81e1683880beae4584b04c0404515f1f5ecc0754c23b282f16c99db",
+    "src/reactiveTransport/pintleTransportKernels.h": "6144a0eea5e4880356e6c139393d4460957da5d9767851507728c1e6d5062833",
+    "src/reactiveTransport/pintleTurbulence.h": "8a832ccada490c0e22d02c69aceec5b1cc612591283e476a490e4d9fd9eeaa10",
+    "src/reactiveTransport/pintleWale.h": "736d567ac80903b5272012d499ddc21b190e9f2de3cbc446d0312518f771f489",
+    "tests/interface_primitives.cpp": "c4ca68a90e9a81a2d41cd919afd9c6757283ca7d85ec9fed6e94920a246c4eb5",
+    "tests/interface_primitives_cuda.cu": "0b1dff358c6b209992e2108ca452272cfd37088b9665f37dc009a259ab1ea834",
+    "tools/resolved_drops.py": "f5927c9a5e1c9f2c5c8177f77f8a417c47ac867e7fc6c24ee968b3af81c0579c",
+    "tools/test_resolved_drops.py": "abb42641990d744ceebf125033e85bda794fd05dfb9eeff4ffad5a2a2e6e9511",
+    "tools/validate_interface_primitives.py": "1665c87cd745e2ee1c9c5333706590ea58b0349016f9d6d8ef49dc6c23224392",
+    "tools/validate_wale_solver.py": "61868a3b0f2c52ff15d608305ef9a5dcb33f5ca85f636d19b5130160f46755a9",
+    "tools/validate_wale_transport.py": "7f49ff8d227b3fae97d2f09105ee501da661ceb89a36f858981f6b0fadd4e179",
+    "tools/wale_cuda_test.cu": "dffc0f6889fa6145077b566ebbfea25a0dc26e9e0bf39d059af4820f1245fed6",
+    "tools/wale_test.cpp": "a2e40671466a796a30416374f43aa15241536286f17a2359e1b38e84f7393261"
+  },
+  "resolvedDropTests": {
+    "passed": true,
+    "count": 6,
+    "command": "python3 -m unittest tools/test_resolved_drops.py -v"
+  },
+  "tensorTests": {
+    "cpuPassed": true,
+    "cudaPassed": true,
+    "cudaFixtures": 34,
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "runner": "tools/wale_test.cpp and tools/wale_cuda_test.cu; Sol validation"
+  },
+  "builds": {
+    "solver": "89e3dfca8f184696cccbbbdb9e8cad083bc051d50c11d077b99074b03c8a2e50",
+    "transportCuda": "c1012d8420f88574af1c2089260d69f893acfe9e3e105180dc2390bf9a7e7026",
+    "transportCpu": "6be194e8e1ed8c149c4de2600efd7a0fb15b4f107acd65ef9a717ed2d953c2be",
+    "thermoBackend": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b"
+  }
+}

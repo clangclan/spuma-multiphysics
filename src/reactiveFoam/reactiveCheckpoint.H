@@ -39,8 +39,9 @@ void save(const fs::path& path,const Array& q,const States& states,bool mechanic
     put(out,h.steps);put(out,h.retries);put(out,h.time);put(out,h.lastDt);put(out,h.velocityScale);put(out,h.energyScale);
     for(double value:h.initial)put(out,value);for(double value:h.boundary)put(out,value);
     out.write(reinterpret_cast<const char*>(q.data()),q.size()*sizeof(double));
-    for(const auto& s:states) {
-        if(mechanical)put(out,s);else put(out,static_cast<const PintleThermoState&>(s));
+    demand(states.isMechanical()==mechanical,"Checkpoint active state mode mismatch");
+    for(size_t c=0;c<states.size();++c) {
+        if(mechanical)put(out,states.full(c));else put(out,states[c]);
     }
     out.flush();requireIO(bool(out),path.string());out.close();requireIO(!out.fail(),path.string());
 }
@@ -74,9 +75,11 @@ void load(const fs::path& dir,Array& q,States& states,bool mechanical,size_t nv,
     for(double& v:q) {
         double exact;get(in,exact);demand(std::isfinite(exact)&&v==exact,"Checkpoint field/binary conserved state mismatch");v=exact;
     }
-    for(auto& s:states) {
+    demand(states.isMechanical()==mechanical,"Checkpoint active state mode mismatch");
+    for(size_t c=0;c<states.size();++c) {
         CellState saved{};if(mechanical)get(in,saved);else get(in,static_cast<PintleThermoState&>(saved));
-        demand(s.p==saved.p&&s.T==saved.T,"Checkpoint field/binary thermodynamic seed mismatch");s=saved;
+        demand(states[c].p==saved.p&&states[c].T==saved.T,"Checkpoint field/binary thermodynamic seed mismatch");
+        if(mechanical)states.full(c)=saved;else states[c]=saved;
     }
     demand(in.peek()==std::char_traits<char>::eof(),"Checkpoint state has unexpected trailing data");h.loaded=true;
 }

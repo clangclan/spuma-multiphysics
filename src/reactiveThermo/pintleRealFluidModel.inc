@@ -9,8 +9,10 @@
             require(phase==-1&&Y.size()==ns,"Invalid gas branch/composition");
             for(double y:Y) require(std::isfinite(y)&&y>=0,"Invalid EOS composition");
             require(std::abs(std::accumulate(Y.begin(),Y.end(),0.)-1)<1e-12,"EOS composition must sum to one");
+            if(hasSolid||enforceSpeciesTemperatureBounds)speciesBounds(T,Y);
             selected->setMassFractions(Y.data());
         } else {
+            require(size_t(phase)<nl&&!condensedKind[phase],"Incompressible solid has no standalone T/rho inversion");
             require(size_t(phase)<nl&&T>=liquidTmin[phase]&&T<liquidTc[phase]*(1-1e-10),"Unavailable liquid branch");
             selected=liquids[phase].get();
         }

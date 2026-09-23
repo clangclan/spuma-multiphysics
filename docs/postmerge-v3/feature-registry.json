@@ -185,17 +185,21 @@
     },
     {
       "name": "surface-tension",
-      "status": "not-implemented",
-      "backend": null,
-      "constraints": null,
-      "implemented": false,
-      "wired_to_flow": false,
-      "model_supported": false,
-      "gpu_validated": false,
+      "status": "experimental-integrated",
+      "backend": "CUDA geometry, transport and curved UV; host orchestration and SGS enthalpies",
+      "constraints": "One liquid, nonreacting HEM, constant sigma, orthogonal mesh, first-order diffuse interface. Static-drop spurious-current convergence fails; primary breakup not validated.",
+      "implemented": true,
+      "wired_to_flow": true,
+      "model_supported": true,
+      "gpu_validated": true,
       "physics_validated": false,
       "performance_measured": false,
       "default_enabled": false,
-      "evidence": []
+      "evidence": [
+        "../spray-physics/capillary-flashing.ko.md",
+        "../spray-physics/capillary-static-balance-review.md",
+        "../../results/capillary-integration-20260923/flash-validation-v6.json"
+      ]
     },
     {
       "name": "droplet-breakup-coalescence-slip",

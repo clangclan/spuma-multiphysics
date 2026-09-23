@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "jacobian": "analytic",
+  "tests": [
+    {
+      "name": "physical-model-hash-unchanged",
+      "passed": true,
+      "candidate": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+      "baseline": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05"
+    },
+    {
+      "name": "numerical-policy-hash-changed",
+      "passed": true,
+      "candidate": "da4bc6aeb961f420f5737a4527b25e8e9547da592c9bcdeba87acf4062187065",
+      "baseline": "4580396426ebcaa95c180a593f04456f10a4a3cd29355272fc53e6840f7b86f1"
+    },
+    {
+      "name": "cpu-retry-0",
+      "passed": true,
+      "status": 0,
+      "inputAndFailureSeedAtomic": true,
+      "temperature": 207.07993702323665,
+      "residualsPass": true,
+      "solutionScaledError": 1.3268534692899672e-10
+    },
+    {
+      "name": "cpu-retry-1",
+      "passed": true,
+      "status": 0,
+      "inputAndFailureSeedAtomic": true,
+      "temperature": 193.87383040872223,
+      "residualsPass": true,
+      "solutionScaledError": 1.8426326355222551e-10
+    },
+    {
+      "name": "cpu-retry-2",
+      "passed": true,
+      "status": 0,
+      "inputAndFailureSeedAtomic": true,
+      "temperature": 182.5204236688734,
+      "residualsPass": true,
+      "solutionScaledError": 1.904202627881282e-10
+    },
+    {
+      "name": "cpu-retry-3",
+      "passed": true,
+      "status": 1,
+      "inputAndFailureSeedAtomic": true,
+      "temperature": null,
+      "residualsPass": null,
+      "solutionScaledError": null
+    },
+    {
+      "name": "cpu-retry-4",
+      "passed": true,
+      "status": 1,
+      "inputAndFailureSeedAtomic": true,
+      "temperature": null,
+      "residualsPass": null,
+      "solutionScaledError": null
+    },
+    {
+      "name": "temperature-branch-lower-bound-rejected",
+      "passed": true,
+      "boundaryKelvin": 182.34
+    },
+    {
+      "name": "cuda-call-and-inputs",
+      "passed": true,
+      "status": 0,
+      "inputsUnchanged": true,
+      "error": ""
+    },
+    {
+      "name": "cuda-retry-0",
+      "passed": true,
+      "success": 1,
+      "failureSeedUnchanged": false,
+      "cpuScaledError": 5.588550936252305e-11,
+      "solutionScaledError": 1.8857085629893496e-10
+    },
+    {
+      "name": "cuda-retry-1",
+      "passed": true,
+      "success": 1,
+      "failureSeedUnchanged": false,
+      "cpuScaledError": 7.958435723442801e-11,
+      "solutionScaledError": 2.638476207719891e-10
+    },
+    {
+      "name": "cuda-retry-2",
+      "passed": true,
+      "success": 1,
+      "failureSeedUnchanged": false,
+      "cpuScaledError": 2.3282125425514043e-12,
+      "solutionScaledError": 1.9083588531046966e-10
+    },
+    {
+      "name": "cuda-retry-3",
+      "passed": true,
+      "success": 0,
+      "failureSeedUnchanged": true,
+      "cpuScaledError": null,
+      "solutionScaledError": null
+    },
+    {
+      "name": "cuda-retry-4",
+      "passed": true,
+      "success": 0,
+      "failureSeedUnchanged": true,
+      "cpuScaledError": null,
+      "solutionScaledError": null
+    },
+    {
+      "name": "cpu-negative-mass",
+      "passed": true,
+      "status": 1,
+      "rollback": true
+    },
+    {
+      "name": "cuda-negative-mass",
+      "passed": true,
+      "status": 0,
+      "success": 0,
+      "rollback": true,
+      "inputsUnchanged": true,
+      "error": ""
+    },
+    {
+      "name": "cpu-nonfinite-energy",
+      "passed": true,
+      "status": 1,
+      "rollback": true
+    },
+    {
+      "name": "cuda-nonfinite-energy",
+      "passed": true,
+      "status": 0,
+      "success": 0,
+      "rollback": true,
+      "inputsUnchanged": true,
+      "error": ""
+    }
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_impinging_n2o_recovery.py": "9e5ff9c8a857f5eaf82b33b912060a2818106928a1e217c4249e7f1fc32e0363",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/results/benchmarks/impinging-n2o-recovery-diagnosis.json": "26dbc87eab5c63a73ad27fa4dd1b82c4c4fb1b63d03f298bdc58ab39f1211472",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr-config.yaml": "5e05a91dd42c20364bdf323821e3358f515d4df138850aae9dbd3cc61fa0fc85",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so": "039cde89f340772b44904e8de007dc01a4c1606d201b41151a33e50f2ea6bbb0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so": "a4861f690650a13e4c37a2b8e2cfd1f38dcb55d4ab2c95ef4f1561a36af786af",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/baseline/libpintleReactiveBackend.so": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b"
+  },
+  "physicalModelHash": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+  "cudaProfile": {
+    "abiVersion": 1,
+    "structBytes": 144,
+    "batches": 1,
+    "submitted": 5,
+    "succeeded": 3,
+    "cpuFallbacks": 0,
+    "deviceFailures": 2,
+    "phaseEvaluations": 2870,
+    "residualEvaluations": 10828,
+    "flashCandidates": 125,
+    "stableCandidates": 57,
+    "analyticJacobians": 1159,
+    "finiteDifferenceJacobians": 0,
+    "transferBytes": 2068,
+    "hostBytes": 1323,
+    "deviceBytes": 50748,
+    "wallSeconds": 0.145876103,
+    "kernelSeconds": 0.14584524536132812,
+    "copySeconds": 2.191999927163124e-05
+  },
+  "passed": true,
+  "testCount": 18
+}

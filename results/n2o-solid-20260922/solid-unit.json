@@ -1,0 +1,201 @@
+{
+  "schema": 1,
+  "tests": [
+    {
+      "name": "state-abi-unchanged",
+      "passed": true,
+      "bytes": 176
+    },
+    {
+      "name": "condensed-metadata",
+      "passed": true,
+      "phases": [
+        {
+          "slot": 0,
+          "speciesIndex": 2,
+          "species": "N2O",
+          "kind": "liquid",
+          "name": "liquid_N2O"
+        },
+        {
+          "slot": 1,
+          "speciesIndex": 2,
+          "species": "N2O",
+          "kind": "solid",
+          "name": "solid_N2O"
+        }
+      ]
+    },
+    {
+      "name": "solid-h-e-p-over-rho",
+      "passed": true,
+      "density": 1100.3249999999998,
+      "expectedDensity": 1100.3249999999998,
+      "energyIdentity": 0.0
+    },
+    {
+      "name": "solid-cp-enthalpy-derivative",
+      "passed": true,
+      "cp": 1203.0536432417696,
+      "finiteDifference": 1203.0536432284862
+    },
+    {
+      "name": "fusion-reference",
+      "passed": true,
+      "liquidMinusSolidH": 148047.16788221663,
+      "expectedH": 148047.16788221663,
+      "liquidMinusSolidS": 811.6265069636015,
+      "expectedS": 811.6265069636016,
+      "gDifference": 3.4924596548080444e-10
+    },
+    {
+      "name": "sublimation-coexistence-roots",
+      "passed": false,
+      "roots": [
+        {
+          "T": 150.0,
+          "p": 3228.3722075175856,
+          "reference": 2951.322622495971,
+          "relativeError": 0.09387302591382252,
+          "muResidual": 0.0
+        },
+        {
+          "T": 160.0,
+          "p": 10502.794736853675,
+          "reference": 9770.973155845333,
+          "relativeError": 0.0748975121859321,
+          "muResidual": 1.1641532182693481e-10
+        },
+        {
+          "T": 170.0,
+          "p": 29549.140169055954,
+          "reference": 28027.50531909852,
+          "relativeError": 0.05429077017855599,
+          "muResidual": 0.0
+        },
+        {
+          "T": 180.0,
+          "p": 73845.69397953652,
+          "reference": 71340.41680308386,
+          "relativeError": 0.035117220906737856,
+          "muResidual": 0.0
+        },
+        {
+          "T": 182.0,
+          "p": 87619.16735109255,
+          "reference": 84920.2374624286,
+          "relativeError": 0.031781939962874484,
+          "muResidual": -1.1641532182693481e-10
+        }
+      ]
+    },
+    {
+      "name": "gas-liquid-solid-triple-neighborhood",
+      "passed": true,
+      "T": 182.40753351935538,
+      "p": 90685.2964220415,
+      "chemicalPotentialResiduals": [
+        -3.4924596548080444e-10,
+        -3.4924596548080444e-10
+      ],
+      "liquidMass": [
+        1.339994639124641,
+        1.339994639124641
+      ],
+      "gasMass": 2.6799892782492813,
+      "soundEquilibrium": 0.0,
+      "soundFrozen": 135.25646588910894
+    },
+    {
+      "name": "heat-removal-forms-solid",
+      "passed": true,
+      "base": 0.5771334261692307,
+      "cold": 0.5858782020845998
+    },
+    {
+      "name": "heat-addition-sublimes-solid",
+      "passed": true,
+      "base": 0.5771334261692307,
+      "hot": 0.5683809859580429
+    },
+    {
+      "name": "all-solid-rejected",
+      "passed": true
+    },
+    {
+      "name": "condensed-inventory-overrun-rejected",
+      "passed": true
+    },
+    {
+      "name": "below-domain-rejected",
+      "passed": true
+    },
+    {
+      "name": "above-pressure-rejected",
+      "passed": true
+    },
+    {
+      "name": "cuda-call",
+      "passed": true,
+      "status": 0,
+      "error": "",
+      "inputsUnchanged": true
+    },
+    {
+      "name": "cpu-gpu-triple",
+      "passed": true,
+      "success": 1,
+      "scaledError": 0.0
+    },
+    {
+      "name": "cpu-gpu-coexist",
+      "passed": true,
+      "success": 1,
+      "scaledError": 1.828392109851547e-15
+    },
+    {
+      "name": "cpu-gpu-cold",
+      "passed": true,
+      "success": 1,
+      "scaledError": 1.8581342815601406e-15
+    },
+    {
+      "name": "cpu-gpu-hot",
+      "passed": true,
+      "success": 1,
+      "scaledError": 7.227866882031524e-15
+    }
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_n2o_solid.py": "bd3e31d1ad23ebf1cf9a627c458fc34cedd3054ee4dfc0d96c5410c58939c7c0",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_solid_20260922/thermo/cold-pr-148K-config.yaml": "2b54b78b2f269ec2526c82f800808e509e7b6d27da0aae3e8c13892f80949862",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so": "8faee3732abdc2529ee871e212d4fa6a0e1dd13d1c279fc7f89f704cb82c2368",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so": "aed3b98c768cf4bff2fa8b6832501719379fd00985e0c9cd212cc03de1551b94",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/docs/model-data/n2o-solid-atake1974.json": "577231ec735ef13bf9f26568affc37cfddea0d0a82275f91a3c1abd9c7cd90f8"
+  },
+  "cudaProfile": {
+    "abiVersion": 1,
+    "structBytes": 144,
+    "batches": 1,
+    "submitted": 4,
+    "succeeded": 4,
+    "cpuFallbacks": 0,
+    "deviceFailures": 0,
+    "phaseEvaluations": 9840,
+    "residualEvaluations": 3590,
+    "flashCandidates": 60,
+    "stableCandidates": 17,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 194,
+    "transferBytes": 1664,
+    "hostBytes": 756,
+    "deviceBytes": 49360,
+    "wallSeconds": 0.450139891,
+    "kernelSeconds": 0.4500989990234375,
+    "copySeconds": 3.055999986827374e-05
+  },
+  "sublimationReferencePassed": false,
+  "numericalPassed": true,
+  "passed": false,
+  "testCount": 18
+}

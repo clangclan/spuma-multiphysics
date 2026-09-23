@@ -1,0 +1,1458 @@
+{
+  "analysisToolSha256": {
+    "tools/prepare_capillary_case.py": "a4e93a7851fc38a17f67ee3a64322444369f115b72bc703142ae8a4f1c9a0b9e",
+    "tools/validate_capillary_solver.py": "937bf3bf2b899ac6c65a23c38b9e9b61316add645e9018aa83e8d46efc8771a9"
+  },
+  "cases": [
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/plane",
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": 0,
+        "analyticSphereVolumeM3": null,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 0.0,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": null,
+        "initialColorVolumeM3": 3.2e-08,
+        "initialPressureJumpPa": 0,
+        "interfaceField": "interfaceColor",
+        "kind": "plane",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": null,
+        "samplesPerAxis": 8,
+        "shape": [
+          8,
+          8,
+          8
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.0005,
+          0.0005,
+          0.0005
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 45.57748191774461,
+          "bulkPlusSurfaceEnergyJ": 45.57748223774461,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 45.57748223774461,
+          "totalMassKg": 3.088868698890205e-05
+        },
+        {
+          "bulkEnergyJ": 45.57748191774461,
+          "bulkPlusSurfaceEnergyJ": 45.57748223774461,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 9.41690782219453e-15,
+          "momentumKgMPerS": [
+            5.2104918325801e-24,
+            -1.492081953491379e-23,
+            4.291534423828125e-23
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 3e-08,
+          "totalEnergyJ": 45.57748223774461,
+          "totalMassKg": 3.088868698890205e-05
+        },
+        {
+          "bulkEnergyJ": 45.57748191774461,
+          "bulkPlusSurfaceEnergyJ": 45.57748223774461,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 1.883381564438906e-14,
+          "momentumKgMPerS": [
+            1.042098366542695e-23,
+            -2.984163906942742e-23,
+            8.583068847656252e-23
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 45.57748223774461,
+          "totalMassKg": 3.088868698890205e-05
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 0.00034644142454697956,
+      "maxAcceptedDtOverInitialCapillaryLimit": 8.659472532544045e-05,
+      "maxAcceptedStepS": 3e-08,
+      "maxColorVolumeDriftM3": 0.0,
+      "maxInterfaceNormalizationError": 0.0,
+      "maxLiquidInventoryDriftKg": 0.0,
+      "maxMomentumDriftKgMPerS": 8.583068847656252e-23,
+      "maxSpeciesMassDriftKg": 0.0,
+      "maxTotalEnergyDriftJ": 0.0,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "5",
+          "enabled": "1",
+          "faceFluxBuilds": "6144",
+          "geometryBuilds": "20",
+          "geometryKernels": "40",
+          "workspaceBytes": "40964"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "5",
+          "copySeconds": "0.00020636799931526183",
+          "cpuFallbacks": "0",
+          "deviceBytes": "295336",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "459096",
+          "kernelSeconds": "0.0026489600241184235",
+          "phaseEvaluations": "4355",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "2560",
+          "succeeded": "2560",
+          "transferBytes": "1095920",
+          "wallSeconds": "0.002914654"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/sphere-16",
+      "finalLaplaceErrorPa": 0.2180301588959992,
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": 2000.0,
+        "analyticSphereVolumeM3": 4.188790204786391e-09,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 1.1102230246251565e-16,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": null,
+        "initialColorVolumeM3": 4.1923828125e-09,
+        "initialPressureJumpPa": 20.0,
+        "interfaceField": "interfaceColor",
+        "kind": "sphere",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": 0.001,
+        "samplesPerAxis": 8,
+        "shape": [
+          16,
+          16,
+          16
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.00025,
+          0.00025,
+          0.00025
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 5.720634216045382,
+          "bulkPlusSurfaceEnergyJ": 5.720634342585459,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192382598930527e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881201153034329e-06,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "pressure": {
+            "insideCells": 88,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 3184,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120458416404496e-06,
+            5.50185440578605e-07,
+            3.881201153034342e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2654007694912464e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 5.720634342585459,
+          "totalMassKg": 6.2434324352534825e-06
+        },
+        {
+          "bulkEnergyJ": 5.720634216045383,
+          "bulkPlusSurfaceEnergyJ": 5.720634342585459,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192382596260822e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881201153034328e-06,
+          "maxSpeedMPerS": 1.6390984277419562e-05,
+          "momentumKgMPerS": [
+            -6.796376108258889e-24,
+            -4.721037905725021e-24,
+            7.82478661708614e-24
+          ],
+          "pressure": {
+            "insideCells": 88,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 3184,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120458416404655e-06,
+            5.501854405786029e-07,
+            3.881201153034325e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.265400765112621e-07,
+          "timeS": 1.8754924359734e-08,
+          "totalEnergyJ": 5.720634342585459,
+          "totalMassKg": 6.2434324352534825e-06
+        },
+        {
+          "bulkEnergyJ": 5.720634216045384,
+          "bulkPlusSurfaceEnergyJ": 5.72063434258546,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192382593753615e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881201153034329e-06,
+          "maxSpeedMPerS": 3.214622540519577e-05,
+          "momentumKgMPerS": [
+            -2.8688954959847264e-23,
+            -6.651549043582569e-24,
+            2.1799965814420962e-23
+          ],
+          "pressure": {
+            "insideCells": 88,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 3184,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120458416404775e-06,
+            5.501854405785937e-07,
+            3.881201153034333e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2654007607990338e-07,
+          "timeS": 3.75098487072503e-08,
+          "totalEnergyJ": 5.72063434258546,
+          "totalMassKg": 6.243432435253482e-06
+        },
+        {
+          "bulkEnergyJ": 5.720634216045384,
+          "bulkPlusSurfaceEnergyJ": 5.720634342585459,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192382591408943e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881201153034328e-06,
+          "maxSpeedMPerS": 4.72884904072543e-05,
+          "momentumKgMPerS": [
+            -4.6113026057354064e-23,
+            -1.6129776699442372e-23,
+            4.024546083970538e-23
+          ],
+          "pressure": {
+            "insideCells": 88,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 3184,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.81204584164049e-06,
+            5.501854405785934e-07,
+            3.881201153034334e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.265400756550891e-07,
+          "timeS": 5.62647729554252e-08,
+          "totalEnergyJ": 5.720634342585459,
+          "totalMassKg": 6.2434324352534825e-06
+        },
+        {
+          "bulkEnergyJ": 5.720634216045383,
+          "bulkPlusSurfaceEnergyJ": 5.720634342585458,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192382590853573e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881201153034328e-06,
+          "maxSpeedMPerS": 5.023405254398683e-05,
+          "momentumKgMPerS": [
+            -4.718925170803197e-23,
+            -1.62916181435964e-23,
+            4.3469360081826804e-23
+          ],
+          "pressure": {
+            "insideCells": 88,
+            "insidePa": 3000020.218030158,
+            "jumpPa": 20.218030158896,
+            "outsideCells": 3184,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120458416404972e-06,
+            5.501854405785961e-07,
+            3.881201153034319e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2654007556944514e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 5.720634342585458,
+          "totalMassKg": 6.243432435253481e-06
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 0.00012248554029054844,
+      "laplaceReferencePa": 20.0,
+      "maxAcceptedDtOverInitialCapillaryLimit": 0.0001531194973320552,
+      "maxAcceptedStepS": 1.8754924359733973e-08,
+      "maxColorVolumeDriftM3": 8.076954633256673e-18,
+      "maxInterfaceNormalizationError": 0.0,
+      "maxLiquidInventoryDriftKg": 8.470329472543003e-22,
+      "maxMomentumDriftKgMPerS": 4.718925170803197e-23,
+      "maxSpeciesMassDriftKg": 4.7645603283054394e-20,
+      "maxTotalEnergyDriftJ": 8.881784197001252e-16,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "18",
+          "enabled": "1",
+          "faceFluxBuilds": "98304",
+          "geometryBuilds": "45",
+          "geometryKernels": "90",
+          "workspaceBytes": "327684"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "18",
+          "copySeconds": "0.0027277440130710597",
+          "cpuFallbacks": "0",
+          "deviceBytes": "2029992",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "3340632",
+          "kernelSeconds": "0.0051178880035877231",
+          "phaseEvaluations": "205408",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "73728",
+          "succeeded": "73728",
+          "transferBytes": "31556448",
+          "wallSeconds": "0.0087017750000000001"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/sphere-24",
+      "finalLaplaceErrorPa": 9.313225746154785e-10,
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": 2000.0,
+        "analyticSphereVolumeM3": 4.188790204786391e-09,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 2.220446049250313e-16,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": null,
+        "initialColorVolumeM3": 4.19017650462963e-09,
+        "initialPressureJumpPa": 20.0,
+        "interfaceField": "interfaceColor",
+        "kind": "sphere",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": 0.001,
+        "samplesPerAxis": 8,
+        "shape": [
+          24,
+          24,
+          24
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.00016666666666666666,
+          0.00016666666666666666,
+          0.00016666666666666666
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 5.717471957380983,
+          "bulkPlusSurfaceEnergyJ": 5.717472084766797,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.190176363368496e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.879158648257294e-06,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "pressure": {
+            "insideCells": 280,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 10712,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8121126539464126e-06,
+            5.502057265763092e-07,
+            3.87915864825729e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2738581348405446e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 5.717472084766797,
+          "totalMassKg": 6.241477028779713e-06
+        },
+        {
+          "bulkEnergyJ": 5.717471957380985,
+          "bulkPlusSurfaceEnergyJ": 5.717472084766798,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.190176360977891e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.879158648257295e-06,
+          "maxSpeedMPerS": 1.8730030449008087e-05,
+          "momentumKgMPerS": [
+            2.5558604860688557e-23,
+            7.87281873250136e-24,
+            -4.194885839123891e-24
+          ],
+          "pressure": {
+            "insideCells": 280,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 10712,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8121126539463681e-06,
+            5.502057265763047e-07,
+            3.879158648257296e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2738581312734953e-07,
+          "timeS": 1.25032829064893e-08,
+          "totalEnergyJ": 5.717472084766798,
+          "totalMassKg": 6.241477028779713e-06
+        },
+        {
+          "bulkEnergyJ": 5.717471957380984,
+          "bulkPlusSurfaceEnergyJ": 5.717472084766797,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.190176358642731e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.879158648257295e-06,
+          "maxSpeedMPerS": 3.672484666831543e-05,
+          "momentumKgMPerS": [
+            4.823546015008998e-23,
+            7.801949313568246e-24,
+            -6.5138896053098694e-24
+          ],
+          "pressure": {
+            "insideCells": 280,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 10712,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8121126539463709e-06,
+            5.50205726576306e-07,
+            3.879158648257312e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.27385812771054e-07,
+          "timeS": 2.50065657771234e-08,
+          "totalEnergyJ": 5.717472084766797,
+          "totalMassKg": 6.241477028779713e-06
+        },
+        {
+          "bulkEnergyJ": 5.717471957380986,
+          "bulkPlusSurfaceEnergyJ": 5.717472084766798,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.190176352844645e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.879158648257294e-06,
+          "maxSpeedMPerS": 8.340613159142536e-05,
+          "momentumKgMPerS": [
+            9.771950772106361e-23,
+            8.55307685537907e-24,
+            -1.0793364179723316e-23
+          ],
+          "pressure": {
+            "insideCells": 280,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 10712,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8121126539463436e-06,
+            5.502057265763052e-07,
+            3.879158648257274e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2738581179859706e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 5.717472084766798,
+          "totalMassKg": 6.241477028779713e-06
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 6.667268324021202e-05,
+      "laplaceReferencePa": 20.0,
+      "maxAcceptedDtOverInitialCapillaryLimit": 0.0001875323190674923,
+      "maxAcceptedStepS": 1.2503282906489287e-08,
+      "maxColorVolumeDriftM3": 1.0523850838139585e-17,
+      "maxInterfaceNormalizationError": 0.0,
+      "maxLiquidInventoryDriftKg": 8.470329472543003e-22,
+      "maxMomentumDriftKgMPerS": 9.771950772106361e-23,
+      "maxSpeciesMassDriftKg": 6.903318520122548e-20,
+      "maxTotalEnergyDriftJ": 8.881784197001252e-16,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "22",
+          "enabled": "1",
+          "faceFluxBuilds": "414720",
+          "geometryBuilds": "53",
+          "geometryKernels": "106",
+          "workspaceBytes": "1105924"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "88",
+          "copySeconds": "0.010028000004589562",
+          "cpuFallbacks": "0",
+          "deviceBytes": "2029992",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "3340632",
+          "kernelSeconds": "0.022985856264829636",
+          "phaseEvaluations": "856758",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "304128",
+          "succeeded": "304128",
+          "transferBytes": "130171008",
+          "wallSeconds": "0.03660315099999998"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/sphere-32",
+      "finalLaplaceErrorPa": 9.313225746154785e-10,
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": 2000.0,
+        "analyticSphereVolumeM3": 4.188790204786391e-09,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 1.1102230246251565e-16,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": null,
+        "initialColorVolumeM3": 4.1928710937500005e-09,
+        "initialPressureJumpPa": 20.0,
+        "interfaceField": "interfaceColor",
+        "kind": "sphere",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": 0.001,
+        "samplesPerAxis": 8,
+        "shape": [
+          32,
+          32,
+          32
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.000125,
+          0.000125,
+          0.000125
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 5.72133416125745,
+          "bulkPlusSurfaceEnergyJ": 5.721334289033051,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192870986104216e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881653250217377e-06,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "pressure": {
+            "insideCells": 624,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 25560,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.812030995972281e-06,
+            5.501809330372446e-07,
+            3.881653250217292e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2777560179947348e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 5.721334289033051,
+          "totalMassKg": 6.243865179226925e-06
+        },
+        {
+          "bulkEnergyJ": 5.7213341612574515,
+          "bulkPlusSurfaceEnergyJ": 5.721334289033053,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192870984291225e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881653250217377e-06,
+          "maxSpeedMPerS": 2.0199759501388804e-05,
+          "momentumKgMPerS": [
+            3.45480254209853e-24,
+            -8.448604726390995e-24,
+            4.8206802658107234e-24
+          ],
+          "pressure": {
+            "insideCells": 624,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 25560,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120309959722423e-06,
+            5.501809330372798e-07,
+            3.8816532502173445e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2777560150045197e-07,
+          "timeS": 9.37746217986693e-09,
+          "totalEnergyJ": 5.721334289033053,
+          "totalMassKg": 6.243865179226925e-06
+        },
+        {
+          "bulkEnergyJ": 5.721334161257452,
+          "bulkPlusSurfaceEnergyJ": 5.721334289033053,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192870980874359e-09,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.881653250217377e-06,
+          "maxSpeedMPerS": 5.820650434998347e-05,
+          "momentumKgMPerS": [
+            7.328674250684223e-24,
+            -1.4762046916863683e-23,
+            1.4951955339996208e-23
+          ],
+          "pressure": {
+            "insideCells": 624,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 25560,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120309959722243e-06,
+            5.501809330372961e-07,
+            3.881653250217406e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2777560091094227e-07,
+          "timeS": 2.81323863676127e-08,
+          "totalEnergyJ": 5.721334289033053,
+          "totalMassKg": 6.243865179226926e-06
+        },
+        {
+          "bulkEnergyJ": 5.721334161257453,
+          "bulkPlusSurfaceEnergyJ": 5.721334289033053,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192870976359181e-09,
+          "interfaceNormalizationMaxError": 1.5121617225622436e-308,
+          "liquidInventoryKg": 3.881653250217377e-06,
+          "maxSpeedMPerS": 0.00010968049199927854,
+          "momentumKgMPerS": [
+            1.1653407260964887e-23,
+            -2.5247370485533142e-23,
+            2.7633092030390816e-23
+          ],
+          "pressure": {
+            "insideCells": 624,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 25560,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120309959722232e-06,
+            5.501809330373115e-07,
+            3.881653250217409e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2777560004935422e-07,
+          "timeS": 5.62647722570686e-08,
+          "totalEnergyJ": 5.721334289033053,
+          "totalMassKg": 6.243865179226925e-06
+        },
+        {
+          "bulkEnergyJ": 5.721334161257453,
+          "bulkPlusSurfaceEnergyJ": 5.721334289033053,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.192870975787071e-09,
+          "interfaceNormalizationMaxError": 1.6465396354006617e-308,
+          "liquidInventoryKg": 3.881653250217376e-06,
+          "maxSpeedMPerS": 0.00011605071642742299,
+          "momentumKgMPerS": [
+            1.2927646323112066e-23,
+            -2.677931365225249e-23,
+            3.014722323081638e-23
+          ],
+          "pressure": {
+            "insideCells": 624,
+            "insidePa": 3000020.0,
+            "jumpPa": 20.000000000931323,
+            "outsideCells": 25560,
+            "outsidePa": 2999999.999999999
+          },
+          "speciesMassKg": [
+            1.8120309959722164e-06,
+            5.501809330373174e-07,
+            3.881653250217352e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2777559993605025e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 5.721334289033053,
+          "totalMassKg": 6.243865179226925e-06
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 4.3305178068372445e-05,
+      "laplaceReferencePa": 20.0,
+      "maxAcceptedDtOverInitialCapillaryLimit": 0.00021654366979074205,
+      "maxAcceptedStepS": 9.377462179866927e-09,
+      "maxColorVolumeDriftM3": 1.0317145020507484e-17,
+      "maxInterfaceNormalizationError": 1.6465396354006617e-308,
+      "maxLiquidInventoryDriftKg": 8.470329472543003e-22,
+      "maxMomentumDriftKgMPerS": 3.014722323081638e-23,
+      "maxSpeciesMassDriftKg": 1.1689054672109345e-19,
+      "maxTotalEnergyDriftJ": 1.7763568394002505e-15,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "30",
+          "enabled": "1",
+          "faceFluxBuilds": "1376256",
+          "geometryBuilds": "72",
+          "geometryKernels": "144",
+          "workspaceBytes": "2621444"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "240",
+          "copySeconds": "0.031384192153811455",
+          "cpuFallbacks": "0",
+          "deviceBytes": "2029992",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "3340632",
+          "kernelSeconds": "0.060139488607645002",
+          "phaseEvaluations": "2758952",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "983040",
+          "succeeded": "983040",
+          "transferBytes": "420752640",
+          "wallSeconds": "0.10270474399999996"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/wave",
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": null,
+        "analyticSphereVolumeM3": null,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 1.1102230246251565e-16,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": 4e-05,
+        "initialColorVolumeM3": 1.28e-07,
+        "initialPressureJumpPa": 0,
+        "interfaceField": "interfaceColor",
+        "kind": "wave",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.016
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": null,
+        "samplesPerAxis": 8,
+        "shape": [
+          32,
+          4,
+          128
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.000125,
+          0.001,
+          0.000125
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": 0.004
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 182.30992767097842,
+          "bulkPlusSurfaceEnergyJ": 182.3099279918202,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 1.28000000003525e-07,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 0.00011849911121873026,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speciesMassKg": [
+            3.878132338210201e-06,
+            1.1775043986681718e-06,
+            0.00011849911121871748,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2084175341693673e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 182.3099279918202,
+          "totalMassKg": 0.0001235547479556082,
+          "waveAmplitudeM": 3.984681774098245e-05
+        },
+        {
+          "bulkEnergyJ": 182.30992767097842,
+          "bulkPlusSurfaceEnergyJ": 182.3099279918202,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 1.2800000000333097e-07,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 0.00011849911121873025,
+          "maxSpeedMPerS": 6.4588697113351684e-06,
+          "momentumKgMPerS": [
+            4.4315851998860356e-23,
+            -1.0620789627113122e-23,
+            -3.511462502897589e-23
+          ],
+          "speciesMassKg": [
+            3.878132338210234e-06,
+            1.1775043986681699e-06,
+            0.00011849911121871896,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.208417533848189e-07,
+          "timeS": 1.32387769871117e-08,
+          "totalEnergyJ": 182.3099279918202,
+          "totalMassKg": 0.0001235547479556082,
+          "waveAmplitudeM": 3.984681772207737e-05
+        },
+        {
+          "bulkEnergyJ": 182.30992767097842,
+          "bulkPlusSurfaceEnergyJ": 182.3099279918202,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 1.280000000036087e-07,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 0.00011849911121873025,
+          "maxSpeedMPerS": 1.2706887994151928e-05,
+          "momentumKgMPerS": [
+            1.0442906957739184e-22,
+            -2.0600478378734707e-23,
+            -7.101844981656787e-23
+          ],
+          "speciesMassKg": [
+            3.87813233821023e-06,
+            1.1775043986681735e-06,
+            0.00011849911121871926,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2084175335164373e-07,
+          "timeS": 2.64775539683361e-08,
+          "totalEnergyJ": 182.3099279918202,
+          "totalMassKg": 0.0001235547479556082,
+          "waveAmplitudeM": 3.984681768472216e-05
+        },
+        {
+          "bulkEnergyJ": 182.30992767097842,
+          "bulkPlusSurfaceEnergyJ": 182.3099279918202,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 1.2800000000359617e-07,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 0.00011849911121873025,
+          "maxSpeedMPerS": 2.748051561360249e-05,
+          "momentumKgMPerS": [
+            2.3000474648899266e-22,
+            -4.821599472032329e-23,
+            -1.5812002068678377e-22
+          ],
+          "speciesMassKg": [
+            3.878132338210203e-06,
+            1.177504398668168e-06,
+            0.00011849911121871912,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.208417532701295e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 182.3099279918202,
+          "totalMassKg": 0.0001235547479556082,
+          "waveAmplitudeM": 3.98468176155525e-05
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 4.3305178068372445e-05,
+      "maxAcceptedDtOverInitialCapillaryLimit": 0.0003057088684916527,
+      "maxAcceptedStepS": 1.3238776987111674e-08,
+      "maxColorVolumeDriftM3": 1.9402348448043817e-19,
+      "maxInterfaceNormalizationError": 0.0,
+      "maxLiquidInventoryDriftKg": 1.3552527156068805e-20,
+      "maxMomentumDriftKgMPerS": 2.3000474648899266e-22,
+      "maxSpeciesMassDriftKg": 1.7753810574450135e-18,
+      "maxTotalEnergyDriftJ": 0.0,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "22",
+          "enabled": "1",
+          "faceFluxBuilds": "491520",
+          "geometryBuilds": "53",
+          "geometryKernels": "106",
+          "workspaceBytes": "1310724"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "88",
+          "copySeconds": "0.011381728082895278",
+          "cpuFallbacks": "0",
+          "deviceBytes": "2029992",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "3340632",
+          "kernelSeconds": "0.019915712296962741",
+          "phaseEvaluations": "726070",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "360448",
+          "succeeded": "360448",
+          "transferBytes": "154275968",
+          "wallSeconds": "0.035516259000000001"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01,
+      "waveFrequency": {
+        "durationS": 6e-08,
+        "referenceModel": "deep-layer inviscid two-fluid limit; periodic slab has two interfaces",
+        "referencePeriodS": 0.0313562983143804,
+        "samples": 4,
+        "status": "insufficient duration or samples",
+        "wavenumberTimesInterfaceSeparation": 12.566370614359172
+      }
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/drop",
+      "dropFrequency": {
+        "durationS": 6e-08,
+        "referenceModel": "n=2 inviscid Rayleigh-Lamb small-amplitude limit",
+        "referencePeriodS": 0.02167591644906888,
+        "samples": 5,
+        "status": "insufficient duration or samples"
+      },
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": null,
+        "analyticSphereVolumeM3": 4.188790204786391e-09,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 2.220446049250313e-16,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": 2.5e-05,
+        "initialColorVolumeM3": 4.1898803710937505e-09,
+        "initialPressureJumpPa": 20.0,
+        "interfaceField": "interfaceColor",
+        "kind": "drop",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": 0.001,
+        "samplesPerAxis": 8,
+        "shape": [
+          32,
+          32,
+          32
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.000125,
+          0.000125,
+          0.000125
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkEnergyJ": 5.717047536368881,
+          "bulkPlusSurfaceEnergyJ": 5.71704766406133,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.189880263210149e-09,
+          "dropQuadrupoleM5": 1.265487662124412e-16,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.878884514926696e-06,
+          "maxSpeedMPerS": 0.0,
+          "momentumKgMPerS": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "speciesMassKg": [
+            1.8121216089645459e-06,
+            5.502084455581326e-07,
+            3.8788845149265945e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2769244987943695e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 5.71704766406133,
+          "totalMassKg": 6.241214569449399e-06
+        },
+        {
+          "bulkEnergyJ": 5.71704753636888,
+          "bulkPlusSurfaceEnergyJ": 5.7170476640613295,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.1898802613228086e-09,
+          "dropQuadrupoleM5": 1.265487659868639e-16,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.878884514926696e-06,
+          "maxSpeedMPerS": 1.826568738085285e-05,
+          "momentumKgMPerS": [
+            3.664498656851131e-24,
+            -6.911401448846459e-24,
+            3.947840516200997e-24
+          ],
+          "speciesMassKg": [
+            1.8121216089645046e-06,
+            5.502084455581721e-07,
+            3.87888451492665e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.276924495645013e-07,
+          "timeS": 9.37746217986693e-09,
+          "totalEnergyJ": 5.7170476640613295,
+          "totalMassKg": 6.241214569449399e-06
+        },
+        {
+          "bulkEnergyJ": 5.717047536368882,
+          "bulkPlusSurfaceEnergyJ": 5.71704766406133,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.1898802577946665e-09,
+          "dropQuadrupoleM5": 1.2654876554316e-16,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.878884514926695e-06,
+          "maxSpeedMPerS": 5.2738260499243306e-05,
+          "momentumKgMPerS": [
+            3.796080529653412e-24,
+            -1.427104286167445e-23,
+            1.2716223226616877e-23
+          ],
+          "speciesMassKg": [
+            1.8121216089644917e-06,
+            5.502084455581966e-07,
+            3.8788845149266996e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2769244894515326e-07,
+          "timeS": 2.81323863213765e-08,
+          "totalEnergyJ": 5.71704766406133,
+          "totalMassKg": 6.241214569449399e-06
+        },
+        {
+          "bulkEnergyJ": 5.717047536368883,
+          "bulkPlusSurfaceEnergyJ": 5.71704766406133,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.189880253114037e-09,
+          "dropQuadrupoleM5": 1.2654876490599547e-16,
+          "interfaceNormalizationMaxError": 0.0,
+          "liquidInventoryKg": 3.878884514926696e-06,
+          "maxSpeedMPerS": 9.967235740768971e-05,
+          "momentumKgMPerS": [
+            7.735922668949179e-24,
+            -2.4124389195827785e-23,
+            3.395481293694571e-23
+          ],
+          "speciesMassKg": [
+            1.8121216089644942e-06,
+            5.502084455582087e-07,
+            3.878884514926694e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.276924480402267e-07,
+          "timeS": 5.62647721295805e-08,
+          "totalEnergyJ": 5.71704766406133,
+          "totalMassKg": 6.241214569449399e-06
+        },
+        {
+          "bulkEnergyJ": 5.717047536368883,
+          "bulkPlusSurfaceEnergyJ": 5.71704766406133,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 4.189880252542756e-09,
+          "dropQuadrupoleM5": 1.2654876482940753e-16,
+          "interfaceNormalizationMaxError": 1.5872543239933243e-308,
+          "liquidInventoryKg": 3.878884514926696e-06,
+          "maxSpeedMPerS": 0.00010550321712783143,
+          "momentumKgMPerS": [
+            8.974683072556104e-24,
+            -2.5043020429985415e-23,
+            3.5401986614206305e-23
+          ],
+          "speciesMassKg": [
+            1.8121216089644762e-06,
+            5.502084455582076e-07,
+            3.878884514926673e-06,
+            0.0
+          ],
+          "surfaceEnergyJ": 1.2769244792243014e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 5.71704766406133,
+          "totalMassKg": 6.241214569449399e-06
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 4.3305178068372445e-05,
+      "maxAcceptedDtOverInitialCapillaryLimit": 0.00021654366979074205,
+      "maxAcceptedStepS": 9.377462179866927e-09,
+      "maxColorVolumeDriftM3": 1.0667393144197137e-17,
+      "maxInterfaceNormalizationError": 1.5872543239933243e-308,
+      "maxLiquidInventoryDriftKg": 8.470329472543003e-22,
+      "maxMomentumDriftKgMPerS": 3.5401986614206305e-23,
+      "maxSpeciesMassDriftKg": 1.0503208545953324e-19,
+      "maxTotalEnergyDriftJ": 8.881784197001252e-16,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "30",
+          "enabled": "1",
+          "faceFluxBuilds": "1376256",
+          "geometryBuilds": "72",
+          "geometryKernels": "144",
+          "workspaceBytes": "2621444"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "240",
+          "copySeconds": "0.030833984173834324",
+          "cpuFallbacks": "0",
+          "deviceBytes": "2029992",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "3340632",
+          "kernelSeconds": "0.06087488080561166",
+          "phaseEvaluations": "2783132",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "983040",
+          "succeeded": "983040",
+          "transferBytes": "420752640",
+          "wallSeconds": "0.10300278199999999"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "0",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "none",
+          "turbulentHeatFlux": "0",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "0"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "physicalModelHash": "913621cb97fb2c77bdac9e43a7e1fc40031913226b5ef8ec36b112073a912fdf",
+        "solverSha256": "d73dbbb986fd36267dd9b86ee010504f2dc1d2c247ce7c864ae3381da4bfe48d"
+      },
+      "sigmaNPerM": 0.01
+    }
+  ],
+  "offPathParity": {
+    "bitwiseEqual": true,
+    "candidate": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/off-explicit",
+    "differences": [],
+    "fields": [
+      "q0",
+      "q1",
+      "q2",
+      "q3",
+      "rhoMomentum",
+      "rhoTotalEnergy",
+      "rhoLiquid0"
+    ],
+    "matchingHistory": true,
+    "reference": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/off-omitted"
+  },
+  "schema": "capillary-solver-validation-v1",
+  "sphereGridConvergence": {
+    "absoluteLaplaceErrorsPa": [
+      0.2180301588959992,
+      9.313225746154785e-10,
+      9.313225746154785e-10
+    ],
+    "cellLengthsM": [
+      0.00025,
+      0.00016666666666666666,
+      0.000125
+    ],
+    "finalMaxSpeedMPerS": [
+      5.023405254398683e-05,
+      8.340613159142536e-05,
+      0.00011605071642742299
+    ],
+    "pressureErrorStrictlyDecreasing": false,
+    "spuriousCurrentStrictlyDecreasing": false
+  }
+}

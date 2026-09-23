@@ -128,6 +128,19 @@ class Backend:
         self.names = [self.lib.pintle_rt_species_name(self.handle, k).decode() for k in range(self.ns)]
         self.weights = np.array([self.lib.pintle_rt_molecular_weight(self.handle, k) for k in range(self.ns)])
         self.liquid_indices = [self.lib.pintle_rt_liquid_species(self.handle, i) for i in range(self.nl)]
+        self.condensed = []
+        kind = getattr(self.lib, "pintle_rt_condensed_kind_v1", None)
+        phase_name = getattr(self.lib, "pintle_rt_condensed_name_v1", None)
+        if kind is not None and phase_name is not None:
+            kind.argtypes, kind.restype = [void, C.c_size_t], C.c_int
+            phase_name.argtypes, phase_name.restype = [void, C.c_size_t], C.c_char_p
+        for i, species in enumerate(self.liquid_indices):
+            value = kind(self.handle, i) if kind is not None else 0
+            raw = phase_name(self.handle, i) if phase_name is not None else None
+            if value not in (0, 1) or (phase_name is not None and not raw):
+                raise RuntimeError(f"Invalid condensed-phase metadata for slot {i}")
+            self.condensed.append({"slot": i, "speciesIndex": species, "species": self.names[species],
+                "kind": "solid" if value == 1 else "liquid", "name": raw.decode() if raw else f"liquid_{self.names[species]}"})
 
     def close(self):
         if getattr(self, "handle", None):

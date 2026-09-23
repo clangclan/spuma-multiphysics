@@ -1,0 +1,19 @@
+mechanism: cold-pr-148K.yaml
+gas-phase: gas
+condensables:
+- species: N2O
+  phase: liquid_N2O
+  minimum-liquid-temperature: 148.0
+  critical-temperature: 309.52
+temperature-min: 148.0
+temperature-max: 3500.0
+pressure-min: 1000.0
+pressure-max: 50000000.0
+volume-tolerance: 1.0e-09
+energy-tolerance: 1.0e-09
+chemical-potential-tolerance: 1.0e-07
+model-scope: Nonreacting PR gas/supercooled-liquid N2O HEM; liquid branch continued
+  metastably to 148 K; solid formation, sublimation, fusion heat, nucleation and solid
+  equilibrium excluded; no IPA condensed phase; below the N2O triple point this is
+  a fluid-EOS extrapolation
+enforce-species-temperature-bounds: true

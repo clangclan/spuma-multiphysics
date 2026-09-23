@@ -1,0 +1,183 @@
+{
+  "conditions": {
+    "gauge_reference_Pa": 101325.0,
+    "outlet_p_abs_Pa": [
+      101325.0,
+      4000000.0
+    ],
+    "species": "N2O",
+    "supply_T_K": 293.15,
+    "supply_p_abs_Pa": 5601325.0,
+    "supply_p_gauge_Pa": 5500000.0
+  },
+  "destinations": [
+    {
+      "CoolProp_Lemmon_Span": {
+        "Tsat_K": 184.6839191035732,
+        "gas_volume_fraction_isenthalpic": 0.9981608961907468,
+        "gas_volume_fraction_isentropic": 0.9967929870412665,
+        "latent_h_J_kg": 374281.6560592168,
+        "quality_isenthalpic": 0.5681015905551168,
+        "quality_isentropic": 0.42963926868916563,
+        "rho_liquid_kg_m3": 1230.446598249028,
+        "rho_vapour_kg_m3": 2.9820358648435517
+      },
+      "p_abs_Pa": 101325.0,
+      "pressure_drop_Pa": 5500000.0,
+      "repository_PR": {
+        "HEM_isenthalpic_roundtrip": {
+          "T_error_K": -9.691802915767767e-12,
+          "chemical_residual": 1.4210854715202004e-14,
+          "energy_residual": 5.810176265370157e-14,
+          "gas_volume_fraction": 0.9983683733380024,
+          "liquid_mass_fraction": 0.4151607071390863,
+          "p_relative_error": -5.561107130347409e-13,
+          "volume_residual": 1.0242917625191694e-12
+        },
+        "Tsat_K": 184.27467115507127,
+        "gas_volume_fraction_isenthalpic": 0.998368373336977,
+        "gas_volume_fraction_isentropic": 0.9970452058873475,
+        "latent_h_J_kg": 367690.6412070014,
+        "quality_isenthalpic": 0.5848392928606131,
+        "quality_isentropic": 0.4372067077065676,
+        "saturated_liquid": {
+          "branch": 0,
+          "chemicalPotential": 911147.7153214819,
+          "compressibility": 1.2069684864516085e-09,
+          "cp": 1517.9287846521265,
+          "cv": 937.1312088729474,
+          "e": 1391707.7726438094,
+          "expansion": 0.0022176456624762005,
+          "h": 1391786.1494176092,
+          "rho": 1292.7937078163827,
+          "s": 2608.2718318442107,
+          "sound": 1018.8562581437383
+        },
+        "saturated_vapour": {
+          "branch": -1,
+          "chemicalPotential": 911147.7153214763,
+          "compressibility": 1.0095874221023883e-05,
+          "cp": 761.9332368400214,
+          "cv": 559.6207937825687,
+          "e": 1725433.0632820574,
+          "expansion": 0.005743679457910817,
+          "h": 1759476.7906246106,
+          "rho": 2.9763192197039015,
+          "s": 4603.611934215562,
+          "sound": 212.86282309222133
+        }
+      }
+    },
+    {
+      "CoolProp_Lemmon_Span": {
+        "Tsat_K": 283.1374920971622,
+        "gas_volume_fraction_isenthalpic": 0.49674424095914455,
+        "gas_volume_fraction_isentropic": 0.4681325514694089,
+        "latent_h_J_kg": 204932.0593760023,
+        "quality_isenthalpic": 0.1174145562576701,
+        "quality_isentropic": 0.10604761595652357,
+        "rho_liquid_kg_m3": 852.2420265611893,
+        "rho_vapour_kg_m3": 114.86402752882177
+      },
+      "p_abs_Pa": 4000000.0,
+      "pressure_drop_Pa": 1601325.0,
+      "repository_PR": {
+        "HEM_isenthalpic_roundtrip": {
+          "T_error_K": 3.594209374568891e-10,
+          "chemical_residual": 0.0,
+          "energy_residual": 4.321727168878497e-13,
+          "gas_volume_fraction": 0.5253996167403394,
+          "liquid_mass_fraction": 0.8658501753365929,
+          "p_relative_error": 8.718137323171504e-12,
+          "volume_residual": 5.962452753749403e-12
+        },
+        "Tsat_K": 282.99853284949006,
+        "gas_volume_fraction_isenthalpic": 0.5253996167483047,
+        "gas_volume_fraction_isentropic": 0.4981532743826981,
+        "latent_h_J_kg": 203750.17974477657,
+        "quality_isenthalpic": 0.13414982466392483,
+        "quality_isentropic": 0.12197836427598907,
+        "saturated_liquid": {
+          "branch": 0,
+          "chemicalPotential": 619327.895226938,
+          "compressibility": 2.4766403395041354e-08,
+          "cp": 3039.0510023092816,
+          "cv": 886.9760436192369,
+          "e": 1574659.7054934069,
+          "expansion": 0.012484609256860233,
+          "h": 1579493.0331245724,
+          "rho": 827.5871832498716,
+          "s": 3392.827263907721,
+          "sound": 408.8600712147637
+        },
+        "saturated_vapour": {
+          "branch": -1,
+          "chemicalPotential": 619327.895226938,
+          "compressibility": 4.623772478962666e-07,
+          "cp": 1662.3407287368839,
+          "cv": 710.500358041004,
+          "e": 1748708.1268501985,
+          "expansion": 0.01342109408341144,
+          "h": 1783243.212869349,
+          "rho": 115.82423735044128,
+          "s": 4112.796295878425,
+          "sound": 209.01618649333872
+        }
+      }
+    }
+  ],
+  "formulae": {
+    "gas_volume_fraction": "(x/rho_v)/(x/rho_v+(1-x)/rho_l)",
+    "quality_isenthalpic": "(h_in-h_l_sat)/(h_v_sat-h_l_sat)",
+    "quality_isentropic": "(s_in-s_l_sat)/(s_v_sat-s_l_sat)"
+  },
+  "hashes": {
+    "backend_sha256": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b",
+    "configuration_sha256": "1262c7293e0cd73e99a1d94aaa7942d2675fd00a6f6beab94ad91a9abe76a23c",
+    "mechanism_sha256": "7ea020c480bff27404a9ccb051c4940bac71631257e159084b93df2092a6ecdd",
+    "probe_sha256": "890cf0d7cafc02d0f2062650441ef8c350675bfc2f53d9cd702b651bd3d1c869",
+    "reactive_backend_py_sha256": "b7a53297e402b9ae48c700c2b37484df56fa27e6ab6a15cbaf7ff8b1db8e1c76"
+  },
+  "model": {
+    "CoolProp": "6.7.0",
+    "backend": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+    "configuration": "/home/jsw/\ubb38\uc11c/analysis/runs/r04_frozen_14k_20260921/case/thermo/cold-pr-config.yaml",
+    "mechanism": "/home/jsw/\ubb38\uc11c/analysis/runs/r04_frozen_14k_20260921/case/thermo/cold-pr.yaml",
+    "physical_model_fingerprint": "b90c87d0ebb97f92af562c63708d3f5b33ac259f855db7c0ee7f164f8dfc7db1",
+    "python": "3.12.14"
+  },
+  "schema": 1,
+  "scope": "Equilibrium thermodynamic probe; not a nozzle, choking, or finite-rate flashing model",
+  "supply": {
+    "CoolProp_Lemmon_Span": {
+      "h_J_kg": 212630.004120012,
+      "psat_Pa": 5052509.283127991,
+      "rho_kg_m3": 796.01794849192,
+      "s_J_kgK": 870.7097931156009,
+      "subcool_pressure_margin_Pa": 548815.7168720094
+    },
+    "repository_PR": {
+      "fixedState_roundtrip": {
+        "T_error_K": 0.0,
+        "gas_volume_fraction": 0.0,
+        "liquid_mass_fraction": 1.0,
+        "p_relative_error": 0.0
+      },
+      "liquid": {
+        "branch": 0,
+        "chemicalPotential": 586474.1495604991,
+        "compressibility": 4.2045187012410065e-08,
+        "cp": 3706.828452767202,
+        "cv": 877.829316071596,
+        "e": 1599362.4235307293,
+        "expansion": 0.017450145432664783,
+        "h": 1606826.0840125773,
+        "rho": 750.4796089830805,
+        "s": 3480.6479087568746,
+        "sound": 365.82098191267517
+      },
+      "psat_Pa": 5076921.105696001,
+      "subcool_pressure_margin_Pa": 524403.8943039989
+    }
+  }
+}

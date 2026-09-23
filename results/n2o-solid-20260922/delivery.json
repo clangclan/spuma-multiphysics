@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "status": "implemented-provisional-physical-reference-gate-failed",
+  "numericalPassed": true,
+  "gpuRuntimePassed": true,
+  "sublimationReferencePassed": false,
+  "physicalValidationComplete": false,
+  "referenceMaximumRelativeError": 0.09387302591382252,
+  "referenceMaximumAllowedRelativeError": 0.08,
+  "baseCommit": "3b12e1cd9c2b7c1bd178466a3cc17cdc90c382a2",
+  "scope": "Low-temperature HEM recovery plus equilibrium N2O gas/liquid/solid partition on CPU and GPU; no kinetics or particulate dynamics",
+  "limits": {
+    "solidTemperatureRangeK": [
+      148,
+      183
+    ],
+    "solidPressureMaxPa": 200000,
+    "nonzeroGasRequiredForSolid": true,
+    "solidMolarVolumeIsProvisional": true,
+    "condensedIpaDisplaced": true,
+    "reactingSolidSupported": false
+  },
+  "checks": {
+    "legacyRecoveryCount": 388,
+    "fluidCpuCudaRecoveryCount": 18,
+    "solidNumericalChecks": 17,
+    "solidPhysicalReferenceChecksFailed": 1,
+    "densitySensitivityPassed": true,
+    "cudaBuildPassed": true,
+    "finalOutputMetadataSolverBuildPassed": true,
+    "pythonSyntaxPassed": true
+  },
+  "workload": {
+    "cellsPerCase": 256000,
+    "stepsPerCase": 10,
+    "cpuFallbacks": 0,
+    "deviceFailures": 0,
+    "retries": 0,
+    "optimizationResumed": false,
+    "fullCollisionRunPerformed": false,
+    "fullFlowRepeatedAfterValidation": false
+  },
+  "benchmarkDirectory": "/home/jsw/문서/analysis/runs/impinging_n2o_solid_20260922/benchmark",
+  "runtimeEvidenceDirectory": "/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/solid-ten-steps",
+  "testedBinaryHashes": {
+    "bin/ReactiveFoam": "cc7b0b0f876c77a54469473536f2b51eb032f25fe68a68b67f7c557920e898a0",
+    "lib/libpintleReactiveBackend.so": "8faee3732abdc2529ee871e212d4fa6a0e1dd13d1c279fc7f89f704cb82c2368",
+    "lib/libpintleReactiveTransport.so": "aed3b98c768cf4bff2fa8b6832501719379fd00985e0c9cd212cc03de1551b94"
+  },
+  "finalBinaryHashes": {
+    "bin/ReactiveFoam": "513250766d7f80cfb43a903ef7b8292acd8ae98258970d3060e4810aed5bfaaa",
+    "lib/libpintleReactiveBackend.so": "8faee3732abdc2529ee871e212d4fa6a0e1dd13d1c279fc7f89f704cb82c2368",
+    "lib/libpintleReactiveTransport.so": "aed3b98c768cf4bff2fa8b6832501719379fd00985e0c9cd212cc03de1551b94"
+  },
+  "afterRuntimeChanges": [
+    "Solver log reports actual finiteDifference Jacobian for solid configurations and records requested mode",
+    "Named output fields derive species from species metadata instead of parsing phase names",
+    "Preparation tool removes an unused, unsupported sublimation-guard option; generator emits identical model bytes and physical hash",
+    "Preparation README and repository reports explain provisional model scope and validation limits"
+  ],
+  "sourceHashes": {
+    "docs/model-data/n2o-solid-atake1974.json": "577231ec735ef13bf9f26568affc37cfddea0d0a82275f91a3c1abd9c7cd90f8",
+    "src/reactiveFoam/ReactiveFoam.C": "fee2b37af2a1a6327246e8d082585e69be009b776c8be2a256358635a732c481",
+    "src/reactiveFoam/reactiveDiagnostics.H": "776a35c5508ee05debf7642d96cb971c541533a700c811bdc9a7f63d3b119add",
+    "src/reactiveThermo/pintleDeviceFlash.h": "46db3dd49b17f99d1047bfff1b7aef36110c6d14d50ebe998355128a1ff8d242",
+    "src/reactiveThermo/pintleDeviceFlashStabilityReuse.h": "46fb76f315d2d0161eeb3685cc54ca25b5478ad025045c01abcd2ff10161543e",
+    "src/reactiveThermo/pintleFlashSeeds.h": "133993bcba8394b54ad7b6546d22ed05486221be977c9aed2816f25b696c2872",
+    "src/reactiveThermo/pintleGpuHemModel.inc": "1bf8e2366456cd31000cc9293fb975579e675db2ae16fd9c7a02a4f678b9f627",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "892636f16792ebbff43deda98074b85e83eb2cfd2f1baea7cf5753144ae9e933",
+    "src/reactiveThermo/pintleReactiveThermo.h": "7c4c19871c62af0a4a6ba4593b1339bd3631873826f6f27c2abd81a9c618dd1f",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "93ab359c22c292170b36f3055ce03330c77f8fd2c40003c52b4dfe89b35c3fa7",
+    "src/reactiveThermo/pintleSolidThermo.h": "a0f3be69905ab0e19853c3d978affeea1673f9bc4eb08933d4270b600b863b59",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "50282e7bdf6d0112f9e2123b5722dcfd13c9b788cbbc28b01b2c9c5d842b59d5",
+    "tools/analyze_impinging_n2o.py": "21359a65c15464a3d4e32bc4f1604e6da7f32516f5964d06a66de3b2da235f03",
+    "tools/extend_n2o_gas_thermo.py": "23b819b64fb0a86a7e7a19fa2e9d326c3f7633566ea98df651605815cae19ef5",
+    "tools/prepare_impinging_n2o.py": "55c62b952d4a437a8d5bf2bf7b15c0b4dacbe682d657ad09e9d5144e9c9d3320",
+    "tools/reactive_backend.py": "d3d75505c2a159829c6dc542cbcc0cb5ce09af00704df178b6afb3758dc4df0c",
+    "tools/validate_impinging_n2o.py": "688442c81152b68dd00a736683ee81688b29b012717dd784d712c25aa8e71a7d",
+    "tools/validate_impinging_n2o_recovery.py": "9e5ff9c8a857f5eaf82b33b912060a2818106928a1e217c4249e7f1fc32e0363",
+    "tools/validate_n2o_solid.py": "bd3e31d1ad23ebf1cf9a627c458fc34cedd3054ee4dfc0d96c5410c58939c7c0",
+    "tools/validate_n2o_solid_sensitivity.py": "fa890dd299182bcd35f97c637e90f8496c3ef09560dea3405b668a5d1ff61191"
+  },
+  "exampleHashes": {
+    "examples/impinging-n2o-solid/README.ko.md": "5e7509f99e1fd61f9476323832a00906ed15d23663a8dcdd1f2fee3f5a7f5397",
+    "examples/impinging-n2o-solid/cold-pr-148K-config.yaml": "a5c657e5008b9a2bd5e826e247dd74bb084b7123e626e14d9d73273041dafce1",
+    "examples/impinging-n2o-solid/cold-pr-148K.yaml": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916"
+  },
+  "evidenceHashes": {
+    "ambient_1atm-definition.json": "1cf91be803ee596ec397ab0b8bb04060d2cf7176b28d9a37efe5b0d3ec77b725",
+    "ambient_1atm-step-evidence.log": "b34d62d6db0fab648dac534b8fd738e12972854a838443b72be8a7b3fefaee72",
+    "ambient_40bar_abs-definition.json": "51069ae1c77de201d51572d9b971979a2ea62343bb02807de07104869eea6583",
+    "ambient_40bar_abs-step-evidence.log": "e4b37619efe7163eebeb7ec17dce74fef87cffc9e74327706a699e715d7403c6",
+    "benchmark-matrix.json": "c1ea909f663d702990775d6b5f41a91f9b62e400076660c85f8a287ca6f25d7f",
+    "density-sensitivity.json": "5be21822eee738aaf47b3a52bd71ed484839ddd553cb0dcedb8d78c5fec20d9b",
+    "fluid-one-step.json": "0aea4572b887ef3a4a44b98443e8ae7a85f37d6d15c8e6b46073a8e87b53b14c",
+    "fluid-recovery-analytic.json": "0d104702fd55266eb9afe92de8f084252643139a8da06dad7706cac91e0f2c5a",
+    "fluid-ten-step-limit.json": "4ea1dc1e0fcfffca0fa0e0bbc07f68f7b948e30149749a801fb5486ee597dfa3",
+    "generator-check.json": "e5c68a47c5d46e660309ddd4891418ff44eb75017b5bf34ba438033c8e0c8b4a",
+    "gpu-ten-steps.json": "234596bcf8de0b8e99ee827e010a8eb04b114918f41af66883dbbfe1c9025ba0",
+    "legacy-recovery.json": "0ba1b105cfe3e0080e00f339df8ad8b44c8e17a3a996e11a04e0509c99fab686",
+    "solid-unit.json": "41ec8bbe4d1f6231a66e4d11dc75e5b5d6c502f5209ff02216d2d6b21af2e64f",
+    "thermo-preparation.json": "6b16a082bf9eb2e4f9824d4f7f84fd828faadd3d10e4de35bb6e7df5d05599e8"
+  },
+  "historicalEvidence": "Original results/benchmarks/impinging-n2o-* artifacts refer to delivery at 3b12e1c. fluid-one-step and fluid-ten-step-limit are intermediate fluid-only runs before adding solids; their binary hashes are intentionally preserved."
+}

@@ -1,0 +1,38 @@
+{
+  "drop": {
+    "passed": true,
+    "wallSeconds": 1.3080603420003172
+  },
+  "flash-sphere": {
+    "passed": true,
+    "wallSeconds": 25.737261575999582
+  },
+  "off-explicit": {
+    "passed": true,
+    "wallSeconds": 0.6564732939996247
+  },
+  "off-omitted": {
+    "passed": true,
+    "wallSeconds": 0.6520354750000479
+  },
+  "plane": {
+    "passed": true,
+    "wallSeconds": 0.6506456489996708
+  },
+  "sphere-16": {
+    "passed": true,
+    "wallSeconds": 0.7048272439997163
+  },
+  "sphere-24": {
+    "passed": true,
+    "wallSeconds": 0.912196825999672
+  },
+  "sphere-32": {
+    "passed": true,
+    "wallSeconds": 1.3017144859995824
+  },
+  "wave": {
+    "passed": true,
+    "wallSeconds": 0.9072807510001439
+  }
+}

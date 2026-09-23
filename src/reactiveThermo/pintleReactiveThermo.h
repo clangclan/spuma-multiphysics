@@ -69,6 +69,11 @@ const char* pintle_rt_error(void* model);
 size_t pintle_rt_species_count(void* model);
 size_t pintle_rt_reaction_count(void* model);
 size_t pintle_rt_liquid_count(void* model);
+// Legacy phase arrays/count refer to at most two condensed slots. Existing
+// configurations contain liquids; solid-enabled configurations explicitly
+// label each slot without changing this POD's binary layout.
+int pintle_rt_condensed_kind_v1(void* model, size_t slot); // 0 liquid, 1 solid
+const char* pintle_rt_condensed_name_v1(void* model, size_t slot);
 size_t pintle_rt_element_count(void* model);
 const char* pintle_rt_element_name(void* model, size_t element);
 double pintle_rt_atom_coefficient(void* model, size_t species, size_t element);
@@ -117,6 +122,23 @@ int pintle_rt_recover(void* model, const double* speciesMass,
 // The caller supplies the already recovered p/T/phase partition.
 int pintle_rt_gas_enthalpies(void* model, const double* speciesMass,
                              const PintleThermoState* state, double* enthalpies);
+int pintle_rt_gas_enthalpies_capillary_v1(void* model,const double* speciesMass,
+    const PintleThermoState* state,double color,double pressureJump,double* enthalpies);
+
+// Effective partial mass enthalpies for conservative transport of total
+// species inventories. For a species split between gas and pure condensed
+// slots, the returned value is its phase-mass-weighted enthalpy. The caller
+// supplies an already recovered state; this function performs no flash and
+// leaves output unchanged on failure. A condensed-only state must still have
+// a gas-EOS root at its p/T to define enthalpies for absent species.
+int pintle_rt_total_species_enthalpies_v1(void* model, const double* speciesMass,
+                                         const PintleThermoState* state, double* enthalpies);
+// Same effective total-species enthalpies for a curved liquid/gas interface.
+// The recovered state's p is p_bar; gas/liquid EOS calls use the corresponding
+// Laplace-offset pressures. The caller supplies converged geometric color and
+// sigma*curvature. Host property preparation; no flash is performed.
+int pintle_rt_total_species_enthalpies_capillary_v1(void* model,const double* speciesMass,
+    const PintleThermoState* state,double color,double pressureJump,double* enthalpies);
 
 // Closed-cell chemical source. Total formation+thermal energy is fixed and gas
 // reaction rates are multiplied by gas volume fraction. A flash is performed

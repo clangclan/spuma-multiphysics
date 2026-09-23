@@ -11,7 +11,7 @@ int pintle_rt_set_case_context(void* p,const char* physical,const char* numerica
 }
 int pintle_rt_capabilities(void* p,PintleRealFluidCapabilities* out) {
     return protect(p,[&](Model& m){require(out,"Missing capability output");
-        *out={1,sizeof(*out),int(m.gas->type()=="Peng-Robinson"),int(m.nl>0),1,1,0,0,0,0};});
+        *out={1,sizeof(*out),int(m.gas->type()=="Peng-Robinson"),int(m.nl>0),1,1,0,int(m.cudaHem),0,0};});
 }
 int pintle_rt_real_fluid_profile(void* p,int reset,PintleRealFluidProfile* out) {
     return protect(p,[&](Model& m){require(out,"Missing real-fluid profile");*out=m.realProfile;if(reset)m.realProfile={};});

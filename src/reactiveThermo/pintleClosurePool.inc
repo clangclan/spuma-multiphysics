@@ -9,8 +9,16 @@
         for(size_t c=0;c<count;++c){
             uint64_t hash=1469598103934665603ULL;
             auto add=[&](const void* p,size_t n){auto bytes=static_cast<const unsigned char*>(p);
+                // Hash complete words to shorten the dependency chain. This
+                // selects a probe slot only: all key bytes are still compared
+                // below, so a collision can never approve reuse.
+                while(n>=sizeof(uint64_t)){uint64_t word;std::memcpy(&word,bytes,sizeof(word));
+                    hash^=word;hash*=1099511628211ULL;bytes+=sizeof(word);n-=sizeof(word);}
                 for(size_t j=0;j<n;++j){hash^=bytes[j];hash*=1099511628211ULL;}};
             add(mass.data()+c*ns,ns*sizeof(double));add(energies+c,sizeof(double));add(original+c,sizeof(*original));
+            // Mix high floating-point bits into the low power-of-two index.
+            hash^=hash>>33;hash*=0xff51afd7ed558ccdULL;
+            hash^=hash>>33;hash*=0xc4ceb9fe1a85ec53ULL;hash^=hash>>33;
             size_t slot=hash&(hashSlots.size()-1),match=SIZE_MAX;
             while(hashSlots[slot]!=SIZE_MAX){const size_t other=hashSlots[slot];
                 if(std::memcmp(mass.data()+c*ns,mass.data()+other*ns,ns*sizeof(double))==0

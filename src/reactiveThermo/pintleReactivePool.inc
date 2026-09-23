@@ -6,6 +6,13 @@ struct ClosureDeviceClient {
     decltype(&pintle_closure_scalar_run_v1) run=nullptr;
     ~ClosureDeviceClient(){if(handle)destroy(handle);if(library)dlclose(library);}
 };
+struct HemDeviceClient {
+    void* library=nullptr;void* handle=nullptr;
+    decltype(&pintle_gpu_hem_destroy_v1) destroy=nullptr;
+    decltype(&pintle_gpu_hem_run_v1) run=nullptr;
+    decltype(&pintle_gpu_hem_run_v2) runV2=nullptr;
+    ~HemDeviceClient(){if(handle)destroy(handle);if(library)dlclose(library);}
+};
 class ThermoPool {
 public:
     Model* prototype=nullptr;
@@ -30,6 +37,12 @@ public:
     std::vector<PintleClosureScalarOutputV1> gpuOutput;
     std::unique_ptr<ClosureDeviceClient> device;
     PintleClosureAccelerationProfileV1 acceleration{};
+    std::unique_ptr<HemDeviceClient> hemDevice;
+    Vector hemMass,hemEnergy;std::vector<PintleThermoState> hemState;std::vector<int> hemSuccess;
+    std::vector<PintleGpuHemCapillaryInputV2> hemCapillary;
+    const double *capillaryColor=nullptr,*capillaryJump=nullptr;
+    PintleGpuHemProfileV1 hemProfile{};
+#include "pintleGpuHemPool.inc"
 #include "pintleClosurePool.inc"
     ThermoPool(Model& source,size_t workers,size_t capacity,size_t budget) {
         prototype=&source;auto& prototype=source;
@@ -45,7 +58,14 @@ public:
         require(capacity<=(SIZE_MAX-detailBudget)/(perCell+extraPerCell),"Acceleration budget overflow");
         const size_t extra=capacity*sizeof(size_t)+(source.exactBatchReuse?slots*sizeof(size_t):0)
             +(source.cudaScalar?capacity*(sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1)+sizeof(size_t)):0);
-        const size_t scratch=detailBudget+capacity*perCell+extra;
+        const size_t hemPerCell=ns*sizeof(double)+sizeof(double)+sizeof(PintleThermoState)+sizeof(int)
+            +sizeof(PintleGpuHemCapillaryInputV2)
+            +sizeof(PintleDeviceFlash::Input)+sizeof(PintleDeviceFlash::Output)
+            +sizeof(size_t); // reserve the optional CUDA host permutation buffer
+        require(!source.cudaHem||capacity<=(SIZE_MAX-sizeof(PintleDeviceFlash::Model))/hemPerCell,"HEM allocation overflow");
+        const size_t hemExtra=source.cudaHem?capacity*hemPerCell+sizeof(PintleDeviceFlash::Model):0;
+        require(hemExtra<=SIZE_MAX-detailBudget-capacity*perCell-extra,"HEM total allocation overflow");
+        const size_t scratch=detailBudget+capacity*perCell+extra+hemExtra;
         require(scratch<=budget,"Batch scratch exceeds configured budget");
         mass.resize(capacity*ns);states.resize(capacity);drifts.resize(capacity);failures.resize(capacity);order.resize(capacity);workerIds.resize(capacity);
         representative.resize(capacity);if(source.exactBatchReuse)hashSlots.resize(slots);
@@ -59,6 +79,21 @@ public:
             require(create&&device->destroy&&device->run,"Incomplete CUDA scalar ABI");char failure[1024]{};
             device->handle=create(capacity,failure,sizeof(failure));require(device->handle,failure);
             acceleration.deviceBytes=capacity*(sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1));}
+        hemProfile.abiVersion=1;hemProfile.structBytes=sizeof(hemProfile);hemProfile.hostBytes=hemExtra;
+        if(source.cudaHem){hemMass.resize(capacity*ns);hemEnergy.resize(capacity);hemState.resize(capacity);hemSuccess.resize(capacity);
+            hemCapillary.resize(capacity);
+            hemDevice=std::make_unique<HemDeviceClient>();hemDevice->library=dlopen(source.hemLibrary.c_str(),RTLD_NOW|RTLD_LOCAL);
+            require(hemDevice->library,"Cannot open CUDA HEM library for pool");
+            require(Model::queryHemNumericalPolicy(hemDevice->library)==source.hemNumericalPolicy,
+                "CUDA HEM numerical policy changed before pool creation");
+            auto create=reinterpret_cast<decltype(&pintle_gpu_hem_create_v1)>(dlsym(hemDevice->library,"pintle_gpu_hem_create_v1"));
+            hemDevice->destroy=reinterpret_cast<decltype(hemDevice->destroy)>(dlsym(hemDevice->library,"pintle_gpu_hem_destroy_v1"));
+            hemDevice->run=reinterpret_cast<decltype(hemDevice->run)>(dlsym(hemDevice->library,"pintle_gpu_hem_run_v1"));
+            hemDevice->runV2=reinterpret_cast<decltype(hemDevice->runV2)>(dlsym(hemDevice->library,"pintle_gpu_hem_run_v2"));
+            require(create&&hemDevice->destroy&&hemDevice->run&&hemDevice->runV2,"Incomplete CUDA HEM ABI");char failure[1024]{};
+            const auto image=source.deviceHemModel();hemDevice->handle=create(&image,sizeof(image),capacity,failure,sizeof(failure));require(hemDevice->handle,failure);
+            hemProfile.deviceBytes=sizeof(image)+PINTLE_GPU_HEM_PHASE_CACHE_BYTES_V1
+                +capacity*(sizeof(PintleDeviceFlash::Input)+sizeof(PintleDeviceFlash::Output));}
         if(detailBudget)for(auto& d:failureDetails)d.reserve(65536);
         for(size_t i=0;i<workers;++i) {
             auto model=std::make_unique<Model>(prototype.configuration);
@@ -68,6 +103,9 @@ public:
             model->scalarRecovery=prototype.scalarRecovery;model->structuredChemicalJacobian=prototype.structuredChemicalJacobian;
             model->chemicalLinearSolver=prototype.chemicalLinearSolver;model->recoveryMode=prototype.recoveryMode;
             model->exactBatchReuse=prototype.exactBatchReuse;model->cudaScalar=prototype.cudaScalar;model->scalarLibrary=prototype.scalarLibrary;
+            model->cudaHem=prototype.cudaHem;model->hemCpuFallback=prototype.hemCpuFallback;model->hemLibrary=prototype.hemLibrary;
+            model->hemAnalyticJacobian=prototype.hemAnalyticJacobian;
+            model->hemNumericalPolicy=prototype.hemNumericalPolicy;
             model->recoveryTrace.enabled=prototype.recoveryTrace.enabled;model->refreshPolicyHash();
             require(model->policyHash==prototype.policyHash,"Worker numerical policy hash mismatch");models.push_back(std::move(model));
         }
@@ -113,20 +151,32 @@ public:
         }
     }
     void batch(PintleBatchToken token,int op,size_t cells,size_t stride,double* q,const double* e,
-        PintleThermoState* output,double interval,double relative,double absolute,double* drift) {
+        PintleThermoState* output,double interval,double relative,double absolute,double* drift,
+        const double* color=nullptr,const double* pressureJump=nullptr) {
         ProfileTimer timer(summary.batchWallSeconds);++summary.attemptedBatches;
         struct Outcome {PintlePoolSummaryV21& s;bool success=false;~Outcome(){if(success)++s.acceptedBatches;else ++s.failedBatches;}} outcome{summary};
         require(token.attemptId&&token.contentVersion&&token.attemptId>=last.attemptId
             &&token.contentVersion>last.contentVersion
             &&(token.attemptId>last.attemptId||token.stageId>=last.stageId),"Stale batch attempt/stage/content token");
         require((op>=0&&op<=3)&&cells&&cells<=profile.capacity&&stride>=ns&&q&&e&&output&&drift,"Invalid batch buffers/count/operation");
+        require((color==nullptr)==(pressureJump==nullptr),"Incomplete capillary batch inputs");
+        if(color)require((op==0||op==2)&&hemDevice&&!prototype->hemCpuFallback,
+            "Capillary recovery requires strict full CUDA HEM without CPU fallback");
         require(models[0]->physicalHash==prototype->physicalHash&&models[0]->policyHash==prototype->policyHash,"Pool model/policy changed after creation");
         detailCount=0;for(auto& d:failureDetails)d.clear();
         last=token;count=cells;summary.attemptedCells+=count;operation=op;energies=e;dt=interval;rtol=relative;atol=absolute;
-        for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);states[c]=output[c];
-            drifts[c]=0;failures[c][0]=0;order[c]=c;}
+        capillaryColor=color;capillaryJump=pressureJump;
+        // In strict full-HEM recovery every unique seed is gathered directly
+        // into the transactional device buffer below.  No CPU/scalar path can
+        // observe the cell-indexed staging array, and caller output is still
+        // untouched until the all-cell failure scan has passed.
+        const bool directHemSeeds=(operation==0||operation==2)&&hemDevice&&!prototype->hemCpuFallback&&!device;
+        for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);
+            if(!directHemSeeds)states[c]=output[c];
+            if(operation!=0)drifts[c]=0;
+            failures[c][0]=0;}
         // Scheduling only: each cell retains its own source interval and norm.
-        classify(output);prepareDevice();
+        classify(output);prepareDevice();prepareFullDevice(output,directHemSeeds);
         std::sort(order.begin(),order.begin()+jobCount,[&](size_t a,size_t b){
             if(states[a].activeLiquids!=states[b].activeLiquids)return states[a].activeLiquids>states[b].activeLiquids;
             if(states[a].iterations!=states[b].iterations)return states[a].iterations>states[b].iterations;
@@ -136,20 +186,33 @@ public:
         // retain each original cell's failure provenance and bounded details.
         jobCount=0;
         for(size_t c=0;c<count;++c)if(representative[c]!=c){const size_t r=representative[c];
-            if(failures[r][0]){order[jobCount++]=c;++acceleration.failedRepresentativeRetries;}
+            if(failures[r][0]){
+                if(hemDevice&&!prototype->hemCpuFallback){failures[c]=failures[r];workerIds[c]=workerIds[r];}
+                else {order[jobCount++]=c;++acceleration.failedRepresentativeRetries;}
+            }
             else {states[c]=states[r];workerIds[c]=workerIds[r];++acceleration.reusedCells;}}
         dispatch();
         ++profile.batches;profile.cells+=count;
         size_t first=count;
         for(size_t c=0;c<count;++c)if(failures[c][0]) {++profile.failures;if(first==count)first=c;}
         if(first<count)throw std::runtime_error("Batch cell "+std::to_string(first)+": "+failures[first].data());
-        double maximum=0;for(size_t c=0;c<count;++c)maximum=std::max(maximum,drifts[c]);
-        for(size_t c=0;c<count;++c) {std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);output[c]=states[c];}
+        double maximum=0;if(operation!=0)for(size_t c=0;c<count;++c)maximum=std::max(maximum,drifts[c]);
+        for(size_t c=0;c<count;++c) {
+            // Operation-0 recovery consumes immutable conserved mass. Every
+            // other mode retains the staged transactional mass commit.
+            if(operation!=0)std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);
+            output[c]=states[c];}
         *drift=maximum;outcome.success=true;
     }
 };
 }
 extern "C" {
+int pintle_rt_pool_gpu_hem_profile_v1(void* pool,PintleGpuHemProfileV1* out) {
+    if(!pool||!out||out->abiVersion!=1||out->structBytes!=sizeof(*out))return -1;
+    auto& p=*static_cast<ThermoPool*>(pool);std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
+    if(!lock.owns_lock())return 2;
+    *out=p.hemProfile;return 0;
+}
 int pintle_rt_pool_acceleration_profile_v1(void* pool,PintleClosureAccelerationProfileV1* out) {
     if(!pool||!out||out->abiVersion!=1||out->structBytes!=sizeof(*out))return -1;
     auto& p=*static_cast<ThermoPool*>(pool);std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
@@ -204,5 +267,22 @@ int pintle_rt_pool_batch(void* pool,PintleBatchToken token,int op,size_t count,s
     try {p.batch(token,op,count,stride,q,e,state,dt,rtol,atol,drift);p.error[0]=0;return 0;}
     catch(const std::exception& ex){std::snprintf(p.error.data(),p.error.size(),"%s",ex.what());return 1;}
     catch(...){std::snprintf(p.error.data(),p.error.size(),"Unknown pool batch failure");return 1;}
+}
+int pintle_rt_pool_capillary_batch_v1(void* pool,PintleBatchToken token,int equilibrium,
+    size_t count,size_t stride,const double* q,const double* bulkEnergy,
+    const double* color,const double* pressureJump,PintleThermoState* state) {
+    if(!pool||!q||!bulkEnergy||!color||!pressureJump||!state
+       ||(equilibrium!=0&&equilibrium!=1))return -1;
+    auto& p=*static_cast<ThermoPool*>(pool);
+    std::unique_lock<std::mutex> lock(p.entry,std::try_to_lock);
+    if(!lock.owns_lock())return 2;
+    try {
+        double drift=0;
+        // Recovery operations 0 and 2 read q but never commit species mass.
+        p.batch(token,equilibrium?0:2,count,stride,const_cast<double*>(q),bulkEnergy,
+            state,0,0,0,&drift,color,pressureJump);
+        p.error[0]=0;return 0;
+    }catch(const std::exception& ex){std::snprintf(p.error.data(),p.error.size(),"%s",ex.what());return 1;}
+    catch(...){std::snprintf(p.error.data(),p.error.size(),"Unknown capillary batch failure");return 1;}
 }
 }

@@ -1,0 +1,418 @@
+{
+  "schema": 1,
+  "cellsPerCase": 256000,
+  "requestedAcceptedSteps": 2,
+  "scope": "short integration smoke, not jet collision or breakup validation",
+  "cases": {
+    "ambient_1atm": {
+      "passed": true,
+      "steps": [
+        {
+          "time": 1.2932586968105259e-08,
+          "dt": 1.2932586968105259e-08,
+          "retries": 1.0,
+          "massResidual": 8.14265194213996e-15,
+          "energyResidual": 7.387477417051161e-14,
+          "momentumResidual": 9.019033052418009e-21,
+          "globalElementResidual": 9.755438877645564e-15,
+          "frozenLiquidResidual": 0.0,
+          "speciesResidual": 9.472403709361845e-15,
+          "elementDrift": 0.0,
+          "minP": 85205.41613764603,
+          "maxP": 101324.99999999997,
+          "minT": 181.26432982997824,
+          "maxT": 293.15,
+          "maxMach": 0.026551150949664298,
+          "minAlphaGas": 0.9999999999999997,
+          "maxAlphaGas": 1.0000000000000004,
+          "maxVolumeResidual": 4.440892098500626e-16,
+          "maxUVResidual": 6.551539785371081e-10,
+          "maxMuResidual": 0.0,
+          "maxMechanicalResidual": 0.0,
+          "seconds": 3.035232025
+        },
+        {
+          "time": 3.0429011725072056e-08,
+          "dt": 1.74964247569668e-08,
+          "retries": 0.0,
+          "massResidual": 1.1136546724696072e-14,
+          "energyResidual": 1.7344504340599356e-13,
+          "momentumResidual": 2.204652523924402e-20,
+          "globalElementResidual": 1.3828486174753814e-14,
+          "frozenLiquidResidual": 0.0,
+          "speciesResidual": 1.3427418925667134e-14,
+          "elementDrift": 0.0,
+          "minP": 96742.17054665778,
+          "maxP": 101324.99999999997,
+          "minT": 169.467554872962,
+          "maxT": 293.15,
+          "maxMach": 0.05189209504017478,
+          "minAlphaGas": 0.9997315459121708,
+          "maxAlphaGas": 1.0000000000000004,
+          "maxVolumeResidual": 8.827744091277623e-10,
+          "maxUVResidual": 4.515261672910343e-10,
+          "maxMuResidual": 8.416119356979834e-09,
+          "maxMechanicalResidual": 0.0,
+          "seconds": 2.117000693
+        }
+      ],
+      "stepTimings": [
+        {
+          "time": 1.2932586968105259e-08,
+          "cflSeconds": 0.042845637,
+          "backupSeconds": 0.021565544,
+          "transportSeconds": 2.058163161,
+          "recoverySeconds": 0.905942553,
+          "sourceSeconds": 0.0,
+          "conservationSeconds": 0.001252701,
+          "diagnosticsSeconds": 0.001933405,
+          "nestedBatchPackSeconds": 0.009840886000000004,
+          "nestedBatchCallSeconds": 0.8194883009999989,
+          "nestedBatchScatterSeconds": 0.0,
+          "nestedScalarPropertySeconds": 1.998054878,
+          "otherSeconds": 0.0035290239999999024
+        },
+        {
+          "time": 3.0429011725072056e-08,
+          "cflSeconds": 0.028258395,
+          "backupSeconds": 0.015365286,
+          "transportSeconds": 1.368329098,
+          "recoverySeconds": 0.701880858,
+          "sourceSeconds": 0.0,
+          "conservationSeconds": 0.001181362,
+          "diagnosticsSeconds": 0.001944018,
+          "nestedBatchPackSeconds": 0.009614685999999994,
+          "nestedBatchCallSeconds": 0.6266330289999994,
+          "nestedBatchScatterSeconds": 0.0,
+          "nestedScalarPropertySeconds": 1.3299361950000002,
+          "otherSeconds": 4.167599999989032e-05
+        }
+      ],
+      "gpuSteps": [
+        {
+          "time": 1.2932586968105259e-08,
+          "batches": 252.0,
+          "submitted": 1024000.0,
+          "succeeded": 1024000.0,
+          "cpuFallbacks": 0.0,
+          "deviceFailures": 0.0,
+          "phaseEvaluations": 4513104.0,
+          "residualEvaluations": 197192.0,
+          "analyticJacobians": 0.0,
+          "finiteDifferenceJacobians": 26808.0,
+          "wallSeconds": 0.7936874870000004,
+          "kernelSeconds": 0.7488336859345441,
+          "copySeconds": 0.03278924810886383
+        },
+        {
+          "time": 3.0429011725072056e-08,
+          "batches": 252.0,
+          "submitted": 1024000.0,
+          "succeeded": 1024000.0,
+          "cpuFallbacks": 0.0,
+          "deviceFailures": 0.0,
+          "phaseEvaluations": 4363712.0,
+          "residualEvaluations": 121304.0,
+          "analyticJacobians": 0.0,
+          "finiteDifferenceJacobians": 15352.0,
+          "wallSeconds": 0.600936087,
+          "kernelSeconds": 0.5562422443032252,
+          "copySeconds": 0.03273344022035599
+        }
+      ],
+      "capillarySteps": [
+        {
+          "time": 1.2932586968105259e-08,
+          "area": 7.99999999999999e-06,
+          "surfaceEnergy": 1.6461818719222766e-08,
+          "liquidMass": 0.0,
+          "closureResidual": 0.0,
+          "recoveryCalls": 4.0,
+          "outerIterations": 5.0
+        },
+        {
+          "time": 3.0429011725072056e-08,
+          "area": 8.000518256356653e-06,
+          "surfaceEnergy": 1.646288514949695e-08,
+          "liquidMass": 7.055863589038078e-10,
+          "closureResidual": 2.6573092142510857e-11,
+          "recoveryCalls": 6.0,
+          "outerIterations": 9.0
+        }
+      ],
+      "capillaryProfile": [
+        {
+          "enabled": 1.0,
+          "geometryBuilds": 27.0,
+          "geometryKernels": 54.0,
+          "faceFluxBuilds": 3904000.0,
+          "workspaceBytes": 20634628.0,
+          "closureIterations": 9.0
+        }
+      ],
+      "physics": [
+        {
+          "chemistry": 0.0,
+          "combustion": 0.0,
+          "phaseChange": "equilibrium",
+          "viscosity": 1.0,
+          "heatConduction": 1.0,
+          "speciesDiffusion": 0.0,
+          "turbulence": "WALE-stress-v1",
+          "turbulentHeatFlux": 1.0,
+          "turbulentSpeciesMixing": 1.0,
+          "surfaceTension": 1.0,
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "totalEnergy": 1.0,
+          "thermodynamicRecovery": 1.0,
+          "frozenLiquidFields": 0.0,
+          "transportedLiquidFields": 1.0
+        }
+      ],
+      "waleScalars": [
+        {
+          "fieldUploads": 13.0,
+          "fieldUploadBytes": 72686592.0,
+          "workspaceBytes": 11013120.0,
+          "hostEnthalpyCells": 1280000.0,
+          "hostPropertySeconds": 3.330588596,
+          "fluxBackend": "cuda"
+        }
+      ],
+      "runtime": {
+        "schema": 1,
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/benchmark/thermo/cold-pr-config.yaml",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "numericalPolicyHash": "84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781",
+        "modelFingerprint": "001fd5f719f4b75af7e706955a35b36f792895fcdcb5b8145d1bc87403b44fc6",
+        "eos": "Peng-Robinson",
+        "closureBackend": "cuda",
+        "chemistryBackend": "cpu",
+        "deviceFullClosure": true,
+        "deviceChemistryIntegration": false,
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "solidN2O": false,
+        "enforceSpeciesTemperatureBounds": true,
+        "exactBatchReuse": false,
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "hemNumericalPolicy": "legacy-fp64-separate-rn",
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental"
+      },
+      "logPath": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_capillary_20260923/benchmark/ambient_1atm/solver-final.log",
+      "logSha256": "49ba8e547002b480c51294ce555dd48cfca3bd6a7acce86cf2bf6eaf7539510b",
+      "definitionSha256": "001abfa036a993d071bddfb0581fcfed58ebfa57125fbfbab495f63f3f278ff9"
+    },
+    "ambient_40bar_abs": {
+      "passed": true,
+      "steps": [
+        {
+          "time": 2.563574340296437e-08,
+          "dt": 2.563574340296437e-08,
+          "retries": 0.0,
+          "massResidual": -3.8354220865141435e-15,
+          "energyResidual": 5.782025669342041e-15,
+          "momentumResidual": 1.7048698395254062e-20,
+          "globalElementResidual": 5.037584495165034e-15,
+          "frozenLiquidResidual": 0.0,
+          "speciesResidual": 4.891493393548251e-15,
+          "elementDrift": 0.0,
+          "minP": 3990270.015646694,
+          "maxP": 3999999.9999999977,
+          "minT": 291.3491370199004,
+          "maxT": 293.15,
+          "maxMach": 0.0006721197425905795,
+          "minAlphaGas": 0.9999999999999997,
+          "maxAlphaGas": 1.0000000000000004,
+          "maxVolumeResidual": 4.440892098500626e-16,
+          "maxUVResidual": 6.471055519293633e-11,
+          "maxMuResidual": 0.0,
+          "maxMechanicalResidual": 0.0,
+          "seconds": 2.585725919
+        },
+        {
+          "time": 5.12985537326802e-08,
+          "dt": 2.566281032971583e-08,
+          "retries": 0.0,
+          "massResidual": -4.1324206121277804e-15,
+          "energyResidual": 9.968639386968838e-15,
+          "momentumResidual": 3.439303895921195e-20,
+          "globalElementResidual": 7.98178338070792e-15,
+          "frozenLiquidResidual": 0.0,
+          "speciesResidual": 7.750307969866766e-15,
+          "elementDrift": 0.0,
+          "minP": 3979373.744285027,
+          "maxP": 3999999.9999999977,
+          "minT": 289.4835614463283,
+          "maxT": 293.15,
+          "maxMach": 0.001285663418693514,
+          "minAlphaGas": 0.9999999999999997,
+          "maxAlphaGas": 1.0000000000000004,
+          "maxVolumeResidual": 4.440892098500626e-16,
+          "maxUVResidual": 6.58369073125199e-13,
+          "maxMuResidual": 0.0,
+          "maxMechanicalResidual": 0.0,
+          "seconds": 3.798391717
+        }
+      ],
+      "stepTimings": [
+        {
+          "time": 2.563574340296437e-08,
+          "cflSeconds": 0.028539369000000002,
+          "backupSeconds": 0.021184625999999998,
+          "transportSeconds": 1.418615956,
+          "recoverySeconds": 1.114300222,
+          "sourceSeconds": 0.0,
+          "conservationSeconds": 0.001201658,
+          "diagnosticsSeconds": 0.00183325,
+          "nestedBatchPackSeconds": 0.0053914509999999985,
+          "nestedBatchCallSeconds": 1.062705009,
+          "nestedBatchScatterSeconds": 0.0,
+          "nestedScalarPropertySeconds": 1.380338146,
+          "otherSeconds": 5.083799999977827e-05
+        },
+        {
+          "time": 5.12985537326802e-08,
+          "cflSeconds": 0.028530715999999998,
+          "backupSeconds": 0.015388015,
+          "transportSeconds": 1.40542177,
+          "recoverySeconds": 2.345822866,
+          "sourceSeconds": 0.0,
+          "conservationSeconds": 0.001301619,
+          "diagnosticsSeconds": 0.001882245,
+          "nestedBatchPackSeconds": 0.005518370000000001,
+          "nestedBatchCallSeconds": 2.295110239000001,
+          "nestedBatchScatterSeconds": 0.0,
+          "nestedScalarPropertySeconds": 1.36647143,
+          "otherSeconds": 4.4485999999657874e-05
+        }
+      ],
+      "gpuSteps": [
+        {
+          "time": 2.563574340296437e-08,
+          "batches": 126.0,
+          "submitted": 512000.0,
+          "succeeded": 512000.0,
+          "cpuFallbacks": 0.0,
+          "deviceFailures": 0.0,
+          "phaseEvaluations": 2540944.0,
+          "residualEvaluations": 800336.0,
+          "analyticJacobians": 0.0,
+          "finiteDifferenceJacobians": 37672.0,
+          "wallSeconds": 1.0496298129999997,
+          "kernelSeconds": 1.0245441929399965,
+          "copySeconds": 0.019102559991180896
+        },
+        {
+          "time": 5.12985537326802e-08,
+          "batches": 126.0,
+          "submitted": 512000.0,
+          "succeeded": 512000.0,
+          "cpuFallbacks": 0.0,
+          "deviceFailures": 0.0,
+          "phaseEvaluations": 3543176.0,
+          "residualEvaluations": 2485656.0,
+          "analyticJacobians": 0.0,
+          "finiteDifferenceJacobians": 114536.0,
+          "wallSeconds": 2.2814708420000014,
+          "kernelSeconds": 2.2549077031314386,
+          "copySeconds": 0.020416959948837736
+        }
+      ],
+      "capillarySteps": [
+        {
+          "time": 2.563574340296437e-08,
+          "area": 7.99999999999999e-06,
+          "surfaceEnergy": 1.6461818719222766e-08,
+          "liquidMass": 0.0,
+          "closureResidual": 0.0,
+          "recoveryCalls": 3.0,
+          "outerIterations": 3.0
+        },
+        {
+          "time": 5.12985537326802e-08,
+          "area": 7.99999999999999e-06,
+          "surfaceEnergy": 1.6461818719222766e-08,
+          "liquidMass": 0.0,
+          "closureResidual": 0.0,
+          "recoveryCalls": 5.0,
+          "outerIterations": 5.0
+        }
+      ],
+      "capillaryProfile": [
+        {
+          "enabled": 1.0,
+          "geometryBuilds": 20.0,
+          "geometryKernels": 40.0,
+          "faceFluxBuilds": 3123200.0,
+          "workspaceBytes": 20634628.0,
+          "closureIterations": 5.0
+        }
+      ],
+      "physics": [
+        {
+          "chemistry": 0.0,
+          "combustion": 0.0,
+          "phaseChange": "equilibrium",
+          "viscosity": 1.0,
+          "heatConduction": 1.0,
+          "speciesDiffusion": 0.0,
+          "turbulence": "WALE-stress-v1",
+          "turbulentHeatFlux": 1.0,
+          "turbulentSpeciesMixing": 1.0,
+          "surfaceTension": 1.0,
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "totalEnergy": 1.0,
+          "thermodynamicRecovery": 1.0,
+          "frozenLiquidFields": 0.0,
+          "transportedLiquidFields": 1.0
+        }
+      ],
+      "waleScalars": [
+        {
+          "fieldUploads": 11.0,
+          "fieldUploadBytes": 59470848.0,
+          "workspaceBytes": 11013120.0,
+          "hostEnthalpyCells": 1024000.0,
+          "hostPropertySeconds": 2.7494132830000004,
+          "fluxBackend": "cuda"
+        }
+      ],
+      "runtime": {
+        "schema": 1,
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "ab681b408e45b9abb5a005a3fb72063db1d89496b14988a135d5eed934f0327f",
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/benchmark/thermo/cold-pr-config.yaml",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "numericalPolicyHash": "84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781",
+        "modelFingerprint": "001fd5f719f4b75af7e706955a35b36f792895fcdcb5b8145d1bc87403b44fc6",
+        "eos": "Peng-Robinson",
+        "closureBackend": "cuda",
+        "chemistryBackend": "cpu",
+        "deviceFullClosure": true,
+        "deviceChemistryIntegration": false,
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "solidN2O": false,
+        "enforceSpeciesTemperatureBounds": true,
+        "exactBatchReuse": false,
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so",
+        "hemLibrarySha256": "2ac81fc1839af5699fd2645b195b9ee905ab29f12b336854400e1e0220dc5d76",
+        "hemNumericalPolicy": "legacy-fp64-separate-rn",
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental"
+      },
+      "logPath": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_capillary_20260923/benchmark/ambient_40bar_abs/solver-final.log",
+      "logSha256": "185aa5d53684ab75ac92ff429d120cd3887ea834c710819ef8e9b1b7b9c8c533",
+      "definitionSha256": "2abfa67b18f2cbb022cda377889754f8926d4345aa59694f992f6a99aaef78c8"
+    }
+  },
+  "primaryBreakupValidated": false,
+  "passed": true
+}

@@ -7,6 +7,7 @@
 #include "pintleReactiveThermo.h"
 #include "pintleRecovery.h"
 #include "pintleClosureAcceleration.h"
+#include "pintleGpuHem.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleCheckpointIdentity.h"
@@ -21,6 +22,8 @@
 #include <sstream>
 #include "pintleReactiveTransport.h"
 #include "pintleTransportV21.h"
+#include "pintleTurbulence.h"
+#include "pintleCapillary.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -35,10 +38,42 @@
 using namespace Foam;
 namespace {
 using Array=std::vector<double>;
-struct CellState : PintleThermoState {PintleMechanicalState mechanical{};};
-using States=std::vector<CellState>;
+#include "reactiveStates.H"
 using Gradient=std::array<double,9>;
+struct StepTimings {
+    double cfl=0,backup=0,transport=0,recovery=0,source=0,conservation=0,diagnostics=0;
+    // Batch values are nested inside recovery/source. Scalar properties are
+    // nested inside transport/CFL. Neither is additive to the total timings.
+    double batchPack=0,batchCall=0,batchScatter=0,scalarProperties=0;
+};
+struct AddElapsed {
+    double& total;
+    std::chrono::steady_clock::time_point start=std::chrono::steady_clock::now();
+    const double* nested;double nestedStart;
+    explicit AddElapsed(double& value,const double* child=nullptr)
+      :total(value),nested(child),nestedStart(child?*child:0){}
+    ~AddElapsed(){total+=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count()
+        -(nested?*nested-nestedStart:0);}
+};
 void demand(bool ok,const std::string& message) {if(!ok) throw std::runtime_error(message);}
+
+// HEM never mutates the mechanical subobject. Preserve only the active state
+// for its rollback/RK seed; mechanical-equilibrium cases retain the full copy.
+class SavedStates {
+    bool mechanical_;
+    States full_;
+    std::vector<PintleThermoState> thermo_;
+public:
+    SavedStates(const States& states,bool mechanical):mechanical_(mechanical) {
+        if(mechanical_)full_=states;
+        else {thermo_.reserve(states.size());for(size_t c=0;c<states.size();++c)thermo_.push_back(states[c]);}
+    }
+    void restore(States& states)const {
+        if(mechanical_){states=full_;return;}
+        demand(states.size()==thermo_.size(),"State backup size mismatch");
+        for(size_t c=0;c<states.size();++c)static_cast<PintleThermoState&>(states[c])=thermo_[c];
+    }
+};
 
 template<class T> std::vector<T> host(const UList<T>& input)
 {
@@ -77,10 +112,22 @@ public:
     std::vector<Face> faces;
     double viscosity,conductivity,diffusivity,waveFactor,chemicalRtol,chemicalAtol;
     std::vector<size_t> liquidSpecies;
-    bool chemistry,mechanical,frozen;
+    std::vector<int> condensedKinds;
+    std::vector<std::string> condensedNames;
+    bool chemistry,mechanical,frozen,wale,capillary,liquidInventory;
+    double waleCw,turbulentPrandtl,turbulentSchmidt;
+    double sigma,capillaryCfl,capillaryGeometryTolerance;
+    mutable Array interfaceColor,interfaceCurvature,surfaceEnergy,interfaceJump;
+    Array fixedColor;
+    mutable uint64_t capillaryRecoveries=0,capillaryIterations=0;
+    mutable double capillaryClosureResidual=0;
     std::unique_ptr<void,decltype(&pintle_transport_destroy)> transport{nullptr,&pintle_transport_destroy};
     mutable std::vector<PintleTransportState> transportStates;
     mutable Array transportGasY,transportGasH;
+    mutable Array transportScalarCp,transportScalarH;
+    Array fixedScalarCp,fixedScalarH;
+    mutable uint64_t scalarPropertyCells=0;
+    mutable double scalarPropertySeconds=0;
     mutable std::vector<PintleGasPartition> transportPartition;
     bool deviceGasProperties=false;
     mutable std::vector<PintleTransportPrimitive> transportPrimitive;
@@ -94,15 +141,19 @@ public:
     size_t batchCells=64;
     mutable Array batchQ,batchEnergy;
     mutable std::vector<PintleThermoState> batchStates;
+    mutable StepTimings timings;
     Flow(void* t,size_t cells,Array volumes,const dictionary& dict,const ReactivePhysics& physics)
       :thermo(t),physicalSpecies(pintle_rt_species_count(t)),
        ns(physicalSpecies*(dict.get<word>("closure")=="mechanicalEquilibrium"?2:1)),
-       nv(ns+4+(physics.mechanical?2:(physics.frozen?pintle_rt_liquid_count(t):0))),nc(cells),volume(std::move(volumes)),
+       nv(ns+4+(physics.mechanical?2:((physics.frozen||physics.surfaceTension)?pintle_rt_liquid_count(t):0))),nc(cells),volume(std::move(volumes)),
        viscosity(physics.viscosity),conductivity(physics.conductivity),diffusivity(physics.diffusivity),
        waveFactor(dict.getOrDefault<scalar>("waveSpeedFactor",1.1)),
        chemicalRtol(dict.getOrDefault<scalar>("chemicalRelativeTolerance",1e-8)),
        chemicalAtol(dict.getOrDefault<scalar>("chemicalAbsoluteTolerance",1e-14)),
-       chemistry(physics.chemistry),mechanical(physics.mechanical),frozen(physics.frozen)
+       chemistry(physics.chemistry),mechanical(physics.mechanical),frozen(physics.frozen),
+       wale(physics.wale),capillary(physics.surfaceTension),liquidInventory(physics.frozen||physics.surfaceTension),waleCw(physics.waleCw),
+       turbulentPrandtl(physics.turbulentPrandtl),turbulentSchmidt(physics.turbulentSchmidt),
+       sigma(physics.sigma),capillaryCfl(physics.capillaryCfl),capillaryGeometryTolerance(physics.capillaryGeometryTolerance)
     {
         demand(ns>0&&nc>0,"Empty model/mesh");
         requestedTransport=dict.getOrDefault<word>("transportBackend","cpu");
@@ -134,28 +185,58 @@ public:
                &&std::isfinite(waveFactor),"Invalid transport or wave-speed control");
         demand(diffusivity==0||pintle_rt_ideal_gas(thermo),
                "Common-D Fick diffusion requires the ideal-gas model; nonideal thermodynamic diffusion factors are not implemented");
-        for(size_t i=0;i<pintle_rt_liquid_count(thermo);++i) liquidSpecies.push_back(pintle_rt_liquid_species(thermo,i));
+        for(size_t i=0;i<pintle_rt_liquid_count(thermo);++i) {
+            liquidSpecies.push_back(pintle_rt_liquid_species(thermo,i));
+            const int kind=pintle_rt_condensed_kind_v1(thermo,i);const char* name=pintle_rt_condensed_name_v1(thermo,i);
+            demand((kind==0||kind==1)&&name&&name[0],"Invalid condensed-phase metadata");
+            condensedKinds.push_back(kind);condensedNames.emplace_back(name);
+        }
+        demand(!capillary||(condensedKinds.size()==1&&condensedKinds[0]==0),
+            "Capillary coupling requires one liquid phase; solid phases are unsupported");
         demand(!chemistry||pintle_rt_reaction_count(thermo)>0,"Chemistry requested with a nonreacting mechanism");
         for(double V:volume) demand(std::isfinite(V)&&V>0,"Invalid cell volume");
         std::ostringstream physical,numerical;physical<<std::setprecision(17)<<"closure="<<(mechanical?"mechanicalEquilibrium":"HEM")
             <<";chemistry="<<chemistry<<";viscosity="<<viscosity<<";conductivity="<<conductivity<<";commonD="<<diffusivity;
         if(frozen)physical<<";phaseChange=frozen";
+        if(capillary)physical<<";interface=diffuse-liquid-inventory-v1;surfaceEnergy=constant-sigma-area;capillaryPressure=phase-split-v1;sigma="<<sigma;
+        if(wale) {
+            physical<<";turbulence=WALE-stress-v1;Cw="<<waleCw<<";filter=cubeRootVolume";
+            if(turbulentPrandtl>0||turbulentSchmidt>0)
+                physical<<";sgsScalarClosure=total-species-enthalpy-v1;Prt="<<turbulentPrandtl<<";Sct="<<turbulentSchmidt;
+            else physical<<";sgsScalarClosure=none";
+            physical<<";sgsK=none";
+        }
         numerical<<std::setprecision(17)<<"chemicalRtol="<<chemicalRtol<<";chemicalAtol="<<chemicalAtol<<";waveFactor="<<waveFactor
             <<";transportBackend="<<dict.getOrDefault<word>("transportBackend","cpu")
             <<";transportGasProperties="<<dict.getOrDefault<word>("transportGasProperties","auto");
+        if(capillary)numerical<<";capillaryFlux=contact-conservative-stress-v1;capillaryCfl="<<capillaryCfl
+            <<";capillaryGeometryTolerance="<<capillaryGeometryTolerance;
         check(pintle_rt_set_case_context(t,physical.str().c_str(),numerical.str().c_str()),"Case model/policy identity");
         const label workers=dict.getOrDefault<label>("thermoWorkers",1),batch=dict.getOrDefault<label>("thermoBatchCells",64);
         demand(workers>0&&workers<=64&&batch>0,"Invalid thermo worker/batch limits");batchCells=std::min(nc,size_t(batch));
-        const bool reuse=dict.getOrDefault<bool>("thermoExactReuse",!mechanical&&!chemistry&&!frozen);
+        const bool reuse=dict.getOrDefault<bool>("thermoExactReuse",!mechanical&&!chemistry&&!frozen&&!capillary);
         const word scalarBackend=dict.getOrDefault<word>("closureScalarBackend","cpu");
         demand(scalarBackend=="cpu"||scalarBackend=="cuda","Unknown closureScalarBackend");
-        demand(!(reuse||scalarBackend=="cuda")||(!mechanical&&!chemistry&&!frozen),
+        demand(!(reuse||scalarBackend=="cuda")||(!mechanical&&!chemistry&&!frozen&&!capillary),
             "Closure acceleration currently requires nonreacting HEM equilibrium");
         fileName scalarLibrary(dict.getOrDefault<fileName>("closureScalarLibrary","libpintleReactiveTransport.so"));scalarLibrary.expand();
         check(pintle_rt_set_closure_acceleration_v1(t,reuse,scalarBackend=="cuda",scalarLibrary.c_str()),"Closure acceleration policy");
+        const word fullBackend=dict.getOrDefault<word>("closureBackend","cpu");
+        demand(fullBackend=="cpu"||fullBackend=="cuda","Unknown closureBackend");
+        demand(fullBackend!="cuda"||(!mechanical&&!chemistry&&scalarBackend=="cpu"),
+            "Full CUDA closure requires nonreacting HEM and closureScalarBackend cpu");
+        fileName hemLibrary(dict.getOrDefault<fileName>("closureLibrary","libpintleReactiveTransport.so"));hemLibrary.expand();
+        check(pintle_rt_set_gpu_hem_v1(t,fullBackend=="cuda",dict.getOrDefault<bool>("closureCpuFallback",true),hemLibrary.c_str()),"Full GPU closure policy");
+        const word hemJacobian=dict.getOrDefault<word>("closureJacobian","finiteDifference");
+        demand(hemJacobian=="finiteDifference"||hemJacobian=="analytic","Unknown closureJacobian");
+        demand(hemJacobian!="analytic"||fullBackend=="cuda","Analytic closureJacobian requires full CUDA closure");
+        check(pintle_rt_set_gpu_hem_jacobian_v1(t,hemJacobian=="analytic"),"GPU closure Jacobian policy");
+        const bool solidClosure=std::find(condensedKinds.begin(),condensedKinds.end(),1)!=condensedKinds.end();
         Info<<"REACTIVE_CLOSURE_ACCELERATION exactBatchReuse="<<reuse<<" scalarBackend="<<scalarBackend
-            <<" deviceFullClosure=0 hostApproval=1"<<nl;
-        if(workers>1||reuse||scalarBackend=="cuda") {
+            <<" fullBackend="<<fullBackend<<" deviceFullClosure="<<(fullBackend=="cuda")
+            <<" closureJacobian="<<(solidClosure?word("finiteDifference"):hemJacobian)
+            <<" requestedClosureJacobian="<<hemJacobian<<nl;
+        if(workers>1||reuse||scalarBackend=="cuda"||fullBackend=="cuda") {
             demand(!mechanical,"Parallel mechanical-environment recovery is not implemented");
             demand(size_t(workers)<=batchCells,"Worker count exceeds batch capacity");
             const double budget=dict.getOrDefault<scalar>("maxThermoBatchMemoryMB",64)*1e6;
@@ -165,7 +246,9 @@ public:
             pool.reset(pintle_rt_pool_create(t,workers,batchCells,size_t(budget)-flowStagingBytes,error,sizeof(error)));demand(bool(pool),error);
             PintleClosureAccelerationProfileV1 acceleration{};acceleration.abiVersion=1;acceleration.structBytes=sizeof(acceleration);
             demand(pintle_rt_pool_acceleration_profile_v1(pool.get(),&acceleration)==0,"Closure memory query failed");
-            closureDeviceBytes=acceleration.deviceBytes;
+            PintleGpuHemProfileV1 hem{};hem.abiVersion=1;hem.structBytes=sizeof(hem);
+            demand(pintle_rt_pool_gpu_hem_profile_v1(pool.get(),&hem)==0,"GPU HEM memory query failed");
+            closureDeviceBytes=acceleration.deviceBytes+hem.deviceBytes;
             if(closureDeviceBytes){const double deviceBudget=dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9;
                 demand(std::isfinite(deviceBudget)&&double(closureDeviceBytes)<deviceBudget,"Closure CUDA memory exceeds device budget");}
         }
@@ -206,7 +289,28 @@ public:
     void packTransport(const Array& q,const States& states,bool includeGas) const
     {
         transportStates.resize(nc);
-        for(size_t c=0;c<nc;++c) transportStates[c]=compact(states[c],states[c].mechanical.dilatationK);
+        for(size_t c=0;c<nc;++c) transportStates[c]=compact(states[c],(mechanical?states.mechanical(c).dilatationK:0));
+        if(turbulentPrandtl>0||turbulentSchmidt>0) {
+            {
+                AddElapsed stageTiming(timings.scalarProperties),totalTiming(scalarPropertySeconds);
+                if(turbulentPrandtl>0) {
+                    transportScalarCp.resize(nc);
+                    for(size_t c=0;c<nc;++c)transportScalarCp[c]=states[c].cp;
+                }
+                if(includeGas&&turbulentSchmidt>0) {
+                    transportScalarH.resize(nc*ns);
+                    for(size_t c=0;c<nc;++c) {
+                        check(capillary?pintle_rt_total_species_enthalpies_capillary_v1(thermo,&q[c*nv],&states[c],
+                                interfaceColor[c],interfaceJump[c],&transportScalarH[c*ns]):
+                            pintle_rt_total_species_enthalpies_v1(thermo,&q[c*nv],&states[c],&transportScalarH[c*ns]),
+                            "WALE total-species enthalpies cell "+std::to_string(c));
+                        ++scalarPropertyCells;
+                    }
+                }
+            }
+            checkTransport(pintle_transport_wale_scalar_fields_v1(transport.get(),transportScalarCp.data(),
+                includeGas?transportScalarH.data():nullptr,fixedScalarCp.data(),includeGas?fixedScalarH.data():nullptr));
+        }
         if(includeGas&&diffusivity>0) {
             if(deviceGasProperties) {
                 if(!liquidSpecies.empty()) {
@@ -250,6 +354,18 @@ public:
             if(f.kind==3) {
                 f.fixed=fixedStates.size();fixedStates.push_back(compact(face.fixedState));
                 fixedQ.insert(fixedQ.end(),face.fixed.begin(),face.fixed.end());
+                if(capillary) {
+                    const auto& s=face.fixedState;
+                    const double vl=s.liquidMass[0]>0?s.liquidMass[0]/s.rhoLiquid[0]:0;
+                    const double vg=s.gasMass>0?s.gasMass/s.rhoGas:0;
+                    fixedColor.push_back(vl/(vl+vg));
+                }
+                if(turbulentPrandtl>0)fixedScalarCp.push_back(face.fixedState.cp);
+                if(turbulentSchmidt>0) {
+                    const size_t offset=fixedScalarH.size();fixedScalarH.resize(offset+ns);
+                    check(pintle_rt_total_species_enthalpies_v1(thermo,face.fixed.data(),&face.fixedState,&fixedScalarH[offset]),
+                        "WALE fixed total-species enthalpies");
+                }
                 if(diffusivity>0) {
                     const size_t offset=fixedY.size();fixedY.resize(offset+ns);fixedH.resize(offset+ns);
                     gasTransport(face.fixed.data(),face.fixedState,&fixedY[offset],&fixedH[offset]);
@@ -275,12 +391,40 @@ public:
             fixedStates.data(),fixedY.data(),fixedH.data(),message,sizeof(message)));
         demand(bool(transport),message);
         demand(pintle_transport_is_cuda(transport.get()),"Requested CUDA transport was not selected");
+        if(capillary) {
+            const PintleCapillaryOptionsV1 capillaryOptions{1,sizeof(PintleCapillaryOptionsV1),sigma,
+                capillaryCfl,capillaryGeometryTolerance,int64_t(liquidSpecies[0])};
+            checkTransport(pintle_transport_set_capillary_v1(transport.get(),&capillaryOptions));
+        }
+        if(wale) {
+            const PintleWaleOptionsV1 options{1,sizeof(PintleWaleOptionsV1),waleCw};
+            checkTransport(pintle_transport_set_wale_v1(transport.get(),&options));
+            if(turbulentPrandtl>0||turbulentSchmidt>0) {
+                const PintleWaleScalarOptionsV1 scalars{1,sizeof(PintleWaleScalarOptionsV1),turbulentPrandtl,turbulentSchmidt};
+                checkTransport(pintle_transport_set_wale_scalars_v1(transport.get(),&scalars));
+            }
+            Info<<"REACTIVE_TURBULENCE model=WALE-stress-v1 backend=cuda Cw="<<waleCw
+                <<" filter=cubeRootVolume stressWork=1 sgsHeatFlux="<<(turbulentPrandtl>0)
+                <<" sgsSpeciesMixing="<<(turbulentSchmidt>0)<<" Prt="<<turbulentPrandtl<<" Sct="<<turbulentSchmidt
+                <<" scalarPropertyBackend="<<(turbulentSchmidt>0?"host-same-eos":(turbulentPrandtl>0?"recovered-cp":"disabled"))
+                <<" scalarFluxBackend="<<(turbulentSchmidt>0||turbulentPrandtl>0?"cuda":"disabled")
+                <<" sgsK=none TCI=0"<<nl;
+        }
         if(!gasThermo.empty()) {
             const std::vector<int64_t> condensable(liquidSpecies.begin(),liquidSpecies.end());
             checkTransport(pintle_transport_set_gas_thermo(transport.get(),gasThermo.data(),ns,gasRegions.data(),gasRegions.size(),
                 condensable.data(),condensable.size()));
             deviceGasProperties=true;
         }
+    }
+    void waleViscosity(const Array& q,const States& states,Array& nut) const {
+        demand(wale&&bool(transport),"WALE diagnostic requested without active CUDA model");
+        packTransport(q,states,false);transportPrimitive.resize(nc);nut.resize(nc);
+        for(size_t c=0;c<nc;++c) {
+            auto& p=transportPrimitive[c];p.rho=states[c].rho;
+            for(int d=0;d<3;++d)p.u[d]=q[c*nv+ns+d]/p.rho;
+        }
+        checkTransport(pintle_transport_wale_primitives_v1(transport.get(),transportPrimitive.data(),transportStates.data(),nut.data()));
     }
     void transportStage(double dt,int stage,uint64_t input,uint64_t output,Array& q,Array& boundary) const
     {
@@ -314,7 +458,7 @@ public:
             out<<"],\"momentum\":[";for(int i=0;i<3;++i){if(i)out<<',';jsonNumber(out,input[ns+i]);}
             out<<"],\"totalEnergy\":";jsonNumber(out,input[ns+3]);out<<",\"energy\":";jsonNumber(out,internalEnergy(input));
             out<<",\"kineticEnergy\":";jsonNumber(out,input[ns+3]-internalEnergy(input));
-            out<<",\"guess\":";jsonState(out,guess);out<<",\"search\":"<<(details&&details[0]?details:"null");
+            out<<",\"guess\":";jsonState(out,guess,condensedKinds,condensedNames);out<<",\"search\":"<<(details&&details[0]?details:"null");
         }
         out<<"}\n";out.flush();if(!out)throw PersistentIOError("Failed to flush recovery diagnostics: "+diagnosticPath);
     }
@@ -323,12 +467,16 @@ public:
         ++workerStage;
         for(size_t start=0;start<nc;start+=batchCells) {
             const size_t count=std::min(batchCells,nc-start);batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
+            const auto packStart=std::chrono::steady_clock::now();
             for(size_t c=0;c<count;++c) {const double* local=&input[(start+c)*nv];
                 std::copy(local,local+physicalSpecies,batchQ.data()+c*physicalSpecies);batchEnergy[c]=internalEnergy(local);batchStates[c]=states[start+c];
                 if(frozen)for(size_t i=0;i<liquidSpecies.size();++i)batchStates[c].liquidMass[i]=local[ns+4+i];}
+            timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
             double localDrift=0;const PintleBatchToken token{attemptId,workerStage,++workerVersion};
+            const auto callStart=std::chrono::steady_clock::now();
             const int status=pintle_rt_pool_batch(pool.get(),token,op+(frozen?2:0),count,physicalSpecies,batchQ.data(),batchEnergy.data(),batchStates.data(),
                 dt,chemicalRtol,chemicalAtol,&localDrift);
+            timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
             if(status) {
                 const std::string message=pintle_rt_pool_error(pool.get());size_t failed=0,detailed=0;
                 for(size_t c=0;c<count;++c) {
@@ -343,8 +491,10 @@ public:
                     <<" omittedDetails="<<(failed-detailed)<<nl;
                 demand(false,message);
             }
+            const auto scatterStart=std::chrono::steady_clock::now();
             for(size_t c=0;c<count;++c) {static_cast<PintleThermoState&>(states[start+c])=batchStates[c];
                 if(output)std::copy(batchQ.data()+c*physicalSpecies,batchQ.data()+(c+1)*physicalSpecies,output->data()+(start+c)*nv);}
+            timings.batchScatter+=std::chrono::duration<double>(std::chrono::steady_clock::now()-scatterStart).count();
             drift=std::max(drift,localDrift);
         }
     }
@@ -352,16 +502,19 @@ public:
     vector velocity(const double* q) const {return vector(q[ns],q[ns+1],q[ns+2])/density(q);}
     double internalEnergy(const double* q) const
     {return q[ns+3]-.5*(q[ns]*q[ns]+q[ns+1]*q[ns+1]+q[ns+2]*q[ns+2])/density(q);}
-    void recover(const Array& q,States& states) const
+    #include "reactiveCapillary.H"
+    void recover(Array& q,States& states) const
     {
+        AddElapsed timing(timings.recovery);
+        if(capillary){recoverCapillary(q,states);return;}
         if(pool){double drift=0;runBatch(q,nullptr,states,0,0,drift);return;}
         for(size_t c=0;c<nc;++c) {
             const double* local=&q[c*nv];
             if(frozen)for(size_t i=0;i<liquidSpecies.size();++i)states[c].liquidMass[i]=local[ns+4+i];
             if(mechanical) {
                 check(pintle_rt_recover_mechanical(thermo,local,local+physicalSpecies,local[ns+4],
-                    local[ns+5],internalEnergy(local),&states[c].mechanical),"Mechanical recovery cell "+std::to_string(c));
-                static_cast<PintleThermoState&>(states[c])=states[c].mechanical.mixture;
+                    local[ns+5],internalEnergy(local),&states.mechanical(c)),"Mechanical recovery cell "+std::to_string(c));
+                static_cast<PintleThermoState&>(states[c])=states.mechanical(c).mixture;
             } else {
                 const auto previous=states[c];const int status=pintle_rt_recover(thermo,local,internalEnergy(local),!frozen,&states[c]);
                 if(status)failureRecord(c,0,c,0,local,previous,pintle_rt_error(thermo),"recovery_failed",pintle_rt_recovery_diagnostic_v1(thermo),true);
@@ -372,6 +525,7 @@ public:
     void react(Array& q,States& states,double dt,double& drift) const
     {
         if(!chemistry) return;
+        AddElapsed timing(timings.source,&timings.recovery);
         if(pool){runBatch(q,&q,states,1,dt,drift);recover(q,states);return;}
         for(size_t c=0;c<nc;++c) {
             double localDrift=0;double* local=&q[c*nv];
@@ -391,8 +545,8 @@ public:
         check(pintle_rt_make_state(thermo,T,p,Y.data(),liquid,result.data(),&e,&s),"State initialization");
         for(int d=0;d<3;++d) result[ns+d]=s.rho*u[d];
         result[ns+3]=e+.5*s.rho*magSqr(u);
-        if(frozen)for(size_t i=0;i<liquidSpecies.size();++i)result[ns+4+i]=s.liquidMass[i];
         check(pintle_rt_recover(thermo,result.data(),e,!frozen,&s),"Initial UV recovery");
+        if(liquidInventory)for(size_t i=0;i<liquidSpecies.size();++i)result[ns+4+i]=s.liquidMass[i];
         return result;
     }
     void right(const Face& face,const Array& q,const States& states,Array& storage,
@@ -412,7 +566,9 @@ public:
     }
     double stableStep(const Array& q,const States& states,double cfl,double maximum) const
     {
+        AddElapsed timing(timings.cfl);
         if(transport) {
+            refreshInterface(states);
             packTransport(q,states,false);double dt=0;transportPrimitive.resize(nc);
             for(size_t c=0;c<nc;++c) {
                 auto& p=transportPrimitive[c];p.rho=states[c].rho;
@@ -558,28 +714,37 @@ public:
             }
         }
         if(mechanical) for(size_t c=0;c<nc;++c) {
-            derivative[c*nv+ns+4]+=(q[c*nv+ns+4]+states[c].mechanical.dilatationK)*divergence[c];
-            derivative[c*nv+ns+5]+=(q[c*nv+ns+5]-states[c].mechanical.dilatationK)*divergence[c];
+            derivative[c*nv+ns+4]+=(q[c*nv+ns+4]+(mechanical?states.mechanical(c).dilatationK:0))*divergence[c];
+            derivative[c*nv+ns+5]+=(q[c*nv+ns+5]-(mechanical?states.mechanical(c).dilatationK:0))*divergence[c];
         }
     }
     Array totals(const Array& q) const
     {
+        AddElapsed timing(timings.conservation);
         Array result(nv,0);
         for(size_t c=0;c<nc;++c) for(size_t k=0;k<nv;++k) result[k]+=q[c*nv+k]*volume[c];
         return result;
     }
     // One conservative SSPRK2 transport update, between chemical half steps.
-    void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift)
+    void step(Array& q,States& states,double dt,double cfl,Array& boundaryIntegral,double& drift,
+              const SavedStates& initialStates)
     {
         ++attemptId;workerStage=0;
         if(transport)checkTransport(pintle_transport_begin_attempt(transport.get(),pintle_rt_physical_model_hash(thermo),attemptId));
         recoveryStage="source-first";react(q,states,.5*dt,drift);
         // Without a source, q/states still match the initial CFL query.
         if(chemistry)demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"Post-source wave/diffusion CFL requires a smaller step");
-        const States oldStates=states;
+        const auto backupStart=std::chrono::steady_clock::now();
+        // With no source, the caller's rollback state is also the RK2 seed.
+        std::unique_ptr<SavedStates> postSource;
+        if(chemistry)postSource=std::make_unique<SavedStates>(states,mechanical);
+        const SavedStates& oldStates=postSource?*postSource:initialStates;
+        timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-backupStart).count();
         Array rhs,boundaryA,boundaryB;
         Array initial;
         if(transport) {
+            AddElapsed timing(timings.transport);
+            refreshInterface(states);
             packTransport(q,states,true);boundaryA.resize(nv);
             // CPU chemistry (or rollback) may have changed q. A fresh content
             // version forces one upload; the two RK stages then share device q.
@@ -588,21 +753,31 @@ public:
             const uint64_t output=++transportVersion;
             transportStage(dt,0,input,output,q,boundaryA);
         } else {
+            AddElapsed timing(timings.transport);
             initial=q;flux(q,states,rhs,boundaryA);
             for(size_t j=0;j<q.size();++j) q[j]=initial[j]+dt*rhs[j];
         }
         recoveryStage="rk1";recover(q,states);
         demand(dt<=stableStep(q,states,cfl,dt)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
         if(transport) {
+            AddElapsed timing(timings.transport);
             packTransport(q,states,true);boundaryB.resize(nv);
-            // recover() and the primitive CFL query do not modify conserved q.
+            if(capillary&&!frozen) {
+                const PintleTransportToken before{attemptId,1,transportVersion};
+                const uint64_t updated=++transportVersion;
+                checkTransport(pintle_transport_replace_stage_state_v1(transport.get(),before,updated,q.data()));
+            }
             const uint64_t input=transportVersion,output=++transportVersion;
             transportStage(dt,1,input,output,q,boundaryB);
         } else {
+            AddElapsed timing(timings.transport);
             flux(q,states,rhs,boundaryB);
             for(size_t j=0;j<q.size();++j) q[j]=.5*initial[j]+.5*(q[j]+dt*rhs[j]);
         }
-        recoveryStage="rk2";states=oldStates;recover(q,states);
+        recoveryStage="rk2";
+        const auto restoreStart=std::chrono::steady_clock::now();oldStates.restore(states);
+        timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-restoreStart).count();
+        recover(q,states);
         recoveryStage="source-second";react(q,states,.5*dt,drift);
         boundaryIntegral.resize(nv);
         for(size_t k=0;k<nv;++k) boundaryIntegral[k]=.5*dt*(boundaryA[k]+boundaryB[k]);
@@ -645,19 +820,26 @@ int main(int argc,char** argv)
         demand(bool(model),error);
         const ReactivePhysics physics(dict,pintle_rt_liquid_count(model.get()));
         const bool mechanical=physics.mechanical;
-        const word identityClosure=physics.frozen?word("HEM-frozen"):closure;
+        const word identityClosure=physics.surfaceTension?word(physics.frozen?"HEM-capillary-frozen":"HEM-capillary"):
+            (physics.frozen?word("HEM-frozen"):closure);
         const label nc=mesh.nCells();const size_t physicalSpecies=pintle_rt_species_count(model.get());
-        const size_t ns=physicalSpecies*(mechanical?2:1),nv=ns+4+(mechanical?2:(physics.frozen?pintle_rt_liquid_count(model.get()):0));
+        const size_t ns=physicalSpecies*(mechanical?2:1),nv=ns+4+(mechanical?2:
+            ((physics.frozen||physics.surfaceTension)?pintle_rt_liquid_count(model.get()):0));
         const double batchCapacity=std::min(double(nc),double(dict.getOrDefault<label>("thermoBatchCells",64)));
-        const bool defaultReuse=!mechanical&&!physics.chemistry&&!physics.frozen;
+        const bool defaultReuse=!mechanical&&!physics.chemistry&&!physics.frozen&&!physics.surfaceTension;
         const bool batchAccelerated=dict.getOrDefault<bool>("thermoExactReuse",defaultReuse)
-            ||dict.getOrDefault<word>("closureScalarBackend","cpu")=="cuda";
+            ||dict.getOrDefault<word>("closureScalarBackend","cpu")=="cuda"
+            ||dict.getOrDefault<word>("closureBackend","cpu")=="cuda";
         const double accelerationPerCell=sizeof(size_t)+(dict.getOrDefault<bool>("thermoExactReuse",defaultReuse)?4*sizeof(size_t):0)
             +(dict.getOrDefault<word>("closureScalarBackend","cpu")=="cuda"?
                 sizeof(PintleClosureScalarInputV1)+sizeof(PintleClosureScalarOutputV1)+sizeof(size_t):0);
         const double batchKnown=dict.getOrDefault<label>("thermoWorkers",1)>1||batchAccelerated?
             batchCapacity*(2*physicalSpecies*sizeof(double)+2*sizeof(PintleThermoState)+2*sizeof(double)+sizeof(size_t)+512+accelerationPerCell):0;
-        const double memoryEstimate=8.0*nc*(7.0*nv+160)+8.0*mesh.nFaces()*32+batchKnown;
+        const double hemKnown=dict.getOrDefault<word>("closureBackend","cpu")=="cuda"?128000+2048*batchCapacity:0;
+        const double scalarKnown=8.0*(nc+mesh.nBoundaryFaces())*
+            ((physics.turbulentPrandtl>0?1:0)+(physics.turbulentSchmidt>0?physicalSpecies:0));
+        const double memoryEstimate=8.0*nc*(7.0*nv+160+(physics.surfaceTension?12:0))
+            +8.0*mesh.nFaces()*32+batchKnown+hemKnown+scalarKnown;
         const double memoryLimit=dict.getOrDefault<scalar>("maxHostMemoryGB",2)*1e9;
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
                "Conservative species/stage allocation exceeds configured host memory budget");
@@ -668,7 +850,7 @@ int main(int argc,char** argv)
         flow.executableHash=solverHash;flow.runId=std::to_string(getpid())+"-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
         flow.diagnosticPath=std::string((runTime.path()/"reactiveFailures.jsonl").c_str());flow.physicalTime=runTime.value();
         Info<<"REACTIVE_RUNTIME runId="<<flow.runId<<" solverSha256="<<flow.executableHash<<" manifest="<<manifest<<nl;
-        Array q(nc*nv,0);States states(nc);
+        Array q(nc*nv,0);States states(nc,mechanical);
         volScalarField p(IOobject("p",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
         volScalarField T(IOobject("T",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
         volVectorField U(IOobject("U",runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
@@ -739,7 +921,7 @@ int main(int argc,char** argv)
                 demand(alpha.dimensions()==dimless&&beta.dimensions()==dimless,"Environment volume fraction must be dimensionless");
                 const auto av=host(alpha.primitiveField()),bv=host(beta.primitiveField());
                 for(label c=0;c<nc;++c) {
-                    q[c*nv+ns+4]=av[c];q[c*nv+ns+5]=bv[c];states[c].mechanical.mixture=states[c];
+                    q[c*nv+ns+4]=av[c];q[c*nv+ns+5]=bv[c];states.mechanical(c).mixture=states[c];
                 }
                 for(int a=0;a<2;++a) {
                     volScalarField et(IOobject("environmentT"+Foam::name(a),runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
@@ -747,12 +929,12 @@ int main(int argc,char** argv)
                     demand(et.dimensions()==dimTemperature&&ee.dimensions()==dimEnergy/dimMass,"Wrong environment predictor dimensions");
                     const auto tv=host(et.primitiveField()),evv=host(ee.primitiveField());
                     for(label c=0;c<nc;++c) {
-                        states[c].mechanical.environment[a].p=pressure[c];
-                        states[c].mechanical.environment[a].T=tv[c];states[c].mechanical.environment[a].e=evv[c];
+                        states.mechanical(c).environment[a].p=pressure[c];
+                        states.mechanical(c).environment[a].T=tv[c];states.mechanical(c).environment[a].e=evv[c];
                     }
                 }
             }
-            if(flow.frozen)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
+            if(flow.liquidInventory)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
                 volScalarField liquid(IOobject("rhoLiquid"+Foam::name(i),runTime.timeName(),mesh,IOobject::MUST_READ,IOobject::NO_WRITE),mesh);
                 demand(liquid.dimensions()==dimDensity,"Frozen liquid inventory requires mass/volume dimensions");
                 const auto values=host(liquid.primitiveField());
@@ -764,7 +946,8 @@ int main(int argc,char** argv)
                 checkpoint::load(std::string((runTime.path()/runTime.timeName()).c_str()),q,states,mechanical,nv,history);
                 runTime.setTime(history.time,runTime.timeIndex());flow.physicalTime=history.time;
             }
-            flow.recover(q,states);
+            demand(!flow.capillary||checkpointSchema==3,"Capillary conserved initialization requires an exact schema 3 checkpoint");
+            if(!flow.capillary)flow.recover(q,states);
         }
         const auto owner=host(mesh.faceOwner()),neighbour=host(mesh.faceNeighbour());
         const auto centres=host(mesh.C().primitiveField()),faceCentres=host(mesh.faceCentres()),areas=host(mesh.faceAreas());
@@ -779,10 +962,10 @@ int main(int argc,char** argv)
                 demand(face.ownerWeight>=0&&face.ownerWeight<=1,"Face lies outside its cell-centre interval");
             } else if(type=="fixedState") face.ownerWeight=0;
             else if(type=="extrapolate") face.ownerWeight=1;
-            if(flow.viscosity>0||flow.conductivity>0||flow.diffusivity>0)
+            if(flow.viscosity>0||flow.wale||flow.conductivity>0||flow.diffusivity>0||flow.capillary)
                 demand(mag(separation^face.normal)<=1e-6*mag(separation),
                        "Constant transport reference requires an orthogonal mesh");
-            if(flow.viscosity>0)
+            if(flow.viscosity>0||flow.wale||flow.capillary)
                 demand(mag((faceCentres[facei]-centres[left])^face.normal)<=1e-6*mag(separation),
                        "Viscous gradients require unskewed face centres");
             flow.faces.push_back(std::move(face));
@@ -828,11 +1011,19 @@ int main(int argc,char** argv)
             }
         }
         flow.startTransport(dict);
+        flow.initializeCapillary(q,states,history.loaded);
         Info<<"REACTIVE_PHYSICS chemistry="<<flow.chemistry<<" combustion="<<flow.chemistry
             <<" phaseChange="<<(physics.phaseChange?"equilibrium":(flow.frozen?"frozen":"none"))
             <<" viscosity="<<(flow.viscosity>0)<<" heatConduction="<<(flow.conductivity>0)
-            <<" speciesDiffusion="<<(flow.diffusivity>0)<<" totalEnergy=1 thermodynamicRecovery=1"
-            <<" frozenLiquidFields="<<(flow.frozen?flow.liquidSpecies.size():0)<<nl;
+            <<" speciesDiffusion="<<(flow.diffusivity>0)<<" turbulence="<<(flow.wale?"WALE-stress-v1":"none")
+            <<" turbulentHeatFlux="<<(flow.turbulentPrandtl>0)<<" turbulentSpeciesMixing="<<(flow.turbulentSchmidt>0)
+            <<" surfaceTension="<<physics.surfaceTension<<" interfaceModel="<<(flow.capillary?"diffuse-liquid-inventory-v1":"none")
+            <<" totalEnergy=1 thermodynamicRecovery=1"
+            <<" frozenLiquidFields="<<(flow.frozen?flow.liquidSpecies.size():0)
+            <<" transportedLiquidFields="<<(flow.liquidInventory?flow.liquidSpecies.size():0)<<nl;
+        if(flow.capillary)Info<<"REACTIVE_CAPILLARY sigma="<<flow.sigma<<" geometryBackend=cuda tractionBackend=cuda"
+            <<" closureBackend=cuda pressureModel=curved-phase-split surfaceEnergyInTotal=1"
+            <<" capillaryCfl="<<flow.capillaryCfl<<" geometryScheme=Gauss-diffuse noPLIC=1"<<nl;
         PintleRealFluidCapabilities capabilities{};flow.check(pintle_rt_capabilities(model.get(),&capabilities),"Capabilities");
         Info<<"REACTIVE_PHYSICAL_MODEL hash="<<pintle_rt_physical_model_hash(model.get())
             <<" numericalPolicyHash="<<pintle_rt_numerical_policy_hash(model.get())<<" eos="<<pintle_rt_eos_name(model.get())
@@ -840,7 +1031,7 @@ int main(int argc,char** argv)
             <<" nonidealDiffusion="<<capabilities.nonidealDiffusion<<" deviceClosure="<<capabilities.deviceClosure
             <<" deviceKinetics="<<capabilities.deviceKinetics<<" mixtureLiquid="<<capabilities.mixtureLiquid<<nl;
         Info<<"REACTIVE_BACKENDS transport="<<(flow.transport?"cuda":"cpu")
-            <<" thermodynamics=cpu chemistry=cpu chemicalLinearSolver="
+            <<" thermodynamics="<<dict.getOrDefault<word>("closureBackend","cpu")<<" chemistry=cpu chemicalLinearSolver="
             <<dict.getOrDefault<word>("chemicalLinearSolver","dense")
             <<" transportGasProperties="<<(flow.diffusivity==0?"disabled":(flow.deviceGasProperties?"deviceNasa":"host"))<<nl;
         wordList outputTypes(mesh.boundary().size(),"calculated");
@@ -886,20 +1077,40 @@ int main(int argc,char** argv)
                 for(label c=0;c<nc;++c) values[c]=states[c].alphaLiquid[i];
                 writeScalar("alphaLiquid"+Foam::name(i),dimless,values);
             }
-            if(flow.frozen)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
+            for(size_t i=0;i<flow.condensedNames.size();++i) {
+                const std::string species=pintle_rt_species_name(flow.thermo,flow.liquidSpecies[i]);
+                const std::string prefix=flow.condensedKinds[i]?"Solid":"Liquid";
+                for(label c=0;c<nc;++c)values[c]=states[c].alphaLiquid[i];
+                writeScalar(word("alpha"+prefix+"."+species),dimless,values);
+                for(label c=0;c<nc;++c)values[c]=states[c].rhoLiquid[i];
+                writeScalar(word("rho"+prefix+"."+species),dimDensity,values);
+                for(label c=0;c<nc;++c)values[c]=states[c].liquidMass[i];
+                writeScalar(word("mass"+prefix+"."+species),dimDensity,values);
+            }
+            if(flow.liquidInventory)for(size_t i=0;i<flow.liquidSpecies.size();++i) {
                 for(label c=0;c<nc;++c)values[c]=q[c*nv+ns+4+i];
                 writeScalar("rhoLiquid"+Foam::name(i),dimDensity,values);
+            }
+            if(flow.capillary) {
+                flow.refreshInterface(states);
+                writeScalar("interfaceColor",dimless,flow.interfaceColor);
+                writeScalar("interfaceCurvature",dimless/dimLength,flow.interfaceCurvature);
+                writeScalar("surfaceEnergyDensity",dimPressure,flow.surfaceEnergy);
             }
             if(mechanical) {
                 for(label c=0;c<nc;++c) values[c]=q[c*nv+ns+4];writeScalar("alphaEnvironment",dimless,values);
                 for(label c=0;c<nc;++c) values[c]=q[c*nv+ns+5];writeScalar("betaEnvironment",dimless,values);
-                for(label c=0;c<nc;++c) values[c]=states[c].mechanical.pressureResidual;writeScalar("mechanicalPressureResidual",dimless,values);
+                for(label c=0;c<nc;++c) values[c]=states.mechanical(c).pressureResidual;writeScalar("mechanicalPressureResidual",dimless,values);
                 for(int a=0;a<2;++a) {
-                    for(label c=0;c<nc;++c) values[c]=states[c].mechanical.environment[a].T;
+                    for(label c=0;c<nc;++c) values[c]=states.mechanical(c).environment[a].T;
                     writeScalar("environmentT"+Foam::name(a),dimTemperature,values);
-                    for(label c=0;c<nc;++c) values[c]=states[c].mechanical.environment[a].e;
+                    for(label c=0;c<nc;++c) values[c]=states.mechanical(c).environment[a].e;
                     writeScalar("environmentE"+Foam::name(a),dimEnergy/dimMass,values);
                 }
+            }
+            if(flow.wale) {
+                flow.waleViscosity(q,states,values);
+                writeScalar("waleNut",dimensionSet(0,2,-1,0,0,0,0),values);
             }
             tx.checkField("reactiveStateIdentity");
             IOdictionary identity(IOobject("reactiveStateIdentity",outputInstance,mesh,IOobject::NO_READ,IOobject::NO_WRITE,false));
@@ -942,26 +1153,41 @@ int main(int argc,char** argv)
             <<" liquids="<<pintle_rt_liquid_count(model.get())<<" estimatedHostBytes="<<memoryEstimate<<" chemistry="<<flow.chemistry<<nl;
         for(size_t k=0;k<ns;++k) Info<<"REACTIVE_SPECIES index="<<k<<" name="<<pintle_rt_species_name(model.get(),k%physicalSpecies)<<nl;
         writeState();
+        const label acceptedStepLimit=runTime.controlDict().getOrDefault<label>("maxAcceptedSteps",0);
+        demand(acceptedStepLimit>=0,"maxAcceptedSteps must be nonnegative (zero disables the cap)");
+        const auto startingAcceptedSteps=history.steps;
+        const bool profileHemSteps=flow.pool&&dict.getOrDefault<word>("closureBackend","cpu")=="cuda";
+        auto hemProfile=[&]() {
+            PintleGpuHemProfileV1 p{};p.abiVersion=1;p.structBytes=sizeof(p);
+            if(profileHemSteps)demand(pintle_rt_pool_gpu_hem_profile_v1(flow.pool.get(),&p)==0,
+                "GPU HEM step profile query failed");
+            return p;
+        };
         auto beforeEnd=[&]() {
-            return runTime.value()<runTime.endTime().value()
+            return (!acceptedStepLimit||history.steps-startingAcceptedSteps<uint64_t(acceptedStepLimit))
+                &&runTime.value()<runTime.endTime().value()
                 -1e-13*std::max(std::abs(double(runTime.endTime().value())),1e-15);
         };
         // Time::run uses a half-step stopping tolerance. An adaptive explicit
         // step instead lands on the requested end time using the remainder.
         while(beforeEnd()) {
+            flow.timings=StepTimings{};
+            const auto hemBefore=hemProfile();
             const auto start=std::chrono::steady_clock::now();
             const scalar cfl=runTime.controlDict().getOrDefault<scalar>("maxCo",.25);
             const scalar maxDt=runTime.controlDict().get<scalar>("maxDeltaT");
             demand(cfl>0&&cfl<=.5&&maxDt>0,"Require 0<maxCo<=0.5 and maxDeltaT>0");
             double dt=flow.stableStep(q,states,.95*cfl,std::min(double(maxDt),double(runTime.endTime().value()-runTime.value())));
-            const Array previous=q;const States previousStates=states;
+            const auto backupStart=std::chrono::steady_clock::now();
+            const Array previous=q;const SavedStates previousStates(states,mechanical);
+            flow.timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-backupStart).count();
             Array boundaryIntegral,nextBoundary;double drift=0;int retries=0;
             double massError=0,momentumError=0,elementError=0,speciesError=0,liquidError=0,energyError=0;
             for(;;) {
                 const auto attemptProfile=flow.profiles();
                 flow.physicalTime=runTime.value();flow.attemptDt=dt;flow.retryIndex=retries;
                 try {
-                    flow.step(q,states,dt,cfl,boundaryIntegral,drift);
+                    flow.step(q,states,dt,cfl,boundaryIntegral,drift,previousStates);
                     nextBoundary=accumulatedBoundary;
                     for(size_t k=0;k<nv;++k)nextBoundary[k]+=boundaryIntegral[k];
                     const Array final=flow.totals(q);
@@ -991,11 +1217,11 @@ int main(int argc,char** argv)
                 }
                 catch(const PersistentIOError&) {
                     if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
-                    q=previous;states=previousStates;boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
+                    q=previous;previousStates.restore(states);boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
                 }
                 catch(const std::exception& failure) {
                     if(flow.transport)pintle_transport_end_attempt(flow.transport.get(),flow.attemptId,0);
-                    q=previous;states=previousStates;boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
+                    q=previous;previousStates.restore(states);boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
                     ++history.retries;
                     if(++retries>12||dt*.5<=1e-15){if(checkpointFailure)writeState();throw;}
@@ -1005,22 +1231,62 @@ int main(int argc,char** argv)
             runTime.setDeltaT(dt,false);++runTime;
             accumulatedBoundary=std::move(nextBoundary);++history.steps;history.lastDt=dt;
             double minP=GREAT,maxP=0,minT=GREAT,maxT=0,maxMach=0,minGas=1,maxGas=0,maxV=0,maxE=0,maxMu=0,maxME=0;
+            const auto diagnosticsStart=std::chrono::steady_clock::now();
             for(label c=0;c<nc;++c) {
                 const auto& s=states[c];minP=std::min(minP,s.p);minT=std::min(minT,s.T);maxT=std::max(maxT,s.T);
-                maxP=std::max(maxP,s.p);maxME=std::max(maxME,s.mechanical.pressureResidual);
+                maxP=std::max(maxP,s.p);maxME=std::max(maxME,(mechanical?states.mechanical(c).pressureResidual:0));
                 maxMach=std::max(maxMach,mag(flow.velocity(&q[c*nv]))/s.soundEquilibrium);
                 minGas=std::min(minGas,s.alphaGas);maxGas=std::max(maxGas,s.alphaGas);
                 maxV=std::max(maxV,s.volumeResidual);maxE=std::max(maxE,s.energyResidual);maxMu=std::max(maxMu,s.chemicalResidual);
             }
+            flow.timings.diagnostics+=std::chrono::duration<double>(std::chrono::steady_clock::now()-diagnosticsStart).count();
             const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
             Info<<"REACTIVE_STEP time="<<runTime.value()<<" dt="<<dt<<" retries="<<retries<<" massResidual="<<massError
                 <<" energyResidual="<<energyError<<" momentumResidual="<<momentumError<<" globalElementResidual="<<elementError
                 <<" frozenLiquidResidual="<<liquidError<<" speciesResidual="<<speciesError<<" elementDrift="<<drift<<" minP="<<minP<<" maxP="<<maxP<<" minT="<<minT<<" maxT="<<maxT
                 <<" maxMach="<<maxMach<<" minAlphaGas="<<minGas<<" maxAlphaGas="<<maxGas
                 <<" maxVolumeResidual="<<maxV<<" maxUVResidual="<<maxE<<" maxMuResidual="<<maxMu<<" maxMechanicalResidual="<<maxME<<" seconds="<<seconds<<nl;
+            if(flow.capillary) {
+                double area=0,liquidMass=0;
+                for(label c=0;c<nc;++c){area+=flow.surfaceEnergy[c]*flow.volume[c]/flow.sigma;
+                    liquidMass+=q[c*nv+ns+4]*flow.volume[c];}
+                Info<<"REACTIVE_CAPILLARY_STEP time="<<runTime.value()<<" area="<<area
+                    <<" surfaceEnergy="<<flow.sigma*area<<" liquidMass="<<liquidMass
+                    <<" closureResidual="<<flow.capillaryClosureResidual
+                    <<" recoveryCalls="<<double(flow.capillaryRecoveries)<<" outerIterations="<<double(flow.capillaryIterations)<<nl;
+            }
+            if(profileHemSteps) {
+                const auto& t=flow.timings;
+                Info<<"REACTIVE_STEP_TIMINGS time="<<runTime.value()
+                    <<" cflSeconds="<<t.cfl<<" backupSeconds="<<t.backup<<" transportSeconds="<<t.transport
+                    <<" recoverySeconds="<<t.recovery<<" sourceSeconds="<<t.source
+                    <<" conservationSeconds="<<t.conservation<<" diagnosticsSeconds="<<t.diagnostics
+                    <<" nestedBatchPackSeconds="<<t.batchPack<<" nestedBatchCallSeconds="<<t.batchCall
+                    <<" nestedBatchScatterSeconds="<<t.batchScatter
+                    <<" nestedScalarPropertySeconds="<<t.scalarProperties
+                    <<" otherSeconds="<<seconds-t.cfl-t.backup-t.transport-t.recovery-t.source-t.conservation-t.diagnostics<<nl;
+                const auto hemAfter=hemProfile();
+                // Excludes initialization and checkpoint I/O, includes all
+                // attempted RK stages and retries for this accepted step.
+                Info<<"REACTIVE_GPU_HEM_STEP time="<<runTime.value()
+                    <<" batches="<<double(hemAfter.batches-hemBefore.batches)
+                    <<" submitted="<<double(hemAfter.submitted-hemBefore.submitted)
+                    <<" succeeded="<<double(hemAfter.succeeded-hemBefore.succeeded)
+                    <<" cpuFallbacks="<<double(hemAfter.cpuFallbacks-hemBefore.cpuFallbacks)
+                    <<" deviceFailures="<<double(hemAfter.deviceFailures-hemBefore.deviceFailures)
+                    <<" phaseEvaluations="<<double(hemAfter.phaseEvaluations-hemBefore.phaseEvaluations)
+                    <<" residualEvaluations="<<double(hemAfter.residualEvaluations-hemBefore.residualEvaluations)
+                    <<" analyticJacobians="<<double(hemAfter.analyticJacobians-hemBefore.analyticJacobians)
+                    <<" finiteDifferenceJacobians="<<double(hemAfter.finiteDifferenceJacobians-hemBefore.finiteDifferenceJacobians)
+                    <<" wallSeconds="<<hemAfter.wallSeconds-hemBefore.wallSeconds
+                    <<" kernelSeconds="<<hemAfter.kernelSeconds-hemBefore.kernelSeconds
+                    <<" copySeconds="<<hemAfter.copySeconds-hemBefore.copySeconds<<nl;
+            }
             if(runTime.writeTime()||!beforeEnd()||(checkpointFirst&&history.steps==1)
                 ||(checkpointEvery>0&&history.steps%checkpointEvery==0))writeState();
         }
+        if(acceptedStepLimit&&history.steps-startingAcceptedSteps>=uint64_t(acceptedStepLimit))
+            Info<<"REACTIVE_STEP_CAP accepted="<<double(history.steps-startingAcceptedSteps)<<" limit="<<acceptedStepLimit<<" time="<<runTime.value()<<nl;
         PintleModelProfilesV21 prototypeProfile{},workerTotal{},combined{};
         flow.check(pintle_rt_profiles_v21(model.get(),&prototypeProfile),"Prototype profile");combined=prototypeProfile;
         auto printProfile=[&](const std::string& scope,const PintleModelProfilesV21& p) {
@@ -1093,6 +1359,17 @@ int main(int argc,char** argv)
                 <<" deviceBytes="<<double(acceleration.deviceBytes)<<" classifySeconds="<<acceleration.classifySeconds
                 <<" prepareSeconds="<<acceleration.prepareSeconds<<" gpuWallSeconds="<<acceleration.gpuWallSeconds
                 <<" gpuKernelSeconds="<<acceleration.gpuKernelSeconds<<" gpuCopySeconds="<<acceleration.gpuCopySeconds<<nl;
+            PintleGpuHemProfileV1 hem{};hem.abiVersion=1;hem.structBytes=sizeof(hem);
+            demand(pintle_rt_pool_gpu_hem_profile_v1(flow.pool.get(),&hem)==0,"GPU HEM profile failed");
+            Info<<"REACTIVE_GPU_HEM batches="<<double(hem.batches)<<" submitted="<<double(hem.submitted)
+                <<" succeeded="<<double(hem.succeeded)<<" cpuFallbacks="<<double(hem.cpuFallbacks)
+                <<" deviceFailures="<<double(hem.deviceFailures)<<" phaseEvaluations="<<double(hem.phaseEvaluations)
+                <<" residualEvaluations="<<double(hem.residualEvaluations)<<" flashCandidates="<<double(hem.flashCandidates)
+                <<" stableCandidates="<<double(hem.stableCandidates)<<" transferBytes="<<double(hem.transferBytes)
+                <<" analyticJacobians="<<double(hem.analyticJacobians)
+                <<" finiteDifferenceJacobians="<<double(hem.finiteDifferenceJacobians)
+                <<" hostBytes="<<double(hem.hostBytes)<<" deviceBytes="<<double(hem.deviceBytes)
+                <<" wallSeconds="<<hem.wallSeconds<<" kernelSeconds="<<hem.kernelSeconds<<" copySeconds="<<hem.copySeconds<<nl;
             Info<<"REACTIVE_BATCH_V21 attempted="<<double(memory.attemptedBatches)<<" accepted="<<double(memory.acceptedBatches)
                 <<" failed="<<double(memory.failedBatches)<<" batchWallSeconds="<<memory.batchWallSeconds
                 <<" workerJobSecondsSum="<<memory.workerJobSecondsSum<<" workerJobSecondsMax="<<memory.workerJobSecondsMax
@@ -1160,6 +1437,29 @@ int main(int argc,char** argv)
                 <<" bridgeBytes="<<double(memory.bridgeBytes)<<" conservedWorkspaceBytes="<<double(memory.conservedWorkspaceBytes)
                 <<" gasWorkspaceBytes="<<double(memory.gasWorkspaceBytes)<<" rhsWorkspaceBytes="<<double(memory.rhsWorkspaceBytes)
                 <<" d2dBytes="<<double(memory.deviceToDeviceBytes)<<" synchronizations="<<double(memory.synchronizations)<<nl;
+            PintleCapillaryProfileV1 capillaryProfile{};
+            capillaryProfile.abiVersion=1;capillaryProfile.structBytes=sizeof(capillaryProfile);
+            flow.checkTransport(pintle_transport_capillary_profile_v1(flow.transport.get(),&capillaryProfile));
+            Info<<"REACTIVE_CAPILLARY_PROFILE enabled="<<flow.capillary
+                <<" geometryBuilds="<<double(capillaryProfile.geometryBuilds)
+                <<" geometryKernels="<<double(capillaryProfile.geometryKernels)
+                <<" faceFluxBuilds="<<double(capillaryProfile.faceFluxBuilds)
+                <<" workspaceBytes="<<double(capillaryProfile.capillaryWorkspaceBytes)
+                <<" closureIterations="<<double(flow.capillaryIterations)<<nl;
+            if(flow.wale) {
+                PintleWaleProfileV1 p{1,sizeof(PintleWaleProfileV1),0,0,0,0};
+                flow.checkTransport(pintle_transport_wale_profile_v1(flow.transport.get(),&p));
+                Info<<"REACTIVE_WALE gradientBuilds="<<double(p.gradientBuilds)
+                    <<" viscosityBuilds="<<double(p.viscosityBuilds)<<" cellsEvaluated="<<double(p.cellsEvaluated)
+                    <<" workspaceBytes="<<double(p.workspaceBytes)<<nl;
+                PintleWaleScalarProfileV1 scalar{1,sizeof(PintleWaleScalarProfileV1),0,0,0};
+                flow.checkTransport(pintle_transport_wale_scalar_profile_v1(flow.transport.get(),&scalar));
+                Info<<"REACTIVE_WALE_SCALARS fieldUploads="<<double(scalar.fieldUploads)
+                    <<" fieldUploadBytes="<<double(scalar.fieldUploadBytes)<<" workspaceBytes="<<double(scalar.workspaceBytes)
+                    <<" hostEnthalpyCells="<<double(flow.scalarPropertyCells)
+                    <<" hostPropertySeconds="<<flow.scalarPropertySeconds
+                    <<" fluxBackend="<<(flow.turbulentSchmidt>0||flow.turbulentPrandtl>0?"cuda":"disabled")<<nl;
+            }
             PintleTransportStats stats{};flow.checkTransport(pintle_transport_stats(flow.transport.get(),&stats));
             Info<<"REACTIVE_TRANSPORT allocatedBytes="<<double(stats.allocatedBytes)<<" uploadedBytes="<<double(stats.uploadedBytes)
                 <<" downloadedBytes="<<double(stats.downloadedBytes)<<" kernelLaunches="<<double(stats.kernelLaunches)

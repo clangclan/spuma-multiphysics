@@ -1,0 +1,122 @@
+{
+  "cases": [
+    {
+      "analysisOnly": true,
+      "analysisOrRunWallSeconds": 0.08239929299998039,
+      "cleanGpuClosure": false,
+      "error": "Step completed after rejected GPU closure attempts; not clean GPU acceptance",
+      "gpuClosure": "REACTIVE_GPU_HEM batches=319 submitted=764 succeeded=641 cpuFallbacks=0 deviceFailures=123 phaseEvaluations=15620 residualEvaluations=2225 flashCandidates=2225 stableCandidates=641 transferBytes=323968 analyticJacobians=0 finiteDifferenceJacobians=0 hostBytes=3240104 deviceBytes=1929464 wallSeconds=0.10991268700000005 kernelSeconds=0.10252595251798624 copySeconds=0.0057320319823920725",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/impinging-n2o-validation-v1/ambient_1atm/solver.log",
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999998,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 256000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/impinging-n2o-validation-v1/ambient_1atm/8.08876157952566e-10",
+        "checkpointSha256": "9aa429d80b68b578a510de6e688534ccf72b13f974e0bf127f3fcd6435f16ec6",
+        "conservedBudgetResidual": [
+          -5.2677585147940155e-18,
+          9.112874051951046e-19,
+          -3.9291079096268815e-24,
+          0.0,
+          8.271806125530277e-24,
+          2.9778502051908996e-23,
+          -2.401576545796161e-25,
+          2.301847948360525e-13
+        ],
+        "deltaT": 8.088761579525658e-10,
+        "liquidN2oMassKg": 0.0,
+        "n2oMassKg": 9.76793335653187e-10,
+        "pRangePa": [
+          92728.34151548526,
+          101324.99999999997
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 5,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "tRangeK": [
+          212.61603392519004,
+          293.15
+        ],
+        "time": 8.088761579525658e-10,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 9.76793335653187e-10
+      },
+      "name": "ambient_1atm",
+      "passed": false,
+      "runtimeCompleted": true,
+      "step": "REACTIVE_STEP time=8.0887615795256581e-10 dt=8.0887615795256581e-10 retries=5 massResidual=2.8733511138877375e-15 energyResidual=5.2574489832321389e-14 momentumResidual=7.0148034852140075e-21 globalElementResidual=4.2571491049110539e-15 frozenLiquidResidual=0 speciesResidual=4.1339976107219191e-15 elementDrift=0 minP=92728.341515485256 maxP=101324.99999999997 minT=212.61603392519004 maxT=293.14999999999998 maxMach=0.019137833851169683 minAlphaGas=0.99999999999999978 maxAlphaGas=1.0000000000000002 maxVolumeResidual=2.2204460492503131e-16 maxUVResidual=7.3342899112031793e-11 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.262351324"
+    },
+    {
+      "analysisOnly": true,
+      "analysisOrRunWallSeconds": 0.07941722499981552,
+      "cleanGpuClosure": true,
+      "gpuClosure": "REACTIVE_GPU_HEM batches=189 submitted=531 succeeded=531 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=56300 residualEvaluations=381418 flashCandidates=1710 stableCandidates=531 transferBytes=223596 analyticJacobians=24835 finiteDifferenceJacobians=0 hostBytes=3240104 deviceBytes=1929464 wallSeconds=0.21024312300000006 kernelSeconds=0.20576332807540887 copySeconds=0.0034727680059149853",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/impinging-n2o-validation-v1/ambient_40bar_abs/solver.log",
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999997,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 256000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/impinging-n2o-validation-v1/ambient_40bar_abs/2.56361961008088e-08",
+        "checkpointSha256": "327226038885a1b0f73378ad772ab2346dc365c48ba77842475f99ab787b4fb1",
+        "conservedBudgetResidual": [
+          9.376370459283746e-16,
+          4.134280302941359e-16,
+          3.970466940254533e-23,
+          0.0,
+          7.543887186483612e-22,
+          5.293955920339377e-22,
+          -1.1523994657622856e-22,
+          5.95399285430176e-11
+        ],
+        "deltaT": 2.5636196100808844e-08,
+        "liquidN2oMassKg": 0.0,
+        "n2oMassKg": 3.064961359730376e-08,
+        "pRangePa": [
+          3550885.113925738,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "tRangeK": [
+          237.17680197960502,
+          293.15
+        ],
+        "time": 2.5636196100808844e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 3.064961359730376e-08
+      },
+      "name": "ambient_40bar_abs",
+      "passed": true,
+      "runtimeCompleted": true,
+      "step": "REACTIVE_STEP time=2.5636196100808844e-08 dt=2.5636196100808844e-08 retries=0 massResidual=-2.3873334100266645e-15 energyResidual=3.3135167857140083e-15 momentumResidual=1.1628591969017222e-20 globalElementResidual=3.0808003803796904e-15 frozenLiquidResidual=0 speciesResidual=2.9913074487933483e-15 elementDrift=0 minP=3550885.1139257378 maxP=3999999.9999999977 minT=237.17680197960502 maxT=293.14999999999998 maxMach=0.0045136522572365367 minAlphaGas=0.99999999999999967 maxAlphaGas=1.0000000000000002 maxVolumeResidual=3.3306690738754696e-16 maxUVResidual=8.93542549495205e-16 maxMuResidual=0 maxMechanicalResidual=0 seconds=0.26791414800000002"
+    }
+  ],
+  "cudaTransportSha256": "c1012d8420f88574af1c2089260d69f893acfe9e3e105180dc2390bf9a7e7026",
+  "passed": false,
+  "schema": 1,
+  "scope": "One-step runtime and flash mass-accounting checks; no developed collision or breakup validation",
+  "solverSha256": "89e3dfca8f184696cccbbbdb9e8cad083bc051d50c11d077b99074b03c8a2e50",
+  "source": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922",
+  "sourceHashes": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/analyze_impinging_n2o.py": "0fa26f925f94ce37b260412caebaca62f907993f2af3b75c441978e0008e668f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_impinging_n2o.py": "5cca0546b0ea8a506f1e76f6012f91b8c9d593d239a25e8ae59ce2aafa0c7496"
+  },
+  "thermoBackendSha256": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b"
+}

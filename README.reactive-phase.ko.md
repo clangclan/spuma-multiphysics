@@ -21,6 +21,8 @@
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
 
+이 개발 브랜치는 CUDA WALE 응력·열/종 혼합과 실험적인 [표면장력–flashing 결합](docs/spray-physics/capillary-flashing.ko.md)을 포함한다. 새 경로는 독립 액체 질량 수송과 벌크·표면 총에너지 보존을 연결하며, 계면 기하·응력·곡률 UV 복원을 GPU에서 수행한다. 다만 [정적 액적의 기생 유속 수렴 시험](docs/spray-physics/capillary-static-balance-review.md)을 통과하지 못했으므로 검증된 액주·액막 분열 솔버로 취급하지 않는다.
+
 ## 상평형 실패 진단과 안전한 재시작
 
 R04의 미량 기상 재고 복원, 단계 승인과 원자적 체크포인트 개선은 [postmerge v3 안내](docs/postmerge-v3/README.ko.md)에 있다. 기본 복원은 `reference`다. 비반응 HEM에서는 `recoveryMode boundaryFallback;`을 선택할 수 있다. 새 schema 3 체크포인트는 열역학 초기값, 누적 경계 유량과 최초 보존 기준을 함께 보존하며, 손상되거나 완료 표식이 없는 재시작은 거부한다. 실제 solver/library를 고정해 실행·감시하는 `tools/reactive_run.py`도 제공한다.

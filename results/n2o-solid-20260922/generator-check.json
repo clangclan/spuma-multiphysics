@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "source": {
+    "configuration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr-config.yaml",
+    "configurationSha256": "5e05a91dd42c20364bdf323821e3358f515d4df138850aae9dbd3cc61fa0fc85",
+    "mechanism": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr.yaml",
+    "mechanismSha256": "7ea020c480bff27404a9ccb051c4940bac71631257e159084b93df2092a6ecdd"
+  },
+  "output": {
+    "mechanism": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/final-generator-check/cold-pr-148K.yaml",
+    "mechanismSha256": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916",
+    "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/final-generator-check/cold-pr-148K-config.yaml",
+    "configurationSha256": "f0a0bd40568f5f7b924060dfb8d039c8a63339e63eaf68ef83e2f36beed30905"
+  },
+  "temperatureMinK": 148.0,
+  "modifiedSpecies": [
+    "N2",
+    "O2",
+    "N2O"
+  ],
+  "preservedSpecies": [
+    "IC3H7OH"
+  ],
+  "validation": {
+    "N2": {
+      "fluid": "Nitrogen",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 6.3427966139264924e-12,
+      "relative_join_error": {
+        "Cp": 0.0038779075359321132,
+        "h": 0.0,
+        "s": 0.0
+      }
+    },
+    "O2": {
+      "fluid": "Oxygen",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 7.811864151963175e-11,
+      "relative_join_error": {
+        "Cp": 0.0008716575871851224,
+        "h": 1.9876593572295805e-16,
+        "s": 0.0
+      }
+    },
+    "N2O": {
+      "fluid": "NitrousOxide",
+      "source": "CoolProp 6.7.0 CP0MOLAR",
+      "range_K": [
+        148.0,
+        182.34
+      ],
+      "fitSamples": 241,
+      "heldoutSamples": 2001,
+      "max_relative_Cp_error": 1.1845641593509075e-09,
+      "relative_join_error": {
+        "Cp": 0.006941771451169461,
+        "h": 0.0,
+        "s": 0.0
+      }
+    }
+  },
+  "constraints": {
+    "belowOriginalMinimumRequiresZeroSpeciesInventory": [
+      "IC3H7OH"
+    ],
+    "solidN2OPhaseStabilityRequired": true,
+    "liquidMinimumTemperaturesUnchanged": true,
+    "solidPressureMaxPa": 200000.0,
+    "condensedIpaDisplaced": true
+  },
+  "status": "solid-configured",
+  "solidData": {
+    "path": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/docs/model-data/n2o-solid-atake1974.json",
+    "sha256": "577231ec735ef13bf9f26568affc37cfddea0d0a82275f91a3c1abd9c7cd90f8",
+    "schema": 1,
+    "reference": {
+      "temperature": 182.408,
+      "pressure": 87950.87143300277,
+      "pressure_derivation": "Atake equation (9): log10(P/Torr)=-1270.4/T+9.95563-0.00094122*T; 1 Torr=133.32236842105263 Pa",
+      "latent_heat_fusion": 6516.0,
+      "latent_heat_fusion_uncertainty": 20.0,
+      "solid_h_reference": "h_liquid_PR(Tref,pref) - 6516*1000/molecularWeight, converting J/mol to J/kmol before division by kg/kmol",
+      "solid_s_reference": "s_liquid_PR(Tref,pref) - (6516/Tref)*1000/molecularWeight, converting J/mol/K to J/kmol/K before division by kg/kmol"
+    },
+    "domain": {
+      "temperature_min": 148.0,
+      "temperature_max": 183.0,
+      "pressure_max": 200000.0,
+      "pressure_limit_basis": "Explicit provisional low-pressure ceiling. The source available here does not validate solid compressibility or pressure-volume work at the fluid model's 50 MPa ceiling."
+    },
+    "molarVolume": {
+      "value": 0.04,
+      "status": "approximate_provisional",
+      "source_statement": "Atake dissertation discusses a molar volume of about 40 cm^3 in its solid-N2O analysis; it also states that only two density values, at 20 K and 83 K, were available for calorimeter corrections.",
+      "limitation": "No precise density or thermal-expansion data near 148-182 K were available in the accessible primary text. Use only under the explicit 0.2 MPa ceiling and retain sensitivity checks."
+    },
+    "densityLimitation": "Approximate 40 cm^3/mol molar volume; use only below the explicit 0.2 MPa ceiling."
+  },
+  "physicalModelHashes": {
+    "source": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+    "output": "e19b9d7ebc022ae94309f31808ae2236af4ad03f62e64570835e5859959cf56f",
+    "different": true
+  }
+}

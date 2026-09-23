@@ -2,6 +2,10 @@
 #include "pintleReactiveThermo.h"
 #include "pintleRecovery.h"
 #include "pintleClosureAcceleration.h"
+#include "pintleGpuHem.h"
+#include "pintleDeviceFlash.h"
+#include "pintleDevicePRExport.h"
+#include "pintleSolidThermo.h"
 #include "pintleRealFluid.h"
 #include "pintleRealFluidV21.h"
 #include "pintleSmallSystem.h"
@@ -128,6 +132,10 @@ public:
     std::array<std::shared_ptr<Cantera::ThermoPhase>,2> liquids;
     std::array<size_t,2> condensable{};
     std::array<double,2> liquidTmin{}, liquidTc{};
+    std::array<int,2> condensedKind{};
+    std::array<std::string,2> condensedName{};
+    std::array<PintleSolidThermo::Model,2> solid{};
+    bool hasSolid=false,enforceSpeciesTemperatureBounds=false;
     size_t ns=0, nl=0;
     double Tmin=0, Tmax=0, pmin=0, pmax=0, vtol=0, etol=0, mutol=0;
     std::array<char,8192> error{};
@@ -135,7 +143,9 @@ public:
     std::string fingerprint,configuration,physicalHash,policyHash,eosName,basePhysicalHash,physicalContext,numericalContext;
     bool scalarRecovery=true;
     bool exactBatchReuse=false,cudaScalar=false;
-    std::string scalarLibrary;
+    std::string scalarLibrary,hemLibrary;
+    bool cudaHem=false,hemCpuFallback=true,hemAnalyticJacobian=false;
+    std::string hemNumericalPolicy;
     PintleClosureScalarOutputV1 scalarCandidate{};
     uint64_t gpuApproved=0,gpuRejected=0;
     struct LiquidMemo {double p=0,T=0;bool valid=false,mu=false;PintlePhaseProperties value{};};
@@ -187,7 +197,12 @@ public:
             const auto& entry=descriptions[i];
             condensable[i]=gas->speciesIndex(entry["species"].asString());
             require(condensable[i]<ns,"Condensable species is missing from the gas phase");
-            for(size_t j=0;j<i;++j) require(condensable[j]!=condensable[i],"Duplicate condensable species");
+            const auto kind=entry.hasKey("kind")?entry["kind"].asString():"liquid";
+            require(kind=="liquid"||kind=="solid","Unknown condensed phase kind");
+            condensedKind[i]=kind=="solid";hasSolid|=condensedKind[i]!=0;
+            condensedName[i]=condensedKind[i]?"solid_"+entry["species"].asString():entry["phase"].asString();
+            for(size_t j=0;j<i;++j) require(condensable[j]!=condensable[i]||condensedKind[j]!=condensedKind[i],
+                "Duplicate condensed phase of the same species/kind");
             const std::string liquidMechanism=entry.hasKey("mechanism") ? entry["mechanism"].asString() : mechanism;
             hashFile(liquidMechanism);
             if(liquidMechanism!=mechanism) requireSelfContained(liquidMechanism);
@@ -225,9 +240,17 @@ public:
         pmin=input["pressure-min"].asDouble(); pmax=input["pressure-max"].asDouble();
         vtol=input["volume-tolerance"].asDouble(); etol=input["energy-tolerance"].asDouble();
         mutol=input["chemical-potential-tolerance"].asDouble();
+        enforceSpeciesTemperatureBounds=input.hasKey("enforce-species-temperature-bounds")
+            &&input["enforce-species-temperature-bounds"].asBool();
         require(Tmin>0 && Tmax>Tmin && pmin>0 && pmax>pmin && vtol>0 && etol>0 && mutol>0,
                 "Invalid thermodynamic bounds or residual tolerances");
         for(size_t k=0;k<ns;++k) {names.push_back(gas->speciesName(k));weights.push_back(gas->molecularWeight(k));}
+        if(hasSolid) {
+            require(gasSolution->kinetics()->nReactions()==0,"Solid N2O closure is nonreacting only");
+            require(nl==2&&condensedKind[0]==0&&condensedKind[1]==1&&condensable[0]==condensable[1]
+                &&names[condensable[0]]=="N2O","Solid closure requires liquid_N2O and solid_N2O slots");
+            initializeSolid(descriptions[1],1);
+        }
         for(size_t j=0;j<gas->nElements();++j) elementNames.push_back(gas->elementName(j));
         unsigned char digest[SHA256_DIGEST_LENGTH];
         SHA256(reinterpret_cast<const unsigned char*>(identity.data()),identity.size(),digest);
@@ -244,6 +267,8 @@ public:
         for(size_t i=0;i<nl;++i) {const auto& e=descriptions[i];physical+=e["species"].asString()+":"+e["phase"].asString();
             std::ostringstream limits;limits<<std::setprecision(17)<<liquidTmin[i]<<":"<<liquidTc[i];physical+=limits.str();
             if(e.hasKey("mechanism"))physicalFile(e["mechanism"].asString());}
+        if(hasSolid)physical+=":solid-model-v1:"+descriptions[1]["solid"].as<Cantera::AnyMap>().toYamlString();
+        if(enforceSpeciesTemperatureBounds)physical+=":species-temperature-bounds-v1";
         physicalHash=basePhysicalHash=hashText(physical);refreshPolicyHash();
         caloric=std::make_unique<PintleCaloricData>(*gas);
     }
@@ -252,15 +277,28 @@ public:
         unsigned char digest[SHA256_DIGEST_LENGTH];SHA256(reinterpret_cast<const unsigned char*>(text.data()),text.size(),digest);
         std::ostringstream out;out<<std::hex<<std::setfill('0');for(auto c:digest)out<<std::setw(2)<<int(c);return out.str();
     }
+    static std::string queryHemNumericalPolicy(void* library) {
+        const auto query=reinterpret_cast<decltype(&pintle_gpu_hem_numerical_policy_v1)>(
+            dlsym(library,"pintle_gpu_hem_numerical_policy_v1"));
+        if(!query)return {}; // historical separate-rounding libraries
+        const char* policy=query();
+        require(policy,"CUDA HEM numerical policy is null");
+        require(!policy[0]||std::strcmp(policy,PINTLE_GPU_HEM_FP64_FMA_POLICY_V1)==0,
+            "Unknown CUDA HEM numerical policy");
+        return policy;
+    }
     void refreshPolicyHash() {
-        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1.1:reference-flash:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
+        std::ostringstream policy;policy<<std::setprecision(17)<<"pintle-numerics-v2.1.1:reference-flash:phase-temperature-restart-v1:exact-PR32:fd-half-5e-3:"<<vtol<<":"<<etol<<":"<<mutol
             <<":"<<scalarRecovery<<":"<<structuredChemicalJacobian<<":"<<chemicalLinearSolver<<":"<<numericalContext;
         if(recoveryMode)policy<<":boundary-recovery-v1";
         if(exactBatchReuse)policy<<":exact-batch-reuse-v1";
         if(cudaScalar)policy<<":cuda-caloric-candidate-v1";
+        if(cudaHem)policy<<":cuda-hem-v1:"<<hemCpuFallback<<":analytic-jacobian="<<hemAnalyticJacobian;
+        if(cudaHem&&!hemNumericalPolicy.empty())policy<<":arithmetic="<<hemNumericalPolicy;
         policyHash=hashText(policy.str());
     }
 #include "pintleRealFluidModel.inc"
+#include "pintleGpuHemModel.inc"
 
     void bounds(double p,double T) const
     {
@@ -268,11 +306,53 @@ public:
                 "Pressure/temperature is outside the explicitly configured thermodynamic domain");
     }
 
+    void speciesBounds(double T,const Vector& Y) const {
+        for(size_t k=0;k<ns;++k)if(Y[k]>0) {
+            const auto& t=gas->species(k)->thermo;
+            require(T>=t->minTemp()&&T<=t->maxTemp(),"Species temperature outside prepared caloric domain: "+names[k]);
+        }
+    }
+
+    void initializeSolid(const Cantera::AnyMap& entry,size_t i) {
+        auto& s=solid[i];const auto& data=entry["solid"].as<Cantera::AnyMap>();
+        s.enabled=1;s.molecularWeight=weights[condensable[i]];
+        s.Tref=data["reference-temperature"].asDouble();s.pref=data["reference-pressure"].asDouble();
+        s.pmax=data["maximum-pressure"].asDouble();s.molarVolume=data["molar-volume"].asDouble();
+        const auto temperatures=data["temperature-table"].asVector<double>();
+        const auto capacities=data["cp-molar-table"].asVector<double>();
+        require(temperatures.size()==capacities.size()&&temperatures.size()>=2&&temperatures.size()<=64,"Invalid solid Cp table length");
+        s.n=temperatures.size();s.Tmin=temperatures.front();s.Tmax=temperatures.back();
+        for(int j=0;j<s.n;++j){s.T[j]=temperatures[j];s.cp[j]=capacities[j]/s.molecularWeight;}
+        require(s.Tref>=liquidTmin[0]&&s.Tref<s.Tmax&&s.Tmin<=Tmin&&s.pmax<=2e5,
+            "Unsupported low-pressure solid reference/domain");
+        const double fusion=data["fusion-enthalpy"].asDouble()/s.molecularWeight;
+        require(std::isfinite(fusion)&&fusion>0,"Invalid solid fusion enthalpy");
+        const auto liquid=phaseProperties(0,s.pref,s.Tref,{},0);
+        s.hRef=liquid.h-fusion;s.sRef=liquid.s-fusion/s.Tref;
+        require(PintleSolidThermo::validModel(s),"Invalid incompressible solid model");
+        liquidTmin[i]=s.Tmin;liquidTc[i]=s.Tmax/(1-1e-10);
+    }
+
+    PintlePhaseProperties solidProperties(int i,double p,double T) const {
+        const auto& s=solid[i];
+        if(T>s.Tmax)throw PhaseUnavailable("No stable solid in the configured warm domain");
+        require(T>=s.Tmin&&p<=s.pmax,"Solid state outside validated low-pressure temperature/pressure domain");
+        PintleSolidThermo::State v{};
+        require(PintleSolidThermo::evaluate(s,T,p,v),"Invalid incompressible solid state");
+        PintlePhaseProperties out{};out.rho=v.rho;out.h=v.h;out.e=v.e;out.s=v.s;
+        out.cp=out.cv=v.cp;out.chemicalPotential=v.mu;out.branch=2;
+        // Incompressible solid has no standalone finite acoustic speed. Its
+        // contribution is combined with the compressible gas before acoustics.
+        return out;
+    }
+
     PintlePhaseProperties phaseProperties(int index,double p,double T,const Vector& Y,size_t selected,bool chemicalPotential=true)
     {
         ++cost.fullPhaseEvaluations; // legacy logical requests, including failures/cache hits
         if(recoveryTrace.current){auto& t=*recoveryTrace.current;t.phase=index;t.p=p;t.T=T;t.branch=-99;t.density=0;}
         bounds(p,T);
+        require(index==-1||(index>=0&&size_t(index)<nl),"Invalid phase index");
+        if(index>=0&&condensedKind[index])return solidProperties(index,p,T);
         if(exactBatchReuse&&index>=0&&size_t(index)<nl){
             for(const auto& cached:liquidMemo[index])if(cached.valid&&(!chemicalPotential||cached.mu)
                 &&std::memcmp(&p,&cached.p,sizeof(p))==0&&std::memcmp(&T,&cached.T,sizeof(T))==0){
@@ -291,9 +371,11 @@ public:
             for(double y:Y) require(std::isfinite(y)&&y>=0,"Invalid gas mass fraction");
             require(std::abs(std::accumulate(Y.begin(),Y.end(),0.0)-1)<=1e-12,
                     "Gas mass fractions must sum to one");
+            if(hasSolid||enforceSpeciesTemperatureBounds)speciesBounds(T,Y);
             gas->setMassFractions(Y.data()); phase=gas.get();
         } else {
             require(size_t(index)<nl,"Invalid liquid index");
+            if(T<liquidTmin[index]&&hasSolid)throw PhaseUnavailable("Liquid below its supported temperature; solid candidate required");
             require(T>=liquidTmin[index],"Liquid temperature reaches an unsupported solid-state boundary");
             if(T>=liquidTc[index]*(1-1e-10)) throw PhaseUnavailable("No separate liquid above critical temperature");
             phase=liquids[index].get(); selected=0;
@@ -354,6 +436,7 @@ public:
         for(size_t i=0;i<nl;++i)
             require(std::isfinite(mass[i])&&mass[i]>=0&&mass[i]<=q[condensable[i]],
                     "Liquid mass is outside the conserved condensable species inventory");
+        if(hasSolid)require(mass[0]+mass[1]<=q[condensable[0]],"Liquid plus solid mass exceeds conserved N2O inventory");
     }
 
     Evaluation evaluate(const Vector& q,const Liquids& mass,double p,double T,bool virtualLiquids=false,const Liquids* vapor=nullptr)
@@ -364,13 +447,14 @@ public:
         state.p=p;state.T=T;state.rho=std::accumulate(q.begin(),q.end(),0.0);
         Vector gasMass=q;
         for(size_t i=0;i<nl;++i) {
-            gasMass[condensable[i]]=vapor?(*vapor)[i]:q[condensable[i]]-mass[i];
+            gasMass[condensable[i]]=vapor?(*vapor)[i]:gasMass[condensable[i]]-mass[i];
             if(vapor)require(std::isfinite((*vapor)[i])&&(*vapor)[i]>=0&&(*vapor)[i]<=q[condensable[i]],"Invalid explicit vapor inventory");
-            value.gasCondensable[i]=gasMass[condensable[i]];
         }
+        for(size_t i=0;i<nl;++i)value.gasCondensable[i]=gasMass[condensable[i]];
         value.explicitGasPartition=vapor!=nullptr;
         const double mg=std::accumulate(gasMass.begin(),gasMass.end(),0.0);
         state.gasMass=mg;
+        require(!hasSolid||mass[1]==0||mg>0,"Incompressible solid closure requires a nonzero gas phase");
         auto accumulate=[&](double m,const PintlePhaseProperties& phase) {
             const double volume=m/phase.rho;
             const double vp=-volume*phase.compressibility;
@@ -567,8 +651,19 @@ public:
                 require(jac.fullPivLu().isInvertible(),"Singular equilibrium acoustic Jacobian");
                 const Eigen::VectorXd response=pintleFlashSolve(jac,rhs);
                 const double squared=value.state.p*response[0];
-                require(std::isfinite(squared)&&squared>0,"Invalid equilibrium HEM sound speed");
-                value.state.soundEquilibrium=std::sqrt(squared);
+                // A pure species at gas/liquid/solid coexistence has fixed
+                // equilibrium p,T (Gibbs phase rule). Its equilibrium acoustic
+                // derivative is exactly zero, while the frozen wave speed
+                // used by transport remains positive.
+                const bool triple=hasSolid&&active.size()==2&&q[condensable[0]]==rho;
+                if(triple) {
+                    require(std::isfinite(squared)&&std::abs(squared)<=1e-7*value.state.soundFrozen*value.state.soundFrozen,
+                        "Inconsistent pure-species triple-point acoustic derivative");
+                    value.state.soundEquilibrium=0;
+                } else {
+                    require(std::isfinite(squared)&&squared>0,"Invalid equilibrium HEM sound speed");
+                    value.state.soundEquilibrium=std::sqrt(squared);
+                }
                 require(value.state.soundEquilibrium<=value.state.soundFrozen*(1+2e-3),
                         "Equilibrium/frozen sound speeds violate the subcharacteristic check");
                 return value;
@@ -610,12 +705,21 @@ public:
             }
             return true;
         }
+        if(hasSolid) {
+            // Pure liquid must also be stable against solid formation. Pure
+            // solid/mixed condensed-only states are outside this gas-suspension model.
+            if(value.state.liquidMass[1]>0)return false;
+            try {
+                const auto l=phaseProperties(0,p,T,{},0),s=phaseProperties(1,p,T,{},0);
+                if((s.chemicalPotential-l.chemicalPotential)*weights[condensable[0]]/(R*T)<-mutol)return false;
+            } catch(const PhaseUnavailable&) {}
+        }
         // A no-gas state needs a vapour tangent-plane stability test. The model
         // has at most two pure, immiscible liquids: minimize over that binary
         // virtual gas composition. A nonexistent vapour branch is inadmissible.
         std::vector<size_t> present;
         std::array<double,2> liquidMu{};
-        for(size_t i=0;i<nl;++i) if(q[condensable[i]]>0) {
+        for(size_t i=0;i<nl;++i) if(value.state.liquidMass[i]>0) {
             present.push_back(i);
             const auto liquid=phaseProperties(int(i),p,T,{},0);
             liquidMu[i]=liquid.chemicalPotential*weights[condensable[i]]/(R*T);
@@ -662,7 +766,7 @@ public:
         recoveryTrace.begin(0,0,adaptiveRecovery);
         try {consider(frozen(q,{},energy,guess));} catch(const std::exception& ex) {rejected(ex);}
         Liquids allLiquid{};double noncondensable=std::accumulate(q.begin(),q.end(),0.0);
-        for(size_t i=0;i<nl;++i) {allLiquid[i]=q[condensable[i]];noncondensable-=allLiquid[i];}
+        for(size_t i=0;i<nl;++i) {if(hasSolid&&i==1)continue;allLiquid[i]=q[condensable[i]];noncondensable-=allLiquid[i];}
         if(noncondensable<=1e-14*std::accumulate(q.begin(),q.end(),0.0)) {
             // Require exact zero gas inventory; do not erase small gas masses.
             Vector gasInventory=q;for(size_t i=0;i<nl;++i) gasInventory[condensable[i]]=0;
@@ -696,6 +800,30 @@ public:
                     recoveryTrace.begin(mask,first,true);
                     try {consider(activeFlash(q,energy,active,guess,first,second));}
                     catch(const std::exception& ex){rejected(ex);}
+                }
+            }
+        }
+        // The previous cell can be hot/dilute enough that no liquid EOS root
+        // exists at its p,T. Inventory seeds alone then all fail at iteration
+        // zero. Restart within each active set's common temperature domain,
+        // without changing q, energy, bounds or phase acceptance criteria.
+        if(candidates.empty()) {
+            for(unsigned mask=1;mask<(1u<<nl);++mask) {
+                std::vector<size_t> active;bool possible=true;double lower=Tmin,upper=Tmax;
+                for(size_t i=0;i<nl;++i)if(mask&(1u<<i)) {
+                    if(q[condensable[i]]<=0)possible=false;
+                    else {active.push_back(i);lower=std::max(lower,liquidTmin[i]);
+                        upper=std::min(upper,liquidTc[i]*(1-1e-10));}
+                }
+                if(!possible||!(upper>lower))continue;
+                for(int t=0;t<PintleFlashSeeds::count;++t) {
+                    auto restart=guess;
+                    restart.T=lower+(upper-lower)*PintleFlashSeeds::fraction(t);
+                    for(double seed:{-1.0,0.5,0.95,0.1,0.9999}) {
+                        recoveryTrace.begin(mask,seed,adaptiveRecovery);
+                        try {consider(activeFlash(q,energy,active,restart,seed));}
+                        catch(const std::exception& ex) {rejected(ex);}
+                    }
                 }
             }
         }
@@ -1228,6 +1356,38 @@ ChemicalODE& chemicalWorker(Model& m,double energy,bool equilibrium,const Pintle
     worker->reset(energy,equilibrium,state,atol);worker->useSparse=mode==1;worker->useMatrixFree=mode==2;worker->useWoodbury=m.chemicalLinearSolver==4;return *worker;
 }
 
+Vector phaseGasInventory(const Model& m,const Vector& total,const Liquids& condensed,
+    const PintleThermoState& state)
+{
+    m.checkMass(total,condensed);
+    Vector gas=total;
+    for(size_t i=0;i<m.nl;++i)gas[m.condensable[i]]-=condensed[i];
+    // The bounded GPU flash retains condensable vapor explicitly in its
+    // logarithmic phase coordinate. In a nearly full liquid cell, q_l - m_l
+    // can lose several digits although state.gasMass still carries them.
+    // Choose the subtraction with the smaller FP operands, and insist that
+    // both independent inventories agree to within their rounding error.
+    if(m.nl==1&&m.condensedKind[0]==0) {
+        const size_t k=m.condensable[0];
+        double other=0;
+        for(size_t j=0;j<m.ns;++j)if(j!=k)other+=total[j];
+        require(std::isfinite(state.gasMass)&&state.gasMass>=0,
+            "Invalid recovered gas inventory");
+        const double fromGas=state.gasMass-other;
+        const double fromLiquid=gas[k];
+        const double scale=std::max({1.0,std::abs(total[k]),std::abs(condensed[0]),
+            std::abs(state.gasMass),std::abs(other)});
+        const double rounding=16*std::numeric_limits<double>::epsilon()*scale;
+        require(std::isfinite(fromGas)&&std::abs(fromGas-fromLiquid)<=rounding,
+            "Recovered condensable vapor differs from conserved inventory beyond FP rounding");
+        if(fromGas>=0&&fromGas<=total[k]
+            &&std::abs(state.gasMass)+std::abs(other)
+                <std::abs(total[k])+std::abs(condensed[0]))
+            gas[k]=fromGas;
+    }
+    return gas;
+}
+
 template<class Function> int protect(void* pointer,Function&& function)
 {
     if(!pointer) return -1;
@@ -1306,6 +1466,8 @@ int pintle_rt_chemical_rhs(void* model,const double* q,double energy,int equilib
 const char* pintle_rt_species_name(void* model,size_t species){auto& m=*static_cast<Model*>(model);return species<m.ns?m.names[species].c_str():nullptr;}
 double pintle_rt_molecular_weight(void* model,size_t species){auto& m=*static_cast<Model*>(model);return species<m.ns?m.weights[species]:0;}
 int pintle_rt_liquid_species(void* model,size_t liquid){auto& m=*static_cast<Model*>(model);return liquid<m.nl?int(m.condensable[liquid]):-1;}
+int pintle_rt_condensed_kind_v1(void* model,size_t slot){auto& m=*static_cast<Model*>(model);return slot<m.nl?m.condensedKind[slot]:-1;}
+const char* pintle_rt_condensed_name_v1(void* model,size_t slot){auto& m=*static_cast<Model*>(model);return slot<m.nl?m.condensedName[slot].c_str():nullptr;}
 int pintle_rt_phase(void* model,int phase,double T,double p,const double* Y,size_t selected,PintlePhaseProperties* result)
 {
     return protect(model,[&](Model& m){*result=m.phaseProperties(phase,p,T,phase<0?Vector(Y,Y+m.ns):Vector{},selected);});
@@ -1348,27 +1510,61 @@ const char* pintle_rt_runtime_manifest_v1(void* model) {
             <<",\"backendSha256\":"<<recoveryQuote(digest)<<",\"thermoConfiguration\":"<<recoveryQuote(m.configuration)
             <<",\"physicalModelHash\":"<<recoveryQuote(m.physicalHash)<<",\"numericalPolicyHash\":"<<recoveryQuote(m.policyHash)
             <<",\"modelFingerprint\":"<<recoveryQuote(m.fingerprint)<<",\"eos\":"<<recoveryQuote(m.eosName)
-            <<",\"closureBackend\":\"cpu\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":false,\"deviceChemistryIntegration\":false"
+            <<",\"closureBackend\":"<<recoveryQuote(m.cudaHem?"cuda":"cpu")
+            <<",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":"<<(m.cudaHem?"true":"false")
+            <<",\"deviceChemistryIntegration\":false,\"closureCpuFallback\":"<<(m.cudaHem&&m.hemCpuFallback?"true":"false")
+            <<",\"closureJacobian\":"<<recoveryQuote(m.cudaHem&&m.hemAnalyticJacobian&&!m.hasSolid?"analytic":"finiteDifference")
+            <<",\"solidN2O\":"<<(m.hasSolid?"true":"false")
+            <<",\"enforceSpeciesTemperatureBounds\":"<<(m.hasSolid||m.enforceSpeciesTemperatureBounds?"true":"false")
             <<",\"exactBatchReuse\":"<<(m.exactBatchReuse?"true":"false")
             <<",\"deviceCaloricCandidates\":"<<(m.cudaScalar?"true":"false")
             <<",\"deviceCaloricScope\":\"no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval\"";
         if(m.cudaScalar){char gpuDigest[65];require(pintle_rt_file_sha256_v1(m.scalarLibrary.c_str(),gpuDigest,sizeof(gpuDigest))==0,"Cannot hash scalar CUDA library");
             out<<",\"scalarLibrary\":"<<recoveryQuote(m.scalarLibrary)<<",\"scalarLibrarySha256\":"<<recoveryQuote(gpuDigest);}
+        if(m.cudaHem){char gpuDigest[65];require(pintle_rt_file_sha256_v1(m.hemLibrary.c_str(),gpuDigest,sizeof(gpuDigest))==0,"Cannot hash CUDA HEM library");
+            out<<",\"hemLibrary\":"<<recoveryQuote(m.hemLibrary)<<",\"hemLibrarySha256\":"<<recoveryQuote(gpuDigest)
+                <<",\"hemNumericalPolicy\":"<<recoveryQuote(m.hemNumericalPolicy.empty()?"legacy-fp64-separate-rn":m.hemNumericalPolicy)
+                <<",\"deviceHemScope\":\"PR; nonreacting HEM; all reference candidates and boundary fallback; experimental\"";}
         out<<"}";
         m.runtimeManifest=out.str();return m.runtimeManifest.c_str();
     }catch(const std::exception& e){std::snprintf(m.error.data(),m.error.size(),"%s",e.what());return nullptr;}
 }
 int pintle_rt_set_recovery_v1(void* model,int mode,int diagnostics) {
     return protect(model,[&](Model& m){require(mode==0||mode==1,"Unknown recovery mode");
+        require(!m.hasSolid||mode==0,"Log-vapor boundary recovery does not support shared liquid/solid inventories");
         m.recoveryMode=mode;m.recoveryTrace.enabled=diagnostics!=0;m.refreshPolicyHash();});
 }
 const char* pintle_rt_recovery_diagnostic_v1(void* model) {
     return model?static_cast<Model*>(model)->recoveryDiagnostic.c_str():nullptr;
 }
+int pintle_rt_export_gpu_hem_v1(void* model,void* output,size_t size,size_t* required) {
+    return protect(model,[&](Model& m){require(required,"Null HEM export size");
+        *required=sizeof(PintleDeviceFlash::Model);if(!output){require(size==0,"Invalid HEM size query");return;}
+        require(size==*required,"Wrong HEM model image size");const auto image=m.deviceHemModel();std::memcpy(output,&image,sizeof(image));});
+}
+int pintle_rt_set_gpu_hem_v1(void* model,int enabled,int cpuFallback,const char* library) {
+    return protect(model,[&](Model& m){require((enabled==0||enabled==1)&&(cpuFallback==0||cpuFallback==1),"Invalid CUDA HEM mode");
+        std::string path,numerics;
+        if(enabled){require(!m.cudaScalar,"Full CUDA HEM and scalar-only CUDA are mutually exclusive");
+            m.deviceHemModel();require(library&&library[0],"CUDA HEM library is required");
+            std::unique_ptr<void,decltype(&dlclose)> handle(dlopen(library,RTLD_NOW|RTLD_LOCAL),dlclose);
+            const char* failure=handle?nullptr:dlerror();
+            require(bool(handle),failure?failure:"Cannot load CUDA HEM library");
+            auto symbol=dlsym(handle.get(),"pintle_gpu_hem_create_v1");Dl_info info{};
+            const bool found=symbol&&dladdr(symbol,&info)&&info.dli_fname;if(found)path=info.dli_fname;
+            require(found,"CUDA HEM library has no version 1 entry point");
+            numerics=Model::queryHemNumericalPolicy(handle.get());}
+        m.cudaHem=enabled;m.hemCpuFallback=cpuFallback;m.hemLibrary=path;
+        m.hemNumericalPolicy=numerics;m.refreshPolicyHash();});
+}
+int pintle_rt_set_gpu_hem_jacobian_v1(void* model,int analytic) {
+    return protect(model,[&](Model& m){require(analytic==0||analytic==1,"Invalid CUDA HEM Jacobian selection");
+        m.hemAnalyticJacobian=analytic;m.refreshPolicyHash();});
+}
 int pintle_rt_set_closure_acceleration_v1(void* model,int reuse,int cuda,const char* library) {
     return protect(model,[&](Model& m){require((reuse==0||reuse==1)&&(cuda==0||cuda==1),"Invalid closure acceleration mode");
         std::string path;
-        if(cuda){require(library&&library[0],"CUDA scalar library is required");
+        if(cuda){require(!m.cudaHem,"Scalar-only CUDA and full CUDA HEM are mutually exclusive");require(library&&library[0],"CUDA scalar library is required");
             void* handle=dlopen(library,RTLD_NOW|RTLD_LOCAL);const char* failure=handle?nullptr:dlerror();
             require(handle,failure?failure:"Cannot load CUDA scalar library");
             auto symbol=dlsym(handle,"pintle_closure_scalar_create_v1");Dl_info info{};
@@ -1544,22 +1740,124 @@ int pintle_rt_export_gas_thermo(void* model,PintleGasThermoSpecies* output,size_
     });
 }
 
-int pintle_rt_gas_enthalpies(void* model,const double* q,const PintleThermoState* state,double* enthalpies)
+int pintle_rt_gas_enthalpies_capillary_v1(void* model,const double* q,
+    const PintleThermoState* state,double color,double pressureJump,double* enthalpies)
 {
     return protect(model,[&](Model& m){
-        Vector gasMass(q,q+m.ns);const Liquids liquid={state->liquidMass[0],state->liquidMass[1]};
-        m.checkMass(gasMass,liquid);
-        for(size_t i=0;i<m.nl;++i) gasMass[m.condensable[i]]-=liquid[i];
+        require(q&&state&&enthalpies,"Invalid gas enthalpy pointers");
+        require(std::isfinite(color)&&color>=0&&color<=1&&std::isfinite(pressureJump),
+            "Invalid capillary color or pressure jump");
+        require(pressureJump==0||(m.nl==1&&m.condensedKind[0]==0),
+            "Curved gas enthalpies require one liquid phase");
+        const double gasPressure=state->p-color*pressureJump;
+        require(std::isfinite(gasPressure)&&gasPressure>0,"Invalid capillary gas pressure");
+        const Vector total(q,q+m.ns);const Liquids liquid={state->liquidMass[0],state->liquidMass[1]};
+        Vector gasMass=phaseGasInventory(m,total,liquid,*state);
         const double mg=std::accumulate(gasMass.begin(),gasMass.end(),0.0);
         require(mg>0,"Gas enthalpies require a present gas phase");
         for(double& y:gasMass) y/=mg;
-        m.phaseProperties(-1,state->p,state->T,gasMass,0,false);
+        m.phaseProperties(-1,gasPressure,state->T,gasMass,0,false);
         Vector h(m.ns);m.gas->getPartialMolarEnthalpies(h.data());
         for(size_t k=0;k<m.ns;++k) {
             h[k]/=m.weights[k];require(std::isfinite(h[k]),"Non-finite gas partial mass enthalpy");
         }
         std::copy(h.begin(),h.end(),enthalpies);
     });
+}
+int pintle_rt_gas_enthalpies(void* model,const double* q,
+    const PintleThermoState* state,double* enthalpies)
+{
+    return pintle_rt_gas_enthalpies_capillary_v1(model,q,state,0,0,enthalpies);
+}
+
+int pintle_rt_total_species_enthalpies_capillary_v1(void* model,const double* q,
+    const PintleThermoState* state,double color,double pressureJump,double* enthalpies)
+{
+    return protect(model,[&](Model& m){
+        require(q&&state&&enthalpies,"Invalid total-species enthalpy pointers");
+        require(std::isfinite(state->p)&&std::isfinite(state->T)&&state->p>0&&state->T>0,
+                "Invalid recovered pressure or temperature");
+        require(std::isfinite(color)&&color>=0&&color<=1&&std::isfinite(pressureJump),
+                "Invalid capillary color or pressure jump");
+        require(pressureJump==0||(m.nl==1&&m.condensedKind[0]==0),
+                "Curved enthalpies require one liquid phase");
+        const double gasPressure=state->p-color*pressureJump;
+        const double liquidPressure=state->p+(1-color)*pressureJump;
+        require(std::isfinite(gasPressure)&&gasPressure>0&&std::isfinite(liquidPressure)&&liquidPressure>0,
+                "Invalid capillary phase pressure");
+        Vector total(q,q+m.ns);
+        Liquids condensed{state->liquidMass[0],state->liquidMass[1]};
+        Vector gas=phaseGasInventory(m,total,condensed,*state);
+        for(double value:gas)require(std::isfinite(value)&&value>=0,"Invalid recovered gas inventory");
+        const double rho=std::accumulate(total.begin(),total.end(),0.0);
+        const double mg=std::accumulate(gas.begin(),gas.end(),0.0);
+        const double tolerance=std::max(1e-8,50*m.vtol);
+        require(std::isfinite(state->rho)&&std::abs(state->rho-rho)<=tolerance*std::max(1.0,rho),
+                "Recovered density does not match total species inventory");
+        require(std::isfinite(state->gasMass)&&std::abs(state->gasMass-mg)<=tolerance*std::max(1.0,rho),
+                "Recovered gas mass does not match phase inventory");
+
+        // A present gas fixes the mixture composition. For a condensed-only
+        // state, use total composition solely to define finite partial gas
+        // enthalpies for species whose total inventory is zero; present
+        // species receive their condensed enthalpy below.
+        Vector gasY=m.ns?gas:Vector{};
+        const double compositionMass=mg>0?mg:rho;
+        if(mg==0)gasY=total;
+        for(double& value:gasY)value/=compositionMass;
+        m.phaseProperties(-1,gasPressure,state->T,gasY,0,false);
+        Vector gasH(m.ns),effective(m.ns),condensedH(m.nl),condensedRho(m.nl);
+        const double gasDensity=m.gas->density();
+        m.gas->getPartialMolarEnthalpies(gasH.data());
+        for(size_t k=0;k<m.ns;++k) {
+            gasH[k]/=m.weights[k];
+            require(std::isfinite(gasH[k]),"Non-finite gas partial mass enthalpy");
+        }
+        for(size_t i=0;i<m.nl;++i)if(condensed[i]>0) {
+            const auto phase=m.phaseProperties(int(i),liquidPressure,state->T,{},0,false);
+            condensedH[i]=phase.h;condensedRho[i]=phase.rho;
+            require(std::isfinite(state->rhoLiquid[i])&&state->rhoLiquid[i]>0
+                    &&std::abs(state->rhoLiquid[i]/phase.rho-1)<=tolerance,
+                    "Recovered condensed density is inconsistent with p/T");
+            require(std::isfinite(state->alphaLiquid[i])
+                    &&std::abs(state->alphaLiquid[i]-condensed[i]/phase.rho)<=tolerance,
+                    "Recovered condensed volume fraction is inconsistent with inventory");
+        }
+
+        require(mg==0||(std::isfinite(state->rhoGas)&&state->rhoGas>0
+                &&std::abs(state->rhoGas/gasDensity-1)<=tolerance
+                &&std::isfinite(state->alphaGas)
+                &&std::abs(state->alphaGas-mg/gasDensity)<=tolerance),
+                "Recovered gas density or volume fraction is inconsistent with p/T");
+        double reconstructedVolume=mg>0?mg/gasDensity:0;
+        double reconstructedEnthalpy=0;
+        for(size_t k=0;k<m.ns;++k) {
+            double numerator=gas[k]*gasH[k];
+            for(size_t i=0;i<m.nl;++i)if(m.condensable[i]==k) {
+                numerator+=condensed[i]*condensedH[i];
+                if(condensed[i]>0)reconstructedVolume+=condensed[i]/condensedRho[i];
+            }
+            effective[k]=total[k]>0?numerator/total[k]:gasH[k];
+            require(std::isfinite(effective[k]),"Non-finite effective total-species enthalpy");
+            reconstructedEnthalpy+=total[k]*effective[k];
+        }
+        require(std::isfinite(reconstructedVolume)
+                &&std::abs(reconstructedVolume-1)<=tolerance*std::max(1.0,reconstructedVolume),
+                "Recovered phase partition does not fill unit volume");
+        const double pressureWork=pressureJump==0?state->p:
+            gasPressure*state->alphaGas
+            +liquidPressure*(state->alphaLiquid[0]+state->alphaLiquid[1]);
+        require(std::isfinite(state->e)
+                &&std::abs(reconstructedEnthalpy-(rho*state->e+pressureWork))
+                    <=tolerance*std::max({1.0,std::abs(reconstructedEnthalpy),std::abs(rho*state->e+pressureWork)}),
+                "Recovered phase partition is inconsistent with mixture energy");
+        std::copy(effective.begin(),effective.end(),enthalpies);
+    });
+}
+int pintle_rt_total_species_enthalpies_v1(void* model,const double* q,
+    const PintleThermoState* state,double* enthalpies)
+{
+    return pintle_rt_total_species_enthalpies_capillary_v1(model,q,state,0,0,enthalpies);
 }
 
 int pintle_rt_react(void* model,double* q,double energy,double dt,int equilibrium,

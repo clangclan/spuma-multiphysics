@@ -1,0 +1,39 @@
+{
+  "drop": {
+    "passed": true,
+    "wallSeconds": 1.3060093510002844
+  },
+  "flash-sphere": {
+    "error": "ReactiveFoam failed in /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v5/flash-sphere; see /home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v5/flash-sphere/solver.log",
+    "passed": false,
+    "wallSeconds": 12.288028911999845
+  },
+  "off-explicit": {
+    "passed": true,
+    "wallSeconds": 0.6471315250000771
+  },
+  "off-omitted": {
+    "passed": true,
+    "wallSeconds": 14.746288105000076
+  },
+  "plane": {
+    "note": "completed in preceding run",
+    "passed": true
+  },
+  "sphere-16": {
+    "passed": true,
+    "wallSeconds": 0.7502851149997696
+  },
+  "sphere-24": {
+    "passed": true,
+    "wallSeconds": 0.9052561550001883
+  },
+  "sphere-32": {
+    "passed": true,
+    "wallSeconds": 1.303549700000076
+  },
+  "wave": {
+    "passed": true,
+    "wallSeconds": 0.8995593949998693
+  }
+}

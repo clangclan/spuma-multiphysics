@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "scope": "Host-only fixed-q/E sensitivity; no full solver and no GPU execution",
+  "sourceConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_solid_20260922/thermo/cold-pr-148K-config.yaml",
+  "library": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+  "variantConfigurations": {
+    "0.036": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/density-sensitivity/cold-pr-148K-solid-volume-0.036.yaml",
+    "0.040": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/density-sensitivity/cold-pr-148K-solid-volume-0.040.yaml",
+    "0.044": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/density-sensitivity/cold-pr-148K-solid-volume-0.044.yaml"
+  },
+  "fixedInput": {
+    "T_K": 165.0,
+    "coexistencePressure_Pa": 17907.43303222001,
+    "coexistenceMuResidual_J_kg": 0.0,
+    "q_kg_m3": [
+      0.0,
+      0.0,
+      1.1542668523403141,
+      0.0
+    ],
+    "energyDensity_J_m3": 1693545.7476648022,
+    "qSha256": "2cd7d496192dc4f5fe5490cfa657474d34c08b21d7fffad8950c864bf128f083"
+  },
+  "states": [
+    {
+      "molarVolume_m3_kmol": 0.036,
+      "T_K": 164.99728428579127,
+      "p_Pa": 17906.085713313434,
+      "rho_kg_m3": 1.1542668523403141,
+      "solidMass_kg_m3": 0.5771371678241444,
+      "solidVolumeFraction": 0.00047206366395540405,
+      "gasMass_kg_m3": 0.5771296845161697,
+      "volumeResidual": 1.5235590566931023e-11,
+      "energyResidual": 1.2923229581274696e-14,
+      "chemicalResidual": 9.237055564881302e-13
+    },
+    {
+      "molarVolume_m3_kmol": 0.04,
+      "T_K": 165.0000000000058,
+      "p_Pa": 17907.433032230612,
+      "rho_kg_m3": 1.1542668523403141,
+      "solidMass_kg_m3": 0.5771334261692307,
+      "solidVolumeFraction": 0.0005245117816728974,
+      "gasMass_kg_m3": 0.5771334261710834,
+      "volumeResidual": 1.0442757769624222e-12,
+      "energyResidual": 2.7551225617951587e-13,
+      "chemicalResidual": 7.105427357601002e-15
+    },
+    {
+      "molarVolume_m3_kmol": 0.044,
+      "T_K": 165.00271568209854,
+      "p_Pa": 17908.780477092354,
+      "rho_kg_m3": 1.1542668523403141,
+      "solidMass_kg_m3": 0.5771296845991732,
+      "solidVolumeFraction": 0.0005769592193752669,
+      "gasMass_kg_m3": 0.5771371677411409,
+      "volumeResidual": 1.5238255102190124e-11,
+      "energyResidual": 1.2098342586725248e-14,
+      "chemicalResidual": 9.450218385609332e-13
+    }
+  ],
+  "maximumRelativeResponsesFromCentral": {
+    "T_K": 1.6458874027458492e-05,
+    "p_Pa": 7.524500353106589e-05,
+    "solidMass_kg_m3": 6.483171384630282e-06,
+    "solidVolumeFraction": 0.09999416514575388
+  },
+  "headerCalculus": {
+    "knots": 36,
+    "maxRelativeDhDtError": 2.5253929281099374e-08,
+    "maxRelativeDsDtError": 1.3105846408123512e-08,
+    "maxRelativeCpJumpAcrossKnot": 1.0242403551907174e-07
+  },
+  "tests": {
+    "allResidualsPass": true,
+    "temperatureResponseBounded": true,
+    "pressureResponseBounded": true,
+    "solidMassResponseBounded": true,
+    "solidVolumeFractionResponseBounded": true,
+    "headerThermodynamicDerivatives": true,
+    "headerCpContinuous": true
+  },
+  "passed": true
+}

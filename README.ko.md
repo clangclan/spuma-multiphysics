@@ -38,7 +38,7 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 # CUDA 수송을 빌드했다면 --backends cpu cuda로 두 경로를 검사한다.
 ```
 
-현재는 고정 메시·단일 MPI rank·FP64 연구 솔버다. 표면장력, 액적 분열·합체·슬립, WALE/LES/RANS, MPI 영역 분할은 지원하지 않는다. 기본 HEM 접촉면 정확도와 고압 반응 모델에도 알려진 한계가 있다. 전체 범위와 제약은 [상세 사용 설명](README.reactive-phase.ko.md)에 명시한다.
+현재는 고정 메시·단일 MPI rank·FP64 연구 솔버다. 이 개발 브랜치에는 실험적 CUDA WALE 운동량 응력·총에너지 결합을 추가했다. SGS 열/종 유속·TCI 및 난류 통계 검증은 남아 있다. 표면장력 기초 함수와 액적 식별은 독립 모듈이며 실제 계면 수송·1차 분열은 아직 연결하지 않았다. 액적 합체·슬립과 MPI 영역 분할도 지원하지 않는다. [구현 및 검증 현황](docs/spray-physics/implementation-status.ko.md)을 참고한다. 기본 HEM 접촉면 정확도와 고압 반응 모델에도 알려진 한계가 있다. 전체 범위와 제약은 [상세 사용 설명](README.reactive-phase.ko.md)에 명시한다.
 
 ## 저장소 구성
 
@@ -49,3 +49,5 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 - `reports`, `results`: 날짜와 커밋에 대응하는 검증 기록. ColdFoam 관련 과거 결과는 현재 ReactiveFoam의 기능·성능 근거가 아니다. 과거 소스는 Git 이력에서 확인할 수 있다.
 
 SPUMA/OpenFOAM에서 파생한 코드는 GPL-3.0-or-later 조건을 따른다. [LICENSE](LICENSE)를 확인한다.
+
+90도 액체 N₂O 충돌·평형 flashing 입력은 [벤치마크 구성](docs/benchmarks/impinging-n2o-setup.ko.md)에 있다. 55 bar(g) 공급과 1 atm/40 bar(abs) 환경, 각 256k 정육면체 메시를 제공한다. 현재 입력은 [과냉각 액체 N₂O 프로필](docs/benchmarks/impinging-n2o-supercooled.ko.md)로, 148 K까지 기체–액체 상평형을 계산하고 고체·승화는 제외한다. 두 환경의 GPU 10스텝은 재시도·CPU fallback 없이 완료됐고, 이전 고체 프로필 대비 실행 시간은 각각 92.5%, 68.8% 감소했다. 삼중점 아래 액체는 준안정 PR 연장 모델이다.

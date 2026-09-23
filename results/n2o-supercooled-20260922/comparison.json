@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "singleRunPerCase": true,
+  "cells": 256000,
+  "steps": 10,
+  "interpretation": "Physics/model simplification with restored analytic Jacobian; the two models are not physically equivalent below the triple point. Single-run wall-time comparison, not repeated performance statistics.",
+  "baselineEvidence": "/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/results/n2o-solid-20260922/gpu-ten-steps.json",
+  "baselineSha256": "234596bcf8de0b8e99ee827e010a8eb04b114918f41af66883dbbfe1c9025ba0",
+  "currentEvidence": "/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/results/n2o-supercooled-20260922/gpu-ten-steps.json",
+  "currentSha256": "ccb816551c00779398348fe394eb2e4b5a16e297a300f2ab6fb12d4efb99b786",
+  "cases": [
+    {
+      "case": "ambient_1atm",
+      "baselinePhysics": "gas/liquid/solid equilibrium with finite-difference CUDA Jacobian",
+      "currentPhysics": "metastable gas/supercooled-liquid equilibrium with analytic CUDA Jacobian",
+      "baselineWallSeconds": 151.16206499999998,
+      "currentWallSeconds": 11.375355266000042,
+      "speedup": 13.28855771668164,
+      "wallTimeReductionFraction": 0.9247472885078671,
+      "baselineGpuCounters": {
+        "batches": 1323.0,
+        "submitted": 160026.0,
+        "succeeded": 160026.0,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "phaseEvaluations": 46141176.0,
+        "residualEvaluations": 23518157.0,
+        "flashCandidates": 2424495.0,
+        "stableCandidates": 189075.0,
+        "transferBytes": 64714008.0,
+        "analyticJacobians": 0.0,
+        "finiteDifferenceJacobians": 1137622.0,
+        "hostBytes": 3242320.0,
+        "deviceBytes": 1931680.0,
+        "wallSeconds": 149.2458750890001,
+        "kernelSeconds": 149.18369941717395,
+        "copySeconds": 0.05300361608993272
+      },
+      "currentGpuCounters": {
+        "batches": 1323.0,
+        "submitted": 159869.0,
+        "succeeded": 159869.0,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "phaseEvaluations": 3367650.0,
+        "residualEvaluations": 4772226.0,
+        "flashCandidates": 793340.0,
+        "stableCandidates": 183626.0,
+        "transferBytes": 64650580.0,
+        "analyticJacobians": 449773.0,
+        "finiteDifferenceJacobians": 0.0,
+        "hostBytes": 3242328.0,
+        "deviceBytes": 1931688.0,
+        "wallSeconds": 9.514088998000004,
+        "kernelSeconds": 9.453258392035947,
+        "copySeconds": 0.05209971192199739
+      },
+      "stepSecondsRange": [
+        0.404091243,
+        1.81328082
+      ],
+      "dtRangeSeconds": [
+        2.5884037054482106e-08,
+        2.613564658994185e-08
+      ],
+      "minimumTemperatureK": 165.63662100868865,
+      "maxEnergyBudgetResidual": 5.802798418610056e-12
+    },
+    {
+      "case": "ambient_40bar_abs",
+      "baselinePhysics": "gas/liquid/solid equilibrium with finite-difference CUDA Jacobian",
+      "currentPhysics": "metastable gas/supercooled-liquid equilibrium with analytic CUDA Jacobian",
+      "baselineWallSeconds": 65.78589181299981,
+      "currentWallSeconds": 20.505308142000104,
+      "speedup": 3.2082371724155423,
+      "wallTimeReductionFraction": 0.6883023460366301,
+      "baselineGpuCounters": {
+        "batches": 1323.0,
+        "submitted": 159389.0,
+        "succeeded": 159389.0,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "phaseEvaluations": 227947058.0,
+        "residualEvaluations": 249985737.0,
+        "flashCandidates": 2368755.0,
+        "stableCandidates": 168297.0,
+        "transferBytes": 64456660.0,
+        "analyticJacobians": 0.0,
+        "finiteDifferenceJacobians": 11413489.0,
+        "hostBytes": 3242320.0,
+        "deviceBytes": 1931680.0,
+        "wallSeconds": 63.883513328000085,
+        "kernelSeconds": 63.82343680809437,
+        "copySeconds": 0.050942559991031776
+      },
+      "currentGpuCounters": {
+        "batches": 1323.0,
+        "submitted": 159267.0,
+        "succeeded": 159267.0,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "phaseEvaluations": 24627272.0,
+        "residualEvaluations": 179442516.0,
+        "flashCandidates": 788975.0,
+        "stableCandidates": 168179.0,
+        "transferBytes": 64407372.0,
+        "analyticJacobians": 11383841.0,
+        "finiteDifferenceJacobians": 0.0,
+        "hostBytes": 3242328.0,
+        "deviceBytes": 1931688.0,
+        "wallSeconds": 18.598427224000005,
+        "kernelSeconds": 18.53842735910417,
+        "copySeconds": 0.05118176012206819
+      },
+      "stepSecondsRange": [
+        0.340840517,
+        3.014446601
+      ],
+      "dtRangeSeconds": [
+        2.5636196100808844e-08,
+        2.585504847795123e-08
+      ],
+      "minimumTemperatureK": 222.335045710459,
+      "maxEnergyBudgetResidual": 5.758961205170649e-14
+    }
+  ]
+}

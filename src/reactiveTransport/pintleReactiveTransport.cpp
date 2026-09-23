@@ -2,6 +2,7 @@
 // Compile as C++ for portable operator checks, or via .cu for CUDA execution.
 #include "pintleTransportKernels.h"
 #include "pintleTransportV21.h"
+#include "pintleTurbulence.h"
 #include <algorithm>
 #include <array>
 #include <mutex>
@@ -209,9 +210,14 @@ public:
     size_t bridgeCells=256;std::string physicalHash;
     uint64_t attemptId=0,lastAttempt=0,tokenStage=0;bool attemptOpen=false;
     PintleTransportProfile profile{};
+    PintleWaleProfileV1 waleProfile{1,sizeof(PintleWaleProfileV1),0,0,0,0};
+    PintleWaleScalarProfileV1 waleScalarProfile{1,sizeof(PintleWaleScalarProfileV1),0,0,0};
+    PintleCapillaryProfileV1 capillaryProfile{1,sizeof(PintleCapillaryProfileV1),0,0,0,0,0,0,0};
+    uint32_t turbulenceStatus=0;
     PintleTransportDeviceProfile deviceProfile{};uint32_t gasStatus=0;
     uint64_t residentVersion=0,highestVersion=0;bool haveResident=false;
     bool haveInitial=false;double stageDt=0;std::array<char,1024> error{};size_t nonemptyGasCells=0;
+    bool colorReady=false;uint32_t capillaryStatus=0;
     Transport(int backend,const PintleTransportConfig& cfg,const double* volumes,const PintleTransportFace* faces,
               const double* fixedQ,const PintleTransportState* fixedStates,const double* fixedY,const double* fixedH,
               const PintleTransportOptionsV2* options=nullptr,const PintleTransportOptionsV21* options21=nullptr)
@@ -358,7 +364,8 @@ public:
         require(species&&regions&&regionCount&&count==v.cfg.species&&liquids<=2&&(!liquids||liquidSpecies),"Invalid gas thermo layout");
         for(size_t i=0;i<liquids;++i) {
             require(liquidSpecies[i]>=0&&size_t(liquidSpecies[i])<count,"Invalid condensable species index");
-            if(i) require(liquidSpecies[0]!=liquidSpecies[i],"Duplicate condensable species index");
+            // Distinct condensed slots may hold liquid and solid of the same
+            // chemical species. Gas inventory subtracts both slot masses.
         }
         for(size_t k=0;k<count;++k) {
             const auto& s=species[k];if(s.polynomial==9)v.hasNasa9=true;
@@ -405,8 +412,147 @@ public:
         require(gasStatus==0,"Invalid resident inventory/phase partition or non-finite generated gas properties");
         ++deviceProfile.gasPropertyBuilds;deviceProfile.gasPropertyCells+=v.cfg.cells;
     }
+    void installWale(const PintleWaleOptionsV1& options) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options),"Invalid WALE options ABI");
+        require(!v.wale&&!highestVersion&&!execution.stats.stages&&!execution.stats.stepQueries
+            &&profile.conservedUploads==0&&profile.stateUploadBytes==0,
+            "WALE is immutable and must be installed before stepping");
+        require(!v.cfg.mechanical,"WALE mechanical-environment closure is not implemented");
+        require(std::isfinite(options.Cw)&&options.Cw>=0,"Invalid WALE coefficient");
+        const size_t bytes=product(v.cfg.cells,(v.gradient?1:10)*sizeof(double));
+        require(bytes<=std::numeric_limits<size_t>::max()-sizeof(uint32_t),"WALE allocation size overflow");
+        const size_t extra=bytes+sizeof(uint32_t);
+        require(double(execution.stats.allocatedBytes)+double(extra)<=v.cfg.maxBytes,"WALE exceeds transport memory budget");
+        auto* gradient=v.gradient?v.gradient:execution.allocate<double>(product(v.cfg.cells,9),v.cfg.maxBytes);
+        auto* nut=execution.allocate<double>(v.cfg.cells,v.cfg.maxBytes);
+        auto* error=execution.allocate<uint32_t>(1,v.cfg.maxBytes);
+        v.gradient=gradient;v.eddyViscosity=nut;v.turbulenceError=error;
+        v.waleCw=options.Cw;v.wale=true;waleProfile.workspaceBytes=extra;
+    }
+    void installWaleScalars(const PintleWaleScalarOptionsV1& options) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options),"Invalid WALE scalar options ABI");
+        require(v.wale&&!v.waleScalars&&!highestVersion&&!execution.stats.stages&&!execution.stats.stepQueries
+            &&profile.conservedUploads==0&&profile.stateUploadBytes==0,
+            "WALE scalar closure is immutable and must be installed before stepping");
+        require(!v.cfg.mechanical,"WALE scalar mechanical-environment closure is not implemented");
+        require(std::isfinite(options.turbulentPrandtl)&&std::isfinite(options.turbulentSchmidt)
+            &&options.turbulentPrandtl>=0&&options.turbulentSchmidt>=0,
+            "Invalid turbulent Prandtl/Schmidt number");
+        require(options.turbulentSchmidt==0||v.cfg.variables==v.cfg.species+4
+            ||(v.capillary&&v.cfg.variables==v.cfg.species+5
+               &&v.capillarySpecies<v.cfg.species),
+            "WALE total-species mixing requires equilibrium phase partition or a mapped capillary liquid inventory; frozen non-capillary inventories are unsupported");
+        const size_t all=v.cfg.cells+v.cfg.fixed;
+        size_t bytes=0;
+        if(options.turbulentPrandtl>0)bytes=product(all,sizeof(double));
+        if(options.turbulentSchmidt>0)bytes+=product(product(all,v.cfg.species),sizeof(double));
+        require(double(execution.stats.allocatedBytes)+double(bytes)<=v.cfg.maxBytes,"WALE scalar closure exceeds transport memory budget");
+        double* mixtureCp=nullptr;double* speciesH=nullptr;
+        if(options.turbulentPrandtl>0)mixtureCp=execution.allocate<double>(all,v.cfg.maxBytes);
+        if(options.turbulentSchmidt>0)speciesH=execution.allocate<double>(product(all,v.cfg.species),v.cfg.maxBytes);
+        v.turbulentPrandtl=options.turbulentPrandtl;v.turbulentSchmidt=options.turbulentSchmidt;
+        v.mixtureCp=mixtureCp;v.speciesH=speciesH;
+        v.waleScalars=true;waleScalarProfile.workspaceBytes=bytes;
+    }
+    void uploadWaleScalarFields(const double* cellCp,const double* cellH,const double* fixedCp,const double* fixedH) {
+        require(v.waleScalars,"WALE scalar closure is not selected");
+        const bool uploadH=cellH||fixedH;
+        if(v.turbulentPrandtl>0) {
+            require(cellCp&&(!v.cfg.fixed||fixedCp),"Missing WALE mixture heat capacities");
+            for(size_t c=0;c<v.cfg.cells;++c)require(std::isfinite(cellCp[c])&&cellCp[c]>0,"Invalid WALE mixture heat capacity");
+            for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedCp[c])&&fixedCp[c]>0,"Invalid fixed WALE mixture heat capacity");
+        }
+        if(v.turbulentSchmidt>0) {
+            require(!uploadH||(cellH&&(!v.cfg.fixed||fixedH)),"Incomplete WALE effective species enthalpies");
+            if(uploadH) for(size_t j=0;j<v.cfg.cells*v.cfg.species;++j)require(std::isfinite(cellH[j]),"Invalid WALE effective species enthalpy");
+            if(uploadH) for(size_t j=0;j<v.cfg.fixed*v.cfg.species;++j)require(std::isfinite(fixedH[j]),"Invalid fixed WALE effective species enthalpy");
+        }
+        if(v.turbulentPrandtl>0) {
+            execution.upload(v.mixtureCp,cellCp,v.cfg.cells);execution.upload(v.mixtureCp+v.cfg.cells,fixedCp,v.cfg.fixed);
+        }
+        if(v.turbulentSchmidt>0&&uploadH) {
+            pack(v.speciesH,cellH,v.cfg.cells,v.cfg.species);
+            pack(v.speciesH,fixedH,v.cfg.fixed,v.cfg.species,v.cfg.cells,v.cfg.cells+v.cfg.fixed);
+        }
+        execution.finish();v.scalarCpFields=v.turbulentPrandtl==0||cellCp;
+        v.scalarHFields=v.turbulentSchmidt==0||uploadH;++waleScalarProfile.fieldUploads;
+        waleScalarProfile.fieldUploadBytes+=(v.turbulentPrandtl>0?(v.cfg.cells+v.cfg.fixed)*sizeof(double):0)
+            +(v.turbulentSchmidt>0&&uploadH?(v.cfg.cells+v.cfg.fixed)*v.cfg.species*sizeof(double):0);
+    }
+    void buildWale() {
+        if(!v.wale)return;
+        turbulenceStatus=0;execution.upload(v.turbulenceError,&turbulenceStatus,1);
+        execution.launch(v.cfg.cells,v,Gradients{});++waleProfile.gradientBuilds;
+        execution.launch(v.cfg.cells,v,WaleViscosities{});++waleProfile.viscosityBuilds;
+        waleProfile.cellsEvaluated+=v.cfg.cells;
+        execution.download(&turbulenceStatus,v.turbulenceError,1);execution.finish();
+        require(!turbulenceStatus,"Invalid WALE gradient/filter width/eddy viscosity");
+    }
+    void uploadPrimitives(const PintleTransportPrimitive* primitive,const PintleTransportState* state) {
+        require(primitive,"Null transport primitives");
+        for(size_t c=0;c<v.cfg.cells;++c) {
+            require(std::isfinite(primitive[c].rho)&&primitive[c].rho>0,"Invalid primitive density");
+            for(double u:primitive[c].u)require(std::isfinite(u),"Invalid primitive velocity");
+        }
+        uploadState(state);execution.upload(v.primitive,primitive,v.cfg.cells);
+        profile.primitiveUploadBytes+=v.cfg.cells*sizeof(PintleTransportPrimitive);
+    }
+    void setCapillary(const PintleCapillaryOptionsV1& options) {
+        require(options.abiVersion==1&&options.structBytes==sizeof(options)
+            &&std::isfinite(options.sigma)&&options.sigma>0
+            &&std::isfinite(options.capillaryCfl)&&options.capillaryCfl>0&&options.capillaryCfl<=1
+            &&std::isfinite(options.geometryEpsilon)&&options.geometryEpsilon>=0&&options.geometryEpsilon<1,
+            "Invalid capillary options ABI/model");
+        require(!v.capillary&&!attemptOpen&&!execution.stats.stages&&!highestVersion,
+            "Capillary model must be installed once before stepping");
+        require(!v.cfg.mechanical&&v.cfg.variables==v.cfg.species+5
+            &&options.condensableSpecies>=0&&size_t(options.condensableSpecies)<v.cfg.species,
+            "Capillary model needs one mapped conserved liquid inventory");
+        const size_t all=v.cfg.cells+v.cfg.fixed;
+        v.capillaryColor=execution.allocate<double>(all,v.cfg.maxBytes);
+        v.interface.gradient=execution.allocate<double>(product(v.cfg.cells,3),v.cfg.maxBytes);
+        v.interface.normal=execution.allocate<double>(product(v.cfg.cells,3),v.cfg.maxBytes);
+        v.interface.areaDensity=execution.allocate<double>(v.cfg.cells,v.cfg.maxBytes);
+        v.interface.curvature=execution.allocate<double>(v.cfg.cells,v.cfg.maxBytes);
+        v.capillarySurfaceEnergy=execution.allocate<double>(v.cfg.cells,v.cfg.maxBytes);
+        v.capillaryError=execution.allocate<uint32_t>(1,v.cfg.maxBytes);
+        v.interface.cells=v.cfg.cells;v.interface.faces=v.faces;v.interface.row=v.row;
+        v.interface.incidence=v.incidence;v.interface.inverseVolume=v.inverseVolume;
+        v.interface.color=v.capillaryColor;v.interface.sigma=options.sigma;
+        v.interface.geometryEpsilon=options.geometryEpsilon;
+        v.capillaryCfl=options.capillaryCfl;
+        v.capillarySpecies=size_t(options.condensableSpecies);
+        v.capillary=true;
+        capillaryProfile.capillaryWorkspaceBytes=sizeof(double)*(all+9*v.cfg.cells)+sizeof(uint32_t);
+    }
+    void capillaryGeometry(const double* cellColor,const double* fixedColor,double* energy,
+                           double* curvature,double* normal) {
+        require(v.capillary&&cellColor&&energy&&(!v.cfg.fixed||fixedColor),
+            "Missing capillary model, color or surface-energy output");
+        for(size_t c=0;c<v.cfg.cells;++c)require(std::isfinite(cellColor[c])&&cellColor[c]>=0&&cellColor[c]<=1,
+            "Invalid material color");
+        for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedColor[c])&&fixedColor[c]>=0&&fixedColor[c]<=1,
+            "Invalid fixed material color");
+        colorReady=false;capillaryStatus=0;
+        execution.upload(v.capillaryError,&capillaryStatus,1);
+        execution.upload(v.capillaryColor,cellColor,v.cfg.cells);
+        execution.upload(v.capillaryColor+v.cfg.cells,fixedColor,v.cfg.fixed);
+        execution.launch(v.cfg.cells,v,InterfaceGradient{});
+        execution.launch(v.cfg.cells,v,InterfaceCurvature{});
+        execution.download(energy,v.capillarySurfaceEnergy,v.cfg.cells);
+        if(curvature)execution.download(curvature,v.interface.curvature,v.cfg.cells);
+        if(normal)execution.download(normal,v.interface.normal,product(v.cfg.cells,3));
+        execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
+        require(!capillaryStatus,"Invalid capillary geometry");
+        colorReady=true;++capillaryProfile.geometryBuilds;
+        capillaryProfile.geometryCells+=v.cfg.cells;
+        capillaryProfile.geometryKernels+=2;
+        capillaryProfile.colorUploadBytes+=(v.cfg.cells+v.cfg.fixed)*sizeof(double);
+        capillaryProfile.geometryDownloadBytes+=v.cfg.cells*sizeof(double)*(1+(curvature?1:0)+(normal?3:0));
+    }
     void prepareResident(const PintleTransportState* states,const double* gasY,const double* gasH,bool transport,
                          bool generated=false,const PintleGasPartition* partition=nullptr) {
+        require(!v.capillary||colorReady,"Capillary geometry must be uploaded for this stage");
         uploadState(states);
         if(transport&&v.cfg.diffusivity>0) {
             if(generated) buildGasProperties(partition);
@@ -417,9 +563,26 @@ public:
             }
         }
         execution.launch(v.cfg.cells+v.cfg.fixed,v,Cells{});
-        if(transport&&v.cfg.viscosity>0) execution.launch(v.cfg.cells,v,Gradients{});
-        if(transport) {execution.launch(v.cfg.faces,v,Faces{});++deviceProfile.transportFaceLaunches;}
-        else {execution.launch(v.cfg.faces,v,FaceSpeeds{});++deviceProfile.cflFaceLaunches;}
+        if(v.wale)buildWale();
+        else if(transport&&v.cfg.viscosity>0)execution.launch(v.cfg.cells,v,Gradients{});
+        if(transport) {
+            require(!v.waleScalars||((v.turbulentPrandtl==0||v.scalarCpFields)
+                &&(v.turbulentSchmidt==0||v.scalarHFields)),
+                "WALE scalar heat capacities/enthalpies were not uploaded for this thermodynamic stage");
+            if(v.capillary){capillaryStatus=0;execution.upload(v.capillaryError,&capillaryStatus,1);}
+            execution.launch(v.cfg.faces,v,Faces{});++deviceProfile.transportFaceLaunches;
+            if(v.capillary){execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
+                require(!capillaryStatus,"Invalid capillary face flux");
+                capillaryProfile.faceFluxBuilds+=v.cfg.faces;}
+            if(v.wale) {
+                execution.download(&turbulenceStatus,v.turbulenceError,1);execution.finish();
+                require(!turbulenceStatus,"Nonfinite WALE traction/energy flux; stage remains uncommitted");
+            }
+        } else {
+            require(!v.waleScalars||v.turbulentPrandtl==0||v.scalarCpFields,
+                "WALE scalar heat capacities were not uploaded for this thermodynamic stage");
+            execution.launch(v.cfg.faces,v,FaceSpeeds{});++deviceProfile.cflFaceLaunches;
+        }
     }
     void prepare(const double* q,const PintleTransportState* states,const double* gasY,const double* gasH,bool transport) {
         haveResident=false;uploadQ(q);prepareResident(states,gasY,gasH,transport);
@@ -553,19 +716,62 @@ int pintle_transport_upload_conserved(void* t,const double* q,uint64_t version) 
         x.residentVersion=x.highestVersion=version;x.haveResident=true;
     });
 }
+int pintle_transport_set_capillary_v1(void* t,const PintleCapillaryOptionsV1* options) {
+    return protect(t,[&](Transport& x){require(options,"Null capillary options");x.setCapillary(*options);});
+}
+int pintle_transport_capillary_geometry_v1(void* t,const double* color,const double* fixedColor,
+    double* surfaceEnergy,double* curvature,double* normalXYZ) {
+    return protect(t,[&](Transport& x){x.capillaryGeometry(color,fixedColor,surfaceEnergy,curvature,normalXYZ);});
+}
+int pintle_transport_capillary_profile_v1(void* t,PintleCapillaryProfileV1* profile) {
+    return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1
+        &&profile->structBytes==sizeof(*profile),"Invalid capillary profile ABI");
+        *profile=x.capillaryProfile;});
+}
+int pintle_transport_replace_stage_state_v1(void* t,PintleTransportToken before,
+    uint64_t version,const double* q) {
+    return protect(t,[&](Transport& x){
+        require(x.attemptOpen&&x.tokenStage==1&&before.attemptId==x.attemptId
+            &&before.stageId==1&&x.haveResident&&before.contentVersion==x.residentVersion
+            &&x.haveInitial&&version>x.highestVersion&&q,
+            "Invalid post-RK1 capillary/flash state replacement");
+        x.uploadQ(q);x.execution.finish();
+        x.residentVersion=x.highestVersion=version;
+    });
+}
 int pintle_transport_stable_step_primitives(void* t,const PintleTransportPrimitive* primitive,
     const PintleTransportState* state,double cfl,double maximumStep,double* dt) {
     return protect(t,[&](Transport& x){
-        require(primitive,"Null CFL primitives");
-        for(size_t c=0;c<x.v.cfg.cells;++c) {
-            require(std::isfinite(primitive[c].rho)&&primitive[c].rho>0,"Invalid CFL density");
-            for(double u:primitive[c].u) require(std::isfinite(u),"Invalid CFL velocity");
-        }
-        x.uploadState(state);x.execution.upload(x.v.primitive,primitive,x.v.cfg.cells);
-        x.profile.primitiveUploadBytes+=x.v.cfg.cells*sizeof(PintleTransportPrimitive);
+        x.uploadPrimitives(primitive,state);x.buildWale();
+        require(!x.v.waleScalars||x.v.turbulentPrandtl==0||x.v.scalarCpFields,
+            "WALE scalar heat capacities were not uploaded for this thermodynamic stage");
         x.execution.launch(x.v.cfg.faces,x.v,FaceSpeeds{});++x.deviceProfile.cflFaceLaunches;
         x.stableStep(cfl,maximumStep,dt);
     });
+}
+int pintle_transport_set_wale_v1(void* t,const PintleWaleOptionsV1* options) {
+    return protect(t,[&](Transport& x){require(options,"Null WALE options");x.installWale(*options);});
+}
+int pintle_transport_set_wale_scalars_v1(void* t,const PintleWaleScalarOptionsV1* options) {
+    return protect(t,[&](Transport& x){require(options,"Null WALE scalar options");x.installWaleScalars(*options);});
+}
+int pintle_transport_wale_scalar_profile_v1(void* t,PintleWaleScalarProfileV1* profile) {
+    return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1&&profile->structBytes==sizeof(*profile),
+        "Invalid WALE scalar profile ABI");*profile=x.waleScalarProfile;});
+}
+int pintle_transport_wale_scalar_fields_v1(void* t,const double* cellCp,const double* cellH,
+    const double* fixedCp,const double* fixedH) {
+    return protect(t,[&](Transport& x){x.uploadWaleScalarFields(cellCp,cellH,fixedCp,fixedH);});
+}
+int pintle_transport_wale_profile_v1(void* t,PintleWaleProfileV1* profile) {
+    return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1
+        &&profile->structBytes==sizeof(*profile),"Invalid WALE profile ABI");*profile=x.waleProfile;});
+}
+int pintle_transport_wale_primitives_v1(void* t,const PintleTransportPrimitive* primitive,
+    const PintleTransportState* state,double* nut) {
+    return protect(t,[&](Transport& x){require(x.v.wale&&nut,"WALE not selected or missing output");
+        x.uploadPrimitives(primitive,state);x.buildWale();
+        x.execution.download(nut,x.v.eddyViscosity,x.v.cfg.cells);x.execution.finish();});
 }
 int pintle_transport_stage_resident(void* t,const PintleTransportState* states,const double* gasY,const double* gasH,
     double dt,int stage,uint64_t inputVersion,uint64_t outputVersion,double* q,double* boundary) {
@@ -662,3 +868,6 @@ extern "C" int pintle_transport_profile_v21(void* handle,PintleTransportProfileV
 }
 
 #include "pintleClosureScalar.cuh"
+#ifndef PINTLE_EXTERNAL_GPU_HEM
+#include "pintleGpuHem.cuh"
+#endif

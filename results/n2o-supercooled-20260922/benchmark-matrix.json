@@ -1,0 +1,83 @@
+{
+  "cases": [
+    "ambient_1atm",
+    "ambient_40bar_abs"
+  ],
+  "generatorSha256": "55c62b952d4a437a8d5bf2bf7b15c0b4dacbe682d657ad09e9d5144e9c9d3320",
+  "geometry": {
+    "angleDegrees": 90,
+    "cellEdgeM": 0.00025,
+    "cellVolumeM3": 1.5625e-11,
+    "cells": 256000,
+    "domainM": [
+      0.02,
+      0.02,
+      0.01
+    ],
+    "facesPerNozzle": 64,
+    "inletCentersM": [
+      [
+        0,
+        0.006,
+        0.005
+      ],
+      [
+        0.006,
+        0,
+        0.005
+      ]
+    ],
+    "nominalDirections": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "nominalIntersectionM": [
+      0.006,
+      0.006,
+      0.005
+    ],
+    "nozzleShape": "square",
+    "nozzleSideM": 0.002,
+    "shape": [
+      80,
+      80,
+      40
+    ]
+  },
+  "limits": [
+    "fixedState reservoir is not a resolved nozzle or characteristic total-pressure inlet",
+    "HEM flash is thermodynamic equilibrium, not finite-rate nucleation",
+    "no geometric interface/surface-tension breakup prediction",
+    "30 ns is an upper bound; solver may reduce it for CFL or recovery"
+  ],
+  "localThermoHashes": {
+    "thermo/cold-pr-config.yaml": "3c2799dc6d764f6eef2855e50478e3603fdf9c5bc6eb72a448183e44a44e0c95",
+    "thermo/cold-pr.yaml": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916"
+  },
+  "meshCheck": "mesh/checkMesh.log",
+  "meshCheckCommand": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source \"$1\" ParaView_TYPE=none >/dev/null && exec checkMesh -case \"$2\" -allGeometry -allTopology",
+    "mesh-check",
+    "/opt/openfoam14/etc/bashrc",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/benchmark/mesh"
+  ],
+  "purpose": "90-degree pressure-driven liquid N2O impingement and equilibrium flashing",
+  "schema": 1,
+  "sourceConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/thermo/cold-pr-148K-config.yaml",
+  "sourceConfigurationSha256": "f2a6aa83c24633ca4a22566d35e140f5a00f31806d7cd556445ebc5a513aa4ae",
+  "sourceMechanismSha256": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916",
+  "supplyAbsolutePa": 5601325.0,
+  "temperatureK": 293.15
+}
