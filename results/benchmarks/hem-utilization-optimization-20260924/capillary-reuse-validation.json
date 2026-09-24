@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "equilibrium-duplicates",
+      "reuse": false,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 0,
+      "reusedCells": 0,
+      "eligibleCells": 0
+    },
+    {
+      "name": "frozen-duplicates",
+      "reuse": false,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 0,
+      "reusedCells": 0,
+      "eligibleCells": 0
+    },
+    {
+      "name": "one-bit-complete-key",
+      "reuse": false,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 0,
+      "reusedCells": 0,
+      "eligibleCells": 0
+    },
+    {
+      "name": "distinct-geometry-source-order",
+      "reuse": false,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 0,
+      "reusedCells": 0,
+      "eligibleCells": 0
+    },
+    {
+      "name": "failed-duplicates-atomic",
+      "reuse": false,
+      "passed": true,
+      "status": 1,
+      "uniqueCells": 0,
+      "reusedCells": 0,
+      "eligibleCells": 0
+    },
+    {
+      "name": "equilibrium-duplicates",
+      "reuse": true,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 1,
+      "reusedCells": 15,
+      "eligibleCells": 16
+    },
+    {
+      "name": "frozen-duplicates",
+      "reuse": true,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 1,
+      "reusedCells": 15,
+      "eligibleCells": 16
+    },
+    {
+      "name": "one-bit-complete-key",
+      "reuse": true,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 6,
+      "reusedCells": 0,
+      "eligibleCells": 6
+    },
+    {
+      "name": "distinct-geometry-source-order",
+      "reuse": true,
+      "passed": true,
+      "status": 0,
+      "uniqueCells": 3,
+      "reusedCells": 3,
+      "eligibleCells": 6
+    },
+    {
+      "name": "failed-duplicates-atomic",
+      "reuse": true,
+      "passed": true,
+      "status": 1,
+      "uniqueCells": 2,
+      "reusedCells": 0,
+      "eligibleCells": 6
+    }
+  ],
+  "comparison": "All state bytes, including residuals/iterations; exact key and failed-output immutability"
+}

@@ -200,9 +200,9 @@ public:
         if(first<count)throw std::runtime_error("Batch cell "+std::to_string(first)+": "+failures[first].data());
         double maximum=0;if(operation!=0)for(size_t c=0;c<count;++c)maximum=std::max(maximum,drifts[c]);
         for(size_t c=0;c<count;++c) {
-            // Operation-0 recovery consumes immutable conserved mass. Every
-            // other mode retains the staged transactional mass commit.
-            if(operation!=0)std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);
+            // Both equilibrium and frozen recovery consume immutable mass.
+            // Only reacting operations commit staged chemical mass changes.
+            if(operation%2!=0)std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);
             output[c]=states[c];}
         *drift=maximum;outcome.success=true;
     }

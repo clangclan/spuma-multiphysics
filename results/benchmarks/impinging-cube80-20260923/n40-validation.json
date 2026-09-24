@@ -1,0 +1,1794 @@
+{
+  "binaries": {
+    "bin/ReactiveFoam": "4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858",
+    "lib/libpintleReactiveBackend.so": "7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25",
+    "lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f"
+  },
+  "cases": [
+    {
+      "ambientPa": 101325.0,
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_1atm",
+      "cells": 64000,
+      "logSha256": "8cda05e843565e8bbac66682a215e08e4311a4783e7c351e8343b71947f29fac",
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999999,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_1atm/3e-08",
+        "checkpointSha256": "5bc77a11ed936ef440fafaecb0476cabe807b33424e7c072c7e31e4d5c94004e",
+        "conservedBudgetResidual": [
+          9.118618326067185e-17,
+          -1.3487287386421625e-16,
+          1.6543612251060553e-23,
+          0.0,
+          1.0587911840678754e-22,
+          -4.235164736271502e-22,
+          7.56500174527464e-22,
+          8.852467370257244e-13
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.8862178216706518e-08,
+        "n2oMassKg": 1.886217821670652e-08,
+        "pRangePa": [
+          96646.68230502972,
+          101324.99999999997
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          252.88949625228082,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.886217821670652e-08
+      },
+      "passed": true,
+      "processElapsedSeconds": 1.56,
+      "processPeakRssKiB": 691872,
+      "processWallSeconds": 2.330042054999467,
+      "profiles": {
+        "REACTIVE_ATTEMPT_PROFILE": [
+          {
+            "accepted": 1.0,
+            "attempt": 2.0,
+            "factorBuilds": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "retry": 0.0,
+            "rootChecks": 0.0,
+            "scalarProbes": 0.0,
+            "sourceCalls": 0.0,
+            "workerJobElapsedSeconds": 0.0
+          }
+        ],
+        "REACTIVE_BACKENDS": [
+          {
+            "chemicalLinearSolver": "dense",
+            "chemistry": "cpu",
+            "thermodynamics": "cuda",
+            "transport": "cuda",
+            "transportGasProperties": "disabled"
+          }
+        ],
+        "REACTIVE_BATCH": [
+          {
+            "batches": 48.0,
+            "capacity": 4096.0,
+            "cells": 192000.0,
+            "failures": 0.0,
+            "scope": "bounded_scratch_excludes_Cantera_CVODE_worker_allocations",
+            "scratchBytes": 6420824.0,
+            "workers": 1.0
+          }
+        ],
+        "REACTIVE_BATCH_V21": [
+          {
+            "accepted": 48.0,
+            "attempted": 48.0,
+            "batchWallSeconds": 0.030986752000000003,
+            "failed": 0.0,
+            "flowStagingBytes": 884736.0,
+            "poolScratchBytes": 6420824.0,
+            "workerInternalBytesUnmeasured": 1.0,
+            "workerJobSecondsMax": 0.0,
+            "workerJobSecondsSum": 0.0,
+            "workerOwnedBytesKnownLowerBound": 58104.0
+          }
+        ],
+        "REACTIVE_CAPILLARY": [
+          {
+            "capillaryCfl": 0.25,
+            "closureBackend": "cuda",
+            "geometryBackend": "cuda",
+            "geometryScheme": "Gauss-diffuse",
+            "noPLIC": 1.0,
+            "pressureModel": "curved-phase-split",
+            "sigma": 0.0020577273399028486,
+            "surfaceEnergyInTotal": 1.0,
+            "tractionBackend": "cuda"
+          }
+        ],
+        "REACTIVE_CAPILLARY_PROFILE": [
+          {
+            "closureIterations": 3.0,
+            "enabled": 1.0,
+            "faceFluxBuilds": 393600.0,
+            "geometryBuilds": 12.0,
+            "geometryKernels": 24.0,
+            "workspaceBytes": 5171300.0
+          }
+        ],
+        "REACTIVE_CAPILLARY_STEP": [
+          {
+            "area": 4.800000000000002e-05,
+            "closureResidual": 0.0,
+            "liquidMass": 0.0,
+            "outerIterations": 3.0,
+            "recoveryCalls": 3.0,
+            "surfaceEnergy": 9.877091231533678e-08,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_CHECKPOINT": [
+          {
+            "acceptedSteps": 0.0,
+            "complete": 1.0,
+            "schema": 3.0,
+            "time": 0.0
+          },
+          {
+            "acceptedSteps": 1.0,
+            "complete": 1.0,
+            "schema": 3.0,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_CHEMICAL_PROFILE": [
+          {
+            "csrSeconds": 0.0,
+            "factorNnzMeaning": "last_snapshot_sum",
+            "factorNonzeros": 0.0,
+            "factorSeconds": 0.0,
+            "jacobianCacheHits": 0.0,
+            "jvSetups": 0.0,
+            "kineticsSeconds": 0.0,
+            "numericFactorizations": 0.0,
+            "patternBuilds": 0.0,
+            "preconditionerReuses": 0.0,
+            "preconditionerSetups": 0.0,
+            "scope": "combined",
+            "solveSeconds": 0.0,
+            "symbolicAnalyses": 0.0,
+            "symbolicSeconds": 0.0,
+            "thermoSeconds": 0.0,
+            "workspaceCreates": 0.0,
+            "workspaceReinitializations": 0.0
+          }
+        ],
+        "REACTIVE_CHEMISTRY": [
+          {
+            "fallbackCalls": 0.0,
+            "fixedStateCalls": 0.0,
+            "integrationFallbacks": 0.0,
+            "rhsCalls": 0.0,
+            "scope": "combined",
+            "structuredCalls": 0.0,
+            "uvCalls": 0.0
+          }
+        ],
+        "REACTIVE_CLOSURE_ACCELERATION": [
+          {
+            "closureJacobian": "finiteDifference",
+            "deviceFullClosure": 1.0,
+            "exactBatchReuse": 0.0,
+            "fullBackend": "cuda",
+            "requestedClosureJacobian": "finiteDifference",
+            "scalarBackend": "cpu"
+          }
+        ],
+        "REACTIVE_CLOSURE_PROFILE": [
+          {
+            "classifySeconds": 0.00017548199999999994,
+            "deviceBytes": 0.0,
+            "eligibleCells": 0.0,
+            "failedRepresentativeRetries": 0.0,
+            "gpuApproved": 0.0,
+            "gpuConverged": 0.0,
+            "gpuCopySeconds": 0.0,
+            "gpuKernelSeconds": 0.0,
+            "gpuLaunches": 0.0,
+            "gpuRejected": 0.0,
+            "gpuSubmitted": 0.0,
+            "gpuTransferBytes": 0.0,
+            "gpuUnsupported": 0.0,
+            "gpuWallSeconds": 0.0,
+            "hostBytes": 32768.0,
+            "liquidCacheHits": 0.0,
+            "liquidCacheMisses": 0.0,
+            "prepareSeconds": 0.0,
+            "reusedCells": 0.0,
+            "uniqueCells": 0.0
+          }
+        ],
+        "REACTIVE_DEVICE_PROPERTIES": [
+          {
+            "builds": 0.0,
+            "cells": 0.0,
+            "cflFaceLaunches": 2.0,
+            "faceWorkspaceBytes": 28339200.0,
+            "gasStatusChecks": 0.0,
+            "partitionUploadBytes": 0.0,
+            "thermoTableBytes": 0.0,
+            "transportFaceLaunches": 2.0
+          }
+        ],
+        "REACTIVE_GPU_HEM": [
+          {
+            "analyticJacobians": 0.0,
+            "batches": 48.0,
+            "copySeconds": 0.006104032024741173,
+            "cpuFallbacks": 0.0,
+            "deviceBytes": 2029992.0,
+            "deviceFailures": 0.0,
+            "finiteDifferenceJacobians": 0.0,
+            "flashCandidates": 280.0,
+            "hostBytes": 3340632.0,
+            "kernelSeconds": 0.017535680085420606,
+            "phaseEvaluations": 768680.0,
+            "residualEvaluations": 280.0,
+            "stableCandidates": 192000.0,
+            "submitted": 192000.0,
+            "succeeded": 192000.0,
+            "transferBytes": 82178304.0,
+            "wallSeconds": 0.02598617599999999
+          }
+        ],
+        "REACTIVE_GPU_HEM_STEP": [
+          {
+            "analyticJacobians": 0.0,
+            "batches": 32.0,
+            "copySeconds": 0.004087072052061558,
+            "cpuFallbacks": 0.0,
+            "deviceFailures": 0.0,
+            "finiteDifferenceJacobians": 0.0,
+            "kernelSeconds": 0.012513504058122632,
+            "phaseEvaluations": 512680.0,
+            "residualEvaluations": 280.0,
+            "submitted": 128000.0,
+            "succeeded": 128000.0,
+            "time": 3e-08,
+            "wallSeconds": 0.018109555999999992
+          }
+        ],
+        "REACTIVE_MEMORY": [
+          {
+            "bridgeBytes": 1048536.0,
+            "conservedWorkspaceBytes": 10139328.0,
+            "d2dBytes": 461664.0,
+            "gasWorkspaceBytes": 0.0,
+            "liveBytes": 95186176.0,
+            "peakBytes": 95186176.0,
+            "rhsWorkspaceBytes": 0.0,
+            "synchronizations": 47.0
+          }
+        ],
+        "REACTIVE_MODEL": [
+          {
+            "cells": 64000.0,
+            "chemistry": 0.0,
+            "estimatedHostBytes": 186093568.0,
+            "liquids": 1.0,
+            "reactions": 0.0,
+            "species": 4.0
+          }
+        ],
+        "REACTIVE_PHYSICAL_MODEL": [
+          {
+            "deviceClosure": 1.0,
+            "deviceKinetics": 0.0,
+            "eos": "Peng-Robinson",
+            "hash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+            "mixtureLiquid": 0.0,
+            "nonidealDiffusion": 0.0,
+            "numericalPolicyHash": "84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781",
+            "phaseEquilibrium": 1.0,
+            "realEOS": 1.0
+          }
+        ],
+        "REACTIVE_PHYSICS": [
+          {
+            "chemistry": 0.0,
+            "combustion": 0.0,
+            "frozenLiquidFields": 0.0,
+            "heatConduction": 1.0,
+            "interfaceModel": "diffuse-liquid-inventory-v1",
+            "phaseChange": "equilibrium",
+            "speciesDiffusion": 0.0,
+            "surfaceTension": 1.0,
+            "thermodynamicRecovery": 1.0,
+            "totalEnergy": 1.0,
+            "transportedLiquidFields": 1.0,
+            "turbulence": "WALE-stress-v1",
+            "turbulentHeatFlux": 1.0,
+            "turbulentSpeciesMixing": 1.0,
+            "viscosity": 1.0
+          }
+        ],
+        "REACTIVE_PROFILE_V21": [
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 64001.0,
+            "branchFallbacks": 2.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 64003.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 64003.0,
+            "exactMixingEvaluations": 64003.0,
+            "flashCandidates": 10.0,
+            "fullPhaseEvaluations": 264990.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 64003.0,
+            "nasaAggregateEvaluations": 64003.0,
+            "nasaCoefficientVisits": 128004.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 64001.0,
+            "realFluid_flashResiduals": 3238.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 64001.0,
+            "realFluid_scalarAttempts": 64003.0,
+            "realFluid_scalarFallbacks": 2.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 64003.0,
+            "scope": "\"prototype\"",
+            "selectedMuEvaluations": 66037.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 64003.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 0.0,
+            "branchFallbacks": 0.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 0.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 0.0,
+            "exactMixingEvaluations": 0.0,
+            "flashCandidates": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 0.0,
+            "nasaAggregateEvaluations": 0.0,
+            "nasaCoefficientVisits": 0.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 0.0,
+            "realFluid_flashResiduals": 0.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 0.0,
+            "realFluid_scalarAttempts": 0.0,
+            "realFluid_scalarFallbacks": 0.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 0.0,
+            "scope": "\"worker_0\"",
+            "selectedMuEvaluations": 0.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 0.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 0.0,
+            "branchFallbacks": 0.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 0.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 0.0,
+            "exactMixingEvaluations": 0.0,
+            "flashCandidates": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 0.0,
+            "nasaAggregateEvaluations": 0.0,
+            "nasaCoefficientVisits": 0.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 0.0,
+            "realFluid_flashResiduals": 0.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 0.0,
+            "realFluid_scalarAttempts": 0.0,
+            "realFluid_scalarFallbacks": 0.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 0.0,
+            "scope": "\"workers\"",
+            "selectedMuEvaluations": 0.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 0.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 64001.0,
+            "branchFallbacks": 2.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 64003.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 64003.0,
+            "exactMixingEvaluations": 64003.0,
+            "flashCandidates": 10.0,
+            "fullPhaseEvaluations": 264990.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 64003.0,
+            "nasaAggregateEvaluations": 64003.0,
+            "nasaCoefficientVisits": 128004.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 64001.0,
+            "realFluid_flashResiduals": 3238.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 64001.0,
+            "realFluid_scalarAttempts": 64003.0,
+            "realFluid_scalarFallbacks": 2.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 64003.0,
+            "scope": "\"combined\"",
+            "selectedMuEvaluations": 66037.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 64003.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          }
+        ],
+        "REACTIVE_REAL_FLUID": [
+          {
+            "eosEvaluations": 64001.0,
+            "scalarAccepted": 64001.0,
+            "scalarAttempts": 64003.0,
+            "scalarFallbacks": 2.0,
+            "scalarIterations": 0.0,
+            "scope": "combined"
+          }
+        ],
+        "REACTIVE_RECOVERY": [
+          {
+            "baseline": "reference_candidate_search",
+            "fallback": "none",
+            "mode": "reference"
+          }
+        ],
+        "REACTIVE_RUNTIME": [
+          {
+            "manifest": "{\"schema\":1,\"backendPath\":\"/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so\",\"backendSha256\":\"7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25\",\"thermoConfiguration\":\"/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/base/thermo/cold-pr-config.yaml\",\"physicalModelHash\":\"e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e\",\"numericalPolicyHash\":\"84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781\",\"modelFingerprint\":\"a20ef96026cdd9bbdb47c1619a4b76b6b71fb070677908e59ebdc7029b07beef\",\"eos\":\"Peng-Robinson\",\"closureBackend\":\"cuda\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":true,\"deviceChemistryIntegration\":false,\"closureCpuFallback\":false,\"closureJacobian\":\"finiteDifference\",\"solidN2O\":false,\"enforceSpeciesTemperatureBounds\":true,\"exactBatchReuse\":false,\"deviceCaloricCandidates\":false,\"deviceCaloricScope\":\"no-condensable-inventory;",
+            "runId": "\"36072-6625899269864\"",
+            "solverSha256": "\"4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858\""
+          }
+        ],
+        "REACTIVE_SPARSE": [
+          {
+            "denseFallbacks": 0.0,
+            "denseIntegrations": 0.0,
+            "nnzMeaning": "last_snapshot_sum",
+            "nonzeros": 0.0,
+            "products": 0.0,
+            "scope": "combined",
+            "setups": 0.0,
+            "sparseIntegrations": 0.0
+          }
+        ],
+        "REACTIVE_SPECIES": [
+          {
+            "index": 0.0,
+            "name": "N2"
+          },
+          {
+            "index": 1.0,
+            "name": "O2"
+          },
+          {
+            "index": 2.0,
+            "name": "N2O"
+          },
+          {
+            "index": 3.0,
+            "name": "IC3H7OH"
+          }
+        ],
+        "REACTIVE_STEP": [
+          {
+            "dt": 3e-08,
+            "elementDrift": 0.0,
+            "energyResidual": -9.72829979596383e-16,
+            "frozenLiquidResidual": 0.0,
+            "globalElementResidual": 8.283418856457726e-17,
+            "massResidual": -1.2148348211708918e-16,
+            "maxAlphaGas": 1.0000000000000002,
+            "maxMach": 0.00848661972984227,
+            "maxMechanicalResidual": 0.0,
+            "maxMuResidual": 0.0,
+            "maxP": 101324.99999999997,
+            "maxT": 293.15,
+            "maxUVResidual": 1.3771407442010453e-11,
+            "maxVolumeResidual": 2.220446049250313e-16,
+            "minAlphaGas": 0.9999999999999999,
+            "minP": 96646.68230502972,
+            "minT": 252.88949625228082,
+            "momentumResidual": 3.5818943757766005e-21,
+            "retries": 0.0,
+            "seconds": 0.059246155,
+            "speciesResidual": 8.044578889548365e-17,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_STEP_CAP": [
+          {
+            "accepted": 1.0,
+            "limit": 1.0,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_STEP_TIMINGS": [
+          {
+            "backupSeconds": 0.005042981,
+            "cflSeconds": 0.008592939,
+            "conservationSeconds": 0.000232534,
+            "diagnosticsSeconds": 0.000436117,
+            "nestedBatchCallSeconds": 0.021437935,
+            "nestedBatchPackSeconds": 0.0011725670000000004,
+            "nestedBatchScatterSeconds": 0.0,
+            "nestedScalarPropertySeconds": 0.006271840999999999,
+            "otherSeconds": 4.131099999999451e-05,
+            "recoverySeconds": 0.033223134,
+            "sourceSeconds": 0.0,
+            "time": 3e-08,
+            "transportSeconds": 0.011677139
+          }
+        ],
+        "REACTIVE_TRANSFER": [
+          {
+            "boundaryPartitions": 38.0,
+            "conservedDownloadBytes": 9216000.0,
+            "conservedUploadBytes": 9216000.0,
+            "conservedUploads": 2.0,
+            "gasUploadBytes": 0.0,
+            "primitiveUploadBytes": 8192000.0,
+            "stateUploadBytes": 21504000.0
+          }
+        ],
+        "REACTIVE_TRANSPORT": [
+          {
+            "allocatedBytes": 95186176.0,
+            "downloadedBytes": 22528296.0,
+            "kernelLaunches": 88.0,
+            "stages": 2.0,
+            "stepQueries": 2.0,
+            "uploadedBytes": 138598336.0
+          }
+        ],
+        "REACTIVE_TRANSPORT_V21": [
+          {
+            "blockThreads": 256.0,
+            "closureDownloadsPerRK": 2.0,
+            "detailedGasCounters": 0.0,
+            "deviceStagingBytes": 1048536.0,
+            "eventWaits": 22.0,
+            "failedCalls": 0.0,
+            "layoutLaunches": 22.0,
+            "layoutTiles": 22.0,
+            "memcpyCalls": 166.0,
+            "nasaFaceEvaluations": 0.0,
+            "nasaValidationEvaluations": 0.0,
+            "overlapValidated": 0.0,
+            "payloadBytes": 161588296.0,
+            "pinnedBytes": 1048536.0,
+            "slotCells": 14563.0,
+            "slots": 1.0,
+            "stageBarrier": "full",
+            "temperatureBasisBuilds": 0.0,
+            "temperatureBasisBytes": 0.0
+          }
+        ],
+        "REACTIVE_TURBULENCE": [
+          {
+            "Cw": 0.325,
+            "Prt": 0.85,
+            "Sct": 0.7,
+            "TCI": 0.0,
+            "backend": "cuda",
+            "filter": "cubeRootVolume",
+            "model": "WALE-stress-v1",
+            "scalarFluxBackend": "cuda",
+            "scalarPropertyBackend": "device-pr",
+            "sgsHeatFlux": 1.0,
+            "sgsK": "none",
+            "sgsSpeciesMixing": 1.0,
+            "stressWork": 1.0
+          }
+        ],
+        "REACTIVE_WALE": [
+          {
+            "cellsEvaluated": 384000.0,
+            "gradientBuilds": 6.0,
+            "viscosityBuilds": 6.0,
+            "workspaceBytes": 512004.0
+          }
+        ],
+        "REACTIVE_WALE_PR": [
+          {
+            "backend": "device-pr",
+            "builds": 6.0,
+            "cells": 384000.0,
+            "failures": 0.0,
+            "inputUploadBytes": 71983976.0,
+            "kernels": 12.0,
+            "scratchBytes": 15919456.0,
+            "wallSeconds": 0.006067249
+          }
+        ],
+        "REACTIVE_WALE_SCALARS": [
+          {
+            "fieldUploadBytes": 0.0,
+            "fieldUploads": 0.0,
+            "fluxBackend": "cuda",
+            "hostEnthalpyCells": 0.0,
+            "hostPropertySeconds": 0.0,
+            "propertyStageSeconds": 0.010814414999999999,
+            "workspaceBytes": 2816480.0
+          }
+        ],
+        "REACTIVE_WORKER_TIME": [
+          {
+            "max": 0.0,
+            "metric": "thermoSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "kineticsSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "csrSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "symbolicSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "factorSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "solveSeconds",
+            "sum": 0.0
+          }
+        ]
+      },
+      "returnCode": 0,
+      "sampledDevicePeakMiB": 526.0
+    },
+    {
+      "ambientPa": 4000000.0,
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_40bar_abs",
+      "cells": 64000,
+      "logSha256": "d648504dc16d4874494b293e41b3fae26899357242e59228894a80bee9ad6b29",
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999999,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_40bar_abs/3e-08",
+        "checkpointSha256": "1cd0bd72eef04ba359f61a01698d7ac95c8079ce459aff36af9163280fa4a514",
+        "conservedBudgetResidual": [
+          -1.7464965929018306e-14,
+          6.620773756042961e-15,
+          4.1359030627651384e-24,
+          0.0,
+          -2.542422330742986e-20,
+          2.9288811129277604e-20,
+          -2.6034710805117052e-20,
+          3.701465320013475e-09
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -5.322350231185152e-09,
+        "n2oMassKg": 5.3223502311851545e-09,
+        "pRangePa": [
+          3998663.49082789,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          292.89131696226974,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 5.3223502311851545e-09
+      },
+      "passed": true,
+      "processElapsedSeconds": 1.55,
+      "processPeakRssKiB": 697520,
+      "processWallSeconds": 2.299944258999858,
+      "profiles": {
+        "REACTIVE_ATTEMPT_PROFILE": [
+          {
+            "accepted": 1.0,
+            "attempt": 2.0,
+            "factorBuilds": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "retry": 0.0,
+            "rootChecks": 0.0,
+            "scalarProbes": 0.0,
+            "sourceCalls": 0.0,
+            "workerJobElapsedSeconds": 0.0
+          }
+        ],
+        "REACTIVE_BACKENDS": [
+          {
+            "chemicalLinearSolver": "dense",
+            "chemistry": "cpu",
+            "thermodynamics": "cuda",
+            "transport": "cuda",
+            "transportGasProperties": "disabled"
+          }
+        ],
+        "REACTIVE_BATCH": [
+          {
+            "batches": 48.0,
+            "capacity": 4096.0,
+            "cells": 192000.0,
+            "failures": 0.0,
+            "scope": "bounded_scratch_excludes_Cantera_CVODE_worker_allocations",
+            "scratchBytes": 6420824.0,
+            "workers": 1.0
+          }
+        ],
+        "REACTIVE_BATCH_V21": [
+          {
+            "accepted": 48.0,
+            "attempted": 48.0,
+            "batchWallSeconds": 0.3561492989999999,
+            "failed": 0.0,
+            "flowStagingBytes": 884736.0,
+            "poolScratchBytes": 6420824.0,
+            "workerInternalBytesUnmeasured": 1.0,
+            "workerJobSecondsMax": 0.0,
+            "workerJobSecondsSum": 0.0,
+            "workerOwnedBytesKnownLowerBound": 58104.0
+          }
+        ],
+        "REACTIVE_CAPILLARY": [
+          {
+            "capillaryCfl": 0.25,
+            "closureBackend": "cuda",
+            "geometryBackend": "cuda",
+            "geometryScheme": "Gauss-diffuse",
+            "noPLIC": 1.0,
+            "pressureModel": "curved-phase-split",
+            "sigma": 0.0020577273399028486,
+            "surfaceEnergyInTotal": 1.0,
+            "tractionBackend": "cuda"
+          }
+        ],
+        "REACTIVE_CAPILLARY_PROFILE": [
+          {
+            "closureIterations": 3.0,
+            "enabled": 1.0,
+            "faceFluxBuilds": 393600.0,
+            "geometryBuilds": 12.0,
+            "geometryKernels": 24.0,
+            "workspaceBytes": 5171300.0
+          }
+        ],
+        "REACTIVE_CAPILLARY_STEP": [
+          {
+            "area": 4.800000000000002e-05,
+            "closureResidual": 0.0,
+            "liquidMass": 0.0,
+            "outerIterations": 3.0,
+            "recoveryCalls": 3.0,
+            "surfaceEnergy": 9.877091231533678e-08,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_CHECKPOINT": [
+          {
+            "acceptedSteps": 0.0,
+            "complete": 1.0,
+            "schema": 3.0,
+            "time": 0.0
+          },
+          {
+            "acceptedSteps": 1.0,
+            "complete": 1.0,
+            "schema": 3.0,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_CHEMICAL_PROFILE": [
+          {
+            "csrSeconds": 0.0,
+            "factorNnzMeaning": "last_snapshot_sum",
+            "factorNonzeros": 0.0,
+            "factorSeconds": 0.0,
+            "jacobianCacheHits": 0.0,
+            "jvSetups": 0.0,
+            "kineticsSeconds": 0.0,
+            "numericFactorizations": 0.0,
+            "patternBuilds": 0.0,
+            "preconditionerReuses": 0.0,
+            "preconditionerSetups": 0.0,
+            "scope": "combined",
+            "solveSeconds": 0.0,
+            "symbolicAnalyses": 0.0,
+            "symbolicSeconds": 0.0,
+            "thermoSeconds": 0.0,
+            "workspaceCreates": 0.0,
+            "workspaceReinitializations": 0.0
+          }
+        ],
+        "REACTIVE_CHEMISTRY": [
+          {
+            "fallbackCalls": 0.0,
+            "fixedStateCalls": 0.0,
+            "integrationFallbacks": 0.0,
+            "rhsCalls": 0.0,
+            "scope": "combined",
+            "structuredCalls": 0.0,
+            "uvCalls": 0.0
+          }
+        ],
+        "REACTIVE_CLOSURE_ACCELERATION": [
+          {
+            "closureJacobian": "finiteDifference",
+            "deviceFullClosure": 1.0,
+            "exactBatchReuse": 0.0,
+            "fullBackend": "cuda",
+            "requestedClosureJacobian": "finiteDifference",
+            "scalarBackend": "cpu"
+          }
+        ],
+        "REACTIVE_CLOSURE_PROFILE": [
+          {
+            "classifySeconds": 0.00018374400000000004,
+            "deviceBytes": 0.0,
+            "eligibleCells": 0.0,
+            "failedRepresentativeRetries": 0.0,
+            "gpuApproved": 0.0,
+            "gpuConverged": 0.0,
+            "gpuCopySeconds": 0.0,
+            "gpuKernelSeconds": 0.0,
+            "gpuLaunches": 0.0,
+            "gpuRejected": 0.0,
+            "gpuSubmitted": 0.0,
+            "gpuTransferBytes": 0.0,
+            "gpuUnsupported": 0.0,
+            "gpuWallSeconds": 0.0,
+            "hostBytes": 32768.0,
+            "liquidCacheHits": 0.0,
+            "liquidCacheMisses": 0.0,
+            "prepareSeconds": 0.0,
+            "reusedCells": 0.0,
+            "uniqueCells": 0.0
+          }
+        ],
+        "REACTIVE_DEVICE_PROPERTIES": [
+          {
+            "builds": 0.0,
+            "cells": 0.0,
+            "cflFaceLaunches": 2.0,
+            "faceWorkspaceBytes": 28339200.0,
+            "gasStatusChecks": 0.0,
+            "partitionUploadBytes": 0.0,
+            "thermoTableBytes": 0.0,
+            "transportFaceLaunches": 2.0
+          }
+        ],
+        "REACTIVE_GPU_HEM": [
+          {
+            "analyticJacobians": 0.0,
+            "batches": 48.0,
+            "copySeconds": 0.006099903970956801,
+            "cpuFallbacks": 0.0,
+            "deviceBytes": 2029992.0,
+            "deviceFailures": 0.0,
+            "finiteDifferenceJacobians": 4528.0,
+            "flashCandidates": 280.0,
+            "hostBytes": 3340632.0,
+            "kernelSeconds": 0.3426835802495478,
+            "phaseEvaluations": 827256.0,
+            "residualEvaluations": 96244.0,
+            "stableCandidates": 192000.0,
+            "submitted": 192000.0,
+            "succeeded": 192000.0,
+            "transferBytes": 82178304.0,
+            "wallSeconds": 0.3510264700000002
+          }
+        ],
+        "REACTIVE_GPU_HEM_STEP": [
+          {
+            "analyticJacobians": 0.0,
+            "batches": 32.0,
+            "copySeconds": 0.004064319983124732,
+            "cpuFallbacks": 0.0,
+            "deviceFailures": 0.0,
+            "finiteDifferenceJacobians": 4528.0,
+            "kernelSeconds": 0.3376317401528357,
+            "phaseEvaluations": 571256.0,
+            "residualEvaluations": 96244.0,
+            "submitted": 128000.0,
+            "succeeded": 128000.0,
+            "time": 3e-08,
+            "wallSeconds": 0.3431966010000002
+          }
+        ],
+        "REACTIVE_MEMORY": [
+          {
+            "bridgeBytes": 1048536.0,
+            "conservedWorkspaceBytes": 10139328.0,
+            "d2dBytes": 461664.0,
+            "gasWorkspaceBytes": 0.0,
+            "liveBytes": 95186176.0,
+            "peakBytes": 95186176.0,
+            "rhsWorkspaceBytes": 0.0,
+            "synchronizations": 47.0
+          }
+        ],
+        "REACTIVE_MODEL": [
+          {
+            "cells": 64000.0,
+            "chemistry": 0.0,
+            "estimatedHostBytes": 186093568.0,
+            "liquids": 1.0,
+            "reactions": 0.0,
+            "species": 4.0
+          }
+        ],
+        "REACTIVE_PHYSICAL_MODEL": [
+          {
+            "deviceClosure": 1.0,
+            "deviceKinetics": 0.0,
+            "eos": "Peng-Robinson",
+            "hash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+            "mixtureLiquid": 0.0,
+            "nonidealDiffusion": 0.0,
+            "numericalPolicyHash": "84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781",
+            "phaseEquilibrium": 1.0,
+            "realEOS": 1.0
+          }
+        ],
+        "REACTIVE_PHYSICS": [
+          {
+            "chemistry": 0.0,
+            "combustion": 0.0,
+            "frozenLiquidFields": 0.0,
+            "heatConduction": 1.0,
+            "interfaceModel": "diffuse-liquid-inventory-v1",
+            "phaseChange": "equilibrium",
+            "speciesDiffusion": 0.0,
+            "surfaceTension": 1.0,
+            "thermodynamicRecovery": 1.0,
+            "totalEnergy": 1.0,
+            "transportedLiquidFields": 1.0,
+            "turbulence": "WALE-stress-v1",
+            "turbulentHeatFlux": 1.0,
+            "turbulentSpeciesMixing": 1.0,
+            "viscosity": 1.0
+          }
+        ],
+        "REACTIVE_PROFILE_V21": [
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 64001.0,
+            "branchFallbacks": 2.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 64003.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 64003.0,
+            "exactMixingEvaluations": 64003.0,
+            "flashCandidates": 10.0,
+            "fullPhaseEvaluations": 264990.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 64003.0,
+            "nasaAggregateEvaluations": 64003.0,
+            "nasaCoefficientVisits": 128004.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 64001.0,
+            "realFluid_flashResiduals": 3238.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 64001.0,
+            "realFluid_scalarAttempts": 64003.0,
+            "realFluid_scalarFallbacks": 2.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 64003.0,
+            "scope": "\"prototype\"",
+            "selectedMuEvaluations": 66037.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 64003.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 0.0,
+            "branchFallbacks": 0.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 0.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 0.0,
+            "exactMixingEvaluations": 0.0,
+            "flashCandidates": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 0.0,
+            "nasaAggregateEvaluations": 0.0,
+            "nasaCoefficientVisits": 0.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 0.0,
+            "realFluid_flashResiduals": 0.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 0.0,
+            "realFluid_scalarAttempts": 0.0,
+            "realFluid_scalarFallbacks": 0.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 0.0,
+            "scope": "\"worker_0\"",
+            "selectedMuEvaluations": 0.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 0.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 0.0,
+            "branchFallbacks": 0.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 0.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 0.0,
+            "exactMixingEvaluations": 0.0,
+            "flashCandidates": 0.0,
+            "fullPhaseEvaluations": 0.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 0.0,
+            "nasaAggregateEvaluations": 0.0,
+            "nasaCoefficientVisits": 0.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 0.0,
+            "realFluid_flashResiduals": 0.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 0.0,
+            "realFluid_scalarAttempts": 0.0,
+            "realFluid_scalarFallbacks": 0.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 0.0,
+            "scope": "\"workers\"",
+            "selectedMuEvaluations": 0.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 0.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          },
+          {
+            "FzFactorizations": 0.0,
+            "JvFallbacks": 0.0,
+            "RzBuilds": 0.0,
+            "bracketRejects": 0.0,
+            "branchCertificates": 64001.0,
+            "branchFallbacks": 2.0,
+            "chemical_fallbackCalls": 0.0,
+            "chemical_fixedStateCalls": 0.0,
+            "chemical_jacobianCalls": 0.0,
+            "chemical_rhsCalls": 0.0,
+            "chemical_structuredCalls": 0.0,
+            "chemical_uvCalls": 0.0,
+            "densityRootChecks": 64003.0,
+            "derivativeRetries": 0.0,
+            "diagnosticJvCalls": 0.0,
+            "energyCvEvaluations": 64003.0,
+            "exactMixingEvaluations": 64003.0,
+            "flashCandidates": 10.0,
+            "fullPhaseEvaluations": 264990.0,
+            "integrationFallbacks": 0.0,
+            "jobElapsedSeconds": 0.0,
+            "linearizationApplies": 0.0,
+            "linearizationBuilds": 0.0,
+            "matrixFreeIntegrationFallbacks": 0.0,
+            "matrixFreeIntegrations": 0.0,
+            "matrixFreeProducts": 0.0,
+            "matrixFreeSetups": 0.0,
+            "nasaAggregateBuilds": 64003.0,
+            "nasaAggregateEvaluations": 64003.0,
+            "nasaCoefficientVisits": 128004.0,
+            "oneSidedProbes": 0.0,
+            "partialHEvaluations": 0.0,
+            "realFluid_derivativeEvaluations": 0.0,
+            "realFluid_eosEvaluations": 64001.0,
+            "realFluid_flashResiduals": 3238.0,
+            "realFluid_referenceEvaluations": 0.0,
+            "realFluid_scalarAccepted": 64001.0,
+            "realFluid_scalarAttempts": 64003.0,
+            "realFluid_scalarFallbacks": 2.0,
+            "realFluid_scalarIterations": 0.0,
+            "realFluid_sourceJv": 0.0,
+            "realFluid_sourceJvFallbacks": 0.0,
+            "realFluid_tangentBuilds": 0.0,
+            "realFluid_tangentSolves": 0.0,
+            "scalarProbes": 64003.0,
+            "scope": "\"combined\"",
+            "selectedMuEvaluations": 66037.0,
+            "sourceAccepted": 0.0,
+            "sourceAttempts": 0.0,
+            "sourceDirectionProbes": 0.0,
+            "sourceFailed": 0.0,
+            "sourceRhsCalls": 0.0,
+            "sparse_denseFallbacks": 0.0,
+            "sparse_denseIntegrations": 0.0,
+            "sparse_nonzeros": 0.0,
+            "sparse_preconditionerSolves": 0.0,
+            "sparse_preconditioners": 0.0,
+            "sparse_products": 0.0,
+            "sparse_setups": 0.0,
+            "sparse_sparseIntegrations": 0.0,
+            "timing_csrSeconds": 0.0,
+            "timing_factorNonzeros": 0.0,
+            "timing_factorSeconds": 0.0,
+            "timing_jacobianCacheHits": 0.0,
+            "timing_jvSetups": 0.0,
+            "timing_kineticsSeconds": 0.0,
+            "timing_numericFactorizations": 0.0,
+            "timing_patternBuilds": 0.0,
+            "timing_preconditionerReuses": 0.0,
+            "timing_preconditionerSetups": 0.0,
+            "timing_solveSeconds": 0.0,
+            "timing_symbolicAnalyses": 0.0,
+            "timing_symbolicSeconds": 0.0,
+            "timing_thermoSeconds": 0.0,
+            "timing_workspaceCreates": 0.0,
+            "timing_workspaceReinitializations": 0.0,
+            "trhoStateEvaluations": 64003.0,
+            "woodburyFactors": 0.0,
+            "woodburyFallbacks": 0.0,
+            "woodburySetups": 0.0,
+            "woodburySolves": 0.0
+          }
+        ],
+        "REACTIVE_REAL_FLUID": [
+          {
+            "eosEvaluations": 64001.0,
+            "scalarAccepted": 64001.0,
+            "scalarAttempts": 64003.0,
+            "scalarFallbacks": 2.0,
+            "scalarIterations": 0.0,
+            "scope": "combined"
+          }
+        ],
+        "REACTIVE_RECOVERY": [
+          {
+            "baseline": "reference_candidate_search",
+            "fallback": "none",
+            "mode": "reference"
+          }
+        ],
+        "REACTIVE_RUNTIME": [
+          {
+            "manifest": "{\"schema\":1,\"backendPath\":\"/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so\",\"backendSha256\":\"7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25\",\"thermoConfiguration\":\"/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/base/thermo/cold-pr-config.yaml\",\"physicalModelHash\":\"e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e\",\"numericalPolicyHash\":\"84a6d15bb9da7f2463c14bf7ebc679532d122ce30a0d49e997b139830a94d781\",\"modelFingerprint\":\"a20ef96026cdd9bbdb47c1619a4b76b6b71fb070677908e59ebdc7029b07beef\",\"eos\":\"Peng-Robinson\",\"closureBackend\":\"cuda\",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":true,\"deviceChemistryIntegration\":false,\"closureCpuFallback\":false,\"closureJacobian\":\"finiteDifference\",\"solidN2O\":false,\"enforceSpeciesTemperatureBounds\":true,\"exactBatchReuse\":false,\"deviceCaloricCandidates\":false,\"deviceCaloricScope\":\"no-condensable-inventory;",
+            "runId": "\"36739-6627934486746\"",
+            "solverSha256": "\"4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858\""
+          }
+        ],
+        "REACTIVE_SPARSE": [
+          {
+            "denseFallbacks": 0.0,
+            "denseIntegrations": 0.0,
+            "nnzMeaning": "last_snapshot_sum",
+            "nonzeros": 0.0,
+            "products": 0.0,
+            "scope": "combined",
+            "setups": 0.0,
+            "sparseIntegrations": 0.0
+          }
+        ],
+        "REACTIVE_SPECIES": [
+          {
+            "index": 0.0,
+            "name": "N2"
+          },
+          {
+            "index": 1.0,
+            "name": "O2"
+          },
+          {
+            "index": 2.0,
+            "name": "N2O"
+          },
+          {
+            "index": 3.0,
+            "name": "IC3H7OH"
+          }
+        ],
+        "REACTIVE_STEP": [
+          {
+            "dt": 3e-08,
+            "elementDrift": 0.0,
+            "energyResidual": 1.1198183298441331e-16,
+            "frozenLiquidResidual": 0.0,
+            "globalElementResidual": 2.4299114781745238e-17,
+            "massResidual": -1.763820938415677e-17,
+            "maxAlphaGas": 1.0000000000000002,
+            "maxMach": 0.00010219860074743883,
+            "maxMechanicalResidual": 0.0,
+            "maxMuResidual": 0.0,
+            "maxP": 3999999.9999999977,
+            "maxT": 293.15,
+            "maxUVResidual": 3.4625090777466364e-13,
+            "maxVolumeResidual": 2.220446049250313e-16,
+            "minAlphaGas": 0.9999999999999999,
+            "minP": 3998663.49082789,
+            "minT": 292.89131696226974,
+            "momentumResidual": 3.39372572823403e-21,
+            "retries": 0.0,
+            "seconds": 0.384450204,
+            "speciesResidual": 2.6950002863825064e-17,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_STEP_CAP": [
+          {
+            "accepted": 1.0,
+            "limit": 1.0,
+            "time": 3e-08
+          }
+        ],
+        "REACTIVE_STEP_TIMINGS": [
+          {
+            "backupSeconds": 0.004825605,
+            "cflSeconds": 0.008655972000000001,
+            "conservationSeconds": 0.00022822,
+            "diagnosticsSeconds": 0.000298803,
+            "nestedBatchCallSeconds": 0.3466590669999999,
+            "nestedBatchPackSeconds": 0.0012367389999999995,
+            "nestedBatchScatterSeconds": 0.0,
+            "nestedScalarPropertySeconds": 0.006330285999999999,
+            "otherSeconds": 4.10720000000462e-05,
+            "recoverySeconds": 0.35865607099999997,
+            "sourceSeconds": 0.0,
+            "time": 3e-08,
+            "transportSeconds": 0.011744461000000001
+          }
+        ],
+        "REACTIVE_TRANSFER": [
+          {
+            "boundaryPartitions": 38.0,
+            "conservedDownloadBytes": 9216000.0,
+            "conservedUploadBytes": 9216000.0,
+            "conservedUploads": 2.0,
+            "gasUploadBytes": 0.0,
+            "primitiveUploadBytes": 8192000.0,
+            "stateUploadBytes": 21504000.0
+          }
+        ],
+        "REACTIVE_TRANSPORT": [
+          {
+            "allocatedBytes": 95186176.0,
+            "downloadedBytes": 22528296.0,
+            "kernelLaunches": 88.0,
+            "stages": 2.0,
+            "stepQueries": 2.0,
+            "uploadedBytes": 138598336.0
+          }
+        ],
+        "REACTIVE_TRANSPORT_V21": [
+          {
+            "blockThreads": 256.0,
+            "closureDownloadsPerRK": 2.0,
+            "detailedGasCounters": 0.0,
+            "deviceStagingBytes": 1048536.0,
+            "eventWaits": 22.0,
+            "failedCalls": 0.0,
+            "layoutLaunches": 22.0,
+            "layoutTiles": 22.0,
+            "memcpyCalls": 166.0,
+            "nasaFaceEvaluations": 0.0,
+            "nasaValidationEvaluations": 0.0,
+            "overlapValidated": 0.0,
+            "payloadBytes": 161588296.0,
+            "pinnedBytes": 1048536.0,
+            "slotCells": 14563.0,
+            "slots": 1.0,
+            "stageBarrier": "full",
+            "temperatureBasisBuilds": 0.0,
+            "temperatureBasisBytes": 0.0
+          }
+        ],
+        "REACTIVE_TURBULENCE": [
+          {
+            "Cw": 0.325,
+            "Prt": 0.85,
+            "Sct": 0.7,
+            "TCI": 0.0,
+            "backend": "cuda",
+            "filter": "cubeRootVolume",
+            "model": "WALE-stress-v1",
+            "scalarFluxBackend": "cuda",
+            "scalarPropertyBackend": "device-pr",
+            "sgsHeatFlux": 1.0,
+            "sgsK": "none",
+            "sgsSpeciesMixing": 1.0,
+            "stressWork": 1.0
+          }
+        ],
+        "REACTIVE_WALE": [
+          {
+            "cellsEvaluated": 384000.0,
+            "gradientBuilds": 6.0,
+            "viscosityBuilds": 6.0,
+            "workspaceBytes": 512004.0
+          }
+        ],
+        "REACTIVE_WALE_PR": [
+          {
+            "backend": "device-pr",
+            "builds": 6.0,
+            "cells": 384000.0,
+            "failures": 0.0,
+            "inputUploadBytes": 71983976.0,
+            "kernels": 12.0,
+            "scratchBytes": 15919456.0,
+            "wallSeconds": 0.006176589999999999
+          }
+        ],
+        "REACTIVE_WALE_SCALARS": [
+          {
+            "fieldUploadBytes": 0.0,
+            "fieldUploads": 0.0,
+            "fluxBackend": "cuda",
+            "hostEnthalpyCells": 0.0,
+            "hostPropertySeconds": 0.0,
+            "propertyStageSeconds": 0.011067397999999999,
+            "workspaceBytes": 2816480.0
+          }
+        ],
+        "REACTIVE_WORKER_TIME": [
+          {
+            "max": 0.0,
+            "metric": "thermoSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "kineticsSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "csrSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "symbolicSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "factorSeconds",
+            "sum": 0.0
+          },
+          {
+            "max": 0.0,
+            "metric": "solveSeconds",
+            "sum": 0.0
+          }
+        ]
+      },
+      "returnCode": 0,
+      "sampledDevicePeakMiB": 1276.0
+    }
+  ],
+  "gpuSamplingScope": "Total GPU occupancy every 0.5 s; not process-exclusive or a guaranteed peak",
+  "passed": true,
+  "scope": "Initial accepted GPU step including retries; no developed collision validation"
+}

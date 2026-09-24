@@ -1,0 +1,118 @@
+{
+  "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-fp64",
+  "baselineSha256": "80a06405af6ec70e31eee45023562ebc247d3431540198eda556c0ac24bf02f2",
+  "baselineSteps": 23,
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-fp32-linear",
+  "candidateSha256": "8cfd23705fb4de66dbcb6e65bef062c8c81bb582c388542c2124c03fa44df9e9",
+  "candidateSteps": 23,
+  "fields": {
+    "T": {
+      "jetRelativeL2": 3.877507762973114e-13,
+      "maxAbs": 1.1886811535077868e-09,
+      "maxScaled": 6.973200194540774e-12,
+      "relativeL2": 6.362346716583515e-15
+    },
+    "U": {
+      "jetRelativeL2": 1.698530780660998e-11,
+      "maxAbs": 4.05122335678243e-09,
+      "maxScaled": 7.894798098682237e-10,
+      "relativeL2": 1.6985307492557946e-11
+    },
+    "alphaGas": {
+      "jetRelativeL2": 1.2973374761577343e-12,
+      "maxAbs": 8.145040197859998e-12,
+      "maxScaled": 8.145040197859998e-12,
+      "relativeL2": 2.333407391183133e-14
+    },
+    "alphaLiquid": {
+      "jetRelativeL2": 4.046617955200434e-12,
+      "maxAbs": 1.258732701403531e-13,
+      "maxScaled": 1.258732701403531e-13,
+      "relativeL2": 4.0466179552004344e-12
+    },
+    "cp": {
+      "jetRelativeL2": 5.872415401412232e-13,
+      "maxAbs": 6.367145033436827e-09,
+      "maxScaled": 7.058121368817473e-12,
+      "relativeL2": 1.0695015192812505e-14
+    },
+    "cv": {
+      "jetRelativeL2": 1.100047246234439e-12,
+      "maxAbs": 8.273673302028328e-09,
+      "maxScaled": 1.2541868267225838e-11,
+      "relativeL2": 2.1064926488336417e-14
+    },
+    "e": {
+      "jetRelativeL2": 2.2090854528524076e-12,
+      "maxAbs": 1.5870784409344196e-05,
+      "maxScaled": 6.030860465850161e-11,
+      "relativeL2": 2.7976777284303013e-13
+    },
+    "gasMass": {
+      "jetRelativeL2": 3.4033047968315935e-12,
+      "maxAbs": 1.7043788602677523e-10,
+      "maxScaled": 2.2478769588317017e-11,
+      "relativeL2": 2.5000255177631463e-13
+    },
+    "liquidMass": {
+      "jetRelativeL2": 4.1484410467412935e-12,
+      "maxAbs": 1.4019363447914657e-10,
+      "maxScaled": 2.2645857411518477e-11,
+      "relativeL2": 4.1484410467412935e-12
+    },
+    "p": {
+      "jetRelativeL2": 3.865965019978852e-12,
+      "maxAbs": 7.140508387237787e-06,
+      "maxScaled": 2.6132020503329632e-11,
+      "relativeL2": 1.4288342894940388e-13
+    },
+    "q": {
+      "jetRelativeL2": 2.0993041386677324e-12,
+      "maxAbs": 0.0004878789186477661,
+      "maxScaled": 2.2084474440159374e-09,
+      "relativeL2": 1.907555055465632e-12
+    },
+    "rho": {
+      "jetRelativeL2": 2.0612439052731654e-12,
+      "maxAbs": 3.106315205059218e-10,
+      "maxScaled": 2.4125167724199825e-11,
+      "relativeL2": 2.6257166539151445e-13
+    },
+    "soundEquilibrium": {
+      "jetRelativeL2": 4.835970618503179e-11,
+      "maxAbs": 9.028781278175302e-08,
+      "maxScaled": 5.922439049696485e-10,
+      "relativeL2": 7.75743754874791e-13
+    },
+    "soundFrozen": {
+      "jetRelativeL2": 5.922862423901077e-13,
+      "maxAbs": 1.7446382116759196e-09,
+      "maxScaled": 7.617674199741183e-12,
+      "relativeL2": 9.554697300526455e-15
+    }
+  },
+  "identicalAdaptiveHistory": false,
+  "identicalRetryHistory": true,
+  "integrated": {
+    "liquidN2oMassKg": {
+      "baseline": 2.2057790727093107e-07,
+      "candidate": 2.2057790727110667e-07
+    },
+    "n2oMassKg": {
+      "baseline": 5.10094436854312e-07,
+      "candidate": 5.100944368543485e-07
+    },
+    "totalEnergyJ": {
+      "baseline": -54.28065572056855,
+      "candidate": -54.28065572056848
+    }
+  },
+  "jetCells": 1328,
+  "maxDeltaTDifference": 1.366475902158e-18,
+  "passed": true,
+  "phaseMaskChanges": 0,
+  "precisionOnlyInputsVerified": true,
+  "processSpeedup": 1.003394305110315,
+  "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+  "stepSpeedup": 0.9963023761795021
+}

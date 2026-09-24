@@ -11,6 +11,13 @@
 // ../../licenses/Cantera-BSD-3-Clause.txt.
 
 #include <cmath>
+#include <cfloat>
+#ifndef PINTLE_HEM_FP32_SEEDS
+#define PINTLE_HEM_FP32_SEEDS 0
+#endif
+#ifndef PINTLE_HEM_NASA_PRECISION
+#define PINTLE_HEM_NASA_PRECISION 0
+#endif
 
 #if defined(__CUDACC__)
 #define PINTLE_HD __host__ __device__
@@ -115,9 +122,16 @@ PINTLE_HD inline double cubeRoot(double x) {
     return x < 0 ? -::pow(-x, 1.0 / 3.0) : ::pow(x, 1.0 / 3.0);
 }
 
+#include "pintleMixedNasa.h"
+
 PINTLE_HD inline void nasa(const NasaRegion& region, double T,
                            double& cp_R, double& h_RT, double& s_R)
 {
+#if defined(__CUDA_ARCH__) && PINTLE_HEM_NASA_PRECISION == 1
+    if(mixedNasa<float>(region,T,cp_R,h_RT,s_R))return;
+#elif defined(__CUDA_ARCH__) && PINTLE_HEM_NASA_PRECISION == 2
+    if(mixedNasa<DoubleSingle>(region,T,cp_R,h_RT,s_R))return;
+#endif
     const double* a = region.coefficient;
     const double T2 = T*T, T3 = T2*T, T4 = T3*T;
     const double invT = 1.0/T, logT = ::log(T);
@@ -255,6 +269,8 @@ PINTLE_HD inline int uniquePhysical(double* roots, int count, double b) {
     return n;
 }
 
+#include "pintleMixedCubic.h"
+
 } // namespace detail
 
 template<int NC, int NR>
@@ -309,7 +325,9 @@ PINTLE_HD inline Status rootsTP(const Table<NC, NR>& table, double T, double p,
     if (detail::abs(disc) < 1e-14) return Status::NoPhysicalRoot;
     double raw[3] = {0, 0, 0};
     int rawCount = 0;
-    if (disc > 1e-14 || !(delta2 > 0)) {
+    const bool mixed=detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
+    if (mixed) { /* already refined and checked against the FP64 polynomial */ }
+    else if (disc > 1e-14 || !(delta2 > 0)) {
         const double sd = .5*::sqrt(detail::max(0.0, disc));
         raw[0] = r.center + detail::cubeRoot(-.5*q + sd)
                             + detail::cubeRoot(-.5*q - sd);
@@ -323,7 +341,7 @@ PINTLE_HD inline Status rootsTP(const Table<NC, NR>& table, double T, double p,
         raw[2] = r.center + 2.0*delta*::cos(theta + 4.0*Pi/3.0);
         rawCount = 3;
     } else return Status::NoPhysicalRoot;
-    for (int i = 0; i < rawCount; ++i) {
+    for (int i = 0; !mixed && i < rawCount; ++i) {
         for (int n = 0; n < 12; ++n) {
             const double residual = detail::cubicResidual(raw[i], bn, cn, dn);
             const double deriv = (3.0*raw[i] + 2.0*bn)*raw[i] + cn;
@@ -663,7 +681,9 @@ PINTLE_HD inline Status rootsFromMixingCached(
     if (detail::abs(disc) < 1e-14) return Status::NoPhysicalRoot;
     double raw[3] = {0, 0, 0};
     int rawCount = 0;
-    if (disc > 1e-14 || !(delta2 > 0)) {
+    const bool mixed=detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
+    if (mixed) { /* already refined and checked against the FP64 polynomial */ }
+    else if (disc > 1e-14 || !(delta2 > 0)) {
         const double sd = .5*::sqrt(detail::max(0.0, disc));
         raw[0] = r.center + detail::cubeRoot(-.5*q + sd)
                             + detail::cubeRoot(-.5*q - sd);
@@ -677,7 +697,7 @@ PINTLE_HD inline Status rootsFromMixingCached(
         raw[2] = r.center + 2.0*delta*::cos(theta + 4.0*Pi/3.0);
         rawCount = 3;
     } else return Status::NoPhysicalRoot;
-    for (int i = 0; i < rawCount; ++i) {
+    for (int i = 0; !mixed && i < rawCount; ++i) {
         for (int n = 0; n < 12; ++n) {
             const double residual = detail::cubicResidual(raw[i], bn, cn, dn);
             const double deriv = (3.0*raw[i] + 2.0*bn)*raw[i] + cn;

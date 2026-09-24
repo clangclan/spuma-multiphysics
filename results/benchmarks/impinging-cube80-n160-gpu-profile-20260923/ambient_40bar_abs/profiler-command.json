@@ -1,0 +1,20 @@
+{
+  "environmentProfile": "/home/jsw/cae-gpu-pr1-compatible/env.sh",
+  "prefix": [
+    "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/profilers/13.2/Nsight_Systems/target-linux-x64/nsys",
+    "profile",
+    "--trace=cuda,nvtx,osrt",
+    "--sample=none",
+    "--cpuctxsw=none",
+    "--discard-environment=true",
+    "--cuda-memory-usage=true",
+    "--cuda-trace-all-apis=true",
+    "--cuda-event-trace=false",
+    "--osrt-threshold=10000",
+    "--output=/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/full-physics/ambient_40bar_abs/gpu-trace",
+    "--gpu-metrics-devices=0",
+    "--gpu-metrics-set=gb20x",
+    "--gpu-metrics-frequency=1000"
+  ],
+  "startUnixNs": 1790175277156885635
+}

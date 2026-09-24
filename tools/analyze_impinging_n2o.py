@@ -37,12 +37,20 @@ def analyze(case,time_directory=None):
     if not {'reactiveState.bin','reactiveStateIdentity'}.issubset(seen):raise ValueError('Incomplete checkpoint manifest')
     identity=(folder/'reactiveStateIdentity').read_text()
     match=re.search(r'physicalModelHash\s+"?([a-f0-9]{64})',identity)
-    if not match or match.group(1)!=definition['physicalModelHash']:raise ValueError('Physical model identity mismatch')
-    raw=(folder/'reactiveState.bin').read_bytes()
+    if not match:raise ValueError('Missing physical model identity')
+    expected=definition['physicalModelHash']
+    if expected is None and definition.get('surfaceTension'):
+        initial=(case/'0/reactiveStateIdentity').read_text()
+        initial_match=re.search(r'physicalModelHash\s+"?([a-f0-9]{64})',initial)
+        if not initial_match:raise ValueError('Missing initialized capillary identity')
+        expected=initial_match.group(1)
+    if match.group(1)!=expected:raise ValueError('Physical model identity mismatch')
+    raw=np.memmap(folder/'reactiveState.bin',mode='r',dtype=np.uint8)
     if len(raw)<96:raise ValueError('Truncated checkpoint')
     magic,endian,scalar,nc,nv,record_bytes,steps,retries,time,dt,_,_=struct.unpack_from('=8Q4d',raw)
     ns=len(definition['species']);dtype=np.dtype(State)
-    if (magic,endian,scalar,nc,nv,record_bytes)!=(0x524643484b505433,0x0102030405060708,8,definition['geometry']['cells'],ns+4,ctypes.sizeof(State)) or dtype.itemsize!=record_bytes:
+    expected_nv=ns+4+int(bool(definition.get('surfaceTension')))
+    if (magic,endian,scalar,nc,nv,record_bytes)!=(0x524643484b505433,0x0102030405060708,8,definition['geometry']['cells'],expected_nv,ctypes.sizeof(State)) or dtype.itemsize!=record_bytes:
         raise ValueError('Checkpoint layout mismatch')
     offset=96+(2*nv+nc*nv)*8
     if len(raw)!=offset+nc*record_bytes:raise ValueError('Checkpoint byte count mismatch')
@@ -55,10 +63,14 @@ def analyze(case,time_directory=None):
     if not np.isfinite(q).all() or not np.isfinite(liquid).all() or not np.isfinite(solid).all():raise ValueError('Nonfinite phase inventory')
     tolerance=1e-11*max(1.,float(np.max(np.abs(total))))
     if min(float(total.min()),float(liquid.min()),float(solid.min()),float(vapor.min())) < -tolerance:raise ValueError('Invalid N2O phase inventory')
+    if definition.get('surfaceTension'):
+        np.testing.assert_allclose(q[:,ns+4],liquid,rtol=1e-10,atol=tolerance)
     volume=definition['geometry']['cellVolumeM3'];mass=lambda a:float(np.sum(a,dtype=np.float64)*volume)
     total_mass,liquid_mass,solid_mass,vapor_mass=map(mass,(total,liquid,solid,vapor))
     conserved=np.sum(q,axis=0)*volume
-    residual=conserved-initial+boundary
+    # The transported liquid inventory has an equilibrium phase-change source;
+    # it is not an additional globally conserved species or energy component.
+    residual=conserved[:ns+4]-initial[:ns+4]+boundary[:ns+4]
     return {'schema':1,'time':time,'deltaT':dt,'acceptedSteps':steps,'retries':retries,'cells':nc,
         'checkpoint':str(folder),'checkpointSha256':common.sha256(folder/'reactiveState.bin'),
         'n2oMassKg':total_mass,'liquidN2oMassKg':liquid_mass,'solidN2oMassKg':solid_mass,'vaporN2oMassKg':vapor_mass,
@@ -70,6 +82,7 @@ def analyze(case,time_directory=None):
         'pRangePa':[float(states['p'].min()),float(states['p'].max())],
         'tRangeK':[float(states['T'].min()),float(states['T'].max())],
         'conservedBudgetResidual':residual.tolist(),
+        'liquidPhaseChangeKg':float(conserved[ns+4]-initial[ns+4]+boundary[ns+4]) if definition.get('surfaceTension') else None,
         'scope':'Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.'}
 
 def main():

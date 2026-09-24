@@ -1,0 +1,4 @@
+{
+  "reason": "Stopped after >85 s wall time with no result; FP64 same batch completes its eight calls in <1 s. Strict 40bar FP32 NASA batch already had 9812/10006 failed states. Avoid further strict whole-batch repetition.",
+  "pid": 84173
+}

@@ -26,6 +26,12 @@ int pintle_rt_set_gpu_hem_jacobian_v1(void* model,int analytic);
 int pintle_rt_export_gpu_hem_v1(void* model,void* output,size_t size,size_t* required);
 int pintle_rt_pool_gpu_hem_profile_v1(void* pool,PintleGpuHemProfileV1* out);
 #define PINTLE_GPU_HEM_FP64_FMA_POLICY_V1 "fp64-fma-rn-guard-v1:prec-div=true:prec-sqrt=true:fast-math=false"
+#define PINTLE_GPU_HEM_INT_LINEAR_POLICY_V1 "int32-q26-newton-step-fp64-accept-v2:experimental"
+#define PINTLE_GPU_HEM_FP32_NASA_POLICY_V1 "fp32-nasa-fp64-eos-v1:experimental"
+#define PINTLE_GPU_HEM_DS_NASA_POLICY_V1 "two-fp32-nasa-fp64-eos-v1:experimental"
+#define PINTLE_GPU_HEM_FP32_SEED_POLICY_V1 "fp32-cubic-seeds-fp64-refine-v2:experimental"
+#define PINTLE_GPU_HEM_FP32_LINEAR_POLICY_V1 "fp32-newton-step-fp64-accept-v2:experimental"
+#define PINTLE_GPU_HEM_FP32_COMBINED_POLICY_V1 "fp32-cubic-newton-fp64-accept-v2:experimental"
 // Optional for legacy libraries. The backend includes a recognized policy
 // in its numerical identity before it creates a worker pool.
 const char* pintle_gpu_hem_numerical_policy_v1(void);

@@ -1,0 +1,281 @@
+{
+  "capture": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-1atm.bin",
+  "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+  "comparison": {
+    "T": {
+      "maxAbs": 4.348521542851813e-12,
+      "maxScaled": 2.5786949880909803e-14,
+      "relativeL2": 3.2221143466879083e-16
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 4.218847493575595e-15,
+      "maxScaled": 4.218847493575595e-15,
+      "relativeL2": 1.6723481303207165e-16
+    },
+    "alphaLiquid": {
+      "maxAbs": 9.020562075079397e-17,
+      "maxScaled": 9.020562075079397e-17,
+      "relativeL2": 3.3490503671235072e-15
+    },
+    "chemicalResidual": {
+      "maxAbs": 3.019806626980426e-13,
+      "maxScaled": 3.019806626980426e-13,
+      "relativeL2": 2.1998638537302896e-05
+    },
+    "cp": {
+      "maxAbs": 1.261923898709938e-11,
+      "maxScaled": 1.3924068656888982e-14,
+      "relativeL2": 3.643080507038928e-16
+    },
+    "cv": {
+      "maxAbs": 1.6143530956469476e-11,
+      "maxScaled": 2.418222913513182e-14,
+      "relativeL2": 6.442076325963293e-16
+    },
+    "e": {
+      "maxAbs": 4.423782229423523e-09,
+      "maxScaled": 5.7885129424988795e-15,
+      "relativeL2": 6.510025665925187e-16
+    },
+    "energyResidual": {
+      "maxAbs": 5.709750733258697e-15,
+      "maxScaled": 5.709750733258697e-15,
+      "relativeL2": 1.4464062931659699e-06
+    },
+    "entropy": {
+      "maxAbs": 2.7284841053187847e-11,
+      "maxScaled": 4.974821041001406e-15,
+      "relativeL2": 1.0937404418008014e-16
+    },
+    "gasMass": {
+      "maxAbs": 1.0835776720341528e-13,
+      "maxScaled": 1.7039198493717027e-14,
+      "relativeL2": 1.925961376324712e-15
+    },
+    "iterations": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "liquidMass": {
+      "maxAbs": 1.0835776720341528e-13,
+      "maxScaled": 4.75175454539567e-14,
+      "relativeL2": 3.1192600634305298e-15
+    },
+    "p": {
+      "maxAbs": 4.0745362639427185e-09,
+      "maxScaled": 1.9576133376790522e-14,
+      "relativeL2": 1.2424302161774616e-15
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 1.1723955140041653e-13,
+      "maxScaled": 1.8125296259527758e-14,
+      "relativeL2": 2.1683230169085203e-15
+    },
+    "rhoLiquid": {
+      "maxAbs": 1.0913936421275139e-11,
+      "maxScaled": 8.174752904532419e-15,
+      "relativeL2": 1.2575997375803356e-15
+    },
+    "soundEquilibrium": {
+      "maxAbs": 8.957465524872532e-08,
+      "maxScaled": 5.88455348605578e-10,
+      "relativeL2": 1.1499051729246757e-11
+    },
+    "soundFrozen": {
+      "maxAbs": 1.9610979506978765e-12,
+      "maxScaled": 9.604024645573199e-15,
+      "relativeL2": 1.7804844559758345e-16
+    },
+    "volumeResidual": {
+      "maxAbs": 4.218847493575595e-15,
+      "maxScaled": 4.218847493575595e-15,
+      "relativeL2": 4.391042721776724e-06
+    }
+  },
+  "count": 10756,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-seeds.so",
+  "librarySha256": "8e6d778fa5cb7543df1efbc59048c2f056c3a7fb718ad53e8807d052ba888177",
+  "maxKernelSeconds": 0.06400860595703126,
+  "medianKernelSeconds": 0.06396540832519532,
+  "minKernelSeconds": 0.06394732666015625,
+  "passed": true,
+  "policy": "fp32-cubic-seeds-fp64-refine-v2:experimental",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06452310399981798,
+      "copySeconds": 0.000324288010597229,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06400860595703126,
+      "phaseEvaluations": 238621,
+      "repeat": 1,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064474586
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06447584399938933,
+      "copySeconds": 0.00031865599751472473,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06398889541625977,
+      "phaseEvaluations": 238621,
+      "repeat": 2,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064437938
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06445455900029629,
+      "copySeconds": 0.00032607999444007874,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06397020721435547,
+      "phaseEvaluations": 238621,
+      "repeat": 3,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064423906
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06443474400111882,
+      "copySeconds": 0.00032035201787948607,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06396540832519532,
+      "phaseEvaluations": 238621,
+      "repeat": 4,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064411284
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06443662900164782,
+      "copySeconds": 0.0003344959914684296,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06394732666015625,
+      "phaseEvaluations": 238621,
+      "repeat": 5,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064411991
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06442607600001793,
+      "copySeconds": 0.00032707199454307557,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06394972610473633,
+      "phaseEvaluations": 238621,
+      "repeat": 6,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.064401957
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.06444708399976662,
+      "copySeconds": 0.0003274560272693634,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 9268,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.06395913696289063,
+      "phaseEvaluations": 238621,
+      "repeat": 7,
+      "residualEvaluations": 118999,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.06441886
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

@@ -70,6 +70,7 @@ void hemKernel(const HemModel* model,const double* q,const double* energy,
 struct HemCounterTotals {
     uint64_t phases=0,residuals=0,candidates=0,stable=0;
     uint64_t analyticJacobians=0,finiteDifferenceJacobians=0;
+    uint64_t mixedLinearAttempts=0,mixedLinearAccepted=0;
 };
 static_assert(sizeof(HemCounterTotals)<=sizeof(HemCompactOutput)
     &&alignof(HemCounterTotals)<=alignof(HemCompactOutput),
@@ -99,9 +100,11 @@ __global__ void hemReduceCounters(const HemCounters* input,size_t count,
     } while(0)
     HEM_REDUCE(phases);HEM_REDUCE(residuals);HEM_REDUCE(candidates);HEM_REDUCE(stable);
     HEM_REDUCE(analyticJacobians);HEM_REDUCE(finiteDifferenceJacobians);
+    HEM_REDUCE(mixedLinearAttempts);HEM_REDUCE(mixedLinearAccepted);
 #undef HEM_REDUCE
 }
 struct HemDevice {
+    uint64_t mixedLinearAttempts=0,mixedLinearAccepted=0;
     HemPhaseCache* phaseCache=nullptr;
     size_t capacity=0;int ns=0;HemModel* model=nullptr;
     double* mass=nullptr;double* energy=nullptr;PintleThermoState* guess=nullptr;
@@ -113,7 +116,13 @@ struct HemDevice {
     std::vector<uint32_t> hostOrder;std::vector<uint8_t> hostBucket;
 #endif
     cudaStream_t stream=nullptr;cudaEvent_t events[6]{};
-    ~HemDevice(){if(stream)cudaStreamSynchronize(stream);for(auto e:events)if(e)cudaEventDestroy(e);
+    ~HemDevice(){
+#if PINTLE_HEM_FP32_LINEAR || PINTLE_HEM_INT_LINEAR
+        std::fprintf(stderr,"REACTIVE_GPU_PRECISION linearAttempts=%llu linearAccepted=%llu linearFallbacks=%llu\n",
+            (unsigned long long)mixedLinearAttempts,(unsigned long long)mixedLinearAccepted,
+            (unsigned long long)(mixedLinearAttempts-mixedLinearAccepted));
+#endif
+        if(stream)cudaStreamSynchronize(stream);for(auto e:events)if(e)cudaEventDestroy(e);
         if(phaseCache)cudaFree(phaseCache);if(mass)cudaFree(mass);if(energy)cudaFree(energy);
         if(guess)cudaFree(guess);if(capillary)cudaFree(capillary);if(output)cudaFree(output);if(counters)cudaFree(counters);
 #if PINTLE_HEM_PHASE_BUCKETS
@@ -232,6 +241,7 @@ static int hemRun(void* raw,const double* q,const double* energy,
         closureCuda(cudaEventRecord(d.events[4],d.stream));
         closureCuda(cudaMemcpyAsync(&totals,deviceTotals,sizeof(totals),cudaMemcpyDeviceToHost,d.stream));
         closureCuda(cudaEventRecord(d.events[5],d.stream));closureCuda(cudaEventSynchronize(d.events[5]));
+        d.mixedLinearAttempts+=totals.mixedLinearAttempts;d.mixedLinearAccepted+=totals.mixedLinearAccepted;
         float upload=0,kernel=0,stateDownload=0,reduction=0,totalsDownload=0;
         closureCuda(cudaEventElapsedTime(&upload,d.events[0],d.events[1]));
         closureCuda(cudaEventElapsedTime(&kernel,d.events[1],d.events[2]));

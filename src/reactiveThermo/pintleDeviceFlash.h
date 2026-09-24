@@ -13,6 +13,13 @@
 #include <cmath>
 #include <cfloat>
 #include <cstdint>
+#include "pintleMixedLinear.h"
+#ifndef PINTLE_HEM_INT_LINEAR
+#define PINTLE_HEM_INT_LINEAR 0
+#endif
+#ifndef PINTLE_HEM_FP32_LINEAR
+#define PINTLE_HEM_FP32_LINEAR 0
+#endif
 #ifndef PINTLE_HEM_TP_REUSE_GAS
 #define PINTLE_HEM_TP_REUSE_GAS 1
 #endif
@@ -40,6 +47,7 @@ struct Input { double q[maxSpecies]{},energy=0;PintleThermoState guess{}; };
 struct Counters {
     uint64_t phases=0,residuals=0,candidates=0,stable=0,failures=0;
     uint64_t analyticJacobians=0,finiteDifferenceJacobians=0;
+    uint64_t mixedLinearAttempts=0,mixedLinearAccepted=0;
 };
 struct Output {PintleThermoState state{};Counters counters{};int success=0,status=0;};
 struct Evaluation {
@@ -87,7 +95,19 @@ inline bool validModel(const Model& m){
 }
 PINTLE_HD inline double norm(const double* a,int n){double r=0;for(int i=0;i<n;++i)r=hi(r,::fabs(a[i]));return r;}
 // Full row/column pivoting, matching Eigen FullPivLU rank criterion for n<=4.
-PINTLE_HD inline bool solve(const double matrix[4][4],const double* rhs,int n,double* x){
+PINTLE_HD inline bool solve(const double matrix[4][4],const double* rhs,int n,double* x,Counters* counters=nullptr){
+#if defined(__CUDA_ARCH__) && (PINTLE_HEM_FP32_LINEAR || PINTLE_HEM_INT_LINEAR)
+    if(counters){++counters->mixedLinearAttempts;
+    using LinearScalar=
+#if PINTLE_HEM_INT_LINEAR
+        PintleMixedLinear::Fixed;
+#else
+        float;
+#endif
+    if(PintleMixedLinear::solve<LinearScalar>(matrix,rhs,n,x)){
+        ++counters->mixedLinearAccepted;return true;
+    }}
+#endif
     double a[4][4]{},b[4]{},largest=0;int column[4]{0,1,2,3};
     for(int i=0;i<n;++i){b[i]=rhs[i];if(!finite(b[i]))return false;for(int j=0;j<n;++j){a[i][j]=matrix[i][j];if(!finite(a[i][j]))return false;}}
     for(int k=0;k<n;++k){int row=k,col=k;double pivot=0;
@@ -273,7 +293,7 @@ struct Flash {
             value.state.volumeResidual=::fabs(rv);value.state.energyResidual=::fabs(re);value.state.iterations=it;
             if(::fabs(rv)<=m.vtol&&::fabs(re)<=m.etol)return true;
             double jac[4][4]{};jac[0][0]=value.Vp*p;jac[0][1]=value.VT*T;jac[1][0]=value.Ep*p/scale;jac[1][1]=value.ET*T/scale;
-            double rhs[4]{-rv,-re},step[4]{};if(!solve(jac,rhs,2,step))return false;
+            double rhs[4]{-rv,-re},step[4]{};if(!solve(jac,rhs,2,step,&count))return false;
             const double limit=hi(1.,hi(::fabs(step[0])/.7,::fabs(step[1])/.2));step[0]/=limit;step[1]/=limit;
             const double previous=hi(::fabs(rv),::fabs(re));bool accepted=false;
             for(double fraction=1;fraction>1e-9;fraction*=.5){Evaluation trial;const double pp=p*::exp(fraction*step[0]),tt=T*::exp(fraction*step[1]);
@@ -355,7 +375,7 @@ struct Flash {
                 return value.state.soundEquilibrium<=value.state.soundFrozen*(1+2e-3);
             }
             if(!jacobian(active,n,x,scale,f,jac,&value))return false;
-            double rhs[4]{},step[4]{};for(int j=0;j<size;++j)rhs[j]=-f[j];if(!solve(jac,rhs,size,step))return false;
+            double rhs[4]{},step[4]{};for(int j=0;j<size;++j)rhs[j]=-f[j];if(!solve(jac,rhs,size,step,&count))return false;
             double limiter=hi(1.,hi(::fabs(step[0])/.7,::fabs(step[1])/.18));for(int j=2;j<size;++j)limiter=hi(limiter,::fabs(step[j])/(adaptive?2.:.3));
             for(int j=0;j<size;++j)step[j]/=limiter;
             bool accepted=false;const double previous=norm(f,size);

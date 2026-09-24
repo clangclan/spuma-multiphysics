@@ -1,0 +1,281 @@
+{
+  "capture": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar.bin",
+  "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+  "comparison": {
+    "T": {
+      "maxAbs": 2.6147972675971687e-12,
+      "maxScaled": 8.91966920244601e-15,
+      "relativeL2": 1.1503309954986898e-15
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 5.551115123125783e-16,
+      "maxScaled": 5.551115123125783e-16,
+      "relativeL2": 8.848546241468668e-17
+    },
+    "alphaLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "chemicalResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cp": {
+      "maxAbs": 5.229594535194337e-12,
+      "maxScaled": 4.728858191130283e-15,
+      "relativeL2": 1.5533442356607694e-15
+    },
+    "cv": {
+      "maxAbs": 4.888534022029489e-12,
+      "maxScaled": 6.658714720154959e-15,
+      "relativeL2": 2.2901092488217556e-15
+    },
+    "e": {
+      "maxAbs": 2.3865140974521637e-09,
+      "maxScaled": 2.3720249175912134e-14,
+      "relativeL2": 4.4592544390388014e-15
+    },
+    "energyResidual": {
+      "maxAbs": 7.333568670977719e-15,
+      "maxScaled": 7.333568670977719e-15,
+      "relativeL2": 1.0490560540573286e-05
+    },
+    "entropy": {
+      "maxAbs": 5.911715561524034e-11,
+      "maxScaled": 1.0226459709430256e-14,
+      "relativeL2": 1.847867125564987e-15
+    },
+    "gasMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "iterations": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "liquidMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "p": {
+      "maxAbs": 4.0046870708465576e-08,
+      "maxScaled": 1.0011766890448286e-14,
+      "relativeL2": 1.2906036092872242e-15
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 2.842170943040401e-14,
+      "maxScaled": 5.890699414122251e-16,
+      "relativeL2": 8.382163573880435e-17
+    },
+    "rhoLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundEquilibrium": {
+      "maxAbs": 1.5916157281026244e-12,
+      "maxScaled": 4.5744293589782474e-15,
+      "relativeL2": 7.379613871294575e-16
+    },
+    "soundFrozen": {
+      "maxAbs": 1.5916157281026244e-12,
+      "maxScaled": 4.5744293589782474e-15,
+      "relativeL2": 7.379613871294575e-16
+    },
+    "volumeResidual": {
+      "maxAbs": 4.440892098500626e-16,
+      "maxScaled": 4.440892098500626e-16,
+      "relativeL2": 0.37377778615494384
+    }
+  },
+  "count": 10006,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-nasa/libHem-ds-nasa.so",
+  "librarySha256": "b64afa1e067b79023f06b37d7256c746d980f2f68b450e256894d6d09b0d26d3",
+  "maxKernelSeconds": 0.22255119323730468,
+  "medianKernelSeconds": 0.22207350158691405,
+  "minKernelSeconds": 0.22176527404785157,
+  "passed": true,
+  "policy": "two-fp32-nasa-fp64-eos-v1:experimental",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22254353199969046,
+      "copySeconds": 0.000315168023109436,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22204940795898437,
+      "phaseEvaluations": 9088473,
+      "repeat": 1,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222499224
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22233470500032126,
+      "copySeconds": 0.00031059199571609495,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22187049865722655,
+      "phaseEvaluations": 9088473,
+      "repeat": 2,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222300982
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22222125999905984,
+      "copySeconds": 0.00030323201417922974,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22176527404785157,
+      "phaseEvaluations": 9088473,
+      "repeat": 3,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222193935
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22254742900076963,
+      "copySeconds": 0.00030316802859306334,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22208937072753906,
+      "phaseEvaluations": 9088473,
+      "repeat": 4,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222517232
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22261136600172904,
+      "copySeconds": 0.0003038080334663391,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22215206909179688,
+      "phaseEvaluations": 9088473,
+      "repeat": 5,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222578802
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22299595000004047,
+      "copySeconds": 0.0003009920120239258,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22255119323730468,
+      "phaseEvaluations": 9088473,
+      "repeat": 6,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222970026
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.22252068799934932,
+      "copySeconds": 0.00030320000648498534,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.22207350158691405,
+      "phaseEvaluations": 9088473,
+      "repeat": 7,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.222493518
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

@@ -2,7 +2,9 @@
 // Included inside ThermoPool. Exact, batch-local reuse only.
     void classify(const PintleThermoState* original) {
         ProfileTimer timer(acceleration.classifySeconds);jobCount=0;
-        if(!prototype->exactBatchReuse||operation!=0){
+        const bool reusable=operation==0
+            ||(operation==2&&capillaryColor&&hemDevice);
+        if(!prototype->exactBatchReuse||!reusable){
             for(size_t c=0;c<count;++c){representative[c]=c;order[jobCount++]=c;}return;
         }
         std::fill(hashSlots.begin(),hashSlots.end(),SIZE_MAX);acceleration.eligibleCells+=count;
@@ -16,6 +18,13 @@
                     hash^=word;hash*=1099511628211ULL;bytes+=sizeof(word);n-=sizeof(word);}
                 for(size_t j=0;j<n;++j){hash^=bytes[j];hash*=1099511628211ULL;}};
             add(mass.data()+c*ns,ns*sizeof(double));add(energies+c,sizeof(double));add(original+c,sizeof(*original));
+            // Curved UV recovery also consumes the frozen geometry. Both
+            // values must match bit-for-bit even when bulk input/seed match.
+            // The table is cleared each call; model, operation and capillary
+            // presence are batch-global, so no key survives a policy/stage
+            // change. Include operation explicitly for equilibrium/frozen.
+            add(&operation,sizeof(operation));
+            if(capillaryColor){add(capillaryColor+c,sizeof(double));add(capillaryJump+c,sizeof(double));}
             // Mix high floating-point bits into the low power-of-two index.
             hash^=hash>>33;hash*=0xff51afd7ed558ccdULL;
             hash^=hash>>33;hash*=0xc4ceb9fe1a85ec53ULL;hash^=hash>>33;
@@ -23,7 +32,10 @@
             while(hashSlots[slot]!=SIZE_MAX){const size_t other=hashSlots[slot];
                 if(std::memcmp(mass.data()+c*ns,mass.data()+other*ns,ns*sizeof(double))==0
                     &&std::memcmp(energies+c,energies+other,sizeof(double))==0
-                    &&std::memcmp(original+c,original+other,sizeof(*original))==0){match=other;break;}
+                    &&std::memcmp(original+c,original+other,sizeof(*original))==0
+                    &&(!capillaryColor||(
+                        std::memcmp(capillaryColor+c,capillaryColor+other,sizeof(double))==0
+                        &&std::memcmp(capillaryJump+c,capillaryJump+other,sizeof(double))==0))){match=other;break;}
                 slot=(slot+1)&(hashSlots.size()-1);
             }
             if(match==SIZE_MAX){hashSlots[slot]=c;representative[c]=c;order[jobCount++]=c;}

@@ -75,9 +75,14 @@ writeCompression off; timeFormat general; timePrecision 15; runTimeModifiable fa
     put(case,'system/fvSchemes','ddtSchemes { default Euler; } gradSchemes { default Gauss linear; } divSchemes { default none; } laplacianSchemes { default Gauss linear uncorrected; } interpolationSchemes { default linear; } snGradSchemes { default uncorrected; }\n')
     put(case,'system/fvSolution','solvers {}\n')
 
-def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='WALE'):
+def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='WALE',
+            *, cells_per_axis=None, nozzle_diameter_mm=5., domain_mm=80., inlet_z_mm=40.):
     out=Path(output).resolve();source=Path(configuration).resolve()
-    body,geometry=mesh_definition(spacing_mm)
+    if cells_per_axis is None:
+        body,geometry=mesh_definition(spacing_mm)
+    else:
+        from impinging_cartesian_mesh import definition, write_mesh
+        body=None;geometry=definition(cells_per_axis,nozzle_diameter_mm,domain_mm,inlet_z_mm)
     if out.exists():raise ValueError('Use a new output directory')
     if turbulence not in ('none','WALE'):raise ValueError('Unknown turbulence selection')
     if not math.isfinite(temperature) or temperature<=0:raise ValueError('Invalid temperature')
@@ -87,7 +92,11 @@ def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='W
     out.mkdir(parents=True);thermo=out/'thermo';thermo.mkdir()
     shutil.copy2(mechanism,thermo/'cold-pr.yaml');settings['mechanism']=str(thermo/'cold-pr.yaml')
     local_config=thermo/'cold-pr-config.yaml';local_config.write_text(yaml.safe_dump(settings,allow_unicode=True,sort_keys=False))
-    mesh=out/'mesh';system(mesh);put(mesh,'system/blockMeshDict',body)
+    mesh=out/'mesh';system(mesh)
+    if body is not None:put(mesh,'system/blockMeshDict',body)
+    else:
+        write_mesh(mesh,geometry)
+        common.atomic_json(mesh/'mesh-generation.json',geometry)
     env=common.sourced_environment()
     check_mesh=['checkMesh','-case',str(mesh),'-allGeometry','-allTopology']
     check_env=env
@@ -101,8 +110,9 @@ def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='W
             'mesh-check',str(foam_env),str(mesh)]
         import os
         check_env=os.environ.copy()
-    for command,log,selected_env in [(['blockMesh','-case',str(mesh)],'blockMesh.log',env),
-                        (check_mesh,'checkMesh.log',check_env)]:
+    commands=[] if body is None else [(['blockMesh','-case',str(mesh)],'blockMesh.log',env)]
+    commands.append((check_mesh,'checkMesh.log',check_env))
+    for command,log,selected_env in commands:
         with (mesh/log).open('w') as stream:subprocess.run(command,env=selected_env,stdout=stream,stderr=subprocess.STDOUT,check=True,timeout=180)
     text=(mesh/'checkMesh.log').read_text()
     if 'Mesh OK.' not in text:raise RuntimeError('Mesh checks failed: '+str(mesh/'checkMesh.log'))
@@ -134,7 +144,7 @@ def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='W
             case=out/name;system(case)
             # Ordinary copies keep each case independent when opened/modified by the user.
             shutil.copytree(mesh/'constant/polyMesh',case/'constant/polyMesh')
-            put(case,'system/blockMeshDict',body)
+            if body is not None:put(case,'system/blockMeshDict',body)
             q,e,state=b.make_state(temperature,back,ambient_y,(0,0));state=b.recover(q,e,state)
             uniform(case,'p',state.p,'1 -1 -2 0 0 0 0');uniform(case,'T',state.T,'0 0 0 1 0 0 0')
             uniform(case,'U',(0,0,0),'0 1 -1 0 0 0 0')
@@ -178,6 +188,8 @@ boundaryConditions {{
       'localThermoHashes':{str(p.relative_to(out)):common.sha256(p) for p in thermo.iterdir()},
       'generatorSha256':common.sha256(Path(__file__)),'meshCheck':'mesh/checkMesh.log','meshCheckCommand':check_mesh,
       'limits':['fixedState reservoir is not a resolved nozzle or characteristic total-pressure inlet','HEM flash is thermodynamic equilibrium, not finite-rate nucleation','no geometric interface/surface-tension breakup prediction','30 ns is an upper bound; solver may reduce it for CFL or recovery']}
+    if cells_per_axis is not None:
+        matrix['meshGeneratorSha256']=common.sha256(Path(__file__).with_name('impinging_cartesian_mesh.py'))
     common.atomic_json(out/'benchmark-matrix.json',matrix)
     (out/'README.ko.md').write_text(f'''# 90도 액체 N₂O 충돌 벤치마크\n\n두 공급구 모두 {temperature-273.15:g}°C, 55 bar(g)=56.01325 bar(abs). 외부는 각각 1.01325 bar(abs), 40 bar(abs).\n\n메시: {geometry['cells']:,}개 동일 정육면체 셀, 변 길이 {spacing_mm:g} mm. 영역 20 × 20 × 10 mm, 각 정사각 분사구 2 × 2 mm. 공칭 축 교점 (6,6,5) mm.\n\n초기 공간은 정지한 79% N₂/21% O₂ 공기(몰분율)이며 입구 플럭스는 공급구와 공간의 압력 차로 발생한다. `fixedState U=0` 저장조 ghost 경계이며 노즐 출구 속도나 실제 초킹 유량을 지정/검증한 조건은 아니다. 외부 열린 면도 배압 공기 저장조 ghost, 공급 판은 slipWall이다.\n\n상평형·상변화와 CUDA 수송/열역학을 켰고 CPU fallback은 껐다. 기본 WALE는 운동량 응력 범위이며 열/종 SGS는 없다. 계면을 해상하는 VOF·표면장력·액적 분열 해석으로 해석하면 안 된다.\n\n`maxDeltaT=30 ns`, 예비 종료시간 1 ms, 저장 간격 10 μs. 종료시간까지 실행한 결과는 아직 아니다. CFL/복원에 따라 dt가 작아질 수 있다.\n\n환경을 준비한 뒤 `ReactiveFoam -case <케이스 경로>`로 실행한다. `.foam` 파일로 ParaView에서 연다. 전체 실행 전 `tools/validate_impinging_n2o.py --benchmark <이 폴더> --output <새 검증 폴더>`로 각 케이스의 1스텝을 확인할 수 있다.\n''')
     if solid:
@@ -189,13 +201,25 @@ boundaryConditions {{
                 "고체 물성은 잠정 모델이며 독립 승화압 정확도 검증을 별도로 확인해야 한다. "
                 "현재 고체 프로필은 GPU 내 유한차분 Jacobian을 사용하므로 계산 비용이 크게 늘 수 있다. "
                 "저장소 docs/benchmarks/impinging-n2o-solid-recovery.ko.md에 검증 결과와 제한을 기록했다.\n")
+    if cells_per_axis is not None:
+        path=out/'README.ko.md';text=path.read_text()
+        old=f"메시: {geometry['cells']:,}개 동일 정육면체 셀, 변 길이 {spacing_mm:g} mm. 영역 20 × 20 × 10 mm, 각 정사각 분사구 2 × 2 mm."
+        new=(f"메시: {cells_per_axis}³ = {geometry['cells']:,}셀, 영역 {domain_mm:g} × {domain_mm:g} × {domain_mm:g} mm. "
+             f"셀 간격 {np.array(geometry['cellSpacingM'])*1000} mm. 각 원형 분사구 지름 {nozzle_diameter_mm:g} mm. "
+             f"원 내부에 중심이 있는 경계 면을 선택했으며 면적 오차는 {geometry['nozzleAreaRelativeError']:.4%}. "
+             "셀 절단·변형 없이 격자 경계에서 원을 근사한다.")
+        path.write_text(text.replace(old,new).replace('교점 (6,6,5) mm',f'교점 (6,6,{inlet_z_mm:g}) mm'))
     return matrix
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('output',type=Path);ap.add_argument('--configuration',required=True,type=Path)
     ap.add_argument('--cell-mm',type=float,default=.25);ap.add_argument('--temperature',type=float,default=293.15);ap.add_argument('--turbulence',choices=('none','WALE'),default='WALE')
+    ap.add_argument('--cells-per-axis',type=int,choices=(40,80,160));ap.add_argument('--nozzle-diameter-mm',type=float,default=5.)
+    ap.add_argument('--domain-mm',type=float,default=80.)
+    ap.add_argument('--inlet-z-mm',type=float,default=40.)
     a=ap.parse_args()
     with common.RUN_LOCK.open('a+') as lock:
-        fcntl.flock(lock,fcntl.LOCK_EX);report=prepare(a.output,a.configuration,a.cell_mm,a.temperature,a.turbulence)
+        fcntl.flock(lock,fcntl.LOCK_EX);report=prepare(a.output,a.configuration,a.cell_mm,a.temperature,a.turbulence,
+            cells_per_axis=a.cells_per_axis,nozzle_diameter_mm=a.nozzle_diameter_mm,domain_mm=a.domain_mm,inlet_z_mm=a.inlet_z_mm)
     print(json.dumps(report))
 if __name__=='__main__':main()

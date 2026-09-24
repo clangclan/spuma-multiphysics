@@ -240,12 +240,15 @@ public:
         demand(workers>0&&workers<=64&&batch>0,"Invalid thermo worker/batch limits");batchCells=std::min(nc,size_t(batch));
         const bool reuse=dict.getOrDefault<bool>("thermoExactReuse",!mechanical&&!chemistry&&!frozen&&!capillary);
         const word scalarBackend=dict.getOrDefault<word>("closureScalarBackend","cpu");
+        const word fullBackend=dict.getOrDefault<word>("closureBackend","cpu");
         demand(scalarBackend=="cpu"||scalarBackend=="cuda","Unknown closureScalarBackend");
-        demand(!(reuse||scalarBackend=="cuda")||(!mechanical&&!chemistry&&!frozen&&!capillary),
-            "Closure acceleration currently requires nonreacting HEM equilibrium");
+        demand(!reuse||(!mechanical&&!chemistry&&((!frozen&&!capillary)
+            ||(capillary&&fullBackend=="cuda"&&scalarBackend=="cpu"))),
+            "Exact reuse requires nonreacting HEM equilibrium or full CUDA capillary recovery");
+        demand(scalarBackend!="cuda"||(!mechanical&&!chemistry&&!frozen&&!capillary),
+            "Scalar closure acceleration requires nonreacting HEM equilibrium without capillarity");
         fileName scalarLibrary(dict.getOrDefault<fileName>("closureScalarLibrary","libpintleReactiveTransport.so"));scalarLibrary.expand();
         check(pintle_rt_set_closure_acceleration_v1(t,reuse,scalarBackend=="cuda",scalarLibrary.c_str()),"Closure acceleration policy");
-        const word fullBackend=dict.getOrDefault<word>("closureBackend","cpu");
         demand(fullBackend=="cpu"||fullBackend=="cuda","Unknown closureBackend");
         demand(fullBackend!="cuda"||(!mechanical&&!chemistry&&scalarBackend=="cpu"),
             "Full CUDA closure requires nonreacting HEM and closureScalarBackend cpu");

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently check the written native cubic mesh and inlet area vectors."""
+"""Independently check the native Cartesian lattice and inlet area vectors."""
 import argparse
 import json
 from pathlib import Path
@@ -23,10 +23,12 @@ def check(benchmark):
     labels,_=binary_list(faces_raw,'<i4',start=end);labels=labels[:,0]
     assert offsets[0]==0 and offsets[-1]==len(labels) and np.all(np.diff(offsets)==4)
     faces=labels.reshape(-1,4);assert np.min(faces)>=0 and np.max(faces)<len(points)
-    scaled=points/g['cellEdgeM'];lattice=np.rint(scaled).astype(np.int64)
+    spacing=np.array(g.get('cellSpacingM',[g['cellEdgeM']]*3))
+    scaled=points/spacing;lattice=np.rint(scaled).astype(np.int64)
     np.testing.assert_allclose(scaled,lattice,rtol=0,atol=2e-11)
     assert [len(np.unique(lattice[:,i]))-1 for i in range(3)]==g['shape']
-    assert len(np.unique(lattice,axis=0))==len(points)==np.prod(np.array(g['shape'])+1)
+    point_ids=lattice[:,0]+(g['shape'][0]+1)*(lattice[:,1]+(g['shape'][1]+1)*lattice[:,2])
+    assert len(np.unique(point_ids))==len(points)==np.prod(np.array(g['shape'])+1)
     np.testing.assert_allclose(points.min(axis=0),0,atol=1e-14)
     np.testing.assert_allclose(points.max(axis=0),g['domainM'],rtol=1e-12,atol=1e-14)
     boundary=(mesh/'boundary').read_text();patches={}
@@ -37,12 +39,25 @@ def check(benchmark):
     for p in patches.values():assert p['startFace']==cursor;cursor+=p['nFaces']
     assert cursor==len(faces)
     results={}
-    for name,normal,center in [('inletX',[-1,0,0],[0,.006,.005]),('inletY',[0,-1,0],[.006,0,.005])]:
+    for name,normal,center in zip(('inletX','inletY'),([-1,0,0],[0,-1,0]),g['inletCentersM']):
         p=patches[name];v=points[faces[p['startFace']:p['startFace']+p['nFaces']]]
-        area=.5*np.cross(v[:,2]-v[:,0],v[:,3]-v[:,1]);expected=np.array(normal)*g['cellEdgeM']**2
+        area=.5*np.cross(v[:,2]-v[:,0],v[:,3]-v[:,1]);axis=int(np.argmax(np.abs(normal)))
+        expected=np.array(normal)*np.prod(np.delete(spacing,axis))
         np.testing.assert_allclose(area,np.broadcast_to(expected,area.shape),rtol=1e-11,atol=1e-20)
         np.testing.assert_allclose(v.mean(axis=(0,1)),center,rtol=1e-12,atol=1e-14)
-        np.testing.assert_allclose(np.linalg.norm(area,axis=1).sum(),4e-6,rtol=1e-12)
+        np.testing.assert_allclose(np.linalg.norm(area,axis=1).sum(),g.get('nozzleAreaM2',4e-6),rtol=1e-12)
+        if g['nozzleShape']=='circle':
+            centres=v.mean(axis=1)
+            radius2=np.sum((centres-np.array(center))**2,axis=1)
+            assert np.all(radius2 < (g['nozzleDiameterM']/2)**2)
+            # Check the exact mask; do not hide the requested coarse-grid area error.
+            axes=[a for a in range(3) if a!=axis]
+            u,w=np.meshgrid((np.arange(g['shape'][axes[0]])+.5)*spacing[axes[0]],
+                (np.arange(g['shape'][axes[1]])+.5)*spacing[axes[1]],indexing='ij')
+            exact_mask=(u-center[axes[0]])**2+(w-center[axes[1]])**2 < (g['nozzleDiameterM']/2)**2
+            assert len(v)==int(exact_mask.sum())
+            measured_error=np.linalg.norm(area,axis=1).sum()/g['exactNozzleAreaM2']-1
+            np.testing.assert_allclose(measured_error,g['nozzleAreaRelativeError'],atol=1e-12,rtol=1e-12)
         assert len(v)==g['facesPerNozzle']
         results[name]={'faces':len(v),'areaM2':float(np.linalg.norm(area,axis=1).sum()),'outwardNormal':normal,'centerM':v.mean(axis=(0,1)).tolist()}
     hashes={}
@@ -52,7 +67,8 @@ def check(benchmark):
             if common.sha256(root/name/relative)!=digest:raise ValueError('Input changed: '+name+'/'+relative)
         hashes[name]=common.sha256(root/name/'benchmark-definition.json')
     return {'passed':True,'cells':g['cells'],'shape':g['shape'],'points':len(points),'faces':len(faces),'cellEdgeM':g['cellEdgeM'],
-        'cubicLatticeVerified':True,'patches':results,'caseDefinitionHashes':hashes,
+        'cartesianLatticeVerified':True,'cubicLatticeVerified':bool(np.all(spacing==spacing[0])),
+        'cellSpacingM':spacing.tolist(),'patches':results,'caseDefinitionHashes':hashes,
         'meshHashes':{p.name:common.sha256(p) for p in mesh.iterdir() if p.is_file()},'checkerSha256':common.sha256(Path(__file__))}
 
 def main():

@@ -1,0 +1,23 @@
+	Command being timed: "/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/bin/ReactiveFoam -case /home/jsw/문서/analysis/runs/hem_utilization_optimization_20260924/reuse262144-40bar"
+	User time (seconds): 10.64
+	System time (seconds): 6.16
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:17.18
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 10651120
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6353
+	Minor (reclaiming a frame) page faults: 4548295
+	Voluntary context switches: 29130
+	Involuntary context switches: 5914
+	Swaps: 0
+	File system inputs: 200
+	File system outputs: 9600624
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

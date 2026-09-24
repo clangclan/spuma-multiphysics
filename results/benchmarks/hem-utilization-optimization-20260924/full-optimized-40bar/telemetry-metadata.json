@@ -1,0 +1,10 @@
+{
+  "clockTicksPerSecond": 100,
+  "intervalSeconds": 0.5,
+  "logArrivalMeaning": "Buffered stdout observation time, not exact solver event time.",
+  "memoryUtilizationMeaning": "Fraction of sampling period with global memory reads/writes, NOT percentage of peak bandwidth.",
+  "pageBytes": 4096,
+  "samples": 229,
+  "scope": "NVML is device-wide; CPU core utilization is system-wide; proc data is solver-specific.",
+  "unsupportedQueries": {}
+}

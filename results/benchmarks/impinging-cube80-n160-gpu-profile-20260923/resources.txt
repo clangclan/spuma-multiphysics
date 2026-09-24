@@ -1,0 +1,128 @@
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:0
+
+Fatbin elf code:
+================
+arch = sm_120
+code version = [1,8]
+host = linux
+compile_size = 64bit
+compressed
+
+Resource usage:
+ Common:
+  GLOBAL:272 CONSTANT[4]:16
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport13GasDiagnosticEEEvmNS1_4ViewET_:
+  REG:46 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport7AdvanceEEEvmNS1_4ViewET_:
+  REG:92 STACK:648 SHARED:0 LOCAL:0 CONSTANT[0]:1568 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_7MinimumEEEvmN15PintleTransport4ViewET_Pd:
+  REG:20 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1576 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport4StepEEEvmNS1_4ViewET_:
+  REG:35 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1568 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_14BoundaryFinishEEEvmN15PintleTransport4ViewET_Pd:
+  REG:18 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1576 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_15BoundaryPartialEEEvmN15PintleTransport4ViewET_Pd:
+  REG:58 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1568 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport10FaceSpeedsEEEvmNS1_4ViewET_:
+  REG:56 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport3RhsEEEvmNS1_4ViewET_:
+  REG:96 STACK:648 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport5FacesEEEvmNS1_4ViewET_:
+  REG:122 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport24GeometricDiagnosticCellsEEEvmNS1_4ViewET_:
+  REG:48 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1576 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport5CellsEEEvmNS1_4ViewET_:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport18InterfaceCurvatureEEEvmNS1_4ViewET_:
+  REG:44 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport17InterfaceGradientEEEvmNS1_4ViewET_:
+  REG:38 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport14ImplicitCommitEEEvmNS1_4ViewET_:
+  REG:42 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1560 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport13ImplicitFacesEEEvmNS1_4ViewET_:
+  REG:255 STACK:4016 SHARED:0 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport13ImplicitCellsEEEvmNS1_4ViewET_:
+  REG:255 STACK:3920 SHARED:0 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN15PintleTransport22ImplicitVolumeMismatchEEEEEvmNS2_4ViewET_Pd:
+  REG:24 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:2240 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport14ImplicitTargetEEEvmNS1_4ViewET_:
+  REG:14 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1560 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit15JacobianForwardEEEEEvmN15PintleTransport4ViewET_:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1600 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit12PreconditionEEEEEvmN15PintleTransport4ViewET_:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1608 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit9TransposeEEEEEvmN15PintleTransport4ViewET_:
+  REG:62 STACK:128 SHARED:0 LOCAL:0 CONSTANT[0]:1656 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit12CoarseExpandEEEEEvmN15PintleTransport4ViewET_:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN17PintleImplicitFit9CoarseDotEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:42 STACK:80 SHARED:3072 LOCAL:0 CONSTANT[0]:1616 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit13CoarseSamplesEEEEEvmN15PintleTransport4ViewET_:
+  REG:54 STACK:80 SHARED:0 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit12ThirdForwardEEEEEvmN15PintleTransport4ViewET_:
+  REG:52 STACK:128 SHARED:0 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit17LinearCombinationEEEEEvmN15PintleTransport4ViewET_:
+  REG:18 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit5GaugeEEEEEvmN15PintleTransport4ViewET_:
+  REG:56 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1600 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit10SeedNormalEEEEEvmN15PintleTransport4ViewET_:
+  REG:80 STACK:288 SHARED:0 LOCAL:0 CONSTANT[0]:1600 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN17PintleImplicitFit3DotEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:20 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit4SeedEEEEEvmN15PintleTransport4ViewET_:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN17PintleImplicitFit10MixedCountEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:18 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN17PintleImplicitFit11BadGeometryEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:18 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit8GeometryEEEEEvmN15PintleTransport4ViewET_:
+  REG:255 STACK:5760 SHARED:0 LOCAL:0 CONSTANT[0]:1608 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumINS_12ImplicitReadEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:18 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1584 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b12reduceGroupsINS_11ImplicitSumIN17PintleImplicitFit7ExceedsEEEEEvmN15PintleTransport4ViewET_Pd:
+  REG:18 STACK:0 SHARED:3072 LOCAL:0 CONSTANT[0]:1592 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeINS_14ImplicitInvokeIN17PintleImplicitFit10DifferenceEEEEEvmN15PintleTransport4ViewET_:
+  REG:16 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1576 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport15WaleViscositiesEEEvmNS1_4ViewET_:
+  REG:68 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport9GradientsEEEvmNS1_4ViewET_:
+  REG:56 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport13GasPropertiesEEEvmNS1_4ViewET_:
+  REG:58 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport21BuildTemperatureBasisEEEvmNS1_4ViewET_:
+  REG:36 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1553 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b7executeIN15PintleTransport6LayoutEEEvmNS1_4ViewET_:
+  REG:20 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:1608 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b17hemReduceCountersEPKN17PintleDeviceFlash8CountersEmPNS_16HemCounterTotalsE:
+  REG:24 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b9hemKernelEPKN17PintleDeviceFlash5ModelEPKdS5_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2PKjmPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE:
+  REG:255 STACK:6560 SHARED:0 LOCAL:0 CONSTANT[0]:976 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b21hemInitializeTPKernelEPKN17PintleDeviceFlash5ModelEPdS4_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2mPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE:
+  REG:238 STACK:3856 SHARED:0 LOCAL:0 CONSTANT[0]:968 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b23initializeHemPhaseCacheEPKN17PintleDeviceFlash5ModelEPN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE:
+  REG:68 STACK:144 SHARED:0 LOCAL:0 CONSTANT[0]:912 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b19closureScalarKernelEPK26PintleClosureScalarInputV1mP27PintleClosureScalarOutputV1:
+  REG:120 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:920 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b18walePrCommitKernelEmmmPKdS1_PdS2_bb:
+  REG:40 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:954 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN59_GLOBAL__N__a97ee8b5_26_pintleReactiveTransport_cu_7df9a20b22walePrPropertiesKernelEPKN17PintleDeviceFlash5ModelEPKdPK17PintleThermoStateS5_S5_dmmPdS9_Pyb:
+  REG:228 STACK:4480 SHARED:0 LOCAL:0 CONSTANT[0]:985 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin ptx code:
+================
+arch = sm_120
+code version = [9,2]
+host = linux
+compile_size = 64bit
+compressed
+ptxasOptions =  --fmad false 

@@ -1,0 +1,94 @@
+{
+  "cases": [
+    "ambient_1atm",
+    "ambient_40bar_abs"
+  ],
+  "generatorSha256": "05fb9277da62d529891d9b28c5537e1a5edb329cd71b378b939a93af8fbb9342",
+  "geometry": {
+    "angleDegrees": 90,
+    "cellEdgeM": 0.001,
+    "cellSpacingM": [
+      0.001,
+      0.001,
+      0.001
+    ],
+    "cellVolumeM3": 1e-09,
+    "cells": 512000,
+    "domainM": [
+      0.08,
+      0.08,
+      0.08
+    ],
+    "exactNozzleAreaM2": 1.963495408493621e-05,
+    "facesPerNozzle": 16,
+    "inletCentersM": [
+      [
+        0,
+        0.006,
+        0.005
+      ],
+      [
+        0.006,
+        0,
+        0.005
+      ]
+    ],
+    "nominalDirections": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "nominalIntersectionM": [
+      0.006,
+      0.006,
+      0.005
+    ],
+    "nozzleAreaM2": 1.6e-05,
+    "nozzleAreaRelativeError": -0.185126691369496,
+    "nozzleCellsPerDiameter": 5.0,
+    "nozzleDiameterM": 0.005,
+    "nozzleDiscretization": "boundary-face-centre-inside-circle",
+    "nozzleShape": "circle",
+    "shape": [
+      80,
+      80,
+      80
+    ]
+  },
+  "limits": [
+    "fixedState reservoir is not a resolved nozzle or characteristic total-pressure inlet",
+    "HEM flash is thermodynamic equilibrium, not finite-rate nucleation",
+    "no geometric interface/surface-tension breakup prediction",
+    "30 ns is an upper bound; solver may reduce it for CFL or recovery"
+  ],
+  "localThermoHashes": {
+    "thermo/cold-pr-config.yaml": "e56d484a6170ce886d26c1eafc84cabf1ad09c35f9177c7874eb4ae31c293b57",
+    "thermo/cold-pr.yaml": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916"
+  },
+  "meshCheck": "mesh/checkMesh.log",
+  "meshCheckCommand": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source \"$1\" ParaView_TYPE=none >/dev/null && exec checkMesh -case \"$2\" -allGeometry -allTopology",
+    "mesh-check",
+    "/opt/openfoam14/etc/bashrc",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n80/base/mesh"
+  ],
+  "meshGeneratorSha256": "aad4005368fe7d21f1f9036d028ebd6b40569c738213bef7c4e97d3929cd24c2",
+  "purpose": "90-degree pressure-driven liquid N2O impingement and equilibrium flashing",
+  "schema": 1,
+  "sourceConfiguration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml",
+  "sourceConfigurationSha256": "e01156f26c40c5c64fb31a701c881b3d80f365b3ad91e034ab8d941c0d79d8af",
+  "sourceMechanismSha256": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916",
+  "supplyAbsolutePa": 5601325.0,
+  "temperatureK": 293.15
+}

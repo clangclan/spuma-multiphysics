@@ -1,0 +1,281 @@
+{
+  "capture": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar.bin",
+  "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+  "comparison": {
+    "T": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "chemicalResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cp": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cv": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "e": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "energyResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "entropy": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "gasMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "iterations": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "liquidMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "p": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundEquilibrium": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundFrozen": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "volumeResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    }
+  },
+  "count": 10006,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-linear.so",
+  "librarySha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+  "maxKernelSeconds": 0.20873245239257812,
+  "medianKernelSeconds": 0.208583740234375,
+  "minKernelSeconds": 0.20838192749023438,
+  "passed": true,
+  "policy": "fp32-newton-step-fp64-accept-v2:experimental",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.20886108400009107,
+      "copySeconds": 0.0003049920201301575,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20838192749023438,
+      "phaseEvaluations": 9088917,
+      "repeat": 1,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.208816941
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.2090497110002616,
+      "copySeconds": 0.00030476799607276914,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.208583740234375,
+      "phaseEvaluations": 9088917,
+      "repeat": 2,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.209012793
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.20890909700028715,
+      "copySeconds": 0.00030585601925849917,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20843740844726563,
+      "phaseEvaluations": 9088917,
+      "repeat": 3,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.208873238
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.20904554099979578,
+      "copySeconds": 0.00030736002326011656,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20858419799804687,
+      "phaseEvaluations": 9088917,
+      "repeat": 4,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.209011557
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.2091770990009536,
+      "copySeconds": 0.0002998720109462738,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20873245239257812,
+      "phaseEvaluations": 9088917,
+      "repeat": 5,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.209147639
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.20895631900020817,
+      "copySeconds": 0.00030534401535987855,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20851321411132812,
+      "phaseEvaluations": 9088917,
+      "repeat": 6,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.20893356
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.20917444599945156,
+      "copySeconds": 0.0003093760013580322,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696585,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.20871343994140626,
+      "phaseEvaluations": 9088917,
+      "repeat": 7,
+      "residualEvaluations": 15283597,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.209146638
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

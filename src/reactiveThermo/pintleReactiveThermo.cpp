@@ -283,7 +283,13 @@ public:
         if(!query)return {}; // historical separate-rounding libraries
         const char* policy=query();
         require(policy,"CUDA HEM numerical policy is null");
-        require(!policy[0]||std::strcmp(policy,PINTLE_GPU_HEM_FP64_FMA_POLICY_V1)==0,
+        require(!policy[0]||std::strcmp(policy,PINTLE_GPU_HEM_FP64_FMA_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_INT_LINEAR_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_FP32_NASA_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_DS_NASA_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_FP32_SEED_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_FP32_LINEAR_POLICY_V1)==0
+            ||std::strcmp(policy,PINTLE_GPU_HEM_FP32_COMBINED_POLICY_V1)==0,
             "Unknown CUDA HEM numerical policy");
         return policy;
     }

@@ -1,0 +1,8 @@
+==WARNING== Note: Running with uncontrolled GPU caches. Profiling results may be inconsistent.
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 80511 (/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env/bin/python3.12)
+==PROF== Profiling "1:13:_ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b9hemKernelEPKN17PintleDeviceFlash5ModelEPKdS5_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2PKjmPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE:2": 0%....50%....100% - 37 passes
+{"passed": true, "count": 10756, "medianKernelSeconds": 21.441890625, "comparison": {}}
+REACTIVE_GPU_PRECISION linearAttempts=24760 linearAccepted=24520 linearFallbacks=240
+==PROF== Disconnected from process 80511
+==PROF== Report: /home/jsw/문서/analysis/runs/precision_revisit_20260924/ncu-v2-1atm-fp32-linear/counters.ncu-rep

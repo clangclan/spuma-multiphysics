@@ -1,0 +1,190 @@
+{
+  "capture": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-1atm-tol1e-5.bin",
+  "captureSha256": "455b2e113face449b8fe26988176b5b29685147d24d01d982f8d7b845c6d89a9",
+  "comparedSuccessfulCells": 10756,
+  "comparison": {
+    "T": {
+      "maxAbs": 0.0038234757033706046,
+      "maxScaled": 1.304177316940502e-05,
+      "relativeL2": 1.277305752939569e-06
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 9.467477040336902e-06,
+      "maxScaled": 9.467477040336902e-06,
+      "relativeL2": 7.762677454009424e-07
+    },
+    "alphaLiquid": {
+      "maxAbs": 2.861480718711201e-07,
+      "maxScaled": 2.861480718711201e-07,
+      "relativeL2": 2.334216995979763e-05
+    },
+    "chemicalResidual": {
+      "maxAbs": 9.926714000130232e-06,
+      "maxScaled": 9.926714000130232e-06,
+      "relativeL2": 2623.9018754004233
+    },
+    "cp": {
+      "maxAbs": 0.008438862167622574,
+      "maxScaled": 6.8879661754838165e-06,
+      "relativeL2": 6.556944966189712e-07
+    },
+    "cv": {
+      "maxAbs": 0.013006494958972326,
+      "maxScaled": 1.2004900496498e-05,
+      "relativeL2": 1.4379432943082033e-06
+    },
+    "e": {
+      "maxAbs": 4.743371267803013,
+      "maxScaled": 3.0774196199040705e-05,
+      "relativeL2": 2.201919260065766e-06
+    },
+    "energyResidual": {
+      "maxAbs": 9.304707094118015e-06,
+      "maxScaled": 9.304707094118015e-06,
+      "relativeL2": 8561.055246322027
+    },
+    "entropy": {
+      "maxAbs": 0.020817013229134318,
+      "maxScaled": 5.472727995352544e-06,
+      "relativeL2": 2.8270991277374334e-07
+    },
+    "gasMass": {
+      "maxAbs": 0.0003622535726357512,
+      "maxScaled": 2.520685873103986e-05,
+      "relativeL2": 1.5348368919088986e-05
+    },
+    "iterations": {
+      "maxAbs": 7.0,
+      "maxScaled": 1.75,
+      "relativeL2": 0.6695537442201114
+    },
+    "liquidMass": {
+      "maxAbs": 0.00036225357263397484,
+      "maxScaled": 3.1708659260177396e-05,
+      "relativeL2": 2.4864862647957703e-05
+    },
+    "p": {
+      "maxAbs": 19.616188793093897,
+      "maxScaled": 3.435789591631505e-05,
+      "relativeL2": 1.3618679493922359e-05
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 0.0005051639583282252,
+      "maxScaled": 3.464386525334949e-05,
+      "relativeL2": 2.106526336049944e-05
+    },
+    "rhoLiquid": {
+      "maxAbs": 0.0024232473097072216,
+      "maxScaled": 2.0461880368865036e-06,
+      "relativeL2": 9.500960818727683e-07
+    },
+    "soundEquilibrium": {
+      "maxAbs": 0.0035825274444789557,
+      "maxScaled": 2.3535200111863275e-05,
+      "relativeL2": 1.0646248469263858e-06
+    },
+    "soundFrozen": {
+      "maxAbs": 0.0022402410150448304,
+      "maxScaled": 1.3371012552096142e-05,
+      "relativeL2": 7.99263402546031e-07
+    },
+    "volumeResidual": {
+      "maxAbs": 9.753562756453782e-06,
+      "maxScaled": 9.753562756453782e-06,
+      "relativeL2": 20761.3134737701
+    }
+  },
+  "count": 10756,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp64.so",
+  "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+  "maxKernelSeconds": 0.0523015022277832,
+  "medianKernelSeconds": 0.052300830841064454,
+  "minKernelSeconds": 0.05226006317138672,
+  "passed": true,
+  "policy": "",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.05277979300080915,
+      "copySeconds": 0.0003256320059299469,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 7920,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.05226006317138672,
+      "phaseEvaluations": 211493,
+      "repeat": 1,
+      "residualEvaluations": 109563,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.0527313
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.05279586199867481,
+      "copySeconds": 0.00032416000962257383,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 7920,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.0523015022277832,
+      "phaseEvaluations": 211493,
+      "repeat": 2,
+      "residualEvaluations": 109563,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.052758439
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.0528033869995852,
+      "copySeconds": 0.0003299199938774109,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5425528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 7920,
+      "flashCandidates": 53775,
+      "hostBytes": 2032884,
+      "kernelSeconds": 0.052300830841064454,
+      "phaseEvaluations": 211493,
+      "repeat": 3,
+      "residualEvaluations": 109563,
+      "stableCandidates": 11876,
+      "structBytes": 144,
+      "submitted": 10756,
+      "succeeded": 10756,
+      "transferBytes": 4603632,
+      "wallSeconds": 0.052768495
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

@@ -1,0 +1,24 @@
+{
+  "binaries": {
+    "bin/ReactiveFoam": "4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858",
+    "lib/libpintleReactiveBackend.so": "7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25",
+    "lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f"
+  },
+  "prefix": [
+    "/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/profilers/13.2/Nsight_Systems/target-linux-x64/nsys",
+    "profile",
+    "--trace=cuda,nvtx,osrt",
+    "--sample=none",
+    "--cpuctxsw=none",
+    "--discard-environment=true",
+    "--cuda-memory-usage=true",
+    "--cuda-trace-all-apis=true",
+    "--cuda-event-trace=false",
+    "--osrt-threshold=10000",
+    "--output=/home/jsw/\ubb38\uc11c/analysis/runs/hem_utilization_optimization_20260924/batch4096-40bar/gpu-trace",
+    "--gpu-metrics-devices=0",
+    "--gpu-metrics-set=gb20x",
+    "--gpu-metrics-frequency=1000"
+  ],
+  "startUnixNs": 1790180051963774165
+}

@@ -1,0 +1,1 @@
+{"name":"NVIDIA GeForce RTX 5080","computeMajor":12,"computeMinor":0,"smCount":84,"warpSize":32,"maxThreadsPerSM":1536,"maxBlocksPerSM":24,"registersPerSM":65536,"sharedMemoryPerSM":102400,"globalMemoryBytes":16611278848,"l2Bytes":67108864,"memoryBusBits":256,"singleToDoublePerfRatioAttribute":64}

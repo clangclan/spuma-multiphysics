@@ -1,0 +1,3741 @@
+{
+  "aborted": [
+    {
+      "name": "replay-1atm-fp32-nasa",
+      "pid": 84173,
+      "reason": "Stopped after >85 s wall time with no result; FP64 same batch completes its eight calls in <1 s. Strict 40bar FP32 NASA batch already had 9812/10006 failed states. Avoid further strict whole-batch repetition."
+    }
+  ],
+  "captures": [
+    {
+      "bytes": 2628952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-1atm-tol1e-5.bin",
+      "sha256": "455b2e113face449b8fe26988176b5b29685147d24d01d982f8d7b845c6d89a9"
+    },
+    {
+      "bytes": 2628952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-1atm-tol5e-5.bin",
+      "sha256": "e619747d4e71b39fd65b5250fe1019d4069fe4c9849654f19e9585e04800c7bd"
+    },
+    {
+      "bytes": 2628952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-1atm.bin",
+      "sha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d"
+    },
+    {
+      "bytes": 2448952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar-tol1e-5.bin",
+      "sha256": "10fbdc53ebfcd3fdd366c327c0afef4c57cdb8a098955c224396fb9b0757fb93"
+    },
+    {
+      "bytes": 2448952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar-tol5e-5.bin",
+      "sha256": "f4b0aeca89205f80559eb513998ad8a65dd1bfbfb735e751e334b06f0b617068"
+    },
+    {
+      "bytes": 2448952,
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar.bin",
+      "sha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70"
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-fp64",
+      "baselineSha256": "80a06405af6ec70e31eee45023562ebc247d3431540198eda556c0ac24bf02f2",
+      "baselineSteps": 23,
+      "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-fp32-linear",
+      "candidateSha256": "8cfd23705fb4de66dbcb6e65bef062c8c81bb582c388542c2124c03fa44df9e9",
+      "candidateSteps": 23,
+      "fields": {
+        "T": {
+          "jetRelativeL2": 3.877507762973114e-13,
+          "maxAbs": 1.1886811535077868e-09,
+          "maxScaled": 6.973200194540774e-12,
+          "relativeL2": 6.362346716583515e-15
+        },
+        "U": {
+          "jetRelativeL2": 1.698530780660998e-11,
+          "maxAbs": 4.05122335678243e-09,
+          "maxScaled": 7.894798098682237e-10,
+          "relativeL2": 1.6985307492557946e-11
+        },
+        "alphaGas": {
+          "jetRelativeL2": 1.2973374761577343e-12,
+          "maxAbs": 8.145040197859998e-12,
+          "maxScaled": 8.145040197859998e-12,
+          "relativeL2": 2.333407391183133e-14
+        },
+        "alphaLiquid": {
+          "jetRelativeL2": 4.046617955200434e-12,
+          "maxAbs": 1.258732701403531e-13,
+          "maxScaled": 1.258732701403531e-13,
+          "relativeL2": 4.0466179552004344e-12
+        },
+        "cp": {
+          "jetRelativeL2": 5.872415401412232e-13,
+          "maxAbs": 6.367145033436827e-09,
+          "maxScaled": 7.058121368817473e-12,
+          "relativeL2": 1.0695015192812505e-14
+        },
+        "cv": {
+          "jetRelativeL2": 1.100047246234439e-12,
+          "maxAbs": 8.273673302028328e-09,
+          "maxScaled": 1.2541868267225838e-11,
+          "relativeL2": 2.1064926488336417e-14
+        },
+        "e": {
+          "jetRelativeL2": 2.2090854528524076e-12,
+          "maxAbs": 1.5870784409344196e-05,
+          "maxScaled": 6.030860465850161e-11,
+          "relativeL2": 2.7976777284303013e-13
+        },
+        "gasMass": {
+          "jetRelativeL2": 3.4033047968315935e-12,
+          "maxAbs": 1.7043788602677523e-10,
+          "maxScaled": 2.2478769588317017e-11,
+          "relativeL2": 2.5000255177631463e-13
+        },
+        "liquidMass": {
+          "jetRelativeL2": 4.1484410467412935e-12,
+          "maxAbs": 1.4019363447914657e-10,
+          "maxScaled": 2.2645857411518477e-11,
+          "relativeL2": 4.1484410467412935e-12
+        },
+        "p": {
+          "jetRelativeL2": 3.865965019978852e-12,
+          "maxAbs": 7.140508387237787e-06,
+          "maxScaled": 2.6132020503329632e-11,
+          "relativeL2": 1.4288342894940388e-13
+        },
+        "q": {
+          "jetRelativeL2": 2.0993041386677324e-12,
+          "maxAbs": 0.0004878789186477661,
+          "maxScaled": 2.2084474440159374e-09,
+          "relativeL2": 1.907555055465632e-12
+        },
+        "rho": {
+          "jetRelativeL2": 2.0612439052731654e-12,
+          "maxAbs": 3.106315205059218e-10,
+          "maxScaled": 2.4125167724199825e-11,
+          "relativeL2": 2.6257166539151445e-13
+        },
+        "soundEquilibrium": {
+          "jetRelativeL2": 4.835970618503179e-11,
+          "maxAbs": 9.028781278175302e-08,
+          "maxScaled": 5.922439049696485e-10,
+          "relativeL2": 7.75743754874791e-13
+        },
+        "soundFrozen": {
+          "jetRelativeL2": 5.922862423901077e-13,
+          "maxAbs": 1.7446382116759196e-09,
+          "maxScaled": 7.617674199741183e-12,
+          "relativeL2": 9.554697300526455e-15
+        }
+      },
+      "identicalAdaptiveHistory": false,
+      "identicalRetryHistory": true,
+      "integrated": {
+        "liquidN2oMassKg": {
+          "baseline": 2.2057790727093107e-07,
+          "candidate": 2.2057790727110667e-07
+        },
+        "n2oMassKg": {
+          "baseline": 5.10094436854312e-07,
+          "candidate": 5.100944368543485e-07
+        },
+        "totalEnergyJ": {
+          "baseline": -54.28065572056855,
+          "candidate": -54.28065572056848
+        }
+      },
+      "jetCells": 1328,
+      "maxDeltaTDifference": 1.366475902158e-18,
+      "name": "comparison-1atm-fp32-linear.json",
+      "passed": true,
+      "phaseMaskChanges": 0,
+      "precisionOnlyInputsVerified": true,
+      "processSpeedup": 1.003394305110315,
+      "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+      "stepSpeedup": 0.9963023761795021
+    },
+    {
+      "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-fp64",
+      "baselineSha256": "80a06405af6ec70e31eee45023562ebc247d3431540198eda556c0ac24bf02f2",
+      "baselineSteps": 23,
+      "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-1atm-int32-linear",
+      "candidateSha256": "ac4e49030c0994a765b7843f8d6468fcf5fab804cc2bea0732749d073d27f9f9",
+      "candidateSteps": 23,
+      "fields": {
+        "T": {
+          "jetRelativeL2": 1.017008397378292e-11,
+          "maxAbs": 2.807570353979827e-08,
+          "maxScaled": 1.2974341505909848e-10,
+          "relativeL2": 1.6687409821857415e-13
+        },
+        "U": {
+          "jetRelativeL2": 3.9322960547714995e-11,
+          "maxAbs": 6.86119960846554e-09,
+          "maxScaled": 2.762123196831112e-09,
+          "relativeL2": 3.9322948845710875e-11
+        },
+        "alphaGas": {
+          "jetRelativeL2": 8.828559695843223e-11,
+          "maxAbs": 9.269235379250063e-10,
+          "maxScaled": 9.269235379250063e-10,
+          "relativeL2": 1.5879157709120475e-12
+        },
+        "alphaLiquid": {
+          "jetRelativeL2": 5.855708627205662e-11,
+          "maxAbs": 1.98013307139977e-12,
+          "maxScaled": 1.98013307139977e-12,
+          "relativeL2": 5.855708627205663e-11
+        },
+        "cp": {
+          "jetRelativeL2": 1.5413748708965062e-11,
+          "maxAbs": 1.686050836724462e-07,
+          "maxScaled": 1.3823905579435936e-10,
+          "relativeL2": 2.8071969908333037e-13
+        },
+        "cv": {
+          "jetRelativeL2": 1.9181005293533403e-11,
+          "maxAbs": 1.5609953152306844e-07,
+          "maxScaled": 1.448072161347467e-10,
+          "relativeL2": 3.6729918562624355e-13
+        },
+        "e": {
+          "jetRelativeL2": 5.368930191178847e-12,
+          "maxAbs": 2.5925925001502037e-05,
+          "maxScaled": 1.724229232656627e-10,
+          "relativeL2": 6.799436564287025e-13
+        },
+        "gasMass": {
+          "jetRelativeL2": 2.8842271247488106e-11,
+          "maxAbs": 1.364773183354373e-09,
+          "maxScaled": 9.831108832033864e-11,
+          "relativeL2": 2.118717489729803e-12
+        },
+        "liquidMass": {
+          "jetRelativeL2": 3.777718816728144e-11,
+          "maxAbs": 1.3936904963429697e-09,
+          "maxScaled": 1.2730983382165652e-10,
+          "relativeL2": 3.777718816728144e-11
+        },
+        "p": {
+          "jetRelativeL2": 2.3327262287480966e-10,
+          "maxAbs": 0.0005066278390586376,
+          "maxScaled": 9.240058028116301e-10,
+          "relativeL2": 8.621596839848474e-12
+        },
+        "q": {
+          "jetRelativeL2": 4.560429802153781e-12,
+          "maxAbs": 0.0006888285279273987,
+          "maxScaled": 1.3720945075436364e-08,
+          "relativeL2": 4.143883091525197e-12
+        },
+        "rho": {
+          "jetRelativeL2": 4.669832903878834e-12,
+          "maxAbs": 4.3229064772276615e-10,
+          "maxScaled": 5.59006071853492e-11,
+          "relativeL2": 5.948669139784402e-13
+        },
+        "soundEquilibrium": {
+          "jetRelativeL2": 6.41798478974422e-11,
+          "maxAbs": 1.6915751643864496e-07,
+          "maxScaled": 1.1125548552432054e-09,
+          "relativeL2": 1.0295165153509697e-12
+        },
+        "soundFrozen": {
+          "jetRelativeL2": 2.7051997719631737e-12,
+          "maxAbs": 4.042931323056109e-09,
+          "maxScaled": 2.6401194839019188e-11,
+          "relativeL2": 4.363998355043607e-14
+        }
+      },
+      "identicalAdaptiveHistory": false,
+      "identicalRetryHistory": true,
+      "integrated": {
+        "liquidN2oMassKg": {
+          "baseline": 2.2057790727093107e-07,
+          "candidate": 2.2057790727247757e-07
+        },
+        "n2oMassKg": {
+          "baseline": 5.10094436854312e-07,
+          "candidate": 5.100944368541936e-07
+        },
+        "totalEnergyJ": {
+          "baseline": -54.28065572056855,
+          "candidate": -54.28065572056873
+        }
+      },
+      "jetCells": 1328,
+      "maxDeltaTDifference": 5.4851736081820354e-18,
+      "name": "comparison-1atm-int32-linear.json",
+      "passed": true,
+      "phaseMaskChanges": 0,
+      "precisionOnlyInputsVerified": true,
+      "processSpeedup": 1.003520462689382,
+      "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+      "stepSpeedup": 1.0005882754296447
+    },
+    {
+      "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-fp64",
+      "baselineSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+      "baselineSteps": 20,
+      "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-fp32-linear",
+      "candidateSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+      "candidateSteps": 20,
+      "fields": {
+        "T": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "U": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "q": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "identicalAdaptiveHistory": true,
+      "identicalRetryHistory": true,
+      "integrated": {
+        "liquidN2oMassKg": {
+          "baseline": 0.0,
+          "candidate": 0.0
+        },
+        "n2oMassKg": {
+          "baseline": 1.5941757070063265e-07,
+          "candidate": 1.5941757070063265e-07
+        },
+        "totalEnergyJ": {
+          "baseline": -2439.6821833259637,
+          "candidate": -2439.6821833259637
+        }
+      },
+      "jetCells": 680,
+      "maxDeltaTDifference": 0.0,
+      "name": "comparison-40bar-fp32-linear.json",
+      "passed": true,
+      "phaseMaskChanges": 0,
+      "precisionOnlyInputsVerified": true,
+      "processSpeedup": 0.9995360705172813,
+      "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+      "stepSpeedup": 0.9932434473051921
+    },
+    {
+      "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-fp64",
+      "baselineSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+      "baselineSteps": 20,
+      "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-int32-linear",
+      "candidateSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+      "candidateSteps": 20,
+      "fields": {
+        "T": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "U": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "q": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "jetRelativeL2": 0.0,
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "identicalAdaptiveHistory": true,
+      "identicalRetryHistory": true,
+      "integrated": {
+        "liquidN2oMassKg": {
+          "baseline": 0.0,
+          "candidate": 0.0
+        },
+        "n2oMassKg": {
+          "baseline": 1.5941757070063265e-07,
+          "candidate": 1.5941757070063265e-07
+        },
+        "totalEnergyJ": {
+          "baseline": -2439.6821833259637,
+          "candidate": -2439.6821833259637
+        }
+      },
+      "jetCells": 680,
+      "maxDeltaTDifference": 0.0,
+      "name": "comparison-40bar-int32-linear.json",
+      "passed": true,
+      "phaseMaskChanges": 0,
+      "precisionOnlyInputsVerified": true,
+      "processSpeedup": 0.9933148916551408,
+      "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+      "stepSpeedup": 0.9914000653391636
+    }
+  ],
+  "counters": [
+    {
+      "achievedOccupancyPercent": 4.08,
+      "activeThreadsPerWarpInstruction": 20.85,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.03,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.0,
+      "dramBytesPerSecond": 1013858427.15,
+      "dramReadBytesPerSecond": 47526982.43,
+      "dramThroughputPercent": 0.11,
+      "dramWriteBytesPerSecond": 966331444.72,
+      "durationNs": 59105120.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.03,
+      "fp32Flops": 365277229.0,
+      "fp32GflopsPerSecond": 6.1801283712815405,
+      "fp64Flops": 715716666.0,
+      "fp64GflopsPerSecond": 12.109216020541028,
+      "fp64PipePercent": 3.23,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 8.01,
+      "kernel": "hemKernel",
+      "l1HitPercent": 74.11,
+      "l1RequestedSectors": 39969981.0,
+      "l1SectorEquivalentGBperSecond": 21.640077746225707,
+      "l1ThroughputPercent": 1.9,
+      "l2HitPercent": 98.59,
+      "l2SectorEquivalentGBperSecond": 31.46452882592,
+      "l2SectorsPerSecond": 983266525.81,
+      "l2ThroughputPercent": 0.74,
+      "localLoadSectors": 13580457.0,
+      "localStoreSectors": 24155052.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.7,
+      "name": "ncu-1atm-ds-nasa",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.77,
+      "smActiveCyclesMax": 165206359.0,
+      "smActiveCyclesMean": 13916001.77,
+      "smActiveCyclesMin": 1379949.0,
+      "smActiveElapsedPercentDerived": 8.350134984160121,
+      "smElapsedCyclesMean": 166656009.71,
+      "smThroughputPercent": 3.23,
+      "sm__inst_executed_pipe_alu.sum": 18262439.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 8943576.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 10543391.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 8.42
+    },
+    {
+      "achievedOccupancyPercent": 6.09,
+      "activeThreadsPerWarpInstruction": 15.92,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.46,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.6,
+      "dramBytesPerSecond": 18895058880.23,
+      "dramReadBytesPerSecond": 21297136.27,
+      "dramThroughputPercent": 2.0,
+      "dramWriteBytesPerSecond": 18873761743.95,
+      "durationNs": 223110560.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.44,
+      "fp32Flops": 13649814328.0,
+      "fp32GflopsPerSecond": 61.17959781016192,
+      "fp64Flops": 27215127470.0,
+      "fp64GflopsPerSecond": 121.98045430928953,
+      "fp64PipePercent": 42.11,
+      "grid": "(157, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.61,
+      "kernel": "hemKernel",
+      "l1HitPercent": 61.53,
+      "l1RequestedSectors": 1706179387.0,
+      "l1SectorEquivalentGBperSecond": 244.71159224377368,
+      "l1ThroughputPercent": 4.31,
+      "l2HitPercent": 100.06,
+      "l2SectorEquivalentGBperSecond": 334.379533304,
+      "l2SectorsPerSecond": 10449360415.75,
+      "l2ThroughputPercent": 8.63,
+      "localLoadSectors": 599364768.0,
+      "localStoreSectors": 1038545785.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.92,
+      "name": "ncu-40bar-ds-nasa",
+      "percentOutsidePhysicalRange": "l2HitPercent",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 2.15,
+      "smActiveCyclesMax": 626408741.0,
+      "smActiveCyclesMean": 479263994.73,
+      "smActiveCyclesMin": 200536501.0,
+      "smActiveElapsedPercentDerived": 76.66797971850616,
+      "smElapsedCyclesMean": 625116243.43,
+      "smThroughputPercent": 42.11,
+      "sm__inst_executed_pipe_alu.sum": 912473139.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 438881511.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 531028401.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 8.43
+    },
+    {
+      "achievedOccupancyPercent": 3.57,
+      "activeThreadsPerWarpInstruction": 11.65,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.02,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.43,
+      "dramBytesPerSecond": 252484660.06,
+      "dramReadBytesPerSecond": 13558071.9,
+      "dramThroughputPercent": 0.03,
+      "dramWriteBytesPerSecond": 238926588.17,
+      "durationNs": 248162720.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.0,
+      "fp32Flops": 67916772.0,
+      "fp32GflopsPerSecond": 0.27367838328013167,
+      "fp64Flops": 714682007.0,
+      "fp64GflopsPerSecond": 2.8798927050767333,
+      "fp64PipePercent": 1.33,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.6,
+      "kernel": "hemKernel",
+      "l1HitPercent": 75.1,
+      "l1RequestedSectors": 55728223.0,
+      "l1SectorEquivalentGBperSecond": 7.186023492972676,
+      "l1ThroughputPercent": 1.4,
+      "l2HitPercent": 100.78,
+      "l2SectorEquivalentGBperSecond": 13.20575209696,
+      "l2SectorsPerSecond": 412679753.03,
+      "l2ThroughputPercent": 0.28,
+      "localLoadSectors": 19703757.0,
+      "localStoreSectors": 32650228.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.72,
+      "name": "ncu-relaxed-1atm-fp32-nasa",
+      "percentOutsidePhysicalRange": "l2HitPercent",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.91,
+      "smActiveCyclesMax": 699067791.0,
+      "smActiveCyclesMean": 26968307.38,
+      "smActiveCyclesMin": 1264463.0,
+      "smActiveElapsedPercentDerived": 3.8527555425447444,
+      "smElapsedCyclesMean": 699974526.86,
+      "smThroughputPercent": 1.33,
+      "sm__inst_executed_pipe_alu.sum": 33293566.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 15729822.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 19969093.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 8.94
+    },
+    {
+      "achievedOccupancyPercent": 4.02,
+      "activeThreadsPerWarpInstruction": 20.63,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.03,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 98.75,
+      "dramBytesPerSecond": 1113678100.51,
+      "dramReadBytesPerSecond": 53610303.57,
+      "dramThroughputPercent": 0.12,
+      "dramWriteBytesPerSecond": 1060067796.94,
+      "durationNs": 52240704.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.01,
+      "fp32Flops": 35824688.0,
+      "fp32GflopsPerSecond": 0.6857619682920046,
+      "fp64Flops": 661272736.0,
+      "fp64GflopsPerSecond": 12.658189598670033,
+      "fp64PipePercent": 3.04,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.59,
+      "kernel": "hemKernel",
+      "l1HitPercent": 71.04,
+      "l1RequestedSectors": 30587206.0,
+      "l1SectorEquivalentGBperSecond": 18.736167720863794,
+      "l1ThroughputPercent": 1.77,
+      "l2HitPercent": 99.24,
+      "l2SectorEquivalentGBperSecond": 29.09365815584,
+      "l2SectorsPerSecond": 909176817.37,
+      "l2ThroughputPercent": 0.66,
+      "localLoadSectors": 10296914.0,
+      "localStoreSectors": 18228565.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.69,
+      "name": "ncu-relaxed-1atm-fp64",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.68,
+      "smActiveCyclesMax": 146908959.0,
+      "smActiveCyclesMean": 11513251.6,
+      "smActiveCyclesMin": 1207090.0,
+      "smActiveElapsedPercentDerived": 7.813512658661666,
+      "smElapsedCyclesMean": 147350520.86,
+      "smThroughputPercent": 3.04,
+      "sm__inst_executed_pipe_alu.sum": 15416027.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 7577803.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 9026675.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.23
+    },
+    {
+      "achievedOccupancyPercent": 4.08,
+      "activeThreadsPerWarpInstruction": 21.06,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.04,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 98.74,
+      "dramBytesPerSecond": 1102456088.25,
+      "dramReadBytesPerSecond": 54087986.82,
+      "dramThroughputPercent": 0.12,
+      "dramWriteBytesPerSecond": 1048368101.44,
+      "durationNs": 53880800.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.01,
+      "fp32Flops": 41792206.0,
+      "fp32GflopsPerSecond": 0.7756418984127926,
+      "fp64Flops": 749152248.0,
+      "fp64GflopsPerSecond": 13.903881308369586,
+      "fp64PipePercent": 3.27,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.56,
+      "kernel": "hemKernel",
+      "l1HitPercent": 70.62,
+      "l1RequestedSectors": 33576635.0,
+      "l1SectorEquivalentGBperSecond": 19.941283722587638,
+      "l1ThroughputPercent": 1.77,
+      "l2HitPercent": 99.87,
+      "l2SectorEquivalentGBperSecond": 30.2071114016,
+      "l2SectorsPerSecond": 943972231.3,
+      "l2ThroughputPercent": 0.69,
+      "localLoadSectors": 11483162.0,
+      "localStoreSectors": 19866955.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.68,
+      "name": "ncu-v2-1atm-fp32-linear",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.74,
+      "smActiveCyclesMax": 151802435.0,
+      "smActiveCyclesMean": 12619334.12,
+      "smActiveCyclesMin": 1266823.0,
+      "smActiveElapsedPercentDerived": 8.303209839651299,
+      "smElapsedCyclesMean": 151981394.71,
+      "smThroughputPercent": 3.27,
+      "sm__inst_executed_pipe_alu.sum": 17148615.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 8308494.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 10144996.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.22
+    },
+    {
+      "achievedOccupancyPercent": 4.01,
+      "activeThreadsPerWarpInstruction": 19.59,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.03,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 98.55,
+      "dramBytesPerSecond": 904471033.5,
+      "dramReadBytesPerSecond": 43129364.14,
+      "dramThroughputPercent": 0.1,
+      "dramWriteBytesPerSecond": 861341669.36,
+      "durationNs": 64122624.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.01,
+      "fp32Flops": 54638544.0,
+      "fp32GflopsPerSecond": 0.8520946366761285,
+      "fp64Flops": 762415379.0,
+      "fp64GflopsPerSecond": 11.88995913517201,
+      "fp64PipePercent": 3.09,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.53,
+      "kernel": "hemKernel",
+      "l1HitPercent": 71.3,
+      "l1RequestedSectors": 34537430.0,
+      "l1SectorEquivalentGBperSecond": 17.235691415248382,
+      "l1ThroughputPercent": 1.58,
+      "l2HitPercent": 98.04,
+      "l2SectorEquivalentGBperSecond": 30.19302566272,
+      "l2SectorsPerSecond": 943532051.96,
+      "l2ThroughputPercent": 0.65,
+      "localLoadSectors": 11758374.0,
+      "localStoreSectors": 20591826.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.62,
+      "name": "ncu-v2-1atm-fp32-seeds",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.81,
+      "smActiveCyclesMax": 180568611.0,
+      "smActiveCyclesMean": 14439706.04,
+      "smActiveCyclesMin": 1266566.0,
+      "smActiveElapsedPercentDerived": 7.972334480359965,
+      "smElapsedCyclesMean": 181122682.14,
+      "smThroughputPercent": 3.09,
+      "sm__inst_executed_pipe_alu.sum": 19509013.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 9339346.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 11587269.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.21
+    },
+    {
+      "achievedOccupancyPercent": 4.07,
+      "activeThreadsPerWarpInstruction": 20.89,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.04,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 98.73,
+      "dramBytesPerSecond": 1029556060.79,
+      "dramReadBytesPerSecond": 44863357.3,
+      "dramThroughputPercent": 0.11,
+      "dramWriteBytesPerSecond": 984692703.49,
+      "durationNs": 55624192.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.01,
+      "fp32Flops": 40649930.0,
+      "fp32GflopsPerSecond": 0.7307958738528733,
+      "fp64Flops": 747238056.0,
+      "fp64GflopsPerSecond": 13.433688277215785,
+      "fp64PipePercent": 3.19,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.58,
+      "kernel": "hemKernel",
+      "l1HitPercent": 71.27,
+      "l1RequestedSectors": 33662563.0,
+      "l1SectorEquivalentGBperSecond": 19.36571080439245,
+      "l1ThroughputPercent": 1.76,
+      "l2HitPercent": 102.37,
+      "l2SectorEquivalentGBperSecond": 29.06367934304,
+      "l2SectorsPerSecond": 908239979.47,
+      "l2ThroughputPercent": 0.69,
+      "localLoadSectors": 11476823.0,
+      "localStoreSectors": 19947765.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.66,
+      "name": "ncu-v2-1atm-fp64",
+      "percentOutsidePhysicalRange": "l2HitPercent",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.7,
+      "smActiveCyclesMax": 156269065.0,
+      "smActiveCyclesMean": 12699947.38,
+      "smActiveCyclesMin": 1257760.0,
+      "smActiveElapsedPercentDerived": 8.094354021585314,
+      "smElapsedCyclesMean": 156898837.71,
+      "smThroughputPercent": 3.19,
+      "sm__inst_executed_pipe_alu.sum": 17161578.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 8436141.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 10035625.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.24
+    },
+    {
+      "achievedOccupancyPercent": 4.07,
+      "activeThreadsPerWarpInstruction": 20.98,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.04,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 98.74,
+      "dramBytesPerSecond": 1092610057.41,
+      "dramReadBytesPerSecond": 49729457.42,
+      "dramThroughputPercent": 0.12,
+      "dramWriteBytesPerSecond": 1042880599.99,
+      "durationNs": 54119392.0,
+      "eligibleWarpsPerScheduler": 0.08,
+      "fmaPipePercent": 0.01,
+      "fp32Flops": 40989386.0,
+      "fp32GflopsPerSecond": 0.7573881465630656,
+      "fp64Flops": 749975372.0,
+      "fp64GflopsPerSecond": 13.857793746093822,
+      "fp64PipePercent": 3.27,
+      "grid": "(169, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.58,
+      "kernel": "hemKernel",
+      "l1HitPercent": 70.94,
+      "l1RequestedSectors": 33914203.0,
+      "l1SectorEquivalentGBperSecond": 20.052969109482973,
+      "l1ThroughputPercent": 1.77,
+      "l2HitPercent": 95.89,
+      "l2SectorEquivalentGBperSecond": 29.58297772448,
+      "l2SectorsPerSecond": 924468053.89,
+      "l2ThroughputPercent": 0.7,
+      "localLoadSectors": 11603194.0,
+      "localStoreSectors": 20079333.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.66,
+      "name": "ncu-v2-1atm-int32-linear",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 1.72,
+      "smActiveCyclesMax": 152468659.0,
+      "smActiveCyclesMean": 12710082.46,
+      "smActiveCyclesMin": 1256812.0,
+      "smActiveElapsedPercentDerived": 8.310031721318689,
+      "smElapsedCyclesMean": 152948663.57,
+      "smThroughputPercent": 3.27,
+      "sm__inst_executed_pipe_alu.sum": 17646778.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 8611740.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 10464800.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.2
+    },
+    {
+      "achievedOccupancyPercent": 6.11,
+      "activeThreadsPerWarpInstruction": 15.82,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.49,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.42,
+      "dramBytesPerSecond": 17490355173.96,
+      "dramReadBytesPerSecond": 31193111.63,
+      "dramThroughputPercent": 1.85,
+      "dramWriteBytesPerSecond": 17459162062.33,
+      "durationNs": 208267520.0,
+      "eligibleWarpsPerScheduler": 0.07,
+      "fmaPipePercent": 0.09,
+      "fp32Flops": 1701322951.0,
+      "fp32GflopsPerSecond": 8.168930762703662,
+      "fp64Flops": 28863278887.0,
+      "fp64GflopsPerSecond": 138.5875190092051,
+      "fp64PipePercent": 42.44,
+      "grid": "(157, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.22,
+      "kernel": "hemKernel",
+      "l1HitPercent": 57.21,
+      "l1RequestedSectors": 1499104944.0,
+      "l1SectorEquivalentGBperSecond": 230.3352832357153,
+      "l1ThroughputPercent": 3.87,
+      "l2HitPercent": 99.37,
+      "l2SectorEquivalentGBperSecond": 405.71730989056,
+      "l2SectorsPerSecond": 12678665934.08,
+      "l2ThroughputPercent": 8.82,
+      "localLoadSectors": 557651146.0,
+      "localStoreSectors": 873065836.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.89,
+      "name": "ncu-v2-40bar-fp32-linear",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 2.09,
+      "smActiveCyclesMax": 589284582.0,
+      "smActiveCyclesMean": 447116398.3,
+      "smActiveCyclesMin": 190093959.0,
+      "smActiveElapsedPercentDerived": 76.11372656381725,
+      "smElapsedCyclesMean": 587432015.86,
+      "smThroughputPercent": 42.44,
+      "sm__inst_executed_pipe_alu.sum": 909179758.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 426181120.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 545763264.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.14
+    },
+    {
+      "achievedOccupancyPercent": 6.07,
+      "activeThreadsPerWarpInstruction": 15.58,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.49,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.11,
+      "dramBytesPerSecond": 17050975409.14,
+      "dramReadBytesPerSecond": 22477535.17,
+      "dramThroughputPercent": 1.8,
+      "dramWriteBytesPerSecond": 17028497873.98,
+      "durationNs": 212851808.0,
+      "eligibleWarpsPerScheduler": 0.07,
+      "fmaPipePercent": 0.09,
+      "fp32Flops": 2090758646.0,
+      "fp32GflopsPerSecond": 9.822602239770498,
+      "fp64Flops": 28301649925.0,
+      "fp64GflopsPerSecond": 132.96410395066977,
+      "fp64PipePercent": 42.81,
+      "grid": "(157, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.21,
+      "kernel": "hemKernel",
+      "l1HitPercent": 56.1,
+      "l1RequestedSectors": 1431110202.0,
+      "l1SectorEquivalentGBperSecond": 215.1521610002016,
+      "l1ThroughputPercent": 3.71,
+      "l2HitPercent": 100.8,
+      "l2SectorEquivalentGBperSecond": 428.10636748736,
+      "l2SectorsPerSecond": 13378323983.98,
+      "l2ThroughputPercent": 8.97,
+      "localLoadSectors": 509440712.0,
+      "localStoreSectors": 855523872.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.82,
+      "name": "ncu-v2-40bar-fp32-seeds",
+      "percentOutsidePhysicalRange": "l2HitPercent",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 2.14,
+      "smActiveCyclesMax": 601412397.0,
+      "smActiveCyclesMean": 460003237.5,
+      "smActiveCyclesMin": 190683397.0,
+      "smActiveElapsedPercentDerived": 76.62456163434709,
+      "smElapsedCyclesMean": 600333923.86,
+      "smThroughputPercent": 42.81,
+      "sm__inst_executed_pipe_alu.sum": 921074383.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 434045205.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 551376080.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.18
+    },
+    {
+      "achievedOccupancyPercent": 6.1,
+      "activeThreadsPerWarpInstruction": 15.92,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.48,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.49,
+      "dramBytesPerSecond": 18665759681.01,
+      "dramReadBytesPerSecond": 20303889.83,
+      "dramThroughputPercent": 1.97,
+      "dramWriteBytesPerSecond": 18645455791.18,
+      "durationNs": 201999520.0,
+      "eligibleWarpsPerScheduler": 0.07,
+      "fmaPipePercent": 0.08,
+      "fp32Flops": 1535947184.0,
+      "fp32GflopsPerSecond": 7.603716998931483,
+      "fp64Flops": 28365066633.0,
+      "fp64GflopsPerSecond": 140.42145562029057,
+      "fp64PipePercent": 42.83,
+      "grid": "(157, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.22,
+      "kernel": "hemKernel",
+      "l1HitPercent": 56.54,
+      "l1RequestedSectors": 1423258253.0,
+      "l1SectorEquivalentGBperSecond": 225.46718970421315,
+      "l1ThroughputPercent": 3.88,
+      "l2HitPercent": 99.39,
+      "l2SectorEquivalentGBperSecond": 334.06230335584,
+      "l2SectorsPerSecond": 10439446979.87,
+      "l2ThroughputPercent": 8.06,
+      "localLoadSectors": 504531751.0,
+      "localStoreSectors": 850457668.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.91,
+      "name": "ncu-v2-40bar-fp64",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 2.11,
+      "smActiveCyclesMax": 569173570.0,
+      "smActiveCyclesMean": 434551818.2,
+      "smActiveCyclesMin": 182902188.0,
+      "smActiveElapsedPercentDerived": 76.26932835534878,
+      "smElapsedCyclesMean": 569759597.43,
+      "smThroughputPercent": 42.83,
+      "sm__inst_executed_pipe_alu.sum": 857976147.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 414635002.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 504948465.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.22
+    },
+    {
+      "achievedOccupancyPercent": 6.12,
+      "activeThreadsPerWarpInstruction": 15.8,
+      "activeWarpsPerScheduler": 1.0,
+      "aluPipePercent": 0.54,
+      "block": "(64, 1, 1)",
+      "branchUniformPercent": 99.44,
+      "dramBytesPerSecond": 16514428130.31,
+      "dramReadBytesPerSecond": 24321172.29,
+      "dramThroughputPercent": 1.75,
+      "dramWriteBytesPerSecond": 16490106958.02,
+      "durationNs": 210095136.0,
+      "eligibleWarpsPerScheduler": 0.07,
+      "fmaPipePercent": 0.1,
+      "fp32Flops": 1591614200.0,
+      "fp32GflopsPerSecond": 7.575683237140721,
+      "fp64Flops": 28896413509.0,
+      "fp64GflopsPerSecond": 137.53965969492984,
+      "fp64PipePercent": 42.21,
+      "grid": "(157, 1, 1)",
+      "id": 0.0,
+      "issueActivePercent": 7.27,
+      "kernel": "hemKernel",
+      "l1HitPercent": 57.37,
+      "l1RequestedSectors": 1507691301.0,
+      "l1SectorEquivalentGBperSecond": 229.6394031321125,
+      "l1ThroughputPercent": 3.86,
+      "l2HitPercent": 99.9,
+      "l2SectorEquivalentGBperSecond": 428.42634110304,
+      "l2SectorsPerSecond": 13388323159.47,
+      "l2ThroughputPercent": 9.0,
+      "localLoadSectors": 562723332.0,
+      "localStoreSectors": 876624366.0,
+      "longScoreboardCyclesPerIssuedInstruction": 0.87,
+      "name": "ncu-v2-40bar-int32-linear",
+      "percentOutsidePhysicalRange": "",
+      "registersPerThread": 255.0,
+      "shortScoreboardCyclesPerIssuedInstruction": 2.04,
+      "smActiveCyclesMax": 592862515.0,
+      "smActiveCyclesMean": 449457083.14,
+      "smActiveCyclesMin": 191364762.0,
+      "smActiveElapsedPercentDerived": 75.85554639327277,
+      "smElapsedCyclesMean": 592517099.29,
+      "smThroughputPercent": 42.21,
+      "sm__inst_executed_pipe_alu.sum": 983235005.0,
+      "sm__inst_executed_pipe_aluheavy.sum": 471795373.0,
+      "sm__inst_executed_pipe_fmaheavy_subpipe_alulite.sum": 596686584.0,
+      "tensorPipePercent": 0.0,
+      "theoreticalOccupancyPercent": 16.67,
+      "waitCyclesPerIssuedInstruction": 9.07
+    }
+  ],
+  "full": [
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 14.6001734200418,
+      "maxConservationResidual": 3.4881512588498585e-12,
+      "name": "full-1atm-fp32-linear",
+      "passed": true,
+      "processSeconds": 159.09,
+      "recoverySeconds": 64.22959366,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-linear.so",
+        "hemLibrarySha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+        "hemNumericalPolicy": "fp32-newton-step-fp64-accept-v2:experimental",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "89d10c3a2d26eafd0cf80b6c4a31d0c167aa7e9f7db596734732fc6b6b2978dc",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 104.264144682,
+      "steps": 23
+    },
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 14.463231515079755,
+      "maxConservationResidual": 3.488227147380396e-12,
+      "name": "full-1atm-fp64",
+      "passed": true,
+      "processSeconds": 159.63,
+      "recoverySeconds": 63.830755101,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp64.so",
+        "hemLibrarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+        "hemNumericalPolicy": "legacy-fp64-separate-rn",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "323d5cf20ad21261b796f10c78a16a2e3ccace6d90e106f68a0692fb71b76af3",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 103.878615097,
+      "steps": 23
+    },
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 14.643190491557123,
+      "maxConservationResidual": 3.48903120443014e-12,
+      "name": "full-1atm-int32-linear",
+      "passed": true,
+      "processSeconds": 159.07,
+      "recoverySeconds": 64.123882359,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-int32-linear.so",
+        "hemLibrarySha256": "cab02b8ea19b052fec5e2a0065ede87683f5ef227fa723b07e6ffe3ddc5828fd",
+        "hemNumericalPolicy": "int32-q26-newton-step-fp64-accept-v2:experimental",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "f80744863c523b17eebe3aa2036faa03a6e03ed1744c0cae1c368f7d5b17eff9",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 103.817541788,
+      "steps": 23
+    },
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 14.301944861769677,
+      "maxConservationResidual": 6.910566899670343e-14,
+      "name": "full-40bar-fp32-linear",
+      "passed": true,
+      "processSeconds": 129.33,
+      "recoverySeconds": 39.700684677,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-linear.so",
+        "hemLibrarySha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+        "hemNumericalPolicy": "fp32-newton-step-fp64-accept-v2:experimental",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "89d10c3a2d26eafd0cf80b6c4a31d0c167aa7e9f7db596734732fc6b6b2978dc",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 74.08812698,
+      "steps": 20
+    },
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 13.858664650708436,
+      "maxConservationResidual": 6.910566899670343e-14,
+      "name": "full-40bar-fp64",
+      "passed": true,
+      "processSeconds": 129.27,
+      "recoverySeconds": 39.284862214,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp64.so",
+        "hemLibrarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+        "hemNumericalPolicy": "legacy-fp64-separate-rn",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "323d5cf20ad21261b796f10c78a16a2e3ccace6d90e106f68a0692fb71b76af3",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 73.587546646,
+      "steps": 20
+    },
+    {
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "hemKernelSeconds": 14.364353211373084,
+      "maxConservationResidual": 6.910566899670343e-14,
+      "name": "full-40bar-int32-linear",
+      "passed": true,
+      "processSeconds": 130.14,
+      "recoverySeconds": 39.734324357,
+      "runtime": {
+        "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+        "backendSha256": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+        "chemistryBackend": "cpu",
+        "closureBackend": "cuda",
+        "closureCpuFallback": false,
+        "closureJacobian": "finiteDifference",
+        "deviceCaloricCandidates": false,
+        "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+        "deviceChemistryIntegration": false,
+        "deviceFullClosure": true,
+        "deviceHemScope": "PR; nonreacting HEM; all reference candidates and boundary fallback; experimental",
+        "enforceSpeciesTemperatureBounds": true,
+        "eos": "Peng-Robinson",
+        "exactBatchReuse": true,
+        "hemLibrary": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-int32-linear.so",
+        "hemLibrarySha256": "cab02b8ea19b052fec5e2a0065ede87683f5ef227fa723b07e6ffe3ddc5828fd",
+        "hemNumericalPolicy": "int32-q26-newton-step-fp64-accept-v2:experimental",
+        "modelFingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numericalPolicyHash": "f80744863c523b17eebe3aa2036faa03a6e03ed1744c0cae1c368f7d5b17eff9",
+        "physicalModelHash": "e8a14864dd2082dde742598dbbcc5f0f2454bc521d93b9a3bd0befc47d4c9c4e",
+        "schema": 1,
+        "solidN2O": false,
+        "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_counters_1us_20260923/n160/base/thermo/cold-pr-config.yaml"
+      },
+      "stepSeconds": 74.225884402,
+      "steps": 20
+    }
+  ],
+  "libraries": [
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-combined.so",
+      "sha256": "b9c136d0e3902a1ed517d8a0e1e3118815934af936796ebf39eee997374f6810"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-linear.so",
+      "sha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-seeds.so",
+      "sha256": "8e6d778fa5cb7543df1efbc59048c2f056c3a7fb718ad53e8807d052ba888177"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp64.so",
+      "sha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-int32-linear.so",
+      "sha256": "cab02b8ea19b052fec5e2a0065ede87683f5ef227fa723b07e6ffe3ddc5828fd"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-nasa/libHem-ds-nasa.so",
+      "sha256": "b64afa1e067b79023f06b37d7256c746d980f2f68b450e256894d6d09b0d26d3"
+    },
+    {
+      "path": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-nasa/libHem-fp32-nasa.so",
+      "sha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9"
+    }
+  ],
+  "regressions": [
+    {
+      "failed": [],
+      "name": "capillary-v2-fp32-combined.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [],
+      "name": "capillary-v2-fp32-linear.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [],
+      "name": "capillary-v2-fp32-seeds.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [],
+      "name": "capillary-v2-fp64.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [],
+      "name": "capillary-v2-int32-linear.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [],
+      "name": "capillary-ds-nasa.log",
+      "passed": true,
+      "tests": 20
+    },
+    {
+      "failed": [
+        "gpu-equilibrium-curved-conserved",
+        "gpu-equilibrium-curved-kelvin",
+        "pure-gas-pressure-offset",
+        "trace-air-curved-host-enthalpy-identity",
+        "gpu-trace-air-boundary-1-curved"
+      ],
+      "name": "capillary-fp32-nasa.log",
+      "passed": false,
+      "tests": 20
+    }
+  ],
+  "relaxedMatchedPairs": [
+    {
+      "ambient": "1atm",
+      "fp32Speedup": 0.21007117477636186,
+      "identicalCaptureVerified": true,
+      "tolerance": "1e-5"
+    },
+    {
+      "ambient": "1atm",
+      "fp32Speedup": 0.2458768925780704,
+      "identicalCaptureVerified": true,
+      "tolerance": "5e-5"
+    },
+    {
+      "ambient": "40bar",
+      "fp32Speedup": 0.964213235012613,
+      "identicalCaptureVerified": true,
+      "tolerance": "1e-5"
+    },
+    {
+      "ambient": "40bar",
+      "fp32Speedup": 0.9490380023866692,
+      "identicalCaptureVerified": true,
+      "tolerance": "5e-5"
+    }
+  ],
+  "replays": [
+    {
+      "captureSha256": "455b2e113face449b8fe26988176b5b29685147d24d01d982f8d7b845c6d89a9",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0038234757033706046,
+          "maxScaled": 1.304177316940502e-05,
+          "relativeL2": 1.2747166214960984e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 4.348518084618114e-06,
+          "maxScaled": 4.348518084618114e-06,
+          "relativeL2": 1.8546534529646702e-07
+        },
+        "alphaLiquid": {
+          "maxAbs": 4.7254319793937904e-07,
+          "maxScaled": 4.7254319793937904e-07,
+          "relativeL2": 1.6812914220703922e-05
+        },
+        "chemicalResidual": {
+          "maxAbs": 4.767831772056752e-06,
+          "maxScaled": 4.767831772056752e-06,
+          "relativeL2": 657.4022907503354
+        },
+        "cp": {
+          "maxAbs": 0.014000430730902735,
+          "maxScaled": 1.142734796786327e-05,
+          "relativeL2": 6.724387006335197e-07
+        },
+        "cv": {
+          "maxAbs": 0.021008685434935614,
+          "maxScaled": 1.9407575144764655e-05,
+          "relativeL2": 1.327836598915247e-06
+        },
+        "e": {
+          "maxAbs": 7.978808481013402,
+          "maxScaled": 3.0648323443342824e-05,
+          "relativeL2": 2.1858784666453753e-06
+        },
+        "energyResidual": {
+          "maxAbs": 9.266710348368591e-06,
+          "maxScaled": 9.266710348368591e-06,
+          "relativeL2": 8864.748284899597
+        },
+        "entropy": {
+          "maxAbs": 0.03641677706309565,
+          "maxScaled": 9.573857426125858e-06,
+          "relativeL2": 3.183035945836524e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.00059855377772422,
+          "maxScaled": 4.1451336505681535e-05,
+          "relativeL2": 1.1139768268240578e-05
+        },
+        "iterations": {
+          "maxAbs": 10.0,
+          "maxScaled": 2.3333333333333335,
+          "relativeL2": 0.745734311748324
+        },
+        "liquidMass": {
+          "maxAbs": 0.00059855377772422,
+          "maxScaled": 5.239644720815184e-05,
+          "relativeL2": 1.8046791120285628e-05
+        },
+        "p": {
+          "maxAbs": 22.985169809078798,
+          "maxScaled": 4.0261815482643624e-05,
+          "relativeL2": 7.540538463301217e-06
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0005727933896420012,
+          "maxScaled": 3.92847347769228e-05,
+          "relativeL2": 1.1162178544487032e-05
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.004036062674003915,
+          "maxScaled": 3.408028183815591e-06,
+          "relativeL2": 8.055559219920023e-07
+        },
+        "soundEquilibrium": {
+          "maxAbs": 2.13129130180306,
+          "maxScaled": 0.01402999778609421,
+          "relativeL2": 0.0002814081890299906
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0035297281883401865,
+          "maxScaled": 2.3174947966330483e-05,
+          "relativeL2": 8.094039138286511e-07
+        },
+        "volumeResidual": {
+          "maxAbs": 4.571567870592652e-06,
+          "maxScaled": 4.571567870592652e-06,
+          "relativeL2": 4824.295749559018
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9",
+      "maxKernelSeconds": 0.24912922668457033,
+      "medianKernelSeconds": 0.24896719360351563,
+      "minKernelSeconds": 0.24894467163085937,
+      "name": "relaxed-1atm-1e-5-fp32-nasa",
+      "passed": true,
+      "policy": "fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9285,
+        "flashCandidates": 53935,
+        "phaseEvaluations": 238753,
+        "residualEvaluations": 119962,
+        "stableCandidates": 11681
+      }
+    },
+    {
+      "captureSha256": "455b2e113face449b8fe26988176b5b29685147d24d01d982f8d7b845c6d89a9",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0038234757033706046,
+          "maxScaled": 1.304177316940502e-05,
+          "relativeL2": 1.277305752939569e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 9.467477040336902e-06,
+          "maxScaled": 9.467477040336902e-06,
+          "relativeL2": 7.762677454009424e-07
+        },
+        "alphaLiquid": {
+          "maxAbs": 2.861480718711201e-07,
+          "maxScaled": 2.861480718711201e-07,
+          "relativeL2": 2.334216995979763e-05
+        },
+        "chemicalResidual": {
+          "maxAbs": 9.926714000130232e-06,
+          "maxScaled": 9.926714000130232e-06,
+          "relativeL2": 2623.9018754004233
+        },
+        "cp": {
+          "maxAbs": 0.008438862167622574,
+          "maxScaled": 6.8879661754838165e-06,
+          "relativeL2": 6.556944966189712e-07
+        },
+        "cv": {
+          "maxAbs": 0.013006494958972326,
+          "maxScaled": 1.2004900496498e-05,
+          "relativeL2": 1.4379432943082033e-06
+        },
+        "e": {
+          "maxAbs": 4.743371267803013,
+          "maxScaled": 3.0774196199040705e-05,
+          "relativeL2": 2.201919260065766e-06
+        },
+        "energyResidual": {
+          "maxAbs": 9.304707094118015e-06,
+          "maxScaled": 9.304707094118015e-06,
+          "relativeL2": 8561.055246322027
+        },
+        "entropy": {
+          "maxAbs": 0.020817013229134318,
+          "maxScaled": 5.472727995352544e-06,
+          "relativeL2": 2.8270991277374334e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0003622535726357512,
+          "maxScaled": 2.520685873103986e-05,
+          "relativeL2": 1.5348368919088986e-05
+        },
+        "iterations": {
+          "maxAbs": 7.0,
+          "maxScaled": 1.75,
+          "relativeL2": 0.6695537442201114
+        },
+        "liquidMass": {
+          "maxAbs": 0.00036225357263397484,
+          "maxScaled": 3.1708659260177396e-05,
+          "relativeL2": 2.4864862647957703e-05
+        },
+        "p": {
+          "maxAbs": 19.616188793093897,
+          "maxScaled": 3.435789591631505e-05,
+          "relativeL2": 1.3618679493922359e-05
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0005051639583282252,
+          "maxScaled": 3.464386525334949e-05,
+          "relativeL2": 2.106526336049944e-05
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0024232473097072216,
+          "maxScaled": 2.0461880368865036e-06,
+          "relativeL2": 9.500960818727683e-07
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0035825274444789557,
+          "maxScaled": 2.3535200111863275e-05,
+          "relativeL2": 1.0646248469263858e-06
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0022402410150448304,
+          "maxScaled": 1.3371012552096142e-05,
+          "relativeL2": 7.99263402546031e-07
+        },
+        "volumeResidual": {
+          "maxAbs": 9.753562756453782e-06,
+          "maxScaled": 9.753562756453782e-06,
+          "relativeL2": 20761.3134737701
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.0523015022277832,
+      "medianKernelSeconds": 0.052300830841064454,
+      "minKernelSeconds": 0.05226006317138672,
+      "name": "relaxed-1atm-1e-5-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 7920,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 211493,
+        "residualEvaluations": 109563,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "e619747d4e71b39fd65b5250fe1019d4069fe4c9849654f19e9585e04800c7bd",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.017205580094241668,
+          "maxScaled": 5.867276153087374e-05,
+          "relativeL2": 5.180600180643171e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 2.068157106627222e-05,
+          "maxScaled": 2.068157106627222e-05,
+          "relativeL2": 1.0625547909195092e-06
+        },
+        "alphaLiquid": {
+          "maxAbs": 3.1839093068090213e-06,
+          "maxScaled": 3.1839093068090213e-06,
+          "relativeL2": 0.00014924874299662342
+        },
+        "chemicalResidual": {
+          "maxAbs": 2.3796622770078102e-05,
+          "maxScaled": 2.3796622770078102e-05,
+          "relativeL2": 3288.596376736581
+        },
+        "cp": {
+          "maxAbs": 0.09104173850073494,
+          "maxScaled": 7.431248233600266e-05,
+          "relativeL2": 4.374937818946047e-06
+        },
+        "cv": {
+          "maxAbs": 0.1398649948334878,
+          "maxScaled": 0.00012921003259930768,
+          "relativeL2": 9.282271367979383e-06
+        },
+        "e": {
+          "maxAbs": 54.36943408846855,
+          "maxScaled": 0.00013856709078756817,
+          "relativeL2": 1.327948871659136e-05
+        },
+        "energyResidual": {
+          "maxAbs": 4.184695506331291e-05,
+          "maxScaled": 4.184695506331291e-05,
+          "relativeL2": 36682.06429122668
+        },
+        "entropy": {
+          "maxAbs": 0.24736300325002958,
+          "maxScaled": 6.503103096435198e-05,
+          "relativeL2": 1.8610797518160275e-06
+        },
+        "gasMass": {
+          "maxAbs": 0.004063281870635649,
+          "maxScaled": 0.00028149349001250926,
+          "relativeL2": 9.908934656783742e-05
+        },
+        "iterations": {
+          "maxAbs": 10.0,
+          "maxScaled": 2.3333333333333335,
+          "relativeL2": 0.7619556956599945
+        },
+        "liquidMass": {
+          "maxAbs": 0.004063281870635649,
+          "maxScaled": 0.00035582717373564633,
+          "relativeL2": 0.0001605280017227907
+        },
+        "p": {
+          "maxAbs": 177.07739147753455,
+          "maxScaled": 0.0003102959007673732,
+          "relativeL2": 7.156948613287162e-05
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.004407307380303038,
+          "maxScaled": 0.0003023826894671241,
+          "relativeL2": 0.00010695609577413744
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.03034900112993455,
+          "maxScaled": 2.562578807452824e-05,
+          "relativeL2": 7.030352599356207e-06
+        },
+        "soundEquilibrium": {
+          "maxAbs": 2.13129130180306,
+          "maxScaled": 0.01402999778609421,
+          "relativeL2": 0.00033390371632757135
+        },
+        "soundFrozen": {
+          "maxAbs": 0.02397471248755778,
+          "maxScaled": 0.00015740965046671506,
+          "relativeL2": 4.2355546599666345e-06
+        },
+        "volumeResidual": {
+          "maxAbs": 2.386545932908657e-05,
+          "maxScaled": 2.386545932908657e-05,
+          "relativeL2": 31242.14416410079
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9",
+      "maxKernelSeconds": 0.24744338989257814,
+      "medianKernelSeconds": 0.2473363800048828,
+      "minKernelSeconds": 0.24729026794433595,
+      "name": "relaxed-1atm-5e-5-fp32-nasa",
+      "passed": true,
+      "policy": "fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9116,
+        "flashCandidates": 53935,
+        "phaseEvaluations": 235565,
+        "residualEvaluations": 118779,
+        "stableCandidates": 11724
+      }
+    },
+    {
+      "captureSha256": "e619747d4e71b39fd65b5250fe1019d4069fe4c9849654f19e9585e04800c7bd",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.017205580094241668,
+          "maxScaled": 5.867276153087374e-05,
+          "relativeL2": 5.01065448793393e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 9.467477040336902e-06,
+          "maxScaled": 9.467477040336902e-06,
+          "relativeL2": 8.093356269041116e-07
+        },
+        "alphaLiquid": {
+          "maxAbs": 2.861480718711201e-07,
+          "maxScaled": 2.861480718711201e-07,
+          "relativeL2": 2.5210918329787747e-05
+        },
+        "chemicalResidual": {
+          "maxAbs": 1.0121657108896898e-05,
+          "maxScaled": 1.0121657108896898e-05,
+          "relativeL2": 2873.8310722570513
+        },
+        "cp": {
+          "maxAbs": 0.008451418876802563,
+          "maxScaled": 6.893411983459336e-06,
+          "relativeL2": 7.13670355146347e-07
+        },
+        "cv": {
+          "maxAbs": 0.013007122933231585,
+          "maxScaled": 1.2004900496498e-05,
+          "relativeL2": 1.5591334895307202e-06
+        },
+        "e": {
+          "maxAbs": 12.415735800503171,
+          "maxScaled": 0.00013861788855492758,
+          "relativeL2": 5.3048070048414485e-06
+        },
+        "energyResidual": {
+          "maxAbs": 4.186229657765461e-05,
+          "maxScaled": 4.186229657765461e-05,
+          "relativeL2": 32738.163149539247
+        },
+        "entropy": {
+          "maxAbs": 0.04234015204474417,
+          "maxScaled": 6.1627391267641204e-06,
+          "relativeL2": 5.90552326790556e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0003622535726357512,
+          "maxScaled": 2.5215702584774994e-05,
+          "relativeL2": 1.656076554447315e-05
+        },
+        "iterations": {
+          "maxAbs": 7.0,
+          "maxScaled": 1.75,
+          "relativeL2": 0.6801909136442931
+        },
+        "liquidMass": {
+          "maxAbs": 0.00036225357263397484,
+          "maxScaled": 3.1708659260177396e-05,
+          "relativeL2": 2.6828985071907526e-05
+        },
+        "p": {
+          "maxAbs": 19.616188793093897,
+          "maxScaled": 5.884005667575067e-05,
+          "relativeL2": 1.5137322024696804e-05
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0005051639583282252,
+          "maxScaled": 3.464386525334949e-05,
+          "relativeL2": 2.2533240247442823e-05
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0024232473097072216,
+          "maxScaled": 2.0461880368865036e-06,
+          "relativeL2": 1.0081674430721862e-06
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.010079717941835042,
+          "maxScaled": 2.9304823846420546e-05,
+          "relativeL2": 2.6660047029947062e-06
+        },
+        "soundFrozen": {
+          "maxAbs": 0.010079717941835042,
+          "maxScaled": 2.9304823846420546e-05,
+          "relativeL2": 2.5592876664677284e-06
+        },
+        "volumeResidual": {
+          "maxAbs": 9.753562756453782e-06,
+          "maxScaled": 9.753562756453782e-06,
+          "relativeL2": 21669.545683342698
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.060825664520263674,
+      "medianKernelSeconds": 0.06081430053710937,
+      "minKernelSeconds": 0.06081081771850586,
+      "name": "relaxed-1atm-5e-5-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 7908,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 210417,
+        "residualEvaluations": 109479,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "10fbdc53ebfcd3fdd366c327c0afef4c57cdb8a098955c224396fb9b0757fb93",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.004137112168109525,
+          "maxScaled": 1.411397718930615e-05,
+          "relativeL2": 1.457710542320731e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.551115123125783e-16,
+          "maxScaled": 5.551115123125783e-16,
+          "relativeL2": 8.776557346426252e-17
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0013383740961216972,
+          "maxScaled": 1.2319141362516207e-06,
+          "relativeL2": 1.3243331140153408e-07
+        },
+        "cv": {
+          "maxAbs": 0.00011266469414294988,
+          "maxScaled": 1.5346220484571888e-07,
+          "relativeL2": 3.5771755912464736e-08
+        },
+        "e": {
+          "maxAbs": 3.0078154303046176,
+          "maxScaled": 3.0446946167953637e-05,
+          "relativeL2": 3.1603054494844357e-06
+        },
+        "energyResidual": {
+          "maxAbs": 9.444970810473253e-06,
+          "maxScaled": 9.444970810473253e-06,
+          "relativeL2": 8007.176923834859
+        },
+        "entropy": {
+          "maxAbs": 0.009543979533191305,
+          "maxScaled": 1.650977969892676e-06,
+          "relativeL2": 1.9707928194884554e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 1.0,
+          "maxScaled": 1.0,
+          "relativeL2": 0.8579044235810886
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 62.56978083169088,
+          "maxScaled": 1.564762195887509e-05,
+          "relativeL2": 1.615333132001383e-06
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.842170943040401e-14,
+          "maxScaled": 4.990769441803672e-16,
+          "relativeL2": 8.203923856926361e-17
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0027362773186609957,
+          "maxScaled": 7.864726387568853e-06,
+          "relativeL2": 8.131009200180465e-07
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0027362773186609957,
+          "maxScaled": 7.864726387568853e-06,
+          "relativeL2": 8.131009200180465e-07
+        },
+        "volumeResidual": {
+          "maxAbs": 4.440892098500626e-16,
+          "maxScaled": 4.440892098500626e-16,
+          "relativeL2": 0.3596857439965683
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9",
+      "maxKernelSeconds": 0.18318812561035155,
+      "medianKernelSeconds": 0.18254129028320312,
+      "minKernelSeconds": 0.18244432067871094,
+      "name": "relaxed-40bar-1e-5-fp32-nasa",
+      "passed": true,
+      "policy": "fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696516,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9080223,
+        "residualEvaluations": 15281801,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "10fbdc53ebfcd3fdd366c327c0afef4c57cdb8a098955c224396fb9b0757fb93",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.004137112168109525,
+          "maxScaled": 1.411397718930615e-05,
+          "relativeL2": 1.4578588081202936e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.551115123125783e-16,
+          "maxScaled": 5.551115123125783e-16,
+          "relativeL2": 8.152972004118901e-17
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0013804018224163883,
+          "maxScaled": 1.2705987986991192e-06,
+          "relativeL2": 1.3133933534985593e-07
+        },
+        "cv": {
+          "maxAbs": 7.063696784825879e-05,
+          "maxScaled": 9.621563269728435e-08,
+          "relativeL2": 1.0467241168945924e-08
+        },
+        "e": {
+          "maxAbs": 3.0372722713800613,
+          "maxScaled": 3.0745126317395574e-05,
+          "relativeL2": 3.1474873402329156e-06
+        },
+        "energyResidual": {
+          "maxAbs": 9.537469875089758e-06,
+          "maxScaled": 9.537469875089758e-06,
+          "relativeL2": 7974.6139721680465
+        },
+        "entropy": {
+          "maxAbs": 0.010361742029999732,
+          "maxScaled": 1.7924397010436958e-06,
+          "relativeL2": 1.8505735107465822e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 1.0,
+          "maxScaled": 1.0,
+          "relativeL2": 0.8579044235810886
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 62.56978083169088,
+          "maxScaled": 1.564762195887509e-05,
+          "relativeL2": 1.6155701097700086e-06
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.1316282072803006e-14,
+          "maxScaled": 4.4185843091715723e-16,
+          "relativeL2": 7.586220144925475e-17
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0027395063426638444,
+          "maxScaled": 7.87400738774676e-06,
+          "relativeL2": 8.133805004458202e-07
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0027395063426638444,
+          "maxScaled": 7.87400738774676e-06,
+          "relativeL2": 8.133805004458202e-07
+        },
+        "volumeResidual": {
+          "maxAbs": 4.440892098500626e-16,
+          "maxScaled": 4.440892098500626e-16,
+          "relativeL2": 0.3314684798927892
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.1762474822998047,
+      "medianKernelSeconds": 0.17600872802734374,
+      "minKernelSeconds": 0.1759853973388672,
+      "name": "relaxed-40bar-1e-5-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 696548,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9080611,
+        "residualEvaluations": 15282138,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "f4b0aeca89205f80559eb513998ad8a65dd1bfbfb735e751e334b06f0b617068",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.020877011187678818,
+          "maxScaled": 7.129105305772452e-05,
+          "relativeL2": 6.2081810844230715e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.551115123125783e-16,
+          "maxScaled": 5.551115123125783e-16,
+          "relativeL2": 8.738578636579796e-17
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.006936152073876656,
+          "maxScaled": 6.384847215038788e-06,
+          "relativeL2": 5.562172360115869e-07
+        },
+        "cv": {
+          "maxAbs": 0.00043379176167945843,
+          "maxScaled": 5.908888438749372e-07,
+          "relativeL2": 5.7178547854925405e-08
+        },
+        "e": {
+          "maxAbs": 15.319343159004347,
+          "maxScaled": 0.00015479380601551328,
+          "relativeL2": 1.3415878830427193e-05
+        },
+        "energyResidual": {
+          "maxAbs": 4.8151582656192046e-05,
+          "maxScaled": 4.8151582656192046e-05,
+          "relativeL2": 33993.321875856825
+        },
+        "entropy": {
+          "maxAbs": 0.052465440041487454,
+          "maxScaled": 9.075792083993088e-06,
+          "relativeL2": 7.937836802397727e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 1.0,
+          "maxScaled": 1.0,
+          "relativeL2": 0.9033271832508971
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 314.9919517217204,
+          "maxScaled": 7.903236407059557e-05,
+          "relativeL2": 6.871696897083156e-06
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.842170943040401e-14,
+          "maxScaled": 4.990769441803672e-16,
+          "relativeL2": 8.189444397196609e-17
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.013826699012497556,
+          "maxScaled": 3.976408104635585e-05,
+          "relativeL2": 3.4629075892365727e-06
+        },
+        "soundFrozen": {
+          "maxAbs": 0.013826699012497556,
+          "maxScaled": 3.976408104635585e-05,
+          "relativeL2": 3.4629075892365727e-06
+        },
+        "volumeResidual": {
+          "maxAbs": 4.440892098500626e-16,
+          "maxScaled": 4.440892098500626e-16,
+          "relativeL2": 0.36152647750542183
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9",
+      "maxKernelSeconds": 0.19929714965820314,
+      "medianKernelSeconds": 0.19901190185546874,
+      "minKernelSeconds": 0.1985235595703125,
+      "name": "relaxed-40bar-5e-5-fp32-nasa",
+      "passed": true,
+      "policy": "fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696516,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9079343,
+        "residualEvaluations": 15281801,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "f4b0aeca89205f80559eb513998ad8a65dd1bfbfb735e751e334b06f0b617068",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.020877011187678818,
+          "maxScaled": 7.129105305772452e-05,
+          "relativeL2": 6.208223232923112e-06
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.551115123125783e-16,
+          "maxScaled": 5.551115123125783e-16,
+          "relativeL2": 8.539664993781663e-17
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0069725413507057965,
+          "maxScaled": 6.418344169884237e-06,
+          "relativeL2": 5.58292689407539e-07
+        },
+        "cv": {
+          "maxAbs": 0.00034981241640252847,
+          "maxScaled": 4.765057765867105e-07,
+          "relativeL2": 4.216202424983102e-08
+        },
+        "e": {
+          "maxAbs": 15.326234914973611,
+          "maxScaled": 0.00015486344354014733,
+          "relativeL2": 1.3403527033274304e-05
+        },
+        "energyResidual": {
+          "maxAbs": 4.8173246357734235e-05,
+          "maxScaled": 4.8173246357734235e-05,
+          "relativeL2": 33962.00560388219
+        },
+        "entropy": {
+          "maxAbs": 0.05233433423109091,
+          "maxScaled": 9.053112600599419e-06,
+          "relativeL2": 7.880719604679435e-07
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 1.0,
+          "maxScaled": 1.0,
+          "relativeL2": 0.9033271832508971
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 314.9919517217204,
+          "maxScaled": 7.903236407059557e-05,
+          "relativeL2": 6.871760727019063e-06
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.1316282072803006e-14,
+          "maxScaled": 4.421372842501502e-16,
+          "relativeL2": 7.956901617124855e-17
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0138294932791041,
+          "maxScaled": 3.977211705290429e-05,
+          "relativeL2": 3.463539811090442e-06
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0138294932791041,
+          "maxScaled": 3.977211705290429e-05,
+          "relativeL2": 3.463539811090442e-06
+        },
+        "volumeResidual": {
+          "maxAbs": 4.440892098500626e-16,
+          "maxScaled": 4.440892098500626e-16,
+          "relativeL2": 0.35056251898454194
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.18927760314941405,
+      "medianKernelSeconds": 0.18886985778808593,
+      "minKernelSeconds": 0.18882063293457033,
+      "name": "relaxed-40bar-5e-5-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 696548,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9079731,
+        "residualEvaluations": 15282138,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {
+        "T": {
+          "maxAbs": 1.290345608140342e-11,
+          "maxScaled": 5.942342530979503e-14,
+          "relativeL2": 1.6187364199953526e-15
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 3.3806291099836017e-13,
+          "maxScaled": 3.3806291099836017e-13,
+          "relativeL2": 6.516816256113052e-15
+        },
+        "alphaLiquid": {
+          "maxAbs": 1.052977149917922e-15,
+          "maxScaled": 1.052977149917922e-15,
+          "relativeL2": 3.100290758994447e-14
+        },
+        "chemicalResidual": {
+          "maxAbs": 2.8066438062523957e-13,
+          "maxScaled": 2.8066438062523957e-13,
+          "relativeL2": 2.615440629780712e-05
+        },
+        "cp": {
+          "maxAbs": 9.43600753089413e-11,
+          "maxScaled": 1.0411690977673674e-13,
+          "relativeL2": 3.137338262160399e-15
+        },
+        "cv": {
+          "maxAbs": 1.2300915841478854e-10,
+          "maxScaled": 1.8426177411417126e-13,
+          "relativeL2": 5.310809596465816e-15
+        },
+        "e": {
+          "maxAbs": 5.3318217396736145e-08,
+          "maxScaled": 6.976681388590771e-14,
+          "relativeL2": 7.0043163594298445e-15
+        },
+        "energyResidual": {
+          "maxAbs": 6.970654020245251e-14,
+          "maxScaled": 6.970654020245251e-14,
+          "relativeL2": 2.0366945120630295e-05
+        },
+        "entropy": {
+          "maxAbs": 3.055902197957039e-10,
+          "maxScaled": 5.5717995659215916e-14,
+          "relativeL2": 1.9264183785927094e-15
+        },
+        "gasMass": {
+          "maxAbs": 9.769962616701378e-13,
+          "maxScaled": 1.497394661198644e-13,
+          "relativeL2": 1.880177809985474e-14
+        },
+        "iterations": {
+          "maxAbs": 9.0,
+          "maxScaled": 1.3333333333333333,
+          "relativeL2": 0.10808560537514263
+        },
+        "liquidMass": {
+          "maxAbs": 9.769962616701378e-13,
+          "maxScaled": 4.879430193227563e-13,
+          "relativeL2": 3.0457664012007506e-14
+        },
+        "p": {
+          "maxAbs": 1.8265563994646072e-07,
+          "maxScaled": 3.428235285880439e-13,
+          "relativeL2": 3.0621812791946426e-14
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 4.40003589119442e-12,
+          "maxScaled": 3.2263201637045983e-13,
+          "relativeL2": 4.2578930588912305e-14
+        },
+        "rhoLiquid": {
+          "maxAbs": 4.8203219193965197e-11,
+          "maxScaled": 4.0654758336012624e-14,
+          "relativeL2": 4.553053485963702e-15
+        },
+        "soundEquilibrium": {
+          "maxAbs": 2.0663210875682125e-07,
+          "maxScaled": 1.3691581701513473e-09,
+          "relativeL2": 2.295130680615954e-11
+        },
+        "soundFrozen": {
+          "maxAbs": 2.538058652135078e-11,
+          "maxScaled": 1.119269248213288e-13,
+          "relativeL2": 2.044282562156221e-15
+        },
+        "volumeResidual": {
+          "maxAbs": 3.375077994860476e-13,
+          "maxScaled": 3.375077994860476e-13,
+          "relativeL2": 0.00016893820820713544
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "b64afa1e067b79023f06b37d7256c746d980f2f68b450e256894d6d09b0d26d3",
+      "maxKernelSeconds": 0.05903497695922852,
+      "medianKernelSeconds": 0.05871257400512695,
+      "minKernelSeconds": 0.05852691268920898,
+      "name": "replay-1atm-ds-nasa",
+      "passed": true,
+      "policy": "two-fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238621,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {
+        "T": {
+          "maxAbs": 2.6147972675971687e-12,
+          "maxScaled": 8.91966920244601e-15,
+          "relativeL2": 1.1503309954986898e-15
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.551115123125783e-16,
+          "maxScaled": 5.551115123125783e-16,
+          "relativeL2": 8.848546241468668e-17
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 5.229594535194337e-12,
+          "maxScaled": 4.728858191130283e-15,
+          "relativeL2": 1.5533442356607694e-15
+        },
+        "cv": {
+          "maxAbs": 4.888534022029489e-12,
+          "maxScaled": 6.658714720154959e-15,
+          "relativeL2": 2.2901092488217556e-15
+        },
+        "e": {
+          "maxAbs": 2.3865140974521637e-09,
+          "maxScaled": 2.3720249175912134e-14,
+          "relativeL2": 4.4592544390388014e-15
+        },
+        "energyResidual": {
+          "maxAbs": 7.333568670977719e-15,
+          "maxScaled": 7.333568670977719e-15,
+          "relativeL2": 1.0490560540573286e-05
+        },
+        "entropy": {
+          "maxAbs": 5.911715561524034e-11,
+          "maxScaled": 1.0226459709430256e-14,
+          "relativeL2": 1.847867125564987e-15
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 4.0046870708465576e-08,
+          "maxScaled": 1.0011766890448286e-14,
+          "relativeL2": 1.2906036092872242e-15
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.842170943040401e-14,
+          "maxScaled": 5.890699414122251e-16,
+          "relativeL2": 8.382163573880435e-17
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 1.5916157281026244e-12,
+          "maxScaled": 4.5744293589782474e-15,
+          "relativeL2": 7.379613871294575e-16
+        },
+        "soundFrozen": {
+          "maxAbs": 1.5916157281026244e-12,
+          "maxScaled": 4.5744293589782474e-15,
+          "relativeL2": 7.379613871294575e-16
+        },
+        "volumeResidual": {
+          "maxAbs": 4.440892098500626e-16,
+          "maxScaled": 4.440892098500626e-16,
+          "relativeL2": 0.37377778615494384
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "b64afa1e067b79023f06b37d7256c746d980f2f68b450e256894d6d09b0d26d3",
+      "maxKernelSeconds": 0.22255119323730468,
+      "medianKernelSeconds": 0.22207350158691405,
+      "minKernelSeconds": 0.22176527404785157,
+      "name": "replay-40bar-ds-nasa",
+      "passed": true,
+      "policy": "two-fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696548,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088473,
+        "residualEvaluations": 15282138,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {},
+      "count": 10006,
+      "deviceFailures": 9812,
+      "errorScope": "Numerical failure; failed outputs are not accepted states.",
+      "librarySha256": "00f736d836966bd8b807d0a67efa61eda75681b769f30941a8162cfb77842bf9",
+      "maxKernelSeconds": 1.1991456298828125,
+      "medianKernelSeconds": 1.1984931640625,
+      "minKernelSeconds": 1.1978551025390625,
+      "name": "replay-40bar-fp32-nasa",
+      "passed": false,
+      "policy": "fp32-nasa-fp64-eos-v1:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 7147227,
+        "flashCandidates": 501331,
+        "phaseEvaluations": 97048546,
+        "residualEvaluations": 157225996,
+        "stableCandidates": 194
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {
+        "T": {
+          "maxAbs": 3.964260031352751e-10,
+          "maxScaled": 2.242680295463833e-12,
+          "relativeL2": 3.552829621392589e-14
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 6.275535646693697e-12,
+          "maxScaled": 6.275535646693697e-12,
+          "relativeL2": 1.3286951756846596e-13
+        },
+        "alphaLiquid": {
+          "maxAbs": 1.2696657961108748e-14,
+          "maxScaled": 1.2696657961108748e-14,
+          "relativeL2": 2.638193237826446e-13
+        },
+        "chemicalResidual": {
+          "maxAbs": 2.2374990749085555e-11,
+          "maxScaled": 2.2374990749085555e-11,
+          "relativeL2": 0.00239510081971658
+        },
+        "cp": {
+          "maxAbs": 3.2381421988247894e-09,
+          "maxScaled": 3.57183721564191e-12,
+          "relativeL2": 6.790886340425575e-14
+        },
+        "cv": {
+          "maxAbs": 4.185835678072181e-09,
+          "maxScaled": 6.270179538918306e-12,
+          "relativeL2": 1.2183931442862938e-13
+        },
+        "e": {
+          "maxAbs": 1.769978553056717e-06,
+          "maxScaled": 2.3160144941514067e-12,
+          "relativeL2": 1.673168041171165e-13
+        },
+        "energyResidual": {
+          "maxAbs": 2.3160176411980146e-12,
+          "maxScaled": 2.3160176411980146e-12,
+          "relativeL2": 0.00039345531535610887
+        },
+        "entropy": {
+          "maxAbs": 1.0932126315310597e-08,
+          "maxScaled": 1.993244963761235e-12,
+          "relativeL2": 3.2846800780801336e-14
+        },
+        "gasMass": {
+          "maxAbs": 1.6499690502769226e-11,
+          "maxScaled": 5.062256709934056e-12,
+          "relativeL2": 1.7383554381362805e-13
+        },
+        "iterations": {
+          "maxAbs": 9.0,
+          "maxScaled": 3.0,
+          "relativeL2": 0.28037689294287205
+        },
+        "liquidMass": {
+          "maxAbs": 1.6499690502769226e-11,
+          "maxScaled": 1.6499690502769226e-11,
+          "relativeL2": 2.8162513940539646e-13
+        },
+        "p": {
+          "maxAbs": 8.883653208613396e-07,
+          "maxScaled": 4.517341080735194e-12,
+          "relativeL2": 2.0578175562523197e-13
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 2.0120793919886637e-11,
+          "maxScaled": 6.059105286597605e-12,
+          "relativeL2": 3.0882888478650895e-13
+        },
+        "rhoLiquid": {
+          "maxAbs": 1.0722942533902824e-09,
+          "maxScaled": 8.162060502260307e-13,
+          "relativeL2": 1.3300589559879677e-13
+        },
+        "soundEquilibrium": {
+          "maxAbs": 7.603500762343174e-08,
+          "maxScaled": 4.307480648560903e-10,
+          "relativeL2": 1.2496484465430646e-11
+        },
+        "soundFrozen": {
+          "maxAbs": 8.739959866943536e-10,
+          "maxScaled": 3.8542719654878654e-12,
+          "relativeL2": 5.105583334654376e-14
+        },
+        "volumeResidual": {
+          "maxAbs": 6.27520257978631e-12,
+          "maxScaled": 6.27520257978631e-12,
+          "relativeL2": 0.0034510379415036265
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "b9c136d0e3902a1ed517d8a0e1e3118815934af936796ebf39eee997374f6810",
+      "linearCountsIncludingWarmup": {
+        "accepted": 98080,
+        "attempts": 99040,
+        "fallbacks": 960
+      },
+      "maxKernelSeconds": 0.06406495666503906,
+      "medianKernelSeconds": 0.06404483032226563,
+      "minKernelSeconds": 0.06395443344116211,
+      "name": "replay-v2-1atm-fp32-combined",
+      "passed": true,
+      "policy": "fp32-cubic-newton-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238537,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {
+        "T": {
+          "maxAbs": 6.257891982386354e-10,
+          "maxScaled": 3.540244819724861e-12,
+          "relativeL2": 4.049807085424663e-14
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.702327499079729e-12,
+          "maxScaled": 5.702327499079729e-12,
+          "relativeL2": 1.2441463139969177e-13
+        },
+        "alphaLiquid": {
+          "maxAbs": 1.2686195410144263e-14,
+          "maxScaled": 1.2686195410144263e-14,
+          "relativeL2": 3.0764258263921785e-13
+        },
+        "chemicalResidual": {
+          "maxAbs": 3.090505629188556e-11,
+          "maxScaled": 3.090505629188556e-11,
+          "relativeL2": 0.0023839546280124417
+        },
+        "cp": {
+          "maxAbs": 3.242689672333654e-09,
+          "maxScaled": 3.5779838765805364e-12,
+          "relativeL2": 7.58347781925908e-14
+        },
+        "cv": {
+          "maxAbs": 4.192884262010921e-09,
+          "maxScaled": 6.280737976991391e-12,
+          "relativeL2": 1.3783770710240892e-13
+        },
+        "e": {
+          "maxAbs": 1.7718411982059479e-06,
+          "maxScaled": 2.3184517627587745e-12,
+          "relativeL2": 2.0841278501295084e-13
+        },
+        "energyResidual": {
+          "maxAbs": 2.3183967040035736e-12,
+          "maxScaled": 2.3183967040035736e-12,
+          "relativeL2": 0.00046474499343370315
+        },
+        "entropy": {
+          "maxAbs": 1.0943949746433645e-08,
+          "maxScaled": 2.0712190267442234e-12,
+          "relativeL2": 3.910534652269417e-14
+        },
+        "gasMass": {
+          "maxAbs": 1.6486367826473725e-11,
+          "maxScaled": 5.058169190385743e-12,
+          "relativeL2": 2.0742445289346774e-13
+        },
+        "iterations": {
+          "maxAbs": 9.0,
+          "maxScaled": 3.0,
+          "relativeL2": 0.26762574556222885
+        },
+        "liquidMass": {
+          "maxAbs": 1.6486478848776187e-11,
+          "maxScaled": 1.6486478848776187e-11,
+          "relativeL2": 3.360341573890858e-13
+        },
+        "p": {
+          "maxAbs": 7.991911843419075e-07,
+          "maxScaled": 5.9668647748620864e-12,
+          "relativeL2": 2.1757468447110404e-13
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 1.8195223105976766e-11,
+          "maxScaled": 6.669384011655831e-12,
+          "relativeL2": 3.106840338811577e-13
+        },
+        "rhoLiquid": {
+          "maxAbs": 1.6927970136748627e-09,
+          "maxScaled": 1.288518669196949e-12,
+          "relativeL2": 1.523707945459639e-13
+        },
+        "soundEquilibrium": {
+          "maxAbs": 8.184014177459176e-08,
+          "maxScaled": 5.376441440727073e-10,
+          "relativeL2": 1.3117498939745023e-11
+        },
+        "soundFrozen": {
+          "maxAbs": 8.961933417594992e-10,
+          "maxScaled": 4.38890007426396e-12,
+          "relativeL2": 6.446548080119721e-14
+        },
+        "volumeResidual": {
+          "maxAbs": 5.700329097635404e-12,
+          "maxScaled": 5.700329097635404e-12,
+          "relativeL2": 0.003231305621224801
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+      "linearCountsIncludingWarmup": {
+        "accepted": 98080,
+        "attempts": 99040,
+        "fallbacks": 960
+      },
+      "maxKernelSeconds": 0.05387779235839844,
+      "medianKernelSeconds": 0.05371990203857422,
+      "minKernelSeconds": 0.053651042938232425,
+      "name": "replay-v2-1atm-fp32-linear",
+      "passed": true,
+      "policy": "fp32-newton-step-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238537,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {
+        "T": {
+          "maxAbs": 4.348521542851813e-12,
+          "maxScaled": 2.5786949880909803e-14,
+          "relativeL2": 3.2221143466879083e-16
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 4.218847493575595e-15,
+          "maxScaled": 4.218847493575595e-15,
+          "relativeL2": 1.6723481303207165e-16
+        },
+        "alphaLiquid": {
+          "maxAbs": 9.020562075079397e-17,
+          "maxScaled": 9.020562075079397e-17,
+          "relativeL2": 3.3490503671235072e-15
+        },
+        "chemicalResidual": {
+          "maxAbs": 3.019806626980426e-13,
+          "maxScaled": 3.019806626980426e-13,
+          "relativeL2": 2.1998638537302896e-05
+        },
+        "cp": {
+          "maxAbs": 1.261923898709938e-11,
+          "maxScaled": 1.3924068656888982e-14,
+          "relativeL2": 3.643080507038928e-16
+        },
+        "cv": {
+          "maxAbs": 1.6143530956469476e-11,
+          "maxScaled": 2.418222913513182e-14,
+          "relativeL2": 6.442076325963293e-16
+        },
+        "e": {
+          "maxAbs": 4.423782229423523e-09,
+          "maxScaled": 5.7885129424988795e-15,
+          "relativeL2": 6.510025665925187e-16
+        },
+        "energyResidual": {
+          "maxAbs": 5.709750733258697e-15,
+          "maxScaled": 5.709750733258697e-15,
+          "relativeL2": 1.4464062931659699e-06
+        },
+        "entropy": {
+          "maxAbs": 2.7284841053187847e-11,
+          "maxScaled": 4.974821041001406e-15,
+          "relativeL2": 1.0937404418008014e-16
+        },
+        "gasMass": {
+          "maxAbs": 1.0835776720341528e-13,
+          "maxScaled": 1.7039198493717027e-14,
+          "relativeL2": 1.925961376324712e-15
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 1.0835776720341528e-13,
+          "maxScaled": 4.75175454539567e-14,
+          "relativeL2": 3.1192600634305298e-15
+        },
+        "p": {
+          "maxAbs": 4.0745362639427185e-09,
+          "maxScaled": 1.9576133376790522e-14,
+          "relativeL2": 1.2424302161774616e-15
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 1.1723955140041653e-13,
+          "maxScaled": 1.8125296259527758e-14,
+          "relativeL2": 2.1683230169085203e-15
+        },
+        "rhoLiquid": {
+          "maxAbs": 1.0913936421275139e-11,
+          "maxScaled": 8.174752904532419e-15,
+          "relativeL2": 1.2575997375803356e-15
+        },
+        "soundEquilibrium": {
+          "maxAbs": 8.957465524872532e-08,
+          "maxScaled": 5.88455348605578e-10,
+          "relativeL2": 1.1499051729246757e-11
+        },
+        "soundFrozen": {
+          "maxAbs": 1.9610979506978765e-12,
+          "maxScaled": 9.604024645573199e-15,
+          "relativeL2": 1.7804844559758345e-16
+        },
+        "volumeResidual": {
+          "maxAbs": 4.218847493575595e-15,
+          "maxScaled": 4.218847493575595e-15,
+          "relativeL2": 4.391042721776724e-06
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "8e6d778fa5cb7543df1efbc59048c2f056c3a7fb718ad53e8807d052ba888177",
+      "maxKernelSeconds": 0.06400860595703126,
+      "medianKernelSeconds": 0.06396540832519532,
+      "minKernelSeconds": 0.06394732666015625,
+      "name": "replay-v2-1atm-fp32-seeds",
+      "passed": true,
+      "policy": "fp32-cubic-seeds-fp64-refine-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238621,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {},
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.05561692810058594,
+      "medianKernelSeconds": 0.05535039901733398,
+      "minKernelSeconds": 0.05527228927612305,
+      "name": "replay-v2-1atm-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238621,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "0345acaab13191fc33ac32e16b20af38ecd103bffb88aefd54740f09afb6489d",
+      "comparison": {
+        "T": {
+          "maxAbs": 9.602274531061994e-10,
+          "maxScaled": 5.682486890123361e-12,
+          "relativeL2": 1.0542098245782027e-13
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 5.430322858046566e-12,
+          "maxScaled": 5.430322858046566e-12,
+          "relativeL2": 1.7766570383412624e-13
+        },
+        "alphaLiquid": {
+          "maxAbs": 5.919125866532537e-14,
+          "maxScaled": 5.919125866532537e-14,
+          "relativeL2": 2.1340045065544537e-12
+        },
+        "chemicalResidual": {
+          "maxAbs": 9.322320693172514e-12,
+          "maxScaled": 9.322320693172514e-12,
+          "relativeL2": 0.0007796486332653235
+        },
+        "cp": {
+          "maxAbs": 2.1270466277201194e-08,
+          "maxScaled": 2.340100015019732e-11,
+          "relativeL2": 7.120438502345342e-13
+        },
+        "cv": {
+          "maxAbs": 2.7584519557422027e-08,
+          "maxScaled": 4.100636377311282e-11,
+          "relativeL2": 1.288412911315006e-12
+        },
+        "e": {
+          "maxAbs": 1.1231866665184498e-05,
+          "maxScaled": 1.4358693944787271e-11,
+          "relativeL2": 1.7758919412207668e-12
+        },
+        "energyResidual": {
+          "maxAbs": 1.4358574309917699e-11,
+          "maxScaled": 1.4358574309917699e-11,
+          "relativeL2": 0.0044441472679158595
+        },
+        "entropy": {
+          "maxAbs": 6.707614375045523e-08,
+          "maxScaled": 1.2308318858185168e-11,
+          "relativeL2": 3.297786832668982e-13
+        },
+        "gasMass": {
+          "maxAbs": 7.921530098542462e-11,
+          "maxScaled": 3.208064162693228e-11,
+          "relativeL2": 1.4751596882910647e-12
+        },
+        "iterations": {
+          "maxAbs": 9.0,
+          "maxScaled": 3.0,
+          "relativeL2": 0.5608024603171439
+        },
+        "liquidMass": {
+          "maxAbs": 7.921552303002954e-11,
+          "maxScaled": 7.921552303002954e-11,
+          "relativeL2": 2.389809887197265e-12
+        },
+        "p": {
+          "maxAbs": 2.7598580345511436e-06,
+          "maxScaled": 2.8126751149307796e-11,
+          "relativeL2": 1.005104283254398e-12
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 7.240874566605271e-11,
+          "maxScaled": 2.9553295551160006e-11,
+          "relativeL2": 1.5588299343822913e-12
+        },
+        "rhoLiquid": {
+          "maxAbs": 2.4517703423043713e-09,
+          "maxScaled": 1.837644442653232e-12,
+          "relativeL2": 3.8623076446995173e-13
+        },
+        "soundEquilibrium": {
+          "maxAbs": 8.854212296682817e-08,
+          "maxScaled": 4.5586402601703e-10,
+          "relativeL2": 1.3067365474428908e-11
+        },
+        "soundFrozen": {
+          "maxAbs": 5.353996357371216e-09,
+          "maxScaled": 2.3772874638338152e-11,
+          "relativeL2": 5.267201756664809e-13
+        },
+        "volumeResidual": {
+          "maxAbs": 5.37359046148822e-12,
+          "maxScaled": 5.37359046148822e-12,
+          "relativeL2": 0.004593118757505762
+        }
+      },
+      "count": 10756,
+      "deviceFailures": 0,
+      "librarySha256": "cab02b8ea19b052fec5e2a0065ede87683f5ef227fa723b07e6ffe3ddc5828fd",
+      "linearCountsIncludingWarmup": {
+        "accepted": 87408,
+        "attempts": 99680,
+        "fallbacks": 12272
+      },
+      "maxKernelSeconds": 0.054058368682861326,
+      "medianKernelSeconds": 0.0540081901550293,
+      "minKernelSeconds": 0.0538166732788086,
+      "name": "replay-v2-1atm-int32-linear",
+      "passed": true,
+      "policy": "int32-q26-newton-step-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 9268,
+        "flashCandidates": 53775,
+        "phaseEvaluations": 238617,
+        "residualEvaluations": 118999,
+        "stableCandidates": 11876
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "energyResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "entropy": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "volumeResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "b9c136d0e3902a1ed517d8a0e1e3118815934af936796ebf39eee997374f6810",
+      "linearCountsIncludingWarmup": {
+        "accepted": 2769136,
+        "attempts": 5572680,
+        "fallbacks": 2803544
+      },
+      "maxKernelSeconds": 0.2193337860107422,
+      "medianKernelSeconds": 0.21915303039550782,
+      "minKernelSeconds": 0.21907846069335937,
+      "name": "replay-v2-40bar-fp32-combined",
+      "passed": true,
+      "policy": "fp32-cubic-newton-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696585,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088917,
+        "residualEvaluations": 15283597,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "energyResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "entropy": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "volumeResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+      "linearCountsIncludingWarmup": {
+        "accepted": 2768456,
+        "attempts": 5572680,
+        "fallbacks": 2804224
+      },
+      "maxKernelSeconds": 0.20873245239257812,
+      "medianKernelSeconds": 0.208583740234375,
+      "minKernelSeconds": 0.20838192749023438,
+      "name": "replay-v2-40bar-fp32-linear",
+      "passed": true,
+      "policy": "fp32-newton-step-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696585,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088917,
+        "residualEvaluations": 15283597,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "energyResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "entropy": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "volumeResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "8e6d778fa5cb7543df1efbc59048c2f056c3a7fb718ad53e8807d052ba888177",
+      "maxKernelSeconds": 0.2132601318359375,
+      "medianKernelSeconds": 0.21307852172851563,
+      "minKernelSeconds": 0.2129046630859375,
+      "name": "replay-v2-40bar-fp32-seeds",
+      "passed": true,
+      "policy": "fp32-cubic-seeds-fp64-refine-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696548,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088473,
+        "residualEvaluations": 15282138,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {},
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+      "maxKernelSeconds": 0.2021421661376953,
+      "medianKernelSeconds": 0.20171322631835936,
+      "minKernelSeconds": 0.2009653778076172,
+      "name": "replay-v2-40bar-fp64",
+      "passed": true,
+      "policy": "",
+      "work": {
+        "finiteDifferenceJacobians": 696548,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088473,
+        "residualEvaluations": 15282138,
+        "stableCandidates": 10006
+      }
+    },
+    {
+      "captureSha256": "99b04ddf621b13f4de5d6d490c7f6d947238f7e9ec3a8e114286158ccc5ebf70",
+      "comparison": {
+        "T": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "activeLiquids": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "alphaLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "chemicalResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cp": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "cv": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "e": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "energyResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "entropy": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "gasMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "iterations": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "liquidMass": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "p": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rho": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoGas": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "rhoLiquid": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundEquilibrium": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "soundFrozen": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        },
+        "volumeResidual": {
+          "maxAbs": 0.0,
+          "maxScaled": 0.0,
+          "relativeL2": 0.0
+        }
+      },
+      "count": 10006,
+      "deviceFailures": 0,
+      "librarySha256": "cab02b8ea19b052fec5e2a0065ede87683f5ef227fa723b07e6ffe3ddc5828fd",
+      "linearCountsIncludingWarmup": {
+        "accepted": 2001440,
+        "attempts": 5572584,
+        "fallbacks": 3571144
+      },
+      "maxKernelSeconds": 0.2100832977294922,
+      "medianKernelSeconds": 0.21006472778320312,
+      "minKernelSeconds": 0.20976751708984376,
+      "name": "replay-v2-40bar-int32-linear",
+      "passed": true,
+      "policy": "int32-q26-newton-step-fp64-accept-v2:experimental",
+      "work": {
+        "finiteDifferenceJacobians": 696573,
+        "flashCandidates": 50025,
+        "phaseEvaluations": 9088773,
+        "residualEvaluations": 15283632,
+        "stableCandidates": 10006
+      }
+    }
+  ],
+  "scope": "Preserve current-solver precision evidence; excludes unrelated legacy labs.",
+  "timingScopes": {
+    "counters": "One selected HEM launch under kernel replay; pipe percentages are not time fractions or whole-solver averages.",
+    "full": "Fresh 160^3, 0-to-1-us, same physics; NVML only; one run per mode/environment unless explicitly repeated.",
+    "relaxed": "Only the explicitly named tolerance copies alter closure tolerances. Same-tolerance FP64 control required for precision attribution.",
+    "replay": "Same captured HEM batch; CUDA event includes diagnostic reduction; one warmup, repeated identical inputs."
+  }
+}

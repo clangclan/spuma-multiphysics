@@ -1,0 +1,4 @@
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/pintleReactiveThermo.cpp: In lambda function:
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/pintleReactiveThermo.cpp:1550:52: warning: ignoring attributes on template argument ‘int (*)(void*) noexcept’ [-Wignored-attributes]
+ 1550 |             std::unique_ptr<void,decltype(&dlclose)> handle(dlopen(library,RTLD_NOW|RTLD_LOCAL),dlclose);
+      |                                                    ^

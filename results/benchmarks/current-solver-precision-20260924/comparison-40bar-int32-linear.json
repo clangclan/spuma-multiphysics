@@ -1,0 +1,118 @@
+{
+  "baseline": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-fp64",
+  "baselineSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+  "baselineSteps": 20,
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/full-40bar-int32-linear",
+  "candidateSha256": "5d90ac770801c7bdc5ed07d52478e4f9679c83cc51d44db356f02d1843244e23",
+  "candidateSteps": 20,
+  "fields": {
+    "T": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "U": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaLiquid": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cp": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cv": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "e": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "gasMass": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "liquidMass": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "p": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "q": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rho": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundEquilibrium": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundFrozen": {
+      "jetRelativeL2": 0.0,
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    }
+  },
+  "identicalAdaptiveHistory": true,
+  "identicalRetryHistory": true,
+  "integrated": {
+    "liquidN2oMassKg": {
+      "baseline": 0.0,
+      "candidate": 0.0
+    },
+    "n2oMassKg": {
+      "baseline": 1.5941757070063265e-07,
+      "candidate": 1.5941757070063265e-07
+    },
+    "totalEnergyJ": {
+      "baseline": -2439.6821833259637,
+      "candidate": -2439.6821833259637
+    }
+  },
+  "jetCells": 680,
+  "maxDeltaTDifference": 0.0,
+  "passed": true,
+  "phaseMaskChanges": 0,
+  "precisionOnlyInputsVerified": true,
+  "processSpeedup": 0.9933148916551408,
+  "scope": "Compare complete current-solver 1-us checkpoints, including jet-local errors.\n\nEngineering screen for this experiment, not general physical validation:\np/rho/U scaled error <=1e-3, |dT|<=0.1 K, |d alpha|<=1e-4,\nand existing conservation/phase/CUDA validation must pass.\n",
+  "stepSpeedup": 0.9914000653391636
+}
