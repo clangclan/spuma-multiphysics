@@ -99,7 +99,7 @@ def audit(a):
     require(len(manifest_lines)==1,'Missing actual runtime manifest')
     manifest=json.loads(manifest_lines[0].split(' manifest=',1)[1])
     for name,item in status['runtime'].items():require(sha(Path(item['snapshot']))==item['sha256'],'Runtime snapshot changed: '+name)
-    require(manifest['backendSha256']==status['runtime']['libpintleReactiveBackend.so']['sha256'],'Loaded backend hash mismatch')
+    require(manifest['backendSha256']==status['runtime']['libreactiveBackend.so']['sha256'],'Loaded backend hash mismatch')
     require('solverSha256="'+status['runtime']['ReactiveFoam']['sha256']+'"' in manifest_lines[0],'Loaded solver hash mismatch')
     saves=[fields(line) for line in lines if line.startswith('REACTIVE_CHECKPOINT ')]
     require(len(saves)>=2,'Missing initial/final checkpoints')

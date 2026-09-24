@@ -136,7 +136,7 @@ def main():
     specs=args.case or ["uniform:16:2","acoustic:32:2","acoustic:64:2","contact:32:2","release:32:0","shock:64:2",
                        "viscous:64:2","viscous-zero:64:2","conduction:64:2","conduction-zero:64:2","chemistry:4:2","coupled:4:2"]
     env=b.sourced_environment();executable=b.PROJECT_ROOT/"bin/ReactiveFoam"
-    report={"executable_sha256":b.sha256(executable),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libpintleReactiveBackend.so"),
+    report={"executable_sha256":b.sha256(executable),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libreactiveBackend.so"),
             "scope":"Serial numerical reference, first-order spatial HLL and SSPRK2/Strang; engineering checks, not universal E2E validation",
             "runs":[]}
     with b.RUN_LOCK.open("a+") as lock:

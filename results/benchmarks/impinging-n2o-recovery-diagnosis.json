@@ -1,0 +1,540 @@
+{
+  "analysis_complete": true,
+  "conditions_unchanged": {
+    "ambient_p_abs_Pa": 101325.0,
+    "supply_T_K": 293.15,
+    "supply_p_abs_Pa": 5601325.0
+  },
+  "configured_temperature_min_K": 182.34,
+  "hashes": {
+    "backend_sha256": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b",
+    "configuration_sha256": "5e05a91dd42c20364bdf323821e3358f515d4df138850aae9dbd3cc61fa0fc85",
+    "diagnostic_tool_sha256": "91d638a403296ff68357fa7cf86e61c5af6ff041a2327dcd0ebdaad2edf84866",
+    "failures_sha256": "1ab7f13dc905ab148f502979fd27c56654851525931725147d08dfe16cb8564e",
+    "replay_tool_sha256": "c5dbb6be6b24ba78c8926ceb0fd1ac1c577a8042d1917c4dff2c638d1593822b",
+    "solver_log_sha256": "6c83cf081670c42dc04d80dd56e9ad713e5c70cec2b3fd4da576da175e86f030"
+  },
+  "interpretation": {
+    "accepted_smaller_step": "The recorded 0.808876 ns step succeeded without CPU fallback. This demonstrates timestep sensitivity, not that the rejected larger-step intermediate states were representable.",
+    "retries_0_to_2": "Same host reference search also fails from the logged ambient guess, but succeeds for identical q/energy from a saturation-near guess. These are admissible states missed by a search basin shared by host and device; the evidence does not isolate CUDA arithmetic.",
+    "retries_3_to_4": "Host reference and saturation-near searches both fail. At Tmin the stable all-gas state with the conserved density has more internal energy than the target, so the target requires a temperature below the configured fluid domain. The model has no solid-N2O closure."
+  },
+  "method": {
+    "Tmin_boundary": "At Tmin, solve PR gas pressure for the exact conserved density and compare energy and condensation affinity",
+    "admissibility_probe": "Only guess p,T changed to 1-atm PR saturation values; q and energy unchanged",
+    "exact_replay": "Original q, internal energy, complete guess, equilibrium flag, reference recovery mode"
+  },
+  "records": [
+    {
+      "attempt_id": 2,
+      "changed_guess_admissibility_probe": {
+        "T_K": 184.27467115507127,
+        "error": null,
+        "p_Pa": 101325.0,
+        "purpose": "Existence probe only; not an exact replay and not a proposed solver setting",
+        "state": {
+          "T": 207.07993702199093,
+          "activeLiquids": 1,
+          "alphaGas": 0.9945350752871013,
+          "chemicalResidual": 5.212292819578579e-10,
+          "e": 1481140.1371330535,
+          "energyResidual": 2.9423068824842426e-11,
+          "iterations": 10,
+          "liquidMass": [
+            6.676224631344029,
+            0.0
+          ],
+          "p": 400010.2562876931,
+          "rho": 16.808804473244106,
+          "volumeResidual": 9.938372347306768e-11
+        },
+        "success": true
+      },
+      "classification": "shared_search_initialization_failure_with_admissible_same_EOS_state",
+      "configured_Tmin_gas_boundary": {
+        "T_K": 182.34000000000003,
+        "gas_branch_stable_against_N2O_condensation": false,
+        "gas_internal_energy_density_J_m3": 26669591.74285173,
+        "liquid_minus_gas_chemical_potential_J_kg": -53443.661129078246,
+        "p_Pa_at_conserved_density": 531643.1464835233,
+        "rho_kg_m3": 16.808804473244106,
+        "target_internal_energy_density_J_m3": 24896194.961810935,
+        "target_minus_boundary_energy_J_m3": -1773396.7810407951
+      },
+      "device_failure": "CUDA HEM candidate search failed; CPU fallback disabled",
+      "dt_s": 2.5884037054482106e-08,
+      "exact_host_reference_replay": {
+        "error": "No stable UV flash candidate: Requested EOS root is unavailable",
+        "failure_seed_unchanged": true,
+        "input_unchanged": true,
+        "search": {
+          "active_liquid_candidates_unavailable_at_initial_point": 5,
+          "all_gas_last_probes": [
+            {
+              "T": 182.34000000948174,
+              "branch": -1,
+              "density": 2.768399202253973,
+              "p": 96963.77110578325,
+              "phase": -1
+            }
+          ],
+          "candidate_categories": {
+            "candidate_branch_unavailable": 5,
+            "line_search": 1
+          }
+        },
+        "success": false
+      },
+      "global_cell": 105600,
+      "input": {
+        "guess": {
+          "T": 293.15,
+          "activeLiquids": 0,
+          "alphaGas": 1.0000000000000002,
+          "alphaLiquid": [
+            0,
+            0
+          ],
+          "chemicalResidual": 0,
+          "cp": 1011.4419447671543,
+          "cv": 721.608010590304,
+          "e": -89670.22568645515,
+          "energyResidual": 8.179106769698843e-17,
+          "entropy": 6870.3476969669755,
+          "gasMass": 1.2000888915283916,
+          "iterations": 0,
+          "liquidMass": [
+            0,
+            0
+          ],
+          "p": 101324.99999999997,
+          "rho": 1.2000888915283916,
+          "rhoGas": 1.2000888915283914,
+          "rhoLiquid": [
+            0,
+            0
+          ],
+          "soundEquilibrium": 343.90577314082935,
+          "soundFrozen": 343.90577314082935,
+          "volumeResidual": 2.220446049250313e-16
+        },
+        "internal_energy_density_J_m3": 24896194.961810935,
+        "q_kg_m3": [
+          0.9014000019637978,
+          0.2736890788419486,
+          15.63371539243836,
+          0
+        ]
+      },
+      "retry": 0,
+      "source_line": 1
+    },
+    {
+      "attempt_id": 3,
+      "changed_guess_admissibility_probe": {
+        "T_K": 184.27467115507127,
+        "error": null,
+        "p_Pa": 101325.0,
+        "purpose": "Existence probe only; not an exact replay and not a proposed solver setting",
+        "state": {
+          "T": 193.87383041110607,
+          "activeLiquids": 1,
+          "alphaGas": 0.997717046545056,
+          "chemicalResidual": 5.423750337740785e-10,
+          "e": 1376472.3304774817,
+          "energyResidual": 6.546684254242201e-11,
+          "iterations": 10,
+          "liquidMass": [
+            2.8866941334356877,
+            0.0
+          ],
+          "p": 239281.971914942,
+          "rho": 9.004446682386249,
+          "volumeResidual": 7.901018728162512e-10
+        },
+        "success": true
+      },
+      "classification": "shared_search_initialization_failure_with_admissible_same_EOS_state",
+      "configured_Tmin_gas_boundary": {
+        "T_K": 182.34000000000003,
+        "gas_branch_stable_against_N2O_condensation": false,
+        "gas_internal_energy_density_J_m3": 13256875.815744612,
+        "liquid_minus_gas_chemical_potential_J_kg": -33695.468330604024,
+        "p_Pa_at_conserved_density": 312568.94741736894,
+        "rho_kg_m3": 9.004446682386249,
+        "target_internal_energy_density_J_m3": 12394371.708753008,
+        "target_minus_boundary_energy_J_m3": -862504.106991604
+      },
+      "device_failure": "CUDA HEM candidate search failed; CPU fallback disabled",
+      "dt_s": 1.2942018527241053e-08,
+      "exact_host_reference_replay": {
+        "error": "No stable UV flash candidate: Requested EOS root is unavailable",
+        "failure_seed_unchanged": true,
+        "input_unchanged": true,
+        "search": {
+          "active_liquid_candidates_unavailable_at_initial_point": 5,
+          "all_gas_last_probes": [
+            {
+              "T": 182.34000000948174,
+              "branch": -1,
+              "density": 2.6482240233808003,
+              "p": 95875.53474183306,
+              "phase": -1
+            }
+          ],
+          "candidate_categories": {
+            "candidate_branch_unavailable": 5,
+            "line_search": 1
+          }
+        },
+        "success": false
+      },
+      "global_cell": 105600,
+      "input": {
+        "guess": {
+          "T": 293.15,
+          "activeLiquids": 0,
+          "alphaGas": 1.0000000000000002,
+          "alphaLiquid": [
+            0,
+            0
+          ],
+          "chemicalResidual": 0,
+          "cp": 1011.4419447671543,
+          "cv": 721.608010590304,
+          "e": -89670.22568645515,
+          "energyResidual": 8.179106769698843e-17,
+          "entropy": 6870.3476969669755,
+          "gasMass": 1.2000888915283916,
+          "iterations": 0,
+          "liquidMass": [
+            0,
+            0
+          ],
+          "p": 101324.99999999997,
+          "rho": 1.2000888915283916,
+          "rhoGas": 1.2000888915283914,
+          "rhoLiquid": [
+            0,
+            0
+          ],
+          "soundEquilibrium": 343.90577314082935,
+          "soundFrozen": 343.90577314082935,
+          "volumeResidual": 2.220446049250313e-16
+        },
+        "internal_energy_density_J_m3": 12394371.708753008,
+        "q_kg_m3": [
+          0.9109885641428604,
+          0.27660042202420854,
+          7.81685769621918,
+          0
+        ]
+      },
+      "retry": 1,
+      "source_line": 49
+    },
+    {
+      "attempt_id": 4,
+      "changed_guess_admissibility_probe": {
+        "T_K": 184.27467115507127,
+        "error": null,
+        "p_Pa": 101325.0,
+        "purpose": "Existence probe only; not an exact replay and not a proposed solver setting",
+        "state": {
+          "T": 182.52042367336145,
+          "activeLiquids": 1,
+          "alphaGas": 0.9990988783843995,
+          "chemicalResidual": 6.648193107139377e-10,
+          "e": 1204061.8338690563,
+          "energyResidual": 2.6789460272394883e-11,
+          "iterations": 3,
+          "liquidMass": [
+            1.1695379784340427,
+            0.0
+          ],
+          "p": 154124.3012394969,
+          "rho": 5.10226778695732,
+          "volumeResidual": 3.119657865369163e-10
+        },
+        "success": true
+      },
+      "classification": "shared_search_initialization_failure_with_admissible_same_EOS_state",
+      "configured_Tmin_gas_boundary": {
+        "T_K": 182.34000000000003,
+        "gas_branch_stable_against_N2O_condensation": false,
+        "gas_internal_energy_density_J_m3": 6532632.89126323,
+        "liquid_minus_gas_chemical_potential_J_kg": -11916.40430585132,
+        "p_Pa_at_conserved_density": 191623.1611750096,
+        "rho_kg_m3": 5.10226778695732,
+        "target_internal_energy_density_J_m3": 6143445.908290263,
+        "target_minus_boundary_energy_J_m3": -389186.9829729665
+      },
+      "device_failure": "CUDA HEM candidate search failed; CPU fallback disabled",
+      "dt_s": 6.4710092636205265e-09,
+      "exact_host_reference_replay": {
+        "error": "No stable UV flash candidate: Requested EOS root is unavailable",
+        "failure_seed_unchanged": true,
+        "input_unchanged": true,
+        "search": {
+          "active_liquid_candidates_unavailable_at_initial_point": 5,
+          "all_gas_last_probes": [
+            {
+              "T": 182.34000000948174,
+              "branch": -1,
+              "density": 2.4712473326764766,
+              "p": 94239.35930819256,
+              "phase": -1
+            }
+          ],
+          "candidate_categories": {
+            "candidate_branch_unavailable": 5,
+            "line_search": 1
+          }
+        },
+        "success": false
+      },
+      "global_cell": 105600,
+      "input": {
+        "guess": {
+          "T": 293.15,
+          "activeLiquids": 0,
+          "alphaGas": 1.0000000000000002,
+          "alphaLiquid": [
+            0,
+            0
+          ],
+          "chemicalResidual": 0,
+          "cp": 1011.4419447671543,
+          "cv": 721.608010590304,
+          "e": -89670.22568645515,
+          "energyResidual": 8.179106769698843e-17,
+          "entropy": 6870.3476969669755,
+          "gasMass": 1.2000888915283916,
+          "iterations": 0,
+          "liquidMass": [
+            0,
+            0
+          ],
+          "p": 101324.99999999997,
+          "rho": 1.2000888915283916,
+          "rhoGas": 1.2000888915283914,
+          "rhoLiquid": [
+            0,
+            0
+          ],
+          "soundEquilibrium": 343.90577314082935,
+          "soundFrozen": 343.90577314082935,
+          "volumeResidual": 2.220446049250313e-16
+        },
+        "internal_energy_density_J_m3": 6143445.908290263,
+        "q_kg_m3": [
+          0.9157828452323917,
+          0.2780560936153385,
+          3.90842884810959,
+          0
+        ]
+      },
+      "retry": 2,
+      "source_line": 97
+    },
+    {
+      "attempt_id": 5,
+      "changed_guess_admissibility_probe": {
+        "T_K": 184.27467115507127,
+        "error": "No stable UV flash candidate: Active-set phase equilibrium line search failed",
+        "p_Pa": 101325.0,
+        "purpose": "Existence probe only; not an exact replay and not a proposed solver setting",
+        "state": null,
+        "success": false
+      },
+      "classification": "state_below_configured_fluid_temperature_domain",
+      "configured_Tmin_gas_boundary": {
+        "T_K": 182.34000000000003,
+        "gas_branch_stable_against_N2O_condensation": true,
+        "gas_internal_energy_density_J_m3": 3166002.489930175,
+        "liquid_minus_gas_chemical_potential_J_kg": 10902.698662098963,
+        "p_Pa_at_conserved_density": 128243.52945201908,
+        "rho_kg_m3": 3.151178339242856,
+        "target_internal_energy_density_J_m3": 3017964.1066467916,
+        "target_minus_boundary_energy_J_m3": -148038.3832833832
+      },
+      "device_failure": "CUDA HEM candidate search failed; CPU fallback disabled",
+      "dt_s": 3.2355046318102633e-09,
+      "exact_host_reference_replay": {
+        "error": "No stable UV flash candidate: Requested EOS root is unavailable",
+        "failure_seed_unchanged": true,
+        "input_unchanged": true,
+        "search": {
+          "active_liquid_candidates_unavailable_at_initial_point": 5,
+          "all_gas_last_probes": [
+            {
+              "T": 182.34000000948174,
+              "branch": -1,
+              "density": 2.254749038535965,
+              "p": 92160.90506926927,
+              "phase": -1
+            }
+          ],
+          "candidate_categories": {
+            "candidate_branch_unavailable": 5,
+            "line_search": 1
+          }
+        },
+        "success": false
+      },
+      "global_cell": 105600,
+      "input": {
+        "guess": {
+          "T": 293.15,
+          "activeLiquids": 0,
+          "alphaGas": 1.0000000000000002,
+          "alphaLiquid": [
+            0,
+            0
+          ],
+          "chemicalResidual": 0,
+          "cp": 1011.4419447671543,
+          "cv": 721.608010590304,
+          "e": -89670.22568645515,
+          "energyResidual": 8.179106769698843e-17,
+          "entropy": 6870.3476969669755,
+          "gasMass": 1.2000888915283916,
+          "iterations": 0,
+          "liquidMass": [
+            0,
+            0
+          ],
+          "p": 101324.99999999997,
+          "rho": 1.2000888915283916,
+          "rhoGas": 1.2000888915283914,
+          "rhoLiquid": [
+            0,
+            0
+          ],
+          "soundEquilibrium": 343.90577314082935,
+          "soundFrozen": 343.90577314082935,
+          "volumeResidual": 2.220446049250313e-16
+        },
+        "internal_energy_density_J_m3": 3017964.1066467916,
+        "q_kg_m3": [
+          0.9181799857771573,
+          0.2787839294109035,
+          1.954214424054795,
+          0
+        ]
+      },
+      "retry": 3,
+      "source_line": 145
+    },
+    {
+      "attempt_id": 6,
+      "changed_guess_admissibility_probe": {
+        "T_K": 184.27467115507127,
+        "error": "No stable UV flash candidate: Active-set phase equilibrium line search failed",
+        "p_Pa": 101325.0,
+        "purpose": "Existence probe only; not an exact replay and not a proposed solver setting",
+        "state": null,
+        "success": false
+      },
+      "classification": "state_below_configured_fluid_temperature_domain",
+      "configured_Tmin_gas_boundary": {
+        "T_K": 182.34000000000003,
+        "gas_branch_stable_against_N2O_condensation": true,
+        "gas_internal_energy_density_J_m3": 1481555.2704123855,
+        "liquid_minus_gas_chemical_potential_J_kg": 34248.104050630354,
+        "p_Pa_at_conserved_density": 95820.06040607998,
+        "rho_kg_m3": 2.1756336153856237,
+        "target_internal_energy_density_J_m3": 1455203.6486767074,
+        "target_minus_boundary_energy_J_m3": -26351.621735678054
+      },
+      "device_failure": "CUDA HEM candidate search failed; CPU fallback disabled",
+      "dt_s": 1.6177523159051316e-09,
+      "exact_host_reference_replay": {
+        "error": "No stable UV flash candidate: Requested EOS root is unavailable",
+        "failure_seed_unchanged": true,
+        "input_unchanged": true,
+        "search": {
+          "active_liquid_candidates_unavailable_at_initial_point": 5,
+          "all_gas_last_probes": [
+            {
+              "T": 182.34000003366876,
+              "branch": -1,
+              "density": 2.0392777530020707,
+              "p": 89862.49323445185,
+              "phase": -1
+            }
+          ],
+          "candidate_categories": {
+            "candidate_branch_unavailable": 5,
+            "line_search": 1
+          }
+        },
+        "success": false
+      },
+      "global_cell": 105600,
+      "input": {
+        "guess": {
+          "T": 293.15,
+          "activeLiquids": 0,
+          "alphaGas": 1.0000000000000002,
+          "alphaLiquid": [
+            0,
+            0
+          ],
+          "chemicalResidual": 0,
+          "cp": 1011.4419447671543,
+          "cv": 721.608010590304,
+          "e": -89670.22568645515,
+          "energyResidual": 8.179106769698843e-17,
+          "entropy": 6870.3476969669755,
+          "gasMass": 1.2000888915283916,
+          "iterations": 0,
+          "liquidMass": [
+            0,
+            0
+          ],
+          "p": 101324.99999999997,
+          "rho": 1.2000888915283916,
+          "rhoGas": 1.2000888915283914,
+          "rhoLiquid": [
+            0,
+            0
+          ],
+          "soundEquilibrium": 343.90577314082935,
+          "soundFrozen": 343.90577314082935,
+          "volumeResidual": 2.220446049250313e-16
+        },
+        "internal_energy_density_J_m3": 1455203.6486767074,
+        "q_kg_m3": [
+          0.9193785560495402,
+          0.27914784730868597,
+          0.9771072120273975,
+          0
+        ]
+      },
+      "retry": 4,
+      "source_line": 193
+    }
+  ],
+  "runtime": {
+    "backendPath": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so",
+    "backendSha256": "44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b",
+    "chemistryBackend": "cpu",
+    "closureBackend": "cpu",
+    "closureCpuFallback": false,
+    "closureJacobian": "finiteDifference",
+    "deviceCaloricCandidates": false,
+    "deviceCaloricScope": "no-condensable-inventory; NASA/PR-alpha single interval; host branch/residual/stability approval",
+    "deviceChemistryIntegration": false,
+    "deviceFullClosure": false,
+    "eos": "Peng-Robinson",
+    "exactBatchReuse": false,
+    "modelFingerprint": "3d2373a1d736f0e05ca8ee0a1b364f7245478bca2d51e242d7bb4af4140c81d7",
+    "numericalPolicyHash": "4580396426ebcaa95c180a593f04456f10a4a3cd29355272fc53e6840f7b86f1",
+    "physicalModelHash": "f891bce1e0d4b25361a6b4b9f2705a7d5490a7603b44d919bbf4c61beff87f05",
+    "schema": 1,
+    "thermoConfiguration": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr-config.yaml"
+  },
+  "schema": 1,
+  "scope": "Five detailed retry representatives only; no simulation rerun and no solver change"
+}

@@ -1,0 +1,15 @@
+{
+  "bitwiseEqual": true,
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/restart-repeat-v5",
+  "differences": [],
+  "fields": [
+    "q0",
+    "q1",
+    "q2",
+    "q3",
+    "rhoMomentum",
+    "rhoTotalEnergy"
+  ],
+  "matchingHistory": false,
+  "reference": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v5/sphere-16"
+}

@@ -1,0 +1,44 @@
+{
+  "case": "capillary N2O trace-air post-transport GPU HEM replay",
+  "cpuFallbacks": 0,
+  "elapsedSeconds": 2.1452879770004074,
+  "flashCandidates": 20336,
+  "gpuSucceeded": 656,
+  "inputs": 656,
+  "inputsUnchanged": true,
+  "maxRecoveredGasMass": 0.0027946826420926067,
+  "maxResiduals": {
+    "chemical": 2.1936585881121573e-09,
+    "energy": 9.511339628833376e-15,
+    "volume": 6.377121053446899e-13
+  },
+  "minRecoveredGasMass": 2.0849229577097936e-07,
+  "passed": true,
+  "retries": {
+    "0": 8,
+    "1": 8,
+    "10": 80,
+    "11": 80,
+    "12": 80,
+    "2": 8,
+    "3": 8,
+    "4": 32,
+    "5": 32,
+    "6": 80,
+    "7": 80,
+    "8": 80,
+    "9": 80
+  },
+  "schema": 1,
+  "sha256": {
+    "lib/libpintleReactiveBackend.so": "0ec736b1cae0b197501adf75171db47c0c588e925f35ff765146a24a30c573b8",
+    "lib/libpintleReactiveTransport.so": "d78d432399955cd725959299d36c440ccc58f90f431b1946416c24dd950e4218",
+    "logs/capillary-integration-20260923/flash-diagnostic/reactiveFailures.jsonl": "ddab6c16a14ee57d7ec9aa7b21e51b6ae3ea33465459a951a83e376aaf21234c",
+    "logs/capillary-integration-20260923/solver/suite-v5/thermo/capillary-n2o-config.yaml": "ba34d408f006421083faeeb5c7b3209b27d7d2f512acd3d3384c04dd147d9427",
+    "src/reactiveThermo/pintleDeviceFlash.h": "75989dc3eefd91d082d6ed52b559b861e6d1c4c82d10092ab0f0f84c75468797",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "c9c37d416721d8e3c35a9522e59f664b27c71dcd2a981ee65e7df96ce4b4953a",
+    "src/reactiveTransport/pintleGpuHem.cuh": "d19cea684a276af13fb4db2ae2b4c5bc7e7eb5f7078aa1d65de37b59943b3e83"
+  },
+  "stableCandidates": 3816,
+  "uniqueCells": 80
+}

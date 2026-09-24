@@ -28,7 +28,7 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--baseline-root', type=Path, required=True)
     p.add_argument('--baseline-executable', default='ReactiveFoam',
-                   help='Executable filename in baseline-root/bin (use pintleReactiveFoam for pre-rename baselines)')
+                   help='Executable filename in baseline-root/bin (use reactiveFoam for pre-rename baselines)')
     p.add_argument('--case', action='append')
     a = p.parse_args()
     out = a.output.resolve(); out.mkdir(parents=True, exist_ok=False)

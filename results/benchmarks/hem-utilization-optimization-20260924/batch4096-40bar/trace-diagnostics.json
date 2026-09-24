@@ -1,0 +1,218 @@
+[
+  {
+    "globalPid": 281474976710656,
+    "severity": 1,
+    "source": 2,
+    "text": "Environment variable collection is disabled.",
+    "timestamp": -46950223,
+    "timestampType": 1
+  },
+  {
+    "globalPid": -144115188075855872,
+    "severity": 1,
+    "source": 3,
+    "text": "Profiling has started.",
+    "timestamp": 0,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 1,
+    "source": 2,
+    "text": "Process was launched by the profiler, see /tmp/nvidia/nsight_systems/quadd_session_1039937/streams/pid_39946_stdout.log and stderr.log for program output",
+    "timestamp": 52161,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 1,
+    "source": 1,
+    "text": "Common injection library initialized successfully.",
+    "timestamp": 15872291,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 1,
+    "source": 1,
+    "text": "OS runtime libraries injection initialized successfully.",
+    "timestamp": 19645944,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Common injection library initialized successfully.",
+    "timestamp": 129291439,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "OS runtime libraries injection initialized successfully.",
+    "timestamp": 227103646,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Buffers holding CUDA trace data will be flushed on CudaProfilerStop() call. See --flush-on-cudaprofilerstop to control this behavior.",
+    "timestamp": 311259070,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Loaded CUPTI library: /home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/profilers/13.2/Nsight_Systems/target-linux-x64/libcupti.so.13.2",
+    "timestamp": 314227123,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Enabling trace for device graph launch",
+    "timestamp": 496590295,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "CUDA injection initialized successfully.",
+    "timestamp": 496738969,
+    "timestampType": 1
+  },
+  {
+    "globalPid": -144115188075855872,
+    "severity": 2,
+    "source": 3,
+    "text": "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+    "timestamp": 646825828,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 2,
+    "source": 3,
+    "text": "Not all NVTX events might have been collected.",
+    "timestamp": 646866284,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 2,
+    "source": 3,
+    "text": "No NVTX events collected. Does the process use NVTX?",
+    "timestamp": 646867260,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 2,
+    "source": 3,
+    "text": "Not all NVTX events might have been collected.",
+    "timestamp": 646867937,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 2,
+    "source": 3,
+    "text": "No NVTX events collected. Does the process use NVTX?",
+    "timestamp": 646868123,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 2,
+    "source": 3,
+    "text": "CUDA profiling might have not been started correctly.",
+    "timestamp": 646868945,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 2,
+    "source": 3,
+    "text": "No CUDA events collected. Does the process use CUDA?",
+    "timestamp": 646869290,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 3,
+    "text": "Number of CUDA events collected: \t162375.",
+    "timestamp": 646870119,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145159380992,
+    "severity": 1,
+    "source": 3,
+    "text": "Number of OS runtime libraries events collected: \t4.",
+    "timestamp": 646871312,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 3,
+    "text": "Number of OS runtime libraries events collected: \t4523.",
+    "timestamp": 646871630,
+    "timestampType": 2
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Number of CUPTI events produced: \t195162, CUPTI buffers: 50.",
+    "timestamp": 35080438884,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 282145411039232,
+    "severity": 1,
+    "source": 1,
+    "text": "Hardware tracing used for CUDA tracing.",
+    "timestamp": 35080447045,
+    "timestampType": 1
+  },
+  {
+    "globalPid": -144115188075855872,
+    "severity": 1,
+    "source": 3,
+    "text": "Profiling has stopped.",
+    "timestamp": 35416508821,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 281474976710656,
+    "severity": 1,
+    "source": 2,
+    "text": "Number of Debuginfod queries: 28 (successful queries: 0, timed out queries: 1).",
+    "timestamp": 65702205722,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 281474976710656,
+    "severity": 1,
+    "source": 2,
+    "text": "Number of used Debuginfod cached files: 1.",
+    "timestamp": 65702210259,
+    "timestampType": 1
+  },
+  {
+    "globalPid": 281474976710656,
+    "severity": 1,
+    "source": 2,
+    "text": "Total time spent on all Debuginfod queries: 28 sec (successful queries: 0 sec).",
+    "timestamp": 65702211126,
+    "timestampType": 1
+  }
+]

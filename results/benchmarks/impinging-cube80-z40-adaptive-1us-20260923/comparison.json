@@ -1,0 +1,198 @@
+{
+  "baseline": "../impinging-cube80-z40-1us-20260923/summary.json",
+  "cases": [
+    {
+      "adaptiveSeconds": 2.91,
+      "adaptiveSteps": 7,
+      "ambientPa": 101325.0,
+      "baselineSeconds": 8.65,
+      "baselineSteps": 34,
+      "fieldDifferences": {
+        "T": {
+          "maxAbsoluteDifference": 0.06728567049464118,
+          "meanAbsoluteDifference": 2.5379228734162316e-05,
+          "relativeL1": 8.657890035460819e-08
+        },
+        "U": {
+          "maxAbsoluteDifference": 0.0921783409429846,
+          "meanAbsoluteDifference": 2.0178167806340477e-05,
+          "relativeL1": 0.015441490097434145
+        },
+        "p": {
+          "maxAbsoluteDifference": 162.50618210053653,
+          "meanAbsoluteDifference": 0.029757640578037127,
+          "relativeL1": 2.936518979613316e-07
+        },
+        "q2": {
+          "maxAbsoluteDifference": 0.0027677756437567425,
+          "meanAbsoluteDifference": 4.904230809647185e-07,
+          "relativeL1": 0.0005987548530666744
+        }
+      },
+      "grid": 40,
+      "massDifferences": {
+        "liquidN2oMassKg": {
+          "adaptive": 1.657853869548881e-07,
+          "baseline": 1.6623981358346236e-07,
+          "relativeDifference": -0.0027335607444368454
+        },
+        "n2oMassKg": {
+          "adaptive": 4.1926147607296185e-07,
+          "baseline": 4.193646467629966e-07,
+          "relativeDifference": -0.0002460166607536681
+        },
+        "vaporN2oMassKg": {
+          "adaptive": 2.5347608911807376e-07,
+          "baseline": 2.5312483317953423e-07,
+          "relativeDifference": 0.0013876786964256284
+        }
+      },
+      "speedup": 2.972508591065292
+    },
+    {
+      "adaptiveSeconds": 6.63,
+      "adaptiveSteps": 5,
+      "ambientPa": 4000000.0,
+      "baselineSeconds": 69.13,
+      "baselineSteps": 34,
+      "fieldDifferences": {
+        "T": {
+          "maxAbsoluteDifference": 0.010979971480367112,
+          "meanAbsoluteDifference": 1.463187311792069e-06,
+          "relativeL1": 4.991277239243087e-09
+        },
+        "U": {
+          "maxAbsoluteDifference": 0.0008562434882209979,
+          "meanAbsoluteDifference": 1.8081113967165977e-07,
+          "relativeL1": 0.0028927074522893327
+        },
+        "p": {
+          "maxAbsoluteDifference": 174.57243889663368,
+          "meanAbsoluteDifference": 0.026121078684460373,
+          "relativeL1": 6.5302805684091184e-09
+        },
+        "q2": {
+          "maxAbsoluteDifference": 0.00020412306994188611,
+          "meanAbsoluteDifference": 2.553944253733044e-08,
+          "relativeL1": 0.00010813227472919596
+        }
+      },
+      "grid": 40,
+      "massDifferences": {
+        "liquidN2oMassKg": {
+          "adaptive": 0.0,
+          "baseline": 0.0,
+          "relativeDifference": null
+        },
+        "n2oMassKg": {
+          "adaptive": 1.2094084370766353e-07,
+          "baseline": 1.2092776751308445e-07,
+          "relativeDifference": 0.00010813227472895806
+        },
+        "vaporN2oMassKg": {
+          "adaptive": 1.2094084370766353e-07,
+          "baseline": 1.2092776751308445e-07,
+          "relativeDifference": 0.00010813227472895806
+        }
+      },
+      "speedup": 10.42684766214178
+    },
+    {
+      "adaptiveSeconds": 36.03,
+      "adaptiveSteps": 13,
+      "ambientPa": 101325.0,
+      "baselineSeconds": 81.81,
+      "baselineSteps": 34,
+      "fieldDifferences": {
+        "T": {
+          "maxAbsoluteDifference": 0.044780311197825995,
+          "meanAbsoluteDifference": 6.734958879065278e-06,
+          "relativeL1": 2.2975341714982402e-08
+        },
+        "U": {
+          "maxAbsoluteDifference": 0.08447900238419237,
+          "meanAbsoluteDifference": 6.298616163593635e-06,
+          "relativeL1": 0.004849173671654691
+        },
+        "p": {
+          "maxAbsoluteDifference": 188.0179231626098,
+          "meanAbsoluteDifference": 0.012861312532219244,
+          "relativeL1": 1.2691521536818257e-07
+        },
+        "q2": {
+          "maxAbsoluteDifference": 0.00314770080029092,
+          "meanAbsoluteDifference": 2.3304876078814453e-07,
+          "relativeL1": 0.00028729142461017613
+        }
+      },
+      "grid": 80,
+      "massDifferences": {
+        "liquidN2oMassKg": {
+          "adaptive": 1.7684127117084093e-07,
+          "baseline": 1.7703661792659135e-07,
+          "relativeDifference": -0.001103425709541203
+        },
+        "n2oMassKg": {
+          "adaptive": 4.152795409560078e-07,
+          "baseline": 4.153307592993277e-07,
+          "relativeDifference": -0.00012331940790107911
+        },
+        "vaporN2oMassKg": {
+          "adaptive": 2.3843826978516686e-07,
+          "baseline": 2.3829414137273638e-07,
+          "relativeDifference": 0.0006048340576071009
+        }
+      },
+      "speedup": 2.270607826810991
+    },
+    {
+      "adaptiveSeconds": 66.29,
+      "adaptiveSteps": 10,
+      "ambientPa": 4000000.0,
+      "baselineSeconds": 276.18,
+      "baselineSteps": 34,
+      "fieldDifferences": {
+        "T": {
+          "maxAbsoluteDifference": 0.017937674096174305,
+          "meanAbsoluteDifference": 9.222908146964137e-07,
+          "relativeL1": 3.146151730482178e-09
+        },
+        "U": {
+          "maxAbsoluteDifference": 0.002088031402562418,
+          "meanAbsoluteDifference": 1.536665518373801e-07,
+          "relativeL1": 0.0025309984874743972
+        },
+        "p": {
+          "maxAbsoluteDifference": 275.02795846015215,
+          "meanAbsoluteDifference": 0.015898711502059085,
+          "relativeL1": 3.974685080559825e-09
+        },
+        "q2": {
+          "maxAbsoluteDifference": 0.0005627161376651202,
+          "meanAbsoluteDifference": 2.8645447815463165e-08,
+          "relativeL1": 0.00011872013699847611
+        }
+      },
+      "grid": 80,
+      "massDifferences": {
+        "liquidN2oMassKg": {
+          "adaptive": 0.0,
+          "baseline": 0.0,
+          "relativeDifference": null
+        },
+        "n2oMassKg": {
+          "adaptive": 1.235528433305953e-07,
+          "baseline": 1.2353817686131377e-07,
+          "relativeDifference": 0.00011872013699856388
+        },
+        "vaporN2oMassKg": {
+          "adaptive": 1.235528433305953e-07,
+          "baseline": 1.2353817686131377e-07,
+          "relativeDifference": 0.00011872013699856388
+        }
+      },
+      "speedup": 4.166239251772514
+    }
+  ],
+  "scope": "Same mesh and physical time; differences from the retained 30 ns capped reference, not a temporal convergence proof"
+}

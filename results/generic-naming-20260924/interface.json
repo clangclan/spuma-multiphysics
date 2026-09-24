@@ -1,0 +1,22 @@
+{
+  "architecture": "sm_120",
+  "cpu": {
+    "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "passed": true
+  },
+  "cuda": {
+    "compiler": "Build cuda_13.2.r13.2/compiler.37668154_0",
+    "gpu_lock": "/home/jsw/cae-benchmark/run.lock",
+    "passed": true,
+    "skipped": false
+  },
+  "generated_utc": "2026-09-24T05:26:51.605273+00:00",
+  "hashes": {
+    "docs/spray-physics/resolved-interface-design.md": "007df7b7ef1b7b849390ecf989ecc1917e6122085fadcdef3b9ae020ebc61a59",
+    "src/reactiveInterface/reactiveResolvedInterface.h": "e8a289de60b7314d31b97b8bcccb87f6951c4125f8988d9de377532049cfc64b",
+    "tests/interface_primitives.cpp": "c094dafaf5d4198fc84b63705b20e4a609d1fc8e1c0296e3e5f2471abc88bc05",
+    "tests/interface_primitives_cuda.cu": "4a51d829c56aad94d376f06c2b076780887cd9a175b49660a4fcf089bcc7d30a",
+    "tools/validate_interface_primitives.py": "6768d6287048ba627064af2e67effaf3633bc33a1d040621bfa62c825d0b0e28"
+  },
+  "schema": 1
+}

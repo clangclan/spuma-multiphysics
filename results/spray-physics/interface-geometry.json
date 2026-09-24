@@ -1,0 +1,13 @@
+{
+  "cpu": "PASS planeMaxCurvature=0 planeMaxForce=0 sphereError24=1.22085 sphereError48=0.720148 netForce48=1.22227e-17 offCapillaryKernels=0 cpuTimingGrid=32^3 cpuRepeats=30 cpuOnUs=1890.08 cpuOffUs=472.42 logicalCommonGeometryBytes=1835008 logicalDedicatedCapillaryBytes=2883584 onPassesPerCall=4 offPassesPerCall=1 actualOffCommonAllocatedBytes=161280 actualOffDedicatedCapillaryBytes=0",
+  "cuda": "PASS gpuMaxError=7.10543e-15 gpuAdvectionMaxError=5.55112e-17 gpuGeometryKernels=2 gpuCurvatureKernels=1 gpuCapillaryKernels=2 offCapillaryKernels=0 gpuTimingGrid=18x14x12 gpuRepeats=100 gpuOnUs=34.8627 gpuOffUs=19.5501 logicalCommonGeometryBytes=169344 logicalDedicatedCapillaryBytes=266112 onKernelsPerCall=4 offKernelsPerCall=2 actualOffCommonAllocatedBytes=169344 actualOffDedicatedCapillaryBytes=0",
+  "generatedUnix": 1790127728.9486196,
+  "schema": "pintle-interface-geometry-v1",
+  "scope": "standalone structured-grid module; timings are not end-to-end solver timings",
+  "sources": {
+    "src/reactiveInterface/pintleInterfaceGeometry.h": "0064f8120b11bf3cf0fec5f37c7efc4f446f1abe33a5a9d84a0451370b104eba",
+    "tools/interface_geometry_cuda_test.cu": "0e10388e771fb08dc31fe5596b8852b25e248b17114fc7e0da506ff1fb83d65f",
+    "tools/interface_geometry_test.cpp": "5e4f519ad159a3e4af1450fc980384c6f1a5486dbc39e55caad53e64eea365ee",
+    "tools/validate_interface_geometry.py": "74d78f47140e7aedf8c9c2d732e8c0e17cafdaa0a6b631a5b5d1fc907ec86375"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "cartesianLatticeVerified": true,
+  "caseDefinitionHashes": {
+    "ambient_1atm": "2015330efd0bd26ea32761d4a17ef2f47295ad6c167033177e501e7aef32a0af",
+    "ambient_40bar_abs": "51c28cd074beca9f538b8d7238a56dae840f140c39455d60962401e1abf3de62"
+  },
+  "cellEdgeM": 0.0005,
+  "cellSpacingM": [
+    0.0005,
+    0.0005,
+    0.0005
+  ],
+  "cells": 4096000,
+  "checkerSha256": "a02f8261f6eddd39d161d399e8a37b0cc429c561b1d1ca295e14a0e6ae0c0068",
+  "cubicLatticeVerified": true,
+  "faces": 12364800,
+  "meshHashes": {
+    "boundary": "23fc40a0ca0b49b7c0b0653c845186a2faf80a0b07a7f43561443efdfd5d8f5b",
+    "faces": "3cbc6bc7c29a25233788a696430c789b3c5df284c1c8148bf090153c48e12ca8",
+    "neighbour": "9cd76ab44eb09db2b48bb0d1813c7e12edec40668b7af96bd8a1d85681f7c6ca",
+    "owner": "0fff38451ce015b26b8b473d6e13043dcc5b3e985e7022398315430ca2849e17",
+    "points": "1b538012d5e74fb1cc63d01e66be32af08346349e938d46869741644e5662b21"
+  },
+  "passed": true,
+  "patches": {
+    "inletX": {
+      "areaM2": 2.0000000000000022e-05,
+      "centerM": [
+        0.0,
+        0.005999999999999985,
+        0.03999999999999996
+      ],
+      "faces": 80,
+      "outwardNormal": [
+        -1,
+        0,
+        0
+      ]
+    },
+    "inletY": {
+      "areaM2": 2.0000000000000022e-05,
+      "centerM": [
+        0.005999999999999986,
+        0.0,
+        0.03999999999999996
+      ],
+      "faces": 80,
+      "outwardNormal": [
+        0,
+        -1,
+        0
+      ]
+    }
+  },
+  "points": 4173281,
+  "shape": [
+    160,
+    160,
+    160
+  ]
+}

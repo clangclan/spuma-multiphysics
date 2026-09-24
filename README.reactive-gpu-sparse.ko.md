@@ -73,7 +73,7 @@ CVODE SPGMR은 위 **전체 Jv**를 사용한다. Eigen SparseLU로 `I − gamma
 | `sparse` | `chemicalJacobian structured`, 이상기체, 구성에 액상 없음이 필수. 적분 실패·음수 채택 상태를 거부 |
 | `auto` | 가능한 구성에서 희소 시도. 실패하거나 음수/비유한 채택 상태이면 같은 초기 보존량·에너지·기구로 전체 RHS 차분 밀집 재적분. 다른 구성은 밀집 사용 |
 
-`auto`는 성능 자동 튜닝이 아니다. 재적분 때문에 기본 경로보다 느릴 수 있다. Newton 내부의 허용된 작은 음수 시험값에만 기존 RHS 확장과 같은 0 경계를 적용하고 해당 미분 열을 마스킹한다. **채택할 화학 상태는 음수 clipping, 조성 재정규화, 에너지 재설정으로 보정하지 않는다.** 기존 질량·원소 검사를 통과해야 한다. 통계 ABI를 깨지 않도록 희소 통계는 별도 `PintleSparseStats`로 제공한다.
+`auto`는 성능 자동 튜닝이 아니다. 재적분 때문에 기본 경로보다 느릴 수 있다. Newton 내부의 허용된 작은 음수 시험값에만 기존 RHS 확장과 같은 0 경계를 적용하고 해당 미분 열을 마스킹한다. **채택할 화학 상태는 음수 clipping, 조성 재정규화, 에너지 재설정으로 보정하지 않는다.** 기존 질량·원소 검사를 통과해야 한다. 통계 ABI를 깨지 않도록 희소 통계는 별도 `ReactiveSparseStats`로 제공한다.
 
 ## 빌드와 선택
 
@@ -84,11 +84,11 @@ CVODE SPGMR은 위 **전체 Jv**를 사용한다. Eigen SparseLU로 `I − gamma
 bash tools/build_reactive_solver.sh
 
 # 원래 RTX 5080 환경에서 CUDA 수송을 포함해 새로 빌드
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 \
   bash tools/build_reactive_solver.sh
 ```
 
-`NVCC`로 compiler 경로를 지정할 수 있다. `PINTLE_CUDA_ARCH` 기본값은 `80`이며 지정 아키텍처의 native code와 PTX를 포함한다. 테스트 환경의 CUDA 13.4 산출물을 원래 CUDA 13.2 환경으로 복사하지 말고 해당 환경에서 다시 빌드한다. 원래 실험 호스트에서는 기존 `/home/jsw/cae-benchmark/run.lock` 직렬 실행 규칙을 계속 적용한다.
+`NVCC`로 compiler 경로를 지정할 수 있다. `REACTIVE_CUDA_ARCH` 기본값은 `80`이며 지정 아키텍처의 native code와 PTX를 포함한다. 테스트 환경의 CUDA 13.4 산출물을 원래 CUDA 13.2 환경으로 복사하지 말고 해당 환경에서 다시 빌드한다. 원래 실험 호스트에서는 기존 `/home/jsw/cae-benchmark/run.lock` 직렬 실행 규칙을 계속 적용한다.
 
 ```foam
 transportBackend cuda;
@@ -131,7 +131,7 @@ bash tools/build_reactive_transport.sh
 research/reactive-env/bin/python tools/validate_reactive_transport.py \
   --backend cpu --output results/local-transport-cpu.json
 
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 \
   bash tools/build_reactive_transport.sh
 research/reactive-env/bin/python tools/validate_reactive_transport.py \
   --backend cuda --output results/local-transport-cuda.json

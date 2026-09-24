@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "passed": true,
+  "cases": [
+    {
+      "label": "pr-gas",
+      "T": 293.15,
+      "p": 101325.0,
+      "error": 5.218903509293068e-15
+    },
+    {
+      "label": "pure-liquid",
+      "T": 293.15,
+      "p": 5601325.0,
+      "error": 1.977116796210416e-16
+    },
+    {
+      "label": "frozen-mixed",
+      "T": 270.0,
+      "p": 3000000.0,
+      "error": 0.0
+    },
+    {
+      "label": "equilibrium-mixed",
+      "T": 249.2046627424621,
+      "p": 2926111.9042806695,
+      "error": 2.1125862956624945e-11
+    },
+    {
+      "label": "extended-148K-gas",
+      "T": 148.0,
+      "p": 101325.0,
+      "error": 0.0
+    },
+    {
+      "label": "ideal-gas",
+      "T": 300.0,
+      "p": 101325.0,
+      "error": 2.465809057278432e-14
+    }
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so": "541f7c2ade76fcdc749c0ab4337bac7b300286fed776398e10d1d29c8af294d5",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/physics-switches-20260923/thermo/cold-pr-148K-config.yaml": "84862c3c9c7ec73ba3f3139ada9a322e9b6ecd04a92509801072acd6df362ba7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics/research/reactive-thermo-v4/chemistry-config.yaml": "f344e0f4fd910c41de94a5fb494d430168f33ae16cfd8698e9490eea32a0e53e",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_total_species_enthalpies.py": "6d787f785baba6597b4cdfa0099372b5084d43ebcde854de353671aecef5c2c1",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/pintleReactiveThermo.h": "c9f572cd4d26cb4e642d5cc449f94bd60a0c9dbb586278643d7de0f3e0eb01bd",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/pintleReactiveThermo.cpp": "ced1362ff2c79d419bf6b4105cb475c7821459a322e4e08667c82efd505ec8fe"
+  }
+}

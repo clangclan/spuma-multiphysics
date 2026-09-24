@@ -45,7 +45,7 @@ def main():
         return prepare_case(*args,transport_backend=a.transport_backend,thermo_workers=a.thermo_workers,
                             thermo_batch_cells=3,transport_bridge_cells=2,**kwargs)
     env=b.sourced_environment();exe=b.PROJECT_ROOT/"bin/ReactiveFoam"
-    report={"solver_sha256":b.sha256(exe),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libpintleReactiveBackend.so"),
+    report={"solver_sha256":b.sha256(exe),"backend_sha256":b.sha256(b.PROJECT_ROOT/"lib/libreactiveBackend.so"),
             "transport_backend":a.transport_backend,"thermo_workers":a.thermo_workers,"tests":[]}
     def record(name,passed,**data):
         report["tests"].append(dict(name=name,passed=bool(passed),**data))

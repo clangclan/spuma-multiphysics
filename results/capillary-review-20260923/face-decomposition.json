@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "scope": "CPU isolation of production geometry and faceFlux at zero time; synthetic density/sound/energy, not a real-fluid or integrated solver result",
+  "compileCommand": [
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/capillary_face_decomposition.cpp",
+    "-o",
+    "/tmp/capillary_review_face_decomposition"
+  ],
+  "binarySha256": "de30b011a2bad870a299c51563da62c5119896b350e6b357b44944ca9642b1c4",
+  "sourceSha256": {
+    "tools/capillary_face_decomposition.cpp": "b1082e017838ea21ce6d9b9cb5e91b899040980b9473a67fdc42c9b649747ba0",
+    "src/reactiveInterface/pintleBalancedCapillary.h": "e5727d8350e290e6cb79d6afb605d7fbde932239183c764b377d659bdd8b7ce2",
+    "src/reactiveInterface/pintleUnstructuredInterface.h": "b8e4053a5f20a0f23c5160d4db1235f77f465dc9b652304d3e663fc596ad0a41"
+  },
+  "runs": [
+    {
+      "n": 16.0,
+      "samples": 8.0,
+      "h": 0.00025,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 624.0,
+      "interfaceWeightedCurvatureL1": 849.7076862,
+      "interfaceWeightedCurvatureL2": 1057.060416,
+      "interfaceWeightedCurvatureBias": -111.7311917,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 34898.79215,
+        "maxFinalMomentumRhs": 34898.79216,
+        "maxAcceleration": 863.9279361,
+        "maxDecompositionMismatch": 4.518587957e-06,
+        "globalMomentumRhs": 1.638446665e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.005427487737,
+        "maxMassRhs": 37.78736182,
+        "maxPressureMomentumRhs": 255317.2463,
+        "maxCapillaryMomentumRhs": 244695.3552,
+        "maxFinalMomentumRhs": 36282.81327,
+        "maxAcceleration": 767.7897759,
+        "maxDecompositionMismatch": 3.88223998e-06,
+        "globalMomentumRhs": 9.269606306e-22
+      }
+    },
+    {
+      "n": 24.0,
+      "samples": 8.0,
+      "h": 0.0001666666667,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 1392.0,
+      "interfaceWeightedCurvatureL1": 1111.449675,
+      "interfaceWeightedCurvatureL2": 1348.852402,
+      "interfaceWeightedCurvatureBias": -128.9495706,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 64128.5158,
+        "maxFinalMomentumRhs": 64128.5158,
+        "maxAcceleration": 1374.046867,
+        "maxDecompositionMismatch": 7.242866559e-06,
+        "globalMomentumRhs": 1.076207207e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.008058377058,
+        "maxMassRhs": 102.9501895,
+        "maxPressureMomentumRhs": 554116.383,
+        "maxCapillaryMomentumRhs": 554116.383,
+        "maxFinalMomentumRhs": 74523.78218,
+        "maxAcceleration": 1338.971363,
+        "maxDecompositionMismatch": 7.423663192e-06,
+        "globalMomentumRhs": 1.801645732e-22
+      }
+    },
+    {
+      "n": 32.0,
+      "samples": 8.0,
+      "h": 0.000125,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 2400.0,
+      "interfaceWeightedCurvatureL1": 1215.482323,
+      "interfaceWeightedCurvatureL2": 1475.64701,
+      "interfaceWeightedCurvatureBias": -112.0421963,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 122654.931,
+        "maxFinalMomentumRhs": 122654.931,
+        "maxAcceleration": 1893.949935,
+        "maxDecompositionMismatch": 8.691160474e-06,
+        "globalMomentumRhs": 1.349506344e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.0108737209,
+        "maxMassRhs": 179.7500047,
+        "maxPressureMomentumRhs": 1252245.02,
+        "maxCapillaryMomentumRhs": 1252245.02,
+        "maxFinalMomentumRhs": 139353.2431,
+        "maxAcceleration": 1983.060965,
+        "maxDecompositionMismatch": 8.98441067e-06,
+        "globalMomentumRhs": 3.892643492e-22
+      }
+    },
+    {
+      "n": 48.0,
+      "samples": 8.0,
+      "h": 8.333333333e-05,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 5352.0,
+      "interfaceWeightedCurvatureL1": 1588.189727,
+      "interfaceWeightedCurvatureL2": 1945.721968,
+      "interfaceWeightedCurvatureBias": -122.2687447,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 305048.7791,
+        "maxFinalMomentumRhs": 305048.7791,
+        "maxAcceleration": 3929.418346,
+        "maxDecompositionMismatch": 1.697895641e-05,
+        "globalMomentumRhs": 1.146395068e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.01551935956,
+        "maxMassRhs": 416.4764813,
+        "maxPressureMomentumRhs": 2950520.557,
+        "maxCapillaryMomentumRhs": 2950520.557,
+        "maxFinalMomentumRhs": 319363.9067,
+        "maxAcceleration": 3827.138672,
+        "maxDecompositionMismatch": 2.112617949e-05,
+        "globalMomentumRhs": 1.137582212e-21
+      }
+    },
+    {
+      "n": 64.0,
+      "samples": 8.0,
+      "h": 6.25e-05,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 9648.0,
+      "interfaceWeightedCurvatureL1": 2066.720665,
+      "interfaceWeightedCurvatureL2": 2594.300564,
+      "interfaceWeightedCurvatureBias": -134.6131105,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 511202.602,
+        "maxFinalMomentumRhs": 511202.602,
+        "maxAcceleration": 6787.834177,
+        "maxDecompositionMismatch": 2.121040598e-05,
+        "globalMomentumRhs": 5.864373256e-22
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.02054406994,
+        "maxMassRhs": 675.6034249,
+        "maxPressureMomentumRhs": 4766400.012,
+        "maxCapillaryMomentumRhs": 4766400.012,
+        "maxFinalMomentumRhs": 513096.5265,
+        "maxAcceleration": 6327.074766,
+        "maxDecompositionMismatch": 2.141323057e-05,
+        "globalMomentumRhs": 2.48112205e-21
+      }
+    },
+    {
+      "n": 16.0,
+      "samples": 16.0,
+      "h": 0.00025,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 624.0,
+      "interfaceWeightedCurvatureL1": 858.6465465,
+      "interfaceWeightedCurvatureL2": 1062.371194,
+      "interfaceWeightedCurvatureBias": -113.5682634,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 34932.15669,
+        "maxFinalMomentumRhs": 34932.15669,
+        "maxAcceleration": 864.9165525,
+        "maxDecompositionMismatch": 5.287030945e-06,
+        "globalMomentumRhs": 6.19944383e-22
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.005458906608,
+        "maxMassRhs": 38.43711583,
+        "maxPressureMomentumRhs": 255048.5407,
+        "maxCapillaryMomentumRhs": 244261.042,
+        "maxFinalMomentumRhs": 36372.25484,
+        "maxAcceleration": 768.4600148,
+        "maxDecompositionMismatch": 4.843852366e-06,
+        "globalMomentumRhs": 1.434462943e-21
+      }
+    },
+    {
+      "n": 24.0,
+      "samples": 16.0,
+      "h": 0.0001666666667,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 1392.0,
+      "interfaceWeightedCurvatureL1": 1099.648989,
+      "interfaceWeightedCurvatureL2": 1323.093745,
+      "interfaceWeightedCurvatureBias": -119.0314618,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 63896.36852,
+        "maxFinalMomentumRhs": 63896.36852,
+        "maxAcceleration": 1373.129558,
+        "maxDecompositionMismatch": 7.211667253e-06,
+        "globalMomentumRhs": 1.123987856e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.007657172116,
+        "maxMassRhs": 99.18095035,
+        "maxPressureMomentumRhs": 554215.6648,
+        "maxCapillaryMomentumRhs": 554215.6648,
+        "maxFinalMomentumRhs": 73434.94363,
+        "maxAcceleration": 1335.524921,
+        "maxDecompositionMismatch": 9.420502465e-06,
+        "globalMomentumRhs": 2.20035949e-21
+      }
+    },
+    {
+      "n": 32.0,
+      "samples": 16.0,
+      "h": 0.000125,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 2400.0,
+      "interfaceWeightedCurvatureL1": 1215.28251,
+      "interfaceWeightedCurvatureL2": 1469.380899,
+      "interfaceWeightedCurvatureBias": -101.2707724,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 120643.4045,
+        "maxFinalMomentumRhs": 120643.4045,
+        "maxAcceleration": 1878.82782,
+        "maxDecompositionMismatch": 8.314924344e-06,
+        "globalMomentumRhs": 1.295902009e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.01056271974,
+        "maxMassRhs": 172.0113922,
+        "maxPressureMomentumRhs": 1249209.888,
+        "maxCapillaryMomentumRhs": 1249209.888,
+        "maxFinalMomentumRhs": 136204.7466,
+        "maxAcceleration": 1847.800943,
+        "maxDecompositionMismatch": 8.871418686e-06,
+        "globalMomentumRhs": 1.870995378e-21
+      }
+    },
+    {
+      "n": 16.0,
+      "samples": 32.0,
+      "h": 0.00025,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 624.0,
+      "interfaceWeightedCurvatureL1": 856.6580469,
+      "interfaceWeightedCurvatureL2": 1059.480342,
+      "interfaceWeightedCurvatureBias": -113.1688768,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 34822.0027,
+        "maxFinalMomentumRhs": 34822.0027,
+        "maxAcceleration": 863.1785144,
+        "maxDecompositionMismatch": 4.927853297e-06,
+        "globalMomentumRhs": 1.737775508e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.005448799972,
+        "maxMassRhs": 38.32969864,
+        "maxPressureMomentumRhs": 254716.5545,
+        "maxCapillaryMomentumRhs": 243943.996,
+        "maxFinalMomentumRhs": 35924.18786,
+        "maxAcceleration": 766.0679202,
+        "maxDecompositionMismatch": 3.733264748e-06,
+        "globalMomentumRhs": 1.330048749e-21
+      }
+    },
+    {
+      "n": 24.0,
+      "samples": 32.0,
+      "h": 0.0001666666667,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 1392.0,
+      "interfaceWeightedCurvatureL1": 1098.284943,
+      "interfaceWeightedCurvatureL2": 1322.580145,
+      "interfaceWeightedCurvatureBias": -119.1923783,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 63698.18483,
+        "maxFinalMomentumRhs": 63698.18484,
+        "maxAcceleration": 1371.468297,
+        "maxDecompositionMismatch": 7.323527825e-06,
+        "globalMomentumRhs": 1.107445106e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.007486088775,
+        "maxMassRhs": 95.9355024,
+        "maxPressureMomentumRhs": 554118.4454,
+        "maxCapillaryMomentumRhs": 554118.4454,
+        "maxFinalMomentumRhs": 73221.35904,
+        "maxAcceleration": 1327.742518,
+        "maxDecompositionMismatch": 6.575894076e-06,
+        "globalMomentumRhs": 4.225593322e-22
+      }
+    },
+    {
+      "n": 32.0,
+      "samples": 32.0,
+      "h": 0.000125,
+      "mixedCellsMissingNormal": 0.0,
+      "bandEdgeFacesMissingNormal": 2400.0,
+      "interfaceWeightedCurvatureL1": 1211.641481,
+      "interfaceWeightedCurvatureL2": 1467.036612,
+      "interfaceWeightedCurvatureBias": -101.1150357,
+      "exactCurvature": {
+        "maxMassFace": 0.0,
+        "maxMassRhs": 0.0,
+        "maxPressureMomentumRhs": 0.0,
+        "maxCapillaryMomentumRhs": 121564.1565,
+        "maxFinalMomentumRhs": 121564.1565,
+        "maxAcceleration": 1878.670371,
+        "maxDecompositionMismatch": 8.570670616e-06,
+        "globalMomentumRhs": 2.325531504e-21
+      },
+      "reconstructedCurvature": {
+        "maxMassFace": 0.01051809292,
+        "maxMassRhs": 171.4386437,
+        "maxPressureMomentumRhs": 1249208.941,
+        "maxCapillaryMomentumRhs": 1249208.941,
+        "maxFinalMomentumRhs": 136896.8457,
+        "maxAcceleration": 1848.441393,
+        "maxDecompositionMismatch": 9.183197108e-06,
+        "globalMomentumRhs": 3.841270466e-22
+      }
+    }
+  ],
+  "staticBalancePassed": false
+}

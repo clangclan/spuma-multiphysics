@@ -1,0 +1,40 @@
+name,window,count,min,mean,p50,p90,p99,max,sum
+Sync Copy Engine Active [Throughput %],wholeCapture,16931,0.0,0.00011812651349595417,0.0,0.0,0.0,1.0,2.0
+Sync Copy Engine Active [Throughput %],firstToLastGpuActivity,13910,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Sync Copy Engine Active [Throughput %],firstToLastHem,2301,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Async Copy Engine Active 0 [Throughput %],wholeCapture,16931,0.0,2.8253499497962316,0.0,1.0,81.0,100.0,47836.0
+Async Copy Engine Active 0 [Throughput %],firstToLastGpuActivity,13910,0.0,3.3216391085549963,0.0,1.0,81.0,86.0,46204.0
+Async Copy Engine Active 0 [Throughput %],firstToLastHem,2301,0.0,4.201216862233811,0.0,0.0,81.0,83.0,9667.0
+GR Active [Throughput %],wholeCapture,16931,1.0,11.03006319768472,1.0,63.0,100.0,100.0,186750.0
+GR Active [Throughput %],firstToLastGpuActivity,13910,1.0,13.201294033069734,1.0,100.0,100.0,100.0,183630.0
+GR Active [Throughput %],firstToLastHem,2301,1.0,40.93003042155585,1.0,100.0,100.0,100.0,94180.0
+SMs Active [Throughput %],wholeCapture,16931,0.0,8.402693284507707,0.0,13.0,100.0,100.0,142266.0
+SMs Active [Throughput %],firstToLastGpuActivity,13910,0.0,10.222070452911574,0.0,63.100000000000364,100.0,100.0,142189.0
+SMs Active [Throughput %],firstToLastHem,2301,0.0,31.754889178617994,0.0,100.0,100.0,100.0,73068.0
+SM Issue [Throughput %],wholeCapture,16931,0.0,0.35089480833973186,0.0,1.0,7.0,10.0,5941.0
+SM Issue [Throughput %],firstToLastGpuActivity,13910,0.0,0.4270309130122214,0.0,1.0,7.0,10.0,5940.0
+SM Issue [Throughput %],firstToLastHem,2301,0.0,1.6623207301173404,0.0,6.0,9.0,9.0,3825.0
+Tensor Active [Throughput %],wholeCapture,16931,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Tensor Active [Throughput %],firstToLastGpuActivity,13910,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Tensor Active [Throughput %],firstToLastHem,2301,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],wholeCapture,16931,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],firstToLastGpuActivity,13910,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],firstToLastHem,2301,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],wholeCapture,16931,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],firstToLastGpuActivity,13910,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],firstToLastHem,2301,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Compute Warps in Flight [Throughput %],wholeCapture,16931,0.0,2.8332644262004605,0.0,1.0,84.0,99.0,47970.0
+Compute Warps in Flight [Throughput %],firstToLastGpuActivity,13910,0.0,3.4437095614665707,0.0,5.0,94.0,99.0,47902.0
+Compute Warps in Flight [Throughput %],firstToLastHem,2301,0.0,3.877444589308996,0.0,8.0,61.0,94.0,8922.0
+DRAM Read Bandwidth [Throughput %],wholeCapture,16931,0.0,0.8781525013289233,0.0,1.0,38.0,75.0,14868.0
+DRAM Read Bandwidth [Throughput %],firstToLastGpuActivity,13910,0.0,1.043493889288282,0.0,1.0,40.0,75.0,14515.0
+DRAM Read Bandwidth [Throughput %],firstToLastHem,2301,0.0,2.343328987396784,1.0,1.0,43.0,75.0,5392.0
+DRAM Write Bandwidth [Throughput %],wholeCapture,16931,0.0,0.7903845018014294,0.0,1.0,31.0,64.0,13382.0
+DRAM Write Bandwidth [Throughput %],firstToLastGpuActivity,13910,0.0,0.8849748382458663,0.0,1.0,32.0,51.0,12310.0
+DRAM Write Bandwidth [Throughput %],firstToLastHem,2301,0.0,2.394611038678835,1.0,4.0,34.0,35.0,5510.0
+PCIe RX Throughput [Throughput %],wholeCapture,16931,0.0,1.3501269860020082,0.0,1.0,37.0,38.0,22859.0
+PCIe RX Throughput [Throughput %],firstToLastGpuActivity,13910,0.0,1.610567936736161,0.0,1.0,37.0,38.0,22403.0
+PCIe RX Throughput [Throughput %],firstToLastHem,2301,0.0,2.022598870056497,0.0,1.0,37.0,38.0,4654.0
+PCIe TX Throughput [Throughput %],wholeCapture,16931,1.0,1.4448644498257635,1.0,1.0,9.0,37.0,24463.0
+PCIe TX Throughput [Throughput %],firstToLastGpuActivity,13910,1.0,1.5408339324227174,1.0,2.0,10.0,37.0,21433.0
+PCIe TX Throughput [Throughput %],firstToLastHem,2301,1.0,1.3754889178617993,1.0,1.0,16.0,37.0,3165.0

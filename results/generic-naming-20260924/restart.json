@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/generic_naming_20260924/restart-final/ambient_1atm-previous",
+      "checkpointSha256": "f5e1670f7862ae546a27daf0336e7a7c77dd0b2b29afa175726f548f84416457",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "history": [
+        1.1744650740261387e-06,
+        1.7446507402613883e-07,
+        0.0
+      ],
+      "solverSha256": "e81fbb426117ef566d61ad9b6286abbf398c1c8629c7e0e887abcf325a21cc71"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/generic_naming_20260924/restart-final/ambient_1atm-current",
+      "checkpointSha256": "f5e1670f7862ae546a27daf0336e7a7c77dd0b2b29afa175726f548f84416457",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "history": [
+        1.1744650740261387e-06,
+        1.7446507402613883e-07,
+        0.0
+      ],
+      "solverSha256": "0427552a6bb376b4379dede3e7beba2668be6c9f4d4b2c8a697cfb2367137955"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/generic_naming_20260924/restart-final/ambient_40bar_abs-previous",
+      "checkpointSha256": "874fad120ac11271e073a0c7bf41abfe973f80d39fe71dd3fcdedc20bfa384fd",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "history": [
+        1.206512367911485e-06,
+        2.065123679114851e-07,
+        0.0
+      ],
+      "solverSha256": "e81fbb426117ef566d61ad9b6286abbf398c1c8629c7e0e887abcf325a21cc71"
+    },
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/runs/generic_naming_20260924/restart-final/ambient_40bar_abs-current",
+      "checkpointSha256": "874fad120ac11271e073a0c7bf41abfe973f80d39fe71dd3fcdedc20bfa384fd",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "history": [
+        1.206512367911485e-06,
+        2.065123679114851e-07,
+        0.0
+      ],
+      "solverSha256": "0427552a6bb376b4379dede3e7beba2668be6c9f4d4b2c8a697cfb2367137955"
+    }
+  ],
+  "tests": [
+    {
+      "currentCount": 65,
+      "name": "Backend-C-exports",
+      "passed": true,
+      "previousCount": 65
+    },
+    {
+      "currentCount": 51,
+      "name": "Transport-C-exports",
+      "passed": true,
+      "previousCount": 51
+    },
+    {
+      "current": {
+        "fingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numerical_policy_hash": "da4bc6aeb961f420f5737a4527b25e8e9547da592c9bcdeba87acf4062187065",
+        "physical_model_hash": "17d074a827716eb51f269ce2448cddb1a53ef4587b2c0ac89473268ba868acdb"
+      },
+      "name": "model-identities",
+      "passed": true,
+      "previous": {
+        "fingerprint": "86843f73688e246995634977344ab1b56b1c0d5b17fb5620310e34555e990f4f",
+        "numerical_policy_hash": "da4bc6aeb961f420f5737a4527b25e8e9547da592c9bcdeba87acf4062187065",
+        "physical_model_hash": "17d074a827716eb51f269ce2448cddb1a53ef4587b2c0ac89473268ba868acdb"
+      }
+    },
+    {
+      "currentCheckpointSha256": "f5e1670f7862ae546a27daf0336e7a7c77dd0b2b29afa175726f548f84416457",
+      "history": [
+        1.1744650740261387e-06,
+        1.7446507402613883e-07,
+        0.0
+      ],
+      "name": "ambient_1atm-restart-and-step",
+      "passed": true,
+      "previousCheckpointSha256": "f5e1670f7862ae546a27daf0336e7a7c77dd0b2b29afa175726f548f84416457"
+    },
+    {
+      "currentCheckpointSha256": "874fad120ac11271e073a0c7bf41abfe973f80d39fe71dd3fcdedc20bfa384fd",
+      "history": [
+        1.206512367911485e-06,
+        2.065123679114851e-07,
+        0.0
+      ],
+      "name": "ambient_40bar_abs-restart-and-step",
+      "passed": true,
+      "previousCheckpointSha256": "874fad120ac11271e073a0c7bf41abfe973f80d39fe71dd3fcdedc20bfa384fd"
+    }
+  ]
+}

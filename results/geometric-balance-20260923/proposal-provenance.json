@@ -1,0 +1,16 @@
+{
+  "archive": "SPUMA_static_drop_geometric_balance_proposal_20260923.zip",
+  "sha256": "80c54ddd896a1be96cc4de5f591e9004ba67566f042404d129f69608374a66e0",
+  "manifestVerified": true,
+  "files": {
+    "README.ko.md": "1f4b4ad76564ae08404b7687e73c6265b93183925a0b71c1f83bca49b303cadf",
+    "validation.json": "025b333468ffdc22453cd62181668503bd8e545281811722b8f1cb8464f99d2d",
+    "test_geometric_face_terms.cpp": "f5f8c4bae1c1a66b2418a475161968cea7139e08fd24710d2a3277b0941eef78",
+    "aperture_ablation.json": "a59a738cc1e7fa8375a8d826d57910b708adb8b083bbe2b690ebe0e2b04e36b0",
+    "verify_sphere_balance.py": "3ffc0f8b5300a45cfbd03c36c91f5ad7e3e8e52a0f3b904c95bc7a3a69e0a198",
+    "verify_aperture_ablation.py": "e2095704effc11255418c51670b99aac4675554aaec2197afd0d884e08ca68a0",
+    "geometric_face_terms.h": "495d25957f978842af19833e7b57ee2ddbe58ef4af8ff6c2d94ed51b6ac4d255"
+  },
+  "conversation": "6ab3559e-976c-83e8-9a48-e70be20edae6",
+  "scope": "User-supplied proposal and analytic-geometry verification. Not a verified production reconstruction."
+}

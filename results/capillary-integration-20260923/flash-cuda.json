@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "gpu-frozen-zero-jump",
+      "passed": true,
+      "error": "",
+      "p": 140252.74973887048,
+      "T": 190.00000000008032
+    },
+    {
+      "name": "gpu-equilibrium-zero-jump",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "gpu-frozen-curved-conserved",
+      "passed": true,
+      "error": "",
+      "volumeResidual": 2.5808644110725254e-10,
+      "energyResidual": 4.851426972646434e-13
+    },
+    {
+      "name": "gpu-frozen-curved-pressure",
+      "passed": true
+    },
+    {
+      "name": "gpu-equilibrium-curved-conserved",
+      "passed": true,
+      "error": "",
+      "volumeResidual": 2.4508639562270673e-10,
+      "energyResidual": 5.807874004882816e-13,
+      "finiteDifferenceJacobians": 17
+    },
+    {
+      "name": "gpu-equilibrium-curved-kelvin",
+      "passed": true,
+      "chemicalPotentialDifference": -6.281770765781403e-07
+    },
+    {
+      "name": "curved-total-enthalpy",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "pure-liquid-pressure-offset",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "pure-gas-pressure-offset",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "gpu-trace-air-boundary-0-curved",
+      "passed": true,
+      "error": "",
+      "candidates": 31,
+      "stable": 6
+    },
+    {
+      "name": "gpu-trace-air-boundary-0-flat",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "gpu-trace-air-boundary-1-curved",
+      "passed": true,
+      "error": "",
+      "candidates": 31,
+      "stable": 6
+    },
+    {
+      "name": "gpu-trace-air-boundary-1-flat",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "pool-curved-frozen-no-fallback",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "pool-failure-transactional",
+      "passed": true,
+      "status": 1,
+      "error": "Batch cell 1: CUDA HEM candidate search failed; CPU fallback disabled"
+    },
+    {
+      "name": "pool-success-changed-state",
+      "passed": true
+    },
+    {
+      "name": "existing-pool-op2-uses-gpu",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    }
+  ]
+}

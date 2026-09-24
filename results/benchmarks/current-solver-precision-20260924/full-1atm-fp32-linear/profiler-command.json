@@ -1,0 +1,10 @@
+{
+  "binaries": {
+    "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp32-linear.so": "bb4ef82b6dd1b44c570d0f04e26c2ec00e06adcc8c1eb0f716f2630976ae18e8",
+    "bin/ReactiveFoam": "e81fbb426117ef566d61ad9b6286abbf398c1c8629c7e0e887abcf325a21cc71",
+    "lib/libpintleReactiveBackend.so": "29a61f1012aa1892493583e5e0be92f533456b0f3e6acd35e7a81030fb55afc2",
+    "lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f"
+  },
+  "prefix": [],
+  "startUnixNs": 1790184373685041146
+}

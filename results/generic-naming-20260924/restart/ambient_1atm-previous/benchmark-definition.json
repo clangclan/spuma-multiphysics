@@ -1,0 +1,257 @@
+{
+  "ambientAbsolutePa": 101325.0,
+  "ambientMoleFractions": {
+    "N2": 0.79,
+    "O2": 0.21
+  },
+  "ambientState": {
+    "T": 293.15,
+    "activeLiquids": 0,
+    "alphaGas": 1.0000000000000004,
+    "alphaLiquid": [
+      0.0,
+      0.0
+    ],
+    "chemicalResidual": 0.0,
+    "cp": 1011.4419447671544,
+    "cv": 721.608010590304,
+    "e": -89670.22568645517,
+    "energyResidual": 0.0,
+    "entropy": 6870.347696966979,
+    "gasMass": 1.2000888915283916,
+    "iterations": 0,
+    "liquidMass": [
+      0.0,
+      0.0
+    ],
+    "p": 101324.99999999997,
+    "rho": 1.2000888915283916,
+    "rhoGas": 1.200088891528391,
+    "rhoLiquid": [
+      0.0,
+      0.0
+    ],
+    "soundEquilibrium": 343.90577314082935,
+    "soundFrozen": 343.90577314082935,
+    "volumeResidual": 4.440892098500626e-16
+  },
+  "boundaryModel": "stationary fixedState reservoir ghost; HLLC with capillary stress; not a resolved nozzle",
+  "capillaryFlowCoupling": true,
+  "chemistry": false,
+  "closure": "HEM",
+  "condensedPhases": [
+    {
+      "kind": "liquid",
+      "name": "liquid_N2O",
+      "slot": 0,
+      "species": "N2O",
+      "speciesIndex": 2
+    }
+  ],
+  "conductivity": 0.02587,
+  "cpuFallback": false,
+  "gaugeReferencePa": 101325.0,
+  "geometricInterface": false,
+  "geometry": {
+    "angleDegrees": 90,
+    "cellEdgeM": 0.002,
+    "cellSpacingM": [
+      0.002,
+      0.002,
+      0.002
+    ],
+    "cellVolumeM3": 8e-09,
+    "cells": 64000,
+    "domainM": [
+      0.08,
+      0.08,
+      0.08
+    ],
+    "exactNozzleAreaM2": 1.963495408493621e-05,
+    "facesPerNozzle": 4,
+    "inletCentersM": [
+      [
+        0,
+        0.006,
+        0.04
+      ],
+      [
+        0.006,
+        0,
+        0.04
+      ]
+    ],
+    "nominalDirections": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "nominalIntersectionM": [
+      0.006,
+      0.006,
+      0.04
+    ],
+    "nozzleAreaM2": 1.6e-05,
+    "nozzleAreaRelativeError": -0.185126691369496,
+    "nozzleCellsPerDiameter": 2.5,
+    "nozzleDiameterM": 0.005,
+    "nozzleDiscretization": "boundary-face-centre-inside-circle",
+    "nozzleShape": "circle",
+    "shape": [
+      40,
+      40,
+      40
+    ]
+  },
+  "inletPhase": "equilibrium pure liquid N2O",
+  "inletState": {
+    "T": 293.15,
+    "activeLiquids": 1,
+    "alphaGas": 0.0,
+    "alphaLiquid": [
+      1.0,
+      0.0
+    ],
+    "chemicalResidual": 0.0,
+    "cp": 3706.828452767202,
+    "cv": 877.8293160715958,
+    "e": 1599362.4235307293,
+    "energyResidual": 0.0,
+    "entropy": 3480.647908756875,
+    "gasMass": 0.0,
+    "iterations": 0,
+    "liquidMass": [
+      750.4796089830805,
+      0.0
+    ],
+    "p": 5601325.0,
+    "rho": 750.4796089830805,
+    "rhoGas": 0.0,
+    "rhoLiquid": [
+      750.4796089830805,
+      0.0
+    ],
+    "soundEquilibrium": 365.8209819126752,
+    "soundFrozen": 365.8209819126752,
+    "volumeResidual": 0.0
+  },
+  "inputHashes": {
+    "0/T": "fb4e8e340c0889ba2ea32812d05b96b698537cfd4563dab795a1908404a598e9",
+    "0/U": "9da87aba378ac2ccb64fc6639ea87f82cbb43ef02b29dc57764436ae6fc47896",
+    "0/Y0": "91867b5b6a0bd67693de07677ded513cc9d745b58edefbf2f022b0f756a33c83",
+    "0/Y1": "8200bc7b44ec2dfca6c96dccea0c50b1e5cfbd5c043371b8f916d27b0921c195",
+    "0/Y2": "fac0cf5c89622a84dff5aae8b200327692a458b27dbc86b1b7992c3efc06630d",
+    "0/Y3": "395ed1f90052e4993e400414d76f0cc775e335ce5b854b3774770ba68a4408f7",
+    "0/alphaGas": "6e2d827d43d8046007dfdf667d5203598abdb30ad8399f78878c5ee5c1e4a548",
+    "0/alphaLiquid.N2O": "834d1dfe6aba8b39e6212e42af7df168274ca500abe4225fcbb84bbe56a9a973",
+    "0/alphaLiquid0": "895f618a2533422805f8e3d17e50f3b14a62f4d23e4161dd43a55a02f7b9459b",
+    "0/alphaLiquid1": "54d29a52e63e7d695b0871636ca85d2cdd0e067237330b0dad629c7e59fa72ca",
+    "0/interfaceColor": "f8e5040bbc2165899948182c0230c20f98a838e778702ef7b6550d7320117e9b",
+    "0/interfaceCurvature": "9edc718f8ed88262c8b624aed066fe62cfdf9db9dfb75581c87ccb5591fa6515",
+    "0/liquidFraction0": "1f920c41cb423ac3a6d904c65bdda78921a5450b1cc610db9c1d54b37e15242d",
+    "0/massLiquid.N2O": "c2f549d84ebbda3cc63391a92421ae16dec68c53384f5bd4893186b5d76455c3",
+    "0/p": "e6d5715aabd3c75a34a1326fd139ce0ea86986bf9a9620119bbecb171b6e8317",
+    "0/q0": "a239af67e4710376af3b2d57eb78e1ae429376023213e291862eade4312d5f11",
+    "0/q1": "63c1eeadb4281d023540d97ee9497ba94213ab7b047b163a29c4640cb3f28422",
+    "0/q2": "7add6822c570912340a61ea7659c52358b05ef2a000ae06229554151eeeb1a7e",
+    "0/q3": "49c2cca65569f69fdf299cc99991fc0359df14a17d8bdf6476ff58f019f8206c",
+    "0/reactiveCheckpointComplete": "86ab93bfdd102bdf3da667d01112440f18913ec09d677b578bc85995028d0b71",
+    "0/reactiveState.bin": "1120e003f0adbee35d646f12cdf6e6b7776694059476aaa19a4d4365d5c8f937",
+    "0/reactiveStateIdentity": "6e084f7319962e8ee206139a13a78caf82c2f8d6f8e9cf8c8e248073eefc4022",
+    "0/rho": "c722ecc07c63e32296d6ed256e1a05cf9cf5ef478addc373e89c6989e4d65be2",
+    "0/rhoLiquid.N2O": "7ac22cffdcf01609d0a788ea527b07250b2c321b8eb4fdcad6e1bf21eaa27a8a",
+    "0/rhoLiquid0": "906be193a5c14e2fc7523d732b1c1b288acff48e0700098a9522a78ee9516323",
+    "0/rhoMomentum": "2ed7704e4c908ada1175178f43b9d52079e806fbcb0da5fa833e3c1db1437f5f",
+    "0/rhoTotalEnergy": "75cf356a6335e646b1b6014db30704333026c2d3dcfce580531277b871c17d1e",
+    "0/soundEquilibrium": "68c6b80d193aba6b55fa0c8bcbf189be34dab8c4ce793f16947d8652a35640f7",
+    "0/soundFrozen": "3c9332953a966f4d716f3daacf7ed8038280c491377612ee94bbd4b62f6c5e6a",
+    "0/surfaceEnergyDensity": "b22698d0624fef6a1cb6886396f05a230056d97f6dc72a5db4bac2893dd81fd1",
+    "0/waleNut": "2ff6a3aee030ce25b8f2675453e4ad84a011b04a8b825d33c3ddbf777c1b3e67",
+    "1e-06/T": "9bac4820f324d69f56ce8f7e6a6b7bfa3b740c4160b480e5c92377c708634fe0",
+    "1e-06/U": "4d017819c9f79a2369f6671a51589f2232c21e64ecfecce24dd20c4427a927d3",
+    "1e-06/alphaGas": "135222d1f448a26c933eaf0ecc68ce4127e1410bdf6276e4c5b21e75a1c4e3cb",
+    "1e-06/alphaLiquid.N2O": "02ccfc63027ee74ecfe59186b619365e9e6b0afbd7eec8cdf9363ea2239fa65f",
+    "1e-06/alphaLiquid0": "5d0f24aba9f671d72bb31555238fa82f9a6e4fa9e5dd535389664181e43507ed",
+    "1e-06/alphaLiquid1": "cc8d2e979812cb1b55d1d8693be425850f69dacf69c4d2305a8f6c9c861783cd",
+    "1e-06/interfaceColor": "8c732891c4c329a84033dfad59732029214877c07a29f5bc4ac46fe0f3778daa",
+    "1e-06/interfaceCurvature": "081d056fe94189628f66a31b4bf1cdfa8270188c01c87c5de6745c62b6695972",
+    "1e-06/massLiquid.N2O": "bc51c49a2c18847738579bea20bc5b9c1480155a03cea77ebb6a95237095a28b",
+    "1e-06/p": "9cca798cf8c12fdcaa594c651fa7cd6ff3be2b7137986c4843b2b9a43ed1c347",
+    "1e-06/q0": "d67b364adfabaa47dc0ed27c35e5c562592b807f1fcf264087ae3aa096e912c7",
+    "1e-06/q1": "1fc3d4b0882ffb427371440524366857dd212829c78e8e7c46625f518561fffd",
+    "1e-06/q2": "505d74551afdcb3a1987970c4670daabcaf1d21803416b23f4e843321f38b2da",
+    "1e-06/q3": "8fcc8dd5220f9125e7989ff5d35dac7411459e60f942d41e071745e00c2b88c4",
+    "1e-06/reactiveCheckpointComplete": "bc29856ca4f59e75aa7ac312cc3f9487c860d382edef2c1e7794eed033f8bb3d",
+    "1e-06/reactiveState.bin": "c7609672eaef230e2dba7f536f2848fe32081f704dd7766c3e363fbc81fdbc74",
+    "1e-06/reactiveStateIdentity": "3cae87fb46651662e0beef4a49b4b335b06983f27d004df78a42b40859cc96b5",
+    "1e-06/rho": "c38d49e7274f3878d7c9f6b51f95e1dec001dc899724a87284e3503a9f0ad1f5",
+    "1e-06/rhoLiquid.N2O": "924f8694b250f1e924c1e503437975b21b0adc79d2be4136e58e29f50e0ebac8",
+    "1e-06/rhoLiquid0": "8238e7e5e8ccb3508ae7d5a29f23652f2632a17b9ecb8c0a0c0dd4806d04df92",
+    "1e-06/rhoMomentum": "6e09e031ed3a06eb641ea283237401388cb4028eafb864308b945840706d018c",
+    "1e-06/rhoTotalEnergy": "5d0014008bcb311952f86cb0e54fc139a354aea4ef35ee0bb2c0348a1d325218",
+    "1e-06/soundEquilibrium": "d38280e5ae1e801a3078d45d97fed711b1377038617933fce4288c5a1bd34722",
+    "1e-06/soundFrozen": "b01b3304dd784835133d30bfe543b1fd790c0a27dfdf9200632b4ce8e53837cf",
+    "1e-06/surfaceEnergyDensity": "d24f9105310e34049576fd1b6fc7aca3ac8bb66f62fdc10cc86dc0a1b885d94b",
+    "1e-06/waleNut": "c15b5513ba38fa6244dc3d14b7eeaede908696060fcfeeba5b6ea6c27bbefad2",
+    "constant/polyMesh/boundary": "fe87b7179c0012489113f977f77edceec3b0ae934008a16222d0483d1a44f02d",
+    "constant/polyMesh/faces": "f5a30b3847fa7bb113b95c096090e5be4b55be6011eb3df2f40f749686f3767a",
+    "constant/polyMesh/neighbour": "0b96f9d8c631b4725547e13bba6cd66e7a19640f4a02151acc2c6c194760dee3",
+    "constant/polyMesh/owner": "4c3afb6ad5fc1baf268cf9d75ea6afbfa9cf83f40c864ab4e080824f9f0ac599",
+    "constant/polyMesh/points": "6a3491bb1a849a1528f6b0c5341422c13341c5dfc8ca4e25075300fc76f06718",
+    "constant/reactiveProperties": "82afc91c5c4f67810ff21239cbd36392b19833b0facbaa4ee4fef9a2a3e7791a",
+    "system/controlDict": "35bb2fe7981dafbd72e031a2843a13bf8927e0a54311c605fd5c13645abbae44",
+    "system/fvSchemes": "cb2739bdd0ca0387e5fed8b8e86cd5f1d59cc48b6b0af36300c009ebc66a24f0",
+    "system/fvSolution": "b30829977e172d53f2af5b4c9c05642e16c5775ecc6549ea0ee18f1acea2d973"
+  },
+  "interfaceModel": "diffuse-liquid-inventory-v1",
+  "maxAcceptedSteps": 0,
+  "maxCo": 0.25,
+  "maxDeltaT": 1e-06,
+  "n2oLiquidIndex": 0,
+  "n2oSolidIndex": null,
+  "n2oSpeciesIndex": 2,
+  "name": "ambient_1atm",
+  "numericalPolicyHash": null,
+  "optimization": {
+    "batchCells": 65536,
+    "exactReuse": true,
+    "source": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_adaptive_1us_20260923/n40/full-physics/ambient_1atm",
+    "startTime": 1e-06
+  },
+  "phaseChange": true,
+  "physicalModelHash": null,
+  "pressureDifferencePa": 5500000.0,
+  "primaryBreakupValidated": false,
+  "requestedEndTime": 1e-06,
+  "resourceLimits": {
+    "maxDeviceMemoryGB": 12,
+    "maxHostMemoryGB": 32
+  },
+  "schema": 1,
+  "sourceBenchmark": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_adaptive_1us_20260923/n40/base/ambient_1atm",
+  "sourceDefinitionSha256": "514bda9e0e604cf10a5daafa294040eb8da207279f22850bfc5dec6e2a341f63",
+  "species": [
+    "N2",
+    "O2",
+    "N2O",
+    "IC3H7OH"
+  ],
+  "supplyAbsolutePa": 5601325.0,
+  "supplyGaugePa": 5500000.0,
+  "surfaceTension": true,
+  "surfaceTensionCoefficient": 0.0020577273399028486,
+  "temperatureK": 293.15,
+  "timeStepControl": "current-state-wave-diffusion-capillary-CFL",
+  "totalEnergyConvention": "bulk-plus-surface",
+  "turbulence": "WALE",
+  "turbulentHeatFlux": true,
+  "turbulentSpeciesMixing": true,
+  "viscosity": 1.821e-05
+}

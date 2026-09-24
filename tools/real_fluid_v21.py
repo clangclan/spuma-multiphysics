@@ -25,15 +25,15 @@ def nested(s):
 class BackendV21(RealFluidBackend):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.lib.pintle_rt_profiles_v21.argtypes=[C.c_void_p,C.POINTER(ModelProfiles)]
-        self.lib.pintle_rt_profiles_v21.restype=C.c_int
-        self.lib.pintle_rt_pool_profiles_v21.argtypes=[C.c_void_p,C.POINTER(ModelProfiles),C.c_size_t,
+        self.lib.reactive_rt_profiles_v21.argtypes=[C.c_void_p,C.POINTER(ModelProfiles)]
+        self.lib.reactive_rt_profiles_v21.restype=C.c_int
+        self.lib.reactive_rt_pool_profiles_v21.argtypes=[C.c_void_p,C.POINTER(ModelProfiles),C.c_size_t,
             C.POINTER(ModelProfiles),C.POINTER(ModelProfiles),C.POINTER(PoolSummary)]
-        self.lib.pintle_rt_pool_profiles_v21.restype=C.c_int
+        self.lib.reactive_rt_pool_profiles_v21.restype=C.c_int
     def profiles(self):
-        p=ModelProfiles();self.check(self.lib.pintle_rt_profiles_v21(self.handle,C.byref(p)));return nested(p)
+        p=ModelProfiles();self.check(self.lib.reactive_rt_profiles_v21(self.handle,C.byref(p)));return nested(p)
     def pool_profiles(self,pool,count):
         records=(ModelProfiles*count)();total=ModelProfiles();combined=ModelProfiles();summary=PoolSummary()
-        status=self.lib.pintle_rt_pool_profiles_v21(pool,records,count,C.byref(total),C.byref(combined),C.byref(summary))
-        if status:raise RuntimeError(self.lib.pintle_rt_pool_error(pool).decode())
+        status=self.lib.reactive_rt_pool_profiles_v21(pool,records,count,C.byref(total),C.byref(combined),C.byref(summary))
+        if status:raise RuntimeError(self.lib.reactive_rt_pool_error(pool).decode())
         return {'workers':[nested(r) for r in records],'total':nested(total),'combined':nested(combined),'summary':nested(summary)}

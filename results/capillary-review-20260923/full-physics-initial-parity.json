@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "fields": {
+    "q0": 0.0,
+    "q1": 0.0,
+    "q2": 0.0,
+    "q3": 0.0,
+    "rhoMomentum": 0.0,
+    "rhoTotalEnergy": 0.0,
+    "rhoLiquid0": 0.0,
+    "interfaceColor": 0.0,
+    "p": 0.0,
+    "T": 0.0
+  },
+  "oldCheckpointSha256": "81a7c142a5116fca9b8df4eb3cef2061dad306374c5c8cce6c7e521fbb92de2a",
+  "newCheckpointSha256": "81a7c142a5116fca9b8df4eb3cef2061dad306374c5c8cce6c7e521fbb92de2a"
+}

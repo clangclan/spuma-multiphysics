@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "species": "N2O",
+  "model_scope": "Provisional incompressible solid N2O for low-pressure gas-solid equilibrium; not a validated high-pressure solid EOS",
+  "solid": {
+    "reference-temperature": 182.408,
+    "reference-pressure": 87950.87143300277,
+    "maximum-pressure": 200000.0,
+    "molar-volume": 0.04,
+    "fusion-enthalpy": 6516000.0,
+    "temperature-table": [148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183],
+    "cp-molar-table": [50280, 50490, 50700, 50920, 51140, 51360, 51580, 51800, 52020, 52250, 52480, 52710, 52950, 53190, 53430, 53680, 53930, 54180, 54430, 54690, 54950, 55210, 55480, 55750, 56020, 56290, 56570, 56850, 57130, 57410, 57700, 57990, 58280, 58580, 58880, 59180],
+    "table-units": "Temperature K; Cp J/kmol/K; fusion enthalpy J/kmol; molar volume m^3/kmol"
+  },
+  "units": {
+    "temperature": "K",
+    "pressure": "Pa",
+    "molecular_weight": "kg/kmol",
+    "molar_volume": "m^3/kmol",
+    "heat_capacity_molar": "J/mol/K",
+    "heat_capacity_mass": "J/kg/K",
+    "latent_heat_fusion": "J/mol"
+  },
+  "domain": {
+    "temperature_min": 148.0,
+    "temperature_max": 183.0,
+    "pressure_max": 200000.0,
+    "pressure_limit_basis": "Explicit provisional low-pressure ceiling. The source available here does not validate solid compressibility or pressure-volume work at the fluid model's 50 MPa ceiling."
+  },
+  "reference": {
+    "temperature": 182.408,
+    "pressure": 87950.87143300277,
+    "pressure_derivation": "Atake equation (9): log10(P/Torr)=-1270.4/T+9.95563-0.00094122*T; 1 Torr=133.32236842105263 Pa",
+    "latent_heat_fusion": 6516.0,
+    "latent_heat_fusion_uncertainty": 20.0,
+    "solid_h_reference": "h_liquid_PR(Tref,pref) - 6516*1000/molecularWeight, converting J/mol to J/kmol before division by kg/kmol",
+    "solid_s_reference": "s_liquid_PR(Tref,pref) - (6516/Tref)*1000/molecularWeight, converting J/mol/K to J/kmol/K before division by kg/kmol"
+  },
+  "molecular_weight": 44.0128,
+  "molar_volume": {
+    "value": 0.04,
+    "status": "approximate_provisional",
+    "source_statement": "Atake dissertation discusses a molar volume of about 40 cm^3 in its solid-N2O analysis; it also states that only two density values, at 20 K and 83 K, were available for calorimeter corrections.",
+    "limitation": "No precise density or thermal-expansion data near 148-182 K were available in the accessible primary text. Use only under the explicit 0.2 MPa ceiling and retain sensitivity checks."
+  },
+  "heat_capacity": {
+    "interpolation": "piecewise_linear",
+    "integration": "exact analytic integral of Cp=a+b*T for enthalpy and Cp/T for entropy",
+    "temperature": [148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183],
+    "cp_molar": [50.28, 50.49, 50.70, 50.92, 51.14, 51.36, 51.58, 51.80, 52.02, 52.25, 52.48, 52.71, 52.95, 53.19, 53.43, 53.68, 53.93, 54.18, 54.43, 54.69, 54.95, 55.21, 55.48, 55.75, 56.02, 56.29, 56.57, 56.85, 57.13, 57.41, 57.70, 57.99, 58.28, 58.58, 58.88, 59.18],
+    "cp_mass": [1142.394939653919, 1147.166278900683, 1151.937618147448, 1156.936164025011, 1161.934709902574, 1166.933255780137, 1171.931801657700, 1176.930347535262, 1181.928893412825, 1187.154645921187, 1192.380398429548, 1197.606150937909, 1203.059110077068, 1208.512069216228, 1213.965028355388, 1219.645194125345, 1225.325359895303, 1231.005525665261, 1236.685691435219, 1242.593063835975, 1248.500436236731, 1254.407808637487, 1260.542387669042, 1266.676966700596, 1272.811545732151, 1278.946124763705, 1285.307910426058, 1291.669696088411, 1298.031481750764, 1304.393267413116, 1310.982259706267, 1317.571251999418, 1324.160244292570, 1330.976443216519, 1337.792642140468, 1344.608841064418],
+    "endpoint_183": "Linearly continued from the sourced 181 K and 182 K slope: 58.88 + (58.88-58.58) = 59.18 J/mol/K. The 182-183 K segment is a declared short extrapolation so a slightly shifted numerical melting point can be tested and rejected by phase stability."
+  },
+  "sublimation_validation": {
+    "temperature_range": [146.0, 182.408],
+    "equation": "log10(P/Torr)=-1270.4/T+9.95563-0.00094122*T",
+    "requirement": "Independent validation: pure-gas and solid chemical potentials should reproduce this measured sublimation curve over the implemented 148-182.408 K overlap without fitting the solid reference to the validation points."
+  },
+  "sources": [
+    {
+      "citation": "T. Atake and H. Chihara, A New Condensed Gas Calorimeter. Thermodynamic Properties of Solid and Liquid Dinitrogen Oxide, Bulletin of the Chemical Society of Japan 47 (1974) 2126-2136, DOI 10.1246/bcsj.47.2126",
+      "url": "https://doi.org/10.1246/bcsj.47.2126",
+      "data": "Heat capacity 1.9-184 K, triple point, fusion enthalpy, vapor pressure"
+    },
+    {
+      "citation": "T. Atake, Osaka University dissertation, experimental Tables 9-14 and equations (9)-(10)",
+      "url": "https://ir.library.osaka-u.ac.jp/repo/ouka/all/2122/02913_Dissertation.pdf",
+      "data": "Integer-temperature Cp table, fusion measurement, triple point, solid sublimation correlation and measured pressures"
+    }
+  ],
+  "known_limitations": [
+    "The 183 K Cp endpoint is a declared 1 K linear extrapolation from the 181-182 K slope, not a measured table entry.",
+    "The molar volume is approximate and the solid is modeled as incompressible.",
+    "The model supplies no intrinsic solid sound speed or compressibility and requires a nonzero gas phase for mixture pressure sensitivity.",
+    "All-solid states and pressures above 0.2 MPa are outside this model."
+  ]
+}

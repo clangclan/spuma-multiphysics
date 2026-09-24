@@ -1,0 +1,1427 @@
+{
+  "breakdown": [
+    {
+      "percentOfProcess": 85.34040247301228,
+      "percentOfSteps": 85.80281841593882,
+      "seconds": 20143.168284993,
+      "stage": "recoverySeconds"
+    },
+    {
+      "percentOfProcess": 6.620863099627511,
+      "percentOfSteps": 6.656738166588555,
+      "seconds": 1562.743504167,
+      "stage": "transportSeconds"
+    },
+    {
+      "percentOfProcess": 4.651126298719841,
+      "percentOfSteps": 4.676328370549455,
+      "seconds": 1097.820223891,
+      "stage": "cflSeconds"
+    },
+    {
+      "percentOfProcess": 2.468320221663732,
+      "percentOfSteps": 2.4816947850553945,
+      "seconds": 582.605520544,
+      "stage": "backupSeconds"
+    },
+    {
+      "percentOfProcess": 0.14794831358469912,
+      "percentOfSteps": 0.14874996973990995,
+      "seconds": 34.92071389,
+      "stage": "conservationSeconds"
+    },
+    {
+      "percentOfProcess": 0.23199878801372006,
+      "percentOfSteps": 0.2332558706522875,
+      "seconds": 54.759416331,
+      "stage": "diagnosticsSeconds"
+    },
+    {
+      "percentOfProcess": 0.0,
+      "percentOfSteps": 0.0,
+      "seconds": 0.0,
+      "stage": "sourceSeconds"
+    },
+    {
+      "percentOfProcess": 0.00041218803964910764,
+      "percentOfSteps": 0.000414421475577391,
+      "seconds": 0.09729006200010576,
+      "stage": "otherSeconds"
+    },
+    {
+      "percentOfProcess": 0.5389286173385724,
+      "percentOfSteps": null,
+      "seconds": 127.20504612199875,
+      "stage": "outsideAcceptedSteps"
+    }
+  ],
+  "campaignWallSeconds": 24553.184950113297,
+  "cumulativeAcceptedSteps": 1951,
+  "diagnostics": [
+    {
+      "allCaptureGpu": {
+        "activityDutyInsideWindowPercent": 12.439912510143722,
+        "activityUnionSeconds": 2.260014616,
+        "copySumSeconds": 1.036410552,
+        "copyUnionSeconds": 0.936305864,
+        "firstActivityFromSessionSeconds": 1.597938989,
+        "firstToLastActivitySeconds": 18.167447835,
+        "kernelSumSeconds": 1.316090775,
+        "kernelUnionSeconds": 1.316090775,
+        "lastActivityFromSessionSeconds": 19.765386824,
+        "memsetSumSeconds": 0.00974604,
+        "noTracedActivityInsideWindowSeconds": 15.907433219000001,
+        "runtimeApiUnionSeconds": 2.527853507,
+        "runtimeSynchronizationUnionSeconds": 0.246850655,
+        "streamIds": [
+          7,
+          13,
+          14
+        ],
+        "syncOverlapGpuActivitySeconds": 0.241410765,
+        "syncWithoutTracedGpuActivitySeconds": 0.005439890000000003
+      },
+      "checkpointUs": 1,
+      "copies": [
+        {
+          "bytes": 2102525952,
+          "calls": 12834,
+          "destination": "Unknown",
+          "direction": "Unified Device-to-Host",
+          "maxBytes": 1044480,
+          "minBytes": 4096,
+          "payloadGBperSecond": 26.695548612527254,
+          "seconds": 0.078759421,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 847331328,
+          "calls": 62131,
+          "destination": "Unknown",
+          "direction": "Unified Host-to-Device",
+          "maxBytes": 942080,
+          "minBytes": 4096,
+          "payloadGBperSecond": 8.28825713591528,
+          "seconds": 0.102232751,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 1281638400,
+          "calls": 16,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 296755200,
+          "minBytes": 32768000,
+          "payloadGBperSecond": 4.846828820327536,
+          "seconds": 0.264428237,
+          "source": "Managed"
+        },
+        {
+          "bytes": 8094544988,
+          "calls": 112,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 989184000,
+          "minBytes": 4,
+          "payloadGBperSecond": 21.4677165011685,
+          "seconds": 0.377056637,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 727004024,
+          "calls": 69,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 32768000,
+          "minBytes": 4,
+          "payloadGBperSecond": 20.615397223186584,
+          "seconds": 0.035265099,
+          "source": "Device"
+        },
+        {
+          "bytes": 2162690624,
+          "calls": 326,
+          "destination": "Managed",
+          "direction": "Host-to-Device",
+          "maxBytes": 98304000,
+          "minBytes": 8,
+          "payloadGBperSecond": 16.062755162227734,
+          "seconds": 0.134640079,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 600490240,
+          "calls": 580,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 1048536,
+          "minBytes": 19808,
+          "payloadGBperSecond": 26.320461140220907,
+          "seconds": 0.022814579,
+          "source": "Pinned"
+        },
+        {
+          "bytes": 7384320,
+          "calls": 9,
+          "destination": "Device",
+          "direction": "Device-to-Device",
+          "maxBytes": 820480,
+          "minBytes": 820480,
+          "payloadGBperSecond": 630.4918032786885,
+          "seconds": 1.1712e-05,
+          "source": "Device"
+        },
+        {
+          "bytes": 589824000,
+          "calls": 564,
+          "destination": "Pinned",
+          "direction": "Device-to-Host",
+          "maxBytes": 1048536,
+          "minBytes": 273384,
+          "payloadGBperSecond": 27.819213785920667,
+          "seconds": 0.021202037,
+          "source": "Device"
+        }
+      ],
+      "copySeconds": 0.936305864,
+      "gpuKernelSeconds": 1.316090775,
+      "hemKernelSharePercent": 57.604812175664705,
+      "hemSeconds": 0.758131619,
+      "hemVsStepPercent": 19.292929853736275,
+      "nsysStepSeconds": 3.929582623,
+      "recoverySeconds": 2.146274295,
+      "selectedHem": {
+        "achievedOccupancyPercent": 4.44,
+        "activeThreadsPerWarpInstruction": 17.11,
+        "activeWarpsPerScheduler": 1.0,
+        "aluPipePercent": 0.33,
+        "block": "(64, 1, 1)",
+        "branchUniformPercent": 99.59,
+        "dramBytesPerSecond": 3171111565.56,
+        "dramReadBytesPerSecond": 18494088.45,
+        "dramThroughputPercent": 0.34,
+        "dramWriteBytesPerSecond": 3152617477.11,
+        "durationNs": 184641920.0,
+        "eligibleWarpsPerScheduler": 0.08,
+        "fmaPipePercent": 0.06,
+        "fp32Flops": 1037175834.0,
+        "fp32GflopsPerSecond": 5.617228384540195,
+        "fp64Flops": 19149430312.0,
+        "fp64GflopsPerSecond": 103.7111741039088,
+        "fp64PipePercent": 29.45,
+        "grid": "(104, 1, 1)",
+        "id": 9.0,
+        "issueActivePercent": 7.54,
+        "kernel": "hemKernel",
+        "l1HitPercent": 64.32,
+        "l1RequestedSectors": 928944759.0,
+        "l1SectorEquivalentGBperSecond": 160.99395136272412,
+        "l1ThroughputPercent": 2.73,
+        "l2HitPercent": 99.13,
+        "l2SectorEquivalentGBperSecond": 186.64681303135998,
+        "l2SectorsPerSecond": 5832712907.23,
+        "l2ThroughputPercent": 5.17,
+        "localLoadSectors": 329838846.0,
+        "localStoreSectors": 556042556.0,
+        "longScoreboardCyclesPerIssuedInstruction": 0.83,
+        "percentOutsidePhysicalRange": "",
+        "registersPerThread": 255.0,
+        "shortScoreboardCyclesPerIssuedInstruction": 1.66,
+        "smActiveCyclesMax": 521209712.0,
+        "smActiveCyclesMean": 359451961.33,
+        "smActiveCyclesMin": 177613424.0,
+        "smActiveElapsedPercentDerived": 69.02192577057367,
+        "smElapsedCyclesMean": 520779386.14,
+        "smThroughputPercent": 29.45,
+        "tensorPipePercent": 0.0,
+        "theoreticalOccupancyPercent": 16.67,
+        "waitCyclesPerIssuedInstruction": 9.22
+      }
+    },
+    {
+      "allCaptureGpu": {
+        "activityDutyInsideWindowPercent": 27.523263933844216,
+        "activityUnionSeconds": 4.897912552,
+        "copySumSeconds": 1.037718498,
+        "copyUnionSeconds": 0.937910893,
+        "firstActivityFromSessionSeconds": 1.451233992,
+        "firstToLastActivitySeconds": 17.795536764,
+        "kernelSumSeconds": 3.9498669420000003,
+        "kernelUnionSeconds": 3.949866942,
+        "lastActivityFromSessionSeconds": 19.246770756,
+        "memsetSumSeconds": 0.012236748,
+        "noTracedActivityInsideWindowSeconds": 12.897624212,
+        "runtimeApiUnionSeconds": 5.090664964,
+        "runtimeSynchronizationUnionSeconds": 0.261822526,
+        "streamIds": [
+          7,
+          13,
+          14
+        ],
+        "syncOverlapGpuActivitySeconds": 0.256331632,
+        "syncWithoutTracedGpuActivitySeconds": 0.005490894000000024
+      },
+      "checkpointUs": 10,
+      "copies": [
+        {
+          "bytes": 2102525952,
+          "calls": 12834,
+          "destination": "Unknown",
+          "direction": "Unified Device-to-Host",
+          "maxBytes": 1044480,
+          "minBytes": 4096,
+          "payloadGBperSecond": 27.574115908690132,
+          "seconds": 0.076249986,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 835837952,
+          "calls": 62314,
+          "destination": "Unknown",
+          "direction": "Unified Host-to-Device",
+          "maxBytes": 950272,
+          "minBytes": 4096,
+          "payloadGBperSecond": 8.201755837887598,
+          "seconds": 0.101909636,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 1281638400,
+          "calls": 16,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 296755200,
+          "minBytes": 32768000,
+          "payloadGBperSecond": 4.9165060087773655,
+          "seconds": 0.260680735,
+          "source": "Managed"
+        },
+        {
+          "bytes": 8216740296,
+          "calls": 158,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 989184000,
+          "minBytes": 4,
+          "payloadGBperSecond": 21.668748525109848,
+          "seconds": 0.379197732,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 899565784,
+          "calls": 91,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 32768000,
+          "minBytes": 4,
+          "payloadGBperSecond": 21.043980293233147,
+          "seconds": 0.042746941,
+          "source": "Device"
+        },
+        {
+          "bytes": 2195458616,
+          "calls": 326,
+          "destination": "Managed",
+          "direction": "Host-to-Device",
+          "maxBytes": 98304000,
+          "minBytes": 8,
+          "payloadGBperSecond": 16.472377107335433,
+          "seconds": 0.133281226,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 600490240,
+          "calls": 580,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 1048536,
+          "minBytes": 19808,
+          "payloadGBperSecond": 26.502424580950354,
+          "seconds": 0.022657936,
+          "source": "Pinned"
+        },
+        {
+          "bytes": 7384320,
+          "calls": 9,
+          "destination": "Device",
+          "direction": "Device-to-Device",
+          "maxBytes": 820480,
+          "minBytes": 820480,
+          "payloadGBperSecond": 632.2191780821918,
+          "seconds": 1.168e-05,
+          "source": "Device"
+        },
+        {
+          "bytes": 589824000,
+          "calls": 564,
+          "destination": "Pinned",
+          "direction": "Device-to-Host",
+          "maxBytes": 1048536,
+          "minBytes": 273384,
+          "payloadGBperSecond": 28.110113576823032,
+          "seconds": 0.020982626,
+          "source": "Device"
+        }
+      ],
+      "copySeconds": 0.937910893,
+      "gpuKernelSeconds": 3.9498669420000003,
+      "hemKernelSharePercent": 85.22552195886097,
+      "hemSeconds": 3.3662947180000002,
+      "hemVsStepPercent": 45.69146224927977,
+      "nsysStepSeconds": 7.367447992,
+      "recoverySeconds": 5.622117682,
+      "selectedHem": {
+        "achievedOccupancyPercent": 14.52,
+        "activeThreadsPerWarpInstruction": 15.66,
+        "activeWarpsPerScheduler": 1.82,
+        "aluPipePercent": 0.62,
+        "block": "(64, 1, 1)",
+        "branchUniformPercent": 99.4,
+        "dramBytesPerSecond": 75693423025.41,
+        "dramReadBytesPerSecond": 5236433622.27,
+        "dramThroughputPercent": 8.0,
+        "dramWriteBytesPerSecond": 70456989403.14,
+        "durationNs": 453776544.0,
+        "eligibleWarpsPerScheduler": 0.08,
+        "fmaPipePercent": 0.11,
+        "fp32Flops": 4346052320.0,
+        "fp32GflopsPerSecond": 9.577516461494316,
+        "fp64Flops": 80241866506.0,
+        "fp64GflopsPerSecond": 176.8312345955017,
+        "fp64PipePercent": 54.91,
+        "grid": "(458, 1, 1)",
+        "id": 9.0,
+        "issueActivePercent": 8.06,
+        "kernel": "hemKernel",
+        "l1HitPercent": 44.63,
+        "l1RequestedSectors": 3837385908.0,
+        "l1SectorEquivalentGBperSecond": 270.60973221216125,
+        "l1ThroughputPercent": 4.83,
+        "l2HitPercent": 97.1,
+        "l2SectorEquivalentGBperSecond": 551.1798248963199,
+        "l2SectorsPerSecond": 17224369528.01,
+        "l2ThroughputPercent": 11.55,
+        "localLoadSectors": 1355489147.0,
+        "localStoreSectors": 2285317670.0,
+        "longScoreboardCyclesPerIssuedInstruction": 1.15,
+        "percentOutsidePhysicalRange": "",
+        "registersPerThread": 255.0,
+        "shortScoreboardCyclesPerIssuedInstruction": 10.53,
+        "smActiveCyclesMax": 1318341052.0,
+        "smActiveCyclesMean": 856536407.39,
+        "smActiveCyclesMin": 668612842.0,
+        "smActiveElapsedPercentDerived": 67.1082135070915,
+        "smElapsedCyclesMean": 1276351079.29,
+        "smThroughputPercent": 54.91,
+        "tensorPipePercent": 0.0,
+        "theoreticalOccupancyPercent": 16.67,
+        "waitCyclesPerIssuedInstruction": 9.21
+      }
+    },
+    {
+      "allCaptureGpu": {
+        "activityDutyInsideWindowPercent": 43.824178630548644,
+        "activityUnionSeconds": 10.040932545,
+        "copySumSeconds": 1.083062259,
+        "copyUnionSeconds": 0.981726593,
+        "firstActivityFromSessionSeconds": 1.398664997,
+        "firstToLastActivitySeconds": 22.911855644,
+        "kernelSumSeconds": 9.049091533999999,
+        "kernelUnionSeconds": 9.049091534,
+        "lastActivityFromSessionSeconds": 24.310520641,
+        "memsetSumSeconds": 0.012196444,
+        "noTracedActivityInsideWindowSeconds": 12.870923098999999,
+        "runtimeApiUnionSeconds": 10.23235117,
+        "runtimeSynchronizationUnionSeconds": 0.26028531,
+        "streamIds": [
+          7,
+          13,
+          14
+        ],
+        "syncOverlapGpuActivitySeconds": 0.255082405,
+        "syncWithoutTracedGpuActivitySeconds": 0.00520290499999998
+      },
+      "checkpointUs": 50,
+      "copies": [
+        {
+          "bytes": 2102525952,
+          "calls": 12834,
+          "destination": "Unknown",
+          "direction": "Unified Device-to-Host",
+          "maxBytes": 1044480,
+          "minBytes": 4096,
+          "payloadGBperSecond": 27.72155022849527,
+          "seconds": 0.075844458,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 847331328,
+          "calls": 63140,
+          "destination": "Unknown",
+          "direction": "Unified Host-to-Device",
+          "maxBytes": 983040,
+          "minBytes": 4096,
+          "payloadGBperSecond": 8.193291801561381,
+          "seconds": 0.103417692,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 1281638400,
+          "calls": 16,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 296755200,
+          "minBytes": 32768000,
+          "payloadGBperSecond": 4.938895370994843,
+          "seconds": 0.259498998,
+          "source": "Managed"
+        },
+        {
+          "bytes": 8663083396,
+          "calls": 158,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 989184000,
+          "minBytes": 4,
+          "payloadGBperSecond": 21.75140134621474,
+          "seconds": 0.398277024,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 1236152384,
+          "calls": 91,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 35996288,
+          "minBytes": 4,
+          "payloadGBperSecond": 18.640314240575474,
+          "seconds": 0.06631607,
+          "source": "Device"
+        },
+        {
+          "bytes": 2195458616,
+          "calls": 326,
+          "destination": "Managed",
+          "direction": "Host-to-Device",
+          "maxBytes": 98304000,
+          "minBytes": 8,
+          "payloadGBperSecond": 16.136426054482953,
+          "seconds": 0.136056064,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 600490240,
+          "calls": 580,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 1048536,
+          "minBytes": 19808,
+          "payloadGBperSecond": 26.50889212308025,
+          "seconds": 0.022652408,
+          "source": "Pinned"
+        },
+        {
+          "bytes": 7384320,
+          "calls": 9,
+          "destination": "Device",
+          "direction": "Device-to-Device",
+          "maxBytes": 820480,
+          "minBytes": 820480,
+          "payloadGBperSecond": 632.2191780821918,
+          "seconds": 1.168e-05,
+          "source": "Device"
+        },
+        {
+          "bytes": 589824000,
+          "calls": 564,
+          "destination": "Pinned",
+          "direction": "Device-to-Host",
+          "maxBytes": 1048536,
+          "minBytes": 273384,
+          "payloadGBperSecond": 28.103096718032063,
+          "seconds": 0.020987865,
+          "source": "Device"
+        }
+      ],
+      "copySeconds": 0.981726593,
+      "gpuKernelSeconds": 9.049091533999999,
+      "hemKernelSharePercent": 93.53914736298876,
+      "hemSeconds": 8.464443065,
+      "hemVsStepPercent": 66.85272423738115,
+      "nsysStepSeconds": 12.661328557,
+      "recoverySeconds": 10.924068299,
+      "selectedHem": {
+        "achievedOccupancyPercent": 15.56,
+        "activeThreadsPerWarpInstruction": 25.48,
+        "activeWarpsPerScheduler": 1.9,
+        "aluPipePercent": 0.72,
+        "block": "(64, 1, 1)",
+        "branchUniformPercent": 99.11,
+        "dramBytesPerSecond": 122601314654.8,
+        "dramReadBytesPerSecond": 5502659356.82,
+        "dramThroughputPercent": 12.95,
+        "dramWriteBytesPerSecond": 117098655297.98,
+        "durationNs": 837188896.0,
+        "eligibleWarpsPerScheduler": 0.08,
+        "fmaPipePercent": 0.12,
+        "fp32Flops": 14850308594.0,
+        "fp32GflopsPerSecond": 17.738300955678227,
+        "fp64Flops": 274119412862.0,
+        "fp64GflopsPerSecond": 327.4283906197437,
+        "fp64PipePercent": 62.37,
+        "grid": "(2947, 1, 1)",
+        "id": 9.0,
+        "issueActivePercent": 8.12,
+        "kernel": "hemKernel",
+        "l1HitPercent": 43.2,
+        "l1RequestedSectors": 10076808733.0,
+        "l1SectorEquivalentGBperSecond": 385.1674108396201,
+        "l1ThroughputPercent": 7.01,
+        "l2HitPercent": 97.65,
+        "l2SectorEquivalentGBperSecond": 827.84013838624,
+        "l2SectorsPerSecond": 25870004324.57,
+        "l2ThroughputPercent": 17.35,
+        "localLoadSectors": 3599361851.0,
+        "localStoreSectors": 6059233623.0,
+        "longScoreboardCyclesPerIssuedInstruction": 1.13,
+        "percentOutsidePhysicalRange": "",
+        "registersPerThread": 255.0,
+        "shortScoreboardCyclesPerIssuedInstruction": 10.96,
+        "smActiveCyclesMax": 2453148445.0,
+        "smActiveCyclesMean": 1734248106.77,
+        "smActiveCyclesMin": 1496049415.0,
+        "smActiveElapsedPercentDerived": 73.65618645605412,
+        "smElapsedCyclesMean": 2354517916.57,
+        "smThroughputPercent": 62.37,
+        "tensorPipePercent": 0.0,
+        "theoreticalOccupancyPercent": 16.67,
+        "waitCyclesPerIssuedInstruction": 9.19
+      }
+    },
+    {
+      "allCaptureGpu": {
+        "activityDutyInsideWindowPercent": 55.60931252476854,
+        "activityUnionSeconds": 16.914441846,
+        "copySumSeconds": 1.1976803379999998,
+        "copyUnionSeconds": 1.097087645,
+        "firstActivityFromSessionSeconds": 1.43004148,
+        "firstToLastActivitySeconds": 30.416563482,
+        "kernelSumSeconds": 15.807647625,
+        "kernelUnionSeconds": 15.807647625,
+        "lastActivityFromSessionSeconds": 31.846604962,
+        "memsetSumSeconds": 0.011761294,
+        "noTracedActivityInsideWindowSeconds": 13.502121636000002,
+        "runtimeApiUnionSeconds": 17.122643306,
+        "runtimeSynchronizationUnionSeconds": 0.255985457,
+        "streamIds": [
+          7,
+          13,
+          14
+        ],
+        "syncOverlapGpuActivitySeconds": 0.250639583,
+        "syncWithoutTracedGpuActivitySeconds": 0.005345874000000028
+      },
+      "checkpointUs": 100,
+      "copies": [
+        {
+          "bytes": 2102464512,
+          "calls": 12833,
+          "destination": "Unknown",
+          "direction": "Unified Device-to-Host",
+          "maxBytes": 1044480,
+          "minBytes": 4096,
+          "payloadGBperSecond": 27.713309808938646,
+          "seconds": 0.075864793,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 842387456,
+          "calls": 62675,
+          "destination": "Unknown",
+          "direction": "Unified Host-to-Device",
+          "maxBytes": 983040,
+          "minBytes": 4096,
+          "payloadGBperSecond": 8.206611816054474,
+          "seconds": 0.102647411,
+          "source": "Unknown"
+        },
+        {
+          "bytes": 1281638400,
+          "calls": 16,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 296755200,
+          "minBytes": 32768000,
+          "payloadGBperSecond": 4.924350169700563,
+          "seconds": 0.260265488,
+          "source": "Managed"
+        },
+        {
+          "bytes": 9855414528,
+          "calls": 158,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 989184000,
+          "minBytes": 4,
+          "payloadGBperSecond": 21.78013175702818,
+          "seconds": 0.452495634,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 2135287336,
+          "calls": 91,
+          "destination": "Pageable",
+          "direction": "Device-to-Host",
+          "maxBytes": 96191520,
+          "minBytes": 4,
+          "payloadGBperSecond": 16.554906129760735,
+          "seconds": 0.128982147,
+          "source": "Device"
+        },
+        {
+          "bytes": 2195458616,
+          "calls": 326,
+          "destination": "Managed",
+          "direction": "Host-to-Device",
+          "maxBytes": 98304000,
+          "minBytes": 8,
+          "payloadGBperSecond": 16.412596915669905,
+          "seconds": 0.133766681,
+          "source": "Pageable"
+        },
+        {
+          "bytes": 600490240,
+          "calls": 580,
+          "destination": "Device",
+          "direction": "Host-to-Device",
+          "maxBytes": 1048536,
+          "minBytes": 19808,
+          "payloadGBperSecond": 26.503490197852543,
+          "seconds": 0.022657025,
+          "source": "Pinned"
+        },
+        {
+          "bytes": 7384320,
+          "calls": 9,
+          "destination": "Device",
+          "direction": "Device-to-Device",
+          "maxBytes": 820480,
+          "minBytes": 820480,
+          "payloadGBperSecond": 632.2191780821918,
+          "seconds": 1.168e-05,
+          "source": "Device"
+        },
+        {
+          "bytes": 589824000,
+          "calls": 564,
+          "destination": "Pinned",
+          "direction": "Device-to-Host",
+          "maxBytes": 1048536,
+          "minBytes": 273384,
+          "payloadGBperSecond": 28.10093571164868,
+          "seconds": 0.020989479,
+          "source": "Device"
+        }
+      ],
+      "copySeconds": 1.097087645,
+      "gpuKernelSeconds": 15.807647625,
+      "hemKernelSharePercent": 96.31843262320949,
+      "hemSeconds": 15.225678427,
+      "hemVsStepPercent": 76.55934208388442,
+      "nsysStepSeconds": 19.887420676,
+      "recoverySeconds": 18.16079087,
+      "selectedHem": {
+        "achievedOccupancyPercent": 15.41,
+        "activeThreadsPerWarpInstruction": 26.08,
+        "activeWarpsPerScheduler": 1.89,
+        "aluPipePercent": 0.89,
+        "block": "(64, 1, 1)",
+        "branchUniformPercent": 99.23,
+        "dramBytesPerSecond": 154037469126.07,
+        "dramReadBytesPerSecond": 6545949197.09,
+        "dramThroughputPercent": 16.28,
+        "dramWriteBytesPerSecond": 147491519928.98,
+        "durationNs": 1313600320.0,
+        "eligibleWarpsPerScheduler": 0.08,
+        "fmaPipePercent": 0.15,
+        "fp32Flops": 29457402322.0,
+        "fp32GflopsPerSecond": 22.424935403487112,
+        "fp64Flops": 543632337816.0,
+        "fp64GflopsPerSecond": 413.8491210294468,
+        "fp64PipePercent": 77.1,
+        "grid": "(8075, 1, 1)",
+        "id": 9.0,
+        "issueActivePercent": 8.18,
+        "kernel": "hemKernel",
+        "l1HitPercent": 43.24,
+        "l1RequestedSectors": 19646916748.0,
+        "l1SectorEquivalentGBperSecond": 478.60930479675886,
+        "l1ThroughputPercent": 8.55,
+        "l2HitPercent": 97.92,
+        "l2SectorEquivalentGBperSecond": 1116.4021932271999,
+        "l2SectorsPerSecond": 34887568538.35,
+        "l2ThroughputPercent": 23.4,
+        "localLoadSectors": 7020484231.0,
+        "localStoreSectors": 11803856133.0,
+        "longScoreboardCyclesPerIssuedInstruction": 1.12,
+        "percentOutsidePhysicalRange": "",
+        "registersPerThread": 255.0,
+        "shortScoreboardCyclesPerIssuedInstruction": 10.6,
+        "smActiveCyclesMax": 3691304942.0,
+        "smActiveCyclesMean": 3353597825.7,
+        "smActiveCyclesMin": 3196777901.0,
+        "smActiveElapsedPercentDerived": 90.78665016311781,
+        "smElapsedCyclesMean": 3693932775.0,
+        "smThroughputPercent": 77.1,
+        "tensorPipePercent": 0.0,
+        "theoreticalOccupancyPercent": 16.67,
+        "waitCyclesPerIssuedInstruction": 9.2
+      }
+    }
+  ],
+  "finalMetrics": {
+    "acceptedSteps": 1951,
+    "alphaGasRange": [
+      0.6735201489530235,
+      1.0000000000000004
+    ],
+    "alphaLiquidN2oRange": [
+      0.0,
+      0.32647985142052144
+    ],
+    "alphaSolidN2oRange": [
+      0.0,
+      0.0
+    ],
+    "cells": 4096000,
+    "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-100us/0.0001",
+    "checkpointSha256": "a9768bbf2dadb25e019c7f3a45dc70bf6d14609610efcac6daa17ceed25e6799",
+    "conservedBudgetResidual": [
+      -1.2304399614214342e-12,
+      -3.050557242606991e-13,
+      -8.809142651444724e-20,
+      0.0,
+      2.8341044788771086e-16,
+      2.4210234511601314e-16,
+      7.445827938598687e-18,
+      -1.0615740109187755e-07
+    ],
+    "deltaT": 1.9335085630630506e-08,
+    "liquidN2oMassKg": 1.0655602528752629e-05,
+    "liquidPhaseChangeKg": -4.983853149874938e-06,
+    "n2oMassKg": 1.5639455678627542e-05,
+    "pRangePa": [
+      3981243.8497632304,
+      4088641.7619079687
+    ],
+    "phaseMassClosureKg": 0.0,
+    "retries": 0,
+    "schema": 1,
+    "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+    "solidN2oMassKg": 0.0,
+    "tRangeK": [
+      220.70234971197894,
+      293.3438852290007
+    ],
+    "time": 9.999999999999999e-05,
+    "vaporN2oMassFraction": 0.31867177811601927,
+    "vaporN2oMassKg": 4.983853149874914e-06
+  },
+  "hemCounters": {
+    "analyticJacobians": 0.0,
+    "batches": 30696.0,
+    "copySeconds": 125.99664299213514,
+    "cpuFallbacks": 0.0,
+    "deviceBytes": 1573006584.0,
+    "deviceFailures": 0.0,
+    "finiteDifferenceJacobians": 129180386144.0,
+    "flashCandidates": 9857147210.0,
+    "hostBytes": 2579639304.0,
+    "kernelSeconds": 15452.526403781008,
+    "phaseEvaluations": 1704167724260.0,
+    "residualEvaluations": 2830519750434.0,
+    "stableCandidates": 5054909476.0,
+    "submitted": 5041291108.0,
+    "succeeded": 5041291108.0,
+    "transferBytes": 2157674558768.0,
+    "wallSeconds": 15667.025320509983
+  },
+  "maxAbsResiduals": {
+    "energyResidual": 1.7967608048431883e-11,
+    "globalElementResidual": 1.7100037149974995e-11,
+    "massResidual": 2.134426100211469e-11,
+    "speciesResidual": 1.660415204012267e-11
+  },
+  "newAcceptedSteps": 1931,
+  "ordinaryDtNs": {
+    "max": 51.59252668570899,
+    "mean": 51.32240553620763,
+    "median": 51.350050990092356,
+    "min": 50.80958137919093,
+    "p95": 51.42141209507555
+  },
+  "passed": true,
+  "productionAcceptedStepSeconds": 23476.114953878,
+  "productionProcessSeconds": 23603.32,
+  "profilerTargetSeconds": 766.58,
+  "retries": 0,
+  "root": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924",
+  "sampledEnergyWh": 815.7951796244197,
+  "scope": "Production continues 1 to 100 us. Nsight replays are independent diagnostics. Nested times overlap top-level stages; not additive. Checkpoint integrity independently verified without solver rerun.",
+  "segments": [
+    {
+      "classifySeconds": 57.35072316500005,
+      "eligible": 2695168000.0,
+      "endUs": 10.0,
+      "endpointDtNs": 10.698834960860161,
+      "hemKernelSeconds": 401.73702570134367,
+      "meanStepSeconds": 6.062268509107344,
+      "metrics": {
+        "acceptedSteps": 197,
+        "alphaGasRange": [
+          0.958360090828025,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.04163990982138653
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 4096000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-010us/1e-05",
+        "checkpointSha256": "da3854104e99743555e64858dab7bc896cd80718673b70a7c35da27db53ac3da",
+        "conservedBudgetResidual": [
+          -1.1759179581995895e-12,
+          -2.6687605860783604e-13,
+          -2.329340604949326e-21,
+          0.0,
+          -4.440146709507042e-18,
+          7.521652571618187e-19,
+          1.5990413297541588e-18,
+          -9.373223974762368e-08
+        ],
+        "deltaT": 1.0698834960860162e-08,
+        "liquidN2oMassKg": 8.677798796850732e-07,
+        "liquidPhaseChangeKg": -7.34971844990682e-07,
+        "n2oMassKg": 1.6027517246757527e-06,
+        "pRangePa": [
+          3929109.554264901,
+          4299258.726405108
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          224.68037996665797,
+          295.29733115705113
+        ],
+        "time": 9.999999999999999e-06,
+        "vaporN2oMassFraction": 0.458568743789291,
+        "vaporN2oMassKg": 7.349718449906796e-07
+      },
+      "nested": {
+        "nestedBatchCallSeconds": 538.355072984,
+        "nestedBatchPackSeconds": 33.4993797,
+        "nestedBatchScatterSeconds": 0.0,
+        "nestedScalarPropertySeconds": 74.532961211
+      },
+      "nonEndpointDtNs": {
+        "max": 51.59252668570899,
+        "mean": 51.075574801358705,
+        "median": 51.015363573167264,
+        "min": 50.80958137919093,
+        "p95": 51.53274149556846
+      },
+      "processSeconds": 1092.32,
+      "reusePercent": 98.9311772401572,
+      "segment": "to-010us",
+      "stages": {
+        "backupSeconds": 55.788232841,
+        "cflSeconds": 100.501583904,
+        "conservationSeconds": 3.18874836,
+        "diagnosticsSeconds": 5.016054516,
+        "otherSeconds": 0.00869915399999414,
+        "recoverySeconds": 766.831438344,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 141.686768993
+      },
+      "stepSeconds": 1073.021526112,
+      "steps": 177,
+      "submitted": 28806569.0,
+      "telemetry": {
+        "clockEventMasks": {
+          "0": 2011
+        },
+        "energyWh": 26.581996627794897,
+        "gpuBusyPercent": {
+          "max": 100.0,
+          "mean": 47.06066633515664,
+          "median": 40.0,
+          "min": 0.0,
+          "p95": 100.0,
+          "timeWeightedMean": 47.081582067169656
+        },
+        "maxSampleGapSeconds": 0.5689141200055019,
+        "meaning": "Device-wide sampled NVML activity, not SM occupancy; CPU time includes driver polling. Weighted with trapezoidal integration over sample timestamps.",
+        "memoryBusyPercent": {
+          "max": 74.0,
+          "mean": 10.12680258577822,
+          "median": 4.0,
+          "min": 0.0,
+          "p95": 35.0,
+          "timeWeightedMean": 10.132203985854236
+        },
+        "peakSolverSwapKiB": 0,
+        "powerW": {
+          "max": 126.452,
+          "mean": 87.6058717056191,
+          "median": 87.753,
+          "min": 16.93,
+          "p95": 110.4535,
+          "timeWeightedMean": 87.63029086528408
+        },
+        "sampledSeconds": 1092.0332103789988,
+        "samples": 2011,
+        "smMHz": {
+          "max": 2820.0,
+          "mean": 2813.0860268523124,
+          "median": 2820.0,
+          "min": 180.0,
+          "p95": 2820.0,
+          "timeWeightedMean": 2813.7232374113905
+        },
+        "solverCpuSeconds": 1091.83,
+        "temperatureC": {
+          "max": 60.0,
+          "mean": 50.729985082048735,
+          "median": 50.0,
+          "min": 41.0,
+          "p95": 56.0,
+          "timeWeightedMean": 50.732960338120705
+        },
+        "usedGiB": {
+          "max": 8.39764404296875,
+          "mean": 8.346505717576765,
+          "median": 8.39764404296875,
+          "min": 0.5096435546875,
+          "p95": 8.39764404296875,
+          "timeWeightedMean": 8.349856482390793
+        }
+      },
+      "transportCounters": {
+        "blockThreads": 256.0,
+        "closureDownloadsPerRK": 2.0,
+        "detailedGasCounters": 0.0,
+        "deviceStagingBytes": 1048536.0,
+        "eventWaits": 199672.0,
+        "failedCalls": 0.0,
+        "layoutLaunches": 199672.0,
+        "layoutTiles": 199672.0,
+        "memcpyCalls": 215708.0,
+        "nasaFaceEvaluations": 0.0,
+        "nasaValidationEvaluations": 0.0,
+        "overlapValidated": 0.0,
+        "payloadBytes": 1131144480632.0,
+        "pinnedBytes": 1048536.0,
+        "slotCells": 14563.0,
+        "slots": 1.0,
+        "stageBarrier": "full",
+        "temperatureBasisBuilds": 0.0,
+        "temperatureBasisBytes": 0.0
+      }
+    },
+    {
+      "classifySeconds": 300.0488865679981,
+      "eligible": 12779520000.0,
+      "endUs": 49.99999999999999,
+      "endpointDtNs": 20.368205600242714,
+      "hemKernelSeconds": 4515.138738980554,
+      "meanStepSeconds": 9.778843104684615,
+      "metrics": {
+        "acceptedSteps": 977,
+        "alphaGasRange": [
+          0.7907820774776025,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.20921792249104176
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 4096000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-050us/5e-05",
+        "checkpointSha256": "4cd696558ef05d88816e4b4608e72bb1e3a0e2a614f7014cd420c4df7d12a931",
+        "conservedBudgetResidual": [
+          -1.2448515938088985e-12,
+          -2.771398121042709e-13,
+          -5.421010862427522e-20,
+          0.0,
+          5.963111948670274e-19,
+          2.9341221292888964e-18,
+          5.215208483919237e-18,
+          -9.378963206074786e-08
+        ],
+        "deltaT": 2.0368205600242715e-08,
+        "liquidN2oMassKg": 5.2553160305544045e-06,
+        "liquidPhaseChangeKg": -2.5953746859332043e-06,
+        "n2oMassKg": 7.8506907164876e-06,
+        "pRangePa": [
+          3953674.8921072166,
+          4098805.4140277132
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          222.24634867741375,
+          294.05604771841644
+        ],
+        "time": 4.9999999999999996e-05,
+        "vaporN2oMassFraction": 0.3305918905304126,
+        "vaporN2oMassKg": 2.595374685933195e-06
+      },
+      "nested": {
+        "nestedBatchCallSeconds": 5227.74422262,
+        "nestedBatchPackSeconds": 158.488758146,
+        "nestedBatchScatterSeconds": 0.0,
+        "nestedScalarPropertySeconds": 329.523167888
+      },
+      "nonEndpointDtNs": {
+        "max": 51.47422419021173,
+        "mean": 51.32173529447979,
+        "median": 51.32777659204994,
+        "min": 51.13103243641256,
+        "p95": 51.44048198856931
+      },
+      "processSeconds": 7676.0,
+      "reusePercent": 94.10106267684546,
+      "segment": "to-050us",
+      "stages": {
+        "backupSeconds": 232.375874891,
+        "cflSeconds": 443.728179345,
+        "conservationSeconds": 14.503416698,
+        "diagnosticsSeconds": 22.034191416,
+        "otherSeconds": 0.03855924800006267,
+        "recoverySeconds": 6288.141162734,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 626.676237322
+      },
+      "stepSeconds": 7627.497621654,
+      "steps": 780,
+      "submitted": 753855875.0,
+      "telemetry": {
+        "clockEventMasks": {
+          "0": 14097
+        },
+        "energyWh": 241.20227666221462,
+        "gpuBusyPercent": {
+          "max": 100.0,
+          "mean": 65.52741718096048,
+          "median": 83.0,
+          "min": 0.0,
+          "p95": 100.0,
+          "timeWeightedMean": 65.53218176518975
+        },
+        "maxSampleGapSeconds": 0.5569402359978994,
+        "meaning": "Device-wide sampled NVML activity, not SM occupancy; CPU time includes driver polling. Weighted with trapezoidal integration over sample timestamps.",
+        "memoryBusyPercent": {
+          "max": 74.0,
+          "mean": 15.50294388877066,
+          "median": 7.0,
+          "min": 0.0,
+          "p95": 39.0,
+          "timeWeightedMean": 15.504205383256327
+        },
+        "peakSolverSwapKiB": 0,
+        "powerW": {
+          "max": 158.975,
+          "mean": 113.110236717032,
+          "median": 115.666,
+          "min": 17.282,
+          "p95": 147.9256,
+          "timeWeightedMean": 113.11513860258347
+        },
+        "sampledSeconds": 7676.498536899999,
+        "samples": 14097,
+        "smMHz": {
+          "max": 2820.0,
+          "mean": 2811.7664751365537,
+          "median": 2812.0,
+          "min": 180.0,
+          "p95": 2820.0,
+          "timeWeightedMean": 2811.8621043190255
+        },
+        "solverCpuSeconds": 7679.24,
+        "temperatureC": {
+          "max": 60.0,
+          "mean": 55.186280768957936,
+          "median": 55.0,
+          "min": 44.0,
+          "p95": 59.0,
+          "timeWeightedMean": 55.186953308025736
+        },
+        "usedGiB": {
+          "max": 8.50701904296875,
+          "mean": 8.41179631491574,
+          "median": 8.41326904296875,
+          "min": 0.5584716796875,
+          "p95": 8.44647216796875,
+          "timeWeightedMean": 8.412304482285364
+        }
+      },
+      "transportCounters": {
+        "blockThreads": 256.0,
+        "closureDownloadsPerRK": 2.0,
+        "detailedGasCounters": 0.0,
+        "deviceStagingBytes": 1048536.0,
+        "eventWaits": 879856.0,
+        "failedCalls": 0.0,
+        "layoutLaunches": 879856.0,
+        "layoutTiles": 879856.0,
+        "memcpyCalls": 951724.0,
+        "nasaFaceEvaluations": 0.0,
+        "nasaValidationEvaluations": 0.0,
+        "overlapValidated": 0.0,
+        "payloadBytes": 4998431888296.0,
+        "pinnedBytes": 1048536.0,
+        "slotCells": 14563.0,
+        "slots": 1.0,
+        "stageBarrier": "full",
+        "temperatureBasisBuilds": 0.0,
+        "temperatureBasisBytes": 0.0
+      }
+    },
+    {
+      "classifySeconds": 507.27177658200026,
+      "eligible": 15958016000.0,
+      "endUs": 99.99999999999999,
+      "endpointDtNs": 19.335085630630505,
+      "hemKernelSeconds": 10535.65063909911,
+      "meanStepSeconds": 15.170016228041067,
+      "metrics": {
+        "acceptedSteps": 1951,
+        "alphaGasRange": [
+          0.6735201489530235,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.32647985142052144
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 4096000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-100us/0.0001",
+        "checkpointSha256": "a9768bbf2dadb25e019c7f3a45dc70bf6d14609610efcac6daa17ceed25e6799",
+        "conservedBudgetResidual": [
+          -1.2304399614214342e-12,
+          -3.050557242606991e-13,
+          -8.809142651444724e-20,
+          0.0,
+          2.8341044788771086e-16,
+          2.4210234511601314e-16,
+          7.445827938598687e-18,
+          -1.0615740109187755e-07
+        ],
+        "deltaT": 1.9335085630630506e-08,
+        "liquidN2oMassKg": 1.0655602528752629e-05,
+        "liquidPhaseChangeKg": -4.983853149874938e-06,
+        "n2oMassKg": 1.5639455678627542e-05,
+        "pRangePa": [
+          3981243.8497632304,
+          4088641.7619079687
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          220.70234971197894,
+          293.3438852290007
+        ],
+        "time": 9.999999999999999e-05,
+        "vaporN2oMassFraction": 0.31867177811601927,
+        "vaporN2oMassKg": 4.983853149874914e-06
+      },
+      "nested": {
+        "nestedBatchCallSeconds": 11763.836825033,
+        "nestedBatchPackSeconds": 198.669996806,
+        "nestedBatchScatterSeconds": 0.0,
+        "nestedScalarPropertySeconds": 411.060945308
+      },
+      "nonEndpointDtNs": {
+        "max": 51.42528171808389,
+        "mean": 51.36758984005081,
+        "median": 51.364269825876285,
+        "min": 51.33538008954365,
+        "p95": 51.41662003664763
+      },
+      "processSeconds": 14835.0,
+      "reusePercent": 73.3135455936377,
+      "segment": "to-100us",
+      "stages": {
+        "backupSeconds": 294.441412812,
+        "cflSeconds": 553.590460642,
+        "conservationSeconds": 17.228548832,
+        "diagnosticsSeconds": 27.709170399,
+        "otherSeconds": 0.05003166000004895,
+        "recoverySeconds": 13088.195683915,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 794.380497852
+      },
+      "stepSeconds": 14775.595806112,
+      "steps": 974,
+      "submitted": 4258628664.0,
+      "telemetry": {
+        "clockEventMasks": {
+          "0": 27257
+        },
+        "energyWh": 548.0109063344102,
+        "gpuBusyPercent": {
+          "max": 100.0,
+          "mean": 75.01107972264006,
+          "median": 100.0,
+          "min": 0.0,
+          "p95": 100.0,
+          "timeWeightedMean": 75.01313204007073
+        },
+        "maxSampleGapSeconds": 0.5669246129982639,
+        "meaning": "Device-wide sampled NVML activity, not SM occupancy; CPU time includes driver polling. Weighted with trapezoidal integration over sample timestamps.",
+        "memoryBusyPercent": {
+          "max": 75.0,
+          "mean": 22.483765638184686,
+          "median": 28.0,
+          "min": 0.0,
+          "p95": 41.0,
+          "timeWeightedMean": 22.484793465430563
+        },
+        "peakSolverSwapKiB": 0,
+        "powerW": {
+          "max": 181.597,
+          "mean": 132.98214011079722,
+          "median": 141.767,
+          "min": 17.239,
+          "p95": 166.3182,
+          "timeWeightedMean": 132.98436013766616
+        },
+        "sampledSeconds": 14835.122421625987,
+        "samples": 27257,
+        "smMHz": {
+          "max": 2820.0,
+          "mean": 2811.668121950325,
+          "median": 2812.0,
+          "min": 180.0,
+          "p95": 2812.0,
+          "timeWeightedMean": 2811.7156596088544
+        },
+        "solverCpuSeconds": 14838.37,
+        "temperatureC": {
+          "max": 60.0,
+          "mean": 57.091242616575556,
+          "median": 58.0,
+          "min": 45.0,
+          "p95": 60.0,
+          "timeWeightedMean": 57.091573920654874
+        },
+        "usedGiB": {
+          "max": 8.53045654296875,
+          "mean": 8.405441089925008,
+          "median": 8.41326904296875,
+          "min": 0.5584716796875,
+          "p95": 8.44647216796875,
+          "timeWeightedMean": 8.405699957617486
+        }
+      },
+      "transportCounters": {
+        "blockThreads": 256.0,
+        "closureDownloadsPerRK": 2.0,
+        "detailedGasCounters": 0.0,
+        "deviceStagingBytes": 1048536.0,
+        "eventWaits": 1098688.0,
+        "failedCalls": 0.0,
+        "layoutLaunches": 1098688.0,
+        "layoutTiles": 1098688.0,
+        "memcpyCalls": 1188418.0,
+        "nasaFaceEvaluations": 0.0,
+        "nasaValidationEvaluations": 0.0,
+        "overlapValidated": 0.0,
+        "payloadBytes": 6240691191176.0,
+        "pinnedBytes": 1048536.0,
+        "slotCells": 14563.0,
+        "slots": 1.0,
+        "stageBarrier": "full",
+        "temperatureBasisBuilds": 0.0,
+        "temperatureBasisBytes": 0.0
+      }
+    }
+  ],
+  "sourceCommit": "d1c4e973bf0216152f93f3c77fa9da0a08500bef",
+  "sourceLogHashes": {
+    "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-010us/solver.log": "3b9e671418e6bc1b4a2404528de2c736eb9becb985edf565b8b088b94a301779",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-050us/solver.log": "265fe3ef080863aa40ae8262f4a616c1f66f4754b044fe23c4b3de1ffd37c4c3",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-100us/solver.log": "11324dfe404ff106fa3bbfa3472d508613ea8ae541c04e1c7322020906f626c5"
+  },
+  "traceLimitations": [
+    {
+      "checkpointUs": 1,
+      "warnings": [
+        "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "CUDA profiling might have not been started correctly.",
+        "No CUDA events collected. Does the process use CUDA?"
+      ]
+    },
+    {
+      "checkpointUs": 10,
+      "warnings": [
+        "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "CUDA profiling might have not been started correctly.",
+        "No CUDA events collected. Does the process use CUDA?"
+      ]
+    },
+    {
+      "checkpointUs": 50,
+      "warnings": [
+        "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "CUDA profiling might have not been started correctly.",
+        "No CUDA events collected. Does the process use CUDA?"
+      ]
+    },
+    {
+      "checkpointUs": 100,
+      "warnings": [
+        "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "Not all NVTX events might have been collected.",
+        "No NVTX events collected. Does the process use NVTX?",
+        "CUDA profiling might have not been started correctly.",
+        "No CUDA events collected. Does the process use CUDA?"
+      ]
+    }
+  ]
+}

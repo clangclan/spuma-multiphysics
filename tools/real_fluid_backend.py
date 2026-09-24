@@ -41,35 +41,35 @@ class RealFluidBackend(Backend):
             'pool_profile':([v,C.POINTER(BatchProfile)],C.c_int),
             'pool_batch':([v,Token,C.c_int,C.c_size_t,C.c_size_t,p,p,C.POINTER(State),d,d,d,p],C.c_int)}
         for n,(args,ret) in specs.items():
-            f=getattr(self.lib,'pintle_rt_'+n);f.argtypes,f.restype=args,ret
+            f=getattr(self.lib,'reactive_rt_'+n);f.argtypes,f.restype=args,ret
     @property
-    def physical_hash(self):return self.lib.pintle_rt_physical_model_hash(self.handle).decode()
-    def closure_acceleration(self,reuse=False,cuda=False,library='libpintleReactiveTransport.so'):
-        f=self.lib.pintle_rt_set_closure_acceleration_v1
+    def physical_hash(self):return self.lib.reactive_rt_physical_model_hash(self.handle).decode()
+    def closure_acceleration(self,reuse=False,cuda=False,library='libreactiveTransport.so'):
+        f=self.lib.reactive_rt_set_closure_acceleration_v1
         f.argtypes=[C.c_void_p,C.c_int,C.c_int,C.c_char_p];f.restype=C.c_int
         self.check(f(self.handle,int(reuse),int(cuda),str(library).encode()))
     @property
-    def policy_hash(self):return self.lib.pintle_rt_numerical_policy_hash(self.handle).decode()
+    def policy_hash(self):return self.lib.reactive_rt_numerical_policy_hash(self.handle).decode()
     def bind_case(self,chemistry,viscosity,conductivity,diffusivity,transport_backend="cpu",gas_properties="auto",
                   rtol=1e-8,atol=1e-14,wave_factor=1.1,closure="HEM",phase_change=True):
         physical=f"closure={closure};chemistry={int(chemistry)};viscosity={viscosity:.17g};conductivity={conductivity:.17g};commonD={diffusivity:.17g}"
         if not phase_change and self.nl:physical+=";phaseChange=frozen"
         numerical=f"chemicalRtol={rtol:.17g};chemicalAtol={atol:.17g};waveFactor={wave_factor:.17g};transportBackend={transport_backend};transportGasProperties={gas_properties}"
-        self.check(self.lib.pintle_rt_set_case_context(self.handle,physical.encode(),numerical.encode()))
+        self.check(self.lib.reactive_rt_set_case_context(self.handle,physical.encode(),numerical.encode()))
     def capabilities(self):
-        out=Capabilities();self.check(self.lib.pintle_rt_capabilities(self.handle,C.byref(out)));return fields(out)
+        out=Capabilities();self.check(self.lib.reactive_rt_capabilities(self.handle,C.byref(out)));return fields(out)
     def profile(self):
-        out=Profile();self.check(self.lib.pintle_rt_real_fluid_profile(self.handle,0,C.byref(out)));return fields(out)
+        out=Profile();self.check(self.lib.reactive_rt_real_fluid_profile(self.handle,0,C.byref(out)));return fields(out)
     def evaluate(self,T,rho,Y,phase=-1,mask=31,selected=None):
         y=self.vector(Y) if phase<0 else np.ascontiguousarray(Y,dtype=float);selected=list(range(self.ns)) if selected is None else selected
         indices=(C.c_size_t*len(selected))(*selected);h=np.zeros(len(selected));mu=h.copy();out=Result()
-        self.check(self.lib.pintle_rt_evaluate_real_fluid(self.handle,T,rho,ptr(y),phase,mask,indices,len(selected),C.byref(out),ptr(h),ptr(mu)))
+        self.check(self.lib.reactive_rt_evaluate_real_fluid(self.handle,T,rho,ptr(y),phase,mask,indices,len(selected),C.byref(out),ptr(h),ptr(mu)))
         return fields(out),h,mu
     def tangent(self,q,e,state,v,de=0):
         q,v=self.vector(q),self.vector(v);out=Tangent()
-        self.check(self.lib.pintle_rt_thermo_tangent(self.handle,ptr(q),e,C.byref(state),ptr(v),de,C.byref(out)))
+        self.check(self.lib.reactive_rt_thermo_tangent(self.handle,ptr(q),e,C.byref(state),ptr(v),de,C.byref(out)))
         return out
     def jvp(self,q,e,state,v,equilibrium=True):
         q,v=self.vector(q),self.vector(v);out=np.zeros(self.ns);used=C.c_int()
-        self.check(self.lib.pintle_rt_chemical_matrix_free_jvp(self.handle,ptr(q),e,equilibrium,C.byref(state),ptr(v),ptr(out),C.byref(used)))
+        self.check(self.lib.reactive_rt_chemical_matrix_free_jvp(self.handle,ptr(q),e,equilibrium,C.byref(state),ptr(v),ptr(out),C.byref(used)))
         return out,bool(used.value)

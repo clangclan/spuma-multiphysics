@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "baseCommit": "a2a41ad802c7c79f57b5e3e392d7121453d0daa7",
+  "scope": "Optional capillary controls and standalone interface operators; optional WALE scalar fluxes integrated in ReactiveFoam",
+  "surfaceTensionDefault": false,
+  "surfaceTensionOffValidated": true,
+  "capillaryActiveSolverSupported": false,
+  "flashingCapillaryIntegrationComplete": false,
+  "fullImpingingBenchmarkRun": false,
+  "solverCases": 8,
+  "solverChecks": 35,
+  "solverAllChecksPassed": true,
+  "actualGpuUsed": true,
+  "thermoCpuFallbacks": {
+    "all-scalars-off": 0.0,
+    "heat-only": 0.0,
+    "n2o-mixture-on": 0.0,
+    "omitted": 0.0,
+    "scalar-on": 0.0,
+    "species-only": 0.0,
+    "surface-off": 0.0,
+    "transport-on": 0.0
+  },
+  "propertyPreparation": "mixture cp from recovered state; effective total-species enthalpies prepared on host and separately profiled; fluxes on CUDA",
+  "logs": "logs/physics-switches-20260923/solver-delivery",
+  "reports": {
+    "results/physics-switches-20260923/reactive-transport-cpu.json": "78fa9d9fe79f8adf96b225200c5a290677fa88afecdb3f935bf9320ba4a68ff9",
+    "results/physics-switches-20260923/reactive-transport-cuda.json": "4b5bc33d9163305bfa8f32bfacc8f463fe31e14b0fc7354422594490caf33a1e",
+    "results/physics-switches-20260923/solver.json": "5dbce27f81fef1a488e564ad750c9e094408089719d3a7b93e5aadca5dac09ba",
+    "results/physics-switches-20260923/total-species-enthalpies.json": "d5dc47ec712741d5d352d2a418fe29eea1ba7abf8e011b4ae591c17b14f4f857",
+    "results/physics-switches-20260923/wale-scalars-cpu.json": "d7c769ff6dec67ac60373e96039938b876b251f92d66e9e6aead242b4f36f8e0",
+    "results/physics-switches-20260923/wale-scalars-cuda.json": "e06155e0ce88ccf1f8a6863e96ae9179eeeeb567678b7c4c0f0d1ec400a0c334",
+    "results/physics-switches-20260923/wale-transport-cpu.json": "adff44330a8586891493961fe7b12102bcf78188560ad98b5b9ef4aa2e69e680",
+    "results/physics-switches-20260923/wale-transport-cuda.json": "63f27bf413a49e64df975e60b95db7e486c5bb32f42964bd31f73645c0b8d22a",
+    "results/spray-physics/interface-geometry.json": "26f040815731239be22e6cd534557952933637d4bfc8c131e639645ded25c377"
+  },
+  "sources": {
+    "src/reactiveFoam/reactivePhysics.H": "abd9ae78ce559457e965d01da207f280ee10de25e790424eed8156f89b2e1a5a",
+    "src/reactiveFoam/ReactiveFoam.C": "93932021ab019c74d648d7b010ac5098330009cfe783ec03d404c4a747476f8c",
+    "src/reactiveThermo/pintleReactiveThermo.h": "c9f572cd4d26cb4e642d5cc449f94bd60a0c9dbb586278643d7de0f3e0eb01bd",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "ced1362ff2c79d419bf6b4105cb475c7821459a322e4e08667c82efd505ec8fe",
+    "src/reactiveTransport/pintleTurbulence.h": "7321f7ed9403ea1330c7857ae311542cc02ae4c67560c07c2faa88213743bd61",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "3b8560cf8cff7e46dd826e90b8867543df37f97c3aee3c83194c6331f05ba41b",
+    "src/reactiveTransport/pintleTransportKernels.h": "33e1577a338d18d4925d120cce547de62a5d25536b42c43ce4e2f8cd90be7e46",
+    "src/reactiveInterface/pintleInterfaceGeometry.h": "0064f8120b11bf3cf0fec5f37c7efc4f446f1abe33a5a9d84a0451370b104eba",
+    "tools/prepare_impinging_n2o.py": "9548c2a4f905caec868106e98e7c1fa66d125a0d986791e0d947e41c311b290e",
+    "tools/validate_physics_switches.py": "f9a1b226656cdee0b7709b4b532739057eb26569722b085a8301edcc0d1d4c53",
+    "tools/validate_wale_scalars.py": "2db09c12818272aa97dd3bf5dc33531068a8850447d2adb72be12a965c0a359a",
+    "tools/validate_total_species_enthalpies.py": "6d787f785baba6597b4cdfa0099372b5084d43ebcde854de353671aecef5c2c1",
+    "tools/validate_interface_geometry.py": "74d78f47140e7aedf8c9c2d732e8c0e17cafdaa0a6b631a5b5d1fc907ec86375"
+  },
+  "limitations": [
+    "No coupled surface-tension/pressure/energy flashing model in ReactiveFoam; true rejects before transport allocation",
+    "Standalone color advection is first-order donor-cell, not PLIC; compressible dilatation/phase-transfer coupling remains",
+    "N2O/air phase-dependent molecular transport correlations and primary breakup validation remain"
+  ]
+}

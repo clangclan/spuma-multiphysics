@@ -1,0 +1,229 @@
+{
+  "schema": 1,
+  "tests": [
+    {
+      "name": "species-temperature-bounds-enabled",
+      "passed": true
+    },
+    {
+      "name": "configuration-liquid-domain",
+      "passed": true,
+      "condensables": [
+        {
+          "species": "N2O",
+          "phase": "liquid_N2O",
+          "minimum-liquid-temperature": 148.0,
+          "critical-temperature": 309.52
+        }
+      ]
+    },
+    {
+      "name": "state-abi-unchanged",
+      "passed": true,
+      "bytes": 176
+    },
+    {
+      "name": "model-topology",
+      "passed": true,
+      "species": [
+        "N2",
+        "O2",
+        "N2O",
+        "IC3H7OH"
+      ],
+      "condensed": [
+        {
+          "slot": 0,
+          "speciesIndex": 2,
+          "species": "N2O",
+          "kind": "liquid",
+          "name": "liquid_N2O"
+        }
+      ]
+    },
+    {
+      "name": "gas-nasa9-temperature-ranges",
+      "passed": true,
+      "minimumTemperature": [
+        148.0,
+        148.0,
+        148.0,
+        182.34
+      ],
+      "allNasa9": true
+    },
+    {
+      "name": "physical-hash-differs-from-solid-baseline",
+      "passed": true,
+      "supercooled": "17d074a827716eb51f269ce2448cddb1a53ef4587b2c0ac89473268ba868acdb",
+      "baseline": "e19b9d7ebc022ae94309f31808ae2236af4ad03f62e64570835e5859959cf56f"
+    },
+    {
+      "name": "coexistence-160K",
+      "passed": true,
+      "p": 19058.9710777143,
+      "muResidual": 1.1641532182693481e-10,
+      "volumeResidual": 6.6064931303344565e-12,
+      "energyResidual": 6.397076591887498e-13,
+      "chemicalResidual": 7.105427357601002e-15
+    },
+    {
+      "name": "coexistence-170K",
+      "passed": true,
+      "p": 40473.57031808686,
+      "muResidual": -1.1641532182693481e-10,
+      "volumeResidual": 3.311795282456842e-13,
+      "energyResidual": 3.5454229613372145e-13,
+      "chemicalResidual": 7.496225862269057e-13
+    },
+    {
+      "name": "coexistence-182K",
+      "passed": true,
+      "p": 88485.97140084696,
+      "muResidual": 1.4668330550193787e-08,
+      "volumeResidual": 1.1790568521519162e-13,
+      "energyResidual": 3.288514078405209e-14,
+      "chemicalResidual": 3.552713678800501e-15
+    },
+    {
+      "name": "coexistence-190K",
+      "passed": true,
+      "p": 140252.74973819536,
+      "muResidual": 1.1641532182693481e-10,
+      "volumeResidual": 8.577583088253959e-13,
+      "energyResidual": 6.092995919722371e-13,
+      "chemicalResidual": 7.922551503725117e-13
+    },
+    {
+      "name": "cooling-increases-liquid",
+      "passed": true,
+      "base": 1.272686807541007,
+      "cold": 1.2948610102848852
+    },
+    {
+      "name": "heating-evaporates-liquid",
+      "passed": true,
+      "base": 1.272686807541007,
+      "hot": 1.2504581722219819
+    },
+    {
+      "name": "pure-supercooled-liquid",
+      "passed": true,
+      "T": 160.0,
+      "p": 101325.0
+    },
+    {
+      "name": "binary-gas-liquid",
+      "passed": true,
+      "liquidMass": 0.1187287004364352,
+      "gasMass": 0.9486645601217911
+    },
+    {
+      "name": "warm-inlet-unchanged",
+      "passed": true,
+      "T": 293.15,
+      "p": 5601325.0
+    },
+    {
+      "name": "below-148K-rejected",
+      "passed": true
+    },
+    {
+      "name": "positive-IPA-below-bound-rejected",
+      "passed": true
+    },
+    {
+      "name": "cuda-call",
+      "passed": true,
+      "status": 0,
+      "error": "",
+      "inputsUnchanged": true
+    },
+    {
+      "name": "cpu-gpu-0",
+      "passed": true,
+      "success": 1,
+      "scaledError": 1.6848461628012096e-10
+    },
+    {
+      "name": "cpu-gpu-1",
+      "passed": true,
+      "success": 1,
+      "scaledError": 6.75577629393387e-11
+    },
+    {
+      "name": "cpu-gpu-2",
+      "passed": true,
+      "success": 1,
+      "scaledError": 4.21862198845462e-09
+    },
+    {
+      "name": "cpu-gpu-3",
+      "passed": true,
+      "success": 1,
+      "scaledError": 3.474586398579758e-10
+    },
+    {
+      "name": "cpu-gpu-4",
+      "passed": true,
+      "success": 1,
+      "scaledError": 1.0514236474747154e-10
+    },
+    {
+      "name": "cpu-gpu-5",
+      "passed": true,
+      "success": 1,
+      "scaledError": 8.023484980464397e-11
+    },
+    {
+      "name": "cpu-gpu-6",
+      "passed": true,
+      "success": 1,
+      "scaledError": 0.0
+    },
+    {
+      "name": "cpu-gpu-7",
+      "passed": true,
+      "success": 1,
+      "scaledError": 6.827382288419841e-11
+    },
+    {
+      "name": "cuda-analytic-jacobian",
+      "passed": true,
+      "analytic": 498,
+      "finiteDifference": 0
+    }
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_n2o_supercooled.py": "29ae946fe68cc32cdb6b0d8fc3a672f07d2601fea26657c867adc78aa5867d77",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/thermo/cold-pr-148K-config.yaml": "f2a6aa83c24633ca4a22566d35e140f5a00f31806d7cd556445ebc5a513aa4ae",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveBackend.so": "039cde89f340772b44904e8de007dc01a4c1606d201b41151a33e50f2ea6bbb0",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so": "a4861f690650a13e4c37a2b8e2cfd1f38dcb55d4ab2c95ef4f1561a36af786af",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_supercooled_20260922/thermo/cold-pr-148K.yaml": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_solid_20260922/thermo/cold-pr-148K-config.yaml": "2b54b78b2f269ec2526c82f800808e509e7b6d27da0aae3e8c13892f80949862"
+  },
+  "cudaProfile": {
+    "abiVersion": 1,
+    "structBytes": 144,
+    "batches": 1,
+    "submitted": 8,
+    "succeeded": 8,
+    "cpuFallbacks": 0,
+    "deviceFailures": 0,
+    "phaseEvaluations": 1747,
+    "residualEvaluations": 8639,
+    "flashCandidates": 40,
+    "stableCandidates": 36,
+    "analyticJacobians": 498,
+    "finiteDifferenceJacobians": 0,
+    "transferBytes": 3280,
+    "hostBytes": 1512,
+    "deviceBytes": 51208,
+    "wallSeconds": 0.101269628,
+    "kernelSeconds": 0.10123753356933594,
+    "copySeconds": 2.3744000121951103e-05
+  },
+  "physicalModelHash": "17d074a827716eb51f269ce2448cddb1a53ef4587b2c0ac89473268ba868acdb",
+  "passed": true,
+  "testCount": 27
+}

@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "scope": "Generic naming: build, public exports, CUDA physics, archived metadata and exact old-checkpoint continuation. No new performance claim.",
+  "checks": [
+    {
+      "name": "transport-cpu",
+      "passed": true,
+      "checks": 29
+    },
+    {
+      "name": "transport-cuda",
+      "passed": true,
+      "checks": 29
+    },
+    {
+      "name": "wale-cuda",
+      "passed": true,
+      "checks": 11
+    },
+    {
+      "name": "wale-scalars-cuda",
+      "passed": true,
+      "checks": 13
+    },
+    {
+      "name": "capillary-reuse-final",
+      "passed": true,
+      "checks": 10
+    },
+    {
+      "name": "physics-switches",
+      "passed": true,
+      "checks": 41
+    },
+    {
+      "name": "restart",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "name": "capillary-flash",
+      "passed": true,
+      "checks": 20
+    },
+    {
+      "name": "interface-cpu-cuda",
+      "passed": true,
+      "checks": 2
+    },
+    {
+      "name": "renamed-fp32-sidecar-replay",
+      "passed": true,
+      "identicalAcceptedStateBytes": true
+    }
+  ],
+  "renamedFiles": 63,
+  "binaries": {
+    "bin/ReactiveFoam": "0427552a6bb376b4379dede3e7beba2668be6c9f4d4b2c8a697cfb2367137955",
+    "lib/libreactiveBackend.so": "867bba39580513865bf6f5468656b829e9f458f6aa38f67bec974937405d5ac3",
+    "lib/libreactiveTransport.so": "cb83c7a357b734f9f3ef1a89b38d344e0dc0127eebba500ef049bb4996fc06ac"
+  },
+  "historicalResultsUnchanged": true,
+  "rawEvidence": "/home/jsw/문서/analysis/runs/generic_naming_20260924",
+  "buildNotes": [
+    "Cleared old wmake dependency cache after header renames.",
+    "Preserved all four persisted identity domains after old-checkpoint regression identified case-context hash drift.",
+    "An initial WALE runner timed out waiting on a nested test lock; reran with only the tool-owned lock."
+  ]
+}

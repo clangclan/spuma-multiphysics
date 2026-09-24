@@ -1,0 +1,24 @@
+{
+  "cases": [
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_1atm",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_40bar_abs",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_1atm",
+    "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_40bar_abs"
+  ],
+  "domainM": [
+    0.08,
+    0.08,
+    0.08
+  ],
+  "generatorHashes": {
+    "check_impinging_n2o_mesh.py": "a02f8261f6eddd39d161d399e8a37b0cc429c561b1d1ca295e14a0e6ae0c0068",
+    "impinging_cartesian_mesh.py": "4a07df9b58b2f72574c4fad793dc9c6f461d6890a4de27214b0fe2d33cc86e83",
+    "prepare_capillary_impingement.py": "229a74cf828e6190f413d435cfa3847852462e09f0d2be7ac5405d03699551b7",
+    "prepare_impinging_n2o.py": "065202d6b686cd3c6f6db61eb2563a6cb96d6075d2f48c0a4c5b904d3cd17369",
+    "prepare_impinging_resolution_series.py": "e2599b69a72b7d485fe0f71f51bcfe62890d57badcd1ffe290ac672439c1d061"
+  },
+  "inletZmm": 40.0,
+  "nozzleDiameterM": 0.005,
+  "requestedEndTime": 1e-06,
+  "scope": "Transient GPU benchmark to requested end time"
+}

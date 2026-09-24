@@ -1,0 +1,857 @@
+{
+  "binaries": {
+    "bin/ReactiveFoam": "4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858",
+    "lib/libpintleReactiveBackend.so": "7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25",
+    "lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f"
+  },
+  "cases": [
+    {
+      "ambientPa": 101325.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 393600.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 5171300.0
+      },
+      "cells": 64000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 32.0,
+        "copySeconds": 0.004087072052061558,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "kernelSeconds": 0.012513504058122632,
+        "phaseEvaluations": 512680.0,
+        "residualEvaluations": 280.0,
+        "submitted": 128000.0,
+        "succeeded": 128000.0,
+        "time": 3e-08,
+        "wallSeconds": 0.018109555999999992
+      },
+      "grid": 40,
+      "maxNormalizedConservationResidual": 9.72829979596383e-16,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999999,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_1atm/3e-08",
+        "checkpointSha256": "5bc77a11ed936ef440fafaecb0476cabe807b33424e7c072c7e31e4d5c94004e",
+        "conservedBudgetResidual": [
+          9.118618326067185e-17,
+          -1.3487287386421625e-16,
+          1.6543612251060553e-23,
+          0.0,
+          1.0587911840678754e-22,
+          -4.235164736271502e-22,
+          7.56500174527464e-22,
+          8.852467370257244e-13
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.8862178216706518e-08,
+        "n2oMassKg": 1.886217821670652e-08,
+        "pRangePa": [
+          96646.68230502972,
+          101324.99999999997
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          252.88949625228082,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.886217821670652e-08
+      },
+      "nonStepProcessSeconds": 1.500753845,
+      "passed": true,
+      "processPeakRssGiB": 0.659820556640625,
+      "processSeconds": 1.56,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 0.513671875,
+      "solverLogSha256": "8cda05e843565e8bbac66682a215e08e4311a4783e7c351e8343b71947f29fac",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_1atm",
+      "stepSeconds": 0.059246155,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 8.511912713998063,
+          "seconds": 0.005042981
+        },
+        "cflSeconds": {
+          "percentOfStep": 14.503791849445758,
+          "seconds": 0.008592939
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.39248791757034696,
+          "seconds": 0.000232534
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.7361102167727172,
+          "seconds": 0.000436117
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.06972773169836001,
+          "seconds": 4.131099999999451e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 56.07643905330228,
+          "seconds": 0.033223134
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 19.709530517212464,
+          "seconds": 0.011677139
+        }
+      },
+      "transportAllocatedGB": 0.095186176,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 384000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 71983976.0,
+        "kernels": 12.0,
+        "scratchBytes": 15919456.0,
+        "wallSeconds": 0.006067249
+      }
+    },
+    {
+      "ambientPa": 4000000.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 393600.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 5171300.0
+      },
+      "cells": 64000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 32.0,
+        "copySeconds": 0.004064319983124732,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 4528.0,
+        "kernelSeconds": 0.3376317401528357,
+        "phaseEvaluations": 571256.0,
+        "residualEvaluations": 96244.0,
+        "submitted": 128000.0,
+        "succeeded": 128000.0,
+        "time": 3e-08,
+        "wallSeconds": 0.3431966010000002
+      },
+      "grid": 40,
+      "maxNormalizedConservationResidual": 1.1198183298441331e-16,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999999,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_40bar_abs/3e-08",
+        "checkpointSha256": "1cd0bd72eef04ba359f61a01698d7ac95c8079ce459aff36af9163280fa4a514",
+        "conservedBudgetResidual": [
+          -1.7464965929018306e-14,
+          6.620773756042961e-15,
+          4.1359030627651384e-24,
+          0.0,
+          -2.542422330742986e-20,
+          2.9288811129277604e-20,
+          -2.6034710805117052e-20,
+          3.701465320013475e-09
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -5.322350231185152e-09,
+        "n2oMassKg": 5.3223502311851545e-09,
+        "pRangePa": [
+          3998663.49082789,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          292.89131696226974,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 5.3223502311851545e-09
+      },
+      "nonStepProcessSeconds": 1.165549796,
+      "passed": true,
+      "processPeakRssGiB": 0.6652069091796875,
+      "processSeconds": 1.55,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 1.24609375,
+      "solverLogSha256": "d648504dc16d4874494b293e41b3fae26899357242e59228894a80bee9ad6b29",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n40/full-physics/ambient_40bar_abs",
+      "stepSeconds": 0.384450204,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 1.2551963686823795,
+          "seconds": 0.004825605
+        },
+        "cflSeconds": {
+          "percentOfStep": 2.2515196792560426,
+          "seconds": 0.008655972000000001
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.05936269447265009,
+          "seconds": 0.00022822
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.0777221593046677,
+          "seconds": 0.000298803
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.010683308156092487,
+          "seconds": 4.10720000000462e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 93.29064395554332,
+          "seconds": 0.35865607099999997
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 3.054871834584851,
+          "seconds": 0.011744461000000001
+        }
+      },
+      "transportAllocatedGB": 0.095186176,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 384000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 71983976.0,
+        "kernels": 12.0,
+        "scratchBytes": 15919456.0,
+        "wallSeconds": 0.006176589999999999
+      }
+    },
+    {
+      "ambientPa": 101325.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 3110400.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 41165060.0
+      },
+      "cells": 512000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 250.0,
+        "copySeconds": 0.03265315230190752,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "kernelSeconds": 0.07534121930599205,
+        "phaseEvaluations": 4097792.0,
+        "residualEvaluations": 640.0,
+        "submitted": 1024000.0,
+        "succeeded": 1024000.0,
+        "time": 3e-08,
+        "wallSeconds": 0.11976732699999998
+      },
+      "grid": 80,
+      "maxNormalizedConservationResidual": 4.311925323146118e-15,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999997,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 512000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n80/full-physics/ambient_1atm/3e-08",
+        "checkpointSha256": "087f111802cf370375527bbabae7b46b468a2fc7e7dfb55aadedc2738882313e",
+        "conservedBudgetResidual": [
+          4.669476685659913e-15,
+          1.559778530075373e-15,
+          6.617444900424222e-24,
+          0.0,
+          1.283784310682299e-21,
+          -1.2043749718772083e-21,
+          1.280050944450251e-21,
+          7.225671623534158e-10
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.2601675861463689e-08,
+        "n2oMassKg": 1.260167586146369e-08,
+        "pRangePa": [
+          91772.2858492966,
+          101324.99999999997
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          219.37428895010703,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.260167586146369e-08
+      },
+      "nonStepProcessSeconds": 6.43116034,
+      "passed": true,
+      "processPeakRssGiB": 1.5983467102050781,
+      "processSeconds": 6.89,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 2.021484375,
+      "solverLogSha256": "143a74dc083591fda70dbe56a48255718d412780a5487183f9be5348d0b34205",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n80/full-physics/ambient_1atm",
+      "stepSeconds": 0.45883966,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 8.272049761348008,
+          "seconds": 0.037955445000000004
+        },
+        "cflSeconds": {
+          "percentOfStep": 16.159099891234334,
+          "seconds": 0.07414435899999999
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.5461095058783715,
+          "seconds": 0.002505767
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.7551958346407981,
+          "seconds": 0.003465138
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.010713328486038147,
+          "seconds": 4.9157000000020577e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 53.02926255328496,
+          "seconds": 0.243319288
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 21.227569125127502,
+          "seconds": 0.097400506
+        }
+      },
+      "transportAllocatedGB": 0.74201184,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 3072000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 574512776.0,
+        "kernels": 12.0,
+        "scratchBytes": 127023456.0,
+        "wallSeconds": 0.041939722
+      }
+    },
+    {
+      "ambientPa": 4000000.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 3110400.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 41165060.0
+      },
+      "cells": 512000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 250.0,
+        "copySeconds": 0.03271056032925847,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 10448.0,
+        "kernelSeconds": 0.9093369251191616,
+        "phaseEvaluations": 4232624.0,
+        "residualEvaluations": 221040.0,
+        "submitted": 1024000.0,
+        "succeeded": 1024000.0,
+        "time": 3e-08,
+        "wallSeconds": 0.9538334980000002
+      },
+      "grid": 80,
+      "maxNormalizedConservationResidual": 3.3204710837583457e-16,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999999,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 512000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n80/full-physics/ambient_40bar_abs/3e-08",
+        "checkpointSha256": "676b5565614f37cd07d619d40bf9ebb6ba76dad2976fcd3b20a1b2691cc76aa5",
+        "conservedBudgetResidual": [
+          2.0329121828068176e-13,
+          2.745647945570778e-14,
+          3.308722450212111e-24,
+          0.0,
+          -3.024172319493869e-21,
+          4.658681209898652e-21,
+          -3.403420494084226e-21,
+          -1.9037141258358703e-08
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -3.550972016476347e-09,
+        "n2oMassKg": 3.5509720164763476e-09,
+        "pRangePa": [
+          3997292.5877975537,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          292.630808461453,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 3.5509720164763476e-09
+      },
+      "nonStepProcessSeconds": 6.430437115,
+      "passed": true,
+      "processPeakRssGiB": 1.597900390625,
+      "processSeconds": 7.72,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 2.013671875,
+      "solverLogSha256": "c4ead2aa502683695f625d1af8c79a315cd9c469ee5b759e00efa948ed126d51",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n80/full-physics/ambient_40bar_abs",
+      "stepSeconds": 1.289562885,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 2.675344987150433,
+          "seconds": 0.034500256
+        },
+        "cflSeconds": {
+          "percentOfStep": 5.535923515664767,
+          "seconds": 0.071389215
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.20161676721953734,
+          "seconds": 0.002599975
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.27385380279458027,
+          "seconds": 0.003531517
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.003971655868505774,
+          "seconds": 5.1217000000174876e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 83.63541154489724,
+          "seconds": 1.078531226
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 7.673877726404943,
+          "seconds": 0.09895947899999999
+        }
+      },
+      "transportAllocatedGB": 0.74201184,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 3072000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 574512776.0,
+        "kernels": 12.0,
+        "scratchBytes": 127023456.0,
+        "wallSeconds": 0.042360822000000006
+      }
+    },
+    {
+      "ambientPa": 101325.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 24729600.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 328500484.0
+      },
+      "cells": 4096000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 2000.0,
+        "copySeconds": 0.2851630110889673,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 0.0,
+        "kernelSeconds": 0.5623949707150496,
+        "phaseEvaluations": 32776928.0,
+        "residualEvaluations": 2720.0,
+        "submitted": 8192000.0,
+        "succeeded": 8192000.0,
+        "time": 3e-08,
+        "wallSeconds": 0.9443121299999977
+      },
+      "grid": 160,
+      "maxNormalizedConservationResidual": 1.0595055227300159e-13,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999998,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 4096000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n160/full-physics/ambient_1atm/3e-08",
+        "checkpointSha256": "93a9b5a0dc3edb4058abd22fc3f4c3ab0f73d6ff66e920d12df00561c4699765",
+        "conservedBudgetResidual": [
+          -2.615415836427286e-14,
+          2.3465526985498367e-15,
+          3.970466940254533e-23,
+          0.0,
+          3.441071348220595e-22,
+          -5.293955920339377e-22,
+          9.568034486158332e-22,
+          -9.718762419841376e-09
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.5785202474295126e-08,
+        "n2oMassKg": 1.5785202474295126e-08,
+        "pRangePa": [
+          82806.17431748543,
+          101324.99999999997
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          169.17198798075123,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.5785202474295126e-08
+      },
+      "nonStepProcessSeconds": 48.154260669,
+      "passed": true,
+      "processPeakRssGiB": 9.062114715576172,
+      "processSeconds": 51.84,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 7.71484375,
+      "solverLogSha256": "297b35780e3d55a0edeb06572e95c8f107b99b613e2ceb8599dfab48a19b7574",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n160/full-physics/ambient_1atm",
+      "stepSeconds": 3.685739331,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 7.887833318942869,
+          "seconds": 0.290724975
+        },
+        "cflSeconds": {
+          "percentOfStep": 15.952398371061038,
+          "seconds": 0.587963821
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.556432025116537,
+          "seconds": 0.020508634
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.8845298072437124,
+          "seconds": 0.032601463
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.0015099548557911473,
+          "seconds": 5.565300000023865e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 53.08864887819164,
+          "seconds": 1.9567092119999998
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 21.628647644588405,
+          "seconds": 0.797175573
+        }
+      },
+      "transportAllocatedGB": 5.881223312,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 24576000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 4591669896.0,
+        "kernels": 12.0,
+        "scratchBytes": 1015855456.0,
+        "wallSeconds": 0.33690601499999995
+      }
+    },
+    {
+      "ambientPa": 4000000.0,
+      "capillary": {
+        "closureIterations": 3.0,
+        "enabled": 1.0,
+        "faceFluxBuilds": 24729600.0,
+        "geometryBuilds": 12.0,
+        "geometryKernels": 24.0,
+        "workspaceBytes": 328500484.0
+      },
+      "cells": 4096000,
+      "dtNs": 29.999999999999996,
+      "gpuHemStep": {
+        "analyticJacobians": 0.0,
+        "batches": 2000.0,
+        "copySeconds": 0.26453917129337845,
+        "cpuFallbacks": 0.0,
+        "deviceFailures": 0.0,
+        "finiteDifferenceJacobians": 44680.0,
+        "kernelSeconds": 3.227116568744196,
+        "phaseEvaluations": 33352928.0,
+        "residualEvaluations": 944736.0,
+        "submitted": 8192000.0,
+        "succeeded": 8192000.0,
+        "time": 3e-08,
+        "wallSeconds": 3.5872337580000013
+      },
+      "grid": 160,
+      "maxNormalizedConservationResidual": 9.851333704822763e-16,
+      "metrics": {
+        "acceptedSteps": 1,
+        "alphaGasRange": [
+          0.9999999999999997,
+          1.0000000000000002
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 4096000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n160/full-physics/ambient_40bar_abs/3e-08",
+        "checkpointSha256": "8c1adcb662b51886187e6ed76f70cb8b9134882101abfce2eb2d64a5e37e4cd6",
+        "conservedBudgetResidual": [
+          -1.1663732099810103e-12,
+          -2.660319893102074e-13,
+          3.308722450212111e-24,
+          0.0,
+          2.395515053953568e-21,
+          -1.5405411728187587e-20,
+          -2.561574259273539e-21,
+          -9.309605743246241e-08
+        ],
+        "deltaT": 3e-08,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -4.445566802415313e-09,
+        "n2oMassKg": 4.4455668024153126e-09,
+        "pRangePa": [
+          3994469.161659444,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          292.1051919121644,
+          293.15
+        ],
+        "time": 3e-08,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 4.4455668024153126e-09
+      },
+      "nonStepProcessSeconds": 48.716262399,
+      "passed": true,
+      "processPeakRssGiB": 9.06290054321289,
+      "processSeconds": 54.99,
+      "retries": 0.0,
+      "sampledWholeGpuPeakGiB": 7.71484375,
+      "solverLogSha256": "4e5c8f995d168338d6f28b37ae5c8807feda037601404b8f185a33bce4b5e73c",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923/n160/full-physics/ambient_40bar_abs",
+      "stepSeconds": 6.273737601,
+      "stepTimeBreakdown": {
+        "backupSeconds": {
+          "percentOfStep": 4.427886909961314,
+          "seconds": 0.277794006
+        },
+        "cflSeconds": {
+          "percentOfStep": 8.991949390903448,
+          "seconds": 0.56413131
+        },
+        "conservationSeconds": {
+          "percentOfStep": 0.32253099008754677,
+          "seconds": 0.020234748
+        },
+        "diagnosticsSeconds": {
+          "percentOfStep": 0.4944432963701824,
+          "seconds": 0.031020075
+        },
+        "otherSeconds": {
+          "percentOfStep": 0.0008656881026008758,
+          "seconds": 5.43110000002546e-05
+        },
+        "recoverySeconds": {
+          "percentOfStep": 73.03255410729443,
+          "seconds": 4.581870808
+        },
+        "sourceSeconds": {
+          "percentOfStep": 0.0,
+          "seconds": 0.0
+        },
+        "transportSeconds": {
+          "percentOfStep": 12.729769617280493,
+          "seconds": 0.798632343
+        }
+      },
+      "transportAllocatedGB": 5.881223312,
+      "walePr": {
+        "backend": "device-pr",
+        "builds": 6.0,
+        "cells": 24576000.0,
+        "failures": 0.0,
+        "inputUploadBytes": 4591669896.0,
+        "kernels": 12.0,
+        "scratchBytes": 1015855456.0,
+        "wallSeconds": 0.32673843999999996
+      }
+    }
+  ],
+  "conditions": {
+    "ambientPa": [
+      101325,
+      4000000
+    ],
+    "closure": "cuda",
+    "cpuFallback": false,
+    "disabled": [
+      "chemistry",
+      "solid",
+      "sublimation",
+      "molecular species diffusion"
+    ],
+    "enabled": [
+      "HEM equilibrium flashing",
+      "supercooled liquid",
+      "viscosity",
+      "heat conduction",
+      "WALE stress",
+      "turbulent heat flux",
+      "turbulent species mixing",
+      "diffuse surface tension"
+    ],
+    "maxStepNs": 30,
+    "supplyAbsolutePa": 5601325,
+    "supplyGaugePa": 5500000.0,
+    "temperatureK": 293.15,
+    "transport": "cuda",
+    "waleProperties": "device-pr"
+  },
+  "domainM": [
+    0.08,
+    0.08,
+    0.08
+  ],
+  "notes": [
+    "Wall time is GNU time process elapsed; wrapper time includes environment setup and polling.",
+    "GPU observations include all processes and CUDA/OpenFOAM memory; transport allocation is separately counted.",
+    "Each case was run once. Initial TP state construction, mesh work and checkpoint I/O include CPU work.",
+    "Liquid phase balance includes an equilibrium source and is reported separately from the conserved species/momentum/energy budget.",
+    "All six final initial-step checkpoints contain vapor N2O only; this does not validate liquid penetration or breakup."
+  ],
+  "nozzleDiameterM": 0.005,
+  "passed": true,
+  "runDirectory": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_20260923",
+  "scope": "Six single initial accepted steps. Not developed collision/breakup, convergence, or long-time performance.",
+  "sourceHashes": {
+    "tools/analyze_impinging_n2o.py": "4e903ba3fbdf4377fcf262213c490af3612cff23d8ea5e9f53f6361eecd25776",
+    "tools/check_impinging_n2o_mesh.py": "f3588a03448ea19671e43a5ac9cfd6742cb13cad21c915e920e300930b1e11e1",
+    "tools/impinging_cartesian_mesh.py": "aad4005368fe7d21f1f9036d028ebd6b40569c738213bef7c4e97d3929cd24c2",
+    "tools/plot_impinging_n2o.py": "fffea7f18a2d1343d921d937fdb1814cb35d0ea465ec53e076082a22bf4b06d5",
+    "tools/prepare_capillary_impingement.py": "229a74cf828e6190f413d435cfa3847852462e09f0d2be7ac5405d03699551b7",
+    "tools/prepare_impinging_n2o.py": "05fb9277da62d529891d9b28c5537e1a5edb329cd71b378b939a93af8fbb9342",
+    "tools/prepare_impinging_resolution_series.py": "be57e512c5c45871bc24669f1da24f77989c7ee20179d87715b5bf1f5402f414",
+    "tools/validate_impinging_initial_steps.py": "8c6477fce1761f5533931416aab8b965ec0897739ce0b48e62967136618ec140"
+  }
+}

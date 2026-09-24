@@ -14,11 +14,11 @@ class Acceleration(C.Structure):
 
 def attach(b):
     bind(b)
-    f=b.lib.pintle_rt_set_closure_acceleration_v1;f.argtypes=[C.c_void_p,C.c_int,C.c_int,C.c_char_p];f.restype=C.c_int
-    f=b.lib.pintle_rt_pool_acceleration_profile_v1;f.argtypes=[C.c_void_p,C.POINTER(Acceleration)];f.restype=C.c_int
+    f=b.lib.reactive_rt_set_closure_acceleration_v1;f.argtypes=[C.c_void_p,C.c_int,C.c_int,C.c_char_p];f.restype=C.c_int
+    f=b.lib.reactive_rt_pool_acceleration_profile_v1;f.argtypes=[C.c_void_p,C.POINTER(Acceleration)];f.restype=C.c_int
 
 def profile(b,pool):
-    p=Acceleration(1,C.sizeof(Acceleration));b.check(b.lib.pintle_rt_pool_acceleration_profile_v1(pool,C.byref(p)))
+    p=Acceleration(1,C.sizeof(Acceleration));b.check(b.lib.reactive_rt_pool_acceleration_profile_v1(pool,C.byref(p)))
     return {n:getattr(p,n) for n,_ in p._fields_}
 
 def main():
@@ -38,7 +38,7 @@ def main():
                 x=np.asarray(getattr(a,n));y=np.asarray(getattr(b,n));largest=max(largest,float(np.max(np.abs(x-y)/np.maximum(1.,np.abs(y)))))
         return largest
     with RealFluidBackend(args.config,args.library) as reference:
-        attach(reference);reference.check(reference.lib.pintle_rt_set_recovery_v1(reference.handle,1,1))
+        attach(reference);reference.check(reference.lib.reactive_rt_set_recovery_v1(reference.handle,1,1))
         normal=[]
         for Y,liq,p in [({'N2':.7670907820415769,'O2':.2329092179584231},[0,0],101325),({'N2O':1},[0,0],1e6),({'IC3H7OH':1},[0,1],4e6)]:
             q,e,s=reference.make_state(293.15,p,Y,liq);normal.append(dict(q=q.tolist(),energy=e,guess=s.as_dict()))
@@ -49,27 +49,27 @@ def main():
     def run(rows,reuse,cuda,workers=4,repeats=1,operation=0):
         n=len(rows)
         with RealFluidBackend(args.config,args.library) as b:
-            attach(b);b.check(b.lib.pintle_rt_set_recovery_v1(b.handle,1,1))
-            b.check(b.lib.pintle_rt_set_closure_acceleration_v1(b.handle,reuse,cuda,str(args.cuda_library.resolve()).encode()))
-            error=C.create_string_buffer(2048);pool=b.lib.pintle_rt_pool_create(b.handle,workers,n,32*1024*1024,error,len(error))
+            attach(b);b.check(b.lib.reactive_rt_set_recovery_v1(b.handle,1,1))
+            b.check(b.lib.reactive_rt_set_closure_acceleration_v1(b.handle,reuse,cuda,str(args.cuda_library.resolve()).encode()))
+            error=C.create_string_buffer(2048);pool=b.lib.reactive_rt_pool_create(b.handle,workers,n,32*1024*1024,error,len(error))
             if not pool:raise RuntimeError(error.value.decode())
             before=b.profile();times=[];outputs=[];unchanged=True;status=0;message=''
             try:
                 for iteration in range(repeats):
                     q=np.array([r['q'] for r in rows]);energy=np.array([r['energy'] for r in rows]);states=(State*n)(*[guess_of(r) for r in rows]);drift=C.c_double()
                     original=q.tobytes(),energy.tobytes(),bytes(states)
-                    start=time.perf_counter();status=b.lib.pintle_rt_pool_batch(pool,Token(iteration+1,1,iteration+1),operation,n,b.ns,ptr(q),ptr(energy),states,0,1e-8,1e-14,C.byref(drift));times.append(time.perf_counter()-start)
+                    start=time.perf_counter();status=b.lib.reactive_rt_pool_batch(pool,Token(iteration+1,1,iteration+1),operation,n,b.ns,ptr(q),ptr(energy),states,0,1e-8,1e-14,C.byref(drift));times.append(time.perf_counter()-start)
                     unchanged &= q.tobytes()==original[0] and energy.tobytes()==original[1]
                     if status:unchanged &= bytes(states)==original[2]
-                    outputs=[s.copy() for s in states];message=b.lib.pintle_rt_pool_error(pool).decode()
+                    outputs=[s.copy() for s in states];message=b.lib.reactive_rt_pool_error(pool).decode()
                 stats=profile(b,pool)
                 # Token reuse must reject without changing the caller's arrays.
                 snapshot=q.tobytes(),bytes(states)
-                stale=b.lib.pintle_rt_pool_batch(pool,Token(repeats,1,repeats),operation,n,b.ns,ptr(q),ptr(energy),states,0,1e-8,1e-14,C.byref(drift))
+                stale=b.lib.reactive_rt_pool_batch(pool,Token(repeats,1,repeats),operation,n,b.ns,ptr(q),ptr(energy),states,0,1e-8,1e-14,C.byref(drift))
                 stale_safe=stale!=0 and snapshot==(q.tobytes(),bytes(states))
                 return outputs,dict(status=status,error=message,inputsUnchanged=unchanged,staleSafe=stale_safe,times=times,
                     medianSeconds=statistics.median(times),profile=stats)
-            finally:b.lib.pintle_rt_pool_destroy(pool)
+            finally:b.lib.reactive_rt_pool_destroy(pool)
 
     # Captured difficult liquid/trace inputs are never bypassed by GPU calorics.
     for workers in [1,8,16,24]:

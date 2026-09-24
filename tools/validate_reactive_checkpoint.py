@@ -27,7 +27,7 @@ def checkpoint(path):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--thermo-dir',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False);env=b.sourced_environment();exe=b.PROJECT_ROOT/'bin/ReactiveFoam'
-    shim=b.PROJECT_ROOT/'lib/libpintleTestRecoveryFailure.so';report={'solverSha256':b.sha256(exe),'backendSha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),'tests':[]}
+    shim=b.PROJECT_ROOT/'lib/libreactiveTestRecoveryFailure.so';report={'solverSha256':b.sha256(exe),'backendSha256':b.sha256(b.PROJECT_ROOT/'lib/libreactiveBackend.so'),'tests':[]}
     def edit(case,filename,key,value):
         path=case/filename;content,n=re.subn(r'\b'+key+r'\s+[^;]+;',f'{key} {value};',path.read_text())
         if n!=1:raise AssertionError(key)

@@ -1,0 +1,25 @@
+{
+  "scope": "Final source snapshot; exact measured binary hashes are recorded separately in summary.json and per-run manifests. Working tree has preceding optimization changes.",
+  "baseCommit": "406335802c582baa6f2fc2482f7a92ee012f3468",
+  "sourceSha256": {
+    "src/reactiveThermo/pintleMixedLinear.h": "01fcba01233bcb99bb10bb66cc513d250741a8f4ca085a7e5166e9c50b0f2526",
+    "src/reactiveThermo/pintleMixedCubic.h": "4da85013380a502fb4a87aaec462bab1c0d58d88fa767017250f1082e2087160",
+    "src/reactiveThermo/pintleMixedNasa.h": "fc51eb9615ad5cc4760965ea3fa8423cc817f996d46c4db296ecd678d16eeb0e",
+    "src/reactiveThermo/pintleDeviceFlash.h": "fe0acb68d34a530dad19eefddf23296732c9582cd8f970ae9b0d79a8b5bd1eb2",
+    "src/reactiveThermo/pintleDevicePR.h": "f1dc1508bcb9a6a5961341bc6ca743c2daafbe0e6815a05520a2158116c36c6a",
+    "src/reactiveThermo/pintleGpuHem.h": "a0c57ac4534fb7691a74bdbe8c967115365dfa3aef008a4b37652bd5828d8761",
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "808d652d207cc8d92b345160883479048bb9c521a820e4380a587a5110af56dc",
+    "src/reactiveTransport/pintleGpuHem.cuh": "70f9c634a95d9badbf2a66b6d2c32b52a122fb01c0d9c3620b9c92899fcd1311",
+    "src/reactiveTransport/pintleGpuHemFma.cu": "07987e002ca0ab2548325da5ff545da54c01208d3b4a8925180df1897c5ab2a5",
+    "tools/build_hem_precision_variants.sh": "c4266c4edb05d0eceab71405633324ce766396f580bc53360f4498f44866b658",
+    "tools/benchmark_hem_optimization.py": "a17e6ac99f2cf430ee955125b4e7c5ddd025c134f66071d94963934e5053294e",
+    "tools/compare_hem_precision.py": "81f03bc22aaad79d56c7d8bec61e54e8172ff6344738e3a5035c8b65fcbb0c20",
+    "tools/hem_capture.cpp": "b77df3979ae0f338424c956f323c9c9129f8a76149b42ccb60a864db68866923",
+    "tools/profile_hem_precision.py": "781eb1ac997aa4f3c9bd3077c8fb4a24ec9eac3e6949a965cd926f58643d91cf",
+    "tools/relax_hem_capture.cpp": "705c16202cab87cc069068c13d1a3ed3fd582c157be9c1ef8067a31a0fb33516",
+    "tools/replay_hem_precision.py": "cb60663fb6e048cf774090cf860fdfdf778b1073c3d892e4857d864d2fffff8f",
+    "tools/summarize_hem_precision.py": "d546d1d8c90bac0e9dcf55117a6884db5a3ee14aefb547c83a9820c22b58644e",
+    "tools/validate_mixed_linear.cpp": "ecc3428e29fb9bf370ecb9f6fc49ef90c5e8dd0f7fe34ec778387455338907d9",
+    "tools/validate_mixed_nasa.cpp": "7c51cf7a721e6542e281b95a18dfb6dd01e4f770e264dcfb2763b3e2da06c0a6"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "n": 16,
+  "cells": 4096,
+  "faces": 12288,
+  "maxVolumeClosure": 9.003648521188623e-15,
+  "maxTractionClosure": 2.017830347256222e-14,
+  "cudaChecked": true,
+  "maxCudaFaceDifference": 4.440892098500626e-16
+}

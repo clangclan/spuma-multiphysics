@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "backend": "cuda",
+  "actualCuda": true,
+  "cells": 64,
+  "maxOperatorError": 6.137160380603746e-05,
+  "globalSpeciesResidual": 3.6914915568786455e-15,
+  "dtOff": 9.794504387007805e-07,
+  "dtOn": 9.78925788759082e-07,
+  "scalarFieldUploadBytes": 2560,
+  "scalarWorkspaceBytes": 2048,
+  "checks": [
+    "total-species mass-conservative SGS flux",
+    "phase-aware species enthalpy flux",
+    "SGS heat flux",
+    "closed periodic species/energy conservation",
+    "zero coefficients exact off parity",
+    "WALE scalar CFL with cp/cv",
+    "cp-only CFL upload invalidates stale enthalpies",
+    "face rho*nut scalar CFL at 800:1 density contrast",
+    "fixed-state heat/species/enthalpy boundary balance",
+    "frozen-condensate species SGS rejection",
+    "invalid and immutable additive API",
+    "missing-field output atomicity",
+    "no interface/capillary terms"
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libreactiveTransport.so": "cb83c7a357b734f9f3ef1a89b38d344e0dc0127eebba500ef049bb4996fc06ac",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_wale_scalars.py": "c78505a4cd612595b62cba439d1b6fd7e2bb26d91a700732963237c09b7239ce"
+  }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Review regression gates: cache lifetime, broader chemistry and real-state transport.
 
-Build with PINTLE_REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh.
+Build with REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh.
 CUDA selection requires an actual device; CPU results never imply GPU validation.
 """
 import argparse
@@ -24,8 +24,8 @@ def require(ok, message):
 
 
 def callbacks(root, directory):
-    lib = C.CDLL(str(root / "lib/libpintleReactiveCacheTest.so"))
-    fn = lib.pintle_test_sparse_cache
+    lib = C.CDLL(str(root / "lib/libreactiveCacheTest.so"))
+    fn = lib.reactive_test_sparse_cache
     fn.argtypes = [C.c_char_p, C.c_char_p, C.c_size_t]; fn.restype = C.c_int
     error = C.create_string_buffer(8192)
     require(fn(str(directory / "chemistry-config.yaml").encode(), error, len(error)) == 0, error.value.decode())
@@ -37,8 +37,8 @@ def callbacks(root, directory):
 
 
 def failure_recovery(root, directory):
-    lib = C.CDLL(str(root / "lib/libpintleReactiveCacheTest.so"))
-    fn = lib.pintle_test_chemical_failure_recovery
+    lib = C.CDLL(str(root / "lib/libreactiveCacheTest.so"))
+    fn = lib.reactive_test_chemical_failure_recovery
     fn.argtypes = [C.c_char_p, C.c_int, C.c_char_p, C.c_size_t]; fn.restype = C.c_int
     rows = []
     for mode in (0, 1, 2):
@@ -195,14 +195,14 @@ def real_transport(root, directory, backend, kind):
                  for (l, r), n in zip([(0, 1), (1, 2), (2, 0), (0, -1), (2, -1)], normals)]
         cfg = tr.Config(nc, ns, nv, len(faces), 0, .007, 2, 0 if kind == "liquid" else .003, 1.1, 2e8, 0)
         volumes = np.array([.1, .17, .12]); geometry = (tr.Face*len(faces))(*faces)
-        lib = tr.load(root / "lib/libpintleReactiveTransport.so"); error = C.create_string_buffer(4096)
-        handle = lib.pintle_transport_create(int(backend == "cuda"), C.byref(cfg), tr.ptr(volumes), geometry,
+        lib = tr.load(root / "lib/libreactiveTransport.so"); error = C.create_string_buffer(4096)
+        handle = lib.reactive_transport_create(int(backend == "cuda"), C.byref(cfg), tr.ptr(volumes), geometry,
                     None, None, None, None, error, len(error))
         require(bool(handle), error.value.decode())
         try:
             rhs, boundary = np.empty_like(q), np.empty(nv)
-            require(lib.pintle_transport_rhs(handle, tr.ptr(q), states, tr.ptr(gy), tr.ptr(gh), tr.ptr(rhs), tr.ptr(boundary)) == 0,
-                    lib.pintle_transport_error(handle).decode())
+            require(lib.reactive_transport_rhs(handle, tr.ptr(q), states, tr.ptr(gy), tr.ptr(gh), tr.ptr(rhs), tr.ptr(boundary)) == 0,
+                    lib.reactive_transport_error(handle).decode())
             expected, br, dt = tr.reference(q, states, faces, volumes, cfg, None, None, gy, gh, None, None)
             error = float(np.max(np.abs(rhs-expected)/np.maximum(1, np.max(np.abs(expected), axis=0))))
             require(error < 3e-12, "Real thermodynamics / transport mismatch")
@@ -215,12 +215,12 @@ def real_transport(root, directory, backend, kind):
             balance = (rhs*volumes[:, None]).sum(axis=0)+boundary
             require(np.all(np.abs(balance) < 2e-11*np.maximum(1, (np.abs(rhs)*volumes[:, None]).sum(axis=0))), "Real-state conservation failed")
             step = C.c_double()
-            require(lib.pintle_transport_stable_step_primitives(handle, tr.primitives(q, states, ns), states, .23, .1, C.byref(step)) == 0,
-                    lib.pintle_transport_error(handle).decode())
+            require(lib.reactive_transport_stable_step_primitives(handle, tr.primitives(q, states, ns), states, .23, .1, C.byref(step)) == 0,
+                    lib.reactive_transport_error(handle).decode())
             require(abs(step.value/dt-1) < 3e-14, "Real-state primitive CFL mismatch")
             return dict(kind=kind, species=ns, scaled_error=error, boundary_scaled_error=boundary_error, states=actual, gpu_execution=backend == "cuda")
         finally:
-            lib.pintle_transport_destroy(handle)
+            lib.reactive_transport_destroy(handle)
 
 
 def main():
@@ -234,7 +234,7 @@ def main():
     scratch = directory / "review-validation-inputs" / a.output.stem; scratch.mkdir(parents=True, exist_ok=False)
     report = dict(baseline="c26e9c9965145a4d0f1bf0253a61f9d2a5c6b2e0", backend=a.backend,
         cantera=ct.__version__, sundials=ct.__sundials_version__, tests=[], library_sha256={
-        f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in (root / "lib").glob("libpintleReactive*.so") if "reviewed" not in f.name})
+        f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in (root / "lib").glob("libreactive*.so") if "reviewed" not in f.name})
     checks = [("sparse-cache-callbacks", lambda: callbacks(root, directory)),
               ("workspace-lifetime", lambda: workspace_lifetime(directory)),
               ("CVODE-failure-recovery", lambda: failure_recovery(root, directory)),

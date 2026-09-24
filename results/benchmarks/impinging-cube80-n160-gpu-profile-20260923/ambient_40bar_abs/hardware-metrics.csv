@@ -1,0 +1,40 @@
+name,window,count,min,mean,p50,p90,p99,max,sum
+Sync Copy Engine Active [Throughput %],wholeCapture,408204,0.0,0.00012003802020558348,0.0,0.0,0.0,1.0,49.0
+Sync Copy Engine Active [Throughput %],firstToLastGpuActivity,405195,0.0,0.00011352558644603215,0.0,0.0,0.0,1.0,46.0
+Sync Copy Engine Active [Throughput %],firstToLastHem,360718,0.0,0.00012752343936260459,0.0,0.0,0.0,1.0,46.0
+Async Copy Engine Active 0 [Throughput %],wholeCapture,408204,0.0,1.428952190571381,0.0,0.0,72.0,100.0,583304.0
+Async Copy Engine Active 0 [Throughput %],firstToLastGpuActivity,405195,0.0,1.43569145719962,0.0,0.0,73.0,87.0,581735.0
+Async Copy Engine Active 0 [Throughput %],firstToLastHem,360718,0.0,1.5573245582421726,0.0,0.0,78.8300000000163,87.0,561755.0
+GR Active [Throughput %],wholeCapture,408204,1.0,74.01414488834014,100.0,100.0,100.0,100.0,30212870.0
+GR Active [Throughput %],firstToLastGpuActivity,405195,1.0,74.5562951171658,100.0,100.0,100.0,100.0,30209838.0
+GR Active [Throughput %],firstToLastHem,360718,1.0,83.5048431184471,100.0,100.0,100.0,100.0,30121700.0
+SMs Active [Throughput %],wholeCapture,408204,0.0,6.329310834778689,2.0,10.0,100.0,100.0,2583650.0
+SMs Active [Throughput %],firstToLastGpuActivity,405195,0.0,6.376310171645751,2.0,10.0,100.0,100.0,2583649.0
+SMs Active [Throughput %],firstToLastHem,360718,0.0,7.0628690556057645,4.0,11.0,100.0,100.0,2547704.0
+SM Issue [Throughput %],wholeCapture,408204,0.0,0.8684554781432813,1.0,1.0,6.0,10.0,354507.0
+SM Issue [Throughput %],firstToLastGpuActivity,405195,0.0,0.8749022075790669,1.0,1.0,7.0,10.0,354506.0
+SM Issue [Throughput %],firstToLastHem,360718,0.0,0.9808271281167006,1.0,1.0,7.0,10.0,353802.0
+Tensor Active [Throughput %],wholeCapture,408204,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Tensor Active [Throughput %],firstToLastGpuActivity,405195,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Tensor Active [Throughput %],firstToLastHem,360718,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],wholeCapture,408204,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],firstToLastGpuActivity,405195,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Vertex/Tess/Geometry Warps in Flight [Throughput %],firstToLastHem,360718,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],wholeCapture,408204,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],firstToLastGpuActivity,405195,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Pixel Warps in Flight [Throughput %],firstToLastHem,360718,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Compute Warps in Flight [Throughput %],wholeCapture,408204,0.0,1.4720041939814406,1.0,1.0,30.0,99.0,600878.0
+Compute Warps in Flight [Throughput %],firstToLastGpuActivity,405195,0.0,1.4829329088463579,1.0,1.0,30.0,99.0,600877.0
+Compute Warps in Flight [Throughput %],firstToLastHem,360718,0.0,1.5960889115597225,1.0,1.0,30.0,96.0,575738.0
+DRAM Read Bandwidth [Throughput %],wholeCapture,408204,0.0,0.7206935747812369,0.0,1.0,8.0,75.0,294190.0
+DRAM Read Bandwidth [Throughput %],firstToLastGpuActivity,405195,0.0,0.7251175360011846,0.0,1.0,8.0,75.0,293814.0
+DRAM Read Bandwidth [Throughput %],firstToLastHem,360718,0.0,0.7787135657216995,0.0,1.0,21.0,75.0,280896.0
+DRAM Write Bandwidth [Throughput %],wholeCapture,408204,0.0,0.8250752074942921,0.0,1.0,30.0,64.0,336799.0
+DRAM Write Bandwidth [Throughput %],firstToLastGpuActivity,405195,0.0,0.8285689606238972,0.0,1.0,30.0,35.0,335732.0
+DRAM Write Bandwidth [Throughput %],firstToLastHem,360718,0.0,0.9259698712013262,0.0,1.0,30.0,35.0,334014.0
+PCIe RX Throughput [Throughput %],wholeCapture,408204,0.0,0.716465296763383,0.0,1.0,34.0,40.0,292464.0
+PCIe RX Throughput [Throughput %],firstToLastGpuActivity,405195,0.0,0.7206431471266921,0.0,1.0,34.0,40.0,292001.0
+PCIe RX Throughput [Throughput %],firstToLastHem,360718,0.0,0.7755892414573157,0.0,1.0,36.0,40.0,279769.0
+PCIe TX Throughput [Throughput %],wholeCapture,408204,1.0,1.1801011259076344,1.0,1.0,3.0,38.0,481722.0
+PCIe TX Throughput [Throughput %],firstToLastGpuActivity,405195,1.0,1.181332444872222,1.0,1.0,3.0,38.0,478670.0
+PCIe TX Throughput [Throughput %],firstToLastHem,360718,1.0,1.1923497025377165,1.0,1.0,3.0,38.0,430102.0

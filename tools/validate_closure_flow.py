@@ -14,7 +14,7 @@ def main():
         file=case/'system/controlDict';text,n=re.subn(r'\b'+key+r'\s+[^;]+;',f'{key} {value};',file.read_text());assert n==1;file.write_text(text)
     def run(case,label='solver',fault=False):
         selected=dict(env)
-        if fault:selected['LD_PRELOAD']=str(b.PROJECT_ROOT/'lib/libpintleTestBatchFailure.so')
+        if fault:selected['LD_PRELOAD']=str(b.PROJECT_ROOT/'lib/libreactiveTestBatchFailure.so')
         path=case/(label+'.log')
         with path.open('w') as log:rc=subprocess.run([str(b.PROJECT_ROOT/'bin/ReactiveFoam'),'-case',str(case)],env=selected,stdout=log,stderr=subprocess.STDOUT,timeout=120).returncode
         text=path.read_text();assert rc==0,text[-2000:]

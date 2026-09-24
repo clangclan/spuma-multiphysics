@@ -1,0 +1,693 @@
+{
+  "binaries": {
+    "bin/ReactiveFoam": "4f59195d821988335697c8a515a55ffc960da7442f77f91dadd8d1b803b44858",
+    "lib/libpintleReactiveBackend.so": "7d3308ad0bf05428d25829ee9be55afd0f1149494573143bb9845ddbd760ad25",
+    "lib/libpintleReactiveTransport.so": "07434f8a9624d00bce8c9694ecaa997da227b6acb0cc4c1878d294ebfcf8e15f"
+  },
+  "cases": [
+    {
+      "ambientPa": 101325.0,
+      "cells": 64000,
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "dtRangeNs": [
+        9.999999999999693,
+        29.999999999999996
+      ],
+      "finalTime": 1e-06,
+      "firstStepSeconds": 0.057286002,
+      "geometry": {
+        "angleDegrees": 90,
+        "cellEdgeM": 0.002,
+        "cellSpacingM": [
+          0.002,
+          0.002,
+          0.002
+        ],
+        "cellVolumeM3": 8e-09,
+        "cells": 64000,
+        "domainM": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "exactNozzleAreaM2": 1.963495408493621e-05,
+        "facesPerNozzle": 4,
+        "inletCentersM": [
+          [
+            0,
+            0.006,
+            0.04
+          ],
+          [
+            0.006,
+            0,
+            0.04
+          ]
+        ],
+        "nominalDirections": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "nominalIntersectionM": [
+          0.006,
+          0.006,
+          0.04
+        ],
+        "nozzleAreaM2": 1.6e-05,
+        "nozzleAreaRelativeError": -0.185126691369496,
+        "nozzleCellsPerDiameter": 2.5,
+        "nozzleDiameterM": 0.005,
+        "nozzleDiscretization": "boundary-face-centre-inside-circle",
+        "nozzleShape": "circle",
+        "shape": [
+          40,
+          40,
+          40
+        ]
+      },
+      "gpuHemStepFdJacobians": 31634.0,
+      "gpuHemStepKernelSeconds": 5.443615474194289,
+      "gpuHemStepStates": 8192000.0,
+      "grid": 40,
+      "lastStepSeconds": 0.226726187,
+      "maxConservationResidual": 2.7683051817091985e-14,
+      "maxTOverRun": 293.2199097123867,
+      "metrics": {
+        "acceptedSteps": 34,
+        "alphaGasRange": [
+          0.9979696897108903,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0020303105412888336
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_1atm/1e-06",
+        "checkpointSha256": "e906a9a8dfd2ed8e689968577b1b4b29765f5adaba92f8a349cd47bea877ce42",
+        "conservedBudgetResidual": [
+          8.988831716295077e-17,
+          -1.3349294049443355e-16,
+          0.0,
+          0.0,
+          3.3881317890172014e-21,
+          -1.5246593050577406e-20,
+          2.1614690629501996e-20,
+          -1.0614842338441122e-12
+        ],
+        "deltaT": 9.999999999999692e-09,
+        "liquidN2oMassKg": 1.6623981358346236e-07,
+        "liquidPhaseChangeKg": -2.531248331795344e-07,
+        "n2oMassKg": 4.193646467629966e-07,
+        "pRangePa": [
+          101140.30129836593,
+          193322.10459056566
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          188.92900175169785,
+          293.2199097123867
+        ],
+        "time": 1e-06,
+        "vaporN2oMassFraction": 0.6035912543733983,
+        "vaporN2oMassKg": 2.5312483317953423e-07
+      },
+      "minTOverRun": 164.90809884233104,
+      "nonFinalDtRangeNs": [
+        29.999999999999996,
+        29.999999999999996
+      ],
+      "processPeakRssGiB": 0.665374755859375,
+      "processSeconds": 8.65,
+      "retries": 0,
+      "sampledWholeGpuPeakGiB": 1.31640625,
+      "solverLogSha256": "ecf53d19ea565300864f0a7706de3bd8281e4dedca197d03614107be41a55527",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_1atm",
+      "stepSecondsMean": 0.2180389365,
+      "stepSecondsMedian": 0.2235242385,
+      "stepSecondsRange": [
+        0.057286002,
+        0.235204196
+      ],
+      "stepSecondsTotal": 7.4133238409999995,
+      "steps": 34,
+      "timingPercent": {
+        "backupSeconds": 0.6434769750132112,
+        "cflSeconds": 4.043592394306683,
+        "conservationSeconds": 0.10879924003039383,
+        "diagnosticsSeconds": 0.14271288057709985,
+        "otherSeconds": 0.010954748739134566,
+        "recoverySeconds": 89.5019368411266,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 5.548526920206886
+      },
+      "timingSeconds": {
+        "backupSeconds": 0.047703032,
+        "cflSeconds": 0.299764599,
+        "conservationSeconds": 0.00806564,
+        "diagnosticsSeconds": 0.010579768,
+        "otherSeconds": 0.0008121109999999096,
+        "recoverySeconds": 6.635068422,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 0.411330269
+      },
+      "transportAllocatedGB": 0.095185056,
+      "waleHostEnthalpyCells": 0.0
+    },
+    {
+      "ambientPa": 4000000.0,
+      "cells": 64000,
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "dtRangeNs": [
+        9.999999999999693,
+        29.999999999999996
+      ],
+      "finalTime": 1e-06,
+      "firstStepSeconds": 0.276464697,
+      "geometry": {
+        "angleDegrees": 90,
+        "cellEdgeM": 0.002,
+        "cellSpacingM": [
+          0.002,
+          0.002,
+          0.002
+        ],
+        "cellVolumeM3": 8e-09,
+        "cells": 64000,
+        "domainM": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "exactNozzleAreaM2": 1.963495408493621e-05,
+        "facesPerNozzle": 4,
+        "inletCentersM": [
+          [
+            0,
+            0.006,
+            0.04
+          ],
+          [
+            0.006,
+            0,
+            0.04
+          ]
+        ],
+        "nominalDirections": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "nominalIntersectionM": [
+          0.006,
+          0.006,
+          0.04
+        ],
+        "nozzleAreaM2": 1.6e-05,
+        "nozzleAreaRelativeError": -0.185126691369496,
+        "nozzleCellsPerDiameter": 2.5,
+        "nozzleDiameterM": 0.005,
+        "nozzleDiscretization": "boundary-face-centre-inside-circle",
+        "nozzleShape": "circle",
+        "shape": [
+          40,
+          40,
+          40
+        ]
+      },
+      "gpuHemStepFdJacobians": 9281150.0,
+      "gpuHemStepKernelSeconds": 66.40391987588997,
+      "gpuHemStepStates": 4352000.0,
+      "grid": 40,
+      "lastStepSeconds": 2.401215301,
+      "maxConservationResidual": 1.0419410606060216e-14,
+      "maxTOverRun": 293.15,
+      "metrics": {
+        "acceptedSteps": 34,
+        "alphaGasRange": [
+          0.9999999999999996,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 64000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_40bar_abs/1e-06",
+        "checkpointSha256": "46190526c9e196005bea4f3d1bfb606822335c24dda35445cc1945e6a71c457c",
+        "conservedBudgetResidual": [
+          -1.7414057866799776e-14,
+          6.627420906052999e-15,
+          -5.293955920339377e-23,
+          0.0,
+          -8.368685518872487e-19,
+          6.560270176484556e-19,
+          -9.093338473827973e-19,
+          3.6708965034382146e-09
+        ],
+        "deltaT": 9.999999999999692e-09,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.2092776751308447e-07,
+        "n2oMassKg": 1.2092776751308445e-07,
+        "pRangePa": [
+          3951596.9006768023,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          284.2637964422239,
+          293.15
+        ],
+        "time": 1e-06,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.2092776751308445e-07
+      },
+      "minTOverRun": 284.2637964422239,
+      "nonFinalDtRangeNs": [
+        29.999999999999996,
+        29.999999999999996
+      ],
+      "processPeakRssGiB": 0.6652412414550781,
+      "processSeconds": 69.13,
+      "retries": 0,
+      "sampledWholeGpuPeakGiB": 1.275390625,
+      "solverLogSha256": "21d0882cae6e0bb4448fb6a19c12f746c344f546a62789517a7255df3bdc16b9",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n40/full-physics/ambient_40bar_abs",
+      "stepSecondsMean": 1.9975655502058824,
+      "stepSecondsMedian": 2.1547160535,
+      "stepSecondsRange": [
+        0.276464697,
+        2.401215301
+      ],
+      "stepSecondsTotal": 67.917228707,
+      "steps": 34,
+      "timingPercent": {
+        "backupSeconds": 0.06642878965900738,
+        "cflSeconds": 0.4392885953682173,
+        "conservationSeconds": 0.01256359419023313,
+        "diagnosticsSeconds": 0.016493358479518563,
+        "otherSeconds": 0.0014579687935622429,
+        "recoverySeconds": 98.87080386435002,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 0.5929638291594375
+      },
+      "timingSeconds": {
+        "backupSeconds": 0.045116593,
+        "cflSeconds": 0.29835264,
+        "conservationSeconds": 0.008532845,
+        "diagnosticsSeconds": 0.011201832,
+        "otherSeconds": 0.0009902120000003572,
+        "recoverySeconds": 67.150309985,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 0.4027246
+      },
+      "transportAllocatedGB": 0.095185056,
+      "waleHostEnthalpyCells": 0.0
+    },
+    {
+      "ambientPa": 101325.0,
+      "cells": 512000,
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "dtRangeNs": [
+        9.999999999999693,
+        29.999999999999996
+      ],
+      "finalTime": 1e-06,
+      "firstStepSeconds": 0.459092971,
+      "geometry": {
+        "angleDegrees": 90,
+        "cellEdgeM": 0.001,
+        "cellSpacingM": [
+          0.001,
+          0.001,
+          0.001
+        ],
+        "cellVolumeM3": 1e-09,
+        "cells": 512000,
+        "domainM": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "exactNozzleAreaM2": 1.963495408493621e-05,
+        "facesPerNozzle": 16,
+        "inletCentersM": [
+          [
+            0,
+            0.006,
+            0.04
+          ],
+          [
+            0.006,
+            0,
+            0.04
+          ]
+        ],
+        "nominalDirections": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "nominalIntersectionM": [
+          0.006,
+          0.006,
+          0.04
+        ],
+        "nozzleAreaM2": 1.6e-05,
+        "nozzleAreaRelativeError": -0.185126691369496,
+        "nozzleCellsPerDiameter": 5.0,
+        "nozzleDiameterM": 0.005,
+        "nozzleDiscretization": "boundary-face-centre-inside-circle",
+        "nozzleShape": "circle",
+        "shape": [
+          80,
+          80,
+          80
+        ]
+      },
+      "gpuHemStepFdJacobians": 434539.0,
+      "gpuHemStepKernelSeconds": 57.95512903150919,
+      "gpuHemStepStates": 67584000.0,
+      "grid": 80,
+      "lastStepSeconds": 2.692842394,
+      "maxConservationResidual": 4.099968205644306e-14,
+      "maxTOverRun": 293.35039132446514,
+      "metrics": {
+        "acceptedSteps": 34,
+        "alphaGasRange": [
+          0.9954473469450278,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.004552653054340997
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 512000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_1atm/1e-06",
+        "checkpointSha256": "a453eb0b32984ab9289f46c924b3ab64a3b79bccdc0f1e93ed56a3819e6e471f",
+        "conservedBudgetResidual": [
+          4.670729354014428e-15,
+          1.551091117896502e-15,
+          -6.352747104407253e-22,
+          0.0,
+          6.437450399132683e-20,
+          -1.0164395367051604e-20,
+          4.3801921798571214e-20,
+          7.021232484305528e-10
+        ],
+        "deltaT": 9.999999999999692e-09,
+        "liquidN2oMassKg": 1.7703661792659135e-07,
+        "liquidPhaseChangeKg": -2.3829414137273654e-07,
+        "n2oMassKg": 4.153307592993277e-07,
+        "pRangePa": [
+          98201.63629551293,
+          315079.20434249274
+        ],
+        "phaseMassClosureKg": 5.293955920339377e-23,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          201.1000391418222,
+          293.35039132446514
+        ],
+        "time": 1e-06,
+        "vaporN2oMassFraction": 0.5737454692128846,
+        "vaporN2oMassKg": 2.3829414137273638e-07
+      },
+      "minTOverRun": 165.52222530565797,
+      "nonFinalDtRangeNs": [
+        29.999999999999996,
+        29.999999999999996
+      ],
+      "processPeakRssGiB": 1.5980644226074219,
+      "processSeconds": 81.81,
+      "retries": 0,
+      "sampledWholeGpuPeakGiB": 2.025390625,
+      "solverLogSha256": "5759525a0d8bbab28ee251165d94731d78bcba09c3fb620b5fa7b9cb7005a214",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_1atm",
+      "stepSecondsMean": 2.2070808755,
+      "stepSecondsMedian": 1.706983891,
+      "stepSecondsRange": [
+        0.459092971,
+        3.75549436
+      ],
+      "stepSecondsTotal": 75.040749767,
+      "steps": 34,
+      "timingPercent": {
+        "backupSeconds": 1.7471243491980022,
+        "cflSeconds": 3.23903036489766,
+        "conservationSeconds": 0.10820405346710349,
+        "diagnosticsSeconds": 0.17298933766395613,
+        "otherSeconds": 0.0017546706344046675,
+        "recoverySeconds": 90.31653613994733,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 4.414361084191538
+      },
+      "timingSeconds": {
+        "backupSeconds": 1.311055211,
+        "cflSeconds": 2.430592671,
+        "conservationSeconds": 0.081197133,
+        "diagnosticsSeconds": 0.129812496,
+        "otherSeconds": 0.001316717999998638,
+        "recoverySeconds": 67.774205883,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 3.312569655
+      },
+      "transportAllocatedGB": 0.74201184,
+      "waleHostEnthalpyCells": 0.0
+    },
+    {
+      "ambientPa": 4000000.0,
+      "cells": 512000,
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "dtRangeNs": [
+        9.999999999999693,
+        29.999999999999996
+      ],
+      "finalTime": 1e-06,
+      "firstStepSeconds": 1.395992174,
+      "geometry": {
+        "angleDegrees": 90,
+        "cellEdgeM": 0.001,
+        "cellSpacingM": [
+          0.001,
+          0.001,
+          0.001
+        ],
+        "cellVolumeM3": 1e-09,
+        "cells": 512000,
+        "domainM": [
+          0.08,
+          0.08,
+          0.08
+        ],
+        "exactNozzleAreaM2": 1.963495408493621e-05,
+        "facesPerNozzle": 16,
+        "inletCentersM": [
+          [
+            0,
+            0.006,
+            0.04
+          ],
+          [
+            0.006,
+            0,
+            0.04
+          ]
+        ],
+        "nominalDirections": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "nominalIntersectionM": [
+          0.006,
+          0.006,
+          0.04
+        ],
+        "nozzleAreaM2": 1.6e-05,
+        "nozzleAreaRelativeError": -0.185126691369496,
+        "nozzleCellsPerDiameter": 5.0,
+        "nozzleDiameterM": 0.005,
+        "nozzleDiscretization": "boundary-face-centre-inside-circle",
+        "nozzleShape": "circle",
+        "shape": [
+          80,
+          80,
+          80
+        ]
+      },
+      "gpuHemStepFdJacobians": 20356757.0,
+      "gpuHemStepKernelSeconds": 256.3975744419122,
+      "gpuHemStepStates": 34816000.0,
+      "grid": 80,
+      "lastStepSeconds": 9.519342206,
+      "maxConservationResidual": 4.856004824279143e-14,
+      "maxTOverRun": 293.15,
+      "metrics": {
+        "acceptedSteps": 34,
+        "alphaGasRange": [
+          0.9999999999999997,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 512000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_40bar_abs/1e-06",
+        "checkpointSha256": "14ce254312b235dd53a1f6a9573f7ff85b5c2b3c1eeb64b319e2055f50db8490",
+        "conservedBudgetResidual": [
+          2.0308148665204014e-13,
+          2.6912654051167384e-14,
+          -7.940933880509066e-23,
+          0.0,
+          4.010701005249112e-19,
+          1.7067713887174152e-19,
+          -1.1342222109638457e-19,
+          -1.8931877232564176e-08
+        ],
+        "deltaT": 9.999999999999692e-09,
+        "liquidN2oMassKg": 0.0,
+        "liquidPhaseChangeKg": -1.2353817686131382e-07,
+        "n2oMassKg": 1.2353817686131377e-07,
+        "pRangePa": [
+          3892057.882460787,
+          3999999.9999999977
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          275.1661424918412,
+          293.15
+        ],
+        "time": 1e-06,
+        "vaporN2oMassFraction": 1.0,
+        "vaporN2oMassKg": 1.2353817686131377e-07
+      },
+      "minTOverRun": 275.1661424918412,
+      "nonFinalDtRangeNs": [
+        29.999999999999996,
+        29.999999999999996
+      ],
+      "processPeakRssGiB": 1.5979080200195312,
+      "processSeconds": 276.18,
+      "retries": 0,
+      "sampledWholeGpuPeakGiB": 2.017578125,
+      "solverLogSha256": "e2e4c9d418e71c8e39f77de4f71363fb921469728fb8e4cd94ad6b7115a3c039",
+      "sourceCase": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_cube80_z40_1us_20260923/n80/full-physics/ambient_40bar_abs",
+      "stepSecondsMean": 7.922411211352941,
+      "stepSecondsMedian": 8.542726124,
+      "stepSecondsRange": [
+        1.395992174,
+        9.717035595
+      ],
+      "stepSecondsTotal": 269.361981186,
+      "steps": 34,
+      "timingPercent": {
+        "backupSeconds": 0.440101144853628,
+        "cflSeconds": 0.8953870443708166,
+        "conservationSeconds": 0.033423369401872835,
+        "diagnosticsSeconds": 0.04807601482206898,
+        "otherSeconds": 0.0005083282332475073,
+        "recoverySeconds": 97.36206502168046,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 1.2204390766379105
+      },
+      "timingSeconds": {
+        "backupSeconds": 1.185465163,
+        "cflSeconds": 2.411832282,
+        "conservationSeconds": 0.09002985,
+        "diagnosticsSeconds": 0.129498506,
+        "otherSeconds": 0.001369243000003277,
+        "recoverySeconds": 262.256387266,
+        "sourceSeconds": 0.0,
+        "transportSeconds": 3.287398876
+      },
+      "transportAllocatedGB": 0.74201184,
+      "waleHostEnthalpyCells": 0.0
+    }
+  ],
+  "limits": [
+    "One execution per case, not a repeated timing mean",
+    "GPU peak is sampled whole-device occupancy, not solver-exclusive memory",
+    "Final shortened time step aligns the endpoint",
+    "Reaching the requested time does not establish developed collision or breakup accuracy"
+  ],
+  "passed": true,
+  "requestedEndTime": 1e-06,
+  "sourceHashes": {
+    "tools/analyze_impinging_n2o.py": "4e903ba3fbdf4377fcf262213c490af3612cff23d8ea5e9f53f6361eecd25776",
+    "tools/check_impinging_n2o_mesh.py": "a02f8261f6eddd39d161d399e8a37b0cc429c561b1d1ca295e14a0e6ae0c0068",
+    "tools/impinging_cartesian_mesh.py": "4a07df9b58b2f72574c4fad793dc9c6f461d6890a4de27214b0fe2d33cc86e83",
+    "tools/plot_impinging_n2o.py": "791e842de7553d8c53f0cfc7c18a3c903fdcbd2fc11ed3c6482f2a42a88db4e9",
+    "tools/prepare_impinging_n2o.py": "065202d6b686cd3c6f6db61eb2563a6cb96d6075d2f48c0a4c5b904d3cd17369",
+    "tools/prepare_impinging_resolution_series.py": "e2599b69a72b7d485fe0f71f51bcfe62890d57badcd1ffe290ac672439c1d061",
+    "tools/summarize_impinging_transient.py": "f0063b745bed4b53c82ca6bff48e3e803ce60058de3ba668e2e53982c15f8c22",
+    "tools/validate_impinging_initial_steps.py": "264984bffc951ce49c1ded2263d3c2f211edecd64ea2f405e81c71217b048fe2"
+  },
+  "summarizerSha256": "f0063b745bed4b53c82ca6bff48e3e803ce60058de3ba668e2e53982c15f8c22",
+  "validationSha256": "85ae728a0cdc46997cebb44a318d54ad80e54ad3d3299ff6bacef50f6cf51576"
+}

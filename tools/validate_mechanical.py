@@ -101,7 +101,7 @@ def analyze_existing(output,source):
 
 def run(output,thermo_dir,specs,transport_backend='cpu'):
     output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/ReactiveFoam'),
-        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so')};env=b.sourced_environment()
+        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libreactiveBackend.so')};env=b.sourced_environment()
     def record(name,fn):
         start=time.monotonic()
         try:

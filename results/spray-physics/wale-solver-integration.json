@@ -1,0 +1,34 @@
+{
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/bin/ReactiveFoam": "89e3dfca8f184696cccbbbdb9e8cad083bc051d50c11d077b99074b03c8a2e50",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libpintleReactiveTransport.so": "c1012d8420f88574af1c2089260d69f893acfe9e3e105180dc2390bf9a7e7026",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_wale_solver.py": "61868a3b0f2c52ff15d608305ef9a5dcb33f5ca85f636d19b5130160f46755a9"
+  },
+  "baselineOffBitExact": true,
+  "cells": 64,
+  "changedModelRestartRejected": true,
+  "deltaT": 3e-08,
+  "gpuClosure": {
+    "baseline": "REACTIVE_GPU_HEM batches=4 submitted=8 succeeded=8 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=64 residualEvaluations=0 flashCandidates=0 stableCandidates=8 transferBytes=3424 analyticJacobians=0 finiteDifferenceJacobians=0 hostBytes=95144 deviceBytes=74744 wallSeconds=0.0036714550000000006 kernelSeconds=0.0035631358325481418 copySeconds=8.4384001791477215e-05",
+    "off": "REACTIVE_GPU_HEM batches=4 submitted=8 succeeded=8 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=64 residualEvaluations=0 flashCandidates=0 stableCandidates=8 transferBytes=3424 analyticJacobians=0 finiteDifferenceJacobians=0 hostBytes=95144 deviceBytes=74744 wallSeconds=0.0036757210000000003 kernelSeconds=0.0035721281766891485 copySeconds=7.92960012331605e-05",
+    "wale": "REACTIVE_GPU_HEM batches=4 submitted=9 succeeded=9 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=72 residualEvaluations=0 flashCandidates=0 stableCandidates=9 transferBytes=3828 analyticJacobians=0 finiteDifferenceJacobians=0 hostBytes=95144 deviceBytes=74744 wallSeconds=0.0036344159999999997 kernelSeconds=0.0035336001515388492 copySeconds=7.7151998877525338e-05",
+    "zero": "REACTIVE_GPU_HEM batches=4 submitted=8 succeeded=8 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=64 residualEvaluations=0 flashCandidates=0 stableCandidates=8 transferBytes=3424 analyticJacobians=0 finiteDifferenceJacobians=0 hostBytes=95144 deviceBytes=74744 wallSeconds=0.0036539460000000004 kernelSeconds=0.0035594559013843534 copySeconds=7.0720002055168156e-05"
+  },
+  "maxWaleOffDifference": 3.2610662614729335e-07,
+  "passed": true,
+  "physicalHashes": {
+    "baseline": "d52430b67a052d06950ecd3e4e632ee05fc27d2519af2549a6901c7cbb419722",
+    "off": "d52430b67a052d06950ecd3e4e632ee05fc27d2519af2549a6901c7cbb419722",
+    "wale": "19d253520e77edd9b1d18bd96129c0f9ad2293418f6ce4eca175d865b72ffe0a",
+    "zero": "b4e4fa77f6510ebac9fab69877cd5068d042df071cfdaea1c2590f1beb7e846f"
+  },
+  "restartBitExact": true,
+  "scope": "CUDA integration and restart, not LES statistics or primary breakup validation",
+  "skewedMeshRejected": true,
+  "steps": 2,
+  "waleNutRange": [
+    1.1261211097748075e-05,
+    1.1261212504004917e-05
+  ],
+  "zeroCwOffBitExact": true
+}

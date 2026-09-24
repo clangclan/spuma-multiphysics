@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "backend": "cuda",
+  "actualCuda": true,
+  "cells": 64,
+  "maxNutError": 5.759824041329242e-20,
+  "maxSgsRhsError": 1.6729578078411578e-07,
+  "resolvedKineticPower": -0.19996647648347818,
+  "dtOff": 2.0732278788358637e-07,
+  "dtWale": 2.072779860145884e-07,
+  "checks": [
+    "independent tensor formula and central gradient",
+    "momentum stress and total-energy work",
+    "closed periodic global conservation",
+    "nonpositive SGS kinetic power",
+    "eddy-viscous CFL",
+    "zero-Cw exact off limit",
+    "fresh primitive diagnostic",
+    "invalid input output atomicity",
+    "immutable configuration and invalid coefficient",
+    "profile accounting",
+    "nonfinite stress-work output atomicity"
+  ],
+  "artifacts": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/lib/libreactiveTransport.so": "cb83c7a357b734f9f3ef1a89b38d344e0dc0127eebba500ef049bb4996fc06ac",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_wale_transport.py": "b68ff64fe3bcd4031c0e3805fb9309073815b90fafc0cde0048a658d4aa8c446"
+  }
+}

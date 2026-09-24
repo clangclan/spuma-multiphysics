@@ -154,18 +154,18 @@ stable N2/PR 300 K 복원의 한 검사에서는 scalar probe 6회에 명시적 
 아래 파일과 인수는 이번에 실제 작성한 것이다. 기존 로컬 환경에서 의존성과 SPUMA를 활성화한 뒤 실행한다. 출력 디렉터리는 기존 결과가 없는 새 경로를 지정한다.
 
 ```bash
-PINTLE_RF21_CONTRACT_TEST=1 tools/build_reactive_backend.sh
-PINTLE_REACTIVE_TRANSPORT_BUILD=cpu tools/build_reactive_transport.sh
+REACTIVE_RF21_CONTRACT_TEST=1 tools/build_reactive_backend.sh
+REACTIVE_TRANSPORT_BUILD=cpu tools/build_reactive_transport.sh
 python tools/run_real_fluid_v21_local.py \
   --stages smoke cpu-integration \
   --thermo-dir research/reactive-thermo \
-  --thermo-library lib/libpintleReactiveBackend.so \
-  --transport-library lib/libpintleReactiveTransport.so \
+  --thermo-library lib/libreactiveBackend.so \
+  --transport-library lib/libreactiveTransport.so \
   --contract-executable bin/check-real-fluid-v21-contract \
   --output-dir results/rf21-local-cpu
 ```
 
-CUDA 빌드는 기존 `tools/build_reactive_transport.sh`의 `PINTLE_CUDA_ARCH`를 실제 장치에 맞춘다. CPU .so와 CUDA .so를 서로 다른 파일로 보존하고 `--cuda-library`로 지정한다. `--stages cuda-sanitizer`는 실제 CUDA 장치와 Compute Sanitizer가 있어야 실행한다. 현재 환경의 [인수 가용성 결과](../../results/real-fluid-v21-20260919/local-gate-availability/acceptance.json)는 해당 gate를 BLOCKED로 기록한다.
+CUDA 빌드는 기존 `tools/build_reactive_transport.sh`의 `REACTIVE_CUDA_ARCH`를 실제 장치에 맞춘다. CPU .so와 CUDA .so를 서로 다른 파일로 보존하고 `--cuda-library`로 지정한다. `--stages cuda-sanitizer`는 실제 CUDA 장치와 Compute Sanitizer가 있어야 실행한다. 현재 환경의 [인수 가용성 결과](../../results/real-fluid-v21-20260919/local-gate-availability/acceptance.json)는 해당 gate를 BLOCKED로 기록한다.
 
 Flow/benchmark는 `--local-plan` JSON의 `cases`에 기존 case 경로, `expected_end_time`, 실행 파일을 지정한다. benchmark에는 동일 `comparison_group`과 종료 물리시간이 필요하다. runner는 프로세스 성공만으로 통과시키지 않고 실제 `REACTIVE_STEP` 종료시간과 `REACTIVE_FAILURE`를 확인한다. 전체 SPUMA 빌드, checkpoint 연속 실행, 상출현·소멸·근임계, 기존 HEM 접촉면의 알려진 실패는 별도 로컬 인수 항목이다. 이번 작업으로 그 실패가 해결됐다고 표시하지 않는다.
 

@@ -1,0 +1,189 @@
+{
+  "capture": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/hem-40bar-tol1e-5.bin",
+  "captureSha256": "10fbdc53ebfcd3fdd366c327c0afef4c57cdb8a098955c224396fb9b0757fb93",
+  "comparison": {
+    "T": {
+      "maxAbs": 0.004137112168109525,
+      "maxScaled": 1.411397718930615e-05,
+      "relativeL2": 1.4578588081202936e-06
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 5.551115123125783e-16,
+      "maxScaled": 5.551115123125783e-16,
+      "relativeL2": 8.152972004118901e-17
+    },
+    "alphaLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "chemicalResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cp": {
+      "maxAbs": 0.0013804018224163883,
+      "maxScaled": 1.2705987986991192e-06,
+      "relativeL2": 1.3133933534985593e-07
+    },
+    "cv": {
+      "maxAbs": 7.063696784825879e-05,
+      "maxScaled": 9.621563269728435e-08,
+      "relativeL2": 1.0467241168945924e-08
+    },
+    "e": {
+      "maxAbs": 3.0372722713800613,
+      "maxScaled": 3.0745126317395574e-05,
+      "relativeL2": 3.1474873402329156e-06
+    },
+    "energyResidual": {
+      "maxAbs": 9.537469875089758e-06,
+      "maxScaled": 9.537469875089758e-06,
+      "relativeL2": 7974.6139721680465
+    },
+    "entropy": {
+      "maxAbs": 0.010361742029999732,
+      "maxScaled": 1.7924397010436958e-06,
+      "relativeL2": 1.8505735107465822e-07
+    },
+    "gasMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "iterations": {
+      "maxAbs": 1.0,
+      "maxScaled": 1.0,
+      "relativeL2": 0.8579044235810886
+    },
+    "liquidMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "p": {
+      "maxAbs": 62.56978083169088,
+      "maxScaled": 1.564762195887509e-05,
+      "relativeL2": 1.6155701097700086e-06
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 2.1316282072803006e-14,
+      "maxScaled": 4.4185843091715723e-16,
+      "relativeL2": 7.586220144925475e-17
+    },
+    "rhoLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundEquilibrium": {
+      "maxAbs": 0.0027395063426638444,
+      "maxScaled": 7.87400738774676e-06,
+      "relativeL2": 8.133805004458202e-07
+    },
+    "soundFrozen": {
+      "maxAbs": 0.0027395063426638444,
+      "maxScaled": 7.87400738774676e-06,
+      "relativeL2": 8.133805004458202e-07
+    },
+    "volumeResidual": {
+      "maxAbs": 4.440892098500626e-16,
+      "maxScaled": 4.440892098500626e-16,
+      "relativeL2": 0.3314684798927892
+    }
+  },
+  "count": 10006,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/precision_revisit_20260924/variants-v2/libHem-fp64.so",
+  "librarySha256": "b326b078127acd8c6ab28f07fcc131538e7fe848f7fa84e2c0c7a574748b7459",
+  "maxKernelSeconds": 0.1762474822998047,
+  "medianKernelSeconds": 0.17600872802734374,
+  "minKernelSeconds": 0.1759853973388672,
+  "passed": true,
+  "policy": "",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.1767354109997541,
+      "copySeconds": 0.0003081279993057251,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.1762474822998047,
+      "phaseEvaluations": 9080611,
+      "repeat": 1,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.176688197
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.17644886600101017,
+      "copySeconds": 0.0002983039915561676,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.1759853973388672,
+      "phaseEvaluations": 9080611,
+      "repeat": 2,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.176408297
+    },
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 0,
+      "batches": 1,
+      "callSeconds": 0.1764732390001882,
+      "copySeconds": 0.0003056640028953552,
+      "cpuFallbacks": 0,
+      "deviceBytes": 5050528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 696548,
+      "flashCandidates": 50025,
+      "hostBytes": 1891134,
+      "kernelSeconds": 0.17600872802734374,
+      "phaseEvaluations": 9080611,
+      "repeat": 3,
+      "residualEvaluations": 15282138,
+      "stableCandidates": 10006,
+      "structBytes": 144,
+      "submitted": 10006,
+      "succeeded": 10006,
+      "transferBytes": 4282632,
+      "wallSeconds": 0.176440034
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

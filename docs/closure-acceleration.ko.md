@@ -15,11 +15,11 @@ thermoBatchCells 4096;
 
 `thermoExactReuse`를 생략하면 솔버는 비반응 HEM 평형 모드에서 켠다. 반응, 동결상, mechanical 모드에서는 기본적으로 끈다. 명시적으로 이들 모드에서 가속을 켜면 지원 범위 오류를 보고한다. `thermoExactReuse false`로 기준 경로와 비교할 수 있다. 검증용 `prepare_reactive_case.py`는 명시적인 기준 설정을 생성하므로 가속 케이스에는 `--thermo-exact-reuse`를 전달한다.
 
-CUDA 온도 후보는 기본적으로 꺼져 있다. 활성화하려면 CUDA로 수송 라이브러리를 빌드하고 `closureScalarBackend cuda`로 지정한다. 필요하면 `closureScalarLibrary "/absolute/path/libpintleReactiveTransport.so";`를 지정한다. 기본 라이브러리 이름은 실행 환경의 로더 검색 경로를 사용한다. 실행 관리기의 기존 수송 라이브러리 스냅샷에도 새 CUDA 함수가 포함된다. CPU 빌드 라이브러리로 CUDA를 요청하면 명시적으로 실패한다.
+CUDA 온도 후보는 기본적으로 꺼져 있다. 활성화하려면 CUDA로 수송 라이브러리를 빌드하고 `closureScalarBackend cuda`로 지정한다. 필요하면 `closureScalarLibrary "/absolute/path/libreactiveTransport.so";`를 지정한다. 기본 라이브러리 이름은 실행 환경의 로더 검색 경로를 사용한다. 실행 관리기의 기존 수송 라이브러리 스냅샷에도 새 CUDA 함수가 포함된다. CPU 빌드 라이브러리로 CUDA를 요청하면 명시적으로 실패한다.
 
 ```bash
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 ./Allwmake
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_reactive_case.py \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 ./Allwmake
+"$REACTIVE_PREFIX/bin/python" tools/prepare_reactive_case.py \
   cases/closure-example --thermo-dir research/reactive-thermo \
   --kind uniform --cells 32 --thermo-workers 8 \
   --thermo-exact-reuse --closure-scalar-backend cuda --transport-backend cuda
@@ -29,7 +29,7 @@ GPU 아키텍처와 열역학 입력 경로는 실제 환경에 맞춘다. `ther
 
 ## 정확한 탐색 재사용
 
-1. 배치 안의 q 전체, 내부에너지, 초기 `PintleThermoState` 전체를 바이트 단위로 비교한다. 해시가 같아도 원본을 다시 비교한다. 반올림 키, 유사 상태, 질량 floor를 사용하지 않는다.
+1. 배치 안의 q 전체, 내부에너지, 초기 `ReactiveThermoState` 전체를 바이트 단위로 비교한다. 해시가 같아도 원본을 다시 비교한다. 반올림 키, 유사 상태, 질량 floor를 사용하지 않는다.
 2. 같은 입력 하나를 먼저 계산한 뒤 성공한 결과만 원래 셀 순서로 복사한다. 대표 입력이 실패하면 나머지 동일 입력도 각각 실행해 전역 셀 대응·실패 내용·상세 기록 상한을 보존한다.
 3. 키와 결과는 배치 사이에 보관하지 않는다. 기존 모델·정책 해시와 attempt/stage/content token 검사를 통과해야 한다. 실패한 배치는 호출자 상태를 변경하지 않는다.
 4. 한 번의 복원 내부에서는 같은 순수 액상의 정확히 같은 p/T 물성을 16개 슬롯에 보관한다. 액상마다 독립적이며 실패는 저장하지 않는다. 화학퍼텐셜이 필요한 요청과 불필요한 요청을 구분한다. 재사용할 때도 Cantera의 온도·밀도를 복원해 공개 객체 상태를 유지한다. 복원 호출마다 비운다.
@@ -40,7 +40,7 @@ GPU 아키텍처와 열역학 입력 경로는 실제 환경에 맞춘다. `ther
 ## CUDA 경로의 정확한 범위
 
 - 응축성 종의 총 inventory가 **정확히 0**인 기상만 대상이다. 아주 작은 양이라도 있으면 CPU 후보 탐색을 유지한다.
-- 호스트가 기존 `PintleFixedCaloric`으로 조성과 NASA7/9 계수 및 PR 혼합 다항식을 준비한다. 모든 binary-a 보정항을 유지한다.
+- 호스트가 기존 `ReactiveFixedCaloric`으로 조성과 NASA7/9 계수 및 PR 혼합 다항식을 준비한다. 모든 binary-a 보정항을 유지한다.
 - GPU가 FP64로 PR/NASA e, cv, p와 보간·Newton 온도 복원을 계산한다. `--fmad=false --prec-div=true --prec-sqrt=true`로 빌드한다.
 - 준비한 NASA 온도 구간이나 PR alpha 부호 구간을 넘는 상태, 지원하지 않는 물성, 수치적으로 수렴하지 않는 상태는 CPU 기준 경로로 넘기며 수를 보고한다. 구간 밖으로 계수를 외삽하지 않는다.
 - GPU 결과는 최종 평형 상태가 아닌 **온도·압력 후보**다. 호스트의 기존 EOS 분지, 완전한 체적·에너지 잔차 검사 및 상 안정성/엔트로피 선택을 거쳐 승인한다. 잘못된 후보는 거부하고 원 입력과 원 추정값으로 CPU 복원을 수행한다.

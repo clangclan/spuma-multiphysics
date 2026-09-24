@@ -55,7 +55,7 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
     configuration = thermo_dir / ("reactive-dilute-config.yaml" if kind == "coupled" else
                                    "chemistry-config.yaml" if kind in ("chemistry","reacting-shock","diffusion","diffusion-zero") else "cold-pr-config.yaml")
     with Backend(configuration) as backend:
-        backend.check(backend.lib.pintle_rt_load_optimization_policy(backend.handle,str(policy).encode()))
+        backend.check(backend.lib.reactive_rt_load_optimization_policy(backend.handle,str(policy).encode()))
         if chemistry:backend.set_chemical_linear_solver(chemical_linear_solver)
         put("constant/realFluidPolicy.yaml",policy.read_text())
         ns, nv = backend.ns, backend.ns+4
@@ -80,7 +80,7 @@ def prepare(case, thermo_dir, kind="uniform", cells=32, mach=2., cfl=.25, end=No
         identity_closure='HEM-frozen' if frozen else 'HEM'
         backend.bind_case(chemistry,viscosity,conductivity,diffusivity,transport_backend,transport_gas_properties,phase_change=phase_change)
         if thermo_exact_reuse or closure_scalar_backend=='cuda':
-            backend.closure_acceleration(thermo_exact_reuse,closure_scalar_backend=='cuda',common.PROJECT_ROOT/'lib/libpintleReactiveTransport.so')
+            backend.closure_acceleration(thermo_exact_reuse,closure_scalar_backend=='cuda',common.PROJECT_ROOT/'lib/libreactiveTransport.so')
         reference = {"kind": kind, "mean_mach_requested": mach}
         def pack(T, p, Y, liquid=(0, 0), u=None):
             mass, E, state = backend.make_state(T, p, Y, liquid)

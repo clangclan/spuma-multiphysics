@@ -1,0 +1,150 @@
+{
+  "cases": [
+    {
+      "analysisOnly": false,
+      "analysisOrRunWallSeconds": 151.16206499999998,
+      "cleanGpuClosure": true,
+      "gpuClosure": "REACTIVE_GPU_HEM batches=1323 submitted=160026 succeeded=160026 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=46141176 residualEvaluations=23518157 flashCandidates=2424495 stableCandidates=189075 transferBytes=64714008 analyticJacobians=0 finiteDifferenceJacobians=1137622 hostBytes=3242320 deviceBytes=1931680 wallSeconds=149.24587508900009 kernelSeconds=149.18369941717395 copySeconds=0.053003616089932717",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/solid-ten-steps/ambient_1atm/solver.log",
+      "metrics": {
+        "acceptedSteps": 10,
+        "alphaGasRange": [
+          0.9131201018902431,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.08687989810975587
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 256000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/solid-ten-steps/ambient_1atm/2.61000423315802e-07",
+        "checkpointSha256": "50b71da3a866af5573b9420094384832e293fae0140d8684093c9bc44978d16f",
+        "conservedBudgetResidual": [
+          -5.265757023064715e-18,
+          9.65291366365221e-19,
+          -5.293955920339377e-21,
+          0.0,
+          9.317362419797304e-21,
+          1.3976043629695956e-20,
+          -4.25901624927199e-22,
+          2.8241853300414732e-12
+        ],
+        "deltaT": 2.6127618151858857e-08,
+        "liquidN2oMassKg": 1.770941444646879e-07,
+        "n2oMassKg": 2.872662816221619e-07,
+        "pRangePa": [
+          89464.10289454121,
+          2084216.3475165246
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          185.5103355902308,
+          293.15
+        ],
+        "time": 2.610004233158023e-07,
+        "vaporN2oMassFraction": 0.3835192091997145,
+        "vaporN2oMassKg": 1.1017213715747401e-07
+      },
+      "name": "ambient_1atm",
+      "passed": true,
+      "runtimeCompleted": true,
+      "step": "REACTIVE_STEP time=2.6100042331580228e-07 dt=2.6127618151858857e-08 retries=0 massResidual=1.6492765076997613e-14 energyResidual=5.45900169285223e-12 momentumResidual=6.9266173842570304e-18 globalElementResidual=3.2212485480135005e-14 frozenLiquidResidual=0 speciesResidual=3.1636345575240344e-14 elementDrift=0 minP=89464.102894541211 maxP=2084216.3475165246 minT=185.5103355902308 maxT=293.14999999999998 maxMach=0.57334565283151018 minAlphaGas=0.91312010189024306 maxAlphaGas=1.0000000000000004 maxVolumeResidual=9.9423291821665316e-10 maxUVResidual=9.4090951302523266e-10 maxMuResidual=9.5118579679365212e-10 maxMechanicalResidual=0 seconds=3.7958074040000001",
+      "stepSummary": {
+        "count": 10,
+        "dtRangeS": [
+          2.5884037054482106e-08,
+          2.6135571229648018e-08
+        ],
+        "minTemperatureK": 170.18724226924132,
+        "totalRetries": 0
+      }
+    },
+    {
+      "analysisOnly": false,
+      "analysisOrRunWallSeconds": 65.78589181299981,
+      "cleanGpuClosure": true,
+      "gpuClosure": "REACTIVE_GPU_HEM batches=1323 submitted=159389 succeeded=159389 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=227947058 residualEvaluations=249985737 flashCandidates=2368755 stableCandidates=168297 transferBytes=64456660 analyticJacobians=0 finiteDifferenceJacobians=11413489 hostBytes=3242320 deviceBytes=1931680 wallSeconds=63.883513328000085 kernelSeconds=63.823436808094371 copySeconds=0.050942559991031776",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/solid-ten-steps/ambient_40bar_abs/solver.log",
+      "metrics": {
+        "acceptedSteps": 10,
+        "alphaGasRange": [
+          0.9365759891809157,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.06342401053473282
+        ],
+        "alphaSolidN2oRange": [
+          0.0,
+          0.0
+        ],
+        "cells": 256000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/solid-ten-steps/ambient_40bar_abs/2.58327511663799e-07",
+        "checkpointSha256": "9a62cad8d3061d739f43ac136a79fab6a84176b84dec28f29003db157d5103ad",
+        "conservedBudgetResidual": [
+          9.257891938785559e-16,
+          4.127689051749007e-16,
+          -8.205631676526035e-21,
+          0.0,
+          -2.117582368135751e-22,
+          7.835054762102278e-21,
+          -1.4061224961835141e-21,
+          6.908379424075406e-11
+        ],
+        "deltaT": 2.585473619997057e-08,
+        "liquidN2oMassKg": 1.267186302914313e-07,
+        "n2oMassKg": 2.844124623577052e-07,
+        "pRangePa": [
+          3673424.5848182933,
+          4780613.945639125
+        ],
+        "phaseMassClosureKg": 0.0,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "solidN2oMassKg": 0.0,
+        "tRangeK": [
+          248.02682396604365,
+          293.15
+        ],
+        "time": 2.5832751166379874e-07,
+        "vaporN2oMassFraction": 0.5544547195964379,
+        "vaporN2oMassKg": 1.576938320662739e-07
+      },
+      "name": "ambient_40bar_abs",
+      "passed": true,
+      "runtimeCompleted": true,
+      "step": "REACTIVE_STEP time=2.5832751166379874e-07 dt=2.585473619997057e-08 retries=0 massResidual=6.612884363159445e-15 energyResidual=5.8789036096535248e-14 momentumResidual=2.8381648195567454e-19 globalElementResidual=1.5510696899744367e-14 frozenLiquidResidual=0 speciesResidual=1.7202383459971549e-14 elementDrift=0 minP=3673424.5848182933 maxP=4780613.9456391251 minT=248.02682396604365 maxT=293.14999999999998 maxMach=0.025759034298555344 minAlphaGas=0.93657598918091567 maxAlphaGas=1.0000000000000004 maxVolumeResidual=2.8435231946843942e-10 maxUVResidual=8.2522300819724179e-10 maxMuResidual=1.4468549025536959e-08 maxMechanicalResidual=0 seconds=9.0033267450000007",
+      "stepSummary": {
+        "count": 10,
+        "dtRangeS": [
+          2.5636196100808844e-08,
+          2.585504847795135e-08
+        ],
+        "minTemperatureK": 222.33504570461935,
+        "totalRetries": 0
+      }
+    }
+  ],
+  "cudaTransportSha256": "aed3b98c768cf4bff2fa8b6832501719379fd00985e0c9cd212cc03de1551b94",
+  "passed": true,
+  "requestedSteps": 10,
+  "schema": 1,
+  "scope": "Bounded runtime and flash mass-accounting checks; no developed collision or breakup validation",
+  "solverSha256": "cc7b0b0f876c77a54469473536f2b51eb032f25fe68a68b67f7c557920e898a0",
+  "source": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_solid_20260922/benchmark",
+  "sourceHashes": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/analyze_impinging_n2o.py": "21359a65c15464a3d4e32bc4f1604e6da7f32516f5964d06a66de3b2da235f03",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_impinging_n2o.py": "688442c81152b68dd00a736683ee81688b29b012717dd784d712c25aa8e71a7d"
+  },
+  "thermoBackendSha256": "8faee3732abdc2529ee871e212d4fa6a0e1dd13d1c279fc7f89f704cb82c2368"
+}

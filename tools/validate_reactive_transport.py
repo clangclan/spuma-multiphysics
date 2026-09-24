@@ -142,7 +142,7 @@ def load(path):
         "stable_step": ([v, d, s, C.c_double, C.c_double, d], C.c_int),
     }
     for name, (args, ret) in signatures.items():
-        f = getattr(lib, "pintle_transport_"+name); f.argtypes, f.restype = args, ret
+        f = getattr(lib, "reactive_transport_"+name); f.argtypes, f.restype = args, ret
     return lib
 
 
@@ -181,12 +181,12 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, 
     cfg = Config(nc, ns, nv, len(faces), nf, .007 if transport else 0, 2 if transport else 0,
         .003 if transport else 0, 1.1, 2e8, mechanical)
     error = C.create_string_buffer(4096)
-    handle = lib.pintle_transport_create(backend, C.byref(cfg), ptr(volumes), geometry,
+    handle = lib.reactive_transport_create(backend, C.byref(cfg), ptr(volumes), geometry,
         ptr(fixed), fs, ptr(fy), ptr(fh), error, len(error))
     if not handle: raise RuntimeError(error.value.decode())
 
     def check(status):
-        if status: raise AssertionError(lib.pintle_transport_error(handle).decode())
+        if status: raise AssertionError(lib.reactive_transport_error(handle).decode())
 
     def compare(a, b):
         scale = np.maximum(1., np.max(np.abs(b), axis=0))
@@ -195,12 +195,12 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, 
         return error
 
     try:
-        assert bool(lib.pintle_transport_is_cuda(handle)) == bool(backend)
+        assert bool(lib.reactive_transport_is_cuda(handle)) == bool(backend)
         rhs, br = np.empty_like(q), np.empty(nv)
-        check(lib.pintle_transport_rhs(handle, ptr(q), states, ptr(gy), ptr(gh), ptr(rhs), ptr(br)))
+        check(lib.reactive_transport_rhs(handle, ptr(q), states, ptr(gy), ptr(gh), ptr(rhs), ptr(br)))
         expected, expected_br, expected_dt = reference(q, states, faces, volumes, cfg, fixed, fs, gy, gh, fy, fh)
         err = compare(rhs, expected); compare(br[None, :], expected_br[None, :])
-        dt = C.c_double(); check(lib.pintle_transport_stable_step(handle, ptr(q), states, .23, .1, C.byref(dt)))
+        dt = C.c_double(); check(lib.reactive_transport_stable_step(handle, ptr(q), states, .23, .1, C.byref(dt)))
         assert abs(dt.value/expected_dt-1) < 3e-14
         # Conservation is checked separately from agreement with the reference.
         balance = (rhs*volumes[:, None]).sum(axis=0)+br
@@ -209,68 +209,68 @@ def run(lib, backend, ns, nc, boundary_kind, transport=False, mechanical=False, 
         if mechanical: assert np.max(np.abs(rhs[:, -2:].sum(axis=1))) < 1e-10
         original = q.copy(); step = .1*dt.value
         # An orphan RK stage must fail, then a new stage 0 must recover.
-        assert lib.pintle_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step, 1, ptr(br)) != 0
-        check(lib.pintle_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step, 0, ptr(br)))
+        assert lib.reactive_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step, 1, ptr(br)) != 0
+        check(lib.reactive_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step, 0, ptr(br)))
         compare(q, original+step*expected)
         states1, gy1, gh1 = recovered(q, ns, mechanical)
         rhs1, _, _ = reference(q, states1, faces, volumes, cfg, fixed, fs, gy1, gh1, fy, fh)
         expected_final = .5*original+.5*(q+step*rhs1)
-        check(lib.pintle_transport_stable_step(handle, ptr(q), states1, .23, .1, C.byref(dt)))
-        check(lib.pintle_transport_stage(handle, ptr(q), states1, ptr(gy1), ptr(gh1), step, 1, ptr(br)))
+        check(lib.reactive_transport_stable_step(handle, ptr(q), states1, .23, .1, C.byref(dt)))
+        check(lib.reactive_transport_stage(handle, ptr(q), states1, ptr(gy1), ptr(gh1), step, 1, ptr(br)))
         compare(q, expected_final)
         # Rejected-step restoration starts from the caller's exact saved state.
         q[:] = original
-        check(lib.pintle_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step/2, 0, ptr(br)))
+        check(lib.reactive_transport_stage(handle, ptr(q), states, ptr(gy), ptr(gh), step/2, 0, ptr(br)))
         compare(q, original+step/2*expected)
         # Three CFL queries + two RK stages, as in a reacting Flow::step. Only
         # one conserved upload is allowed. Same pointer, changed version must
         # refresh data; wrong input version and rollback are checked below.
         q[:] = original
-        before=Profile();check(lib.pintle_transport_profile(handle,C.byref(before)))
+        before=Profile();check(lib.reactive_transport_profile(handle,C.byref(before)))
         primitive=primitives(q,states,ns)
-        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+        check(lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
         assert abs(dt.value/expected_dt-1)<3e-14
-        check(lib.pintle_transport_upload_conserved(handle,ptr(q),10))
-        check(lib.pintle_transport_upload_conserved(handle,ptr(q),10))
-        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
-        check(lib.pintle_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step,0,10,11,ptr(q),ptr(br)))
+        check(lib.reactive_transport_upload_conserved(handle,ptr(q),10))
+        check(lib.reactive_transport_upload_conserved(handle,ptr(q),10))
+        check(lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+        check(lib.reactive_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step,0,10,11,ptr(q),ptr(br)))
         compare(q,original+step*expected)
         rs,ry,rh=recovered(q,ns,mechanical)
-        check(lib.pintle_transport_stable_step_primitives(handle,primitives(q,rs,ns),rs,.23,.1,C.byref(dt)))
-        check(lib.pintle_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,12,ptr(q),ptr(br)))
+        check(lib.reactive_transport_stable_step_primitives(handle,primitives(q,rs,ns),rs,.23,.1,C.byref(dt)))
+        check(lib.reactive_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,12,ptr(q),ptr(br)))
         compare(q,expected_final)
-        after=Profile();check(lib.pintle_transport_profile(handle,C.byref(after)))
+        after=Profile();check(lib.reactive_transport_profile(handle,C.byref(after)))
         assert after.conservedUploads-before.conservedUploads==1
         assert after.conservedUploadBytes-before.conservedUploadBytes==q.nbytes
         assert after.conservedDownloadBytes-before.conservedDownloadBytes==2*q.nbytes
         assert after.residentStages-before.residentStages==2
         # Stale versions cannot consume a later q. Error invalidates residency.
-        assert lib.pintle_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,13,ptr(q),ptr(br))!=0
+        assert lib.reactive_transport_stage_resident(handle,rs,ptr(ry),ptr(rh),step,1,11,13,ptr(q),ptr(br))!=0
         q[:]=original
-        check(lib.pintle_transport_upload_conserved(handle,ptr(q),20))
-        check(lib.pintle_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step/2,0,20,21,ptr(q),ptr(br)))
+        check(lib.reactive_transport_upload_conserved(handle,ptr(q),20))
+        check(lib.reactive_transport_stage_resident(handle,states,ptr(gy),ptr(gh),step/2,0,20,21,ptr(q),ptr(br)))
         compare(q,original+step/2*expected)
         # Same host storage now represents a CPU chemical update / restoration.
         q[:]=original*1.001
         altered=q.copy();ar,ay,ah=recovered(q,ns,mechanical)
         arhs,_,_=reference(q,ar,faces,volumes,cfg,fixed,fs,ay,ah,fy,fh)
-        check(lib.pintle_transport_upload_conserved(handle,ptr(q),30))
-        check(lib.pintle_transport_stage_resident(handle,ar,ptr(ay),ptr(ah),step/2,0,30,31,ptr(q),ptr(br)))
+        check(lib.reactive_transport_upload_conserved(handle,ptr(q),30))
+        check(lib.reactive_transport_stage_resident(handle,ar,ptr(ay),ptr(ah),step/2,0,30,31,ptr(q),ptr(br)))
         compare(q,altered+step/2*arhs)
         # Invalid velocities/states at different reduction positions must fail.
         for c in set((0,nc//2,nc-1)):
             bad=primitives(original,states,ns);bad[c].u[1]=float('nan')
-            assert lib.pintle_transport_stable_step_primitives(handle,bad,states,.23,.1,C.byref(dt))!=0
-        check(lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
+            assert lib.reactive_transport_stable_step_primitives(handle,bad,states,.23,.1,C.byref(dt))!=0
+        check(lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt)))
         assert abs(dt.value/expected_dt-1)<3e-14
         delta={n:getattr(after,n)-getattr(before,n) for n,_ in Profile._fields_ if n!='boundaryPartitions'}
-        stats = Stats(); check(lib.pintle_transport_stats(handle, C.byref(stats)))
+        stats = Stats(); check(lib.reactive_transport_stats(handle, C.byref(stats)))
         return dict(species=ns, cells=nc, boundary_kind=boundary_kind, transport=transport,
             mechanical=mechanical, frozen_liquids=frozen_liquids, spatial=spatial, boundary_faces=sum(f.neighbour<0 for f in faces),
             scaled_error=err, resident_cycle=delta, boundary_partitions=after.boundaryPartitions,
             stats={n: getattr(stats, n) for n, _ in stats._fields_})
     finally:
-        lib.pintle_transport_destroy(handle)
+        lib.reactive_transport_destroy(handle)
 
 
 def run_large_cfl(lib,backend,nc):
@@ -281,30 +281,30 @@ def run_large_cfl(lib,backend,nc):
     primitive=(Primitive*nc)(*[Primitive(1,(C.c_double*3)(5,0,0))]*nc)
     faces=(Face*nc)(*[Face(c,(c+1)%nc,-1,(C.c_double*3)(1,0,0),1,.2,.5,0) for c in range(nc)])
     error=C.create_string_buffer(4096)
-    handle=lib.pintle_transport_create(backend,C.byref(cfg),ptr(volume),faces,None,None,None,None,error,len(error))
+    handle=lib.reactive_transport_create(backend,C.byref(cfg),ptr(volume),faces,None,None,None,None,error,len(error))
     if not handle:raise RuntimeError(error.value.decode())
     try:
         dt=C.c_double();expected=.23*.2/(2*(5+1.1*300))
-        status=lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))
-        if status:raise AssertionError(lib.pintle_transport_error(handle).decode())
+        status=lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))
+        if status:raise AssertionError(lib.reactive_transport_error(handle).decode())
         assert abs(dt.value/expected-1)<3e-14
         for c in (0,nc//2,nc-1):
             # Finite input passes host validation but overflows the GPU cell
             # denominator. Its error must survive every reduction level.
             primitive[c].u[0]=1e308
-            assert lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))!=0
+            assert lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))!=0
             primitive[c].u[0]=5
-        assert lib.pintle_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))==0
-        profile=Profile();assert lib.pintle_transport_profile(handle,C.byref(profile))==0
+        assert lib.reactive_transport_stable_step_primitives(handle,primitive,states,.23,.1,C.byref(dt))==0
+        profile=Profile();assert lib.reactive_transport_profile(handle,C.byref(profile))==0
         assert profile.conservedUploadBytes==0
         return dict(name="large-CFL-reduction",cells=nc,relative_error=abs(dt.value/expected-1),
                     invalid_device_denominator_rejected=True,conserved_upload_bytes=0)
-    finally:lib.pintle_transport_destroy(handle)
+    finally:lib.reactive_transport_destroy(handle)
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--library", type=Path, default=Path(__file__).resolve().parents[1]/"lib/libpintleReactiveTransport.so")
+    p.add_argument("--library", type=Path, default=Path(__file__).resolve().parents[1]/"lib/libreactiveTransport.so")
     p.add_argument("--backend", choices=("cpu", "cuda"), default="cpu")
     p.add_argument("--output", type=Path, required=True); args = p.parse_args()
     if args.output.exists(): raise SystemExit("Refusing to overwrite evidence")

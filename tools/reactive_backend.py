@@ -78,7 +78,7 @@ class ChemicalProfile(C.Structure):
 class Backend:
     def __init__(self, configuration, library=None):
         root = Path(__file__).resolve().parents[1]
-        self.library_path = Path(library or root / "lib/libpintleReactiveBackend.so").resolve()
+        self.library_path = Path(library or root / "lib/libreactiveBackend.so").resolve()
         self.configuration = Path(configuration).resolve()
         self.lib = C.CDLL(str(self.library_path))
         void, double, ptr = C.c_void_p, C.c_double, C.POINTER(C.c_double)
@@ -107,31 +107,44 @@ class Backend:
             "react": ([void, ptr, double, double, C.c_int, double, double, C.POINTER(State), ptr], C.c_int),
         }
         for name, (args, result) in specs.items():
-            function = getattr(self.lib, f"pintle_rt_{name}")
+            function = getattr(self.lib, f"reactive_rt_{name}")
             function.argtypes, function.restype = args, result
-        if hasattr(self.lib, "pintle_rt_chemical_profile"):
-            self.lib.pintle_rt_chemical_profile.argtypes = [void, C.c_int, C.POINTER(ChemicalProfile)]
-            self.lib.pintle_rt_chemical_profile.restype = C.c_int
-        if hasattr(self.lib, "pintle_rt_export_gas_thermo"):
-            self.lib.pintle_rt_export_gas_thermo.argtypes = [void, C.POINTER(GasThermoSpecies), C.c_size_t,
+        if hasattr(self.lib, "reactive_rt_chemical_profile"):
+            self.lib.reactive_rt_chemical_profile.argtypes = [void, C.c_int, C.POINTER(ChemicalProfile)]
+            self.lib.reactive_rt_chemical_profile.restype = C.c_int
+        if hasattr(self.lib, "reactive_rt_export_gas_thermo"):
+            self.lib.reactive_rt_export_gas_thermo.argtypes = [void, C.POINTER(GasThermoSpecies), C.c_size_t,
                 C.POINTER(GasThermoRegion), C.c_size_t, C.POINTER(C.c_size_t)]
-            self.lib.pintle_rt_export_gas_thermo.restype = C.c_int
+            self.lib.reactive_rt_export_gas_thermo.restype = C.c_int
         error = C.create_string_buffer(8192)
-        self.handle = self.lib.pintle_rt_create(str(self.configuration).encode(), error, len(error))
+        self.handle = self.lib.reactive_rt_create(str(self.configuration).encode(), error, len(error))
         if not self.handle:
             raise RuntimeError(error.value.decode(errors="replace"))
-        self.ns = self.lib.pintle_rt_species_count(self.handle)
-        self.nl = self.lib.pintle_rt_liquid_count(self.handle)
-        self.nr = self.lib.pintle_rt_reaction_count(self.handle)
-        self.fingerprint = self.lib.pintle_rt_fingerprint(self.handle).decode()
-        self.ideal_gas = bool(self.lib.pintle_rt_ideal_gas(self.handle))
-        self.names = [self.lib.pintle_rt_species_name(self.handle, k).decode() for k in range(self.ns)]
-        self.weights = np.array([self.lib.pintle_rt_molecular_weight(self.handle, k) for k in range(self.ns)])
-        self.liquid_indices = [self.lib.pintle_rt_liquid_species(self.handle, i) for i in range(self.nl)]
+        self.ns = self.lib.reactive_rt_species_count(self.handle)
+        self.nl = self.lib.reactive_rt_liquid_count(self.handle)
+        self.nr = self.lib.reactive_rt_reaction_count(self.handle)
+        self.fingerprint = self.lib.reactive_rt_fingerprint(self.handle).decode()
+        self.ideal_gas = bool(self.lib.reactive_rt_ideal_gas(self.handle))
+        self.names = [self.lib.reactive_rt_species_name(self.handle, k).decode() for k in range(self.ns)]
+        self.weights = np.array([self.lib.reactive_rt_molecular_weight(self.handle, k) for k in range(self.ns)])
+        self.liquid_indices = [self.lib.reactive_rt_liquid_species(self.handle, i) for i in range(self.nl)]
+        self.condensed = []
+        kind = getattr(self.lib, "reactive_rt_condensed_kind_v1", None)
+        phase_name = getattr(self.lib, "reactive_rt_condensed_name_v1", None)
+        if kind is not None and phase_name is not None:
+            kind.argtypes, kind.restype = [void, C.c_size_t], C.c_int
+            phase_name.argtypes, phase_name.restype = [void, C.c_size_t], C.c_char_p
+        for i, species in enumerate(self.liquid_indices):
+            value = kind(self.handle, i) if kind is not None else 0
+            raw = phase_name(self.handle, i) if phase_name is not None else None
+            if value not in (0, 1) or (phase_name is not None and not raw):
+                raise RuntimeError(f"Invalid condensed-phase metadata for slot {i}")
+            self.condensed.append({"slot": i, "speciesIndex": species, "species": self.names[species],
+                "kind": "solid" if value == 1 else "liquid", "name": raw.decode() if raw else f"liquid_{self.names[species]}"})
 
     def close(self):
         if getattr(self, "handle", None):
-            self.lib.pintle_rt_destroy(self.handle)
+            self.lib.reactive_rt_destroy(self.handle)
             self.handle = None
 
     def __enter__(self):
@@ -142,7 +155,7 @@ class Backend:
 
     def check(self, status):
         if status:
-            raise RuntimeError(self.lib.pintle_rt_error(self.handle).decode(errors="replace"))
+            raise RuntimeError(self.lib.reactive_rt_error(self.handle).decode(errors="replace"))
 
     def vector(self, values):
         if isinstance(values, dict):
@@ -170,7 +183,7 @@ class Backend:
         if isinstance(selected, str):
             selected = self.names.index(selected)
         result = PhaseProperties()
-        self.check(self.lib.pintle_rt_phase(self.handle, phase, T, p, self.pointer(fractions), selected, C.byref(result)))
+        self.check(self.lib.reactive_rt_phase(self.handle, phase, T, p, self.pointer(fractions), selected, C.byref(result)))
         return result
 
     def make_state(self, T, p, Y, liquid_fractions=(0, 0)):
@@ -179,76 +192,76 @@ class Backend:
         fractions[:len(liquid_fractions)] = liquid_fractions
         q = np.empty(self.ns)
         energy, state = C.c_double(), State()
-        self.check(self.lib.pintle_rt_make_state(self.handle, T, p, self.pointer(Y), self.pointer(fractions),
+        self.check(self.lib.reactive_rt_make_state(self.handle, T, p, self.pointer(Y), self.pointer(fractions),
                                                self.pointer(q), C.byref(energy), C.byref(state)))
         return q, energy.value, state
 
     def recover(self, q, energy, guess, equilibrium=True):
         q, result = self.vector(q), guess.copy()
-        self.check(self.lib.pintle_rt_recover(self.handle, self.pointer(q), energy, int(equilibrium), C.byref(result)))
+        self.check(self.lib.reactive_rt_recover(self.handle, self.pointer(q), energy, int(equilibrium), C.byref(result)))
         return result
 
     def react(self, q, energy, dt, guess, equilibrium=True, rtol=1e-8, atol=1e-14):
         q, result, drift = self.vector(q).copy(), guess.copy(), C.c_double()
-        self.check(self.lib.pintle_rt_react(self.handle, self.pointer(q), energy, dt, int(equilibrium), rtol, atol,
+        self.check(self.lib.reactive_rt_react(self.handle, self.pointer(q), energy, dt, int(equilibrium), rtol, atol,
                                           C.byref(result), C.byref(drift)))
         return q, result, drift.value
 
     def gas_enthalpies(self, q, state):
         q, values = self.vector(q), np.empty(self.ns)
-        self.check(self.lib.pintle_rt_gas_enthalpies(self.handle, self.pointer(q), C.byref(state), self.pointer(values)))
+        self.check(self.lib.reactive_rt_gas_enthalpies(self.handle, self.pointer(q), C.byref(state), self.pointer(values)))
         return values
 
     def export_gas_thermo(self):
         count=C.c_size_t()
-        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,None,0,None,0,C.byref(count)))
+        self.check(self.lib.reactive_rt_export_gas_thermo(self.handle,None,0,None,0,C.byref(count)))
         records=(GasThermoSpecies*self.ns)();regions=(GasThermoRegion*count.value)()
-        self.check(self.lib.pintle_rt_export_gas_thermo(self.handle,records,self.ns,regions,len(regions),C.byref(count)))
+        self.check(self.lib.reactive_rt_export_gas_thermo(self.handle,records,self.ns,regions,len(regions),C.byref(count)))
         return records,regions
 
     def set_chemical_jacobian(self, structured=True):
-        self.check(self.lib.pintle_rt_set_chemical_jacobian(self.handle, int(structured)))
+        self.check(self.lib.reactive_rt_set_chemical_jacobian(self.handle, int(structured)))
 
     def set_chemical_linear_solver(self, mode="dense"):
         modes = {"dense": 0, "sparse": 1, "auto": 2, "matrixFree": 3, "matrixFreeWoodbury": 4}
-        self.check(self.lib.pintle_rt_set_chemical_linear_solver(self.handle, modes[mode]))
+        self.check(self.lib.reactive_rt_set_chemical_linear_solver(self.handle, modes[mode]))
 
     def chemical_profile(self, reset=False):
         result = ChemicalProfile()
-        self.check(self.lib.pintle_rt_chemical_profile(self.handle, int(reset), C.byref(result)))
+        self.check(self.lib.reactive_rt_chemical_profile(self.handle, int(reset), C.byref(result)))
         return {name: getattr(result, name) for name, _ in result._fields_}
 
     def sparse_stats(self, reset=False):
         result = SparseStats()
-        self.check(self.lib.pintle_rt_sparse_stats(self.handle, int(reset), C.byref(result)))
+        self.check(self.lib.reactive_rt_sparse_stats(self.handle, int(reset), C.byref(result)))
         return {name: getattr(result, name) for name, _ in result._fields_}
 
     def chemical_sparse_jvp(self, q, energy, guess, direction):
         q, direction, result = self.vector(q), self.vector(direction), np.empty(self.ns)
-        self.check(self.lib.pintle_rt_chemical_sparse_jvp(self.handle, self.pointer(q), energy,
+        self.check(self.lib.reactive_rt_chemical_sparse_jvp(self.handle, self.pointer(q), energy,
                    C.byref(guess), self.pointer(direction), self.pointer(result)))
         return result
 
     def chemical_stats(self, reset=False):
         result = ChemicalStats()
-        fallbacks = self.lib.pintle_rt_chemical_integration_fallbacks(self.handle)
-        self.check(self.lib.pintle_rt_chemical_stats(self.handle, int(reset), C.byref(result)))
+        fallbacks = self.lib.reactive_rt_chemical_integration_fallbacks(self.handle)
+        self.check(self.lib.reactive_rt_chemical_stats(self.handle, int(reset), C.byref(result)))
         return {name: getattr(result, name) for name, _ in result._fields_} | {"integrationFallbacks": fallbacks}
 
     def chemical_jacobian(self, q, energy, guess, equilibrium=True):
         q, result, used = self.vector(q), np.empty((self.ns, self.ns)), C.c_int()
-        self.check(self.lib.pintle_rt_chemical_jacobian(self.handle, self.pointer(q), energy,
+        self.check(self.lib.reactive_rt_chemical_jacobian(self.handle, self.pointer(q), energy,
                    int(equilibrium), C.byref(guess), self.pointer(result), C.byref(used)))
         return result, bool(used.value)
 
     def chemical_rhs(self, q, energy, guess, equilibrium=True):
         q, result = self.vector(q), np.empty(self.ns)
-        self.check(self.lib.pintle_rt_chemical_rhs(self.handle, self.pointer(q), energy,
+        self.check(self.lib.reactive_rt_chemical_rhs(self.handle, self.pointer(q), energy,
                    int(equilibrium), C.byref(guess), self.pointer(result)))
         return result
 
     def recover_mechanical(self, qa, qb, alpha, energy, guess, beta=None):
         qa, qb, result = self.vector(qa), self.vector(qb), guess.copy()
-        self.check(self.lib.pintle_rt_recover_mechanical(self.handle, self.pointer(qa), self.pointer(qb),
+        self.check(self.lib.reactive_rt_recover_mechanical(self.handle, self.pointer(qa), self.pointer(qb),
                    alpha, 1-alpha if beta is None else beta, energy, C.byref(result)))
         return result

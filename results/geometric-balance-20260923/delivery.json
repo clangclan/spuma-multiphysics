@@ -1,0 +1,47 @@
+{
+  "scope": "GPU geometric face operator and isolated production-kernel diagnostic with analytic supplied geometry; restricted VOF reconstruction feasibility probe. Production static-drop convergence remains unresolved.",
+  "productionGeometricModelEnabled": false,
+  "productionStaticDropConvergenceResolved": false,
+  "githubPR": "https://github.com/clangclan/spuma-multiphysics/pull/6",
+  "mergePermittedByEvidence": false,
+  "sourceSha256": {
+    "src/reactiveInterface/pintleGeometricCapillary.h": "2436d375d833e9486438e2376ea434c12e9c186e65ac7f10bade104321d00bfa",
+    "src/reactiveTransport/pintleGeometricTransport.h": "936d09b77bfa81b490427df15af36204f394ddacfb639c5c31cd6a081920b1c5",
+    "src/reactiveTransport/pintleReactiveTransport.cpp": "00c783fdbaad56413262ff57d98340b6bf3abb2b6dda459488fdcb9858d986ad",
+    "src/reactiveTransport/pintleTransportKernels.h": "aabd470dfd8c0ccc54dce121d3f9727ea7e19b1bc9b70696abbd1c64e3c2a0e0",
+    "tools/capillary_geometric_oracle.h": "5f83350dc7d78caaa59e8a8238c8fa29c82382e6c1937f6760ce8ec9aa7660f8",
+    "tools/capillary_geometric_test.cpp": "fd0e9c02e0356833b9706033ab65e8c8441b57badb7c82f38cbb6b51870443a8",
+    "tools/capillary_geometric_cuda_test.cu": "b4b573305ab9f082ac215a31d1e37f05949f60d551a9d955871ae8f1db0dd165",
+    "tools/geometric_oracle_export.cpp": "587fe12af3452b8f44efcf9a39ae8b2c9178fb005eb615e2cf2fa194492a2a00",
+    "tools/geometric_reconstruction_probe.py": "ea3c9d6a317ef0cdee050c0ec8f2ec115f816c854103bbc1ad150bb7149e46c8",
+    "tools/validate_geometric_transport.py": "a6776ffdce642f89a296799f1ab957aab68a909b04aad1861ef9b9bec8819159",
+    "reports/geometric-balance-review-20260923.ko.md": "484d9417f08fd15af20eda9b3672f0616590a0e67f4fbfaada6406cd2185ed9d"
+  },
+  "runtimeSha256": {
+    "bin/ReactiveFoam": "e1baf097060be8d4832a5610f6aa5e7f28b013c2608c3d5fd433300e55da3a7c",
+    "lib/libpintleReactiveTransport.so": "7038cde12848b6c98263feeda25d45828294187854bbbea86c33b600e389149c",
+    "lib/libpintleReactiveBackend.so": "0ec736b1cae0b197501adf75171db47c0c588e925f35ff765146a24a30c573b8"
+  },
+  "evidenceSha256": {
+    "results/geometric-balance-20260923/face-operator-tests.json": "0e20ec521db03ea840647588572673abb33f23cfdd7b876bcc114f513439c63a",
+    "results/geometric-balance-20260923/full-physics-parity.json": "7f325621f3239f6a8944f481d9fc80899896de4ebcf401097248e68eba58d8ec",
+    "results/geometric-balance-20260923/full-physics-regression.json": "53ec118fa39920334a4fef40f50c9356753b509cc38c38dea7c0ee5c4133ed06",
+    "results/geometric-balance-20260923/geometric-reconstruction-probe.json": "693aa466538303ab1f9b4eb2382de548f90ecdd9af4b5ee91b6013046a051418",
+    "results/geometric-balance-20260923/physics-switches.json": "92ff96fb5bde4a902858130d22a33b9672c4cacb799600621f27234791090711",
+    "results/geometric-balance-20260923/proposal-provenance.json": "6e020c43cc46c542beac7e7db33a418dcdc3c2be9f8640a72cdcaf4766ea44c8",
+    "results/geometric-balance-20260923/transport-api-cpu.json": "862d092053af44f5fc23873ddd0951cf39528ec70d62c4029c33a7b8e838aa23",
+    "results/geometric-balance-20260923/transport-api-cuda.json": "1d92caaf53637ca867d85939c1caf7a7e47380c83d7b3b5c9e6d0b7897e47410"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "driver": "595.91.07",
+    "cudaArchitecture": "sm_120"
+  },
+  "checks": {
+    "geometricApiCpu": 64,
+    "geometricApiCuda": 64,
+    "legacyPhysicsSwitches": 35,
+    "fullPhysicsConservedHistoryBitwiseEqual": true
+  },
+  "baselineLocalCommit": "097ac62953951acb00c71005c71b86a64c64e167"
+}

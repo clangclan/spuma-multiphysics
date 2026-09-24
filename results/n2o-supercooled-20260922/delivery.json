@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "baseCommit": "cdb6093f1c1ce7887a89a36baf0e486c786ea69f",
+  "status": "supercooled-fluid-profile-implemented-and-numerically-verified",
+  "selectedCondensedPhases": [
+    "liquid_N2O"
+  ],
+  "solidPhaseEnabled": false,
+  "sublimationEnabled": false,
+  "phaseChange": "gas-liquid equilibrium",
+  "liquidMinimumK": 148,
+  "metastableBelowTriplePoint": true,
+  "subTripleExperimentalAccuracyValidated": false,
+  "numericalChecksPassed": true,
+  "unitChecks": 27,
+  "legacyCpuCudaChecks": 18,
+  "gpuRuntimePassed": true,
+  "gpuFiniteDifferenceJacobians": 0,
+  "cpuFallbacks": 0,
+  "retries": 0,
+  "fullFlowRunsPerCase": 1,
+  "stepsPerRun": 10,
+  "generalOptimizationResumed": false,
+  "developedCollisionValidated": false,
+  "caseDirectory": "/home/jsw/문서/analysis/runs/impinging_n2o_supercooled_20260922/benchmark",
+  "binaryHashes": {
+    "bin/ReactiveFoam": "513250766d7f80cfb43a903ef7b8292acd8ae98258970d3060e4810aed5bfaaa",
+    "lib/libpintleReactiveBackend.so": "039cde89f340772b44904e8de007dc01a4c1606d201b41151a33e50f2ea6bbb0",
+    "lib/libpintleReactiveTransport.so": "a4861f690650a13e4c37a2b8e2cfd1f38dcb55d4ab2c95ef4f1561a36af786af"
+  },
+  "sourceHashes": {
+    "src/reactiveThermo/pintleReactiveThermo.cpp": "28961edfeaf02ac97f2f3f2fabbe4059042eda442467d6a45888acf5a70a8fcc",
+    "src/reactiveThermo/pintleRealFluidModel.inc": "27e0319355304a5f1cc3561e803dfb9fcbf90fa3a575c2b8b606c3ca41f4dd9e",
+    "src/reactiveThermo/pintleGpuHemModel.inc": "ab48e4dffa9e99da1d5954902b1a991a7d95e8201ad9c5a204d4e946f4db40b0",
+    "src/reactiveThermo/pintleDeviceFlash.h": "25c394f701632e73704c1bade4492446d2432e0b50036738364161ebee3a5b63",
+    "tools/extend_n2o_gas_thermo.py": "b7dfcc20f0194d0e4f5c743053cda560a91a5bcca65f556a5dd6796a829b3343",
+    "tools/prepare_impinging_n2o.py": "55c62b952d4a437a8d5bf2bf7b15c0b4dacbe682d657ad09e9d5144e9c9d3320",
+    "tools/validate_n2o_supercooled.py": "29ae946fe68cc32cdb6b0d8fc3a672f07d2601fea26657c867adc78aa5867d77",
+    "tools/validate_impinging_n2o.py": "688442c81152b68dd00a736683ee81688b29b012717dd784d712c25aa8e71a7d",
+    "tools/analyze_impinging_n2o.py": "21359a65c15464a3d4e32bc4f1604e6da7f32516f5964d06a66de3b2da235f03"
+  },
+  "exampleHashes": {
+    "examples/impinging-n2o-supercooled/README.ko.md": "9d3eef029b9d25521f0080b15607a945b6897de9fa53952368323e266f6a4937",
+    "examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml": "e01156f26c40c5c64fb31a701c881b3d80f365b3ad91e034ab8d941c0d79d8af",
+    "examples/impinging-n2o-supercooled/cold-pr-148K.yaml": "b73e7835a30cc3826b9b0573cf7877bcfe9d6480455d9a86718a40da10980916"
+  },
+  "evidenceHashes": {
+    "ambient_1atm-definition.json": "b28aebf42602bb33a396d55b45ff1b944d21ab374f5dfc7a2fd9a2d0d47cc75f",
+    "ambient_1atm-step-evidence.log": "bf02d70a7fc7fa7ecdd8654cc8ce32ca06b9b62e24d6bc7fcdfc040f91be3076",
+    "ambient_40bar_abs-definition.json": "b1a732e923db40700d5089256609d39da0169f3753c17917102ff638ab674da2",
+    "ambient_40bar_abs-step-evidence.log": "4b4195cfe6ce77700f2515d782b8e8a1e6158bced43ec0d87804d157a9f816f7",
+    "benchmark-matrix.json": "6ddaa68a4717244bfd0e97bd491556f9f5ed25909ea642fc70ec8abb48099563",
+    "comparison.json": "cf955d9e48f8c9dd8d22b9754985a4430eb3a19752f7b06669523b189f068c9a",
+    "gpu-ten-steps.json": "ccb816551c00779398348fe394eb2e4b5a16e297a300f2ab6fb12d4efb99b786",
+    "legacy-cuda-recovery.json": "ef53651f013a8b58959110da1afeb9b071039591f741ea591dd59ee112dcb7c6",
+    "thermo-preparation.json": "27565420d20ef0dc624c6315b89534842faac93bd196b589e8d0df757049353e",
+    "unit.json": "5b8e6fe23d98fe37756ca29dc6718ab6839269c9c3fc56073c86de55af5e32e3"
+  }
+}

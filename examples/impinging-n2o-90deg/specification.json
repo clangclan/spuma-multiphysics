@@ -1,0 +1,90 @@
+{
+  "geometry": {
+    "angleDegrees": 90,
+    "cellEdgeM": 0.00025,
+    "cellVolumeM3": 1.5625e-11,
+    "cells": 256000,
+    "domainM": [
+      0.02,
+      0.02,
+      0.01
+    ],
+    "facesPerNozzle": 64,
+    "inletCentersM": [
+      [
+        0,
+        0.006,
+        0.005
+      ],
+      [
+        0.006,
+        0,
+        0.005
+      ]
+    ],
+    "nominalDirections": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    "nominalIntersectionM": [
+      0.006,
+      0.006,
+      0.005
+    ],
+    "nozzleShape": "square",
+    "nozzleSideM": 0.002,
+    "shape": [
+      80,
+      80,
+      40
+    ]
+  },
+  "temperatureK": 293.15,
+  "supplyGaugePa": 5500000,
+  "gaugeReferencePa": 101325,
+  "supplyAbsolutePa": 5601325,
+  "cases": {
+    "ambient_1atm": {
+      "ambientAbsolutePa": 101325,
+      "pressureDifferencePa": 5500000
+    },
+    "ambient_40bar_abs": {
+      "ambientAbsolutePa": 4000000,
+      "pressureDifferencePa": 1601325
+    }
+  },
+  "fluidAtBothInlets": "pure liquid N2O",
+  "ambientMoleFractions": {
+    "N2": 0.79,
+    "O2": 0.21
+  },
+  "physics": {
+    "closure": "HEM",
+    "phaseChange": true,
+    "chemistry": false,
+    "turbulence": "WALE-stress-v1",
+    "geometricInterface": false
+  },
+  "boundaryConditions": {
+    "inletX": "stationary fixedState reservoir, pressure-driven HLL flux",
+    "inletY": "stationary fixedState reservoir, pressure-driven HLL flux",
+    "ambient": "fixedState ambient-air reservoir",
+    "inletPlates": "slipWall"
+  },
+  "maxDeltaT": 3e-08,
+  "preliminaryEndTime": 0.001,
+  "writeInterval": 1e-05,
+  "meshRefinementCellCounts": [
+    256000,
+    500000,
+    864000
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "cases": [
+    {
+      "analysisOnly": false,
+      "analysisOrRunWallSeconds": 11.149682233000021,
+      "error": "pted=0 retry=7 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=2.0421092684656835e-10 reason=Batch cell 3369: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_RECOVERY_FAILURE batchOffset=102400 failedCells=30 detailed=1 omittedDetails=29\nREACTIVE_ATTEMPT_PROFILE attempt=41 accepted=0 retry=8 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=1.0210546342328417e-10 reason=Batch cell 3369: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_RECOVERY_FAILURE batchOffset=102400 failedCells=30 detailed=1 omittedDetails=29\nREACTIVE_ATTEMPT_PROFILE attempt=42 accepted=0 retry=9 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=5.1052731711642087e-11 reason=Batch cell 3369: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_RECOVERY_FAILURE batchOffset=102400 failedCells=30 detailed=1 omittedDetails=29\nREACTIVE_ATTEMPT_PROFILE attempt=43 accepted=0 retry=10 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=2.5526365855821043e-11 reason=Batch cell 3369: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_RECOVERY_FAILURE batchOffset=102400 failedCells=28 detailed=1 omittedDetails=27\nREACTIVE_ATTEMPT_PROFILE attempt=44 accepted=0 retry=11 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=1.2763182927910522e-11 reason=Batch cell 3370: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_RECOVERY_FAILURE batchOffset=102400 failedCells=16 detailed=1 omittedDetails=15\nREACTIVE_ATTEMPT_PROFILE attempt=45 accepted=0 retry=12 sourceCalls=0 fullPhaseEvaluations=0 scalarProbes=0 rootChecks=0 matrixFreeProducts=0 factorBuilds=0 workerJobElapsedSeconds=0\nREACTIVE_RETRY dt=6.3815914639552608e-12 reason=Batch cell 3530: CUDA HEM candidate search failed; CPU fallback disabled\nREACTIVE_CHECKPOINT time=6.3136870607875573e-08 acceptedSteps=7 complete=1 schema=3\nREACTIVE_FAILURE Batch cell 3530: CUDA HEM candidate search failed; CPU fallback disabled\n",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/ten-steps/ambient_1atm/solver.log",
+      "name": "ambient_1atm",
+      "passed": false
+    },
+    {
+      "analysisOnly": false,
+      "analysisOrRunWallSeconds": 12.589007713,
+      "cleanGpuClosure": true,
+      "gpuClosure": "REACTIVE_GPU_HEM batches=1323 submitted=159267 succeeded=159267 cpuFallbacks=0 deviceFailures=0 phaseEvaluations=24377496 residualEvaluations=179442516 flashCandidates=788975 stableCandidates=168179 transferBytes=64407372 analyticJacobians=11383841 finiteDifferenceJacobians=0 hostBytes=3240104 deviceBytes=1929464 wallSeconds=10.782068124999995 kernelSeconds=10.723664954409013 copySeconds=0.049581343962810956",
+      "log": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/ten-steps/ambient_40bar_abs/solver.log",
+      "metrics": {
+        "acceptedSteps": 10,
+        "alphaGasRange": [
+          0.9365759893862735,
+          1.0000000000000004
+        ],
+        "alphaLiquidN2oRange": [
+          0.0,
+          0.06342401049751037
+        ],
+        "cells": 256000,
+        "checkpoint": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/n2o-temperature-recovery-v1/ten-steps/ambient_40bar_abs/2.583275116638e-07",
+        "checkpointSha256": "17c316bff9bcd5503a638d776f5985a401dea14582e8540984202a1fd6b7e5fb",
+        "conservedBudgetResidual": [
+          9.257366579834914e-16,
+          4.12755862191002e-16,
+          -7.623296525288703e-21,
+          0.0,
+          -5.293955920339377e-22,
+          6.776263578034403e-21,
+          -1.4351492196979451e-21,
+          6.908656979831562e-11
+        ],
+        "deltaT": 2.5854736199970543e-08,
+        "liquidN2oMassKg": 1.267186302582885e-07,
+        "n2oMassKg": 2.8441246235770596e-07,
+        "pRangePa": [
+          3673424.5848181644,
+          4780613.94439135
+        ],
+        "phaseMassClosureKg": -1.5881867761018131e-22,
+        "retries": 0,
+        "schema": 1,
+        "scope": "Thermodynamic N2O mass partition; ambient-air alphaGas is not an N2O vaporization measure. No geometric breakup inference.",
+        "tRangeK": [
+          248.02682396603817,
+          293.15
+        ],
+        "time": 2.5832751166379996e-07,
+        "vaporN2oMassFraction": 0.5544547197129694,
+        "vaporN2oMassKg": 1.5769383209941732e-07
+      },
+      "name": "ambient_40bar_abs",
+      "passed": true,
+      "runtimeCompleted": true,
+      "step": "REACTIVE_STEP time=2.5832751166379996e-07 dt=2.5854736199970543e-08 retries=0 massResidual=6.6239252171685199e-15 energyResidual=5.7460177802264537e-14 momentumResidual=2.6647214139171669e-19 globalElementResidual=1.5512987505980866e-14 frozenLiquidResidual=0 speciesResidual=1.7205023664191111e-14 elementDrift=0 minP=3673424.5848181644 maxP=4780613.9443913503 minT=248.02682396603817 maxT=293.14999999999998 maxMach=0.025759034303828247 minAlphaGas=0.93657598938627351 maxAlphaGas=1.0000000000000004 maxVolumeResidual=1.1621648088322445e-10 maxUVResidual=8.2522300819724179e-10 maxMuResidual=1.3751940031170307e-08 maxMechanicalResidual=0 seconds=1.842843499",
+      "stepSummary": {
+        "count": 10,
+        "dtRangeS": [
+          2.5636196100808844e-08,
+          2.585504847795123e-08
+        ],
+        "minTemperatureK": 222.335045710459,
+        "totalRetries": 0
+      }
+    }
+  ],
+  "cudaTransportSha256": "ec2d2f54ec4cbfeca9e218b3e95493f9c67811691c1bd1a172deb8b0a33f86b3",
+  "passed": false,
+  "requestedSteps": 10,
+  "schema": 1,
+  "scope": "Bounded runtime and flash mass-accounting checks; no developed collision or breakup validation",
+  "solverSha256": "89e3dfca8f184696cccbbbdb9e8cad083bc051d50c11d077b99074b03c8a2e50",
+  "source": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922",
+  "sourceHashes": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/analyze_impinging_n2o.py": "0fa26f925f94ce37b260412caebaca62f907993f2af3b75c441978e0008e668f",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/tools/validate_impinging_n2o.py": "688442c81152b68dd00a736683ee81688b29b012717dd784d712c25aa8e71a7d"
+  },
+  "thermoBackendSha256": "acf8bfeae3362b3a47e3cf0a31df83901f277535d7751f532e9fddd7e3154d38"
+}

@@ -1,14 +1,14 @@
 // Test-only LD_PRELOAD shim: fail once after an earlier batch has committed.
 // This verifies Flow's full-state rollback after CPU worker/GPU stage progress.
-#include "../src/reactiveThermo/pintleRealFluid.h"
+#include "../src/reactiveThermo/reactiveRealFluid.h"
 #include <cstdio>
 #include <dlfcn.h>
-extern "C" int pintle_rt_pool_batch(void* pool,PintleBatchToken token,int op,
-    size_t count,size_t stride,double* q,const double* e,PintleThermoState* state,
+extern "C" int reactive_rt_pool_batch(void* pool,ReactiveBatchToken token,int op,
+    size_t count,size_t stride,double* q,const double* e,ReactiveThermoState* state,
     double dt,double rtol,double atol,double* drift)
 {
-    using Function=decltype(&pintle_rt_pool_batch);
-    static auto real=reinterpret_cast<Function>(dlsym(RTLD_NEXT,"pintle_rt_pool_batch"));
+    using Function=decltype(&reactive_rt_pool_batch);
+    static auto real=reinterpret_cast<Function>(dlsym(RTLD_NEXT,"reactive_rt_pool_batch"));
     static int matching=0;
     if(!real)return -1;
     if(token.attemptId==2&&(op==0||op==2)&&++matching==2) {

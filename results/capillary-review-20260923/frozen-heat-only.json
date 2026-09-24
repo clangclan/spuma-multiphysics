@@ -1,0 +1,226 @@
+{
+  "analysisToolSha256": {
+    "tools/validate_capillary_solver.py": "679d469ca375588c1d75deef05cbd057438550d480a08168864a7cf3311f0a90"
+  },
+  "cases": [
+    {
+      "case": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-review-20260923/solver/frozen-heat-only",
+      "flashCandidatesMax": 0,
+      "geometry": {
+        "analyticLaplaceCurvaturePerM": 0,
+        "analyticSphereVolumeM3": null,
+        "capillaryCfl": 0.25,
+        "colorConstructionMaxAbsoluteError": 0.0,
+        "configuration": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-integration-20260923/solver/suite-v7/thermo/capillary-n2o-config.yaml",
+        "endTimeS": 6e-08,
+        "initialAmplitudeM": null,
+        "initialColorVolumeM3": 3.2e-08,
+        "initialPressureJumpPa": 0,
+        "interfaceField": "interfaceColor",
+        "kind": "plane",
+        "lengthsM": [
+          0.004,
+          0.004,
+          0.004
+        ],
+        "phaseChange": false,
+        "pressurePa": 3000000.0,
+        "pureGasDensityKgPerM3": 39.497162006859114,
+        "pureLiquidDensityKgPerM3": 925.7743063963303,
+        "radiusM": null,
+        "samplesPerAxis": 8,
+        "shape": [
+          8,
+          8,
+          8
+        ],
+        "sigmaNPerM": 0.01,
+        "spacingM": [
+          0.0005,
+          0.0005,
+          0.0005
+        ],
+        "surfaceTension": "true",
+        "temperatureK": 270.0,
+        "testPurpose": "frozen capillary RK and Cp/H GPU epochs",
+        "waleSpeciesMixing": false,
+        "wavelengthM": null
+      },
+      "history": [
+        {
+          "bulkInternalEnergyJ": 45.577481917744606,
+          "bulkPlusKineticEnergyJ": 45.577482078365776,
+          "bulkPlusSurfaceEnergyJ": 45.577482398365774,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "kineticEnergyJ": 1.6062117234229076e-07,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 0.10198039027185571,
+          "momentumKgMPerS": [
+            3.088868698890194e-06,
+            6.177737397780444e-07,
+            0.0
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 0.0,
+          "totalEnergyJ": 45.577482398365774,
+          "totalMassKg": 3.088868698890205e-05,
+          "volumeWeightedL2SpeedMPerS": 0.10198039027185571
+        },
+        {
+          "bulkInternalEnergyJ": 45.577481917744606,
+          "bulkPlusKineticEnergyJ": 45.577482078365776,
+          "bulkPlusSurfaceEnergyJ": 45.577482398365774,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "kineticEnergyJ": 1.6062117234229073e-07,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 0.10198039027186394,
+          "momentumKgMPerS": [
+            3.088868698890194e-06,
+            6.177737397780439e-07,
+            2.145767211914018e-23
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 3e-08,
+          "totalEnergyJ": 45.577482398365774,
+          "totalMassKg": 3.088868698890205e-05,
+          "volumeWeightedL2SpeedMPerS": 0.10198039027185572
+        },
+        {
+          "bulkInternalEnergyJ": 45.577481917744606,
+          "bulkPlusKineticEnergyJ": 45.577482078365776,
+          "bulkPlusSurfaceEnergyJ": 45.577482398365774,
+          "colorMax": 1.0,
+          "colorMin": 0.0,
+          "colorVolumeM3": 3.2e-08,
+          "interfaceNormalizationMaxError": 0.0,
+          "kineticEnergyJ": 1.6062117234229073e-07,
+          "liquidInventoryKg": 2.9624777804682562e-05,
+          "maxSpeedMPerS": 0.1019803902718722,
+          "momentumKgMPerS": [
+            3.0888686988901947e-06,
+            6.177737397780429e-07,
+            4.2915344238280337e-23
+          ],
+          "speciesMassKg": [
+            9.69533084552466e-07,
+            2.943760996670313e-07,
+            2.962477780468272e-05,
+            0.0
+          ],
+          "surfaceEnergyJ": 3.2e-07,
+          "timeS": 6e-08,
+          "totalEnergyJ": 45.577482398365774,
+          "totalMassKg": 3.088868698890205e-05,
+          "volumeWeightedL2SpeedMPerS": 0.10198039027185575
+        }
+      ],
+      "initialReferenceCapillaryDtLimitS": 0.00034644142454697956,
+      "maxAcceptedDtOverInitialCapillaryLimit": 8.659472532544045e-05,
+      "maxAcceptedStepS": 3e-08,
+      "maxColorVolumeDriftM3": 0.0,
+      "maxInterfaceNormalizationError": 0.0,
+      "maxLiquidInventoryDriftKg": 0.0,
+      "maxMomentumDriftKgMPerS": 1.4823076576950256e-21,
+      "maxSpeciesMassDriftKg": 0.0,
+      "maxTotalEnergyDriftJ": 0.0,
+      "profiles": {
+        "REACTIVE_CAPILLARY_PROFILE": {
+          "closureIterations": "5",
+          "enabled": "1",
+          "faceFluxBuilds": "6144",
+          "geometryBuilds": "20",
+          "geometryKernels": "40",
+          "workspaceBytes": "40964"
+        },
+        "REACTIVE_GPU_HEM": {
+          "analyticJacobians": "0",
+          "batches": "5",
+          "copySeconds": "0.00018457600474357605",
+          "cpuFallbacks": "0",
+          "deviceBytes": "295336",
+          "deviceFailures": "0",
+          "finiteDifferenceJacobians": "0",
+          "flashCandidates": "0",
+          "hostBytes": "459096",
+          "kernelSeconds": "0.0026138559728860855",
+          "phaseEvaluations": "4338",
+          "residualEvaluations": "0",
+          "stableCandidates": "0",
+          "submitted": "2560",
+          "succeeded": "2560",
+          "transferBytes": "1095920",
+          "wallSeconds": "0.0028595579999999999"
+        },
+        "REACTIVE_PHYSICS": {
+          "chemistry": "0",
+          "combustion": "0",
+          "frozenLiquidFields": "1",
+          "heatConduction": "1",
+          "interfaceModel": "diffuse-liquid-inventory-v1",
+          "phaseChange": "frozen",
+          "speciesDiffusion": "0",
+          "surfaceTension": "1",
+          "thermodynamicRecovery": "1",
+          "totalEnergy": "1",
+          "transportedLiquidFields": "1",
+          "turbulence": "WALE-stress-v1",
+          "turbulentHeatFlux": "1",
+          "turbulentSpeciesMixing": "0",
+          "viscosity": "1"
+        },
+        "REACTIVE_WALE": {
+          "cellsEvaluated": "5632",
+          "gradientBuilds": "11",
+          "viscosityBuilds": "11",
+          "workspaceBytes": "4100"
+        },
+        "REACTIVE_WALE_PR": {
+          "backend": "device-pr",
+          "builds": "11",
+          "cells": "5632",
+          "failures": "0",
+          "inputUploadBytes": "1038768",
+          "kernels": "22",
+          "scratchBytes": "141664",
+          "wallSeconds": "0.000982653"
+        },
+        "REACTIVE_WALE_SCALARS": {
+          "fieldUploadBytes": "0",
+          "fieldUploads": "0",
+          "fluxBackend": "cuda",
+          "hostEnthalpyCells": "0",
+          "hostPropertySeconds": "0",
+          "propertyStageSeconds": "0.0010111819999999998",
+          "workspaceBytes": "4096"
+        }
+      },
+      "runtimeArtifacts": {
+        "backendSha256": "0ec736b1cae0b197501adf75171db47c0c588e925f35ff765146a24a30c573b8",
+        "hemLibrarySha256": "e50c8f88423c4226c7cd4af2b551d473eb33161709a4e84a4d8aa02d3837580a",
+        "physicalModelHash": "d55bf9c0c57732214e04a7b4bf6c22abe9fad360d942c58d5b863a3977a3009a",
+        "solverSha256": "e1baf097060be8d4832a5610f6aa5e7f28b013c2608c3d5fd433300e55da3a7c"
+      },
+      "sigmaNPerM": 0.01
+    }
+  ],
+  "schema": "capillary-solver-validation-v1",
+  "sphereGridConvergence": "not evaluated; requires at least three sphere meshes"
+}

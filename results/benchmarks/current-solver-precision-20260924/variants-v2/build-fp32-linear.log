@@ -1,0 +1,87 @@
+ptxas info    : 272 bytes gmem
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b17hemReduceCountersEPKN17PintleDeviceFlash8CountersEmPNS_16HemCounterTotalsE' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b17hemReduceCountersEPKN17PintleDeviceFlash8CountersEmPNS_16HemCounterTotalsE
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 27 registers, used 0 barriers
+ptxas info    : Compile time = 5.332 ms
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b9hemKernelEPKN17PintleDeviceFlash5ModelEPKdS5_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2PKjmPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b9hemKernelEPKN17PintleDeviceFlash5ModelEPKdS5_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2PKjmPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE
+    6864 bytes stack frame, 48 bytes spill stores, 32 bytes spill loads
+ptxas info    : Used 255 registers, used 0 barriers, 6864 bytes cumulative stack size
+ptxas info    : Compile time = 11511.269 ms
+ptxas info    : Function properties for _ZN14PintleDevicePR17evaluateTPTrustedILi16ELi8EEENS_6StatusERKNS_5TableIXT_EXT0_EEEddPKdNS_10RootChoiceERNS_5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN14PintleDevicePR23evaluateTPTrustedFixed4ILi16ELi8EEENS_6StatusERKNS_5TableIXT_EXT0_EEEddPKdNS_10RootChoiceERNS_5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN14PintleDevicePR6detail19reportedPhaseCachedILi1ELi16ELi8EEENS_6StatusERKNS_5TableIXT0_EXT1_EEEdPKdddddRi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash11activeFlashEPKiidRNS_10EvaluationEdPK17PintleThermoState
+    0 bytes stack frame, 208 bytes spill stores, 432 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash11phaseStatusEiddPKdRN14PintleDevicePR5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash17temperatureSearchERNS_10EvaluationE
+    0 bytes stack frame, 232 bytes spill stores, 384 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash3runERNS_10EvaluationEb
+    0 bytes stack frame, 86 bytes spill stores, 120 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash6frozenEPKdRNS_10EvaluationE
+    0 bytes stack frame, 8 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash6searchERNS_10EvaluationE
+    0 bytes stack frame, 324 bytes spill stores, 940 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash6stableERNS_10EvaluationE
+    0 bytes stack frame, 4 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash7tangentEddPKiiPKdd
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash8evaluateEPKdddRNS_10EvaluationEbS2_
+    0 bytes stack frame, 12 bytes spill stores, 16 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash8gasProbeEdRdS1_S1_Pd
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash8jacobianEPKiiPKddS4_PA4_dPKNS_10EvaluationE
+    0 bytes stack frame, 792 bytes spill stores, 560 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash8residualEPKiiPKddPdPNS_10EvaluationE
+    0 bytes stack frame, 20 bytes spill stores, 24 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash9scalarGasERNS_10EvaluationE
+    0 bytes stack frame, 4 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN24PintleDevicePRSelectedMu23evaluateTPTrustedFixed4ILi16ELi8EEEN14PintleDevicePR6StatusERKNS1_5TableIXT_EXT0_EEEddPKdNS1_10RootChoiceEjRNS1_5StateE
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN25PintleDeviceFlashJacobian11buildCachedILi16ELi8EEEbPKN14PintleDevicePR5TableIXT_EXT0_EEEiiPKiPKdS7_ibS9_dddddddddS9_bS9_S9_jPA4_d
+    0 bytes stack frame, 0 bytes spill stores, 4 bytes spill loads
+ptxas info    : Function properties for _ZN25PintleDeviceFlashJacobian5buildILi16ELi8EEEbPKN14PintleDevicePR5TableIXT_EXT0_EEEiiPKiPKdS7_ibS9_dddddddPA4_dPm
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN28PintleDevicePRPurePhaseCache31reportedPhaseCachedWithFallbackILi16ELi8EEEN14PintleDevicePR6StatusERKNS1_5TableIXT_EXT0_EEEdPKdddddRKNS_22PureReportedPhaseCacheERi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for __internal_accurate_pow
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for __internal_trig_reduction_slowpathd
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b21hemInitializeTPKernelEPKN17PintleDeviceFlash5ModelEPdS4_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2mPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b21hemInitializeTPKernelEPKN17PintleDeviceFlash5ModelEPdS4_PK17PintleThermoStatePK28PintleGpuHemCapillaryInputV2mPNS_16HemCompactOutputEPNS0_8CountersEPKN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE
+    3872 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 238 registers, used 0 barriers, 3872 bytes cumulative stack size
+ptxas info    : Compile time = 2053.781 ms
+ptxas info    : Function properties for _ZN14PintleDevicePR17evaluateTPTrustedILi16ELi8EEENS_6StatusERKNS_5TableIXT_EXT0_EEEddPKdNS_10RootChoiceERNS_5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN14PintleDevicePR23evaluateTPTrustedFixed4ILi16ELi8EEENS_6StatusERKNS_5TableIXT_EXT0_EEEddPKdNS_10RootChoiceERNS_5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN14PintleDevicePR6detail19reportedPhaseCachedILi1ELi16ELi8EEENS_6StatusERKNS_5TableIXT0_EXT1_EEEdPKdddddRi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash11phaseStatusEiddPKdRN14PintleDevicePR5StateEb
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN17PintleDeviceFlash5Flash8evaluateEPKdddRNS_10EvaluationEbS2_
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN24PintleDevicePRSelectedMu23evaluateTPTrustedFixed4ILi16ELi8EEEN14PintleDevicePR6StatusERKNS1_5TableIXT_EXT0_EEEddPKdNS1_10RootChoiceEjRNS1_5StateE
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for _ZN28PintleDevicePRPurePhaseCache31reportedPhaseCachedWithFallbackILi16ELi8EEEN14PintleDevicePR6StatusERKNS1_5TableIXT_EXT0_EEEdPKdddddRKNS_22PureReportedPhaseCacheERi
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for __internal_accurate_pow
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for __internal_trig_reduction_slowpathd
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Compiling entry function '_ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b23initializeHemPhaseCacheEPKN17PintleDeviceFlash5ModelEPN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE' for 'sm_120'
+ptxas info    : Function properties for _ZN51_GLOBAL__N__b1320dc0_18_pintleGpuHemFma_cu_c130191b23initializeHemPhaseCacheEPKN17PintleDeviceFlash5ModelEPN28PintleDevicePRPurePhaseCache22PureReportedPhaseCacheE
+    144 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 68 registers, used 0 barriers, 144 bytes cumulative stack size
+ptxas info    : Compile time = 46.042 ms
+ptxas info    : Function properties for __internal_accurate_pow
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Function properties for __internal_trig_reduction_slowpathd
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads

@@ -39,7 +39,7 @@ checkpointOnFailure true;      // 기본 true
 ```bash
 python tools/replay_reactive_recovery.py tests/fixtures/r04-recovery.jsonl \
   --config /absolute/path/cold-pr-config.yaml \
-  --library /absolute/path/libpintleReactiveBackend.so \
+  --library /absolute/path/libreactiveBackend.so \
   --mode boundaryFallback --output replay.json
 ```
 
@@ -49,8 +49,8 @@ python tools/replay_reactive_recovery.py tests/fixtures/r04-recovery.jsonl \
 python tools/reactive_run.py launch \
   --case /absolute/path/case --output /absolute/path/new-run-directory \
   --solver /absolute/path/ReactiveFoam \
-  --backend-library /absolute/path/libpintleReactiveBackend.so \
-  --transport-library /absolute/path/libpintleReactiveTransport.so \
+  --backend-library /absolute/path/libreactiveBackend.so \
+  --transport-library /absolute/path/libreactiveTransport.so \
   --spuma-env /absolute/path/spuma-env.sh --end-time 1e-8 --cpu-list 0-23
 python tools/reactive_run.py watch /absolute/path/new-run-directory/status.json
 ```

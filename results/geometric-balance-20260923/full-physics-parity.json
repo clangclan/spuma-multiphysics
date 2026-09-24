@@ -1,0 +1,16 @@
+{
+  "reference": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/capillary-review-20260923/solver/full-physics-checkpoint-gpu-pr",
+  "candidate": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-spray-physics/logs/geometric-balance-20260923/full-physics-final",
+  "matchingHistory": true,
+  "fields": [
+    "q0",
+    "q1",
+    "q2",
+    "q3",
+    "rhoMomentum",
+    "rhoTotalEnergy",
+    "rhoLiquid0"
+  ],
+  "bitwiseEqual": true,
+  "differences": []
+}

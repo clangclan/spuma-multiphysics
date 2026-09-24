@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "generatedUtc": "2026-09-22T10:40:06.345365+00:00",
+  "generatedBenchmark": "/home/jsw/\ubb38\uc11c/analysis/runs/impinging_n2o_90deg_20260922",
+  "caseCreationComplete": true,
+  "meshPassed": true,
+  "fullCollisionRunPerformed": false,
+  "gpuCleanAcceptance": {
+    "ambient_1atm": false,
+    "ambient_40bar_abs": true
+  },
+  "optimizationResumed": false,
+  "sourceHashes": {
+    "tools/diagnose_impinging_n2o_recovery.py": "91d638a403296ff68357fa7cf86e61c5af6ff041a2327dcd0ebdaad2edf84866",
+    "tools/plot_impinging_n2o.py": "15be84a0d1becf3a332f0e5bd5ec3d721ea752f275f4e04afd1c5dddc018a697",
+    "tools/probe_impinging_n2o_flash.py": "890cf0d7cafc02d0f2062650441ef8c350675bfc2f53d9cd702b651bd3d1c869",
+    "tools/prepare_impinging_n2o.py": "17a8869d8170fa7bd780f18acf8317ee199e3c0cb62c52f8eafd4149b287b6c7",
+    "tools/analyze_impinging_n2o.py": "0fa26f925f94ce37b260412caebaca62f907993f2af3b75c441978e0008e668f",
+    "tools/validate_impinging_n2o.py": "5cca0546b0ea8a506f1e76f6012f91b8c9d593d239a25e8ae59ce2aafa0c7496",
+    "tools/check_impinging_n2o_mesh.py": "73fd26dce8046bee37164b6ac21e83339d0978508f4506e8f020fc02bc960168",
+    "docs/benchmarks/impinging-n2o-geometry.svg": "70e82b61b3b1742df92d1cf144f3414891aa76e3190a7078b253d0ce891fd4fb",
+    "docs/benchmarks/impinging-n2o-setup.ko.md": "efeb52f938bca0ddcadc0b9676f5d83cad3c7788ed67605b35a23be00a37d4b2",
+    "docs/benchmarks/impinging-n2o-thermodynamics.md": "2025c1017493105d6a8f9a1d75b226d419275110f853e0d749ac0e13ae302fa2",
+    "docs/benchmarks/impinging-n2o-acceptance.ko.md": "6a4852c6c64396ccd80bac820c360e94f426ced01b7489bd190af2aebe47e49b",
+    "docs/benchmarks/impinging-n2o-geometry.png": "e972710d5af8fd680564082eba36f8e3a9d9cd2ba42d344deba418eb2927d34e",
+    "results/benchmarks/impinging-n2o-recovery-diagnosis.json": "26dbc87eab5c63a73ad27fa4dd1b82c4c4fb1b63d03f298bdc58ab39f1211472",
+    "results/benchmarks/impinging-n2o-mesh.json": "e8736012e4b76a9dda0190e0b64d4283c256b2b41ad92c9c1dce8999049e2b4c",
+    "results/benchmarks/impinging-n2o-gpu-smoke.json": "9ded4de358cc0c745fd64f967cd041c7939b8e05b420bd6bf8993a437147ba9d",
+    "results/benchmarks/impinging-n2o-checkMesh.log": "4ef03d9a5e21ab2f5e7cea04f778923abc21dc82a22f300b22e1d197d5b837e6",
+    "results/benchmarks/impinging-n2o-ambient_40bar_abs-definition.json": "c6cfbd87611d620a9ba4e13c4020fa11c214d876548740c3f6377b8dfa36670a",
+    "results/benchmarks/impinging-n2o-thermodynamics.json": "64a373642f4a9e41696699fff619744226f8f5c3e7ef794bd5733f8b9d4caebf",
+    "results/benchmarks/impinging-n2o-ambient_1atm-definition.json": "2be93cd835ccaae5f5c959814ca0913b9c57aac95eef170ee08b51baec5be1ac",
+    "examples/impinging-n2o-90deg/specification.json": "732ad8e151b3aa9aec91389ebaef20d9ca46468cdc0aa25173c746b9ef3c3b67",
+    "examples/impinging-n2o-90deg/blockMeshDict": "2f9c8d401c3763f91dc4227bbec50d5b91121fc1d586e310410c774c4243be63"
+  },
+  "generatorProvenance": {
+    "creationSha256": "2f15737534076b8d5149493424cbf277f3b8febe30c5887f91a7bc043362be3d",
+    "currentSha256": "17a8869d8170fa7bd780f18acf8317ee199e3c0cb62c52f8eafd4149b287b6c7",
+    "difference": "Disable ParaView autodetection during independent CPU checkMesh environment startup; format optional temperature in README. Generated physics/mesh inputs unchanged."
+  },
+  "refinementDefinitionCellCounts": [
+    256000,
+    500000,
+    864000
+  ],
+  "artifactNormalization": "Tracked SVG and checkMesh log have trailing whitespace removed; original raw checkMesh logs remain in the generated mesh directory and validation logs."
+}

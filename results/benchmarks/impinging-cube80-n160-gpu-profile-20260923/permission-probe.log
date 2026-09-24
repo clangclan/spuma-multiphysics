@@ -1,0 +1,7 @@
+==WARNING== Note: Running with uncontrolled GPU caches. Profiling results may be inconsistent.
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 9434 (/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/logs/gpu-profile-160-20260923/probe)
+==PROF== Profiling "profileProbe(double *)" - 0 (1/1): 0%....50%....100% - 9 passes
+{"name":"NVIDIA GeForce RTX 5080","computeMajor":12,"computeMinor":0,"smCount":84,"warpSize":32,"maxThreadsPerSM":1536,"maxBlocksPerSM":24,"registersPerSM":65536,"sharedMemoryPerSM":102400,"globalMemoryBytes":16611278848,"l2Bytes":67108864,"memoryBusBits":256,"singleToDoublePerfRatioAttribute":64}
+==PROF== Disconnected from process 9434
+==PROF== Report: /home/jsw/문서/analysis/spuma-multiphysics-spray-physics/logs/gpu-profile-160-counters-20260923/probe.ncu-rep

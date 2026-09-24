@@ -1,0 +1,106 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-7b05503f98a8
+Exec   : checkMesh -case /home/jsw/문서/analysis/runs/impinging_n2o_90deg_20260922/mesh -allGeometry -allTopology
+Date   : Sep 22 2026
+Time   : 19:29:58
+Host   : "jsw-ubuntu"
+PID    : 49896
+I/O    : uncollated
+Case   : /home/jsw/문서/analysis/runs/impinging_n2o_90deg_20260922/mesh
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+--> FOAM Warning:
+    From function static Foam::instantList Foam::timeSelector::select0(Foam::Time&, const Foam::argList&)
+    in file db/Time/timeSelector.C at line 269
+    No time specified or available, selecting 'constant'
+Create mesh for time = constant
+
+Enabling all (cell, face, edge, point) topology checks.
+
+Enabling all geometry checks.
+
+Time = constant
+
+Mesh stats
+    points:           269001
+    faces:            780800
+    internal faces:   755200
+    cells:            256000
+    faces per cell:   6
+    boundary patches: 4
+    point zones:      0
+    face zones:       0
+    cell zones:       0
+
+Overall number of cells of each type:
+    hexahedra:     256000
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     0
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Topological cell zip-up check OK.
+    Face-face connectivity OK.
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+    Patch               Faces    Points   Surface topology
+    inletX              64       81       ok (non-closed singly connected)
+    inletY              64       81       ok (non-closed singly connected)
+    inletPlates         6272     6503     ok (non-closed singly connected)
+    ambient             19200    19401    ok (non-closed singly connected)
+
+Checking geometry...
+    Overall domain bounding box (0 0 0) (0.020000000000000004 0.020000000000000004 0.010000000000000002)
+    Patch bounding boxes
+        inletX               (0 0.0050000000000000001 0.0040000000000000001) (0 0.0070000000000000001 0.0060000000000000001)
+        inletY               (0.0050000000000000001 0 0.0040000000000000001) (0.0070000000000000001 0 0.0060000000000000001)
+        inletPlates          (0 0 0) (0.02 0.02 0.010000000000000002)
+        ambient              (0 0 0) (0.020000000000000004 0.020000000000000004 0.010000000000000002)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Max cell openness = 3.4220131069073048e-16 OK.
+    Max aspect ratio = 1.0000000000000631 OK.
+    Minimum face area = 6.2499999999996649e-08. Maximum face area = 6.250000000000271e-08.  Face area magnitudes OK.
+    Min volume = 1.5624999999999119e-11. Max volume = 1.5625000000000864e-11.  Total volume = 3.9999999999841442e-06.  Cell volumes OK.
+    Mesh non-orthogonality Max: 0 average: 0
+    Non-orthogonality check OK.
+    Face pyramids OK.
+    Max skewness = 1.0430024899309968e-13 OK.
+    Coupled point location match (average 0) OK.
+    Face tets OK.
+    Min/max edge length = 0.00024999999999998981 0.00025000000000001063 OK.
+    All angles in faces OK.
+    Face flatness (1 = flat, 0 = butterfly) : min = 0.99999999999999956  average = 1
+    All face flatness OK.
+    Cell determinant (wellposedness) : minimum: 1 average: 7.60621875
+    Cell determinant check OK.
+    Concave cell check OK.
+    Face interpolation weight : minimum: 0.49999999999995831 average: 0.5
+    Face interpolation weight check OK.
+    Face volume ratio : minimum: 0.9999999999999134 average: 0.99999999999999989
+    Face volume ratio check OK.
+
+Mesh OK.
+
+End

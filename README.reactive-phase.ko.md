@@ -1,6 +1,6 @@
 # N₂O/IPA 상변화·반응 열유동 연구 솔버
 
-실행 명령은 `ReactiveFoam`이다(이전 이름: `pintleReactiveFoam`). 다시 빌드한 뒤 기존 케이스의 `system/controlDict`에서도 `application ReactiveFoam;`으로 변경한다. 솔버 소스는 `src/reactiveFoam/ReactiveFoam.C`에 있다.
+실행 명령은 `ReactiveFoam`이다. 케이스의 `system/controlDict`는 `application ReactiveFoam;`을 사용한다. 솔버 소스는 `src/reactiveFoam/ReactiveFoam.C`에 있다.
 
 `ReactiveFoam`은 N₂O/IPA의 액체–증기 상분배, 반응 종 수송, 압축성 총에너지 방정식을 함께 계산하는 **단일 MPI rank 연구 솔버**다. 기본 HEM과 비혼합 접촉면용 `mechanicalEquilibrium` 폐쇄식을 제공한다. 저장소의 기본 솔버이며 SPUMA 메시·입출력을 사용한다. **고압 액체 주입부터 연소까지의 예측 솔버가 완성·검증된 상태는 아니다.** 새 비반응 접촉면 모드는 압력 보존 검사를 통과하지만 기본 HEM의 물질 접촉면 시험은 여전히 실패한다.
 
@@ -20,6 +20,8 @@
 - 화학 Jacobian은 기본적으로 고정 활성 상 구간의 암시적 열역학 미분 `J=f_q−f_z solve(F_z,F_q)`를 사용한다. 상 경계, 나쁜 조건수 및 음의 Newton 시험 상태에서는 전체 RHS 차분으로 돌아간다. `reactiveProperties`의 `chemicalJacobian fullRHS;`로 기존 CVODE 차분과 비교할 수 있다. 기본 선형계 풀이는 밀집형이며, 액상 없는 이상기체 구성에는 선택 가능한 희소 경로도 제공한다.
 - 대류는 모든 보존량에 같은 HLL 면 유속, 공간 1차, SSPRK2 시간 적분을 사용한다. 화학은 Strang 분할이다. 고정 조성·상분배 음속으로 파속을 제한하고 평형 음속을 별도로 계산한다. 상태 또는 CFL 검사가 실패하면 전체 단계를 복원하고 시간 간격을 줄인다.
 - 상수 Newtonian 점성·점성 일·Fourier 열전도, 이상기체에서 공통 계수 Fick 종 확산과 종 엔탈피 수송을 제공한다. 종 확산은 기상에만 작용하며 총 확산 질량 유속은 0이다. 수송계수는 사용자가 지정하며, 현재 솔버가 Cantera 수송계수를 자동 적용하지는 않는다.
+
+이 개발 브랜치는 CUDA WALE 응력·열/종 혼합과 실험적인 [표면장력–flashing 결합](docs/spray-physics/capillary-flashing.ko.md)을 포함한다. 새 경로는 독립 액체 질량 수송과 벌크·표면 총에너지 보존을 연결하며, 단일 액체 모세관 경로의 계면 기하·응력·곡률 UV 복원과 WALE PR 종 엔탈피 준비를 GPU에서 수행한다. 다만 [정적 액적의 기생 유속 수렴 시험](docs/spray-physics/capillary-static-balance-review.md)을 통과하지 못했으므로 검증된 액주·액막 분열 솔버로 취급하지 않는다. 후속 [Cartesian implicit 구현·검증](reports/implicit-static-drop-20260923.ko.md)은 선택 가능한 GPU C² 계면 복원과 공유 면 점유면적·적분 traction을 실제 RK 수송에 연결한다. swept PLIC와 검증된 분열·합체 모델을 제공한다는 뜻은 아니며, 기본 diffuse 모델은 유지한다.
 
 ## 상평형 실패 진단과 안전한 재시작
 
@@ -110,7 +112,7 @@ HLL의 계면 확산은 남아 있다. 압력이 일정한 접촉면 시험 통�
 
 ## 환경과 빌드
 
-기존 SPUMA 환경과 별도로 Cantera 3.2, Sundials, CoolProp 환경을 만든다. 기존 DeepFlame 환경은 사용하지 않는다. 아래 명령은 저장소 루트에서 실행한다. `env.sh`의 `PINTLE_SPUMA_ENV`가 해당 시스템의 SPUMA 환경을 가리켜야 한다.
+기존 SPUMA 환경과 별도로 Cantera 3.2, Sundials, CoolProp 환경을 만든다. 기존 DeepFlame 환경은 사용하지 않는다. 아래 명령은 저장소 루트에서 실행한다. `env.sh`의 `REACTIVE_SPUMA_ENV`가 해당 시스템의 SPUMA 환경을 가리켜야 한다.
 
 ```bash
 micromamba create -y -p "$PWD/research/reactive-env" -c conda-forge \
