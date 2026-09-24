@@ -11,6 +11,7 @@ results/benchmarks/*
 !results/benchmarks/impinging-cube80-n160-gpu-profile-20260923/
 !results/benchmarks/hem-utilization-optimization-20260924/
 !results/benchmarks/current-solver-precision-20260924/
+!results/benchmarks/n160-40bar-100us-gpu-20260924/
 **/Make/linux*/
 **/lnInclude/
 **/__pycache__/

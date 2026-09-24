@@ -100,6 +100,7 @@ class Monitor:
                 cpus[name]=dict(busyPercent=100*(total-diffs[3]-diffs[4])/total if total else 0,
                     iowaitPercent=100*diffs[4]/total if total else 0)
         row['hostCpu']=cpus
+        self.latest=row
         self.file.write(json.dumps(row,separators=(',',':'))+'\n');self.file.flush();self.count+=1
         with (self.case/'solver.log').open('rb') as log:
             log.seek(self.offset);data=log.read();self.offset=log.tell()

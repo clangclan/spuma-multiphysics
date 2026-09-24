@@ -1,0 +1,242 @@
+{
+  "ambientAbsolutePa": 4000000,
+  "analysisArtifactsSha256": {
+    "README.ko.md": "bb8326e54715cdf1da7e93621eb64e593e008d18777adfadf8f699a6445101e2",
+    "analysis.json": "ea3e1704f8e9e31355fdd29b174618bd764529e292e92e597172496ea2bba486",
+    "evolution.png": "d0d2228cdf9e7affd80d28491d499c2d51f14117f261feee780efe10ac13f637",
+    "profiled-kernels.csv": "fe4e78351a1443cbab5038c36daec84600c26a1c15371b2afb7cea6d96765c6b",
+    "selected-kernel-counters.csv": "26e593a75f904e31155a9b8bb1c4ddd69bf0756be2d3e77bf558b9abc9fce76b",
+    "steps.csv": "de5dfd582e23b7d187b7b2a27d25eefb7acf62372a66fd347a11902c162d3a33",
+    "time-breakdown.csv": "e1591b25c53c7eaa3d2b57ca5fc9b287404c43edf1e4e793882d67e7b3aaf142"
+  },
+  "binarySha256": {
+    "bin/ReactiveFoam": "0427552a6bb376b4379dede3e7beba2668be6c9f4d4b2c8a697cfb2367137955",
+    "lib/libreactiveBackend.so": "867bba39580513865bf6f5468656b829e9f458f6aa38f67bec974937405d5ac3",
+    "lib/libreactiveTransport.so": "cb83c7a357b734f9f3ef1a89b38d344e0dc0127eebba500ef049bb4996fc06ac"
+  },
+  "cells": 4096000,
+  "finishedUnix": 1790260151.7268615,
+  "jobs": [
+    {
+      "case": "diagnostics/40bar-1us/nsys",
+      "checkpointSha256": "5612b25ae47625cb8f67e2cd1f92daa51d36fbf9d3f2a99f47bac4bd08a1651f",
+      "endTime": 1.051592526685709e-06,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "3a6588064ecb49b05875b4a29283f9725eff073b234f506d55a94f845ba3c642",
+      "passed": true,
+      "phase": "Nsight Systems",
+      "processSeconds": 21.23,
+      "returnCode": 0,
+      "validationSha256": "2df336711a4e20c76969a9b154bde6aa8c1e4ecc273c453dfc51ec2db2e81db8"
+    },
+    {
+      "case": "diagnostics/40bar-1us/ncu",
+      "checkpointSha256": "5612b25ae47625cb8f67e2cd1f92daa51d36fbf9d3f2a99f47bac4bd08a1651f",
+      "counterValidation": {
+        "launches": 10,
+        "missingCounters": {
+          "0.0": [],
+          "1.0": [],
+          "2.0": [],
+          "3.0": [],
+          "4.0": [],
+          "5.0": [],
+          "6.0": [],
+          "7.0": [],
+          "8.0": [],
+          "9.0": []
+        },
+        "missingFamilies": [],
+        "passed": true
+      },
+      "counterValidationSha256": "c020f414a288c098a79f5fb58f89c9196b611ad63f4e174a71d3d75376de618c",
+      "endTime": 1.051592526685709e-06,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "4cb3a4a98898217e25018dd8dc94e42f14772f99745731aaa68aad6965294e1f",
+      "passed": true,
+      "phase": "Nsight Compute",
+      "processSeconds": 107.49000000000001,
+      "returnCode": 0,
+      "validationSha256": "617f8cf88642690a43530b9c9168663d28f84c88e7400e62aeaed43a7a12ad0a"
+    },
+    {
+      "case": "production/40bar/to-010us",
+      "checkpointSha256": "da3854104e99743555e64858dab7bc896cd80718673b70a7c35da27db53ac3da",
+      "endTime": 9.999999999999999e-06,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "3b9e671418e6bc1b4a2404528de2c736eb9becb985edf565b8b088b94a301779",
+      "passed": true,
+      "phase": "production",
+      "processSeconds": 1092.32,
+      "returnCode": 0,
+      "validationSha256": "79e40e8ee2282239677ecd2d5bd4df5d168e456daef667a9210492ac39be0837"
+    },
+    {
+      "case": "diagnostics/40bar-10us/nsys",
+      "checkpointSha256": "9cbb81623e1ba84e6901fd2a16cf01b7fbf9976900d3559369932c4d72d9f8f3",
+      "endTime": 1.0051275823383894e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "7cd435f21b96b7a92c0cf6c24e4b71774648087f8ff73f3cc33b0dfc983c48e3",
+      "passed": true,
+      "phase": "Nsight Systems",
+      "processSeconds": 20.56,
+      "returnCode": 0,
+      "validationSha256": "0f8d36b061f5fc633706706a86401e769bc99299a093e237008589a8b3f1c398"
+    },
+    {
+      "case": "diagnostics/40bar-10us/ncu",
+      "checkpointSha256": "9cbb81623e1ba84e6901fd2a16cf01b7fbf9976900d3559369932c4d72d9f8f3",
+      "counterValidation": {
+        "launches": 10,
+        "missingCounters": {
+          "0.0": [],
+          "1.0": [],
+          "2.0": [],
+          "3.0": [],
+          "4.0": [],
+          "5.0": [],
+          "6.0": [],
+          "7.0": [],
+          "8.0": [],
+          "9.0": []
+        },
+        "missingFamilies": [],
+        "passed": true
+      },
+      "counterValidationSha256": "c020f414a288c098a79f5fb58f89c9196b611ad63f4e174a71d3d75376de618c",
+      "endTime": 1.0051275823383894e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "024fdc3e7df09d3b3c24b8c047a0109e119a58dd4e2f62f5e2fbf4c87c1fbb03",
+      "passed": true,
+      "phase": "Nsight Compute",
+      "processSeconds": 126.41,
+      "returnCode": 0,
+      "validationSha256": "90a9c810966a3f881df23c4b319b02cb2450f86a0e48402f4e65ac2588c66b49"
+    },
+    {
+      "case": "production/40bar/to-050us",
+      "checkpointSha256": "4cd696558ef05d88816e4b4608e72bb1e3a0e2a614f7014cd420c4df7d12a931",
+      "endTime": 4.9999999999999996e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "265fe3ef080863aa40ae8262f4a616c1f66f4754b044fe23c4b3de1ffd37c4c3",
+      "passed": true,
+      "phase": "production",
+      "processSeconds": 7676.0,
+      "returnCode": 0,
+      "validationSha256": "e527fc66a9ddd00f30bb20a33414b438861856ba08b087e6b130843b0502e858"
+    },
+    {
+      "case": "diagnostics/40bar-50us/nsys",
+      "checkpointSha256": "d95f7c59aabb858f1605e72ebcdde407ee4914c75f8b80191350932b2e93e9e5",
+      "endTime": 5.0051407867087786e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "7282611ac963f3ba052ebd95dbc947ba70c44b865681a4b152bea799b26b6b1c",
+      "passed": true,
+      "phase": "Nsight Systems",
+      "processSeconds": 25.69,
+      "returnCode": 0,
+      "validationSha256": "1c4867f89ecc56d262c3b6ded315cd5e92b1b000ce2a78af8eadc82c297b8df8"
+    },
+    {
+      "case": "diagnostics/40bar-50us/ncu",
+      "checkpointSha256": "d95f7c59aabb858f1605e72ebcdde407ee4914c75f8b80191350932b2e93e9e5",
+      "counterValidation": {
+        "launches": 10,
+        "missingCounters": {
+          "0.0": [],
+          "1.0": [],
+          "2.0": [],
+          "3.0": [],
+          "4.0": [],
+          "5.0": [],
+          "6.0": [],
+          "7.0": [],
+          "8.0": [],
+          "9.0": []
+        },
+        "missingFamilies": [],
+        "passed": true
+      },
+      "counterValidationSha256": "c020f414a288c098a79f5fb58f89c9196b611ad63f4e174a71d3d75376de618c",
+      "endTime": 5.0051407867087786e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "36ef8eedf748f147719cebe167f6fcff312d4b6f90f2de16f45402e565709e04",
+      "passed": true,
+      "phase": "Nsight Compute",
+      "processSeconds": 178.61,
+      "returnCode": 0,
+      "validationSha256": "d361c670b4e8ac60cfebfceeedf5f552eef73f459fdb5149219f5a1231f3171c"
+    },
+    {
+      "case": "production/40bar/to-100us",
+      "checkpointSha256": "a9768bbf2dadb25e019c7f3a45dc70bf6d14609610efcac6daa17ceed25e6799",
+      "endTime": 9.999999999999999e-05,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "11324dfe404ff106fa3bbfa3472d508613ea8ae541c04e1c7322020906f626c5",
+      "passed": true,
+      "phase": "production",
+      "processSeconds": 14835.0,
+      "returnCode": 0,
+      "validationSha256": "90d72db2900d551e32386cead6eec71765e659106453c1997f33a1bd08236304"
+    },
+    {
+      "case": "diagnostics/40bar-100us/nsys",
+      "checkpointSha256": "c157fa954323fb6f4222931781d47d6c1c476ba90506e50fd81e5de4a4890c6c",
+      "endTime": 0.00010005134964929935,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "b4100f22c59ad36fe09462280f731016591194b0a0410b82407b8a72f406388b",
+      "passed": true,
+      "phase": "Nsight Systems",
+      "processSeconds": 33.24,
+      "returnCode": 0,
+      "validationSha256": "b487e20044fd85066d3077124f39d11de3bb7b967293cc6efa12795e338c4304"
+    },
+    {
+      "case": "diagnostics/40bar-100us/ncu",
+      "checkpointSha256": "c157fa954323fb6f4222931781d47d6c1c476ba90506e50fd81e5de4a4890c6c",
+      "counterValidation": {
+        "launches": 10,
+        "missingCounters": {
+          "0.0": [],
+          "1.0": [],
+          "2.0": [],
+          "3.0": [],
+          "4.0": [],
+          "5.0": [],
+          "6.0": [],
+          "7.0": [],
+          "8.0": [],
+          "9.0": []
+        },
+        "missingFamilies": [],
+        "passed": true
+      },
+      "counterValidationSha256": "c020f414a288c098a79f5fb58f89c9196b611ad63f4e174a71d3d75376de618c",
+      "endTime": 0.00010005134964929935,
+      "hemCpuFallbacks": 0.0,
+      "hemDeviceFailures": 0.0,
+      "logSha256": "0c5bd44f8009a29dfd93a00322fa296432567d0b268c1cc1809c015c60ced65e",
+      "passed": true,
+      "phase": "Nsight Compute",
+      "processSeconds": 253.35,
+      "returnCode": 0,
+      "validationSha256": "34334463f06b00ce7cf5c949097ed783a6e6a60ab290fcf59856463879490fa0"
+    }
+  ],
+  "passed": true,
+  "rawRoot": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100us_gpu_20260924",
+  "requestedEndTime": 0.0001,
+  "schema": 1,
+  "sourceCommit": "d1c4e973bf0216152f93f3c77fa9da0a08500bef",
+  "startedUnix": 1790235598.5419114
+}
