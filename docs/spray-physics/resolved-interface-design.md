@@ -2,11 +2,11 @@
 
 ## 결정
 
-첫 morphology 모델은 `ResolvedInterfaceV1` (`RIF1`)이다. 보존 상태에 별도 color/volume field `c`를 두며 `c=1`은 물질 A(첫 경로에서는 액체), `c=0`은 물질 B(기체)다. `c`는 `PintleThermoState::alphaLiquid`, HEM flash 결과, 또는 `alphaEnvironment`의 별칭이 아니다. HEM의 액상 체적분율은 증발·응축으로도 바뀌고, mechanical environment 체적분율은 각 환경 안의 HEM을 포함할 수 있으므로 둘 다 기하 계면을 정의하지 못한다.
+첫 morphology 모델은 `ResolvedInterfaceV1` (`RIF1`)이다. 보존 상태에 별도 color/volume field `c`를 두며 `c=1`은 물질 A(첫 경로에서는 액체), `c=0`은 물질 B(기체)다. `c`는 `ReactiveThermoState::alphaLiquid`, HEM flash 결과, 또는 `alphaEnvironment`의 별칭이 아니다. HEM의 액상 체적분율은 증발·응축으로도 바뀌고, mechanical environment 체적분율은 각 환경 안의 HEM을 포함할 수 있으므로 둘 다 기하 계면을 정의하지 못한다.
 
 첫 실제 계산 경로는 **비반응·비상변화·비혼화성·압축성 2물질**이다. A/B는 서로 분리된 보존 질량과 frozen phase inventory, 각자의 EOS를 가지며 한 속도를 공유한다. color face flux와 A/B inventory flux는 같은 기하 재구성에서 나와야 한다. 계면 압축이나 regularization이 `c`만 바꾸어 물질 및 에너지 flux와 어긋나는 방식은 허용하지 않는다. 이 경로에서 액주와 액막의 변형, ligament 형성, pinch-off와 해상 액적 생성을 검증한 뒤에만 증발과 반응을 붙인다.
 
-현 `pintle_rt_recover_mechanical`은 한 셀 안의 두 환경 압력이 같아질 때까지 에너지를 분할한다. 따라서 이 폐쇄식에 상별 압력 차만 임시로 넣으면 다음 recovery에서 지워진다. 이는 모든 one-fluid 공통 압력 모델이 셀 사이의 공간적인 압력 점프를 표현할 수 없다는 주장은 아니다. 여기서 설계한 상별 에너지 경로는 다음 결합 중 하나를 요구한다. 다른 one-fluid 경로를 채택하려면 그 압력·계면력·상변화·에너지 이산화를 별도로 검증해야 한다.
+현 `reactive_rt_recover_mechanical`은 한 셀 안의 두 환경 압력이 같아질 때까지 에너지를 분할한다. 따라서 이 폐쇄식에 상별 압력 차만 임시로 넣으면 다음 recovery에서 지워진다. 이는 모든 one-fluid 공통 압력 모델이 셀 사이의 공간적인 압력 점프를 표현할 수 없다는 주장은 아니다. 여기서 설계한 상별 에너지 경로는 다음 결합 중 하나를 요구한다. 다른 one-fluid 경로를 채택하려면 그 압력·계면력·상변화·에너지 이산화를 별도로 검증해야 한다.
 
 1. cold immiscible 전용 EOS recovery가 각 물질 압력을 유지하고 계면 Riemann/pressure coupling에서 점프를 적용한다.
 2. mechanical closure를 `p_A-p_B=σ κ`로 확장하고, 에너지 분할·음속·dilatation 관계를 같은 제약에서 다시 유도한다.
@@ -21,7 +21,7 @@ p_A=p̄+(1-c)\Delta p,\qquad p_B=p̄-c\Delta p
 
 ## 구현된 host/device 원시 연산
 
-[`pintleResolvedInterface.h`](../../src/reactiveInterface/pintleResolvedInterface.h)는 OpenFOAM과 thermo 타입이 없는 CPU/CUDA 공용 값 API다. 잘못된 model ID, `σ<0`, NaN/Inf, 범위 밖 color, 양수가 아닌 밀도·cell length, 단위가 아닌 face normal은 상태를 부분 변경하지 않고 오류를 반환한다. `σ=0`은 유효한 비활성 모델이다.
+[`reactiveResolvedInterface.h`](../../src/reactiveInterface/reactiveResolvedInterface.h)는 OpenFOAM과 thermo 타입이 없는 CPU/CUDA 공용 값 API다. 잘못된 model ID, `σ<0`, NaN/Inf, 범위 밖 color, 양수가 아닌 밀도·cell length, 단위가 아닌 face normal은 상태를 부분 변경하지 않고 오류를 반환한다. `σ=0`은 유효한 비활성 모델이다.
 
 입력 `∇c`의 단위는 `m⁻¹`이다. A에서 B로 향하는 법선과 계면 면적 밀도를
 

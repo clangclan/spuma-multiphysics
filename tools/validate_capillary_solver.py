@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def run_solver(case: Path, timeout_seconds: int) -> None:
     compatible_env = Path("/home/jsw/cae-gpu-pr1-compatible/env.sh")
-    if "PINTLE_SPUMA_ENV" not in os.environ and compatible_env.is_file():
+    if "REACTIVE_SPUMA_ENV" not in os.environ and compatible_env.is_file():
         # This host's legacy default SPUMA libraries abort before main() with
         # SIGILL; the solver is built against the compatible checkout.
         common.SPUMA_ENV = compatible_env

@@ -1,6 +1,6 @@
 # ReactiveFoam
 
-이 저장소의 기본 솔버는 **`ReactiveFoam`**이다. 다중물리 연산 선택을 개선한 `selection` 커밋(`96a781c`, PR #2)을 포함한 `main`을 기준으로 개발한다. ColdFoam 코드와 전용 빌드·실행·벤치마크 도구는 제거했다.
+**`ReactiveFoam`**은 반응·상전이·수송 모델을 선택할 수 있는 범용 압축성 다중물리 연구 솔버다. 소스 파일·API·빌드 환경변수도 `reactive` 계열 이름을 사용한다. 기존 명령과 외부 라이브러리의 변경 사항은 [명칭 전환 안내](docs/generic-naming.ko.md)에 정리했다.
 
 N₂O/IPA 상분배, 화학종 수송과 압축성 총에너지를 계산하며, `constant/reactiveProperties`의 `physics`에서 화학반응·상전이·점성·열전도·종 확산을 선택한다. `combustion`은 `chemistry`의 별칭이다. 상전이를 끄면 액상 질량을 보존하여 수송하고 증발·응축 교환만 제외한다. EOS 복원과 필요한 에너지 결합은 유지한다.
 
@@ -9,21 +9,21 @@ N₂O/IPA 상분배, 화학종 수송과 압축성 총에너지를 계산하며,
 SPUMA 환경과 Cantera/Sundials 의존성을 먼저 준비한다. 설치 및 반응기구 준비 방법은 [상세 사용 설명](README.reactive-phase.ko.md#환경과-빌드)을 따른다. 아래 경로는 설치 위치에 맞게 지정한다.
 
 ```bash
-export PINTLE_SPUMA_ENV=/path/to/spuma-env.sh
-export PINTLE_REACTIVE_PREFIX="$PWD/research/reactive-env"
-export PINTLE_RUN_LOCK=/tmp/reactivefoam-run.lock
+export REACTIVE_SPUMA_ENV=/path/to/spuma-env.sh
+export REACTIVE_PREFIX="$PWD/research/reactive-env"
+export REACTIVE_RUN_LOCK=/tmp/reactivefoam-run.lock
 # 기본 CPU 수송. CUDA를 빌드하려면 다음 환경변수를 지정한다.
-# export PINTLE_REACTIVE_TRANSPORT_BUILD=cuda
-flock "$PINTLE_RUN_LOCK" ./Allwmake
+# export REACTIVE_TRANSPORT_BUILD=cuda
+flock "$REACTIVE_RUN_LOCK" ./Allwmake
 source ./env.sh
 
-flock "$PINTLE_RUN_LOCK" "$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_reactive_case.py cases/frozen-example \
+flock "$REACTIVE_RUN_LOCK" "$REACTIVE_PREFIX/bin/python" tools/prepare_reactive_case.py cases/frozen-example \
   --thermo-dir research/reactive-thermo --kind acoustic --cells 32 \
   --chemistry off --phase-change frozen --transport-backend cpu
-flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
+flock "$REACTIVE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 ```
 
-`./Allwmake`는 열역학 백엔드, 수송 라이브러리, `bin/ReactiveFoam`을 빌드한다. CUDA 빌드는 같은 실행파일에서 CPU/CUDA 수송을 선택할 수 있다. `PINTLE_CUDA_ARCH`는 대상 GPU의 compute capability에 맞춰 지정할 수 있다.
+`./Allwmake`는 열역학 백엔드, 수송 라이브러리, `bin/ReactiveFoam`을 빌드한다. CUDA 빌드는 같은 실행파일에서 CPU/CUDA 수송을 선택할 수 있다. `REACTIVE_CUDA_ARCH`는 대상 GPU의 compute capability에 맞춰 지정할 수 있다.
 
 ## 물리 연산 선택과 검증
 
@@ -32,8 +32,8 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 [연산 선택 및 의존관계](README.reactive-phase.ko.md#실행할-연산-선택), [selection 검증 보고서](reports/reactive-physics-selection-20260921.md), [검증 집계](results/physics-selection-20260921/validation-summary.json)를 참고한다.
 
 ```bash
-# 이 검증 도구는 내부에서 PINTLE_RUN_LOCK을 획득한다.
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/validate_reactive_physics.py \
+# 이 검증 도구는 내부에서 REACTIVE_RUN_LOCK을 획득한다.
+"$REACTIVE_PREFIX/bin/python" tools/validate_reactive_physics.py \
   --thermo-dir research/reactive-thermo --output cases/physics-check --backends cpu
 # CUDA 수송을 빌드했다면 --backends cpu cuda로 두 경로를 검사한다.
 ```
@@ -50,4 +50,4 @@ flock "$PINTLE_RUN_LOCK" ReactiveFoam -case cases/frozen-example
 
 SPUMA/OpenFOAM에서 파생한 코드는 GPL-3.0-or-later 조건을 따른다. [LICENSE](LICENSE)를 확인한다.
 
-90도 액체 N₂O 충돌·평형 flashing 입력은 [벤치마크 구성](docs/benchmarks/impinging-n2o-setup.ko.md)에 있다. 55 bar(g) 공급과 1 atm/40 bar(abs) 환경, 각 256k 정육면체 메시를 제공한다. 현재 입력은 [과냉각 액체 N₂O 프로필](docs/benchmarks/impinging-n2o-supercooled.ko.md)로, 148 K까지 기체–액체 상평형을 계산하고 고체·승화는 제외한다. 두 환경의 GPU 10스텝은 재시도·CPU fallback 없이 완료됐고, 이전 고체 프로필 대비 실행 시간은 각각 92.5%, 68.8% 감소했다. 삼중점 아래 액체는 준안정 PR 연장 모델이다.
+90도 액체 N₂O 충돌·평형 flashing은 55 bar(g) 공급, 1 atm/40 bar(abs) 환경에서 검증한다. 최신 메시 시리즈는 한 변 80 mm, 지름 5 mm 입구, 입구 z=40 mm의 40³·80³·160³ 셀이다. [40³/80³ 적응 시간 간격 결과](reports/impinging-cube80-z40-adaptive-1us-20260923.ko.md), [160³ 상세 GPU 계측](reports/impinging-cube80-n160-gpu-profile-20260924.ko.md), [배치·정확 재사용 최적화](reports/hem-utilization-optimization-20260924.ko.md), [현재 솔버의 정밀도 실험](reports/current-solver-precision-20260924.ko.md)을 참고한다. 정밀도 실험 후에도 기본 산술은 FP64다. 현재 [과냉각 액체 프로필](docs/benchmarks/impinging-n2o-supercooled.ko.md)은 148 K까지 기체–액체 상평형을 계산하고 고체·승화를 제외한다. 삼중점 아래 액체는 준안정 PR 연장 모델이다.

@@ -5,7 +5,7 @@
 기구는 이전 저온 확장과 동일하다. 설정은 액체 최소 온도 148 K, 단일 응축상, `enforce-species-temperature-bounds: true`를 사용한다. 양의 IPA 질량은 기존 IPA 물성 범위 밖에서 거부한다. 이 케이스의 초기장·경계·기구는 IPA가 생성되지 않는 비반응 조건이다.
 
 ```bash
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-supercooled-benchmark \
+"$REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-supercooled-benchmark \
   --configuration examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml --cell-mm 0.25
 ```
 

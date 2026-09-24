@@ -3,7 +3,7 @@
 
 The sphere is used only to generate test VOF fractions and to score curvature.
 The fitter receives fractions, Cartesian dimensions and spacing, never radius
-or center. Its coefficients follow pintleImplicitSurface.h's x-fastest layout:
+or center. Its coefficients follow reactiveImplicitSurface.h's x-fastest layout:
 cell (i,j,k) evaluates tensor cubic B-splines at coefficients [i:i+4,
 j:j+4,k:k+4]. This is a research probe, not a solver reconstruction.
 """

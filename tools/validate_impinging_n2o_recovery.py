@@ -36,7 +36,7 @@ def load_records(path):
 
 def attach_host(b):
     bind(b)
-    f=b.lib.pintle_rt_export_gpu_hem_v1
+    f=b.lib.reactive_rt_export_gpu_hem_v1
     f.argtypes=[C.c_void_p,C.c_void_p,C.c_size_t,C.POINTER(C.c_size_t)];f.restype=C.c_int
 
 def residuals(state):
@@ -53,27 +53,27 @@ def distance(actual,expected):
 def host_run(b,row):
     q=np.asarray(row['q'],dtype=np.float64);energy=np.asarray([row['energy']],dtype=np.float64);state=guess_of(row)
     before=(q.tobytes(),energy.tobytes(),bytes(state))
-    rc=b.lib.pintle_rt_recover(b.handle,ptr(q),float(energy[0]),1,C.byref(state))
+    rc=b.lib.reactive_rt_recover(b.handle,ptr(q),float(energy[0]),1,C.byref(state))
     atomic=before[:2]==(q.tobytes(),energy.tobytes()) and (rc==0 or before[2]==bytes(state))
     return rc,state,atomic
 
 def export_model(b):
-    size=C.c_size_t();b.check(b.lib.pintle_rt_export_gpu_hem_v1(b.handle,None,0,C.byref(size)))
-    image=C.create_string_buffer(size.value);b.check(b.lib.pintle_rt_export_gpu_hem_v1(b.handle,image,size.value,C.byref(size)))
+    size=C.c_size_t();b.check(b.lib.reactive_rt_export_gpu_hem_v1(b.handle,None,0,C.byref(size)))
+    image=C.create_string_buffer(size.value);b.check(b.lib.reactive_rt_export_gpu_hem_v1(b.handle,image,size.value,C.byref(size)))
     return image,size.value
 
 def gpu_bind(path):
     lib=C.CDLL(str(path.resolve()));v=C.c_void_p;p=C.POINTER(C.c_double)
-    lib.pintle_gpu_hem_create_v1.argtypes=[v,C.c_size_t,C.c_size_t,C.c_char_p,C.c_size_t];lib.pintle_gpu_hem_create_v1.restype=v
-    lib.pintle_gpu_hem_destroy_v1.argtypes=[v];lib.pintle_gpu_hem_destroy_v1.restype=None
-    lib.pintle_gpu_hem_run_v1.argtypes=[v,p,p,C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
-    lib.pintle_gpu_hem_run_v1.restype=C.c_int
+    lib.reactive_gpu_hem_create_v1.argtypes=[v,C.c_size_t,C.c_size_t,C.c_char_p,C.c_size_t];lib.reactive_gpu_hem_create_v1.restype=v
+    lib.reactive_gpu_hem_destroy_v1.argtypes=[v];lib.reactive_gpu_hem_destroy_v1.restype=None
+    lib.reactive_gpu_hem_run_v1.argtypes=[v,p,p,C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
+    lib.reactive_gpu_hem_run_v1.restype=C.c_int
     return lib
 
 def gpu_run(lib,handle,rows):
     n=len(rows);q=np.ascontiguousarray([r['q'] for r in rows],dtype=np.float64);energy=np.ascontiguousarray([r['energy'] for r in rows],dtype=np.float64)
     states=(State*n)(*[guess_of(r) for r in rows]);success=(C.c_int*n)();profile=HemProfile(1,C.sizeof(HemProfile));error=C.create_string_buffer(4096)
-    before=(q.tobytes(),energy.tobytes(),bytes(states));rc=lib.pintle_gpu_hem_run_v1(handle,ptr(q),ptr(energy),n,states,success,C.byref(profile),error,len(error))
+    before=(q.tobytes(),energy.tobytes(),bytes(states));rc=lib.reactive_gpu_hem_run_v1(handle,ptr(q),ptr(energy),n,states,success,C.byref(profile),error,len(error))
     unchanged=before[:2]==(q.tobytes(),energy.tobytes())
     return rc,[states[i].copy() for i in range(n)],list(success),unchanged,before[2],bytes(states),error.value.decode(errors='replace'),profile
 
@@ -91,7 +91,7 @@ def main():
     def record(name,passed,**detail):
         item=dict(name=name,passed=bool(passed),**detail);report['tests'].append(item);print(json.dumps(item,allow_nan=False),flush=True)
     with RealFluidBackend(a.configuration,a.library) as b:
-        attach_host(b);b.check(b.lib.pintle_rt_set_recovery_v1(b.handle,0,1));report['physicalModelHash']=b.physical_hash
+        attach_host(b);b.check(b.lib.reactive_rt_set_recovery_v1(b.handle,0,1));report['physicalModelHash']=b.physical_hash
         if a.baseline_library:
             report['artifacts'][str(a.baseline_library.resolve())]=sha(a.baseline_library)
             with RealFluidBackend(a.configuration,a.baseline_library) as baseline:
@@ -109,12 +109,12 @@ def main():
         try:b.phase(TMIN-1e-6,101325.,-1,{'N2O':1.},'N2O');rejected=False
         except RuntimeError:rejected=True
         record('temperature-branch-lower-bound-rejected',rejected,boundaryKelvin=TMIN)
-        select=b.lib.pintle_rt_set_gpu_hem_jacobian_v1
+        select=b.lib.reactive_rt_set_gpu_hem_jacobian_v1
         select.argtypes=[C.c_void_p,C.c_int];select.restype=C.c_int
         b.check(select(b.handle,int(a.jacobian=='analytic')))
         image,image_size=export_model(b)
         cuda=gpu_bind(a.cuda_library);error=C.create_string_buffer(4096)
-        device=cuda.pintle_gpu_hem_create_v1(image,image_size,len(rows)+2,error,len(error))
+        device=cuda.reactive_gpu_hem_create_v1(image,image_size,len(rows)+2,error,len(error))
         if not device:raise RuntimeError(error.value.decode(errors='replace'))
         try:
             rc,states,success,unchanged,before,after,message,profile=gpu_run(cuda,device,rows)
@@ -134,7 +134,7 @@ def main():
                 record('cuda-'+label,grc==0 and gsuccess==[0] and gunchanged and gbefore==gafter,
                     status=grc,success=gsuccess[0],rollback=gbefore==gafter,inputsUnchanged=gunchanged,error=gmessage)
             report['cudaProfile']={n:getattr(profile,n) for n,_ in profile._fields_}
-        finally:cuda.pintle_gpu_hem_destroy_v1(device)
+        finally:cuda.reactive_gpu_hem_destroy_v1(device)
     report['passed']=all(t['passed'] for t in report['tests']);report['testCount']=len(report['tests'])
     a.output.parent.mkdir(parents=True,exist_ok=True);tmp=a.output.with_suffix(a.output.suffix+'.tmp')
     tmp.write_text(json.dumps(report,indent=2,allow_nan=False)+'\n');tmp.replace(a.output)

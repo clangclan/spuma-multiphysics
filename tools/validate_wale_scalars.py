@@ -15,10 +15,10 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--library',type=Path,required=True)
     ap.add_argument('--backend',choices=('cpu','cuda'),required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
     lib=load(a.library);v=C.c_void_p;d=C.POINTER(C.c_double)
-    lib.pintle_transport_set_wale_v1.argtypes=[v,C.POINTER(Wale)];lib.pintle_transport_set_wale_v1.restype=C.c_int
-    lib.pintle_transport_set_wale_scalars_v1.argtypes=[v,C.POINTER(Scalars)];lib.pintle_transport_set_wale_scalars_v1.restype=C.c_int
-    lib.pintle_transport_wale_scalar_fields_v1.argtypes=[v,d,d,d,d];lib.pintle_transport_wale_scalar_fields_v1.restype=C.c_int
-    lib.pintle_transport_wale_scalar_profile_v1.argtypes=[v,C.POINTER(ScalarProfile)];lib.pintle_transport_wale_scalar_profile_v1.restype=C.c_int
+    lib.reactive_transport_set_wale_v1.argtypes=[v,C.POINTER(Wale)];lib.reactive_transport_set_wale_v1.restype=C.c_int
+    lib.reactive_transport_set_wale_scalars_v1.argtypes=[v,C.POINTER(Scalars)];lib.reactive_transport_set_wale_scalars_v1.restype=C.c_int
+    lib.reactive_transport_wale_scalar_fields_v1.argtypes=[v,d,d,d,d];lib.reactive_transport_wale_scalar_fields_v1.restype=C.c_int
+    lib.reactive_transport_wale_scalar_profile_v1.argtypes=[v,C.POINTER(ScalarProfile)];lib.reactive_transport_wale_scalar_profile_v1.restype=C.c_int
     n,dx,ns,Cw,Prt,Sct=4,.01,3,.325,.85,.7;nc=n**3;nv=ns+4
     xyz=np.array(list(np.ndindex(n,n,n)));phase=2*np.pi*(xyz+.5)/n
     velocity=np.column_stack((16*np.sin(phase[:,0])*np.cos(phase[:,1]),-16*np.cos(phase[:,0])*np.sin(phase[:,1]),5*np.sin(phase[:,2])))
@@ -52,29 +52,29 @@ def main():
         amount=dx**2*(wave+2*diff/dx);denominator[l]+=amount;denominator[r]+=amount
     cfg=Config(nc,ns,nv,len(faces),0,0,0,0,1.1,1e8,0);face_array=(Face*len(faces))(*faces)
     def run(label,scalars):
-        error=C.create_string_buffer(2048);handle=lib.pintle_transport_create(int(a.backend=='cuda'),C.byref(cfg),ptr(volumes),face_array,None,None,None,None,error,len(error))
+        error=C.create_string_buffer(2048);handle=lib.reactive_transport_create(int(a.backend=='cuda'),C.byref(cfg),ptr(volumes),face_array,None,None,None,None,error,len(error))
         assert handle,error.value.decode()
         try:
             def check(rc):
-                if rc:raise AssertionError(lib.pintle_transport_error(handle).decode())
-            check(lib.pintle_transport_set_wale_v1(handle,C.byref(Wale(1,C.sizeof(Wale),Cw))))
+                if rc:raise AssertionError(lib.reactive_transport_error(handle).decode())
+            check(lib.reactive_transport_set_wale_v1(handle,C.byref(Wale(1,C.sizeof(Wale),Cw))))
             if scalars is not None:
-                invalid=Scalars(1,C.sizeof(Scalars),-1,Sct);assert lib.pintle_transport_set_wale_scalars_v1(handle,C.byref(invalid))!=0
-                check(lib.pintle_transport_set_wale_scalars_v1(handle,C.byref(scalars)))
-                assert lib.pintle_transport_set_wale_scalars_v1(handle,C.byref(scalars))!=0
+                invalid=Scalars(1,C.sizeof(Scalars),-1,Sct);assert lib.reactive_transport_set_wale_scalars_v1(handle,C.byref(invalid))!=0
+                check(lib.reactive_transport_set_wale_scalars_v1(handle,C.byref(scalars)))
+                assert lib.reactive_transport_set_wale_scalars_v1(handle,C.byref(scalars))!=0
                 if scalars.turbulentPrandtl or scalars.turbulentSchmidt:
                     rejected=np.full_like(q,-19.);rejected_boundary=np.full(nv,-23.)
-                    assert lib.pintle_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rejected),ptr(rejected_boundary))!=0
+                    assert lib.reactive_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rejected),ptr(rejected_boundary))!=0
                     assert np.all(rejected==-19.) and np.all(rejected_boundary==-23.)
-                    check(lib.pintle_transport_wale_scalar_fields_v1(handle,ptr(cp),None,None,None))
-                    dt_cp=C.c_double();check(lib.pintle_transport_stable_step_primitives(handle,primitives,states,.23,.1,C.byref(dt_cp)))
-                    assert lib.pintle_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rejected),ptr(rejected_boundary))!=0
-                    check(lib.pintle_transport_wale_scalar_fields_v1(handle,ptr(cp),ptr(np.ascontiguousarray(h)),None,None))
-            rhs=np.empty_like(q);boundary=np.empty(nv);check(lib.pintle_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rhs),ptr(boundary)))
-            dt=C.c_double();check(lib.pintle_transport_stable_step_primitives(handle,primitives,states,.23,.1,C.byref(dt)))
-            profile=ScalarProfile(1,C.sizeof(ScalarProfile),0,0,0);check(lib.pintle_transport_wale_scalar_profile_v1(handle,C.byref(profile)))
+                    check(lib.reactive_transport_wale_scalar_fields_v1(handle,ptr(cp),None,None,None))
+                    dt_cp=C.c_double();check(lib.reactive_transport_stable_step_primitives(handle,primitives,states,.23,.1,C.byref(dt_cp)))
+                    assert lib.reactive_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rejected),ptr(rejected_boundary))!=0
+                    check(lib.reactive_transport_wale_scalar_fields_v1(handle,ptr(cp),ptr(np.ascontiguousarray(h)),None,None))
+            rhs=np.empty_like(q);boundary=np.empty(nv);check(lib.reactive_transport_rhs(handle,ptr(q),states,ptr(gy),ptr(gh),ptr(rhs),ptr(boundary)))
+            dt=C.c_double();check(lib.reactive_transport_stable_step_primitives(handle,primitives,states,.23,.1,C.byref(dt)))
+            profile=ScalarProfile(1,C.sizeof(ScalarProfile),0,0,0);check(lib.reactive_transport_wale_scalar_profile_v1(handle,C.byref(profile)))
             return rhs,boundary,dt.value,profile
-        finally:lib.pintle_transport_destroy(handle)
+        finally:lib.reactive_transport_destroy(handle)
     off=run('off',None);zero=run('zero',Scalars(1,C.sizeof(Scalars),0,0));on=run('on',Scalars(1,C.sizeof(Scalars),Prt,Sct))
     # A separate fixed-state face exercises scalar field packing and verifies that
     # its heat/species/enthalpy flux is represented by the boundary integral.
@@ -84,33 +84,33 @@ def main():
     fixed_cfg=Config(1,ns,nv,3,3,0,0,0,1.1,1e8,0);fixed_volume=np.array([dx**3])
     def fixed_run(enable):
         error=C.create_string_buffer(2048)
-        handle=lib.pintle_transport_create(int(a.backend=='cuda'),C.byref(fixed_cfg),ptr(fixed_volume),fixed_faces,
+        handle=lib.reactive_transport_create(int(a.backend=='cuda'),C.byref(fixed_cfg),ptr(fixed_volume),fixed_faces,
             ptr(fixed_q),fixed_states,ptr(fixed_y),ptr(fixed_gas_h),error,len(error))
         assert handle,error.value.decode()
         try:
             def check(rc):
-                if rc:raise AssertionError(lib.pintle_transport_error(handle).decode())
-            check(lib.pintle_transport_set_wale_v1(handle,C.byref(Wale(1,C.sizeof(Wale),Cw))))
+                if rc:raise AssertionError(lib.reactive_transport_error(handle).decode())
+            check(lib.reactive_transport_set_wale_v1(handle,C.byref(Wale(1,C.sizeof(Wale),Cw))))
             if enable:
-                check(lib.pintle_transport_set_wale_scalars_v1(handle,C.byref(Scalars(1,C.sizeof(Scalars),Prt,Sct))))
-                check(lib.pintle_transport_wale_scalar_fields_v1(handle,ptr(cp[:1]),ptr(np.ascontiguousarray(h[:1])),
+                check(lib.reactive_transport_set_wale_scalars_v1(handle,C.byref(Scalars(1,C.sizeof(Scalars),Prt,Sct))))
+                check(lib.reactive_transport_wale_scalar_fields_v1(handle,ptr(cp[:1]),ptr(np.ascontiguousarray(h[:1])),
                     ptr(np.ascontiguousarray(cp[fixed_indices])),ptr(np.ascontiguousarray(h[fixed_indices]))))
             rhs=np.empty((1,nv));boundary=np.empty(nv)
-            check(lib.pintle_transport_rhs(handle,ptr(np.ascontiguousarray(q[:1])),states,ptr(gy[:1]),ptr(gh[:1]),ptr(rhs),ptr(boundary)))
+            check(lib.reactive_transport_rhs(handle,ptr(np.ascontiguousarray(q[:1])),states,ptr(gy[:1]),ptr(gh[:1]),ptr(rhs),ptr(boundary)))
             return rhs,boundary
-        finally:lib.pintle_transport_destroy(handle)
+        finally:lib.reactive_transport_destroy(handle)
     fixed_off=fixed_run(False);fixed_on=fixed_run(True)
     fixed_delta=fixed_on[0]-fixed_off[0];fixed_boundary=fixed_on[1]-fixed_off[1]
     np.testing.assert_allclose(fixed_delta[0]*fixed_volume[0]+fixed_boundary,0,rtol=2e-12,atol=2e-10)
     assert np.max(abs(fixed_delta[0,:ns]))>0 and abs(fixed_delta[0,ns+3])>0
     frozen_cfg=Config(nc,ns,nv+1,len(faces),0,0,0,0,1.1,1e8,0)
     frozen_error=C.create_string_buffer(2048)
-    frozen=lib.pintle_transport_create(int(a.backend=='cuda'),C.byref(frozen_cfg),ptr(volumes),face_array,None,None,None,None,frozen_error,len(frozen_error))
+    frozen=lib.reactive_transport_create(int(a.backend=='cuda'),C.byref(frozen_cfg),ptr(volumes),face_array,None,None,None,None,frozen_error,len(frozen_error))
     assert frozen,frozen_error.value.decode()
     try:
-        assert lib.pintle_transport_set_wale_v1(frozen,C.byref(Wale(1,C.sizeof(Wale),Cw)))==0
-        assert lib.pintle_transport_set_wale_scalars_v1(frozen,C.byref(Scalars(1,C.sizeof(Scalars),0,Sct)))!=0
-    finally:lib.pintle_transport_destroy(frozen)
+        assert lib.reactive_transport_set_wale_v1(frozen,C.byref(Wale(1,C.sizeof(Wale),Cw)))==0
+        assert lib.reactive_transport_set_wale_scalars_v1(frozen,C.byref(Scalars(1,C.sizeof(Scalars),0,Sct)))!=0
+    finally:lib.reactive_transport_destroy(frozen)
     np.testing.assert_array_equal(off[0],zero[0]);np.testing.assert_array_equal(off[1],zero[1]);assert off[2]==zero[2]
     delta=on[0]-off[0];np.testing.assert_allclose(delta,expected,rtol=2e-8,atol=1e-4)
     np.testing.assert_allclose((on[0]*volumes[:,None]).sum(0)+on[1],0,atol=3e-10)

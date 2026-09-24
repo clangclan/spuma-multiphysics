@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // CPU/GPU parity for the actual header-only capillary face flux.
-#include "../src/reactiveInterface/pintleBalancedCapillary.h"
+#include "../src/reactiveInterface/reactiveBalancedCapillary.h"
 #include <cuda_runtime.h>
 #include <cassert>
 #include <cmath>
 #include <cstdio>
 
-namespace BC=PintleBalancedCapillary;
+namespace BC=ReactiveBalancedCapillary;
 
 __global__ void evaluate(const BC::State* left,const BC::State* right,
                          const BC::Face* face,BC::Flux* flux,int* success) {

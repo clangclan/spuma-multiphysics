@@ -1,0 +1,9 @@
+In file included from /home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/reactiveThermo.cpp:7:
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/reactiveDeviceFlash.h: In function ‘bool ReactiveDeviceFlash::solve(const double (*)[4], const double*, int, double*, Counters*)’:
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/reactiveDeviceFlash.h:98:101: warning: unused parameter ‘counters’ [-Wunused-parameter]
+   98 | REACTIVE_HD inline bool solve(const double matrix[4][4],const double* rhs,int n,double* x,Counters* counters=nullptr){
+      |                                                                                           ~~~~~~~~~~^~~~~~~~~~~~~~~~
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/reactiveThermo.cpp: In lambda function:
+/home/jsw/문서/analysis/spuma-multiphysics-spray-physics/src/reactiveThermo/reactiveThermo.cpp:1557:52: warning: ignoring attributes on template argument ‘int (*)(void*) noexcept’ [-Wignored-attributes]
+ 1557 |             std::unique_ptr<void,decltype(&dlclose)> handle(dlopen(library,RTLD_NOW|RTLD_LOCAL),dlclose);
+      |                                                    ^

@@ -19,7 +19,7 @@ MFC와 PeleC/PelePhysics의 실제 소스를 읽고 **기상 질량분율·종 �
 
 ## 기상 수송 물성의 device 계산
 
-새 `pintle_rt_export_gas_thermo()`는 실제 모델에서 종 순서, `R/W`, NASA 다항식 종류, 모든 온도 구간과 계수를 내보낸다. 가변 구간은 종별 offset/count와 연속 구간 배열로 저장한다. **409×2 + 4×3 = 830개 구간**, 표 크기는 86,256 byte이며 시작할 때 한 번 전송한다. NASA9를 NASA7로 근사하거나 낮은 온도 구간을 버리지 않는다.
+새 `reactive_rt_export_gas_thermo()`는 실제 모델에서 종 순서, `R/W`, NASA 다항식 종류, 모든 온도 구간과 계수를 내보낸다. 가변 구간은 종별 offset/count와 연속 구간 배열로 저장한다. **409×2 + 4×3 = 830개 구간**, 표 크기는 86,256 byte이며 시작할 때 한 번 전송한다. NASA9를 NASA7로 근사하거나 낮은 온도 구간을 버리지 않는다.
 
 device 연산자는 각 셀·종에 대해 다음을 계산한다.
 
@@ -103,7 +103,7 @@ research/reactive-env/bin/python tools/validate_device_gas_transport.py \
   --thermo-dir research/reactive-thermo --backend cpu \
   --output results/local-device-gas-cpu.json
 
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 \
   bash tools/build_reactive_solver.sh
 research/reactive-env/bin/python tools/validate_device_gas_transport.py \
   --thermo-dir research/reactive-thermo --backend cuda \

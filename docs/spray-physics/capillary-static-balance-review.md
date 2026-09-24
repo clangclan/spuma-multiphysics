@@ -61,8 +61,8 @@ A passing velocity trend would still be only one gate; it does not certify dynam
 ## Geometric pressure/traction follow-up (2026-09-23)
 
 The [geometric proposal implementation report](../../reports/geometric-balance-review-20260923.ko.md)
-adds a separate host/device `PintleGeometricCapillary::faceFlux` and the one-shot
-`pintle_transport_geometric_diagnostic_v1` API. The latter uses the production
+adds a separate host/device `ReactiveGeometricCapillary::faceFlux` and the one-shot
+`reactive_transport_geometric_diagnostic_v1` API. The latter uses the production
 `Faces` and `Rhs` kernels with caller-supplied liquid face apertures and integrated
 surface tractions. It reports cell volume mismatch, vector-area closure, traction
 closure and geometric surface energy. It cannot install geometry into the stepper.

@@ -34,17 +34,17 @@ def main():
     seed=data[offset:offset+n*statebytes];offset+=n*statebytes
     cap=(Capillary*n).from_buffer_copy(data[offset:offset+n*capbytes]);offset+=n*capbytes
     assert offset==len(data)
-    gpu=gpu_bind(a.library);gpu.pintle_gpu_hem_run_v2.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(C.c_double),C.POINTER(Capillary),C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
-    gpu.pintle_gpu_hem_run_v2.restype=C.c_int
-    gpu.pintle_gpu_hem_numerical_policy_v1.restype=C.c_char_p
-    error=C.create_string_buffer(4096);handle=gpu.pintle_gpu_hem_create_v1(model,modelbytes,n,error,len(error))
+    gpu=gpu_bind(a.library);gpu.reactive_gpu_hem_run_v2.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(C.c_double),C.POINTER(Capillary),C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
+    gpu.reactive_gpu_hem_run_v2.restype=C.c_int
+    gpu.reactive_gpu_hem_numerical_policy_v1.restype=C.c_char_p
+    error=C.create_string_buffer(4096);handle=gpu.reactive_gpu_hem_create_v1(model,modelbytes,n,error,len(error))
     if not handle:raise RuntimeError(error.value.decode())
     rows=[];accepted=True;deterministic=True;reference_bytes=None
     try:
         for repeat in range(a.repeats+1):
             states=(State*n).from_buffer_copy(seed);success=(C.c_int*n)();profile=HemProfile(1,C.sizeof(HemProfile))
             start=time.perf_counter()
-            rc=gpu.pintle_gpu_hem_run_v2(handle,ptr(q),ptr(energy),cap,n,states,success,C.byref(profile),error,len(error))
+            rc=gpu.reactive_gpu_hem_run_v2(handle,ptr(q),ptr(energy),cap,n,states,success,C.byref(profile),error,len(error))
             elapsed=time.perf_counter()-start
             accepted&=rc==0 and all(success) and profile.cpuFallbacks==0 and profile.deviceFailures==0
             if reference_bytes is None:reference_bytes=bytes(states)
@@ -66,7 +66,7 @@ def main():
                 comparison[name]=dict(maxAbs=float(np.max(np.abs(x-y))),maxScaled=float(np.max(np.abs(x-y)/np.maximum(1,np.abs(y)))),
                     relativeL2=float(np.linalg.norm((x-y).ravel())/max(1e-300,np.linalg.norm(y.ravel()))))
         report=dict(passed=bool(accepted and deterministic and unchanged),capture=str(a.capture.resolve()),captureSha256=common.sha256(a.capture),
-            library=str(a.library.resolve()),librarySha256=common.sha256(a.library),policy=gpu.pintle_gpu_hem_numerical_policy_v1().decode(),
+            library=str(a.library.resolve()),librarySha256=common.sha256(a.library),policy=gpu.reactive_gpu_hem_numerical_policy_v1().decode(),
             count=n,species=ns,deterministic=deterministic,inputsUnchanged=unchanged,repetitions=rows,comparison=comparison,
             comparedSuccessfulCells=compared_count,
             medianKernelSeconds=float(np.median([r['kernelSeconds'] for r in rows])),
@@ -74,7 +74,7 @@ def main():
             scope='Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.')
         common.atomic_json(out/'replay.json',report)
         print(json.dumps(dict(passed=report['passed'],count=n,medianKernelSeconds=report['medianKernelSeconds'],comparison=comparison)),flush=True)
-    finally:gpu.pintle_gpu_hem_destroy_v1(handle)
+    finally:gpu.reactive_gpu_hem_destroy_v1(handle)
     if not report['passed']:raise SystemExit(1)
 
 

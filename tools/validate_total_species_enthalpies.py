@@ -11,7 +11,7 @@ import numpy as np
 from reactive_backend import Backend, State
 
 def bind(backend):
-    function=backend.lib.pintle_rt_total_species_enthalpies_v1
+    function=backend.lib.reactive_rt_total_species_enthalpies_v1
     function.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(State),C.POINTER(C.c_double)]
     function.restype=C.c_int
     return function
@@ -75,8 +75,8 @@ def main():
     root=Path(__file__).resolve().parents[1]
     artifacts={str(path.resolve()):sha(path) for path in
         (a.library,a.pr_configuration,a.ideal_configuration,Path(__file__),
-         root/'src/reactiveThermo/pintleReactiveThermo.h',
-         root/'src/reactiveThermo/pintleReactiveThermo.cpp')}
+         root/'src/reactiveThermo/reactiveThermo.h',
+         root/'src/reactiveThermo/reactiveThermo.cpp')}
     report={'schema':1,'passed':True,'cases':rows,'artifacts':artifacts}
     a.output.parent.mkdir(parents=True,exist_ok=True)
     temporary=a.output.with_suffix(a.output.suffix+'.tmp')

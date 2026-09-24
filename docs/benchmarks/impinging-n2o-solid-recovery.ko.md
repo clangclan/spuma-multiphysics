@@ -34,7 +34,7 @@
 
 ## 상태 저장과 GPU
 
-`PintleThermoState`의 176바이트 레이아웃과 schema-3 체크포인트는 유지한다. 기존 `liquidMass[2]`, `alphaLiquid[2]`는 ABI 이름을 보존하고, 메타데이터로 각 슬롯의 액체/고체 종류와 종을 구분한다. 같은 N₂O 보존 질량에서 액체와 고체를 모두 차감하며 합계가 보존 질량을 넘는 입력은 거부한다. 기상 N₂O 분석은 `q_N2O - massLiquid.N2O - massSolid.N2O`를 사용한다.
+`ReactiveThermoState`의 176바이트 레이아웃과 schema-3 체크포인트는 유지한다. 기존 `liquidMass[2]`, `alphaLiquid[2]`는 ABI 이름을 보존하고, 메타데이터로 각 슬롯의 액체/고체 종류와 종을 구분한다. 같은 N₂O 보존 질량에서 액체와 고체를 모두 차감하며 합계가 보존 질량을 넘는 입력은 거부한다. 기상 N₂O 분석은 `q_N2O - massLiquid.N2O - massSolid.N2O`를 사용한다.
 
 출력은 `alphaLiquid.N2O`, `rhoLiquid.N2O`, `massLiquid.N2O`와 `alphaSolid.N2O`, `rhoSolid.N2O`, `massSolid.N2O`를 제공한다. `mass*` 필드는 셀 체적당 상 질량(kg/m³)이며, 적분 질량은 셀 체적을 곱한다. 기존 `alphaLiquid0/1`은 호환을 위해 유지하므로 고체 프로필의 `alphaLiquid1`은 실제로 고체 체적분율이다.
 
@@ -87,28 +87,28 @@ dt는 30 ns 상한보다 작지만 실패 재시도로 줄어든 결과가 아�
 준비한 두 케이스는 `/home/jsw/문서/analysis/runs/impinging_n2o_solid_20260922/benchmark`에 있다. 저장소에 포함한 [입력 예제](../../examples/impinging-n2o-solid/README.ko.md)는 동일 기구를 사용한다. 원래 유체 전용 입력과 초기 실패 기록은 보존했다.
 
 ```bash
-export PINTLE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
-export PINTLE_REACTIVE_PREFIX=/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env
-export PINTLE_REACTIVE_TRANSPORT_BUILD=cuda
-export PINTLE_CUDA_ARCH=120
+export REACTIVE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
+export REACTIVE_PREFIX=/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env
+export REACTIVE_TRANSPORT_BUILD=cuda
+export REACTIVE_CUDA_ARCH=120
 flock /home/jsw/cae-benchmark/run.lock ./Allwmake
 
 # 새 경로를 사용한다. 기존 케이스를 덮어쓰지 않는다.
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-solid-benchmark \
+"$REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-solid-benchmark \
   --configuration examples/impinging-n2o-solid/cold-pr-148K-config.yaml --cell-mm 0.25
 
 # 아래 연속 검증 명령은 재현용이다. 비용 때문에 자동 반복하지 않는다.
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/validate_impinging_n2o.py \
+"$REACTIVE_PREFIX/bin/python" tools/validate_impinging_n2o.py \
   --benchmark /path/to/new-solid-benchmark --output /path/to/new-validation --steps 10
 
 # 빠른 0D 수치·물성 검사. 현재 참조 정확도 미달로 종료 코드 1이 예상된다.
-flock /home/jsw/cae-benchmark/run.lock "$PINTLE_REACTIVE_PREFIX/bin/python" tools/validate_n2o_solid.py \
+flock /home/jsw/cae-benchmark/run.lock "$REACTIVE_PREFIX/bin/python" tools/validate_n2o_solid.py \
   --configuration /path/to/new-solid-benchmark/thermo/cold-pr-config.yaml \
-  --library lib/libpintleReactiveBackend.so --cuda-library lib/libpintleReactiveTransport.so \
+  --library lib/libreactiveBackend.so --cuda-library lib/libreactiveTransport.so \
   --output /path/to/solid-unit.json
 ```
 
-저온 기구를 원본에서 다시 만들려면 `extend_n2o_gas_thermo.py --configuration <원본 cold-pr-config.yaml> --solid-data docs/model-data/n2o-solid-atake1974.json --output <새 경로> --library lib/libpintleReactiveBackend.so`를 사용한다. 최종 생성기 검사는 원래 준비된 기구 바이트와 물리 해시가 동일함을 확인했다.
+저온 기구를 원본에서 다시 만들려면 `extend_n2o_gas_thermo.py --configuration <원본 cold-pr-config.yaml> --solid-data docs/model-data/n2o-solid-atake1974.json --output <새 경로> --library lib/libreactiveBackend.so`를 사용한다. 최종 생성기 검사는 원래 준비된 기구 바이트와 물리 해시가 동일함을 확인했다.
 
 수치 라이브러리는 위 검증과 동일하다. 마지막 솔버 정리에서는 로그에 실제 유한차분 선택을 표시하고 출력 필드의 종 이름을 메타데이터에서 읽도록 수정했다. 이 출력·로그 변경은 빌드 검증했으며 256k 계산을 반복하지 않았다. 실행 당시와 최종 바이너리 해시는 [전달 manifest](../../results/n2o-solid-20260922/delivery.json)에서 구분한다.
 

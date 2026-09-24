@@ -36,7 +36,7 @@ def main():
     report={'schema':1,'generated_utc':datetime.now(timezone.utc).isoformat(),
             'architecture':'sm_120','cpu':{'passed':False},
             'cuda':{'passed':False,'skipped':bool(args.skip_cuda)},'hashes':{}}
-    with tempfile.TemporaryDirectory(prefix='pintle-interface-') as temporary:
+    with tempfile.TemporaryDirectory(prefix='reactive-interface-') as temporary:
         build=Path(temporary)
         cpu=build/'interface_primitives_cpu'
         run(['g++','-std=c++17','-O2','-Wall','-Wextra','-pedantic',
@@ -55,7 +55,7 @@ def main():
             report['cuda'].update(passed=True,skipped=False,
                                   compiler=output([str(args.nvcc),'--version']).splitlines()[-1],
                                   gpu_lock=str(args.gpu_lock))
-    sources=[ROOT/'src/reactiveInterface/pintleResolvedInterface.h',
+    sources=[ROOT/'src/reactiveInterface/reactiveResolvedInterface.h',
              ROOT/'tests/interface_primitives.cpp',ROOT/'tests/interface_primitives_cuda.cu',
              ROOT/'tools/validate_interface_primitives.py',
              ROOT/'docs/spray-physics/resolved-interface-design.md']

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveInterface/pintleBalancedCapillary.h"
-#include "../src/reactiveInterface/pintleUnstructuredInterface.h"
+#include "../src/reactiveInterface/reactiveBalancedCapillary.h"
+#include "../src/reactiveInterface/reactiveUnstructuredInterface.h"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <vector>
 
-using namespace PintleBalancedCapillary;
+using namespace ReactiveBalancedCapillary;
 
 static bool close(double a,double b,double tolerance=2e-11) {
     return std::abs(a-b)<=tolerance*std::max(1.0,std::max(std::abs(a),std::abs(b)));
@@ -116,14 +116,14 @@ static void movingFaceWorkAndFallback() {
 }
 
 static void weightedFaceColor() {
-    PintleTransportFace raw{};raw.owner=0;raw.neighbour=1;
+    ReactiveTransportFace raw{};raw.owner=0;raw.neighbour=1;
     raw.kind=0;raw.ownerWeight=.8;raw.normal[0]=1;raw.area=1;raw.distance=1;
     const double color[2]{.2,.8};
     double area[2]{1,1},curvature[2]{2,2},normal[6]{1,0,0,1,0,0};
-    PintleUnstructuredInterface::View v{};v.cells=2;v.faces=&raw;
+    ReactiveUnstructuredInterface::View v{};v.cells=2;v.faces=&raw;
     v.color=color;v.areaDensity=area;v.curvature=curvature;v.normal=normal;
     v.sigma=.1;
-    Face f{};assert(PintleUnstructuredInterface::faceGeometry(0,v,f));
+    Face f{};assert(ReactiveUnstructuredInterface::faceGeometry(0,v,f));
     assert(close(f.colorFace,.32));
     State left{},right{};left.rho=right.rho=1;
     left.pressure=right.pressure=100;left.sound=right.sound=10;
@@ -139,10 +139,10 @@ static void reconstructedDrop() {
     constexpr int n=32, cells=n*n;
     constexpr double sigma=.072, radius=.22, h=1.0/n, volume=h*h;
     const auto id=[](int i,int j){return (i+n)%n+n*((j+n)%n);};
-    std::vector<PintleTransportFace> faces;
+    std::vector<ReactiveTransportFace> faces;
     faces.reserve(2*cells);
     for(int j=0;j<n;++j) for(int i=0;i<n;++i) for(int d=0;d<2;++d) {
-        PintleTransportFace f{};
+        ReactiveTransportFace f{};
         f.owner=id(i,j);f.neighbour=d==0?id(i+1,j):id(i,j+1);
         f.kind=0;f.normal[d]=1;f.area=h;f.distance=h;f.ownerWeight=.5;
         faces.push_back(f);
@@ -161,19 +161,19 @@ static void reconstructedDrop() {
         const double x=(i+.5)*h-.5,y=(j+.5)*h-.5;
         color[id(i,j)]=.5*(1-std::tanh((std::sqrt(x*x+y*y)-radius)/(1.5*h)));
     }
-    PintleUnstructuredInterface::View geometry{};
+    ReactiveUnstructuredInterface::View geometry{};
     geometry.cells=cells;geometry.faces=faces.data();geometry.row=row.data();
     geometry.incidence=incidence.data();geometry.inverseVolume=inverse.data();
     geometry.color=color.data();geometry.gradient=gradient.data();geometry.normal=normal.data();
     geometry.areaDensity=area.data();geometry.curvature=curvature.data();
     geometry.sigma=sigma;geometry.geometryEpsilon=1e-10;
-    for(int c=0;c<cells;++c)assert(PintleUnstructuredInterface::gradientCell(c,geometry));
-    for(int c=0;c<cells;++c)assert(PintleUnstructuredInterface::curvatureCell(c,geometry));
+    for(int c=0;c<cells;++c)assert(ReactiveUnstructuredInterface::gradientCell(c,geometry));
+    for(int c=0;c<cells;++c)assert(ReactiveUnstructuredInterface::curvatureCell(c,geometry));
     std::vector<double> momentum(3*cells),energy(cells);
     for(std::size_t fi=0;fi<faces.size();++fi) {
         const auto& f=faces[fi];
-        PintleBalancedCapillary::Face cf{};
-        assert(PintleUnstructuredInterface::faceGeometry(fi,geometry,cf));
+        ReactiveBalancedCapillary::Face cf{};
+        assert(ReactiveUnstructuredInterface::faceGeometry(fi,geometry,cf));
         const auto state=[&](std::size_t c) {
             State s{};s.color=color[c];s.rho=1.2+998.8*s.color;
             s.pressure=101325+sigma*s.color/radius;

@@ -33,21 +33,21 @@ def main():
     with RealFluidBackend(args.configuration, args.library) as backend:
         q, energy, seed = backend.make_state(190., 140252.74973819536, {'N2O': 1}, [.5])
         seed = backend.recover(q, energy, seed)
-        select = backend.lib.pintle_rt_set_gpu_hem_jacobian_v1
+        select = backend.lib.reactive_rt_set_gpu_hem_jacobian_v1
         select.argtypes = [C.c_void_p, C.c_int]
         select.restype = C.c_int
-        export = backend.lib.pintle_rt_export_gpu_hem_v1
+        export = backend.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes = [C.c_void_p, C.c_void_p, C.c_size_t, C.POINTER(C.c_size_t)]
         export.restype = C.c_int
-        backend.check(backend.lib.pintle_rt_set_gpu_hem_jacobian_v1(backend.handle, 1))
+        backend.check(backend.lib.reactive_rt_set_gpu_hem_jacobian_v1(backend.handle, 1))
         image, image_size = export_model(backend)
         gpu = gpu_bind(args.cuda_library)
-        gpu.pintle_gpu_hem_run_v2.argtypes = [C.c_void_p, C.POINTER(C.c_double), C.POINTER(C.c_double),
+        gpu.reactive_gpu_hem_run_v2.argtypes = [C.c_void_p, C.POINTER(C.c_double), C.POINTER(C.c_double),
             C.POINTER(Capillary), C.c_size_t, C.POINTER(State), C.POINTER(C.c_int),
             C.POINTER(HemProfile), C.c_char_p, C.c_size_t]
-        gpu.pintle_gpu_hem_run_v2.restype = C.c_int
+        gpu.reactive_gpu_hem_run_v2.restype = C.c_int
         error = C.create_string_buffer(4096)
-        handle = gpu.pintle_gpu_hem_create_v1(image, image_size, 8, error, len(error))
+        handle = gpu.reactive_gpu_hem_create_v1(image, image_size, 8, error, len(error))
         if not handle:
             raise RuntimeError(error.value.decode())
         def run(local_q, local_e, guess, color, jump, equilibrium):
@@ -57,7 +57,7 @@ def main():
             cap = (Capillary*1)(Capillary(color, jump, int(equilibrium)))
             succeeded = (C.c_int*1)()
             profile = HemProfile(1, C.sizeof(HemProfile))
-            rc = gpu.pintle_gpu_hem_run_v2(handle, ptr(masses), ptr(energies), cap,
+            rc = gpu.reactive_gpu_hem_run_v2(handle, ptr(masses), ptr(energies), cap,
                 1, state, succeeded, C.byref(profile), error, len(error))
             return rc, succeeded[0], state[0].copy(), profile, error.value.decode()
         try:
@@ -110,7 +110,7 @@ def main():
             else:
                 check('gpu-equilibrium-curved-kelvin', False)
 
-            enthalpy = backend.lib.pintle_rt_total_species_enthalpies_capillary_v1
+            enthalpy = backend.lib.reactive_rt_total_species_enthalpies_capillary_v1
             enthalpy.argtypes = [C.c_void_p, C.POINTER(C.c_double), C.POINTER(State),
                 C.c_double, C.c_double, C.POINTER(C.c_double)]
             enthalpy.restype = C.c_int
@@ -122,7 +122,7 @@ def main():
             expected += (curved_frozen.p+(1-color)*jump)*curved_frozen.alphaLiquid[0]
             check('curved-total-enthalpy', status == 0 and
                 relative(np.dot(q, values), expected) < 1e-8,
-                status=status, error=backend.lib.pintle_rt_error(backend.handle).decode())
+                status=status, error=backend.lib.reactive_rt_error(backend.handle).decode())
 
             # A pure liquid with c=1 has p_l=p_bar regardless of curvature.
             pure_q, pure_e, pure_seed = backend.make_state(293.15, 5601325.,
@@ -181,31 +181,31 @@ def main():
                             and relative(np.dot(trace_vector, trace_h),
                                 sum(trace_q)*recovered.e+phase_work) < 1e-8,
                             status=h_status,
-                            error=backend.lib.pintle_rt_error(backend.handle).decode())
+                            error=backend.lib.reactive_rt_error(backend.handle).decode())
                         inconsistent = recovered.copy()
                         inconsistent.gasMass += 1e-8
                         h_status = enthalpy(backend.handle, ptr(trace_vector),
                             C.byref(inconsistent), 1., supplied_jump, ptr(trace_h))
                         check('trace-air-inconsistent-gas-mass-rejected', h_status != 0
                             and 'beyond FP rounding' in
-                                backend.lib.pintle_rt_error(backend.handle).decode(),
+                                backend.lib.reactive_rt_error(backend.handle).decode(),
                             status=h_status,
-                            error=backend.lib.pintle_rt_error(backend.handle).decode())
+                            error=backend.lib.reactive_rt_error(backend.handle).decode())
         finally:
-            gpu.pintle_gpu_hem_destroy_v1(handle)
+            gpu.reactive_gpu_hem_destroy_v1(handle)
 
-        configure = backend.lib.pintle_rt_set_gpu_hem_v1
+        configure = backend.lib.reactive_rt_set_gpu_hem_v1
         configure.argtypes = [C.c_void_p, C.c_int, C.c_int, C.c_char_p]
         configure.restype = C.c_int
         backend.check(configure(backend.handle, 1, 0,
             str(args.cuda_library.resolve()).encode()))
-        bridge = backend.lib.pintle_rt_pool_capillary_batch_v1
+        bridge = backend.lib.reactive_rt_pool_capillary_batch_v1
         bridge.argtypes = [C.c_void_p, Token, C.c_int, C.c_size_t, C.c_size_t,
             C.POINTER(C.c_double), C.POINTER(C.c_double), C.POINTER(C.c_double),
             C.POINTER(C.c_double), C.POINTER(State)]
         bridge.restype = C.c_int
         pool_error = C.create_string_buffer(1024)
-        pool = backend.lib.pintle_rt_pool_create(backend.handle, 1, 4,
+        pool = backend.lib.reactive_rt_pool_create(backend.handle, 1, 4,
             128_000_000, pool_error, len(pool_error))
         if not pool:
             raise RuntimeError(pool_error.value.decode())
@@ -220,26 +220,26 @@ def main():
             check('pool-curved-frozen-no-fallback', status == 0
                 and relative(states[0].p, curved_frozen.p) < 1e-10
                 and relative(states[1].p, curved_frozen.p) < 1e-10,
-                status=status, error=backend.lib.pintle_rt_pool_error(pool).decode())
+                status=status, error=backend.lib.reactive_rt_pool_error(pool).decode())
             before = bytes(states)
             states[1].liquidMass[0] = q[backend.names.index('N2O')]*2
             invalid_before = bytes(states)
             status = bridge(pool, Token(1, 2, 2), 0, 2, backend.ns,
                 ptr(mass), ptr(energies), ptr(colors), ptr(jumps), states)
             check('pool-failure-transactional', status != 0 and bytes(states) == invalid_before,
-                status=status, error=backend.lib.pintle_rt_pool_error(pool).decode())
+                status=status, error=backend.lib.reactive_rt_pool_error(pool).decode())
             check('pool-success-changed-state', before != invalid_before)
             ordinary = (State*1)(seed.copy())
             one_q = np.ascontiguousarray(q, dtype=np.float64)
             one_e = np.ascontiguousarray([energy], dtype=np.float64)
             drift = C.c_double()
-            status = backend.lib.pintle_rt_pool_batch(pool, Token(1, 3, 3),
+            status = backend.lib.reactive_rt_pool_batch(pool, Token(1, 3, 3),
                 2, 1, backend.ns, ptr(one_q), ptr(one_e), ordinary,
                 0., 1e-8, 1e-14, C.byref(drift))
             check('existing-pool-op2-uses-gpu', status == 0
                 and relative(ordinary[0].p, frozen_host.p) < 1e-6
                 and relative(ordinary[0].liquidMass[0], seed.liquidMass[0]) < 1e-12,
-                status=status, error=backend.lib.pintle_rt_pool_error(pool).decode())
+                status=status, error=backend.lib.reactive_rt_pool_error(pool).decode())
             trace_q, trace_e, trace_ml, trace_jump = trace_cases[0]
             trace_input = np.ascontiguousarray(trace_q, dtype=np.float64)
             trace_energy = np.ascontiguousarray([trace_e], dtype=np.float64)
@@ -255,9 +255,9 @@ def main():
                 and trace_state[0].energyResidual < 1e-9
                 and trace_state[0].chemicalResidual < 1e-7
                 and trace_state[0].gasMass > trace_q[0] + trace_q[1],
-                status=status, error=backend.lib.pintle_rt_pool_error(pool).decode())
+                status=status, error=backend.lib.reactive_rt_pool_error(pool).decode())
         finally:
-            backend.lib.pintle_rt_pool_destroy(pool)
+            backend.lib.reactive_rt_pool_destroy(pool)
 
     print(json.dumps({'passed': all(t['passed'] for t in tests), 'tests': tests}, indent=2))
     raise SystemExit(0 if all(t['passed'] for t in tests) else 1)

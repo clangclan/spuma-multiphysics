@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveInterface/pintleResolvedInterface.h"
+#include "../src/reactiveInterface/reactiveResolvedInterface.h"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <limits>
 
-using namespace PintleInterface;
+using namespace ReactiveInterface;
 
 namespace {
 bool close(double a, double b, double tolerance=1e-13)

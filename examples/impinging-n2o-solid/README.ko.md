@@ -7,7 +7,7 @@
 저장소 루트에서 준비한 Python/SPUMA 환경을 사용한다.
 
 ```bash
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-solid-benchmark \
+"$REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-solid-benchmark \
   --configuration examples/impinging-n2o-solid/cold-pr-148K-config.yaml --cell-mm 0.25
 ```
 

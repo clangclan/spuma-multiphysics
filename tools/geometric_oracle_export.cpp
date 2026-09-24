@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <iostream>
 
-using namespace PintleGeometricOracle;
+using namespace ReactiveGeometricOracle;
 using Vec=std::array<double,8>; // liquid volume, area, normal integral, kappa-normal integral
 
 static Vec add(const Vec& a,const Vec& b,double scale=1) {

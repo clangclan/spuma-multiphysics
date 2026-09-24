@@ -13,7 +13,7 @@ dt = min(maxDeltaT, 종료까지 남은 시간,
 
 단순 유속만 사용하는 조건이 아니다. 압축성 유동이므로 음속과 경계 ghost 상태가 포함되고, WALE를 포함한 확산 제한도 반영된다. 바깥 단계 선택은 `0.95 × maxCo`를 사용하며, 중간 RK 단계에서도 현재 상태의 CFL을 재검사한다. 반려 시 원래 상태로 돌아가 dt를 절반으로 줄인다. 모든 셀은 동일한 물리 시각을 공유하므로 가장 제한적인 셀이 전체 dt를 결정한다. 그 제한이 거의 변하지 않으면 적응형이어도 dt 변화가 작을 수 있다.
 
-확인한 구현: [시간 루프](../src/reactiveFoam/ReactiveFoam.C), [GPU 시간 간격 연산자](../src/reactiveTransport/pintleTransportKernels.h), [GPU 최솟값 reduction](../src/reactiveTransport/pintleReactiveTransport.cpp). 새 적분기를 추가하거나 `adjustTimeStep` 같은 사용되지 않는 옵션을 넣지 않고 실제 읽는 `maxDeltaT` 설정을 바꿨다.
+확인한 구현: [시간 루프](../src/reactiveFoam/ReactiveFoam.C), [GPU 시간 간격 연산자](../src/reactiveTransport/reactiveTransportKernels.h), [GPU 최솟값 reduction](../src/reactiveTransport/reactiveTransport.cpp). 새 적분기를 추가하거나 `adjustTimeStep` 같은 사용되지 않는 옵션을 넣지 않고 실제 읽는 `maxDeltaT` 설정을 바꿨다.
 
 ## 적용 설정과 실제 결과
 

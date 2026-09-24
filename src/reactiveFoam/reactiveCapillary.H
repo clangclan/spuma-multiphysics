@@ -28,7 +28,7 @@
     void interfaceGeometry(const Array& color) const {
         demand(capillary&&transport&&color.size()==nc,"Capillary geometry needs the CUDA transport mesh");
         surfaceEnergy.resize(nc);interfaceCurvature.resize(nc);interfaceJump.resize(nc);
-        checkTransport(pintle_transport_capillary_geometry_v1(transport.get(),color.data(),fixedColor.data(),
+        checkTransport(reactive_transport_capillary_geometry_v1(transport.get(),color.data(),fixedColor.data(),
             surfaceEnergy.data(),interfaceCurvature.data(),nullptr));
         interfaceColor=color;
         for(size_t c=0;c<nc;++c)interfaceJump[c]=sigma*interfaceCurvature[c];
@@ -62,15 +62,15 @@
                     if(frozen||iteration==0)batchStates[c].liquidMass[0]=local[ns+4];
                 }
                 timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
-                const PintleBatchToken token{attemptId,++workerStage,++workerVersion};
+                const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
                 const auto callStart=std::chrono::steady_clock::now();
-                const int status=pintle_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
+                const int status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
                     batchQ.data(),batchEnergy.data(),colorBefore.data()+start,jumpBefore.data()+start,batchStates.data());
                 timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
                 if(status)for(size_t c=0;c<count;++c) {
-                    PintleRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);
+                    ReactiveRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);
                     const char* details=nullptr;
-                    if(pintle_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
+                    if(reactive_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
                         std::ostringstream cap;cap<<std::setprecision(17)<<"{\"capillary\":true,\"color\":"<<colorBefore[start+c]
                             <<",\"pressureJump\":"<<jumpBefore[start+c]<<",\"bulkEnergy\":"<<batchEnergy[c]
                             <<",\"surfaceEnergy\":"<<energyBefore[start+c]<<",\"outerIteration\":"<<iteration<<'}';
@@ -78,7 +78,7 @@
                             failure.message,failure.category,cap.str().c_str(),true);
                     }
                 }
-                demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(start)+": "+pintle_rt_pool_error(pool.get()));
+                demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(start)+": "+reactive_rt_pool_error(pool.get()));
                 for(size_t c=0;c<count;++c)states[start+c]=batchStates[c];
             }
             const Array candidate=liquidColor(states);
@@ -112,10 +112,10 @@
         demand(false,"Surface-energy / curved UV closure did not converge (residual "+std::to_string(capillaryClosureResidual)+")");
     }
     void saveImplicitSurface(const std::filesystem::path& directory) const {
-        size_t count=0;checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&count));
-        Array coefficients(count);checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),coefficients.data(),nullptr,count,&count));
-        PintleCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
-        checkTransport(pintle_transport_cartesian_info_v1(transport.get(),&grid));
+        size_t count=0;checkTransport(reactive_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&count));
+        Array coefficients(count);checkTransport(reactive_transport_implicit_coefficients_v1(transport.get(),coefficients.data(),nullptr,count,&count));
+        ReactiveCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
+        checkTransport(reactive_transport_cartesian_info_v1(transport.get(),&grid));
         std::ofstream out(directory/"implicitSurface.bin",std::ios::binary|std::ios::trunc);
         checkpoint::requireIO(bool(out),"implicit surface");checkpoint::put(out,uint64_t(0x5246494d504c5331ULL));
         checkpoint::put(out,uint64_t(count));
@@ -124,9 +124,9 @@
         out.flush();checkpoint::requireIO(bool(out),"implicit surface flush");out.close();checkpoint::requireIO(!out.fail(),"implicit surface close");
     }
     void restoreImplicitSurface(const std::filesystem::path& directory) const {
-        size_t required=0;checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&required));
-        PintleCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
-        checkTransport(pintle_transport_cartesian_info_v1(transport.get(),&grid));
+        size_t required=0;checkTransport(reactive_transport_implicit_coefficients_v1(transport.get(),nullptr,nullptr,0,&required));
+        ReactiveCartesianInfoV1 grid{};grid.abiVersion=1;grid.structBytes=sizeof(grid);
+        checkTransport(reactive_transport_cartesian_info_v1(transport.get(),&grid));
         std::ifstream in(directory/"implicitSurface.bin",std::ios::binary);uint64_t magic,count;
         checkpoint::get(in,magic);checkpoint::get(in,count);
         demand(magic==0x5246494d504c5331ULL&&count==required,"Implicit surface checkpoint layout mismatch");
@@ -134,7 +134,7 @@
             demand(n==grid.dims[d]&&origin==grid.origin[d]&&spacing==grid.spacing[d],"Implicit surface checkpoint mesh mismatch");}
         Array coefficients(required);for(double& value:coefficients)checkpoint::get(in,value);
         demand(in.peek()==std::char_traits<char>::eof(),"Implicit surface checkpoint has trailing data");
-        checkTransport(pintle_transport_implicit_coefficients_v1(transport.get(),nullptr,coefficients.data(),required,&required));
+        checkTransport(reactive_transport_implicit_coefficients_v1(transport.get(),nullptr,coefficients.data(),required,&required));
     }
     void initializeCurvedPrimitive(Array& q,States& states,const Array* seed) const {
         demand(pool&&transport,"Curved primitive initialization requires CUDA closure and transport");
@@ -155,10 +155,10 @@
                     batchStates[c].p=pressure[cell];batchStates[c].T=temperature[cell];
                     batchStates[c].liquidMass[0]=q[cell*nv+ns+4];
                 }
-                const PintleBatchToken token{attemptId,++workerStage,++workerVersion};
-                const int status=pintle_rt_pool_capillary_initialize_tp_v1(pool.get(),token,count,physicalSpecies,
+                const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
+                const int status=reactive_rt_pool_capillary_initialize_tp_v1(pool.get(),token,count,physicalSpecies,
                     batchQ.data(),batchEnergy.data(),previousColor.data()+start,previousJump.data()+start,batchStates.data());
-                demand(!status,std::string("Curved primitive GPU initialization: ")+pintle_rt_pool_error(pool.get()));
+                demand(!status,std::string("Curved primitive GPU initialization: ")+reactive_rt_pool_error(pool.get()));
                 for(size_t c=0;c<count;++c){const size_t cell=start+c;double* local=&q[cell*nv];
                     std::copy(batchQ.data()+c*physicalSpecies,batchQ.data()+(c+1)*physicalSpecies,local);
                     states[cell]=batchStates[c];double kinetic=0;

@@ -1,10 +1,10 @@
-#include "../src/reactiveInterface/pintleInterfaceGeometry.h"
+#include "../src/reactiveInterface/reactiveInterfaceGeometry.h"
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-using namespace PintleInterfaceGeometry;
+using namespace ReactiveInterfaceGeometry;
 static void ck(cudaError_t e,const char*m){if(e!=cudaSuccess){std::cerr<<m<<": "<<cudaGetErrorString(e)<<"\n";std::exit(2);}}
 static Boundaries periodic(){Boundaries b{};for(int a=0;a<3;++a)b.low[a]=b.high[a]={BoundaryMode::periodic,0};return b;}
 int main(){

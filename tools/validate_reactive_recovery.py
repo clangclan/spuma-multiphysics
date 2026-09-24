@@ -20,7 +20,7 @@ def main():
         report['tests'].append(dict(name=name,passed=bool(passed),**detail))
         print(name,passed,flush=True)
     with RealFluidBackend(a.config,a.library) as b:
-        bind(b);b.check(b.lib.pintle_rt_set_recovery_v1(b.handle,0,1));normal=[]
+        bind(b);b.check(b.lib.reactive_rt_set_recovery_v1(b.handle,0,1));normal=[]
         for T in [285.,293.15,300.]:
             for pressure in [101325.,1e6,4e6]:
                 for Y,liquid in [({'N2':.7670907820415769,'O2':.2329092179584231},[0,0]),({'N2O':1},[0,0]),({'IC3H7OH':1},[0,1])]:
@@ -67,37 +67,37 @@ def main():
         for name,row in [('negative',dict(inputs[0],q=[-1,1,0,0])),('nonfinite',dict(inputs[0],energy=float('nan')))]:
             result=replay(b,row,'boundaryFallback')
             record(name,not result['success'] and result['inputUnchanged'] and result['failureSeedUnchanged'],error=result.get('error'))
-        b.check(b.lib.pintle_rt_set_recovery_v1(b.handle,1,1))
+        b.check(b.lib.reactive_rt_set_recovery_v1(b.handle,1,1))
         # Original order is retained despite the pool's scheduling permutation.
         rows=inputs;count=len(rows);q=np.array([r['q'] for r in rows]);e=np.array([r['energy'] for r in rows]);expected=[]
         for row in rows:expected.append(b.recover(row['q'],row['energy'],guess_of(row)))
         for workers in [1,24]:
-            error=C.create_string_buffer(8192);pool=b.lib.pintle_rt_pool_create(b.handle,workers,count,16*1024*1024,error,len(error))
+            error=C.create_string_buffer(8192);pool=b.lib.reactive_rt_pool_create(b.handle,workers,count,16*1024*1024,error,len(error))
             if not pool:raise RuntimeError(error.value.decode())
             try:
                 states=(State*count)(*[guess_of(row) for row in rows]);mass=q.copy();drift=C.c_double()
-                status=b.lib.pintle_rt_pool_batch(pool,Token(1,1,1),0,count,b.ns,ptr(mass),ptr(e),states,0.,1e-8,1e-14,C.byref(drift))
+                status=b.lib.reactive_rt_pool_batch(pool,Token(1,1,1),0,count,b.ns,ptr(mass),ptr(e),states,0.,1e-8,1e-14,C.byref(drift))
                 equal=not status and all(bytes(states[i])==bytes(expected[i]) for i in range(count))
-                record(f'pool-{workers}',equal and mass.tobytes()==q.tobytes(),count=count,bitwiseIdentical=equal,error=b.lib.pintle_rt_pool_error(pool).decode())
-            finally:b.lib.pintle_rt_pool_destroy(pool)
+                record(f'pool-{workers}',equal and mass.tobytes()==q.tobytes(),count=count,bitwiseIdentical=equal,error=b.lib.reactive_rt_pool_error(pool).decode())
+            finally:b.lib.reactive_rt_pool_destroy(pool)
         class Failure(C.Structure):
             _fields_=[('abiVersion',C.c_uint32),('structBytes',C.c_uint32),('localCell',C.c_uint64),('worker',C.c_uint64),('category',C.c_char*48),('message',C.c_char*512)]
-        query=b.lib.pintle_rt_pool_failure_v1;query.argtypes=[C.c_void_p,C.c_size_t,C.POINTER(Failure),C.POINTER(C.c_char_p)];query.restype=C.c_int
-        count=30;error=C.create_string_buffer(8192);pool=b.lib.pintle_rt_pool_create(b.handle,24,count,16*1024*1024,error,len(error))
+        query=b.lib.reactive_rt_pool_failure_v1;query.argtypes=[C.c_void_p,C.c_size_t,C.POINTER(Failure),C.POINTER(C.c_char_p)];query.restype=C.c_int
+        count=30;error=C.create_string_buffer(8192);pool=b.lib.reactive_rt_pool_create(b.handle,24,count,16*1024*1024,error,len(error))
         if not pool:raise RuntimeError(error.value.decode())
         try:
             q=np.tile(rows[0]['q'],(count,1));q[:,0]=-1.;e=np.full(count,rows[0]['energy']);states=(State*count)(*[guess_of(rows[0]) for _ in range(count)])
             for i in range(count):states[i].iterations=count-i
             before=q.tobytes(),bytes(states);drift=C.c_double()
-            rc=b.lib.pintle_rt_pool_batch(pool,Token(1,1,1),0,count,b.ns,ptr(q),ptr(e),states,0.,1e-8,1e-14,C.byref(drift))
+            rc=b.lib.reactive_rt_pool_batch(pool,Token(1,1,1),0,count,b.ns,ptr(q),ptr(e),states,0.,1e-8,1e-14,C.byref(drift))
             details=0;correct=rc!=0
             for i in range(count):
                 failure=Failure(1,C.sizeof(Failure));detail=C.c_char_p();result=query(pool,i,C.byref(failure),C.byref(detail))
                 correct &= result==0 and failure.localCell==i and failure.worker<24
                 if detail.value:details+=1;json.loads(detail.value)
             record('pool-failure-id-budget-rollback',correct and details==16 and before==(q.tobytes(),bytes(states)),failedCells=count,details=details,omittedDetails=count-details)
-        finally:b.lib.pintle_rt_pool_destroy(pool)
-        report['runtime']=json.loads(b.lib.pintle_rt_runtime_manifest_v1(b.handle))
+        finally:b.lib.reactive_rt_pool_destroy(pool)
+        report['runtime']=json.loads(b.lib.reactive_rt_runtime_manifest_v1(b.handle))
     report['passed']=all(t['passed'] for t in report['tests']);report['testCount']=len(report['tests'])
     a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     raise SystemExit(0 if report['passed'] else 1)

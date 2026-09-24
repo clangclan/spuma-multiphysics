@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Bounded test bridge for the same host/device reconstruction algorithm.
-#include "../src/reactiveInterface/pintleImplicitFit.h"
+#include "../src/reactiveInterface/reactiveImplicitFit.h"
 #include <vector>
 #include <cstdio>
 #include <cstdlib>
@@ -78,11 +78,11 @@ extern "C" int implicit_fit(int backend,int n,const double* color,const double* 
     unsigned nonlinear,unsigned linear,double volumeTolerance,double* output,double* report) {
     if(n<4||n>64||!color||!output||!report)return -1;
     try {
-        Runtime runtime(backend);PintleImplicitFit::Grid grid{{n,n,n}};
-        PintleImplicitFit::Workspace<Runtime> fit(runtime,grid);
+        Runtime runtime(backend);ReactiveImplicitFit::Grid grid{{n,n,n}};
+        ReactiveImplicitFit::Workspace<Runtime> fit(runtime,grid);
         runtime.upload(fit.target(),color,size_t(n)*n*n);
         if(seed)runtime.upload(fit.initialCoefficients(),seed,size_t(n+3)*(n+3)*(n+3));
-        PintleImplicitFit::Settings settings{};settings.nonlinearIterations=nonlinear;
+        ReactiveImplicitFit::Settings settings{};settings.nonlinearIterations=nonlinear;
         settings.linearIterations=linear;settings.volumeTolerance=volumeTolerance;
         settings.observer=[](unsigned iteration,double rms,double smooth,double lambda){
             std::fprintf(stderr,"FIT iteration=%u rmsVolume=%.12g regularizer=%.12g lambda=%.12g\n",iteration,rms,smooth,lambda);

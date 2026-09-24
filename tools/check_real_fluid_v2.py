@@ -23,10 +23,10 @@ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def thermo(a,tmp):
     with RealFluidBackend(a.thermo_dir/'cold-pr-config.yaml',a.thermo_library) as b:
         policy=ROOT/'policies/real-fluid-optimization-v2.yaml'
-        b.check(b.lib.pintle_rt_load_optimization_policy(b.handle,str(policy).encode()))
+        b.check(b.lib.reactive_rt_load_optimization_policy(b.handle,str(policy).encode()))
         identity=b.physical_hash;old_policy=b.policy_hash
         invalid=tmp/'invalid-policy.yaml';invalid.write_text(policy.read_text()+'unknown_option: true\n')
-        check(b.lib.pintle_rt_load_optimization_policy(b.handle,str(invalid).encode())!=0,'Unknown policy key accepted')
+        check(b.lib.reactive_rt_load_optimization_policy(b.handle,str(invalid).encode())!=0,'Unknown policy key accepted')
         check(b.physical_hash==identity and b.policy_hash==old_policy,'Rejected policy changed identity')
         caps=b.capabilities();check(caps['realEOS']==1 and caps['nonidealDiffusion']==0 and caps['deviceKinetics']==0,'Wrong capabilities')
         reference=ct.Solution(str(a.thermo_dir/'cold-pr.yaml'),'gas',transport_model=None)
@@ -75,24 +75,24 @@ def pool_and_jvp(a,tmp):
         v=q*np.array([.1,-.2,.3,-.1]);product,fixed=b.jvp(q,e,s,v)
         h=1e-4;ref=(b.chemical_rhs(q+h*v,e,s)-b.chemical_rhs(q-h*v,e,s))/(2*h)
         err=scaled(product,ref);check(fixed and err<2e-5,'Same-EOS source Jv mismatch')
-        error=C.create_string_buffer(8192);pool=b.lib.pintle_rt_pool_create(b.handle,2,3,1_000_000,error,len(error))
+        error=C.create_string_buffer(8192);pool=b.lib.reactive_rt_pool_create(b.handle,2,3,1_000_000,error,len(error))
         check(bool(pool),error.value.decode())
         try:
             qq=np.tile(q,(3,1));energies=np.full(3,e);states=(State*3)(*[s.copy() for _ in range(3)]);drift=C.c_double(-1)
-            status=b.lib.pintle_rt_pool_batch(pool,Token(1,1,1),1,3,b.ns,ptr(qq),ptr(energies),states,1e-4,1e-8,1e-14,C.byref(drift))
-            check(status==0,b.lib.pintle_rt_pool_error(pool).decode())
+            status=b.lib.reactive_rt_pool_batch(pool,Token(1,1,1),1,3,b.ns,ptr(qq),ptr(energies),states,1e-4,1e-8,1e-14,C.byref(drift))
+            check(status==0,b.lib.reactive_rt_pool_error(pool).decode())
             expected,_,_=b.react(q,e,1e-4,s)
             check(scaled(qq,np.tile(expected,(3,1)))<1e-10,'Independent worker result mismatch')
             saved=qq.copy();before=bytes(states);bad=energies.copy();bad[1]=np.nan
-            check(b.lib.pintle_rt_pool_batch(pool,Token(2,1,2),0,3,b.ns,ptr(qq),ptr(bad),states,0,1e-8,1e-14,C.byref(drift))!=0,'Bad cell was accepted')
+            check(b.lib.reactive_rt_pool_batch(pool,Token(2,1,2),0,3,b.ns,ptr(qq),ptr(bad),states,0,1e-8,1e-14,C.byref(drift))!=0,'Bad cell was accepted')
             check(np.array_equal(qq,saved) and bytes(states)==before,'Failed batch partially committed')
-            check(b.lib.pintle_rt_pool_batch(pool,Token(1,1,1),0,3,b.ns,ptr(qq),ptr(energies),states,0,1e-8,1e-14,C.byref(drift))!=0,'Stale batch accepted')
+            check(b.lib.reactive_rt_pool_batch(pool,Token(1,1,1),0,3,b.ns,ptr(qq),ptr(energies),states,0,1e-8,1e-14,C.byref(drift))!=0,'Stale batch accepted')
             # Fresh attempt with original source inputs must recover after failure.
             qq[:]=q;states=(State*3)(*[s.copy() for _ in range(3)])
-            check(b.lib.pintle_rt_pool_batch(pool,Token(3,1,3),0,3,b.ns,ptr(qq),ptr(energies),states,0,1e-8,1e-14,C.byref(drift))==0,'Pool recovery failed')
-            profile=BatchProfile();check(b.lib.pintle_rt_pool_profile(pool,C.byref(profile))==0,'Pool profile failed')
+            check(b.lib.reactive_rt_pool_batch(pool,Token(3,1,3),0,3,b.ns,ptr(qq),ptr(energies),states,0,1e-8,1e-14,C.byref(drift))==0,'Pool recovery failed')
+            profile=BatchProfile();check(b.lib.reactive_rt_pool_profile(pool,C.byref(profile))==0,'Pool profile failed')
             return {'jvp_scaled_error':err,'fixed_branch':fixed,'batch':{n:getattr(profile,n) for n,_ in profile._fields_},'fixture':'synthetic balanced PR source, not physical combustion validation'}
-        finally:b.lib.pintle_rt_pool_destroy(pool)
+        finally:b.lib.reactive_rt_pool_destroy(pool)
 
 class Options(C.Structure):
     _fields_=[('abiVersion',C.c_uint32),('structBytes',C.c_uint32),('bridgeCells',C.c_size_t),('recomputeGas',C.c_int),('physicalModelHash',C.c_char*65)]
@@ -101,62 +101,62 @@ class Memory(C.Structure):
 
 def transport(a,tmp):
     lib=gas.load(ROOT,a.transport_library);v,d,p=C.c_void_p,C.c_double,C.POINTER(C.c_double)
-    lib.pintle_transport_create_v2.argtypes=[C.c_int,C.POINTER(tr.Config),C.POINTER(Options),p,C.POINTER(tr.Face),p,C.POINTER(tr.State),p,p,C.c_char_p,C.c_size_t]
-    lib.pintle_transport_create_v2.restype=v
+    lib.reactive_transport_create_v2.argtypes=[C.c_int,C.POINTER(tr.Config),C.POINTER(Options),p,C.POINTER(tr.Face),p,C.POINTER(tr.State),p,p,C.c_char_p,C.c_size_t]
+    lib.reactive_transport_create_v2.restype=v
     specs={'memory_v2':([v,C.POINTER(Memory)],C.c_int),'begin_attempt':([v,C.c_char_p,C.c_uint64],C.c_int),
            'end_attempt':([v,C.c_uint64,C.c_int],C.c_int),
            'advance_resident_v2':([v,Token,Token,C.POINTER(tr.State),C.POINTER(gas.GasPartition),p,p,d,p],C.c_int),
            'download_conserved':([v,Token,p],C.c_int)}
-    for name,(args,ret) in specs.items():f=getattr(lib,'pintle_transport_'+name);f.argtypes,f.restype=args,ret
+    for name,(args,ret) in specs.items():f=getattr(lib,'reactive_transport_'+name);f.argtypes,f.restype=args,ret
     # 7 cells > bridge capacity 2 exercises multiple partial transpose tiles.
     with RealFluidBackend(a.thermo_dir/'chemistry-config.yaml',a.thermo_library) as b:
         q,states=gas.state_rows(b,'ideal',7)
         with closing(gas.Fixture(lib,0,b,q,states)) as f:
             opts=Options(1,C.sizeof(Options),2,1,b.physical_hash.encode());error=C.create_string_buffer(8192)
             geom=(tr.Face*len(f.faces))(*f.faces)
-            handle=lib.pintle_transport_create_v2(0,C.byref(f.cfg),C.byref(opts),tr.ptr(f.volumes),geom,tr.ptr(f.fixed),f.fs,tr.ptr(f.fy),tr.ptr(f.fh),error,len(error))
+            handle=lib.reactive_transport_create_v2(0,C.byref(f.cfg),C.byref(opts),tr.ptr(f.volumes),geom,tr.ptr(f.fixed),f.fs,tr.ptr(f.fy),tr.ptr(f.fh),error,len(error))
             check(bool(handle),error.value.decode())
-            def ok(status):check(status==0,lib.pintle_transport_error(handle).decode())
+            def ok(status):check(status==0,lib.reactive_transport_error(handle).decode())
             try:
-                ok(lib.pintle_transport_set_gas_thermo(handle,f.records,b.ns,f.regions,len(f.regions),None,0))
-                ok(lib.pintle_transport_begin_attempt(handle,b.physical_hash.encode(),1))
-                ok(lib.pintle_transport_upload_conserved(handle,ptr(q),1))
+                ok(lib.reactive_transport_set_gas_thermo(handle,f.records,b.ns,f.regions,len(f.regions),None,0))
+                ok(lib.reactive_transport_begin_attempt(handle,b.physical_hash.encode(),1))
+                ok(lib.reactive_transport_upload_conserved(handle,ptr(q),1))
                 current=q.copy();initial=q.copy();err=0.;dt=1e-9
                 for stage in range(2):
                     compact,partition,y,h=gas.arrays(b,current,states)
                     rhs,boundary,_=tr.reference(current,compact,f.faces,f.volumes,f.cfg,f.fixed,f.fs,y,h,f.fy,f.fh)
                     expected=current+dt*rhs if stage==0 else .5*initial+.5*(current+dt*rhs)
                     rate=np.zeros(b.ns+4);out=np.empty_like(q)
-                    ok(lib.pintle_transport_advance_resident_v2(handle,Token(1,stage,stage+1),Token(1,stage+1,stage+2),compact,partition,None,None,dt,ptr(rate)))
-                    before=tr.Profile();ok(lib.pintle_transport_profile(handle,C.byref(before)))
+                    ok(lib.reactive_transport_advance_resident_v2(handle,Token(1,stage,stage+1),Token(1,stage+1,stage+2),compact,partition,None,None,dt,ptr(rate)))
+                    before=tr.Profile();ok(lib.reactive_transport_profile(handle,C.byref(before)))
                     check(before.conservedDownloadBytes==stage*q.nbytes,'Implicit conserved download remains')
-                    ok(lib.pintle_transport_download_conserved(handle,Token(1,stage+1,stage+2),ptr(out)))
+                    ok(lib.reactive_transport_download_conserved(handle,Token(1,stage+1,stage+2),ptr(out)))
                     err=max(err,scaled(out,expected));check(scaled(rate,boundary)<2e-11,'Boundary mismatch')
                     current=out;states=[b.recover(row[:b.ns],row[-1]-.5*np.dot(row[b.ns:b.ns+3],row[b.ns:b.ns+3])/row[:b.ns].sum(),s) for row,s in zip(current,states)]
                 check(err<2e-11,'Fused two-field RK mismatch')
-                ok(lib.pintle_transport_end_attempt(handle,1,1))
-                memory=Memory();ok(lib.pintle_transport_memory_v2(handle,C.byref(memory)))
+                ok(lib.reactive_transport_end_attempt(handle,1,1))
+                memory=Memory();ok(lib.reactive_transport_memory_v2(handle,C.byref(memory)))
                 check(memory.rhsWorkspaceBytes==0 and memory.bridgeBytes==2*(b.ns+4)*8,'Unbounded RHS/bridge workspace')
                 check(memory.gasWorkspaceBytes==2*f.cfg.fixed*b.ns*8,'Interior gas arrays still materialized')
                 # Stale completion and rollback do not expose a valid download.
-                ok(lib.pintle_transport_begin_attempt(handle,b.physical_hash.encode(),2))
+                ok(lib.reactive_transport_begin_attempt(handle,b.physical_hash.encode(),2))
                 untouched=np.full_like(q,123)
-                check(lib.pintle_transport_download_conserved(handle,Token(1,2,3),ptr(untouched))!=0,'Stale download accepted')
+                check(lib.reactive_transport_download_conserved(handle,Token(1,2,3),ptr(untouched))!=0,'Stale download accepted')
                 check(np.all(untouched==123),'Stale download wrote output')
-                ok(lib.pintle_transport_end_attempt(handle,2,0))
+                ok(lib.reactive_transport_end_attempt(handle,2,0))
                 return {'rk_scaled_error':err,'memory':{n:getattr(memory,n) for n,_ in memory._fields_},'backend':'CPU common kernels; no GPU execution'}
-            finally:lib.pintle_transport_destroy(handle)
+            finally:lib.reactive_transport_destroy(handle)
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--thermo-dir',type=Path,required=True)
-    p.add_argument('--thermo-library',type=Path,default=ROOT/'lib/libpintleReactiveBackend.so')
-    p.add_argument('--transport-library',type=Path,default=ROOT/'lib/libpintleReactiveTransport.so')
+    p.add_argument('--thermo-library',type=Path,default=ROOT/'lib/libreactiveBackend.so')
+    p.add_argument('--transport-library',type=Path,default=ROOT/'lib/libreactiveTransport.so')
     p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     for name in ('thermo_dir','thermo_library','transport_library','output'):setattr(a,name,getattr(a,name).resolve())
     if a.output.exists():raise SystemExit('Refusing to overwrite check evidence')
     report={'baseline':'3c3cd49b33ba090b746ce787ca11181f18c50a55','scope':'brief mathematical/code smoke checks; full G0-G10 campaigns deferred',
             'libraries':{str(path):sha(path) for path in (a.thermo_library,a.transport_library)},'tests':[]}
-    with tempfile.TemporaryDirectory(prefix='pintle-rf-') as folder:
+    with tempfile.TemporaryDirectory(prefix='reactive-rf-') as folder:
         for name,fn in [('same-EOS-thermo-policy-tangent',thermo),('same-EOS-Jv-worker-transactions',pool_and_jvp),('resident-memory-RK-transactions',transport)]:
             try:row={'name':name,'passed':True,'result':fn(a,Path(folder))}
             except Exception as e:row={'name':name,'passed':False,'error':str(e)}

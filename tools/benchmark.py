@@ -22,8 +22,8 @@ import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SPUMA_ENV = Path(os.environ.get("PINTLE_SPUMA_ENV", "/home/jsw/cae-gpu/spuma-env.sh"))
-RUN_LOCK = Path(os.environ.get("PINTLE_RUN_LOCK", "/home/jsw/cae-benchmark/run.lock"))
+SPUMA_ENV = Path(os.environ.get("REACTIVE_SPUMA_ENV", "/home/jsw/cae-gpu/spuma-env.sh"))
+RUN_LOCK = Path(os.environ.get("REACTIVE_RUN_LOCK", "/home/jsw/cae-benchmark/run.lock"))
 DELTA_T = Decimal("3e-8")
 PHASES = ("ipa", "n2o", "air")
 CORE_FIELDS = ("p", "U", "T", "rho")
@@ -89,7 +89,7 @@ def sourced_environment() -> dict[str, str]:
             errors="surrogateescape"
         )
 
-    environment["PINTLE_GPU_ROOT"] = str(PROJECT_ROOT)
+    environment["REACTIVE_PROJECT_ROOT"] = str(PROJECT_ROOT)
     environment["OMP_NUM_THREADS"] = "1"
     environment["OPENBLAS_NUM_THREADS"] = "1"
     environment["PATH"] = os.pathsep.join(

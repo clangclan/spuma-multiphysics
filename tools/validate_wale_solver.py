@@ -72,7 +72,7 @@ maxDeviceMemoryGB 1; maxHostMemoryGB 2; boundaryConditions {{}} {physics}
         active_env=env.copy()
         if label=='baseline':
             libdir=out/'baseline-libraries';libdir.mkdir()
-            shutil.copy2(ROOT/'lib/libpintleReactiveTransportBaseline.so',libdir/'libpintleReactiveTransport.so')
+            shutil.copy2(ROOT/'lib/libreactiveTransportBaseline.so',libdir/'libreactiveTransport.so')
             active_env['LD_LIBRARY_PATH']=str(libdir)+':'+env['LD_LIBRARY_PATH']
         text=run(case,'ReactiveFoamBaseline' if label=='baseline' else 'ReactiveFoam',active_env)
         q=np.column_stack([values(case/'6e-08'/f'q{k}')[:,0] for k in range(len(names))])
@@ -121,7 +121,7 @@ maxDeviceMemoryGB 1; maxHostMemoryGB 2; boundaryConditions {{}} {physics}
       'baselineOffBitExact':True,'zeroCwOffBitExact':True,'restartBitExact':True,'changedModelRestartRejected':True,
       'waleNutRange':results['wale']['nutRange'],'maxWaleOffDifference':float(np.max(np.abs(results['wale']['data']-results['off']['data']))),
       'gpuClosure':{k:v['hem'] for k,v in results.items()},'physicalHashes':{k:v['model'] for k,v in results.items()},
-      'artifacts':{str(p):common.sha256(p) for p in [ROOT/'bin/ReactiveFoam',ROOT/'lib/libpintleReactiveTransport.so',Path(__file__)]}}
+      'artifacts':{str(p):common.sha256(p) for p in [ROOT/'bin/ReactiveFoam',ROOT/'lib/libreactiveTransport.so',Path(__file__)]}}
     common.atomic_json(out/'result.json',report);print(json.dumps(report))
 
 if __name__=='__main__':

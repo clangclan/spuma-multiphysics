@@ -98,7 +98,7 @@ def launch(a):
         if len(matches)!=1 or float(matches[0])!=a.end_time:raise ValueError('--end-time must match the explicit scalar controlDict endTime')
         if (output/'runtime').exists():raise ValueError('Runtime snapshot already exists')
         runtime=output/'runtime';runtime.mkdir()
-        for source,name in [(a.solver,'ReactiveFoam'),(a.backend_library,'libpintleReactiveBackend.so'),(a.transport_library,'libpintleReactiveTransport.so')]:
+        for source,name in [(a.solver,'ReactiveFoam'),(a.backend_library,'libreactiveBackend.so'),(a.transport_library,'libreactiveTransport.so')]:
             source=source.resolve(strict=True);target=runtime/name;shutil.copy2(source,target)
             state['runtime'][name]={'source':str(source),'snapshot':str(target),'sha256':sha(target)}
         env_result=subprocess.run(['bash','-c','source "$1" >/dev/null || exit $?; env -0','bash',str(a.spuma_env.resolve(strict=True))],capture_output=True,check=True)

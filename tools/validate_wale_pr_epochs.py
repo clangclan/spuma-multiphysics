@@ -80,7 +80,7 @@ def bind(lib):
                                 C.c_double,p],C.c_int),
     }
     for name,(args,ret) in spec.items():
-        method=getattr(lib,'pintle_transport_'+name)
+        method=getattr(lib,'reactive_transport_'+name)
         method.argtypes=args;method.restype=ret
 
 
@@ -96,7 +96,7 @@ def main():
     # The backend resolves the mechanism relative to the process cwd.
     os.chdir(a.configuration.parent)
     with RealFluidBackend(a.configuration,a.backend) as backend:
-        export=backend.lib.pintle_rt_export_gpu_hem_v1
+        export=backend.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes=[C.c_void_p,C.c_void_p,C.c_size_t,C.POINTER(C.c_size_t)]
         export.restype=C.c_int
         image,size=export_model(backend)
@@ -123,38 +123,38 @@ def main():
         dt=C.c_double()
         checks=[];scratch={}
         def require(handle,status,label):
-            assert status==0,(label,lib.pintle_transport_error(handle).decode())
+            assert status==0,(label,lib.reactive_transport_error(handle).decode())
             checks.append(label)
         def reject(handle,status,label):
             assert status!=0,label
             checks.append(label)
         def geometry(handle):
-            require(handle,lib.pintle_transport_capillary_geometry_v1(handle,ptr(color),None,
+            require(handle,lib.reactive_transport_capillary_geometry_v1(handle,ptr(color),None,
                 ptr(surface),None,None),'geometry')
         def epoch(version,token,enthalpies=0):
             return Epoch(1,C.sizeof(Epoch),token,version,version,1,enthalpies)
         def prop(handle,e,local_state=state,local_q=None):
-            return lib.pintle_transport_wale_pr_properties_v1(handle,C.byref(e),
+            return lib.reactive_transport_wale_pr_properties_v1(handle,C.byref(e),
                 ptr(local_q) if local_q is not None else None,nv,local_state)
         def cfl(handle):
-            return lib.pintle_transport_stable_step_primitives(handle,primitive,compact,.5,1e-7,C.byref(dt))
+            return lib.reactive_transport_stable_step_primitives(handle,primitive,compact,.5,1e-7,C.byref(dt))
         for label,schmidt in [('heatOnly',0.),('heatSpecies',.7)]:
             error=C.create_string_buffer(2048)
-            handle=lib.pintle_transport_create_v2(1,C.byref(cfg),C.byref(options),ptr(volume),
+            handle=lib.reactive_transport_create_v2(1,C.byref(cfg),C.byref(options),ptr(volume),
                 face,None,None,None,None,error,len(error))
             assert handle,error.value.decode()
             try:
-                require(handle,lib.pintle_transport_set_capillary_v1(handle,C.byref(cap)),'capillary')
-                require(handle,lib.pintle_transport_set_wale_v1(handle,C.byref(wale)),'wale')
+                require(handle,lib.reactive_transport_set_capillary_v1(handle,C.byref(cap)),'capillary')
+                require(handle,lib.reactive_transport_set_wale_v1(handle,C.byref(wale)),'wale')
                 scalars=Scalars(1,C.sizeof(Scalars),.9,schmidt)
-                require(handle,lib.pintle_transport_set_wale_scalars_v1(handle,C.byref(scalars)),'scalars')
+                require(handle,lib.reactive_transport_set_wale_scalars_v1(handle,C.byref(scalars)),'scalars')
                 old_cp=np.array([accepted.cp],dtype=np.float64)
                 old_h=np.zeros((1,ns),dtype=np.float64)
-                require(handle,lib.pintle_transport_wale_scalar_fields_v1(handle,ptr(old_cp),
+                require(handle,lib.reactive_transport_wale_scalar_fields_v1(handle,ptr(old_cp),
                     ptr(old_h) if schmidt else None,None,None),'preinstallHostUpload')
-                require(handle,lib.pintle_transport_set_wale_pr_model_v1(handle,C.byref(model)),
+                require(handle,lib.reactive_transport_set_wale_pr_model_v1(handle,C.byref(model)),
                     'deviceModelInstall')
-                reject(handle,lib.pintle_transport_wale_scalar_fields_v1(handle,ptr(old_cp),
+                reject(handle,lib.reactive_transport_wale_scalar_fields_v1(handle,ptr(old_cp),
                     ptr(old_h) if schmidt else None,None,None),'hostUploadAfterDeviceInstallRejected')
                 geometry(handle)
                 reject(handle,cfl(handle),'preinstallHostCpInvalidated')
@@ -167,7 +167,7 @@ def main():
                 outside=epoch(2,Token(0,0,0))
                 require(handle,prop(handle,outside),'freshGeometryCp')
                 require(handle,cfl(handle),'freshGeometryCfl')
-                require(handle,lib.pintle_transport_begin_attempt(handle,backend.physical_hash.encode(),2),
+                require(handle,lib.reactive_transport_begin_attempt(handle,backend.physical_hash.encode(),2),
                     'beginAttempt')
                 reject(handle,cfl(handle),'beginInvalidatesCp')
                 cfl_epoch=epoch(2,Token(2,2**64-1,0))
@@ -184,50 +184,50 @@ def main():
                     corrupted=(ThermoState*1)(accepted.copy())
                     corrupted[0].gasMass+=1e-8
                     reject(handle,prop(handle,exact,corrupted,q),'corruptedStateRejected')
-                    require(handle,lib.pintle_transport_upload_conserved(handle,ptr(q),1),
+                    require(handle,lib.reactive_transport_upload_conserved(handle,ptr(q),1),
                         'uploadConserved')
                     boundary=np.zeros(nv,dtype=np.float64)
-                    reject(handle,lib.pintle_transport_advance_resident_v2(handle,Token(2,0,1),
+                    reject(handle,lib.reactive_transport_advance_resident_v2(handle,Token(2,0,1),
                         Token(2,1,2),compact,None,None,None,1e-9,ptr(boundary)),
                         'failedPropertiesDoNotPublish')
-                require(handle,lib.pintle_transport_end_attempt(handle,2,0),'rollback')
+                require(handle,lib.reactive_transport_end_attempt(handle,2,0),'rollback')
                 reject(handle,cfl(handle),'rollbackInvalidatesCp')
                 if schmidt:
-                    require(handle,lib.pintle_transport_begin_attempt(handle,
+                    require(handle,lib.reactive_transport_begin_attempt(handle,
                         backend.physical_hash.encode(),3),'retryBegin')
                     retry=Epoch(1,C.sizeof(Epoch),Token(3,0,2),3,2,1,1)
                     require(handle,prop(handle,retry,state,q),'retryStageEnthalpies')
-                    require(handle,lib.pintle_transport_upload_conserved(handle,ptr(q),2),
+                    require(handle,lib.reactive_transport_upload_conserved(handle,ptr(q),2),
                         'retryUploadConserved')
-                    require(handle,lib.pintle_transport_advance_resident_v2(handle,Token(3,0,2),
+                    require(handle,lib.reactive_transport_advance_resident_v2(handle,Token(3,0,2),
                         Token(3,1,3),compact,None,None,None,1e-9,ptr(boundary)),
                         'stageAcceptsFreshProperties')
-                    require(handle,lib.pintle_transport_end_attempt(handle,3,0),'retryRollback')
+                    require(handle,lib.reactive_transport_end_attempt(handle,3,0),'retryRollback')
                     reject(handle,cfl(handle),'retryRollbackInvalidatesCp')
                 outside=Epoch(1,C.sizeof(Epoch),Token(0,0,0),4,2,1,0)
                 require(handle,prop(handle,outside),'postRollbackFreshCp')
                 require(handle,cfl(handle),'postRollbackCfl')
                 profile=Profile(1,C.sizeof(Profile))
-                require(handle,lib.pintle_transport_wale_pr_profile_v1(handle,C.byref(profile)),
+                require(handle,lib.reactive_transport_wale_pr_profile_v1(handle,C.byref(profile)),
                     'profile')
                 assert profile.builds>0 and profile.kernels>=2*profile.builds
                 scratch[label]=profile.scratchBytes
             finally:
-                lib.pintle_transport_destroy(handle)
+                lib.reactive_transport_destroy(handle)
         error=C.create_string_buffer(2048)
-        cpu=lib.pintle_transport_create_v2(0,C.byref(cfg),C.byref(options),ptr(volume),
+        cpu=lib.reactive_transport_create_v2(0,C.byref(cfg),C.byref(options),ptr(volume),
             face,None,None,None,None,error,len(error))
         assert cpu,error.value.decode()
         try:
-            require(cpu,lib.pintle_transport_set_capillary_v1(cpu,C.byref(cap)),'cpuCapillary')
-            require(cpu,lib.pintle_transport_set_wale_v1(cpu,C.byref(wale)),'cpuWale')
+            require(cpu,lib.reactive_transport_set_capillary_v1(cpu,C.byref(cap)),'cpuCapillary')
+            require(cpu,lib.reactive_transport_set_wale_v1(cpu,C.byref(wale)),'cpuWale')
             scalars=Scalars(1,C.sizeof(Scalars),.9,.7)
-            require(cpu,lib.pintle_transport_set_wale_scalars_v1(cpu,C.byref(scalars)),
+            require(cpu,lib.reactive_transport_set_wale_scalars_v1(cpu,C.byref(scalars)),
                 'cpuScalars')
-            reject(cpu,lib.pintle_transport_set_wale_pr_model_v1(cpu,C.byref(model)),
+            reject(cpu,lib.reactive_transport_set_wale_pr_model_v1(cpu,C.byref(model)),
                 'cpuPropertyFallbackRejected')
         finally:
-            lib.pintle_transport_destroy(cpu)
+            lib.reactive_transport_destroy(cpu)
         assert scratch['heatSpecies']-scratch['heatOnly']==2*ns*8
         report={'passed':True,'checks':checks,'scratchBytes':scratch,
                 'conditionalSpeciesScratch':True,

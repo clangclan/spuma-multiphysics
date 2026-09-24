@@ -140,7 +140,7 @@ def main():
     result=dict(scope='Transient GPU benchmark' if a.end_time is not None else 'Initial accepted GPU step',requestedEndTime=a.end_time,cases=[],
         gpuSamplingScope='Total device occupancy sampled every 0.5 s; not process-exclusive or a guaranteed peak',
         binaries={name:common.sha256(common.PROJECT_ROOT/name) for name in
-            ('bin/ReactiveFoam','lib/libpintleReactiveTransport.so','lib/libpintleReactiveBackend.so')})
+            ('bin/ReactiveFoam','lib/libreactiveTransport.so','lib/libreactiveBackend.so')})
     with common.RUN_LOCK.open('a+') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         for case in a.cases:

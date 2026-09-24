@@ -139,7 +139,7 @@ def prepare(output,configuration,spacing_mm=.25,temperature=293.15,turbulence='W
         physical='closure=HEM;chemistry=0;viscosity=0;conductivity=0;commonD=0'
         if turbulence=='WALE':physical+=f';turbulence=WALE-stress-v1;Cw={.325:.17g};filter=cubeRootVolume;sgsScalarClosure=none;sgsK=none'
         numerical=f'chemicalRtol={1e-8:.17g};chemicalAtol={1e-14:.17g};waveFactor={1.1:.17g};transportBackend=cuda;transportGasProperties=auto'
-        b.check(b.lib.pintle_rt_set_case_context(b.handle,physical.encode(),numerical.encode()))
+        b.check(b.lib.reactive_rt_set_case_context(b.handle,physical.encode(),numerical.encode()))
         for name,back in BACK_PRESSURES.items():
             case=out/name;system(case)
             # Ordinary copies keep each case independent when opened/modified by the user.

@@ -43,8 +43,9 @@ def stats(values):
         p90=float(np.quantile(a,.9)),p99=float(np.quantile(a,.99)),max=float(a.max()),sum=float(a.sum()))
 
 def short(name):
+    from legacy_artifacts import strip_transport_namespace
     name=name.replace('<unnamed>::','')
-    if 'execute<' in name:return name.split('execute<',1)[1].split('>',1)[0].replace('PintleTransport::','')
+    if 'execute<' in name:return strip_transport_namespace(name.split('execute<',1)[1].split('>',1)[0])
     if 'reduceGroups<' in name:return 'reduce '+name.split('reduceGroups<',1)[1].split('>',1)[0].replace('(anonymous namespace)::','')
     name=name.replace('(anonymous namespace)::','')
     return name.split('(',1)[0].removeprefix('void ')

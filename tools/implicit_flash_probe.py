@@ -32,7 +32,7 @@ def main():
     temperature=read_internal_field(case/'0'/'T').values.ravel()
     colors=np.load(case/'initial-color.npz')['color'].ravel()
     with RealFluidBackend(Path(reference['configuration'])) as backend:
-        export=backend.lib.pintle_rt_export_gpu_hem_v1
+        export=backend.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes=[C.c_void_p,C.c_void_p,C.c_size_t,C.POINTER(C.c_size_t)]
         export.restype=C.c_int
         y=np.column_stack([read_internal_field(case/'0'/f'Y{k}').values.ravel() for k in range(backend.ns)])
@@ -40,14 +40,14 @@ def main():
         for i in range(n**3):
             q[i],energy[i],state[i]=backend.make_state(temperature[i],pressure[i],y[i],(1,0))
         model,size=export_model(backend);gpu=gpu_bind(args.cuda_library)
-        gpu.pintle_gpu_hem_run_v2.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(C.c_double),
+        gpu.reactive_gpu_hem_run_v2.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(C.c_double),
             C.POINTER(Capillary),C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),
             C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
-        gpu.pintle_gpu_hem_run_v2.restype=C.c_int
-        gpu.pintle_gpu_hem_initialize_tp_v1.argtypes=gpu.pintle_gpu_hem_run_v2.argtypes
-        gpu.pintle_gpu_hem_initialize_tp_v1.restype=C.c_int
+        gpu.reactive_gpu_hem_run_v2.restype=C.c_int
+        gpu.reactive_gpu_hem_initialize_tp_v1.argtypes=gpu.reactive_gpu_hem_run_v2.argtypes
+        gpu.reactive_gpu_hem_initialize_tp_v1.restype=C.c_int
         error=C.create_string_buffer(4096)
-        handle=gpu.pintle_gpu_hem_create_v1(model,size,n**3,error,len(error))
+        handle=gpu.reactive_gpu_hem_create_v1(model,size,n**3,error,len(error))
         if not handle:raise RuntimeError(error.value.decode())
         cap=(Capillary*(n**3))(*(Capillary(colors[i],sigma*curvature[i],0) for i in range(n**3)))
         success=(C.c_int*(n**3))();profile=HemProfile(1,C.sizeof(HemProfile))
@@ -56,16 +56,16 @@ def main():
                 # One invalid cell must leave every public output unchanged.
                 bad=(State*(n**3)).from_buffer_copy(state);bad[n**3//2].T=-1
                 bad_before=bytes(bad);bad_q=q.copy();bad_energy=energy.copy()
-                code=gpu.pintle_gpu_hem_initialize_tp_v1(handle,ptr(bad_q),ptr(bad_energy),cap,n**3,bad,
+                code=gpu.reactive_gpu_hem_initialize_tp_v1(handle,ptr(bad_q),ptr(bad_energy),cap,n**3,bad,
                     success,C.byref(profile),error,len(error))
                 assert code==0 and not all(success)
                 assert bytes(bad)==bad_before and np.array_equal(bad_q,q) and np.array_equal(bad_energy,energy)
-                code=gpu.pintle_gpu_hem_initialize_tp_v1(handle,ptr(q),ptr(energy),cap,n**3,state,success,
+                code=gpu.reactive_gpu_hem_initialize_tp_v1(handle,ptr(q),ptr(energy),cap,n**3,state,success,
                     C.byref(profile),error,len(error))
                 if code or not all(success):raise RuntimeError(f'Curved TP initialization: {error.value.decode()}')
                 initial_color=np.array([s.alphaLiquid[0]/(s.alphaGas+s.alphaLiquid[0]) for s in state])
                 assert np.max(abs(initial_color-colors))<1e-10
-            code=gpu.pintle_gpu_hem_run_v2(handle,ptr(q),ptr(energy),cap,n**3,state,success,C.byref(profile),error,len(error))
+            code=gpu.reactive_gpu_hem_run_v2(handle,ptr(q),ptr(energy),cap,n**3,state,success,C.byref(profile),error,len(error))
             if code or not all(success):raise RuntimeError(f'Curved recovery: {error.value.decode()}')
             color=np.empty(n**3);p_after=np.empty(n**3)
             for i,s in enumerate(state):
@@ -73,7 +73,7 @@ def main():
                 vg=s.gasMass/s.rhoGas if s.gasMass>0 else 0
                 color[i]=vl/(vl+vg);p_after[i]=s.p
         finally:
-            gpu.pintle_gpu_hem_destroy_v1(handle)
+            gpu.reactive_gpu_hem_destroy_v1(handle)
     result={'maxColorChange':float(abs(color-colors).max()),
             'maxPressureChangePa':float(abs(p_after-pressure).max()),
             'rmsPressureChangePa':float(np.sqrt(np.mean((p_after-pressure)**2))),

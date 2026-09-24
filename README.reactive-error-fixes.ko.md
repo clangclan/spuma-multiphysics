@@ -30,7 +30,7 @@
 | 수정 후 동일 검사 | 컴파일 성공; [결과](results/reactive-const-after-20260912.json) |
 | 전체 `Flow` 본문·SPUMA 헤더·링크 | 미검증 |
 
-이전 백엔드 검사와 CUDA 수송 라이브러리 컴파일은 `pintleReactiveFoam.C`를 컴파일하지 않았다. 따라서 그 검사들의 통과로 이번 오류를 발견할 수 없었다. 새 최소 검사도 **전체 솔버 빌드를 대체하지 않는다.**
+이전 백엔드 검사와 CUDA 수송 라이브러리 컴파일은 솔버 본체를 컴파일하지 않았다. 따라서 그 검사들의 통과로 이번 오류를 발견할 수 없었다. 새 최소 검사도 **전체 솔버 빌드를 대체하지 않는다.**
 
 ## 보강한 수치 검사
 
@@ -71,7 +71,7 @@
 ```bash
 python3 tools/validate_reactive_flow_contract.py \
   --output results/local-flow-contract.json
-PINTLE_REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh
+REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh
 research/reactive-env/bin/python tools/validate_reactive_review.py \
   --thermo-dir research/reactive-thermo --backend cpu \
   --output results/local-error-review.json

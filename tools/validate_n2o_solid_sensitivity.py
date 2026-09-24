@@ -46,13 +46,13 @@ def header_calculus(configuration: Path) -> dict:
     cp = [float(x) / molecular_weight for x in raw["cp-molar-table"]]
     array_t = ",".join(f"{x:.17g}" for x in temperatures)
     array_cp = ",".join(f"{x:.17g}" for x in cp)
-    source = f'''#include "pintleSolidThermo.h"
+    source = f'''#include "reactiveSolidThermo.h"
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 int main() {{
-  PintleSolidThermo::Model m; m.enabled=1; m.n={len(temperatures)};
+  ReactiveSolidThermo::Model m; m.enabled=1; m.n={len(temperatures)};
   m.Tmin={temperatures[0]:.17g}; m.Tmax={temperatures[-1]:.17g};
   m.Tref={float(raw['reference-temperature']):.17g};
   m.pref={float(raw['reference-pressure']):.17g}; m.pmax={float(raw['maximum-pressure']):.17g};
@@ -62,18 +62,18 @@ int main() {{
   double maxH=0,maxS=0,maxCpJump=0;
   for(int i=0;i<m.n;++i){{
     const double T=m.T[i], span=std::min(i?T-m.T[i-1]:1.0,i+1<m.n?m.T[i+1]-T:1.0);
-    const double d=1e-5*span; PintleSolidThermo::State a,b,c;
-    if(!PintleSolidThermo::evaluate(m,T,m.pref,c))return 2;
+    const double d=1e-5*span; ReactiveSolidThermo::State a,b,c;
+    if(!ReactiveSolidThermo::evaluate(m,T,m.pref,c))return 2;
     double dh,ds;
-    if(i==0){{PintleSolidThermo::evaluate(m,T+d,m.pref,b);dh=(b.h-c.h)/d;ds=(b.s-c.s)/d;}}
-    else if(i==m.n-1){{PintleSolidThermo::evaluate(m,T-d,m.pref,a);dh=(c.h-a.h)/d;ds=(c.s-a.s)/d;}}
-    else{{PintleSolidThermo::evaluate(m,T-d,m.pref,a);PintleSolidThermo::evaluate(m,T+d,m.pref,b);dh=(b.h-a.h)/(2*d);ds=(b.s-a.s)/(2*d);}}
+    if(i==0){{ReactiveSolidThermo::evaluate(m,T+d,m.pref,b);dh=(b.h-c.h)/d;ds=(b.s-c.s)/d;}}
+    else if(i==m.n-1){{ReactiveSolidThermo::evaluate(m,T-d,m.pref,a);dh=(c.h-a.h)/d;ds=(c.s-a.s)/d;}}
+    else{{ReactiveSolidThermo::evaluate(m,T-d,m.pref,a);ReactiveSolidThermo::evaluate(m,T+d,m.pref,b);dh=(b.h-a.h)/(2*d);ds=(b.s-a.s)/(2*d);}}
     maxH=std::max(maxH,std::fabs(dh/c.cp-1));maxS=std::max(maxS,std::fabs(ds/(c.cp/T)-1));
-    if(i&&i+1<m.n){{PintleSolidThermo::State l,r;PintleSolidThermo::evaluate(m,T-d,m.pref,l);PintleSolidThermo::evaluate(m,T+d,m.pref,r);maxCpJump=std::max(maxCpJump,std::fabs(r.cp-l.cp)/c.cp);}}
+    if(i&&i+1<m.n){{ReactiveSolidThermo::State l,r;ReactiveSolidThermo::evaluate(m,T-d,m.pref,l);ReactiveSolidThermo::evaluate(m,T+d,m.pref,r);maxCpJump=std::max(maxCpJump,std::fabs(r.cp-l.cp)/c.cp);}}
   }}
   std::cout<<std::setprecision(17)<<maxH<<" "<<maxS<<" "<<maxCpJump<<"\\n";
 }}'''
-    with tempfile.TemporaryDirectory(prefix="pintle-solid-calculus-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="reactive-solid-calculus-") as temporary:
         temporary = Path(temporary)
         cpp, binary = temporary / "check.cpp", temporary / "check"
         cpp.write_text(source)
@@ -96,7 +96,7 @@ def state_record(volume: float, state) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--configuration", type=Path, default=DEFAULT_CONFIG)
-    parser.add_argument("--library", type=Path, default=ROOT / "lib/libpintleReactiveBackend.so")
+    parser.add_argument("--library", type=Path, default=ROOT / "lib/libreactiveBackend.so")
     parser.add_argument("--output-directory", type=Path,
                         default=ROOT / "logs/n2o-temperature-recovery-v1/density-sensitivity")
     parser.add_argument("--report", type=Path)

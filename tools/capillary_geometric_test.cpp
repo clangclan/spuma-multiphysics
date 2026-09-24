@@ -7,8 +7,8 @@
 #include <limits>
 
 namespace {
-namespace GC=PintleGeometricCapillary;
-namespace GO=PintleGeometricOracle;
+namespace GC=ReactiveGeometricCapillary;
+namespace GO=ReactiveGeometricOracle;
 
 bool close(double x,double y,double tolerance=1e-12) {
     return std::abs(x-y)<=tolerance*(1+std::max(std::abs(x),std::abs(y)));

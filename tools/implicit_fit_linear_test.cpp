@@ -3,7 +3,7 @@
 #include <random>
 #include <cassert>
 int main(int argc,char** argv) {
-    using namespace PintleImplicitFit;
+    using namespace ReactiveImplicitFit;
     const int backend=argc>1&&argv[1][0]=='g'?1:0;
     Runtime runtime(backend);const Grid grid{{5,6,7}};
     const size_t nc=grid.count(),na=grid.controls();

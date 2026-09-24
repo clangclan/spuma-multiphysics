@@ -117,4 +117,4 @@ maxThermoBatchMemoryMB 2097.152;
 
 자료: [집계 및 재현 안내](../results/benchmarks/hem-utilization-optimization-20260924/README.ko.md), [검증된 수치](../results/benchmarks/hem-utilization-optimization-20260924/summary.json).
 
-코드: [정확 키](../src/reactiveThermo/pintleClosurePool.inc), [솔버 옵션](../src/reactiveFoam/ReactiveFoam.C), [원자적 회복 풀](../src/reactiveThermo/pintleReactivePool.inc), [회귀 검증](../tools/validate_capillary_reuse.py), [실행 도구](../tools/benchmark_hem_optimization.py), [집계 도구](../tools/summarize_hem_optimization.py).
+코드: [정확 키](../src/reactiveThermo/reactiveClosurePool.inc), [솔버 옵션](../src/reactiveFoam/ReactiveFoam.C), [원자적 회복 풀](../src/reactiveThermo/reactivePool.inc), [회귀 검증](../tools/validate_capillary_reuse.py), [실행 도구](../tools/benchmark_hem_optimization.py), [집계 도구](../tools/summarize_hem_optimization.py).

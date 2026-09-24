@@ -23,9 +23,9 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     lib = load(args.library)
-    lib.pintle_transport_set_wale_v1.argtypes = [C.c_void_p, C.POINTER(Wale)]
-    lib.pintle_transport_wale_profile_v1.argtypes = [C.c_void_p, C.POINTER(WaleProfile)]
-    lib.pintle_transport_wale_primitives_v1.argtypes = [C.c_void_p, C.POINTER(Primitive), C.POINTER(State), C.POINTER(C.c_double)]
+    lib.reactive_transport_set_wale_v1.argtypes = [C.c_void_p, C.POINTER(Wale)]
+    lib.reactive_transport_wale_profile_v1.argtypes = [C.c_void_p, C.POINTER(WaleProfile)]
+    lib.reactive_transport_wale_primitives_v1.argtypes = [C.c_void_p, C.POINTER(Primitive), C.POINTER(State), C.POINTER(C.c_double)]
     n, dx, ns, Cw = 4, .01, 2, .325
     nc, nv = n**3, ns+4
     coords = np.array(list(np.ndindex(n, n, n)))
@@ -66,28 +66,28 @@ def main():
     face_array=(Face*len(faces))(*faces)
     results={}
     def check(status, handle):
-        if status:raise AssertionError(lib.pintle_transport_error(handle).decode())
+        if status:raise AssertionError(lib.reactive_transport_error(handle).decode())
     for label, coefficient in [('off', None), ('zero', 0.), ('wale', Cw)]:
         error=C.create_string_buffer(2048)
-        handle=lib.pintle_transport_create(int(args.backend=='cuda'), C.byref(cfg), ptr(volumes), face_array,
+        handle=lib.reactive_transport_create(int(args.backend=='cuda'), C.byref(cfg), ptr(volumes), face_array,
                                          None, None, None, None, error, len(error))
         assert handle, error.value.decode()
         try:
-            assert bool(lib.pintle_transport_is_cuda(handle)) == (args.backend=='cuda')
+            assert bool(lib.reactive_transport_is_cuda(handle)) == (args.backend=='cuda')
             if coefficient is not None:
                 invalid=Wale(1, C.sizeof(Wale), -1.)
-                assert lib.pintle_transport_set_wale_v1(handle, C.byref(invalid)) != 0
+                assert lib.reactive_transport_set_wale_v1(handle, C.byref(invalid)) != 0
                 options=Wale(1, C.sizeof(Wale), coefficient)
-                check(lib.pintle_transport_set_wale_v1(handle, C.byref(options)), handle)
-                assert lib.pintle_transport_set_wale_v1(handle, C.byref(options)) != 0
+                check(lib.reactive_transport_set_wale_v1(handle, C.byref(options)), handle)
+                assert lib.reactive_transport_set_wale_v1(handle, C.byref(options)) != 0
                 nut=np.full(nc, -1.)
-                check(lib.pintle_transport_wale_primitives_v1(handle, primitives, states, ptr(nut)), handle)
+                check(lib.reactive_transport_wale_primitives_v1(handle, primitives, states, ptr(nut)), handle)
                 np.testing.assert_allclose(nut, expected_nut if coefficient else 0., rtol=3e-13, atol=2e-15)
             else:nut=np.zeros(nc)
             rhs=np.empty_like(q);boundary=np.empty(nv)
-            check(lib.pintle_transport_rhs(handle, ptr(q), states, ptr(gy), ptr(gh), ptr(rhs), ptr(boundary)), handle)
+            check(lib.reactive_transport_rhs(handle, ptr(q), states, ptr(gy), ptr(gh), ptr(rhs), ptr(boundary)), handle)
             dt=C.c_double()
-            check(lib.pintle_transport_stable_step_primitives(handle, primitives, states, .23, .1, C.byref(dt)), handle)
+            check(lib.reactive_transport_stable_step_primitives(handle, primitives, states, .23, .1, C.byref(dt)), handle)
             denominator=np.zeros(nc)
             for f in faces:
                 l,r=f.owner,f.neighbour;normal=np.array(f.normal)
@@ -101,19 +101,19 @@ def main():
             np.testing.assert_allclose((rhs*volumes[:, None]).sum(axis=0)+boundary, 0, atol=2e-10)
             if coefficient is None:
                 options=Wale(1, C.sizeof(Wale), Cw)
-                assert lib.pintle_transport_set_wale_v1(handle, C.byref(options))!=0
+                assert lib.reactive_transport_set_wale_v1(handle, C.byref(options))!=0
             else:
                 # Explicit diagnostic recomputes, so scaling velocity changes nut.
                 changed=(Primitive*nc)(*[Primitive(rho[c],(C.c_double*3)(*(2*velocity[c]))) for c in range(nc)])
                 later=np.full(nc,-1.)
-                check(lib.pintle_transport_wale_primitives_v1(handle, changed, states, ptr(later)), handle)
+                check(lib.reactive_transport_wale_primitives_v1(handle, changed, states, ptr(later)), handle)
                 np.testing.assert_allclose(later, 2*nut, rtol=3e-13, atol=2e-15)
                 bad=(Primitive*nc).from_buffer_copy(bytes(changed));bad[3].u[0]=float('nan')
                 sentinel=np.full(nc,-17.)
-                assert lib.pintle_transport_wale_primitives_v1(handle,bad,states,ptr(sentinel))!=0
+                assert lib.reactive_transport_wale_primitives_v1(handle,bad,states,ptr(sentinel))!=0
                 assert np.all(sentinel==-17.)
                 profile=WaleProfile(1,C.sizeof(WaleProfile),0,0,0,0)
-                check(lib.pintle_transport_wale_profile_v1(handle,C.byref(profile)),handle)
+                check(lib.reactive_transport_wale_profile_v1(handle,C.byref(profile)),handle)
                 assert profile.gradientBuilds==4 and profile.viscosityBuilds==4
                 assert profile.cellsEvaluated==4*nc and profile.workspaceBytes==80*nc+4
                 if coefficient:
@@ -123,10 +123,10 @@ def main():
                     huge_states=(State*nc).from_buffer_copy(bytes(states))
                     for state in huge_states:state.rho*=1e100;state.gasMass*=1e100
                     rejected_rhs=np.full_like(q,-19.);rejected_boundary=np.full(nv,-23.)
-                    assert lib.pintle_transport_rhs(handle,ptr(huge),huge_states,ptr(gy),ptr(gh),ptr(rejected_rhs),ptr(rejected_boundary))!=0
+                    assert lib.reactive_transport_rhs(handle,ptr(huge),huge_states,ptr(gy),ptr(gh),ptr(rejected_rhs),ptr(rejected_boundary))!=0
                     assert np.all(rejected_rhs==-19.) and np.all(rejected_boundary==-23.)
             results[label]={'rhs':rhs,'dt':dt.value,'nut':nut}
-        finally:lib.pintle_transport_destroy(handle)
+        finally:lib.reactive_transport_destroy(handle)
     np.testing.assert_array_equal(results['zero']['rhs'],results['off']['rhs'])
     delta=results['wale']['rhs']-results['off']['rhs']
     np.testing.assert_allclose(delta,expected_delta,rtol=3e-9,atol=2e-6)

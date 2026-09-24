@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveTransport/pintleWale.h"
+#include "../src/reactiveTransport/reactiveWale.h"
 
 #include <algorithm>
 #include <array>
@@ -97,7 +97,7 @@ Matrix transpose(const Matrix& matrix)
 double evaluate(const Matrix& gradient, double delta = 0.37, double coefficient = 0.5)
 {
     double nut = -1.0;
-    require(PintleWale::eddyViscosity(gradient.data(), delta, coefficient, nut),
+    require(ReactiveWale::eddyViscosity(gradient.data(), delta, coefficient, nut),
         "valid input was rejected");
     require(nut >= 0.0 && std::isfinite(nut), "valid input did not produce finite non-negative nut");
     return nut;
@@ -111,8 +111,8 @@ void testFormulaAndCanonicalFlows()
     Matrix shear{};
     shear[1] = 3.0;
     require(evaluate(shear) == 0.0, "laminar simple shear must give exact zero");
-    PintleWale::NormalizedInvariants shearInvariants{};
-    require(PintleWale::normalizedInvariants(shear.data(), shearInvariants),
+    ReactiveWale::NormalizedInvariants shearInvariants{};
+    require(ReactiveWale::normalizedInvariants(shear.data(), shearInvariants),
         "simple-shear invariants failed");
     requireNear(shearInvariants.gradientScale, 3.0, 0.0, "simple-shear normalization scale");
     requireNear(shearInvariants.strainSquared, 0.5, 1e-15, "simple-shear S:S");
@@ -195,27 +195,27 @@ void testExtremeScalesAndDomain()
         "small-gradient/large-filter scaling lost a representable result");
 
     double nut = 0.0;
-    require(!PintleWale::eddyViscosity(huge.data(), std::ldexp(1.0, 200), 0.5, nut)
+    require(!ReactiveWale::eddyViscosity(huge.data(), std::ldexp(1.0, 200), 0.5, nut)
             && std::isnan(nut),
         "unrepresentable eddy viscosity must fail instead of clipping");
-    require(!PintleWale::eddyViscosity(base.data(), -1.0, 0.5, nut) && std::isnan(nut),
+    require(!ReactiveWale::eddyViscosity(base.data(), -1.0, 0.5, nut) && std::isnan(nut),
         "negative filter width must fail");
-    require(!PintleWale::eddyViscosity(base.data(), 1.0, -0.5, nut) && std::isnan(nut),
+    require(!ReactiveWale::eddyViscosity(base.data(), 1.0, -0.5, nut) && std::isnan(nut),
         "negative WALE coefficient must fail");
     Matrix invalid = base;
     invalid[4] = std::numeric_limits<double>::infinity();
-    require(!PintleWale::eddyViscosity(invalid.data(), 1.0, 0.5, nut) && std::isnan(nut),
+    require(!ReactiveWale::eddyViscosity(invalid.data(), 1.0, 0.5, nut) && std::isnan(nut),
         "nonfinite gradient must fail");
-    require(!PintleWale::eddyViscosity(nullptr, 1.0, 0.5, nut) && std::isnan(nut),
+    require(!ReactiveWale::eddyViscosity(nullptr, 1.0, 0.5, nut) && std::isnan(nut),
         "null gradient must fail");
 
     double delta = 0.0;
-    require(PintleWale::filterWidthFromCellVolume(8.0, delta), "valid volume rejected");
+    require(ReactiveWale::filterWidthFromCellVolume(8.0, delta), "valid volume rejected");
     requireNear(delta, 2.0, 1e-15, "cube-root-volume filter width");
-    require(PintleWale::filterWidthFromCellVolume(std::numeric_limits<double>::min(), delta)
+    require(ReactiveWale::filterWidthFromCellVolume(std::numeric_limits<double>::min(), delta)
             && delta > 0.0 && std::isfinite(delta),
         "small finite volume did not produce a finite filter width");
-    require(!PintleWale::filterWidthFromCellVolume(0.0, delta) && std::isnan(delta),
+    require(!ReactiveWale::filterWidthFromCellVolume(0.0, delta) && std::isnan(delta),
         "zero volume must fail");
 }
 

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Test-only analytic sphere oracle. No sphere parameters enter production code.
-#ifndef PINTLE_CAPILLARY_GEOMETRIC_ORACLE_H
-#define PINTLE_CAPILLARY_GEOMETRIC_ORACLE_H
+#ifndef REACTIVE_CAPILLARY_GEOMETRIC_ORACLE_H
+#define REACTIVE_CAPILLARY_GEOMETRIC_ORACLE_H
 
-#include "../src/reactiveInterface/pintleGeometricCapillary.h"
+#include "../src/reactiveInterface/reactiveGeometricCapillary.h"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -13,8 +13,8 @@
 #include <limits>
 #include <vector>
 
-namespace PintleGeometricOracle {
-namespace GC=PintleGeometricCapillary;
+namespace ReactiveGeometricOracle {
+namespace GC=ReactiveGeometricCapillary;
 constexpr double boxLength=.004,sigma=.01,basePressure=3e6;
 constexpr double pi=3.1415926535897932384626433832795;
 
@@ -223,5 +223,5 @@ inline std::vector<GC::Flux> evaluateCPU(const Case& test) {
     }
     return out;
 }
-} // namespace PintleGeometricOracle
+} // namespace ReactiveGeometricOracle
 #endif

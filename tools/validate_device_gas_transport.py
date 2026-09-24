@@ -28,7 +28,7 @@ def require(ok, message):
 
 
 def load(root, library=None):
-    lib = tr.load(library or root / "lib/libpintleReactiveTransport.so")
+    lib = tr.load(library or root / "lib/libreactiveTransport.so")
     v, d, s, part = C.c_void_p, C.POINTER(C.c_double), C.POINTER(tr.State), C.POINTER(GasPartition)
     signatures = {
         "device_profile": ([v, C.POINTER(DeviceProfile)], C.c_int),
@@ -39,13 +39,13 @@ def load(root, library=None):
         "stage_resident_gas": ([v, s, part, C.c_double, C.c_int, C.c_uint64, C.c_uint64, d, d], C.c_int),
     }
     for name, (args, ret) in signatures.items():
-        f = getattr(lib, "pintle_transport_"+name); f.argtypes, f.restype = args, ret
+        f = getattr(lib, "reactive_transport_"+name); f.argtypes, f.restype = args, ret
     return lib
 
 
 def profile(lib, handle, cls=DeviceProfile):
     out = cls(); name = {DeviceProfile: "device_profile", tr.Profile: "profile", tr.Stats: "stats"}[cls]
-    require(getattr(lib, "pintle_transport_"+name)(handle, C.byref(out)) == 0, "Profile failed")
+    require(getattr(lib, "reactive_transport_"+name)(handle, C.byref(out)) == 0, "Profile failed")
     return {name: getattr(out, name) for name, _ in out._fields_}
 
 
@@ -93,20 +93,20 @@ class Fixture:
         if fixed:self.fs, _, self.fy, self.fh = arrays(b, self.fixed, states[:1])
         else:self.fs, self.fy, self.fh = (tr.State*0)(), None, None
         geometry = (tr.Face*len(self.faces))(*self.faces); error = C.create_string_buffer(8192)
-        self.handle = lib.pintle_transport_create(backend, C.byref(self.cfg), tr.ptr(self.volumes), geometry,
+        self.handle = lib.reactive_transport_create(backend, C.byref(self.cfg), tr.ptr(self.volumes), geometry,
             tr.ptr(self.fixed), self.fs, tr.ptr(self.fy), tr.ptr(self.fh), error, len(error))
         require(bool(self.handle), error.value.decode())
         try:
             self.records, self.regions = b.export_gas_thermo()
             self.liquids = (C.c_int64*b.nl)(*b.liquid_indices)
-            if install:self.check(lib.pintle_transport_set_gas_thermo(self.handle, self.records, b.ns, self.regions, len(self.regions), self.liquids, b.nl))
+            if install:self.check(lib.reactive_transport_set_gas_thermo(self.handle, self.records, b.ns, self.regions, len(self.regions), self.liquids, b.nl))
         except Exception:
-            lib.pintle_transport_destroy(self.handle); raise
+            lib.reactive_transport_destroy(self.handle); raise
 
     def check(self, status):
-        require(status == 0, self.lib.pintle_transport_error(self.handle).decode())
+        require(status == 0, self.lib.reactive_transport_error(self.handle).decode())
 
-    def close(self): self.lib.pintle_transport_destroy(self.handle)
+    def close(self): self.lib.reactive_transport_destroy(self.handle)
 
     def reference(self, q, compact, y, h):
         return tr.reference(q, compact, self.faces, self.volumes, self.cfg, self.fixed, self.fs, y, h, self.fy, self.fh)
@@ -138,9 +138,9 @@ def properties(lib, backend, directory, configuration=None):
         try:
             compact=(tr.State*len(q))(*[tr.State(s.p,s.T,s.rho,s.cv,s.soundFrozen,s.gasMass,0) for s in states])
             partition=None;y=np.tile(Y,(len(q),1))
-            f.check(lib.pintle_transport_upload_conserved(f.handle, tr.ptr(q), 1))
+            f.check(lib.reactive_transport_upload_conserved(f.handle, tr.ptr(q), 1))
             gy, gh = np.empty_like(y), np.empty_like(y)
-            f.check(lib.pintle_transport_gas_properties_resident(f.handle, compact, partition, tr.ptr(gy), tr.ptr(gh)))
+            f.check(lib.reactive_transport_gas_properties_resident(f.handle, compact, partition, tr.ptr(gy), tr.ptr(gh)))
             error = float(np.max(np.abs(gh-expected)/np.maximum(1, np.abs(expected))))
             require(error < 2e-11 and np.max(np.abs(gy-y)) < 2e-15, "Generated NASA7/NASA9/Y differ from Cantera")
             # Export includes coefficient ordering, molecular weights and species ordering.
@@ -178,7 +178,7 @@ def operators(lib, backend, directory, kind):
             compact, partition, y, h = arrays(b,q,states)
             expected, boundary, _ = f.reference(q,compact,y,h)
             rhs, br = np.empty_like(q), np.empty(q.shape[1])
-            f.check(lib.pintle_transport_rhs_gas(f.handle,tr.ptr(q),compact,partition,tr.ptr(rhs),tr.ptr(br)))
+            f.check(lib.reactive_transport_rhs_gas(f.handle,tr.ptr(q),compact,partition,tr.ptr(rhs),tr.ptr(br)))
             error = float(np.max(np.abs(rhs-expected)/np.maximum(1,np.max(np.abs(expected),axis=0))))
             budget = np.maximum(1,(np.abs(expected)*f.volumes[:,None]).sum(axis=0))
             boundary_error = float(np.max(np.abs(br-boundary)/budget))
@@ -199,21 +199,21 @@ def resident(lib, backend, directory):
             try:
                 compact,partition,y,h=arrays(b,q,states); before=profile(lib,f.handle,tr.Profile); device=profile(lib,f.handle)
                 step=C.c_double();dt=1e-9
-                for _ in range(2): f.check(lib.pintle_transport_stable_step_primitives(f.handle,tr.primitives(q,compact,b.ns),compact,.23,.1,C.byref(step)))
-                f.check(lib.pintle_transport_upload_conserved(f.handle,tr.ptr(q),1))
+                for _ in range(2): f.check(lib.reactive_transport_stable_step_primitives(f.handle,tr.primitives(q,compact,b.ns),compact,.23,.1,C.byref(step)))
+                f.check(lib.reactive_transport_upload_conserved(f.handle,tr.ptr(q),1))
                 errors=[]
                 for stage in (0,1):
                     rhs,boundary,_=f.reference(q,compact,y,h)
                     expected=q+dt*rhs if stage==0 else .5*initial+.5*(q+dt*rhs)
                     br=np.empty(q.shape[1])
-                    f.check(lib.pintle_transport_stage_resident_gas(f.handle,compact,partition,dt,stage,1+stage,2+stage,tr.ptr(q),tr.ptr(br)))
+                    f.check(lib.reactive_transport_stage_resident_gas(f.handle,compact,partition,dt,stage,1+stage,2+stage,tr.ptr(q),tr.ptr(br)))
                     error=float(np.max(np.abs(q-expected)/np.maximum(1,np.abs(expected))))
                     require(error<3e-12,"Resident RK state differs from independent operator")
                     errors.append(error)
                     if stage==0:
                         states=[b.recover(q[c,:b.ns],q[c,b.ns+3]-.5*np.sum(q[c,b.ns:b.ns+3]**2)/q[c,:b.ns].sum(),s) for c,s in enumerate(states)]
                         compact,partition,y,h=arrays(b,q,states)
-                        f.check(lib.pintle_transport_stable_step_primitives(f.handle,tr.primitives(q,compact,b.ns),compact,.23,.1,C.byref(step)))
+                        f.check(lib.reactive_transport_stable_step_primitives(f.handle,tr.primitives(q,compact,b.ns),compact,.23,.1,C.byref(step)))
                 after=profile(lib,f.handle,tr.Profile); dev=profile(lib,f.handle)
                 delta={k:after[k]-before[k] for k in after}; dd={k:dev[k]-device[k] for k in dev}
                 require(delta["conservedUploads"]==1 and delta["conservedUploadBytes"]==initial.nbytes
@@ -223,11 +223,11 @@ def resident(lib, backend, directory):
                 # Invalid versions or phase data must leave caller outputs intact;
                 # a fresh upload then starts a valid stage 0 after rollback.
                 saved=q.copy();br.fill(123)
-                require(lib.pintle_transport_stage_resident_gas(f.handle,compact,partition,dt,1,2,4,tr.ptr(q),tr.ptr(br))!=0,"Stale version accepted")
+                require(lib.reactive_transport_stage_resident_gas(f.handle,compact,partition,dt,1,2,4,tr.ptr(q),tr.ptr(br))!=0,"Stale version accepted")
                 require(np.array_equal(q,saved) and np.all(br==123),"Rejected version changed outputs")
                 q=initial.copy();compact,partition,_,_=arrays(b,q,state_rows(b,kind,len(q))[1])
-                f.check(lib.pintle_transport_upload_conserved(f.handle,tr.ptr(q),4))
-                f.check(lib.pintle_transport_stage_resident_gas(f.handle,compact,partition,dt,0,4,5,tr.ptr(q),tr.ptr(br)))
+                f.check(lib.reactive_transport_upload_conserved(f.handle,tr.ptr(q),4))
+                f.check(lib.reactive_transport_stage_resident_gas(f.handle,compact,partition,dt,0,4,5,tr.ptr(q),tr.ptr(br)))
                 rows.append(dict(kind=kind,stage_scaled_errors=errors,profile_delta=delta,device_delta=dd,
                     stale_version_rejected=True,rollback_fresh_upload=True,face_workspace_bytes=dev["faceWorkspaceBytes"],faces=len(f.faces)))
             finally:f.close()
@@ -248,10 +248,10 @@ def rejection(lib, backend, directory, scratch):
                 elif case=="noncontiguous-regions":regions[1].minimumTemperature+=1
                 else:regions[0].coefficient[0]=np.nan
                 before=profile(lib,f.handle,tr.Stats)["allocatedBytes"]
-                require(lib.pintle_transport_set_gas_thermo(f.handle,records,b.ns,regions,len(regions),f.liquids,b.nl)!=0,"Invalid table accepted")
-                message=lib.pintle_transport_error(f.handle).decode()
+                require(lib.reactive_transport_set_gas_thermo(f.handle,records,b.ns,regions,len(regions),f.liquids,b.nl)!=0,"Invalid table accepted")
+                message=lib.reactive_transport_error(f.handle).decode()
                 require(profile(lib,f.handle,tr.Stats)["allocatedBytes"]==before,"Invalid table allocated memory")
-                f.check(lib.pintle_transport_set_gas_thermo(f.handle,f.records,b.ns,f.regions,len(f.regions),f.liquids,b.nl))
+                f.check(lib.reactive_transport_set_gas_thermo(f.handle,f.records,b.ns,f.regions,len(f.regions),f.liquids,b.nl))
                 results.append(dict(case=case,error=message))
             finally:f.close()
     with Backend(directory/"reactive-dilute-config.yaml") as b:
@@ -264,14 +264,14 @@ def rejection(lib, backend, directory, scratch):
                 elif case=="negative-species":q[0,0]=-1
                 elif case=="gas-mass-mismatch":compact[0].gasMass*=1.01
                 else:compact[0].T=1e200
-                version=1+2*index;f.check(lib.pintle_transport_upload_conserved(f.handle,tr.ptr(q),version))
+                version=1+2*index;f.check(lib.reactive_transport_upload_conserved(f.handle,tr.ptr(q),version))
                 output=np.full_like(q,17);br=np.full(q.shape[1],19.)
-                status=lib.pintle_transport_stage_resident_gas(f.handle,compact,part,1e-9,0,version,version+1,tr.ptr(output),tr.ptr(br))
+                status=lib.reactive_transport_stage_resident_gas(f.handle,compact,part,1e-9,0,version,version+1,tr.ptr(output),tr.ptr(br))
                 require(status!=0 and np.all(output==17) and np.all(br==19),"Invalid gas input escaped or changed outputs")
-                message=lib.pintle_transport_error(f.handle).decode();results.append(dict(case=case,error=message))
+                message=lib.reactive_transport_error(f.handle).decode();results.append(dict(case=case,error=message))
             compact,part,_,_=arrays(b,initial,states)
-            f.check(lib.pintle_transport_upload_conserved(f.handle,tr.ptr(initial),20))
-            f.check(lib.pintle_transport_stage_resident_gas(f.handle,compact,part,1e-9,0,20,21,tr.ptr(output),tr.ptr(br)))
+            f.check(lib.reactive_transport_upload_conserved(f.handle,tr.ptr(initial),20))
+            f.check(lib.reactive_transport_stage_resident_gas(f.handle,compact,part,1e-9,0,20,21,tr.ptr(output),tr.ptr(br)))
         finally:f.close()
     # Unsupported thermodynamic representations leave the export buffer intact.
     template=yaml.safe_load((directory/"chemistry-config.yaml").read_text())
@@ -283,9 +283,9 @@ def rejection(lib, backend, directory, scratch):
         with Backend(path) as b:
             records=(GasThermoSpecies*b.ns)();regions=(GasThermoRegion*4)();count=C.c_size_t(77)
             C.memset(C.addressof(records),0x5A,C.sizeof(records));before=bytes(records)
-            status=b.lib.pintle_rt_export_gas_thermo(b.handle,records,b.ns,regions,len(regions),C.byref(count))
+            status=b.lib.reactive_rt_export_gas_thermo(b.handle,records,b.ns,regions,len(regions),C.byref(count))
             require(status!=0 and bytes(records)==before and count.value==77,"Unsupported export was not atomic")
-            results.append(dict(case=path.name,error=b.lib.pintle_rt_error(b.handle).decode()))
+            results.append(dict(case=path.name,error=b.lib.reactive_rt_error(b.handle).decode()))
     return dict(rejections=results,next_source_recovered=True)
 
 
@@ -297,7 +297,7 @@ def main():
     a=parser.parse_args();root=Path(__file__).resolve().parents[1];directory=a.thermo_dir.resolve()
     if a.output.exists():raise SystemExit("Refusing to overwrite evidence")
     scratch=directory/"device-gas-inputs"/a.output.stem;scratch.mkdir(parents=True,exist_ok=False)
-    library=(a.transport_library or root/"lib/libpintleReactiveTransport.so").resolve()
+    library=(a.transport_library or root/"lib/libreactiveTransport.so").resolve()
     lib=load(root,library);backend=int(a.backend=="cuda")
     checks=[("NASA7-NASA9-Cantera",lambda:properties(lib,backend,directory))]
     checks += [("NASA9-inverse-log-terms",lambda:nasa9_terms(lib,backend,directory,scratch))]
@@ -309,7 +309,7 @@ def main():
         checks=[(name,fn) for name,fn in checks if name in a.checks]
     report=dict(baseline="69bd3f0e4a81f89c6ca083f9ea69acd6849111fd",backend=a.backend,cantera=ct.__version__,tests=[],
         selected_checks=[name for name,_ in checks],validator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        libraries={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (root/"lib/libpintleReactiveBackend.so",library)})
+        libraries={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (root/"lib/libreactiveBackend.so",library)})
     a.output.parent.mkdir(parents=True,exist_ok=True)
     for name,fn in checks:
         try:row=dict(name=name,passed=True,**fn())

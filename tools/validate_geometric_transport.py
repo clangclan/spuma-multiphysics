@@ -60,7 +60,7 @@ def bind(lib):
         'download_conserved':([v,Token,d],C.c_int),
     }
     for name,(args,ret) in signatures.items():
-        fn=getattr(lib,'pintle_transport_'+name);fn.argtypes=args;fn.restype=ret
+        fn=getattr(lib,'reactive_transport_'+name);fn.argtypes=args;fn.restype=ret
 
 
 def export_case(exe,n,pressure_factor):
@@ -179,12 +179,12 @@ def run_one(lib,backend,cell,face,h,sigma):
     cfg,mesh,gcells,gfaces,states,q,color,volumes=make_case(cell,face,h,sigma)
     nv=cfg.variables;nc=cfg.cells
     error=C.create_string_buffer(2048)
-    handle=lib.pintle_transport_create(backend,C.byref(cfg),ptr(volumes),mesh,
+    handle=lib.reactive_transport_create(backend,C.byref(cfg),ptr(volumes),mesh,
                                        None,None,None,None,error,len(error))
     assert handle,error.value.decode()
     checks=[]
     try:
-        assert lib.pintle_transport_is_cuda(handle)==backend
+        assert lib.reactive_transport_is_cuda(handle)==backend
         opts=Options(1,C.sizeof(Options),sigma,0)
         rhs=np.full((nc,nv),-7.125,dtype=np.float64)
         boundary=np.full(nv,-8.125,dtype=np.float64)
@@ -193,7 +193,7 @@ def run_one(lib,backend,cell,face,h,sigma):
 
         def invoke(o=opts,qq=q,cc=color,cg=gcells,fg=gfaces,ss=states,
                    output=rhs,bout=boundary,res=residual):
-            return lib.pintle_transport_geometric_diagnostic_v1(handle,
+            return lib.reactive_transport_geometric_diagnostic_v1(handle,
                 C.byref(o) if o is not None else None,ptr(qq) if qq is not None else None,
                 ss,ptr(cc) if cc is not None else None,cg,fg,
                 ptr(output) if output is not None else None,
@@ -201,7 +201,7 @@ def run_one(lib,backend,cell,face,h,sigma):
 
         def accepted(label):
             result=invoke()
-            assert result==0,(label,lib.pintle_transport_error(handle).decode())
+            assert result==0,(label,lib.reactive_transport_error(handle).decode())
             checks.append(label)
 
         def rejected(label,**kwargs):
@@ -275,16 +275,16 @@ def run_one(lib,backend,cell,face,h,sigma):
 
         # Inside an attempt, the rejection must preserve both public outputs
         # and an already uploaded resident conserved state.
-        assert lib.pintle_transport_begin_attempt(handle,b'',1)==0
-        assert lib.pintle_transport_upload_conserved(handle,ptr(q),1)==0
+        assert lib.reactive_transport_begin_attempt(handle,b'',1)==0
+        assert lib.reactive_transport_upload_conserved(handle,ptr(q),1)==0
         before=np.empty_like(q);after=np.empty_like(q)
         token=Token(1,0,1)
-        assert lib.pintle_transport_download_conserved(handle,token,ptr(before))==0
+        assert lib.reactive_transport_download_conserved(handle,token,ptr(before))==0
         rejected('openAttemptRejected')
-        assert lib.pintle_transport_download_conserved(handle,token,ptr(after))==0
+        assert lib.reactive_transport_download_conserved(handle,token,ptr(after))==0
         assert np.array_equal(before,after)
         checks.append('residentUnchanged')
-        assert lib.pintle_transport_end_attempt(handle,1,0)==0
+        assert lib.reactive_transport_end_attempt(handle,1,0)==0
         accepted('retryAfterRollback')
         assert np.array_equal(rhs,baseline)
         checks.append('rollbackParity')
@@ -309,7 +309,7 @@ def run_one(lib,backend,cell,face,h,sigma):
         status=invoke(qq=moving_q,cg=moving_cells,fg=moving_faces,
                       ss=moving_states,output=moving_rhs,bout=moving_boundary,
                       res=moving_residual)
-        assert status==0,lib.pintle_transport_error(handle).decode()
+        assert status==0,lib.reactive_transport_error(handle).decode()
         reference=reference_rhs(moving_q,moving_states,color,
                                 np.array([[x.liquidVolume,x.interfaceArea] for x in moving_cells]),
                                 face,moving_faces,volumes[0],sigma,cfg.waveFactor)
@@ -324,14 +324,14 @@ def run_one(lib,backend,cell,face,h,sigma):
         checks.append('movingPressureWaveBulkSurfaceEnergyParity')
 
         # A null option after resident upload must not erase the token.
-        assert lib.pintle_transport_begin_attempt(handle,b'',2)==0
-        assert lib.pintle_transport_upload_conserved(handle,ptr(q),2)==0
+        assert lib.reactive_transport_begin_attempt(handle,b'',2)==0
+        assert lib.reactive_transport_upload_conserved(handle,ptr(q),2)==0
         token2=Token(2,0,2)
-        assert lib.pintle_transport_download_conserved(handle,token2,ptr(before))==0
+        assert lib.reactive_transport_download_conserved(handle,token2,ptr(before))==0
         rejected('nullOptionsAfterResidentUpload',o=None)
-        assert lib.pintle_transport_download_conserved(handle,token2,ptr(after))==0
+        assert lib.reactive_transport_download_conserved(handle,token2,ptr(after))==0
         assert np.array_equal(before,after)
-        assert lib.pintle_transport_end_attempt(handle,2,0)==0
+        assert lib.reactive_transport_end_attempt(handle,2,0)==0
         checks.append('nullFailureRetainsResidentToken')
 
         maximum=float(np.max(np.abs(observed)))
@@ -344,7 +344,7 @@ def run_one(lib,backend,cell,face,h,sigma):
                 'movingMaxAssemblyError':float(np.max(difference)),
                 'rhs':baseline}
     finally:
-        lib.pintle_transport_destroy(handle)
+        lib.reactive_transport_destroy(handle)
 
 
 def main():
@@ -382,10 +382,10 @@ def main():
         artifacts=[args.library.resolve(),root/'tools/validate_geometric_transport.py',
                    root/'tools/geometric_oracle_export.cpp',
                    root/'tools/capillary_geometric_oracle.h',
-                   root/'src/reactiveInterface/pintleGeometricCapillary.h',
-                   root/'src/reactiveTransport/pintleGeometricTransport.h',
-                   root/'src/reactiveTransport/pintleReactiveTransport.cpp',
-                   root/'src/reactiveTransport/pintleTransportKernels.h']
+                   root/'src/reactiveInterface/reactiveGeometricCapillary.h',
+                   root/'src/reactiveTransport/reactiveGeometricTransport.h',
+                   root/'src/reactiveTransport/reactiveTransport.cpp',
+                   root/'src/reactiveTransport/reactiveTransportKernels.h']
         results['sha256']={str(path.relative_to(root) if path.is_relative_to(root) else path):
                            hashlib.sha256(path.read_bytes()).hexdigest() for path in artifacts}
         args.output.parent.mkdir(parents=True,exist_ok=True)

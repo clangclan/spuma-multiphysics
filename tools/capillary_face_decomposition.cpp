@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Zero-time production faceFlux decomposition on sampled periodic 3D spheres.
 // This diagnoses a spatial balance defect; it does not advance the solver.
-#include "../src/reactiveInterface/pintleUnstructuredInterface.h"
+#include "../src/reactiveInterface/reactiveUnstructuredInterface.h"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -63,18 +63,18 @@ double sampledColor(int n,int i,int j,int k,int samples) {
     }
     return double(inside)/(samples*samples*samples);
 }
-Summary evaluate(const PintleUnstructuredInterface::View& geometry,const std::vector<PintleTransportFace>& faces,
+Summary evaluate(const ReactiveUnstructuredInterface::View& geometry,const std::vector<ReactiveTransportFace>& faces,
                  const std::vector<double>& color,const std::vector<double>& area,
                  int n,bool exactCurvature) {
     const double h=length/n,volume=h*h*h,analyticCurvature=2/radius;
     std::vector<Rates> rates(color.size());Summary summary{};
     for(std::size_t fi=0;fi<faces.size();++fi) {
         const auto& f=faces[fi];
-        PintleBalancedCapillary::Face cf{};
-        assert(PintleUnstructuredInterface::faceGeometry(fi,geometry,cf));
+        ReactiveBalancedCapillary::Face cf{};
+        assert(ReactiveUnstructuredInterface::faceGeometry(fi,geometry,cf));
         if(exactCurvature)cf.curvature=analyticCurvature;
         const auto state=[&](std::size_t cell) {
-            PintleBalancedCapillary::State s{};
+            ReactiveBalancedCapillary::State s{};
             s.color=color[cell];s.rho=rhoGas+(rhoLiquid-rhoGas)*s.color;
             s.pressure=p0+sigma*analyticCurvature*s.color;
             s.sound=300+900*s.color;
@@ -82,8 +82,8 @@ Summary evaluate(const PintleUnstructuredInterface::View& geometry,const std::ve
             return s;
         };
         const auto left=state(std::size_t(f.owner)),right=state(std::size_t(f.neighbour));
-        PintleBalancedCapillary::Flux flux{};
-        assert(PintleBalancedCapillary::faceFlux(left,right,cf,flux));
+        ReactiveBalancedCapillary::Flux flux{};
+        assert(ReactiveBalancedCapillary::faceFlux(left,right,cf,flux));
         const double pressure[3]{flux.pressureMomentum*f.normal[0],
                                  flux.pressureMomentum*f.normal[1],
                                  flux.pressureMomentum*f.normal[2]};
@@ -130,12 +130,12 @@ void run(int n,int samples) {
     const double h=length/n,volume=h*h*h;
     std::vector<double> color(cells),inverse(cells,1/volume),gradient(3*cells),
         normal(3*cells),area(cells),curvature(cells);
-    std::vector<PintleTransportFace> faces;faces.reserve(3*cells);
+    std::vector<ReactiveTransportFace> faces;faces.reserve(3*cells);
     for(int k=0;k<n;++k)for(int j=0;j<n;++j)for(int i=0;i<n;++i) {
         const auto owner=index(n,i,j,k);
         color[owner]=sampledColor(n,i,j,k,samples);
         for(int d=0;d<3;++d) {
-            PintleTransportFace f{};f.owner=std::int64_t(owner);
+            ReactiveTransportFace f{};f.owner=std::int64_t(owner);
             f.neighbour=std::int64_t(index(n,i+(d==0),j+(d==1),k+(d==2)));
             f.normal[d]=1;f.area=h*h;f.distance=h;f.ownerWeight=.5;f.kind=0;
             faces.push_back(f);
@@ -150,14 +150,14 @@ void run(int n,int samples) {
         incidence[next[std::size_t(f.owner)]++]=-std::int64_t(fi)-1;
         incidence[next[std::size_t(f.neighbour)]++]=std::int64_t(fi)+1;
     }
-    PintleUnstructuredInterface::View geometry{};
+    ReactiveUnstructuredInterface::View geometry{};
     geometry.cells=cells;geometry.faces=faces.data();geometry.row=row.data();
     geometry.incidence=incidence.data();geometry.inverseVolume=inverse.data();
     geometry.color=color.data();geometry.gradient=gradient.data();geometry.normal=normal.data();
     geometry.areaDensity=area.data();geometry.curvature=curvature.data();
     geometry.sigma=sigma;geometry.geometryEpsilon=1e-10;
-    for(std::size_t c=0;c<cells;++c)assert(PintleUnstructuredInterface::gradientCell(c,geometry));
-    for(std::size_t c=0;c<cells;++c)assert(PintleUnstructuredInterface::curvatureCell(c,geometry));
+    for(std::size_t c=0;c<cells;++c)assert(ReactiveUnstructuredInterface::gradientCell(c,geometry));
+    for(std::size_t c=0;c<cells;++c)assert(ReactiveUnstructuredInterface::curvatureCell(c,geometry));
     GeometrySummary geometrySummary{};
     const double analyticCurvature=2/radius;
     const auto hasNormal=[&](std::size_t c) {

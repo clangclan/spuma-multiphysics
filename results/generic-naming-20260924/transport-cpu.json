@@ -1,0 +1,783 @@
+{
+  "passed": true,
+  "backend": "cpu",
+  "gpu_execution_verified": false,
+  "tests": [
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 1.957664212914237e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 4408,
+        "uploadedBytes": 11208,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 1.957426857573416e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5360,
+        "uploadedBytes": 14792,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.4377996038072087e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 4648,
+        "uploadedBytes": 11304,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.4376332020051822e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5600,
+        "uploadedBytes": 14888,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.4377996038072087e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 4648,
+        "uploadedBytes": 11304,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.4376332020051822e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5600,
+        "uploadedBytes": 14888,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.7182021800592003e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 4864,
+        "uploadedBytes": 11456,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 78,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.0383249362193287e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 448,
+        "conservedDownloadBytes": 896,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5880,
+        "uploadedBytes": 15104,
+        "downloadedBytes": 4144,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 413,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 2.50396484094861e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 23352,
+        "conservedDownloadBytes": 46704,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 102568,
+        "uploadedBytes": 217344,
+        "downloadedBytes": 213552,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 53,
+      "cells": 257,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 2.397428930424526e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 117192,
+        "conservedDownloadBytes": 234384,
+        "stateUploadBytes": 71960,
+        "primitiveUploadBytes": 24672,
+        "gasUploadBytes": 435872,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 796168,
+        "uploadedBytes": 3061392,
+        "downloadedBytes": 941232,
+        "kernelLaunches": 140,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 1,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 1.4589176761835546e-13,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 64,
+        "conservedDownloadBytes": 128,
+        "stateUploadBytes": 280,
+        "primitiveUploadBytes": 96,
+        "gasUploadBytes": 128,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 1416,
+        "uploadedBytes": 2432,
+        "downloadedBytes": 1072,
+        "kernelLaunches": 98,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 8,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": true,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 3.9785082237402526e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 784,
+        "conservedDownloadBytes": 1568,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5848,
+        "uploadedBytes": 14232,
+        "downloadedBytes": 7216,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 8,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": false,
+      "mechanical": true,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 3.9785082237402526e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 784,
+        "conservedDownloadBytes": 1568,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6088,
+        "uploadedBytes": 14328,
+        "downloadedBytes": 7216,
+        "kernelLaunches": 77,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 1,
+      "boundary_kind": 0,
+      "transport": false,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 0.0,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 64,
+        "conservedDownloadBytes": 128,
+        "stateUploadBytes": 280,
+        "primitiveUploadBytes": 96,
+        "gasUploadBytes": 0,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 760,
+        "uploadedBytes": 1608,
+        "downloadedBytes": 1072,
+        "kernelLaunches": 71,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 255,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": true,
+      "boundary_faces": 2,
+      "scaled_error": 7.045608448828444e-16,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 16320,
+        "conservedDownloadBytes": 32640,
+        "stateUploadBytes": 71400,
+        "primitiveUploadBytes": 24480,
+        "gasUploadBytes": 32640,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 251112,
+        "uploadedBytes": 563168,
+        "downloadedBytes": 131120,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 256,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": true,
+      "boundary_faces": 2,
+      "scaled_error": 7.679926912823217e-16,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 16384,
+        "conservedDownloadBytes": 32768,
+        "stateUploadBytes": 71680,
+        "primitiveUploadBytes": 24576,
+        "gasUploadBytes": 32768,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 252096,
+        "uploadedBytes": 565376,
+        "downloadedBytes": 131632,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 257,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": true,
+      "boundary_faces": 4099,
+      "scaled_error": 5.964975854030658e-16,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 16448,
+        "conservedDownloadBytes": 32896,
+        "stateUploadBytes": 71960,
+        "primitiveUploadBytes": 24672,
+        "gasUploadBytes": 32896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 17,
+      "stats": {
+        "allocatedBytes": 1237336,
+        "uploadedBytes": 960896,
+        "downloadedBytes": 132144,
+        "kernelLaunches": 143,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 413,
+      "cells": 17,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 0,
+      "spatial": true,
+      "boundary_faces": 515,
+      "scaled_error": 9.387642517026925e-16,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 56712,
+        "conservedDownloadBytes": 113424,
+        "stateUploadBytes": 4760,
+        "primitiveUploadBytes": 1632,
+        "gasUploadBytes": 224672,
+        "residentStages": 2
+      },
+      "boundary_partitions": 3,
+      "stats": {
+        "allocatedBytes": 500088,
+        "uploadedBytes": 1487328,
+        "downloadedBytes": 480432,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 1,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 3.0892038849468626e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 504,
+        "conservedDownloadBytes": 1008,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5600,
+        "uploadedBytes": 15296,
+        "downloadedBytes": 4656,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 1,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 3.0892038849468626e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 504,
+        "conservedDownloadBytes": 1008,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5840,
+        "uploadedBytes": 15392,
+        "downloadedBytes": 4656,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 1,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 3.0892038849468626e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 504,
+        "conservedDownloadBytes": 1008,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5840,
+        "uploadedBytes": 15392,
+        "downloadedBytes": 4656,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 1,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 3.0892038849468626e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 504,
+        "conservedDownloadBytes": 1008,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6136,
+        "uploadedBytes": 15616,
+        "downloadedBytes": 4656,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 0,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 2,
+      "spatial": false,
+      "boundary_faces": 0,
+      "scaled_error": 1.663886354862749e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 560,
+        "conservedDownloadBytes": 1120,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 5840,
+        "uploadedBytes": 15800,
+        "downloadedBytes": 5168,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 1,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 2,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 1.663886354862749e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 560,
+        "conservedDownloadBytes": 1120,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6080,
+        "uploadedBytes": 15896,
+        "downloadedBytes": 5168,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 2,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 2,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 1.3389962680354791e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 560,
+        "conservedDownloadBytes": 1120,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6080,
+        "uploadedBytes": 15896,
+        "downloadedBytes": 5168,
+        "kernelLaunches": 101,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "species": 4,
+      "cells": 7,
+      "boundary_kind": 3,
+      "transport": true,
+      "mechanical": false,
+      "frozen_liquids": 2,
+      "spatial": false,
+      "boundary_faces": 2,
+      "scaled_error": 2.76940692650856e-15,
+      "resident_cycle": {
+        "conservedUploads": 1,
+        "conservedUploadBytes": 560,
+        "conservedDownloadBytes": 1120,
+        "stateUploadBytes": 1960,
+        "primitiveUploadBytes": 672,
+        "gasUploadBytes": 896,
+        "residentStages": 2
+      },
+      "boundary_partitions": 1,
+      "stats": {
+        "allocatedBytes": 6392,
+        "uploadedBytes": 16128,
+        "downloadedBytes": 5168,
+        "kernelLaunches": 104,
+        "stages": 7,
+        "stepQueries": 6
+      }
+    },
+    {
+      "name": "large-CFL-reduction",
+      "cells": 65535,
+      "relative_error": 0.0,
+      "invalid_device_denominator_rejected": true,
+      "conserved_upload_bytes": 0
+    },
+    {
+      "name": "large-CFL-reduction",
+      "cells": 65536,
+      "relative_error": 0.0,
+      "invalid_device_denominator_rejected": true,
+      "conserved_upload_bytes": 0
+    },
+    {
+      "name": "large-CFL-reduction",
+      "cells": 65537,
+      "relative_error": 0.0,
+      "invalid_device_denominator_rejected": true,
+      "conserved_upload_bytes": 0
+    }
+  ],
+  "library_sha256": "cb83c7a357b734f9f3ef1a89b38d344e0dc0127eebba500ef049bb4996fc06ac"
+}

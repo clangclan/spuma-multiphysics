@@ -19,9 +19,9 @@
 
 ## 수송에서 바꾼 부분
 
-`pintle_transport_stable_step_primitives()`는 셀별 속도·밀도와 compact 열역학 상태만 받는다. CFL 조회 때문에 전체 종 보존장을 업로드하거나 SoA로 전치하지 않는다. 실제 `Flow::stableStep()`도 이 API를 사용한다.
+`reactive_transport_stable_step_primitives()`는 셀별 속도·밀도와 compact 열역학 상태만 받는다. CFL 조회 때문에 전체 종 보존장을 업로드하거나 SoA로 전치하지 않는다. 실제 `Flow::stableStep()`도 이 API를 사용한다.
 
-`pintle_transport_upload_conserved()`와 `pintle_transport_stage_resident()`는 명시적인 내용 버전을 사용한다. 새 CPU 화학 결과 또는 거부한 단계의 복원은 더 큰 버전으로 업로드한다. 동일 버전의 중복 업로드는 생략하고, 오래된 입력 버전·증가하지 않은 출력 버전·짝이 없는 RK stage 1은 거부한다. 포인터 주소는 재사용의 근거가 아니다.
+`reactive_transport_upload_conserved()`와 `reactive_transport_stage_resident()`는 명시적인 내용 버전을 사용한다. 새 CPU 화학 결과 또는 거부한 단계의 복원은 더 큰 버전으로 업로드한다. 동일 버전의 중복 업로드는 생략하고, 오래된 입력 버전·증가하지 않은 출력 버전·짝이 없는 RK stage 1은 거부한다. 포인터 주소는 재사용의 근거가 아니다.
 
 버전은 호출자가 내용 변경 때 증가시켜야 하는 계약이다. 배열 내용을 hash로 비교하지 않으므로, 같은 버전으로 바뀐 내용을 넘기는 호출자 오류는 자동 검출하지 않는다.
 
@@ -34,7 +34,7 @@
 | CPU flash를 위한 다운로드 | `2Q` | `2Q` |
 | 합계 | `7Q` | `3Q` |
 
-이는 전체 보존장 전송 바이트의 **57.1% 감소**이며 실행시간 감소율은 아니다. `gasY/gasH`와 작은 상태 배열의 전송은 남는다. 새 `PintleTransportProfile`과 `REACTIVE_TRANSFER`는 보존장·상태·원시량·기상 수송 배열의 바이트를 구분한다. 검사에서 CFL 3회와 RK 2회가 실제로 보존장 업로드 1회·다운로드 2회만 만드는지 확인했다.
+이는 전체 보존장 전송 바이트의 **57.1% 감소**이며 실행시간 감소율은 아니다. `gasY/gasH`와 작은 상태 배열의 전송은 남는다. 새 `ReactiveTransportProfile`과 `REACTIVE_TRANSFER`는 보존장·상태·원시량·기상 수송 배열의 바이트를 구분한다. 검사에서 CFL 3회와 RK 2회가 실제로 보존장 업로드 1회·다운로드 2회만 만드는지 확인했다.
 
 확산이 켜진 정상 RK2 스텝에서 종 배열 한 벌을 `G`라고 하면 `gasY/gasH` 전송은 여전히 `4G`다. 작은 상태·원시량을 제외한 합계는 **`7Q + 4G → 3Q + 4G`**이며, 413종·417변수에서는 약 **36.5% 감소**다. Device의 보존장 저장공간도 여전히 네 벌이므로 메모리 용량 감소나 전체 PCIe 전송의 57.1% 감소로 해석하면 안 된다.
 
@@ -62,7 +62,7 @@ CSC의 outer/inner 배열을 검사하고 실제 패턴이 바뀔 때만 CSR row
 
 각 `Model`에 밀집·희소 작업공간을 하나씩 보관한다. context, N_Vector, constraints, CVODE, 선형 풀이 객체와 구조 정보를 재사용하되 매 독립 source 적분에서 `CVodeReInit()`으로 **BDF 이력을 초기화**한다. 다른 셀의 이력을 이어 쓰지 않는다. setup 실패로 부분 초기화된 객체는 폐기한다. 이 객체를 여러 스레드가 공유하도록 만든 것은 아니며, 향후 CPU 병렬화에서는 작업자별 `Model`이 필요하다. [CVODE 재초기화 문서](https://sundials.readthedocs.io/en/v7.4.0/cvode/Usage/index.html#cvode-reinitialization-function)
 
-별도 `PintleChemicalProfile`을 추가해 기존 통계 ABI 크기를 유지했다. `Jv`/전처리기 callback, 실제 Jacobian 구성, 패턴 생성, 구조 분석, 수치 분해, 작업공간 생성·재초기화, LU 저장 개수를 구분한다. 시간은 Jacobian 구성의 열역학 복원·Cantera 미분·CSR 처리와 구조 분석·수치 분해·삼각 풀이의 host 경과시간이다. 전체 RHS/flash 또는 GPU 시간을 모두 측정하는 프로파일러는 아니다.
+별도 `ReactiveChemicalProfile`을 추가해 기존 통계 ABI 크기를 유지했다. `Jv`/전처리기 callback, 실제 Jacobian 구성, 패턴 생성, 구조 분석, 수치 분해, 작업공간 생성·재초기화, LU 저장 개수를 구분한다. 시간은 Jacobian 구성의 열역학 복원·Cantera 미분·CSR 처리와 구조 분석·수치 분해·삼각 풀이의 host 경과시간이다. 전체 RHS/flash 또는 GPU 시간을 모두 측정하는 프로파일러는 아니다.
 
 특히 `kineticsSeconds`는 미분 설정, `ddCi`, 질량 단위 변환, 부분 몰 열역학, `ddT/ddP`, rank 벡터 구성을 포함한다. 20 bar 기록의 약 2.198초를 순수 반응률 계산 시간으로 분류하지 않는다. `auto`는 앞선 희소 적분의 구조를 재사용한 기록이므로 최초 희소 적분과 같은 초기 조건의 성능 비교도 아니다.
 
@@ -106,7 +106,7 @@ CSC의 outer/inner 배열을 검사하고 실제 패턴이 바뀔 때만 CSR row
 원래 환경에서는 기존 실행 잠금 규칙을 지키고 새 출력 경로를 사용한다. 아래 source 변경은 원래 Cantera/Eigen/SUNDIALS 고정 환경에서도 다시 빌드해야 한다. 이번 C++ 수치 검증은 최초 PR과 같은 별도 Cantera 3.2.0/SUNDIALS 7.4.0/Eigen 3.4.1 환경에서 수행했다.
 
 ```bash
-PINTLE_REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh
+REACTIVE_CACHE_TEST=1 bash tools/build_reactive_backend.sh
 bash tools/build_reactive_transport.sh
 research/reactive-env/bin/python tools/validate_reactive_transport.py \
   --backend cpu --output results/local-review-transport.json
@@ -116,7 +116,7 @@ research/reactive-env/bin/python tools/validate_reactive_review.py \
   --thermo-dir research/reactive-thermo --backend cpu \
   --output results/local-review-expanded.json
 
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 \
   bash tools/build_reactive_solver.sh
 research/reactive-env/bin/python tools/validate_reactive_transport.py \
   --backend cuda --output results/local-review-cuda.json

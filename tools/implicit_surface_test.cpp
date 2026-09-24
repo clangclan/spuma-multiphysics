@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Host tests of a generic cubic B-spline field. Sphere coefficients are an
 // analytic test oracle only; the production evaluator has no shape parameter.
-#include "../src/reactiveInterface/pintleImplicitSurface.h"
+#include "../src/reactiveInterface/reactiveImplicitSurface.h"
 #include <algorithm>
 #include <array>
 #include <cassert>
@@ -11,7 +11,7 @@
 #include <limits>
 #include <vector>
 
-namespace IS=PintleImplicitSurface;
+namespace IS=ReactiveImplicitSurface;
 namespace {
 bool close(double a,double b,double absoluteTolerance,double relativeTolerance=1e-12) {
     return std::abs(a-b)<=absoluteTolerance+relativeTolerance*std::max(std::abs(a),std::abs(b));

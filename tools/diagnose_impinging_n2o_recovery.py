@@ -182,9 +182,9 @@ def main() -> None:
                 "classification": classification,
             })
 
-        manifest_text = backend.lib.pintle_rt_runtime_manifest_v1(backend.handle)
+        manifest_text = backend.lib.reactive_rt_runtime_manifest_v1(backend.handle)
         if not manifest_text:
-            raise RuntimeError(backend.lib.pintle_rt_error(backend.handle).decode())
+            raise RuntimeError(backend.lib.reactive_rt_error(backend.handle).decode())
         runtime = json.loads(manifest_text)
 
     expected = [

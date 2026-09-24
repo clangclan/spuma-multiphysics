@@ -19,8 +19,8 @@ def main():
     matrix=json.loads((source/'benchmark-matrix.json').read_text());env=common.sourced_environment()
     report={'schema':1,'scope':'Bounded runtime and flash mass-accounting checks; no developed collision or breakup validation','requestedSteps':a.steps,
         'source':str(source),'solverSha256':common.sha256(common.PROJECT_ROOT/'bin/ReactiveFoam'),
-        'cudaTransportSha256':common.sha256(common.PROJECT_ROOT/'lib/libpintleReactiveTransport.so'),
-        'thermoBackendSha256':common.sha256(common.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),'cases':[]}
+        'cudaTransportSha256':common.sha256(common.PROJECT_ROOT/'lib/libreactiveTransport.so'),
+        'thermoBackendSha256':common.sha256(common.PROJECT_ROOT/'lib/libreactiveBackend.so'),'cases':[]}
     for name in matrix['cases']:
         case=out/name
         if not a.analyze_existing:

@@ -21,7 +21,7 @@ FILES = ("kinetics.CHEMKIN.CKI", "thermo.CHEMKIN.CKT", "TOT2003.TRAN", "README.m
 
 
 def download(url: str) -> bytes:
-    request = urllib.request.Request(url, headers={"User-Agent": "pintle-mechanism-audit/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "reactive-mechanism-audit/1"})
     with urllib.request.urlopen(request, timeout=60) as response:
         return response.read()
 

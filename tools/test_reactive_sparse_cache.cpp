@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Compile this translation unit as a shared library with the backend's normal
-// dependency flags, then call pintle_test_sparse_cache via ctypes. Including the
+// dependency flags, then call reactive_test_sparse_cache via ctypes. Including the
 // implementation exercises real CVODE callbacks without adding test-only ABI to
 // the production library. Numerical references below do not use its CSR product.
-#include "../src/reactiveThermo/pintleReactiveThermo.cpp"
+#include "../src/reactiveThermo/reactiveThermo.cpp"
 #include <Eigen/LU>
 #include <cstring>
 #include <iomanip>
@@ -47,10 +47,10 @@ void factorPatternChanges(Model& model,const Evaluation& state) {
 }
 }
 
-extern "C" int pintle_test_sparse_cache(const char* configuration,char* error,size_t size) {
+extern "C" int reactive_test_sparse_cache(const char* configuration,char* error,size_t size) {
     try {
         // Same nnz, different pattern, followed by zero crossings in fixed slots.
-        PintleSparseJacobian csr;const int outer[]={0,2,3,4};
+        ReactiveSparseJacobian csr;const int outer[]={0,2,3,4};
         const int innerA[]={0,2,1,0},innerB[]={0,1,2,0};
         const double values[]={2,3,4,5},changed[]={0,-3,0,7},x[]={.2,-.5,2};
         csr.uT={1,2,3};csr.vT={.1,.2,.3};csr.uP={-1,2,-3};csr.vP={.4,-.1,.2};
@@ -64,7 +64,7 @@ extern "C" int pintle_test_sparse_cache(const char* configuration,char* error,si
         }
         Model model(configuration);Vector q(model.ns,0);
         q[model.gas->speciesIndex("N2O")]=.2;q[model.gas->speciesIndex("IC3H7OH")]=.1;q[model.gas->speciesIndex("N2")]=2;
-        PintleThermoState guess{};guess.T=2200;guess.p=1e6;
+        ReactiveThermoState guess{};guess.T=2200;guess.p=1e6;
         const double p=R*guess.T*std::inner_product(q.begin(),q.end(),model.weights.begin(),0.0,std::plus<double>(),[](double m,double W){return m/W;});
         const auto state=model.evaluate(q,{},p,guess.T);ChemicalODE ode(model,state.energy,true,state.state,1e-14);
         require(SUNContext_Create(SUN_COMM_NULL,&ode.context)==0,"Context allocation failed");
@@ -101,7 +101,7 @@ extern "C" int pintle_test_sparse_cache(const char* configuration,char* error,si
 // Fault injection is confined to this test translation unit. CVODE invokes the
 // real chemical RHS, then receives an unrecoverable nonlinear-RHS error through
 // its public API. The production react() catch/fallback/commit path is unchanged.
-extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,int mode,char* report,size_t size) {
+extern "C" int reactive_test_chemical_failure_recovery(const char* configuration,int mode,char* report,size_t size) {
     try {
         Model model(configuration);model.chemicalLinearSolver=mode;
         Vector initial(model.ns,0);initial[model.gas->speciesIndex("N2O")]=.2;
@@ -110,7 +110,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
             std::plus<double>(),[](double m,double W){return m/W;});
         const auto value=model.evaluate(initial,{},p,T);const double dt=1e-8,rtol=1e-8,atol=1e-14;
         Vector q=initial;auto state=value.state;double drift=0;
-        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Failure fixture warmup: "+std::string(model.error.data()));
+        require(reactive_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Failure fixture warmup: "+std::string(model.error.data()));
         const int slot=mode==0?0:1;
         require(bool(model.chemicalWorkspace[slot]),"Missing warm workspace");
         std::weak_ptr<ChemicalODE> old=model.chemicalWorkspace[slot];
@@ -126,7 +126,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         require(CVodeSetNlsRhsFn(model.chemicalWorkspace[slot]->integrator,reject)==CV_SUCCESS,"Cannot install test RHS fault");
         const auto beforeProfile=model.chemicalProfile;
         q=initial;state=value.state;const auto beforeState=state;drift=-17;
-        const int failure=pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift);
+        const int failure=reactive_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift);
         const std::string diagnostic=model.error.data();
         require(injectedRhsCalls==1,"Injected callback was not reached exactly once");
         require(old.expired()&&!model.chemicalWorkspace[slot],"Failed CVODE workspace survived");
@@ -145,9 +145,9 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         Model fresh(configuration);fresh.chemicalLinearSolver=mode==2?0:mode;
         fresh.structuredChemicalJacobian=mode!=2;
         Vector reference=initial;auto expected=value.state;double expectedDrift=0;
-        require(pintle_rt_react(&fresh,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
+        require(reactive_rt_react(&fresh,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
                 "Fresh recovery reference failed: "+std::string(fresh.error.data()));
-        auto compare=[&](const Vector& actual,const PintleThermoState& s) {
+        auto compare=[&](const Vector& actual,const ReactiveThermoState& s) {
             double error=0;for(size_t k=0;k<model.ns;++k) error=std::max(error,std::abs(actual[k]-reference[k])/value.state.rho);
             require(error<2e-10&&std::abs(s.T/expected.T-1)<2e-10,"Recovered workspace differs from fresh solve");
             return error;
@@ -155,7 +155,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         const double fallbackError=mode==2?compare(q,state):0;
         const auto creates=model.chemicalProfile.workspaceCreates;
         q=initial;state=value.state;
-        require(pintle_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Next source failed: "+std::string(model.error.data()));
+        require(reactive_rt_react(&model,q.data(),value.energy,dt,1,rtol,atol,&state,&drift)==0,"Next source failed: "+std::string(model.error.data()));
         require(model.chemicalProfile.workspaceCreates==creates+1&&bool(model.chemicalWorkspace[slot]),
                 "Next source did not allocate a new worker");
         // For auto, the next successful source uses sparse again, so obtain the
@@ -163,7 +163,7 @@ extern "C" int pintle_test_chemical_failure_recovery(const char* configuration,i
         if(mode==2) {
             Model sparseReference(configuration);sparseReference.chemicalLinearSolver=1;
             reference=initial;expected=value.state;
-            require(pintle_rt_react(&sparseReference,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
+            require(reactive_rt_react(&sparseReference,reference.data(),value.energy,dt,1,rtol,atol,&expected,&expectedDrift)==0,
                     "Fresh sparse reference failed: "+std::string(sparseReference.error.data()));
         }
         const double recoveryError=compare(q,state);

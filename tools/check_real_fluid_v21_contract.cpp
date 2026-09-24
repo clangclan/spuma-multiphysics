@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Isolated internal contract harness. Compile this TU instead of the backend
 // TU, using the SAME include/link flags. It is not a SPUMA/Flow execution.
-#include "../src/reactiveThermo/pintleReactiveThermo.cpp"
-#include "../src/reactiveThermo/pintleCheckpointIdentity.h"
+#include "../src/reactiveThermo/reactiveThermo.cpp"
+#include "../src/reactiveThermo/reactiveCheckpointIdentity.h"
 #include <iostream>
 int main(int argc,char** argv) {
  try {
     require(argc==2,"Pass cold-pr-config.yaml");
     const std::string hash(64,'a'),other(64,'b');
-    PintleCheckpointIdentity now{2,4,hash,"HEM",hash,hash},old=now;
-    require(!pintleValidateIdentity(old,now),"Valid schema 2 rejected");
+    ReactiveCheckpointIdentity now{2,4,hash,"HEM",hash,hash},old=now;
+    require(!reactiveValidateIdentity(old,now),"Valid schema 2 rejected");
     old.schema=1;old.closure="";old.physicalModelHash="";old.numericalPolicyHash="";
-    require(!pintleValidateIdentity(old,now),"Legacy schema 1 rejected");
+    require(!reactiveValidateIdentity(old,now),"Legacy schema 1 rejected");
     int rejected=0;
     for(int i=0;i<7;++i){old=now;
         if(i==0)old.fingerprint="";
@@ -21,13 +21,13 @@ int main(int argc,char** argv) {
         if(i==4)old.numericalPolicyHash="";
         if(i==5)old.physicalModelHash=other;
         if(i==6)old.numericalPolicyHash="invalid";
-        try{pintleValidateIdentity(old,now);}catch(const std::exception&){++rejected;}}
+        try{reactiveValidateIdentity(old,now);}catch(const std::exception&){++rejected;}}
     require(rejected==7,"Schema 2 accepted missing/malformed identity");old=now;old.numericalPolicyHash=other;
-    require(pintleValidateIdentity(old,now),"Supported policy delta not reported");
+    require(reactiveValidateIdentity(old,now),"Supported policy delta not reported");
     Model m(argv[1]);Vector Y(m.ns,0);Y[0]=.7;Y[1]=.1;Y[2]=.15;Y[3]=.05;
     auto reference=m.phaseProperties(-1,3e6,1000,Y,0);Vector q=Y;for(double& x:q)x*=reference.rho;
     auto state=m.evaluate(q,{},3e6,1000);const double energy=state.energy;
-    double maxCaloricError=0;PintleFixedCaloric fast(*m.caloric,Y,m.weights,m.cost);
+    double maxCaloricError=0;ReactiveFixedCaloric fast(*m.caloric,Y,m.weights,m.cost);
     for(double T:{199.999999,200.,200.000001,1049.999999,1050.,1050.000001,1500.}){
         const auto a=fast.evaluate(T,reference.rho);m.gas->setMassFractions(Y.data());m.gas->setTemperature(T);m.gas->setDensity(reference.rho);
         const double actual[]={a.energy,a.cv,a.p},expected[]={m.gas->intEnergy_mass(),m.gas->cv_mass(),m.gas->pressure()};

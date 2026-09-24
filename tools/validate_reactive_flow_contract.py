@@ -42,7 +42,7 @@ def main():
         *[mutation+";" for mutation in increments], "}", "};", "",
     ])
     compiler = shlex.split(os.environ.get("CXX", "c++"))
-    with tempfile.TemporaryDirectory(prefix="pintle-flow-contract-") as directory:
+    with tempfile.TemporaryDirectory(prefix="reactive-flow-contract-") as directory:
         path = Path(directory) / "flow_contract.cpp"; path.write_text(unit)
         result = subprocess.run(compiler+["-std=c++17", "-fsyntax-only", str(path)], capture_output=True, text=True)
         diagnostic = result.stderr.replace(str(path), "flow_contract.cpp")

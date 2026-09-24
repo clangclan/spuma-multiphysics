@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Validation bridge to the production-capable host/device sharp integrator.
-#include "../src/reactiveInterface/pintleImplicitVolume.h"
-#include "../src/reactiveInterface/pintleImplicitFace.h"
+#include "../src/reactiveInterface/reactiveImplicitVolume.h"
+#include "../src/reactiveInterface/reactiveImplicitFace.h"
 #include <cstddef>
 #include <cstdint>
 #ifdef __CUDACC__
 #include <cuda_runtime.h>
 #endif
-using PintleImplicitSurface::View;
-using PintleImplicitVolume::Options;
-using PintleImplicitVolume::Integrals;
+using ReactiveImplicitSurface::View;
+using ReactiveImplicitVolume::Options;
+using ReactiveImplicitVolume::Integrals;
 #ifdef __CUDACC__
 #define PROBE_HD __host__ __device__
 #else
@@ -19,7 +19,7 @@ PROBE_HD inline void oneCell(const View& v,Options options,int64_t flat,double* 
                              double* jacobian,uint32_t* status) {
     const int64_t n=v.cells[0],cell[3]={flat%n,(flat/n)%n,flat/(n*n)};
     Integrals out{};
-    if(!PintleImplicitVolume::integrate(v,cell,options,out)){*status=1;return;}
+    if(!ReactiveImplicitVolume::integrate(v,cell,options,out)){*status=1;return;}
     geometry[0]=out.liquidVolume;geometry[1]=out.interfaceArea;
     for(int d=0;d<3;++d){geometry[2+d]=out.normalIntegral[d];geometry[5+d]=out.curvatureNormalIntegral[d];}
     geometry[8]=out.curvatureAreaIntegral;geometry[9]=out.maxEstimatedError;
@@ -31,8 +31,8 @@ PROBE_HD inline void oneFace(const View& v,Options options,int64_t flat,
                              double* geometry,uint32_t* status) {
     const int axis=int(flat%3);flat/=3;
     const int64_t n=v.cells[0],cell[3]={flat%n,(flat/n)%n,flat/(n*n)};
-    PintleImplicitFace::Integrals out{};
-    if(!PintleImplicitFace::integrate(v,cell,axis,1,options,out)){*status=1;return;}
+    ReactiveImplicitFace::Integrals out{};
+    if(!ReactiveImplicitFace::integrate(v,cell,axis,1,options,out)){*status=1;return;}
     geometry[0]=out.liquidArea;
     for(int d=0;d<3;++d)geometry[1+d]=out.conormalIntegral[d];
     geometry[4]=out.curveLength;geometry[5]=out.maxEstimatedError;

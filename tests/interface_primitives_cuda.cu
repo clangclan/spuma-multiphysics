@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveInterface/pintleResolvedInterface.h"
+#include "../src/reactiveInterface/reactiveResolvedInterface.h"
 #include <cuda_runtime.h>
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
 
-using namespace PintleInterface;
+using namespace ReactiveInterface;
 
 struct Results {
     int status[12];

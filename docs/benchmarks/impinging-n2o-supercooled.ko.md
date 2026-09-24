@@ -59,17 +59,17 @@
 저장소의 [과냉각 액체 예제](../../examples/impinging-n2o-supercooled/README.ko.md)를 사용한다. 빌드는 기존 CUDA 설정을 유지하며, 새 device 모델 이미지를 사용하므로 host backend와 CUDA 라이브러리를 함께 빌드한다.
 
 ```bash
-export PINTLE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
-export PINTLE_REACTIVE_PREFIX=/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env
-export PINTLE_REACTIVE_TRANSPORT_BUILD=cuda
-export PINTLE_CUDA_ARCH=120
+export REACTIVE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
+export REACTIVE_PREFIX=/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env
+export REACTIVE_TRANSPORT_BUILD=cuda
+export REACTIVE_CUDA_ARCH=120
 flock /home/jsw/cae-benchmark/run.lock ./Allwmake
 
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-benchmark \
+"$REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-benchmark \
   --configuration examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml --cell-mm 0.25
 
-"$PINTLE_REACTIVE_PREFIX/bin/python" tools/validate_impinging_n2o.py \
+"$REACTIVE_PREFIX/bin/python" tools/validate_impinging_n2o.py \
   --benchmark /path/to/new-benchmark --output /path/to/new-check --steps 10 --timeout 60
 ```
 
-원본 182.34 K 기구에서 준비하려면 `extend_n2o_gas_thermo.py --configuration <원본 설정> --supercooled-liquid --output <새 폴더> --library lib/libpintleReactiveBackend.so`를 사용한다. 이전 고체 예제는 현재 기본 벤치마크가 아니다.
+원본 182.34 K 기구에서 준비하려면 `extend_n2o_gas_thermo.py --configuration <원본 설정> --supercooled-liquid --output <새 폴더> --library lib/libreactiveBackend.so`를 사용한다. 이전 고체 예제는 현재 기본 벤치마크가 아니다.

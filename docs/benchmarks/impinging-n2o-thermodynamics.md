@@ -22,7 +22,7 @@
 
 | 입력 | SHA-256 |
 |---|---|
-| `lib/libpintleReactiveBackend.so` | `44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b` |
+| `lib/libreactiveBackend.so` | `44224acb75f87352ed76eebd67f7dcc06f94b2ec6fbdd070d42186733a09cb0b` |
 | `tools/reactive_backend.py` | `b7a53297e402b9ae48c700c2b37484df56fa27e6ab6a15cbaf7ff8b1db8e1c76` |
 | `cold-pr-config.yaml` | `1262c7293e0cd73e99a1d94aaa7942d2675fd00a6f6beab94ad91a9abe76a23c` |
 | `cold-pr.yaml` | `7ea020c480bff27404a9ccb051c4940bac71631257e159084b93df2092a6ecdd` |
@@ -85,7 +85,7 @@ x_s=\frac{s_{in}-s_l(p_{out})}{s_v(p_{out})-s_l(p_{out})}.
 `ReactiveFoam.C`의 현재 경로는 다음과 같다.
 
 1. 패치에서 `p,T,U,Y,liquidFractions`를 읽는다.
-2. `pintle_rt_make_state`로 conserved ghost state를 만들고, HEM이면 exact UV recovery를 수행한다.
+2. `reactive_rt_make_state`로 conserved ghost state를 만들고, HEM이면 exact UV recovery를 수행한다.
 3. 회복된 `p,T`가 요청값과 `1e-6` 상대 오차 안에서 일치하지 않으면 경계를 거부한다.
 4. 각 face에서 이 ghost state를 고정된 HLL right state로 사용한다. 내부 owner state가 left state다.
 
@@ -131,7 +131,7 @@ PYTHONPATH=tools /home/jsw/문서/analysis/spuma-multiphysics/research/reactive-
   tools/diagnose_impinging_n2o_recovery.py \
   --failures logs/impinging-n2o-validation-v1/ambient_1atm/reactiveFailures.jsonl \
   --configuration /home/jsw/문서/analysis/runs/impinging_n2o_90deg_20260922/thermo/cold-pr-config.yaml \
-  --library lib/libpintleReactiveBackend.so \
+  --library lib/libreactiveBackend.so \
   --solver-log logs/impinging-n2o-validation-v1/ambient_1atm/solver.log \
   --seed-temperature 184.27467115507127 \
   --output results/benchmarks/impinging-n2o-recovery-diagnosis.json

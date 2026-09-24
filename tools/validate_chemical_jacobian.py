@@ -16,7 +16,7 @@ def require(ok,message):
 
 
 def run(thermo_dir,output):
-    report={'tests':[],'backend_sha256':common.sha256(common.PROJECT_ROOT/'lib/libpintleReactiveBackend.so')}
+    report={'tests':[],'backend_sha256':common.sha256(common.PROJECT_ROOT/'lib/libreactiveBackend.so')}
     def record(name,fn):
         begin=time.monotonic()
         try:entry=dict(name=name,passed=True,**fn())

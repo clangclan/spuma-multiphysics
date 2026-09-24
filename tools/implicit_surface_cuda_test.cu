@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveInterface/pintleImplicitSurface.h"
+#include "../src/reactiveInterface/reactiveImplicitSurface.h"
 #include <cuda_runtime.h>
 #include <cassert>
 #include <cmath>
 #include <cstdio>
 
-namespace IS=PintleImplicitSurface;
+namespace IS=ReactiveImplicitSurface;
 static void check(cudaError_t status) {
     if(status!=cudaSuccess) {
         std::fprintf(stderr,"CUDA error: %s\n",cudaGetErrorString(status));

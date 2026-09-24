@@ -14,7 +14,7 @@ from validate_reactive_runtime import replace,internal
 
 def run(output,thermo_dir,transport_backend='cpu'):
     output.mkdir(parents=True);report={'tests':[],'solver_sha256':b.sha256(b.PROJECT_ROOT/'bin/ReactiveFoam'),
-        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),
+        'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libreactiveBackend.so'),
         'transport_backend':transport_backend};env=b.sourced_environment()
     def prepare(*args,**kwargs):
         result=prepare_case(*args,**kwargs)

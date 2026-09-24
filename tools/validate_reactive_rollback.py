@@ -3,7 +3,7 @@
 
 Build the test-only shim before running:
 g++ -std=c++17 -shared -fPIC tools/test_reactive_batch_failure.cpp -ldl \
-    -o lib/libpintleTestBatchFailure.so
+    -o lib/libreactiveTestBatchFailure.so
 """
 import argparse
 from decimal import Decimal
@@ -28,7 +28,7 @@ def main():
     p.add_argument('--phase-change',choices=('equilibrium','frozen'),default='equilibrium')
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     env=b.sourced_environment();exe=b.PROJECT_ROOT/'bin/ReactiveFoam'
-    shim=b.PROJECT_ROOT/'lib/libpintleTestBatchFailure.so'
+    shim=b.PROJECT_ROOT/'lib/libreactiveTestBatchFailure.so'
     report={'solver_sha256':b.sha256(exe),'fault_shim_sha256':b.sha256(shim),'kind':a.kind,'phase_change':a.phase_change,'tests':[]}
     def save():b.atomic_json(out/'validation.json',report)
     def set_entry(case,file,key,value):

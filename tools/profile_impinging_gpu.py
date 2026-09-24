@@ -130,7 +130,7 @@ def main():
     ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
     result=dict(scope='Instrumented GPU diagnostic campaign; do not compare runtime with unprofiled runs.',
         requestedEndTime=a.end_time,cases=[],binaries={name:common.sha256(common.PROJECT_ROOT/name)
-        for name in ('bin/ReactiveFoam','lib/libpintleReactiveTransport.so','lib/libpintleReactiveBackend.so')})
+        for name in ('bin/ReactiveFoam','lib/libreactiveTransport.so','lib/libreactiveBackend.so')})
     with common.RUN_LOCK.open('a+') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         for path in a.cases:

@@ -1,6 +1,8 @@
 # 90도 액체 N₂O 충돌 벤치마크
 
-**최신 상태:** 아래 1스텝 결과는 초기 전달 커밋 `3b12e1c` 시점의 기록이다. 현재 사용 입력은 고체·승화를 제외한 [과냉각 액체 N₂O 프로필](impinging-n2o-supercooled.ko.md)이다. 두 환경 모두 GPU 10스텝이 재시도 없이 완료됐다. 중간 고체 구현·검증은 [고체 모델 기록](impinging-n2o-solid-recovery.ko.md)에 보존하며, 현재 계산 설정과 구분한다.
+**현재 구성:** 80 mm 정육면체의 40³·80³·160³ 메시, 지름 5 mm 원형 입구, 입구 z=40 mm를 사용한다. 과냉각 액체 N₂O, flashing, 점성·열전도·WALE 혼합·표면장력을 켜고 고체·승화·연소는 제외한다. [메시 시리즈](../../reports/impinging-cube80-initial-steps-20260923.ko.md), [z=40 mm 적응 시간 간격 실행](../../reports/impinging-cube80-z40-adaptive-1us-20260923.ko.md), [160³ GPU 분석](../../reports/impinging-cube80-n160-gpu-profile-20260924.ko.md)을 참고한다.
+
+**아래 본문은 초기 2026-09-22 구성과 결과의 기록이다.** 256k 메시, 당시 꺼져 있던 물리 옵션과 저온 복원 한계를 현재 설정으로 해석하지 않는다. 현재의 [과냉각 액체 프로필](impinging-n2o-supercooled.ko.md)과 중간 [고체 모델 기록](impinging-n2o-solid-recovery.ko.md)은 별도로 보존한다.
 
 두 케이스를 생성했다. 두 분사구 모두 20°C의 순수 액체 N₂O를 공급하고, 공급압은 **55 bar(g) = 56.01325 bar(abs)**로 동일하다. 외부 압력만 바꾼다.
 
@@ -50,7 +52,7 @@
 저장소 루트에서 호환 SPUMA 환경과 Python 환경을 지정한다.
 
 ```bash
-export PINTLE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
+export REACTIVE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh
 PYTHON=/home/jsw/문서/analysis/spuma-multiphysics/research/reactive-env/bin/python
 
 "$PYTHON" tools/prepare_impinging_n2o.py /path/to/new-output \

@@ -31,8 +31,8 @@ def main():
     out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
     thermo=args.thermo_dir.resolve();env=b.sourced_environment()
     exe=b.PROJECT_ROOT/'bin/ReactiveFoam'
-    report={'solver_sha256':b.sha256(exe),'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveBackend.so'),
-            'transport_sha256':b.sha256(b.PROJECT_ROOT/'lib/libpintleReactiveTransport.so'),'tests':[]}
+    report={'solver_sha256':b.sha256(exe),'backend_sha256':b.sha256(b.PROJECT_ROOT/'lib/libreactiveBackend.so'),
+            'transport_sha256':b.sha256(b.PROJECT_ROOT/'lib/libreactiveTransport.so'),'tests':[]}
     def record(name,passed,**details):
         row=dict(name=name,passed=bool(passed),**details);report['tests'].append(row)
         b.atomic_json(out/'validation.json',report);print(json.dumps(row),flush=True)

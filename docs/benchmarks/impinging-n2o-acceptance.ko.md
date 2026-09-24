@@ -165,7 +165,7 @@ V_l=\sum_i\alpha_{l,N2O,i}V_i,
 
 특히 이 문제의 ambient air 셀은 N₂O가 없어도 `alphaGas≈1`이다. 따라서 `sum(alphaGas*V)` 또는 `alphaGas` 증가를 “기화한 N₂O 질량”으로 사용할 수 없다. `alphaLiquidN2O`도 HEM의 열역학적 셀 평균 상 체적분율이지 기하학적 액주 `alpha`가 아니다.
 
-일반 field 출력은 equilibrium 모드의 per-cell N₂O 액상 질량밀도를 쓰지 않는다. `rhoLiquid*` field는 frozen 모드의 보존 재고다. 그러나 schema-3 `reactiveState.bin`은 conserved `q` 뒤에 각 셀의 전체 `PintleThermoState`를 저장하며, 그 구조체에 `liquidMass[0]`가 들어 있다. 따라서 이 케이스의 N₂O가 liquid index 0임을 thermo identity에서 확인한 뒤
+일반 field 출력은 equilibrium 모드의 per-cell N₂O 액상 질량밀도를 쓰지 않는다. `rhoLiquid*` field는 frozen 모드의 보존 재고다. 그러나 schema-3 `reactiveState.bin`은 conserved `q` 뒤에 각 셀의 전체 `ReactiveThermoState`를 저장하며, 그 구조체에 `liquidMass[0]`가 들어 있다. 따라서 이 케이스의 N₂O가 liquid index 0임을 thermo identity에서 확인한 뒤
 
 \[
 m^v_{N2O,i}=q_{N2O,i}-\mathrm{state}_i.\mathrm{liquidMass}[0]
@@ -173,7 +173,7 @@ m^v_{N2O,i}=q_{N2O,i}-\mathrm{state}_i.\mathrm{liquidMass}[0]
 
 로 기상 N₂O 질량밀도를 직접 얻을 수 있다. 새 field를 만들거나 checkpoint를 다시 flash할 필요가 없다.
 
-postprocessor는 임의의 native 구조체 파일처럼 읽지 않는다. `reactiveCheckpointComplete` manifest의 `reactiveState.bin` SHA-256을 먼저 검증하고, schema-3 magic, endian marker, FP64 크기, 셀 수, conserved-variable 수, `sizeof(PintleThermoState)`, 예상 파일 끝을 확인해야 한다. 같은 checkpoint의 physical-model identity와 종·액체 순서도 고정한다. 각 셀에서 `liquidMass[0]`가 backend 허용오차 안에서 `0`과 `q_N2O` 사이이고 모든 값이 유한한 경우에만 `M_l`, `M_v`를 집계한다. 이 검증에 실패하면 `alphaGas`로 대체하지 않고 분석을 실패시킨다.
+postprocessor는 임의의 native 구조체 파일처럼 읽지 않는다. `reactiveCheckpointComplete` manifest의 `reactiveState.bin` SHA-256을 먼저 검증하고, schema-3 magic, endian marker, FP64 크기, 셀 수, conserved-variable 수, `sizeof(ReactiveThermoState)`, 예상 파일 끝을 확인해야 한다. 같은 checkpoint의 physical-model identity와 종·액체 순서도 고정한다. 각 셀에서 `liquidMass[0]`가 backend 허용오차 안에서 `0`과 `q_N2O` 사이이고 모든 값이 유한한 경우에만 `M_l`, `M_v`를 집계한다. 이 검증에 실패하면 `alphaGas`로 대체하지 않고 분석을 실패시킨다.
 
 checkpoint 분석이 가능해도 “현재 영역에 존재하는 증기 질량”과 “누적 기화량”은 다르다. 후자는 증기 N₂O의 입·출구 flux 또는 상간 질량전달 이력을 함께 알아야 한다. HEM은 매 복원에서 순간 평형을 강제하므로 유한속도 nucleation/cavitation 시간을 측정한 값도 아니다.
 

@@ -2,7 +2,7 @@
 
 ## Implemented model
 
-`src/reactiveTransport/pintleWale.h` implements the local tensor part of the
+`src/reactiveTransport/reactiveWale.h` implements the local tensor part of the
 Wall-Adapting Local Eddy-viscosity (WALE) model. For the row-major resolved
 velocity gradient \(g_{ij}=\partial \widetilde u_i/\partial x_j\), it forms
 

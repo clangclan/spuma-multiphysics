@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveTransport/pintleWale.h"
+#include "../src/reactiveTransport/reactiveWale.h"
 
 #include <cuda_runtime.h>
 
@@ -41,7 +41,7 @@ __global__ void evaluateKernel(const Case* cases, Output* output, int count)
     const int index = static_cast<int>(blockIdx.x * blockDim.x + threadIdx.x);
     if (index >= count) return;
     double nut = 0.0;
-    const bool valid = PintleWale::eddyViscosity(
+    const bool valid = ReactiveWale::eddyViscosity(
         cases[index].gradient, cases[index].delta, cases[index].coefficient, nut);
     output[index] = {nut, valid ? 1 : 0};
 }
@@ -100,7 +100,7 @@ int main()
     const std::vector<Case> input = fixtures();
     std::vector<Output> host(input.size());
     for (std::size_t i = 0; i < input.size(); ++i) {
-        host[i].valid = PintleWale::eddyViscosity(
+        host[i].valid = ReactiveWale::eddyViscosity(
             input[i].gradient, input[i].delta, input[i].coefficient, host[i].nut) ? 1 : 0;
     }
 

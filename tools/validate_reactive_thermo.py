@@ -186,7 +186,7 @@ def main():
         run("full_mechanism_closed_reactor", chemistry)
     report["passed"] = all(item["passed"] for item in report["tests"])
     report["inputs"] = {str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-                        for path in [root / "manifest.json", Path(__file__), Path(__file__).parents[1] / "lib/libpintleReactiveBackend.so"]}
+                        for path in [root / "manifest.json", Path(__file__), Path(__file__).parents[1] / "lib/libreactiveBackend.so"]}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2)+"\n")
     raise SystemExit(0 if report["passed"] else 1)

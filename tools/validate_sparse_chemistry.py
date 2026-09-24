@@ -126,7 +126,7 @@ def main():
     a.output.parent.mkdir(parents=True,exist_ok=True)
     scratch=a.thermo_dir/"sparse-validation-inputs"/a.output.stem;scratch.mkdir(parents=True,exist_ok=False)
     report=dict(cantera=ct.__version__,sundials=ct.__sundials_version__,backend="host C++",gpu_execution=False,
-        library_sha256=hashlib.sha256((Path(__file__).resolve().parents[1]/"lib/libpintleReactiveBackend.so").read_bytes()).hexdigest(),tests=[])
+        library_sha256=hashlib.sha256((Path(__file__).resolve().parents[1]/"lib/libreactiveBackend.so").read_bytes()).hexdigest(),tests=[])
     checks=[("PLOG",lambda:check_pressure_derivative(scratch)),("liquid-routing",lambda:check_liquid_fallback(a.thermo_dir))]
     checks += [(f"full-mechanism-{int(p)}Pa",lambda p=p:check_gas(a.thermo_dir/"chemistry-config.yaml",p)) for p in (1e5,2e6)]
     for name,fn in checks:

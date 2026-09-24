@@ -80,7 +80,7 @@ def main():
     with common.RUN_LOCK.open('a+') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         meta=prepare(source,target,a.batch,None if a.reuse is None else a.reuse=='true');inv=meta['selectedHemBatch']
-        selection='::regex:.*walePrPropertiesKernel.*:^3$' if a.wale_only else f'::regex:.*pintleReactiveTransport.*:^(1|{inv})$'
+        selection='::regex:.*walePrPropertiesKernel.*:^3$' if a.wale_only else f'::regex:.*reactiveTransport.*:^(1|{inv})$'
         if a.hem_only:selection=f'::regex:.*hemKernel.*:^(1|{inv})$'
         command=[str(a.ncu),'--target-processes','all','--kernel-name-base','mangled','--rename-kernels','off',
             '--kernel-id',selection,

@@ -25,8 +25,8 @@ def main():
         with LOCK.open("a+") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX)
             gpu_result = run([gpu])
-        sources = [ROOT / "src/reactiveInterface/pintleInterfaceGeometry.h", ROOT / "tools/interface_geometry_test.cpp", ROOT / "tools/interface_geometry_cuda_test.cu", Path(__file__).resolve()]
-        evidence = {"schema": "pintle-interface-geometry-v1", "generatedUnix": time.time(), "scope": "standalone structured-grid module; timings are not end-to-end solver timings", "cpu": cpu_result, "cuda": gpu_result, "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}}
+        sources = [ROOT / "src/reactiveInterface/reactiveInterfaceGeometry.h", ROOT / "tools/interface_geometry_test.cpp", ROOT / "tools/interface_geometry_cuda_test.cu", Path(__file__).resolve()]
+        evidence = {"schema": "reactive-interface-geometry-v1", "generatedUnix": time.time(), "scope": "standalone structured-grid module; timings are not end-to-end solver timings", "cpu": cpu_result, "cuda": gpu_result, "sources": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}}
         out = ROOT / "results/spray-physics/interface-geometry.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         tmp = out.with_suffix(".tmp")

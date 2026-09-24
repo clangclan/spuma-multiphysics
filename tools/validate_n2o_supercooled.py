@@ -59,9 +59,9 @@ def main():
         condensed[0].get('kind','liquid')=='liquid' and condensed[0].get('minimum-liquid-temperature')==148 and
         condensed[0].get('critical-temperature')==309.52 and 'solid' not in condensed[0],condensables=condensed)
     with RealFluidBackend(a.configuration,a.library) as b:
-        export=b.lib.pintle_rt_export_gpu_hem_v1
+        export=b.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes=[C.c_void_p,C.c_void_p,C.c_size_t,C.POINTER(C.c_size_t)];export.restype=C.c_int
-        select=b.lib.pintle_rt_set_gpu_hem_jacobian_v1
+        select=b.lib.reactive_rt_set_gpu_hem_jacobian_v1
         select.argtypes=[C.c_void_p,C.c_int];select.restype=C.c_int
         b.check(select(b.handle,1))
         record('state-abi-unchanged',C.sizeof(State)==176,bytes=C.sizeof(State))
@@ -114,7 +114,7 @@ def main():
             except RuntimeError:rejected=True
             record(name+'-rejected',rejected)
         image,size=export_model(b);cuda=gpu_bind(a.cuda_library);error=C.create_string_buffer(4096)
-        device=cuda.pintle_gpu_hem_create_v1(image,size,len(rows),error,len(error))
+        device=cuda.reactive_gpu_hem_create_v1(image,size,len(rows),error,len(error))
         if not device:raise RuntimeError(error.value.decode(errors='replace'))
         try:
             rc,gpu,success,unchanged,before,after,message,profile=gpu_run(cuda,device,rows)
@@ -125,7 +125,7 @@ def main():
             record('cuda-analytic-jacobian',profile.analyticJacobians>0 and profile.finiteDifferenceJacobians==0,
                 analytic=profile.analyticJacobians,finiteDifference=profile.finiteDifferenceJacobians)
             report['cudaProfile']={n:getattr(profile,n) for n,_ in profile._fields_}
-        finally:cuda.pintle_gpu_hem_destroy_v1(device)
+        finally:cuda.reactive_gpu_hem_destroy_v1(device)
         report['physicalModelHash']=b.physical_hash
     report['passed']=all(x['passed'] for x in report['tests']);report['testCount']=len(report['tests'])
     a.output.parent.mkdir(parents=True,exist_ok=True);tmp=a.output.with_suffix(a.output.suffix+'.tmp')

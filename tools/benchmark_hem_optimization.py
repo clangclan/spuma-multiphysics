@@ -74,7 +74,7 @@ def main():
         fcntl.flock(lock,fcntl.LOCK_EX)
         prepare(source,target,args.batch,None if args.reuse is None else args.reuse=='true',args.fresh,args.closure_library)
         binaries={name:common.sha256(common.PROJECT_ROOT/name) for name in
-            ('bin/ReactiveFoam','lib/libpintleReactiveTransport.so','lib/libpintleReactiveBackend.so')}
+            ('bin/ReactiveFoam','lib/libreactiveTransport.so','lib/libreactiveBackend.so')}
         if args.closure_library:binaries[str(args.closure_library.resolve())]=common.sha256(args.closure_library)
         prefix=[]
         if args.nsys:

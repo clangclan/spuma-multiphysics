@@ -6,4 +6,4 @@ EXE_INC = \
 
 EXE_LIBS = \
     -lfiniteVolume -lmeshTools \
-    -L$(PINTLE_GPU_ROOT)/lib -lpintleReactiveBackend -lpintleReactiveTransport
+    -L$(REACTIVE_PROJECT_ROOT)/lib -lreactiveBackend -lreactiveTransport

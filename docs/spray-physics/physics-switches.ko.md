@@ -17,7 +17,7 @@ physics
 
 `surfaceTension true`는 새 [diffuse-interface GPU 결합 경로](capillary-flashing.ko.md)를 선택한다. 하나의 액상, 비반응 HEM, CUDA 수송·열역학, `closureCpuFallback false`, 양의 `surfaceTensionCoefficient`가 필요하다. 독립 액체 질량과 벌크·표면 총에너지를 수송한다. 실제 flashing 결합은 실행되지만 정적 액적의 기생 유속 수렴 기준은 아직 통과하지 못했다.
 
-독립 모듈 `pintleInterfaceGeometry.h`에서는 `InterfaceOptions::enableSurfaceTension`이 모세관 경로를 제어한다. 비활성일 때 곡률과 capillary workspace 포인터는 null로 둘 수 있다. 계면 수송에 별도로 필요한 color·기하 계산은 표면장력 비용과 분리한다. 이 모듈은 현재 ReactiveFoam 실행 파일에 연결되어 있지 않다. 주어진 면 체적 플럭스의 donor-cell 수송은 비발산 이동 시험용이며, 일반 압축성 유동의 체적분율 팽창항이나 상변화 질량 전달을 대신하지 않는다.
+독립 모듈 `reactiveInterfaceGeometry.h`에서는 `InterfaceOptions::enableSurfaceTension`이 모세관 경로를 제어한다. 비활성일 때 곡률과 capillary workspace 포인터는 null로 둘 수 있다. 계면 수송에 별도로 필요한 color·기하 계산은 표면장력 비용과 분리한다. 이 모듈은 현재 ReactiveFoam 실행 파일에 연결되어 있지 않다. 주어진 면 체적 플럭스의 donor-cell 수송은 비발산 이동 시험용이며, 일반 압축성 유동의 체적분율 팽창항이나 상변화 질량 전달을 대신하지 않는다.
 
 ## WALE 열·종 혼합 선택
 

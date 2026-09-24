@@ -61,7 +61,7 @@ def main():
         item=dict(name=name,passed=bool(passed),**detail);report['tests'].append(item);print(json.dumps(item,allow_nan=False),flush=True)
     cpu_rows=[];cpu_states=[]
     with RealFluidBackend(a.configuration,a.library) as b:
-        export=b.lib.pintle_rt_export_gpu_hem_v1
+        export=b.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes=[C.c_void_p,C.c_void_p,C.c_size_t,C.POINTER(C.c_size_t)];export.restype=C.c_int
         record('state-abi-unchanged',C.sizeof(State)==176,bytes=C.sizeof(State))
         record('condensed-metadata',[(x['species'],x['kind'],x['name']) for x in b.condensed]==
@@ -108,7 +108,7 @@ def main():
             except RuntimeError:rejected=True
             record(name+'-rejected',rejected)
         image,size=export_model(b);cuda=gpu_bind(a.cuda_library);error=C.create_string_buffer(4096)
-        device=cuda.pintle_gpu_hem_create_v1(image,size,len(cpu_rows),error,len(error))
+        device=cuda.reactive_gpu_hem_create_v1(image,size,len(cpu_rows),error,len(error))
         if not device:raise RuntimeError(error.value.decode(errors='replace'))
         try:
             rc,gpu,success,unchanged,before,after,message,profile=gpu_run(cuda,device,cpu_rows)
@@ -117,7 +117,7 @@ def main():
                 error_value=scaled(gpu[i],cpu_states[i]) if success[i] else None
                 record('cpu-gpu-'+name,success[i]==1 and residuals(gpu[i]) and error_value<1e-6,success=success[i],scaledError=error_value)
             report['cudaProfile']={n:getattr(profile,n) for n,_ in profile._fields_}
-        finally:cuda.pintle_gpu_hem_destroy_v1(device)
+        finally:cuda.reactive_gpu_hem_destroy_v1(device)
     report['sublimationReferencePassed']=sublimation_reference_passed
     report['numericalPassed']=all(x['passed'] for x in report['tests'] if x['name']!='sublimation-coexistence-roots')
     report['passed']=report['numericalPassed'] and report['sublimationReferencePassed'];report['testCount']=len(report['tests'])

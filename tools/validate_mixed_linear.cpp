@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include "../src/reactiveThermo/pintleDeviceFlash.h"
+#include "../src/reactiveThermo/reactiveDeviceFlash.h"
 #include <cassert>
 #include <random>
 #include <iostream>
 int main(){
-    using PintleMixedLinear::Fixed;
+    using ReactiveMixedLinear::Fixed;
     std::mt19937_64 rng(24092026);std::uniform_real_distribution<double> u(-1,1);
     unsigned products=0,systems=0;
     for(int k=0;k<100000;++k){
@@ -25,14 +25,14 @@ int main(){
         for(int j=0;j<n;++j)truth[j]=u(rng);
         for(int i=0;i<n;++i){for(int j=0;j<n;++j)a[i][j]=u(rng);a[i][i]+=n+1;
             for(int j=0;j<n;++j)b[i]+=a[i][j]*truth[j];}
-        assert(PintleMixedLinear::solve<float>(a,b,n,fp));
-        assert(PintleMixedLinear::solve<Fixed>(a,b,n,integer));
+        assert(ReactiveMixedLinear::solve<float>(a,b,n,fp));
+        assert(ReactiveMixedLinear::solve<Fixed>(a,b,n,integer));
         for(int i=0;i<n;++i){assert(::fabs(fp[i]-truth[i])<2e-5);assert(::fabs(integer[i]-truth[i])<2e-5);}
         ++systems;
     }
     double a[4][4]{{1,0},{0,1e-18}},b[4]{1,1e-18},x[4]{};
-    assert(!PintleMixedLinear::solve<float>(a,b,2,x));
-    assert(!PintleMixedLinear::solve<Fixed>(a,b,2,x));
+    assert(!ReactiveMixedLinear::solve<float>(a,b,2,x));
+    assert(!ReactiveMixedLinear::solve<Fixed>(a,b,2,x));
     assert(!Fixed(32.).valid()&&!Fixed(-32.).valid());
     assert(!(Fixed(31.)+Fixed(2.)).valid());assert(!(Fixed(1.)/Fixed(0.)).valid());
     std::cout<<"{\"passed\":true,\"integerProducts\":"<<products<<",\"knownSolutionSystems\":"<<systems<<",\"tinyRowRankRejected\":true}"<<std::endl;

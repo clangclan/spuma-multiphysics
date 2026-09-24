@@ -11,7 +11,7 @@ void jsonNumber(std::ostream& out,double value) {
     if(std::isfinite(value))out<<value;
     else out<<jsonQuote(std::isnan(value)?"NaN":(value<0?"-Infinity":"Infinity"));
 }
-void jsonState(std::ostream& out,const PintleThermoState& s,const std::vector<int>& condensedKinds,
+void jsonState(std::ostream& out,const ReactiveThermoState& s,const std::vector<int>& condensedKinds,
                const std::vector<std::string>& condensedNames) {
     out<<'{';bool comma=false;
 #define STATE_VALUE(n) if(comma)out<<',';comma=true;out<<"\"" #n "\":";jsonNumber(out,s.n);

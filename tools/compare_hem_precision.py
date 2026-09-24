@@ -14,6 +14,7 @@ import numpy as np
 import benchmark as common
 from reactive_backend import State
 from validate_capillary_solver import time_points
+from legacy_artifacts import canonical_binary_hashes
 
 def checkpoint(case):
     _,directory=time_points(case)[-1];path=directory/'reactiveState.bin'
@@ -37,8 +38,9 @@ def main():
     def properties(case):
         return re.sub(r'\bclosureLibrary\s+[^;]+;','closureLibrary <experiment>;', (case/prop).read_text())
     assert properties(a.baseline)==properties(a.candidate), 'Non-precision solver settings differ'
-    binary_paths=('bin/ReactiveFoam','lib/libpintleReactiveTransport.so','lib/libpintleReactiveBackend.so')
-    assert all(bd['binaries'][p]==cd['binaries'][p] for p in binary_paths)
+    binary_paths=('bin/ReactiveFoam','lib/libreactiveTransport.so','lib/libreactiveBackend.so')
+    bb,cb=canonical_binary_hashes(bd['binaries']),canonical_binary_hashes(cd['binaries'])
+    assert all(bb[p]==cb[p] for p in binary_paths)
     bh,bq,bs=checkpoint(a.baseline);ch,cq,cs=checkpoint(a.candidate)
     assert bh[3:6]==ch[3:6] and bh[8]==ch[8]==1e-6
     n2o=bdef['n2oSpeciesIndex'];ns=len(bdef['species']);jet=bq[:,n2o]>1e-9

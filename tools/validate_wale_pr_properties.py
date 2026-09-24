@@ -50,7 +50,7 @@ def main():
         nvcc=os.environ.get('NVCC') or shutil.which('nvcc')
         if not nvcc:
             nvcc='/home/jsw/nvidia/hpc_sdk/Linux_x86_64/26.5/cuda/bin/nvcc'
-        arch=os.environ.get('PINTLE_CUDA_ARCH','120')
+        arch=os.environ.get('REACTIVE_CUDA_ARCH','120')
         assert arch.isdigit()
         source=Path(__file__).resolve().with_name('wale_pr_property_probe.cu')
         subprocess.run([nvcc,'-std=c++17','-O2','-Xcompiler=-fPIC,-Wall,-Wextra',
@@ -67,11 +67,11 @@ def main():
     # The backend resolves the mechanism relative to the process cwd.
     os.chdir(args.configuration.parent)
     with RealFluidBackend(args.configuration, args.backend) as backend:
-        select = backend.lib.pintle_rt_set_gpu_hem_jacobian_v1
+        select = backend.lib.reactive_rt_set_gpu_hem_jacobian_v1
         select.argtypes = [C.c_void_p, C.c_int]
         select.restype = C.c_int
         backend.check(select(backend.handle, 1))
-        export = backend.lib.pintle_rt_export_gpu_hem_v1
+        export = backend.lib.reactive_rt_export_gpu_hem_v1
         export.argtypes = [C.c_void_p, C.c_void_p, C.c_size_t, C.POINTER(C.c_size_t)]
         export.restype = C.c_int
         image, image_size = export_model(backend)
@@ -83,24 +83,24 @@ def main():
         caps = (Capillary*n)(*[Capillary(colors[i], jumps[i], int(records[i]['equilibrium']))
                                for i in range(n)])
         gpu = gpu_bind(args.cuda_library)
-        gpu.pintle_gpu_hem_run_v2.argtypes = [C.c_void_p, C.POINTER(C.c_double),
+        gpu.reactive_gpu_hem_run_v2.argtypes = [C.c_void_p, C.POINTER(C.c_double),
             C.POINTER(C.c_double), C.POINTER(Capillary), C.c_size_t, C.POINTER(State),
             C.POINTER(C.c_int), C.POINTER(HemProfile), C.c_char_p, C.c_size_t]
-        gpu.pintle_gpu_hem_run_v2.restype = C.c_int
+        gpu.reactive_gpu_hem_run_v2.restype = C.c_int
         error = C.create_string_buffer(4096)
-        handle = gpu.pintle_gpu_hem_create_v1(image, image_size, n, error, len(error))
+        handle = gpu.reactive_gpu_hem_create_v1(image, image_size, n, error, len(error))
         assert handle, error.value.decode()
         succeeded = (C.c_int*n)()
         profile = HemProfile(1, C.sizeof(HemProfile))
         try:
-            rc = gpu.pintle_gpu_hem_run_v2(handle, ptr(q), ptr(energy), caps, n,
+            rc = gpu.reactive_gpu_hem_run_v2(handle, ptr(q), ptr(energy), caps, n,
                 states, succeeded, C.byref(profile), error, len(error))
             assert rc == 0 and all(succeeded), error.value.decode()
         finally:
-            gpu.pintle_gpu_hem_destroy_v1(handle)
+            gpu.reactive_gpu_hem_destroy_v1(handle)
 
         probe = C.CDLL(str(args.probe_library.resolve()))
-        method = probe.pintle_wale_pr_property_probe
+        method = probe.reactive_wale_pr_property_probe
         method.argtypes = [C.c_void_p, C.c_size_t, C.POINTER(C.c_double),
             C.POINTER(State), C.POINTER(C.c_double), C.POINTER(C.c_double), C.c_size_t,
             C.POINTER(C.c_double), C.POINTER(C.c_double), C.POINTER(C.c_uint)]
@@ -111,7 +111,7 @@ def main():
             ptr(h), ptr(cp), statuses) == 0
         failed = [(i, statuses[i]) for i in range(n) if statuses[i]]
         assert not failed, failed[:12]
-        host = backend.lib.pintle_rt_total_species_enthalpies_capillary_v1
+        host = backend.lib.reactive_rt_total_species_enthalpies_capillary_v1
         host.argtypes = [C.c_void_p, C.POINTER(C.c_double), C.POINTER(State),
             C.c_double, C.c_double, C.POINTER(C.c_double)]
         host.restype = C.c_int
@@ -120,7 +120,7 @@ def main():
             row = np.ascontiguousarray(q[i])
             rc = host(backend.handle, ptr(row), C.byref(states[i]),
                 colors[i], jumps[i], ptr(reference[i]))
-            assert rc == 0, (i, backend.lib.pintle_rt_error(backend.handle).decode())
+            assert rc == 0, (i, backend.lib.reactive_rt_error(backend.handle).decode())
         rel = np.abs(h-reference)/np.maximum(1., np.abs(reference))
         assert np.max(rel) < 2e-6, np.unravel_index(np.argmax(rel), rel.shape)
         np.testing.assert_array_equal(cp, np.array([state.cp for state in states]))

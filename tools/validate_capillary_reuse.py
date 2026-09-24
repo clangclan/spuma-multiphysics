@@ -24,19 +24,19 @@ def main():
             attach(b)
             q,e,seed=b.make_state(190.,140252.74973819536,{'N2O':1},[.5])
             seed=b.recover(q,e,seed)
-            b.check(b.lib.pintle_rt_set_closure_acceleration_v1(b.handle,int(reuse),0,b''))
-            configure=b.lib.pintle_rt_set_gpu_hem_v1
+            b.check(b.lib.reactive_rt_set_closure_acceleration_v1(b.handle,int(reuse),0,b''))
+            configure=b.lib.reactive_rt_set_gpu_hem_v1
             configure.argtypes=[C.c_void_p,C.c_int,C.c_int,C.c_char_p];configure.restype=C.c_int
             b.check(configure(b.handle,1,0,str(a.cuda_library.resolve()).encode()))
-            call=b.lib.pintle_rt_pool_capillary_batch_v1
+            call=b.lib.reactive_rt_pool_capillary_batch_v1
             call.argtypes=[C.c_void_p,Token,C.c_int,C.c_size_t,C.c_size_t]+[C.POINTER(C.c_double)]*4+[C.POINTER(State)]
             call.restype=C.c_int
-            hem_query=b.lib.pintle_rt_pool_gpu_hem_profile_v1
+            hem_query=b.lib.reactive_rt_pool_gpu_hem_profile_v1
             hem_query.argtypes=[C.c_void_p,C.POINTER(HemProfile)];hem_query.restype=C.c_int
             def hem_stats():
                 h=HemProfile(1,C.sizeof(HemProfile));b.check(hem_query(pool,C.byref(h)));return h
             error=C.create_string_buffer(1024)
-            pool=b.lib.pintle_rt_pool_create(b.handle,1,32,32_000_000,error,len(error))
+            pool=b.lib.reactive_rt_pool_create(b.handle,1,32,32_000_000,error,len(error))
             if not pool:raise RuntimeError(error.value.decode())
             version=0
             try:
@@ -85,7 +85,7 @@ def main():
                         success&=delta['uniqueCells']==unique
                         success&=delta['reusedCells']==(0 if kind=='failure' else n-unique)
                     if kind=='failure':
-                        success&=output==before[2] and 'Batch cell 1:' in b.lib.pintle_rt_pool_error(pool).decode()
+                        success&=output==before[2] and 'Batch cell 1:' in b.lib.reactive_rt_pool_error(pool).decode()
                     if kind=='geometry':success&=states[0].p!=states[1].p and states[1].p!=states[2].p
                     snapshot=bytes(states)
                     stale=call(pool,token,equilibrium,n,b.ns,ptr(mass),ptr(energy),ptr(color),ptr(jump),states)
@@ -93,7 +93,7 @@ def main():
                     results.append(dict(name=name,reuse=reuse,passed=bool(success),status=status,**delta))
                     if mapping is not None:
                         del mass;mapping.close();backing.close()
-            finally:b.lib.pintle_rt_pool_destroy(pool)
+            finally:b.lib.reactive_rt_pool_destroy(pool)
     report=dict(passed=all(x['passed'] for x in results),tests=results,
         comparison='All state bytes, including residuals/iterations; exact key and failed-output immutability')
     a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,indent=2)+'\n')

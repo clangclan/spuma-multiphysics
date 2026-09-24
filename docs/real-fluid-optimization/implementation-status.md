@@ -18,7 +18,7 @@
 
 ### 2.1 모델과 수치 정책을 별도로 식별
 
-- 기존 `pintle-reactive-thermo-v3` checkpoint fingerprint 계산을 보존했다. 따라서 이전 재시작 입력의 의미를 바꾸지 않는다.
+- 기존 checkpoint fingerprint 계산을 보존했다. 명칭 정리 후에도 해시 입력 문자열의 바이트는 같으며 이전 재시작 입력의 의미를 바꾸지 않는다.
 - 새로운 `physicalModelHash`는 선택 EOS, 원본 기구/액상 파일 내용, 종 순서·계수, 상 구성과 온도·압력 영역을 식별한다. Flow에서는 closure, 반응 활성화와 처방된 점성·열전도·확산 계수도 hash에 포함한다.
 - `numericalPolicyHash`는 열역학 허용오차, scalar 복원 선택, 화학 Jacobian/선형해법과 Flow의 source tolerance·파속 계수·수송 backend 선택을 구분한다. 시간/격자/worker 수 등 전체 실행 입력은 별도의 case 파일 hash로 추적하며 이 hash 하나가 모든 실행조건을 뜻하지 않는다.
 - 체크포인트 schema 2에 두 hash를 추가했다. 기존 schema 1의 fingerprint 검사는 유지하며, 새 물리 hash가 있으면 함께 검사한다. 수치 정책이 다르다는 이유만으로 EOS가 바뀌었다고 판정하지 않는다. 단, 기존 v3 fingerprint에 포함된 설정을 바꾸는 재시작에는 종전 제한이 여전히 적용된다.
@@ -29,7 +29,7 @@
 
 ### 2.2 동일 EOS의 선택 물성 인터페이스
 
-신규 `pintleRealFluid.h`는 기존 C ABI 구조체를 변경하지 않는 추가 인터페이스다. `pintle_rt_evaluate_real_fluid()`의 독립변수는 `(T,rho,Y)`이고 기상 또는 지정 순수 액상 branch를 명시한다. 직접 EOS에서 압력·내부에너지·엔탈피·엔트로피·cp/cv를 계산하고 요청 mask에 따라 다음을 추가 계산한다.
+신규 `reactiveRealFluid.h`는 기존 C ABI 구조체를 변경하지 않는 추가 인터페이스다. `reactive_rt_evaluate_real_fluid()`의 독립변수는 `(T,rho,Y)`이고 기상 또는 지정 순수 액상 branch를 명시한다. 직접 EOS에서 압력·내부에너지·엔탈피·엔트로피·cp/cv를 계산하고 요청 mask에 따라 다음을 추가 계산한다.
 
 - 기준상태와 잔차: `e=e0+er`, `h=h0+hr`, `s=s0+sr`. 엔트로피 기준은 같은 `(T,rho,Y)`의 이상기체 기준상태와 혼합항이다. 실제 반환 물성은 항상 원 EOS 값이다.
 - 고정 조성 압력 미분: `dp/dT|rho,Y = expansion/compressibility`, `dp/drho|T,Y = 1/(rho*compressibility)`.
@@ -56,9 +56,9 @@ F(T)=\rho e_{EOS}(T,\rho,Y)-\varepsilon,\qquad F'(T)=\rho c_{v,EOS}(T,\rho,Y).
 
 작은 선형계는 행·열 scaling과 pivoted LU로 풀며 역행렬을 만들지 않는다. 새 접선 API는 scaled reciprocal condition과 원 방정식의 선형 잔차를 반환한다. flash에서는 scaling 검사가 실패하면 기존 FP64 pivoted solve로 돌아가므로 새 screening 기준만으로 기존 엔트로피 후보를 제거하지 않는다.
 
-`pintle_rt_thermo_tangent()`는 `F_z dz = -F_q v - F_epsilon d_epsilon`를 방향차분으로 적용한다. 로그의 기준은 `log(p/1 Pa)`, `log(T/1 K)`다. 무기상, 소멸/출현 경계, 작은 absent-phase 안정성 여유는 고정 branch 접선을 거부한다. 현재 미분은 bounded finite difference이며 analytic/AD 완료를 뜻하지 않는다.
+`reactive_rt_thermo_tangent()`는 `F_z dz = -F_q v - F_epsilon d_epsilon`를 방향차분으로 적용한다. 로그의 기준은 `log(p/1 Pa)`, `log(T/1 K)`다. 무기상, 소멸/출현 경계, 작은 absent-phase 안정성 여유는 고정 branch 접선을 거부한다. 현재 미분은 bounded finite difference이며 analytic/AD 완료를 뜻하지 않는다.
 
-`pintle_rt_chemical_matrix_free_jvp()`는 `Jv=R_q v+R_z dz`를 계산한다. `Ns×Ns` 행렬이나 `F_q` 전체를 만들지 않고 작은 `F_z`, 종 벡터와 방향 probe를 사용한다. 고정 branch 적용이 어려우면 같은 EOS의 전체 source 방향차분으로 복구한다. **진단 API이며 기존 CVODE 적분기 선택에는 아직 연결하지 않았다.** 기존 최신 Jv cache와 preconditioner snapshot의 분리도 유지한다. 동적-rank Woodbury·제3체 공통항 생성기는 후속 작업이다.
+`reactive_rt_chemical_matrix_free_jvp()`는 `Jv=R_q v+R_z dz`를 계산한다. `Ns×Ns` 행렬이나 `F_q` 전체를 만들지 않고 작은 `F_z`, 종 벡터와 방향 probe를 사용한다. 고정 branch 적용이 어려우면 같은 EOS의 전체 source 방향차분으로 복구한다. **진단 API이며 기존 CVODE 적분기 선택에는 아직 연결하지 않았다.** 기존 최신 Jv cache와 preconditioner snapshot의 분리도 유지한다. 동적-rank Woodbury·제3체 공통항 생성기는 후속 작업이다.
 
 ### 2.5 GPU 수송의 메모리와 명시적 상태 수명
 
@@ -131,7 +131,7 @@ research/reactive-env/bin/python tools/check_real_fluid_v2.py \
   --thermo-dir research/reactive-thermo \
   --output results/local-rf-v2-smoke.json
 
-PINTLE_REACTIVE_TRANSPORT_BUILD=cuda PINTLE_CUDA_ARCH=120 \
+REACTIVE_TRANSPORT_BUILD=cuda REACTIVE_CUDA_ARCH=120 \
   bash tools/build_reactive_solver.sh
 ```
 

@@ -8,8 +8,8 @@
 #include <cstdio>
 #include <vector>
 
-namespace GC=PintleGeometricCapillary;
-namespace GO=PintleGeometricOracle;
+namespace GC=ReactiveGeometricCapillary;
+namespace GO=ReactiveGeometricOracle;
 
 static void check(cudaError_t status) {
     if(status!=cudaSuccess) {

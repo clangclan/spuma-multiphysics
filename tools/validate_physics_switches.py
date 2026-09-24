@@ -205,8 +205,8 @@ physics {{ turbulence WALE; {switches} }}
     run(case, 'Restart physical model hash differs', log='changed-scalar-rejected.log')
     record('changed-scalar-restart-rejected', True)
     report['passed'] = all(row['passed'] for row in report['checks'])
-    report['artifacts'] = {str(p): common.sha256(p) for p in [ROOT/'bin/ReactiveFoam', ROOT/'lib/libpintleReactiveBackend.so',
-                            ROOT/'lib/libpintleReactiveTransport.so', Path(__file__)]}
+    report['artifacts'] = {str(p): common.sha256(p) for p in [ROOT/'bin/ReactiveFoam', ROOT/'lib/libreactiveBackend.so',
+                            ROOT/'lib/libreactiveTransport.so', Path(__file__)]}
     common.atomic_json(out/'result.json', report)
     print(json.dumps(report))
 

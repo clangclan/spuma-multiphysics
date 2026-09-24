@@ -13,7 +13,7 @@ inline void requireIO(bool ok,const std::string& message) {
 }
 inline std::string sha(const fs::path& path) {
     char hash[65];
-    if(pintle_rt_file_sha256_v1(path.c_str(),hash,sizeof(hash)))
+    if(reactive_rt_file_sha256_v1(path.c_str(),hash,sizeof(hash)))
         throw PersistentIOError("Cannot hash checkpoint file "+path.string());
     return hash;
 }
@@ -35,7 +35,7 @@ void save(const fs::path& path,const Array& q,const States& states,bool mechanic
     std::ofstream out(path,std::ios::binary|std::ios::trunc);requireIO(bool(out),path.string());
     const uint64_t magic=0x524643484b505433ULL,endian=0x0102030405060708ULL;
     put(out,magic);put(out,endian);put(out,uint64_t(sizeof(double)));put(out,uint64_t(states.size()));
-    put(out,uint64_t(h.initial.size()));put(out,uint64_t(mechanical?sizeof(CellState):sizeof(PintleThermoState)));
+    put(out,uint64_t(h.initial.size()));put(out,uint64_t(mechanical?sizeof(CellState):sizeof(ReactiveThermoState)));
     put(out,h.steps);put(out,h.retries);put(out,h.time);put(out,h.lastDt);put(out,h.velocityScale);put(out,h.energyScale);
     for(double value:h.initial)put(out,value);for(double value:h.boundary)put(out,value);
     out.write(reinterpret_cast<const char*>(q.data()),q.size()*sizeof(double));
@@ -51,7 +51,7 @@ void verify(const fs::path& dir) {
     demand(signature=="ReactiveFoam checkpoint 3","Incomplete checkpoint: missing/invalid complete marker");
     std::string hash,name;bool state=false,identity=false;size_t count=0;
     while(marker>>hash>>std::quoted(name)) {
-        demand(pintleIdentityHash(hash)&&name.find('/')==std::string::npos&&name!="."&&name!="..",
+        demand(reactiveIdentityHash(hash)&&name.find('/')==std::string::npos&&name!="."&&name!="..",
                "Invalid checkpoint manifest entry");
         demand(fs::is_regular_file(dir/name)&&sha(dir/name)==hash,"Checkpoint checksum mismatch: "+name);
         state|=name=="reactiveState.bin";
@@ -64,7 +64,7 @@ void load(const fs::path& dir,Array& q,States& states,bool mechanical,size_t nv,
     uint64_t magic,endian,scalarBytes,cells,variables,stateBytes;
     get(in,magic);get(in,endian);get(in,scalarBytes);get(in,cells);get(in,variables);get(in,stateBytes);
     demand(magic==0x524643484b505433ULL&&endian==0x0102030405060708ULL&&scalarBytes==sizeof(double)
-        &&cells==states.size()&&variables==nv&&stateBytes==(mechanical?sizeof(CellState):sizeof(PintleThermoState)),
+        &&cells==states.size()&&variables==nv&&stateBytes==(mechanical?sizeof(CellState):sizeof(ReactiveThermoState)),
         "Checkpoint layout/mesh/closure mismatch; explicit migration required");
     get(in,h.steps);get(in,h.retries);get(in,h.time);get(in,h.lastDt);get(in,h.velocityScale);get(in,h.energyScale);
     demand(std::isfinite(h.time)&&std::string(Foam::Time::timeName(h.time).c_str())==dir.filename().string()&&std::isfinite(h.lastDt)&&h.lastDt>=0&&std::isfinite(h.velocityScale)&&h.velocityScale>0
@@ -77,7 +77,7 @@ void load(const fs::path& dir,Array& q,States& states,bool mechanical,size_t nv,
     }
     demand(states.isMechanical()==mechanical,"Checkpoint active state mode mismatch");
     for(size_t c=0;c<states.size();++c) {
-        CellState saved{};if(mechanical)get(in,saved);else get(in,static_cast<PintleThermoState&>(saved));
+        CellState saved{};if(mechanical)get(in,saved);else get(in,static_cast<ReactiveThermoState&>(saved));
         demand(states[c].p==saved.p&&states[c].T==saved.T,"Checkpoint field/binary thermodynamic seed mismatch");
         if(mechanical)states.full(c)=saved;else states[c]=saved;
     }

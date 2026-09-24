@@ -1,11 +1,11 @@
-#include "../src/reactiveInterface/pintleInterfaceGeometry.h"
+#include "../src/reactiveInterface/reactiveInterfaceGeometry.h"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <iostream>
 #include <numeric>
 #include <vector>
-using namespace PintleInterfaceGeometry;
+using namespace ReactiveInterfaceGeometry;
 
 struct Storage {
   std::vector<double> gx,gy,gz,nx,ny,nz,a,k,sxx,syy,szz,sxy,sxz,syz,fx,fy,fz,se;
