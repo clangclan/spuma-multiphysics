@@ -6,9 +6,10 @@
 
 ```bash
 "$REACTIVE_PREFIX/bin/python" tools/prepare_impinging_n2o.py /path/to/new-supercooled-benchmark \
-  --configuration examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml --cell-mm 0.25
+  --configuration examples/impinging-n2o-supercooled/cold-pr-148K-config.yaml \
+  --cells-per-axis 40 --domain-mm 80 --nozzle-diameter-mm 5 --inlet-z-mm 40
 ```
 
-설정의 기구 상대경로는 생성기가 절대경로로 변환한다. backend API에 직접 사용할 때는 `mechanism`을 절대경로로 지정한다. [수치 검증과 GPU 성능](../../docs/benchmarks/impinging-n2o-supercooled.ko.md)을 참고한다.
+설정의 기구 상대경로는 생성기가 절대경로로 변환한다. backend API에 직접 사용할 때는 `mechanism`을 절대경로로 지정한다. [현재 솔버 안내와 검증 결과](../../README.md)를 참고한다.
 
-생성한 케이스는 `physics.surfaceTension false`를 명시한다. 표면장력 선택은 상변화·WALE와 독립적이며, 현재 미완성인 계면 결합을 활성화하려는 요청은 솔버가 거부한다. [선택 방법과 검증 범위](../../docs/spray-physics/physics-switches.ko.md)를 참고한다.
+생성한 케이스는 `physics.surfaceTension false`를 명시한다. 표면장력은 별도 옵션이며 `tools/prepare_capillary_impingement.py`로 CUDA 모세관·flashing 파생 케이스를 만들 수 있다. 단일 액체·비반응 HEM·CUDA 수송/복원 및 CPU fallback 비활성화 조건이 필요하다. 정적 액적의 메시 수렴 문제는 아직 해결되지 않았다. [실행 예제](../../README.md#n₂o-충돌-케이스-시작하기), [모세관 모델](../../docs/spray-physics/capillary-flashing.ko.md), [선택 방법과 검증 범위](../../docs/spray-physics/physics-switches.ko.md)를 참고한다.
