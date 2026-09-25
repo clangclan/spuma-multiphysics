@@ -27,6 +27,7 @@
 #include "reactiveTransportV21.h"
 #include "reactiveCartesianTransport.h"
 #include "reactiveTurbulence.h"
+#include "reactiveCapillaryResident.h"
 #include "reactiveCapillary.h"
 #include <algorithm>
 #include <array>
@@ -136,7 +137,7 @@ public:
     double sigma,capillaryCfl,capillaryGeometryTolerance;
     mutable Array interfaceColor,interfaceCurvature,surfaceEnergy,interfaceJump;
     Array fixedColor;
-    mutable uint64_t capillaryRecoveries=0,capillaryIterations=0;
+    mutable uint64_t capillaryRecoveries=0,capillaryIterations=0,capillaryResidentFallbacks=0;
     // Outer capillary closure: per-cell seed of the current recovery, the
     // geometry input of each cell's latest flash, and the flashed/reused
     // cell counts. See recoverCapillary.
@@ -173,14 +174,23 @@ public:
     // through the pool's staging, exact-reuse hash, gather/scatter and commit.
     // Failed batches are repacked and re-run through the pool for diagnostics;
     // the original failure always rejects the attempt. Count both executions.
+    // closureHemBatchCells sets the cells per launch: direct defaults to
+    // thermoBatchCells (its host staging scales with it); resident defaults to
+    // all cells (it holds only per-cell counters), so the few slow liquid
+    // cells overlap the gas cells in one launch. Resident also keeps the
+    // closure iteration on the device, and its host-path rerun uses the pool
+    // (reactiveCapillary.H), so it never needs direct host staging.
     struct DirectHem {
-        void* library=nullptr;void* handle=nullptr;
+        void* library=nullptr;void* handle=nullptr;size_t capacity=0;bool resident=false;
         decltype(&reactive_gpu_hem_run_v2) run=nullptr;decltype(&reactive_gpu_hem_destroy_v1) destroy=nullptr;
+        decltype(&reactive_gpu_hem_run_resident_v1) runResident=nullptr;
         ~DirectHem(){if(handle&&destroy)destroy(handle);if(library)dlclose(library);}
     };
     std::unique_ptr<DirectHem> directHem;
     mutable ReactiveGpuHemProfileV1 directHemProfile{};
     mutable std::vector<ReactiveGpuHemCapillaryInputV2> batchCapillary;mutable std::vector<int> batchSuccess;
+    mutable Array residentQ,residentLiquid,residentBulk;
+    mutable bool residentDeviceFailure=false;
     static void addHemProfile(ReactiveGpuHemProfileV1& a,const ReactiveGpuHemProfileV1& b) {
 #define REACTIVE_HEM_SUM(f) a.f+=b.f
         REACTIVE_HEM_SUM(batches);REACTIVE_HEM_SUM(submitted);REACTIVE_HEM_SUM(succeeded);REACTIVE_HEM_SUM(cpuFallbacks);
@@ -323,9 +333,14 @@ public:
         demand(hemSearch=="reference"||fullBackend=="cuda","stableGasPrune closureSearch requires full CUDA closure");
         check(reactive_rt_set_gpu_hem_search_v1(t,hemSearch=="stableGasPrune"),"GPU closure search policy");
         const word hemPath=dict.getOrDefault<word>("closureHemPath","pool");
-        demand(hemPath=="pool"||hemPath=="direct","Unknown closureHemPath");
-        demand(hemPath!="direct"||(capillary&&fullBackend=="cuda"&&!dict.getOrDefault<bool>("closureCpuFallback",true)),
-            "closureHemPath direct requires capillary strict CUDA HEM without CPU fallback");
+        demand(hemPath=="pool"||hemPath=="direct"||hemPath=="resident","Unknown closureHemPath");
+        demand(hemPath=="pool"||(capillary&&fullBackend=="cuda"&&!dict.getOrDefault<bool>("closureCpuFallback",true)),
+            "closureHemPath direct/resident requires capillary strict CUDA HEM without CPU fallback");
+        demand(hemPath!="resident"||(!mechanical&&capillaryGeometryMode=="diffuse"),
+            "closureHemPath resident requires diffuse capillary geometry without mechanical states");
+        const label hemBatch=dict.getOrDefault<label>("closureHemBatchCells",
+            hemPath=="resident"?label(nc):label(batchCells));
+        demand(hemBatch>0,"closureHemBatchCells must be positive");
         const bool solidClosure=std::find(condensedKinds.begin(),condensedKinds.end(),1)!=condensedKinds.end();
         Info<<"REACTIVE_CLOSURE_ACCELERATION exactBatchReuse="<<reuse<<" scalarBackend="<<scalarBackend
             <<" fullBackend="<<fullBackend<<" deviceFullClosure="<<(fullBackend=="cuda")
@@ -344,21 +359,35 @@ public:
             ReactiveGpuHemProfileV1 hem{};hem.abiVersion=1;hem.structBytes=sizeof(hem);
             demand(reactive_rt_pool_gpu_hem_profile_v1(pool.get(),&hem)==0,"GPU HEM memory query failed");
             closureDeviceBytes=acceleration.deviceBytes+hem.deviceBytes;
-            if(hemPath=="direct") {
+            if(hemPath!="pool") {
                 size_t bytes=0;check(reactive_rt_export_gpu_hem_v1(t,nullptr,0,&bytes),"HEM model size");
                 std::vector<char> image(bytes);check(reactive_rt_export_gpu_hem_v1(t,image.data(),bytes,&bytes),"HEM model export");
                 directHem=std::make_unique<DirectHem>();
                 directHem->library=dlopen(hemLibrary.c_str(),RTLD_NOW|RTLD_LOCAL);
                 demand(directHem->library,"Cannot open CUDA HEM library for the direct path");
-                auto create=reinterpret_cast<decltype(&reactive_gpu_hem_create_v1)>(dlsym(directHem->library,"reactive_gpu_hem_create_v1"));
+                directHem->resident=hemPath=="resident";
+                auto create=reinterpret_cast<decltype(&reactive_gpu_hem_create_v1)>(dlsym(directHem->library,
+                    directHem->resident?"reactive_gpu_hem_create_resident_v1":"reactive_gpu_hem_create_v1"));
+                auto deviceBytes=reinterpret_cast<decltype(&reactive_gpu_hem_device_bytes_v1)>(
+                    dlsym(directHem->library,"reactive_gpu_hem_device_bytes_v1"));
                 directHem->destroy=reinterpret_cast<decltype(&reactive_gpu_hem_destroy_v1)>(dlsym(directHem->library,"reactive_gpu_hem_destroy_v1"));
                 directHem->run=reinterpret_cast<decltype(&reactive_gpu_hem_run_v2)>(dlsym(directHem->library,"reactive_gpu_hem_run_v2"));
-                demand(create&&directHem->destroy&&directHem->run,"Incomplete CUDA HEM ABI for the direct path");
-                directHem->handle=create(image.data(),bytes,batchCells,error,sizeof(error));demand(directHem->handle,error);
-                closureDeviceBytes+=hem.deviceBytes;
-                directHemProfile.deviceBytes=hem.deviceBytes;
+                demand(create&&deviceBytes&&directHem->destroy&&directHem->run,"Incomplete CUDA HEM ABI for the direct path");
+                if(directHem->resident){
+                    directHem->runResident=reinterpret_cast<decltype(&reactive_gpu_hem_run_resident_v1)>(
+                        dlsym(directHem->library,"reactive_gpu_hem_run_resident_v1"));
+                    demand(directHem->runResident,"CUDA HEM library lacks the resident batch ABI");
+                }
+                directHem->capacity=std::min(nc,size_t(hemBatch));
+                directHem->handle=create(image.data(),bytes,directHem->capacity,error,sizeof(error));demand(directHem->handle,error);
+                const size_t directBytes=deviceBytes(directHem->handle);
+                // The host HEM API allocates capillary inputs lazily on its
+                // first run. Reserve that known growth before sizing transport.
+                closureDeviceBytes+=directBytes+(directHem->resident?0:
+                    directHem->capacity*sizeof(ReactiveGpuHemCapillaryInputV2));
+                directHemProfile.deviceBytes=directBytes;
             }
-            Info<<"REACTIVE_CLOSURE_HEM_PATH path="<<hemPath<<nl;
+            Info<<"REACTIVE_CLOSURE_HEM_PATH path="<<hemPath<<" batchCells="<<double(directHem?directHem->capacity:batchCells)<<nl;
             if(closureDeviceBytes){const double deviceBudget=dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9;
                 demand(std::isfinite(deviceBudget)&&double(closureDeviceBytes)<deviceBudget,"Closure CUDA memory exceeds device budget");}
         }
@@ -1490,7 +1519,8 @@ int main(int argc,char** argv)
                     <<" surfaceEnergy="<<flow.sigma*area<<" liquidMass="<<liquidMass
                     <<" closureResidual="<<flow.capillaryClosureResidual
                     <<" recoveryCalls="<<double(flow.capillaryRecoveries)<<" outerIterations="<<double(flow.capillaryIterations)
-                    <<" flashedCells="<<double(flow.capillaryFlashedCells)<<" reusedCells="<<double(flow.capillaryReusedCells)<<nl;
+                    <<" flashedCells="<<double(flow.capillaryFlashedCells)<<" reusedCells="<<double(flow.capillaryReusedCells)
+                    <<" residentFallbacks="<<double(flow.capillaryResidentFallbacks)<<nl;
             }
             if(profileHemSteps) {
                 const auto& t=flow.timings;

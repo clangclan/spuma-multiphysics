@@ -1,0 +1,36 @@
+In file included from /home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/src/reactiveThermo/reactiveThermo.cpp:9:
+/home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/src/reactiveThermo/reactiveDeviceFlash.h: In function ‘bool ReactiveDeviceFlash::solve(const double (*)[4], const double*, int, double*, Counters*)’:
+/home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/src/reactiveThermo/reactiveDeviceFlash.h:111:101: warning: unused parameter ‘counters’ [-Wunused-parameter]
+  111 | REACTIVE_HD inline bool solve(const double matrix[4][4],const double* rhs,int n,double* x,Counters* counters=nullptr){
+      |                                                                                           ~~~~~~~~~~^~~~~~~~~~~~~~~~
+/home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/src/reactiveThermo/reactiveThermo.cpp: In lambda function:
+/home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/src/reactiveThermo/reactiveThermo.cpp:1570:52: warning: ignoring attributes on template argument ‘int (*)(void*) noexcept’ [-Wignored-attributes]
+ 1570 |             std::unique_ptr<void,decltype(&dlclose)> handle(dlopen(library,RTLD_NOW|RTLD_LOCAL),dlclose);
+      |                                                    ^
+/home/jsw/353254270354204234/analysis/spuma-multiphysics-gpu-opt/src/reactiveTransport/../reactiveThermo/reactiveDeviceFlash.h: In function ‘bool ReactiveDeviceFlash::solve(const double (*)[4], const double*, int, double*, Counters*)’:
+/home/jsw/353254270354204234/analysis/spuma-multiphysics-gpu-opt/src/reactiveTransport/../reactiveThermo/reactiveDeviceFlash.h:111:93: warning: unused parameter ‘counters’ [-Wunused-parameter]
+Compiling enabled on 1 cores
+wmake src/reactiveFoam
+Making dependencies: ReactiveFoam.C
+nvc++ -std=c++17 -gpu=cc120 -cuda -Dhave_cuda -m64 -DOPENFOAM=2512 -DWM_DP -DWM_LABEL_SIZE=32 -Wall -Wextra --diag_suppress=111,128,177,185,612,998,1098,1428 --display_error_number -O3  -DNoRepository -tp=x86-64-v3 -I../reactiveThermo -I../reactiveTransport -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/finiteVolume/lnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/meshTools/lnInclude -iquote. -IlnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/OSspecific/POSIX/lnInclude   -fPIC -c ReactiveFoam.C -o Make/linux64NvidiaDPInt32Opt/ReactiveFoam.o
+"/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/cudaExecutor.cu", line 257: warning #3560-D: CUDA C++ compilation is unsupported in nvc++; nvcc is the recommended CUDA compiler [cuda_compile]
+      <<<numblocks, nThreadsPerBlock>>>
+      ^
+          detected during:
+            instantiation of "void Foam::executor<T>::parallelFor(F &, const Foam::label &) [with T=Foam::cudaExecutor, F=lambda [](Foam::label)->void]" at line 1190 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/FieldFunctions.C"
+            instantiation of "void Foam::dot(Foam::Field<Foam::innerProduct<Form, Type>::type> &, const Foam::VectorSpace<Form, Cmpt, nCmpt> &, const Foam::UList<Type> &) [with Form=Foam::Tensor<double>, Cmpt=double, nCmpt=(Foam::direction)'\t', Type=Foam::Vector<double>]" at line 1190 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/FieldFunctions.C"
+            instantiation of "Foam::tmp<Foam::Field<Foam::innerProduct<Form, Type>::type>> Foam::operator&(const Foam::VectorSpace<Form, Cmpt, nCmpt> &, const Foam::UList<Type> &) [with Form=Foam::Tensor<double>, Cmpt=double, nCmpt=(Foam::direction)'\t', Type=Foam::Vector<double>]" at line 105 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/vectorTensorTransformI.H"
+
+Remark #3391-D: individual warnings can be suppressed with "--diag_suppress <warning-name>"
+
+"/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/cudaExecutor.cu", line 319: warning #3560-D: CUDA C++ compilation is unsupported in nvc++; nvcc is the recommended CUDA compiler [cuda_compile]
+      <<<(numBlocks + nStreamingMultiprocessors -1)/nStreamingMultiprocessors, nThreadsPerBlock, maxbytes>>>
+      ^
+          detected during:
+            instantiation of "void Foam::executor<T>::reductionSum(F &, resultT *, const Foam::label &) [with T=Foam::cudaExecutor, F=lambda [](Foam::label)->Foam::label, resultT=Foam::label]" at line 549 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/FieldFunctions.C"
+            instantiation of "Type Foam::sum(const Foam::UList<Type> &) [with Type=Foam::label]" at line 560 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/FieldFunctions.C"
+            instantiation of "Type Foam::sum(const Foam::tmp<Foam::Field<Type>> &) [with Type=Foam::label]" at line 462 of "/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude/globalIndexAndTransformI.H"
+
+nvc++ -std=c++17 -gpu=cc120 -cuda -Dhave_cuda -m64 -DOPENFOAM=2512 -DWM_DP -DWM_LABEL_SIZE=32 -Wall -Wextra --diag_suppress=111,128,177,185,612,998,1098,1428 --display_error_number -O3  -DNoRepository -tp=x86-64-v3 -I../reactiveThermo -I../reactiveTransport -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/finiteVolume/lnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/meshTools/lnInclude -iquote. -IlnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/OpenFOAM/lnInclude -I/home/jsw/cae-gpu-pr1-compatible/spuma/src/OSspecific/POSIX/lnInclude   -fPIC -Xlinker --add-needed  Make/linux64NvidiaDPInt32Opt/ReactiveFoam.o -L/home/jsw/cae-gpu-pr1-compatible/spuma/platforms/linux64NvidiaDPInt32Opt/lib \
+    -lfiniteVolume -lmeshTools -L/home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/lib -lreactiveBackend -lreactiveTransport -lOpenFOAM -ldl  \
+     -lm -o /home/jsw/문서/analysis/spuma-multiphysics-gpu-opt/bin/ReactiveFoam

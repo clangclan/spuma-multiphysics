@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "gpu-frozen-zero-jump",
+      "passed": true,
+      "error": "",
+      "p": 140252.74973887048,
+      "T": 190.00000000008032
+    },
+    {
+      "name": "gpu-equilibrium-zero-jump",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "gpu-frozen-curved-conserved",
+      "passed": true,
+      "error": "",
+      "volumeResidual": 2.5808644110725254e-10,
+      "energyResidual": 4.851426972646434e-13
+    },
+    {
+      "name": "gpu-frozen-curved-pressure",
+      "passed": true
+    },
+    {
+      "name": "gpu-equilibrium-curved-conserved",
+      "passed": true,
+      "error": "",
+      "volumeResidual": 2.4508306495363286e-10,
+      "energyResidual": 5.807874004882816e-13,
+      "analyticJacobians": 17,
+      "finiteDifferenceJacobians": 0
+    },
+    {
+      "name": "gpu-equilibrium-curved-kelvin",
+      "passed": true,
+      "chemicalPotentialDifference": -6.51925802230835e-07
+    },
+    {
+      "name": "curved-total-enthalpy",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "pure-liquid-pressure-offset",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "pure-gas-pressure-offset",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "gpu-trace-air-boundary-0-curved",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "trace-air-curved-host-enthalpy-identity",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "trace-air-inconsistent-gas-mass-rejected",
+      "passed": true,
+      "status": 1,
+      "error": "Recovered condensable vapor differs from conserved inventory beyond FP rounding"
+    },
+    {
+      "name": "gpu-trace-air-boundary-0-flat",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "gpu-trace-air-boundary-1-curved",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "gpu-trace-air-boundary-1-flat",
+      "passed": true,
+      "error": "",
+      "candidates": 11,
+      "stable": 8
+    },
+    {
+      "name": "pool-curved-frozen-no-fallback",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "pool-failure-transactional",
+      "passed": true,
+      "status": 1,
+      "error": "Batch cell 1: CUDA HEM candidate search failed; CPU fallback disabled"
+    },
+    {
+      "name": "pool-success-changed-state",
+      "passed": true
+    },
+    {
+      "name": "existing-pool-op2-uses-gpu",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    },
+    {
+      "name": "pool-trace-air-curved-equilibrium",
+      "passed": true,
+      "status": 0,
+      "error": ""
+    }
+  ]
+}

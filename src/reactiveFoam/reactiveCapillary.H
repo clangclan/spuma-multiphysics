@@ -41,6 +41,77 @@
         if(capillary)interfaceGeometry(liquidColor(states));
     }
     static bool sameBits(double a,double b) {return std::memcmp(&a,&b,sizeof(double))==0;}
+    // closureHemPath resident: the loop below, with every per-cell array on
+    // the device. The host supplies q-derived inputs once (its own
+    // internalEnergy, so no device arithmetic replaces a host expression) and
+    // receives the converged states once. Returns false, with q, states and
+    // logical closure counters untouched, whenever the host path must run instead: an input
+    // the host path rejects, a failed device cell, or no convergence. The host
+    // path then reproduces the same closure and reports it. Actual device
+    // work and failure counters remain cumulative across discarded work.
+    // Test hook: REACTIVE_CAPILLARY_RESIDENT_FALLBACK=N abandons every resident
+    // closure after selecting iteration N, exercising the host-path rerun.
+    static int residentFallbackIteration(){static const int n=[]{const char* v=std::getenv("REACTIVE_CAPILLARY_RESIDENT_FALLBACK");
+        return v?std::atoi(v):-1;}();return n;}
+    bool recoverCapillaryResident(Array& q,States& states) const {
+        REACTIVE_RANGE("capillary-resident");
+        const uint64_t iterations0=capillaryIterations,flashed0=capillaryFlashedCells,reused0=capillaryReusedCells;
+        auto abandon=[&]{capillaryIterations=iterations0;capillaryFlashedCells=flashed0;
+            capillaryReusedCells=reused0;++capillaryResidentFallbacks;return false;};
+        const auto packStart=std::chrono::steady_clock::now();
+        {REACTIVE_RANGE("capillary-resident-inputs");
+        residentQ.resize(nc*physicalSpecies);residentLiquid.resize(nc);residentBulk.resize(nc);
+        reactiveParallel::forEach(nc,[&](size_t c) {
+            const double* local=&q[c*nv];
+            std::copy(local,local+physicalSpecies,residentQ.data()+c*physicalSpecies);
+            residentLiquid[c]=local[ns+4];residentBulk[c]=internalEnergy(local);
+        });}
+        timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
+        int fallback=0;
+        checkTransport(reactive_transport_capillary_resident_begin_v1(transport.get(),physicalSpecies,residentQ.data(),
+            residentLiquid.data(),residentBulk.data(),&states[0],fixedColor.data(),sigma,frozen?0:1,&fallback));
+        if(fallback)return abandon();
+        double previousResidual=GREAT;
+        for(int iteration=0;iteration<40;++iteration) {
+            REACTIVE_RANGE(iteration==0?"capillary-iteration-0":"capillary-iteration-n");
+            ++capillaryIterations;
+            ReactiveCapillaryResidentViewV1 view{};view.abiVersion=1;view.structBytes=sizeof(view);
+            checkTransport(reactive_transport_capillary_resident_select_v1(transport.get(),iteration,&view,&fallback));
+            if(fallback||iteration==residentFallbackIteration())return abandon();
+            capillaryFlashedCells+=view.count;capillaryReusedCells+=nc-view.count;
+            // Launches of at most `capacity` cells; heavy cells lead the order.
+            for(size_t first=0;first<view.count;first+=directHem->capacity){REACTIVE_RANGE("capillary-direct-hem");
+                const size_t part=std::min(directHem->capacity,view.count-first);
+                const auto callStart=std::chrono::steady_clock::now();
+                ReactiveGpuHemProfileV1 profile{};profile.abiVersion=1;profile.structBytes=sizeof(profile);char error[1024]{};
+                const int executed=directHem->runResident(directHem->handle,view.q,view.energy,view.seed,view.capillary,
+                    view.order+first,part,view.output,&profile,error,sizeof(error));
+                if(executed)demand(false,std::string("Resident CUDA HEM batch failed: ")+error);
+                timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
+                // Keep actual work and rejected-device failures in the cumulative
+                // profile; only logical closure counters are restored on rerun.
+                addHemProfile(directHemProfile,profile);
+                // A device failure is never accepted, even if the host rerun succeeds.
+                if(profile.deviceFailures){residentDeviceFailure=true;return abandon();}
+            }
+            double residual=0;
+            checkTransport(reactive_transport_capillary_resident_update_v1(transport.get(),view.count,&residual,&fallback));
+            if(fallback)return abandon();
+            capillaryClosureResidual=residual;
+            if(residual<=1e-9) {
+                surfaceEnergy.resize(nc);interfaceCurvature.resize(nc);interfaceJump.resize(nc);interfaceColor.resize(nc);
+                checkTransport(reactive_transport_capillary_resident_commit_v1(transport.get(),&states[0],
+                    interfaceColor.data(),surfaceEnergy.data(),interfaceCurvature.data()));
+                reactiveParallel::forEach(nc,[&](size_t c){interfaceJump[c]=sigma*interfaceCurvature[c];});
+                if(!frozen)reactiveParallel::forEach(nc,[&](size_t c){q[c*nv+ns+4]=states[c].liquidMass[0];});
+                return true;
+            }
+            if(iteration>0&&residual>previousResidual*.9)
+                checkTransport(reactive_transport_capillary_resident_relax_v1(transport.get()));
+            previousResidual=residual;
+        }
+        return abandon();
+    }
     void recoverCapillary(Array& q,States& states) const {
         demand(capillary&&pool&&transport,"Capillary recovery requires initialized CUDA closure and transport");
         ++capillaryRecoveries;
@@ -49,6 +120,11 @@
             if(!(std::isfinite(ml)&&ml>=0&&ml<=total))
                 demand(false,"Transported liquid exceeds chemical inventory at cell "+std::to_string(c));
         });
+        residentDeviceFailure=false;
+        if(directHem&&directHem->resident&&recoverCapillaryResident(q,states))return;
+        // Host path: direct HEM batches, except for a resident-only handle,
+        // where the pool (same kernel, preallocated) reruns the closure.
+        const bool hostDirect=directHem&&!directHem->resident;
         // Rebuild from the supplied seed, including after global rollback. No
         // geometry from a failed attempt may leak into the next attempt.
         refreshInterface(states);
@@ -83,11 +159,12 @@
             capillaryDirty.clear();
             for(const auto& part:dirtyParts)capillaryDirty.insert(capillaryDirty.end(),part.begin(),part.end());
             capillaryFlashedCells+=capillaryDirty.size();capillaryReusedCells+=nc-capillaryDirty.size();
-            for(size_t start=0;start<capillaryDirty.size();start+=batchCells) {
-                const size_t count=std::min(batchCells,capillaryDirty.size()-start);
+            const size_t passCells=hostDirect?directHem->capacity:batchCells;
+            for(size_t start=0;start<capillaryDirty.size();start+=passCells) {
+                const size_t count=std::min(passCells,capillaryDirty.size()-start);
                 batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
                 batchColor.resize(count);batchJump.resize(count);
-                if(directHem){batchCapillary.resize(count);batchSuccess.resize(count);}
+                if(hostDirect){batchCapillary.resize(count);batchSuccess.resize(count);}
                 const auto packStart=std::chrono::steady_clock::now();
                 {REACTIVE_RANGE("capillary-pack");
                 reactiveParallel::forEach(count,[&](size_t c) {
@@ -95,14 +172,12 @@
                     std::copy(local,local+physicalSpecies,batchQ.data()+c*physicalSpecies);
                     batchEnergy[c]=internalEnergy(local)-energyBefore[cell];batchStates[c]=capillarySeeds[cell];
                     batchColor[c]=colorBefore[cell];batchJump[c]=jumpBefore[cell];
-                    if(directHem)batchCapillary[c]={colorBefore[cell],jumpBefore[cell],frozen?0:1};
+                    if(hostDirect)batchCapillary[c]={colorBefore[cell],jumpBefore[cell],frozen?0:1};
                 });}
                 timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
-                const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
                 const auto callStart=std::chrono::steady_clock::now();
-                int status=0;
                 bool direct=false;
-                if(directHem){REACTIVE_RANGE("capillary-direct-hem");
+                if(hostDirect){REACTIVE_RANGE("capillary-direct-hem");
                     ReactiveGpuHemProfileV1 profile{};profile.abiVersion=1;profile.structBytes=sizeof(profile);char error[1024]{};
                     const int executed=directHem->run(directHem->handle,batchQ.data(),batchEnergy.data(),batchCapillary.data(),count,
                         batchStates.data(),batchSuccess.data(),&profile,error,sizeof(error));
@@ -111,26 +186,31 @@
                     if(!profile.deviceFailures)direct=true;
                     else reactiveParallel::forEach(count,[&](size_t c){batchStates[c]=capillarySeeds[capillaryDirty[start+c]];});
                 }
-                if(!direct){REACTIVE_RANGE("capillary-pool-batch");
-                status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
-                    batchQ.data(),batchEnergy.data(),batchColor.data(),batchJump.data(),batchStates.data());}
-                timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
-                if(status)for(size_t c=0;c<count;++c) {
-                    ReactiveRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);
-                    const char* details=nullptr;
-                    if(reactive_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
-                        const size_t cell=capillaryDirty[start+c];
-                        std::ostringstream cap;cap<<std::setprecision(17)<<"{\"capillary\":true,\"color\":"<<batchColor[c]
-                            <<",\"pressureJump\":"<<batchJump[c]<<",\"bulkEnergy\":"<<batchEnergy[c]
-                            <<",\"surfaceEnergy\":"<<energyBefore[cell]<<",\"outerIteration\":"<<iteration<<'}';
-                        failureRecord(cell,start,c,failure.worker,&q[cell*nv],batchStates[c],
-                            failure.message,failure.category,cap.str().c_str(),true);
+                // The pool's batch capacity may be smaller than a direct pass.
+                if(!direct)for(size_t sub=0;sub<count;sub+=batchCells){REACTIVE_RANGE("capillary-pool-batch");
+                    const size_t part=std::min(batchCells,count-sub),first=start+sub;
+                    const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
+                    const int status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,part,physicalSpecies,
+                        batchQ.data()+sub*physicalSpecies,batchEnergy.data()+sub,batchColor.data()+sub,
+                        batchJump.data()+sub,batchStates.data()+sub);
+                    if(status)for(size_t c=0;c<part;++c) {
+                        ReactiveRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);
+                        const char* details=nullptr;
+                        if(reactive_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
+                            const size_t cell=capillaryDirty[first+c];
+                            std::ostringstream cap;cap<<std::setprecision(17)<<"{\"capillary\":true,\"color\":"<<batchColor[sub+c]
+                                <<",\"pressureJump\":"<<batchJump[sub+c]<<",\"bulkEnergy\":"<<batchEnergy[sub+c]
+                                <<",\"surfaceEnergy\":"<<energyBefore[cell]<<",\"outerIteration\":"<<iteration<<'}';
+                            failureRecord(cell,first,c,failure.worker,&q[cell*nv],batchStates[sub+c],
+                                failure.message,failure.category,cap.str().c_str(),true);
+                        }
                     }
+                    demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(first)+": "+reactive_rt_pool_error(pool.get()));
                 }
-                demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(start)+": "+reactive_rt_pool_error(pool.get()));
+                timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
                 // A diagnostic rerun is not permission to accept an attempt
                 // that failed on the direct device, even if the rerun succeeds.
-                demand(!directHem||direct,"Direct CUDA HEM cell failure; pool diagnostic rerun succeeded, rollback required");
+                demand(!hostDirect||direct,"Direct CUDA HEM cell failure; pool diagnostic rerun succeeded, rollback required");
                 reactiveParallel::forEach(count,[&](size_t c) {
                     const size_t cell=capillaryDirty[start+c];states[cell]=batchStates[c];
                     flashedColor[cell]=colorBefore[cell];flashedJump[cell]=jumpBefore[cell];
@@ -164,6 +244,7 @@
             }
             capillaryClosureResidual=residual;
             if(residual<=1e-9&&surfaceConsistent) {
+                demand(!residentDeviceFailure,"Resident CUDA HEM cell failure; pool diagnostic rerun succeeded, rollback required");
                 // Phase change is an internal source: only the liquid/gas
                 // partition changes. Total species, momentum and H stay fixed.
                 if(!frozen)reactiveParallel::forEach(nc,[&](size_t c){q[c*nv+ns+4]=states[c].liquidMass[0];});

@@ -1,0 +1,65 @@
+{
+  "binaries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/bin/ReactiveFoam": "8e7aacc7d8871e4d297b00ee1633731229842b0f8d2de6829067cd3700a70f84",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveBackend.so": "db1594408a6d5e13f828ea8bb29650ceece26e3a7fa62bc25996dd997f2280b7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTestDirectHemFailure.so": "1584e424eb66a8008dc09443379c812ec2e7bf7b419d00a7a4ddfcdbf2cf4b93",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTransport.so": "9568ea4219a79517b067dcf6ea03f07f966528c52f2cb5a3b8e7dc9076c05965"
+  },
+  "cases": [
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "faultInjected": true,
+      "finalStateSha256": "e43a39b9701e982c104db908626d8b7f0a99bf5f8afaee28fb210f8b3c7f99cf",
+      "logSha256": "c43fc140d49c51657e49b619808017137c2710882bb83ad29bb0f8b288430110",
+      "name": "pool-failure",
+      "passed": true,
+      "residentFallbacks": 0.0,
+      "retries": 1.0,
+      "stepSeconds": [
+        3.669607776,
+        2.658301411,
+        2.697780981,
+        2.696051274
+      ],
+      "steps": 4
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "faultInjected": true,
+      "finalStateSha256": "e43a39b9701e982c104db908626d8b7f0a99bf5f8afaee28fb210f8b3c7f99cf",
+      "logSha256": "bf5995db8a794435fd762328230f7f5f94a4cd8f87db6fe907673d590a17d092",
+      "name": "direct-failure",
+      "passed": true,
+      "residentFallbacks": 0.0,
+      "retries": 1.0,
+      "stepSeconds": [
+        3.412068049,
+        2.400457778,
+        2.434930136,
+        2.439446612
+      ],
+      "steps": 4
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "faultInjected": true,
+      "finalStateSha256": "e43a39b9701e982c104db908626d8b7f0a99bf5f8afaee28fb210f8b3c7f99cf",
+      "logSha256": "1409cac8dcf4073fe6d517c65a172f8378366fdc62da77f90e253de468630eaf",
+      "name": "resident-failure",
+      "passed": true,
+      "residentFallbacks": 0.0,
+      "retries": 1.0,
+      "stepSeconds": [
+        2.62823462,
+        1.777894181,
+        1.789691451,
+        1.785912061
+      ],
+      "steps": 4
+    }
+  ],
+  "passed": true
+}
