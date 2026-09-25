@@ -87,6 +87,7 @@
                 const size_t count=std::min(batchCells,capillaryDirty.size()-start);
                 batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
                 batchColor.resize(count);batchJump.resize(count);
+                if(directHem){batchCapillary.resize(count);batchSuccess.resize(count);}
                 const auto packStart=std::chrono::steady_clock::now();
                 {REACTIVE_RANGE("capillary-pack");
                 reactiveParallel::forEach(count,[&](size_t c) {
@@ -94,12 +95,23 @@
                     std::copy(local,local+physicalSpecies,batchQ.data()+c*physicalSpecies);
                     batchEnergy[c]=internalEnergy(local)-energyBefore[cell];batchStates[c]=capillarySeeds[cell];
                     batchColor[c]=colorBefore[cell];batchJump[c]=jumpBefore[cell];
+                    if(directHem)batchCapillary[c]={colorBefore[cell],jumpBefore[cell],frozen?0:1};
                 });}
                 timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
                 const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
                 const auto callStart=std::chrono::steady_clock::now();
                 int status=0;
-                {REACTIVE_RANGE("capillary-pool-batch");
+                bool direct=false;
+                if(directHem){REACTIVE_RANGE("capillary-direct-hem");
+                    ReactiveGpuHemProfileV1 profile{};profile.abiVersion=1;profile.structBytes=sizeof(profile);char error[1024]{};
+                    const int executed=directHem->run(directHem->handle,batchQ.data(),batchEnergy.data(),batchCapillary.data(),count,
+                        batchStates.data(),batchSuccess.data(),&profile,error,sizeof(error));
+                    if(executed)demand(false,std::string("Direct CUDA HEM batch failed: ")+error);
+                    addHemProfile(directHemProfile,profile);
+                    if(!profile.deviceFailures)direct=true;
+                    else reactiveParallel::forEach(count,[&](size_t c){batchStates[c]=capillarySeeds[capillaryDirty[start+c]];});
+                }
+                if(!direct){REACTIVE_RANGE("capillary-pool-batch");
                 status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
                     batchQ.data(),batchEnergy.data(),batchColor.data(),batchJump.data(),batchStates.data());}
                 timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
@@ -116,6 +128,9 @@
                     }
                 }
                 demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(start)+": "+reactive_rt_pool_error(pool.get()));
+                // A diagnostic rerun is not permission to accept an attempt
+                // that failed on the direct device, even if the rerun succeeds.
+                demand(!directHem||direct,"Direct CUDA HEM cell failure; pool diagnostic rerun succeeded, rollback required");
                 reactiveParallel::forEach(count,[&](size_t c) {
                     const size_t cell=capillaryDirty[start+c];states[cell]=batchStates[c];
                     flashedColor[cell]=colorBefore[cell];flashedJump[cell]=jumpBefore[cell];

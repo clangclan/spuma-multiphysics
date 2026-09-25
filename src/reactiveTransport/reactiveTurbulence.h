@@ -73,6 +73,11 @@ int reactive_transport_set_wale_pr_model_v1(void*,const ReactiveWalePrModelV1*);
 // On any failure active Cp/H buffers stay uncommitted for this stage.
 int reactive_transport_wale_pr_properties_v1(void*,const ReactiveWalePrEpochV1*,
     const double* q,size_t qStride,const ReactiveThermoState* state);
+// v2: statesUnchanged!=0 asserts that `state` is bitwise the array passed to
+// the previous successful call; the device copy is then reused, not uploaded.
+// The caller owns this guarantee (ReactiveFoam tracks a state epoch).
+int reactive_transport_wale_pr_properties_v2(void*,const ReactiveWalePrEpochV1*,
+    const double* q,size_t qStride,const ReactiveThermoState* state,int statesUnchanged);
 int reactive_transport_wale_pr_profile_v1(void*,ReactiveWalePrProfileV1*);
 #ifdef __cplusplus
 }

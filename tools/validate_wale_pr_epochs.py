@@ -69,6 +69,7 @@ def bind(lib):
         'wale_scalar_fields_v1':([v,p,p,p,p],C.c_int),
         'set_wale_pr_model_v1':([v,C.POINTER(Model)],C.c_int),
         'wale_pr_properties_v1':([v,C.POINTER(Epoch),p,C.c_size_t,C.POINTER(ThermoState)],C.c_int),
+        'wale_pr_properties_v2':([v,C.POINTER(Epoch),p,C.c_size_t,C.POINTER(ThermoState),C.c_int],C.c_int),
         'wale_pr_profile_v1':([v,C.POINTER(Profile)],C.c_int),
         'capillary_geometry_v1':([v,p,p,p,p,p],C.c_int),
         'stable_step_primitives':([v,C.POINTER(Primitive),C.POINTER(TransportState),
@@ -90,6 +91,7 @@ def main():
     ap.add_argument('--backend',type=Path,required=True)
     ap.add_argument('--cuda-library',type=Path,required=True)
     ap.add_argument('--output',type=Path,required=True)
+    ap.add_argument('--api',choices=('v1','v2'),default='v2')
     a=ap.parse_args()
     for name in ('configuration','backend','cuda_library','output'):
         setattr(a,name,getattr(a,name).resolve())
@@ -133,12 +135,20 @@ def main():
                 ptr(surface),None,None),'geometry')
         def epoch(version,token,enthalpies=0):
             return Epoch(1,C.sizeof(Epoch),token,version,version,1,enthalpies)
-        def prop(handle,e,local_state=state,local_q=None):
+        def prop(handle,e,local_state=state,local_q=None,reuse=0):
+            if a.api=='v2':
+                return lib.reactive_transport_wale_pr_properties_v2(handle,C.byref(e),
+                    ptr(local_q) if local_q is not None else None,nv,local_state,reuse)
             return lib.reactive_transport_wale_pr_properties_v1(handle,C.byref(e),
                 ptr(local_q) if local_q is not None else None,nv,local_state)
+        def uploaded(handle):
+            value=Profile(1,C.sizeof(Profile))
+            assert lib.reactive_transport_wale_pr_profile_v1(handle,C.byref(value))==0
+            return value.inputUploadBytes
         def cfl(handle):
             return lib.reactive_transport_stable_step_primitives(handle,primitive,compact,.5,1e-7,C.byref(dt))
         for label,schmidt in [('heatOnly',0.),('heatSpecies',.7)]:
+            color[:]=1.
             error=C.create_string_buffer(2048)
             handle=lib.reactive_transport_create_v2(1,C.byref(cfg),C.byref(options),ptr(volume),
                 face,None,None,None,None,error,len(error))
@@ -161,8 +171,18 @@ def main():
                 outside=epoch(1,Token(0,0,0))
                 require(handle,prop(handle,outside),'freshOutsideCp')
                 require(handle,cfl(handle),'outsideCflAcceptsGpuCp')
+                reject(handle,lib.reactive_transport_stable_step_primitives(handle,primitive,None,
+                    .5,1e-7,C.byref(dt)),'cachedStateStillRejectsNull')
                 geometry(handle)
                 reject(handle,cfl(handle),'geometryInvalidatesCp')
+                # Identical geometry is reused, so its content version stays
+                # valid, but properties must still be explicitly republished.
+                before=uploaded(handle)
+                require(handle,prop(handle,outside,reuse=1),'sameGeometryRefresh')
+                assert uploaded(handle)-before==8+(0 if a.api=='v2' else C.sizeof(ThermoState))
+                checks.append('stateUploadReuseBytes-'+a.api)
+                color[0]=np.nextafter(color[0],0.)
+                geometry(handle)
                 reject(handle,prop(handle,outside),'staleGeometryRejected')
                 outside=epoch(2,Token(0,0,0))
                 require(handle,prop(handle,outside),'freshGeometryCp')
@@ -190,6 +210,10 @@ def main():
                     reject(handle,lib.reactive_transport_advance_resident_v2(handle,Token(2,0,1),
                         Token(2,1,2),compact,None,None,None,1e-9,ptr(boundary)),
                         'failedPropertiesDoNotPublish')
+                    before=uploaded(handle)
+                    refresh=epoch(2,Token(2,0,2),1)
+                    require(handle,prop(handle,refresh,state,q,reuse=1),'failedUploadCannotBeReused')
+                    assert uploaded(handle)-before==8+C.sizeof(ThermoState)+ns*8
                 require(handle,lib.reactive_transport_end_attempt(handle,2,0),'rollback')
                 reject(handle,cfl(handle),'rollbackInvalidatesCp')
                 if schmidt:
@@ -229,7 +253,7 @@ def main():
         finally:
             lib.reactive_transport_destroy(cpu)
         assert scratch['heatSpecies']-scratch['heatOnly']==2*ns*8
-        report={'passed':True,'checks':checks,'scratchBytes':scratch,
+        report={'passed':True,'api':a.api,'checks':checks,'scratchBytes':scratch,
                 'conditionalSpeciesScratch':True,
                 'sha256':{str(path):hashlib.sha256(path.read_bytes()).hexdigest()
                           for path in (a.configuration,a.backend,a.cuda_library,

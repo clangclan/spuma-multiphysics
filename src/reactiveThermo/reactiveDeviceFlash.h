@@ -297,11 +297,14 @@ struct Flash {
         result.state.volumeResidual=::fabs(result.volume-1);result.state.energyResidual=::fabs(result.energy-in.energy)/energyScale(result);result.state.iterations=it;
         return result.state.volumeResidual<=m.vtol&&result.state.energyResidual<=m.etol;
     }
-    REACTIVE_HEM_CALL bool frozen(const double* mass,Evaluation& value){
+    // stallLimit>0 ends the search as a failure after that many consecutive
+    // iterations whose accepted line-search fraction is below 1/32.
+    REACTIVE_HEM_CALL bool frozen(const double* mass,Evaluation& value,int stallLimit=0){
         if(!finite(in.energy))return false;
         if(m.scalarRecovery&&mass[0]==0&&mass[1]==0&&scalarGas(value))return true;
         double p=clamp(in.guess.p,m.pmin,m.pmax),T=clamp(in.guess.T,m.Tmin,m.Tmax);
         if(!evaluate(mass,p,T,value))return false;
+        int stalled=0;
         for(int it=0;it<70;++it){const double scale=energyScale(value),rv=value.volume-1,re=(value.energy-in.energy)/scale;
             value.state.volumeResidual=::fabs(rv);value.state.energyResidual=::fabs(re);value.state.iterations=it;
             if(::fabs(rv)<=m.vtol&&::fabs(re)<=m.etol)return true;
@@ -311,8 +314,14 @@ struct Flash {
             const double previous=hi(::fabs(rv),::fabs(re));bool accepted=false;
             for(double fraction=1;fraction>1e-9;fraction*=.5){Evaluation trial;const double pp=p*::exp(fraction*step[0]),tt=T*::exp(fraction*step[1]);
                 if(evaluate(mass,pp,tt,trial)){const double next=hi(::fabs(trial.volume-1),::fabs(trial.energy-in.energy)/scale);
-                    if(next<previous*(1-1e-4*fraction)||next<lo(m.vtol,m.etol)){value=trial;p=pp;T=tt;accepted=true;break;}}}
+                    if(next<previous*(1-1e-4*fraction)||next<lo(m.vtol,m.etol)){value=trial;p=pp;T=tt;accepted=true;
+                        stalled=fraction<1./32?stalled+1:0;break;}}}
             if(!accepted)return false;
+            // A small accepted step may itself reach the tolerances. Let the
+            // next normal convergence check accept it before declaring stall.
+            if(stallLimit>0&&stalled>=stallLimit
+                && !(::fabs(value.volume-1)<=m.vtol
+                     && ::fabs(value.energy-in.energy)/energyScale(value)<=m.etol))return false;
         }return false;
     }
     REACTIVE_HEM_CALL bool residual(const int* active,int n,const double* x,double scale,double* f,Evaluation* out=nullptr){
@@ -503,7 +512,12 @@ struct Flash {
     // test is not a proof of the global UV entropy maximum. Replay parity is
     // established for the documented 40 bar N2O/air campaign only.
         bool gasStable=false;
-        if(frozen(mass,candidate)){const uint64_t before=count.stable;consider(candidate,best,have);
+        // With stableGasPrune the all-gas Newton also stops once it crawls
+        // (4 consecutive steps below 1/32). On the verified 40 bar data such
+        // a crawl never ends in a converged state: every all-gas success
+        // converged within 3 iterations, so only failures end earlier.
+        const bool fastGas=m.stableGasPrune&&supportsStableGasPrune(m)&&!adaptive;
+        if(frozen(mass,candidate,fastGas?4:0)){const uint64_t before=count.stable;consider(candidate,best,have);
             gasStable=count.stable>before&&candidate.state.gasMass>0;}
         else ++count.failures;
     const bool prune=m.stableGasPrune&&supportsStableGasPrune(m)&&gasStable&&!adaptive;

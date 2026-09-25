@@ -2,6 +2,7 @@
 // Compile as C++ for portable operator checks, or via .cu for CUDA execution.
 #include "reactiveTransportKernels.h"
 #include "../reactiveThermo/reactiveNvtx.h"
+#include "../reactiveThermo/reactiveParallel.h"
 #include "reactiveTransportV21.h"
 #include "reactiveCartesianTransport.h"
 #include "reactiveImplicitTransportKernels.h"
@@ -289,7 +290,7 @@ public:
     bool colorReady=false;uint32_t capillaryStatus=0;
     bool walePrInstalled=false,walePrReady=false;
     ReactiveWalePrEpochV1 walePrEpoch{};
-    uint64_t walePrLastThermoVersion=0;
+    uint64_t walePrLastThermoVersion=0;bool walePrStatesCurrent=false;
     ReactiveDeviceFlash::Model* walePrModel=nullptr;
     double *walePrQ=nullptr,*walePrH=nullptr,*walePrCp=nullptr;
     ReactiveThermoState* walePrStates=nullptr;
@@ -430,21 +431,47 @@ public:
     }
     static void validateStates(const ReactiveTransportState* states,size_t count) {
         require(!count||states,"Null transport state");
-        for(size_t c=0;c<count;++c) {
+        reactiveParallel::forEach(count,[&](size_t c) {
             const auto& s=states[c];
             require(std::isfinite(s.p)&&s.p>0&&std::isfinite(s.T)&&s.T>0&&std::isfinite(s.rho)&&s.rho>0
                     &&std::isfinite(s.sound)&&s.sound>0&&std::isfinite(s.cv)&&s.cv>0
                     &&std::isfinite(s.gasMass)&&s.gasMass>=0&&std::isfinite(s.dilatation),"Invalid recovered transport state");
-        }
+        });
     }
+    // Host shadows of the last successful uploads. v.state (cells part) and
+    // the capillary color/geometry arrays are written only by uploadState and
+    // capillaryGeometry, so bitwise-equal inputs leave the device data valid.
+    template<class T> static bool sameBytes(const std::vector<T>& shadow,const T* input,size_t count) {
+        if(shadow.size()!=count)return false;
+        std::vector<char> same(reactiveParallel::chunkCount(count),1);
+        reactiveParallel::forChunks(count,[&](size_t k,size_t b,size_t e){
+            same[k]=std::memcmp(shadow.data()+b,input+b,(e-b)*sizeof(T))==0;});
+        for(char ok:same)if(!ok)return false;
+        return true;
+    }
+    template<class T> static void keep(std::vector<T>& shadow,const T* input,size_t count) {
+        shadow.resize(count);reactiveParallel::forEach(count,[&](size_t c){shadow[c]=input[c];});
+    }
+    std::vector<ReactiveTransportState> stateShadow;bool stateShadowValid=false;
+    std::vector<double> colorShadow,fixedColorShadow,energyShadow,curvatureShadow;bool geometryShadowValid=false;
+    uint64_t stateUploadsSkipped=0,geometryBuildsSkipped=0;
     void uploadQ(const double* q) {
         pack(v.q,q,v.cfg.cells,v.cfg.variables);
         ++profile.conservedUploads;profile.conservedUploadBytes+=v.cfg.cells*v.cfg.variables*sizeof(double);
     }
     void uploadState(const ReactiveTransportState* states) {
         REACTIVE_RANGE("tr-validate-upload-state");
-        validateStates(states,v.cfg.cells);nonemptyGasCells=0;for(size_t c=0;c<v.cfg.cells;++c)nonemptyGasCells+=states[c].gasMass>0;execution.upload(v.state,states,v.cfg.cells);
+        require(!v.cfg.cells||states,"Null transport state");
+        if(stateShadowValid&&sameBytes(stateShadow,states,v.cfg.cells)){++stateUploadsSkipped;return;}
+        stateShadowValid=false;
+        validateStates(states,v.cfg.cells);
+        std::vector<size_t> gas(reactiveParallel::chunkCount(v.cfg.cells),0);
+        reactiveParallel::forChunks(v.cfg.cells,[&](size_t k,size_t b,size_t e){size_t local=0;
+            for(size_t c=b;c<e;++c)local+=states[c].gasMass>0;gas[k]=local;});
+        nonemptyGasCells=0;for(const size_t count:gas)nonemptyGasCells+=count;
+        execution.upload(v.state,states,v.cfg.cells);
         profile.stateUploadBytes+=v.cfg.cells*sizeof(ReactiveTransportState);
+        keep(stateShadow,states,v.cfg.cells);stateShadowValid=true;
     }
     void installGasThermo(const ReactiveGasThermoSpecies* species,size_t count,const ReactiveGasThermoRegion* regions,
                          size_t regionCount,const int64_t* liquidSpecies,size_t liquids) {
@@ -626,9 +653,14 @@ public:
             +v.cfg.fixed*ns*(v.turbulentSchmidt>0?sizeof(double):0);
     }
     void prepareWalePr(const ReactiveWalePrEpochV1& epoch,const double* q,size_t stride,
-                       const ReactiveThermoState* states) {
+                       const ReactiveThermoState* states,bool statesUnchanged=false) {
         REACTIVE_RANGE("tr-wale-pr");
         const auto begin=std::chrono::steady_clock::now();
+        const bool reuse=statesUnchanged&&walePrStatesCurrent;
+        // No failed request may publish old properties or promise a reusable
+        // state upload, including errors rejected before kernel launch.
+        walePrStatesCurrent=false;walePrReady=false;
+        v.scalarCpFields=false;v.scalarHFields=false;
         require(epoch.abiVersion==1&&epoch.structBytes==sizeof(epoch)
             &&(epoch.enthalpies==0||epoch.enthalpies==1)
             &&epoch.thermoVersion>0&&epoch.thermoVersion>=walePrLastThermoVersion
@@ -660,14 +692,15 @@ public:
         }
         v.scalarCpFields=false;v.scalarHFields=false;walePrReady=false;
         const size_t n=v.cfg.cells,ns=v.cfg.species;
-        if(epoch.enthalpies)for(size_t c=0;c<n;++c)
-            for(size_t k=0;k<ns;++k)walePrHostQ[c*ns+k]=q[c*stride+k];
+        if(epoch.enthalpies)reactiveParallel::forEach(n,[&](size_t c){
+            for(size_t k=0;k<ns;++k)walePrHostQ[c*ns+k]=q[c*stride+k];});
         const unsigned long long noFailure=std::numeric_limits<unsigned long long>::max();
         unsigned long long failure=noFailure;
         execution.upload(walePrFailure,&noFailure,1);
-        execution.upload(walePrStates,states,n);
+        // Only this function writes walePrStates; a failed call invalidates it.
+        if(!reuse)execution.upload(walePrStates,states,n);
         if(epoch.enthalpies)execution.upload(walePrQ,walePrHostQ.data(),product(n,ns));
-        walePrProfile.inputUploadBytes+=sizeof(noFailure)+n*sizeof(ReactiveThermoState)
+        walePrProfile.inputUploadBytes+=sizeof(noFailure)+(reuse?0:n*sizeof(ReactiveThermoState))
             +(epoch.enthalpies?product(n,ns)*sizeof(double):0);
 #ifdef __CUDACC__
         const unsigned block=execution.blockThreads;
@@ -694,7 +727,7 @@ public:
 #endif
         execution.finish();
         v.scalarCpFields=true;v.scalarHFields=epoch.enthalpies!=0||v.turbulentSchmidt==0;
-        walePrReady=true;walePrEpoch=epoch;
+        walePrReady=true;walePrEpoch=epoch;walePrStatesCurrent=true;
         walePrLastThermoVersion=epoch.thermoVersion;
         ++walePrProfile.builds;
         walePrProfile.wallSeconds+=std::chrono::duration<double>(
@@ -751,14 +784,21 @@ public:
         REACTIVE_RANGE("tr-capillary-geometry");
         require(v.capillary&&cellColor&&energy&&(!v.cfg.fixed||fixedColor),
             "Missing capillary model, color or surface-energy output");
-        for(size_t c=0;c<v.cfg.cells;++c)require(std::isfinite(cellColor[c])&&cellColor[c]>=0&&cellColor[c]<=1,
-            "Invalid material color");
+        reactiveParallel::forEach(v.cfg.cells,[&](size_t c){require(std::isfinite(cellColor[c])&&cellColor[c]>=0&&cellColor[c]<=1,
+            "Invalid material color");});
         for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedColor[c])&&fixedColor[c]>=0&&fixedColor[c]<=1,
             "Invalid fixed material color");
         if(implicitFit)for(size_t c=0;c<v.cfg.fixed;++c)require(fixedColor[c]==0||fixedColor[c]==1,
             "Implicit fixed reservoirs must be pure phases");
-        colorReady=false;capillaryStatus=0;
         if(walePrInstalled){walePrReady=false;v.scalarCpFields=false;v.scalarHFields=false;}
+        // Diffuse geometry is a pure function of the colors: an identical
+        // request returns the published outputs without device work.
+        if(!implicitFit&&!normal&&colorReady&&geometryShadowValid&&(!curvature||!curvatureShadow.empty())
+           &&sameBytes(colorShadow,cellColor,v.cfg.cells)&&sameBytes(fixedColorShadow,fixedColor,v.cfg.fixed)){
+            reactiveParallel::forEach(v.cfg.cells,[&](size_t c){energy[c]=energyShadow[c];if(curvature)curvature[c]=curvatureShadow[c];});
+            ++geometryBuildsSkipped;return;}
+        geometryShadowValid=false;
+        colorReady=false;capillaryStatus=0;
         execution.upload(v.capillaryError,&capillaryStatus,1);
         execution.upload(v.capillaryColor,cellColor,v.cfg.cells);
         execution.upload(v.capillaryColor+v.cfg.cells,fixedColor,v.cfg.fixed);
@@ -806,6 +846,10 @@ public:
         execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
         require(!capillaryStatus,"Invalid capillary geometry");
         colorReady=true;++capillaryProfile.geometryBuilds;
+        if(!implicitFit){keep(colorShadow,cellColor,v.cfg.cells);keep(fixedColorShadow,fixedColor,v.cfg.fixed);
+            keep(energyShadow,energy,v.cfg.cells);
+            if(curvature)keep(curvatureShadow,curvature,v.cfg.cells);else curvatureShadow.clear();
+            geometryShadowValid=true;}
         capillaryProfile.geometryCells+=v.cfg.cells;
         capillaryProfile.geometryKernels+=execution.stats.kernelLaunches-previousKernels;
         capillaryProfile.colorUploadBytes+=(v.cfg.cells+v.cfg.fixed)*sizeof(double);
@@ -1335,6 +1379,11 @@ int reactive_transport_wale_pr_properties_v1(void* t,const ReactiveWalePrEpochV1
     const double* q,size_t stride,const ReactiveThermoState* states) {
     return protect(t,[&](Transport& x){require(epoch,"Null WALE PR property epoch");
         x.prepareWalePr(*epoch,q,stride,states);});
+}
+int reactive_transport_wale_pr_properties_v2(void* t,const ReactiveWalePrEpochV1* epoch,
+    const double* q,size_t stride,const ReactiveThermoState* states,int statesUnchanged) {
+    return protect(t,[&](Transport& x){require(epoch,"Null WALE PR property epoch");
+        x.prepareWalePr(*epoch,q,stride,states,statesUnchanged!=0);});
 }
 int reactive_transport_wale_pr_profile_v1(void* t,ReactiveWalePrProfileV1* profile) {
     return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1

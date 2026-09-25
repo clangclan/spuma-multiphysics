@@ -1,0 +1,44 @@
+{
+ "liquid|defer|tol1": {
+  "cells": 1332,
+  "success": 1332,
+  "refSuccess": 1332,
+  "kernelMs": 245.33859252929688,
+  "bitDiffCells": 0,
+  "maxdT": 0.0,
+  "maxdP": 0.0,
+  "maxdAlphaGas": 0.0,
+  "maxRelLiquidMass": 0.0,
+  "phaseEvalPerCell": 563.1351351351351,
+  "residPerCell": 28.324324324324323,
+  "deterministic": true
+ },
+ "curved|defer|tol1": {
+  "cells": 2520,
+  "success": 2520,
+  "refSuccess": 2520,
+  "kernelMs": 242.25669860839844,
+  "bitDiffCells": 0,
+  "maxdT": 0.0,
+  "maxdP": 0.0,
+  "maxdAlphaGas": 0.0,
+  "maxRelLiquidMass": 0.0,
+  "phaseEvalPerCell": 300.01428571428573,
+  "residPerCell": 14.971428571428572,
+  "deterministic": true
+ },
+ "condensable|defer|tol1": {
+  "cells": 1027686,
+  "success": 1027686,
+  "refSuccess": 1027686,
+  "kernelMs": 252.4719696044922,
+  "bitDiffCells": 0,
+  "maxdT": 0.0,
+  "maxdP": 0.0,
+  "maxdAlphaGas": 0.0,
+  "maxRelLiquidMass": 0.0,
+  "phaseEvalPerCell": 5.72340773349058,
+  "residPerCell": 0.036711602571213385,
+  "deterministic": true
+ }
+}

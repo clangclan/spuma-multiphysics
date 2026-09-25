@@ -312,7 +312,7 @@ public:
         // FD-only policies keep their previous identity.
         if(cudaHem&&hemAnalyticJacobian)policy<<":curved-analytic-v1";
         if(cudaHem)policy<<":pr-isolated-root-v1";
-        if(cudaHem&&hemStableGasPrune)policy<<":stable-gas-prune-v1";
+        if(cudaHem&&hemStableGasPrune)policy<<":stable-gas-prune-v2";
         if(cudaHem&&!hemNumericalPolicy.empty())policy<<":arithmetic="<<hemNumericalPolicy;
         policyHash=hashText(policy.str());
     }
