@@ -201,7 +201,8 @@ capillaryCfl             0.25;
 | `closureScalarBackend` | `cpu` | 별도의 온도 후보 평가 가속. 전체 GPU flash와 구분 |
 | `closureCpuFallback` | `true` | GPU 복원 실패 시 CPU 허용 여부. 모세관 모델은 `false` 필수 |
 | `closureJacobian` | `finiteDifference` | `analytic`은 전체 CUDA 복원 전용. 곡면(J≠0) 모세관 셀도 포함하며, 해석식이 실패한 상태만 유한차분으로 대체. 모세관 N₂O 케이스 생성기의 기본값 |
-| `closureSearch` | `reference` | `stableGasPrune`은 전체 CUDA 복원·단일 순수 액체상·고체 없음 조건에서 명시적으로 선택. 안정성 검사를 통과한 전 기체 셀의 두 상 seed 탐색 생략(정책 태그 `stable-gas-prune-v1`). 솔버와 생성기 모두 기본값 `reference`. 비트 동일성 검증 범위는 40 bar N₂O/공기 125–200 μs 및 200 μs 이후 10스텝이며, 다른 조건은 재검증 필요 |
+| `closureSearch` | `reference` | `stableGasPrune`은 전체 CUDA 복원·단일 순수 액체상·고체 없음 조건에서 명시적으로 선택. 안정성 검사를 통과한 전 기체 셀의 두 상 seed 탐색을 생략하고, 전 기체 후보 Newton이 4회 연속 1/32 미만 보폭으로 기어가면 실패로 조기 종료(정책 태그 `stable-gas-prune-v2`). 솔버와 생성기 모두 기본값 `reference`. 비트 동일성 검증 범위는 40 bar N₂O/공기 125–200 μs 및 200 μs 이후 10스텝이며, 다른 조건은 재검증 필요 |
+| `closureHemPath` | `pool` | `direct`는 모세관·strict CUDA HEM·CPU fallback 금지에서 모세관 UV 배치를 풀(정확 재사용 hash, gather/scatter)을 거치지 않고 솔버 소유 HEM 장치로 직접 실행. 실패 배치는 기존 풀로 진단 재실행 후 원래 시도를 롤백하며, 두 실행의 비용·실패를 모두 기록. 결과는 `pool`과 비트 동일(40 bar 200 μs 10스텝) |
 | `thermoWorkers` | 1 | CPU 열역학 작업자, 1–64 및 배치 크기 이하 |
 | `thermoBatchCells` | 64 | 열역학 배치 상한, 셀 수와 메모리 예산에 의해서도 제한 |
 | `thermoExactReuse` | 비반응·비동결·비모세관 HEM에서 활성화 | 완전히 동일한 상태만 재사용. CUDA 모세관 모델에서는 명시적으로 켤 수 있음 |
@@ -213,6 +214,8 @@ capillaryCfl             0.25;
 | `transportDetailedGasCounters` | `false` | 추가 기체 수송 진단 카운터 |
 
 전체 CUDA HEM 복원은 현재 **PR EOS·화학종 최대 16개·액체 종 최대 2개**의 비반응 경로다. 모세관 모델에서는 액체가 하나로 더 제한된다. `closureBackend cuda; closureScalarBackend cpu;`는 정상적인 전체 GPU flash 설정이다. 이때 `cpu`라는 후보 평가 설정만 보고 전체 flash가 CPU fallback이라고 판단하면 안 된다. `closureScalarBackend cuda`는 비반응 평형 후보 평가의 별도 옵션이며 모세관 경로와 조합하지 않는다.
+
+WALE GPU 상태는 솔버의 상태 변경 번호가 같을 때 업로드를 재사용한다. `REACTIVE_WALE_STATES_CHECK=1`은 재사용 시 호스트 사본과 바이트 비교하여 변경 누락을 검사한다. 수송 상태와 diffuse 계면 기하도 동일한 입력을 재사용하며, 상태를 보유하는 `cartesianImplicit` 기하에는 이 캐시를 적용하지 않는다. `direct` HEM 경로도 호스트↔GPU 전송은 남아 있고, 진단용 풀과 별도 장치 핸들·호스트 캐시의 메모리를 추가로 사용한다([측정과 검증](reports/gpu-residency-20260925.ko.md)).
 
 `closureLibrary`, `closureScalarLibrary`의 기본값은 `libreactiveTransport.so`다. `analytic`은 곡면 flash에서도 기체·액체를 각자의 상 압력에서 평가한 해석 Jacobian을 사용한다. 100 μs 체크포인트의 실제 N₂O 배치에서 HEM 커널은 3.50 s에서 1.45 s로 줄었다([GPU HEM 최적화 기록](reports/gpu-hem-optimization-20260925.ko.md)).
 

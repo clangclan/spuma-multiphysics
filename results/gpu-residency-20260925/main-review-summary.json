@@ -1,0 +1,19 @@
+{
+  "allCpuFallbacks": 0,
+  "apiErrorRollbackCases": 2,
+  "cellFailureRollbackCases": 2,
+  "checkpointCells": 3693404,
+  "finalBinaries": {
+    "bin/ReactiveFoam": "46cf5523b283cba2ea17adecf7c60a3a40919174995d05389787146cc35e1e8a",
+    "lib/libreactiveBackend.so": "db1594408a6d5e13f828ea8bb29650ceece26e3a7fa62bc25996dd997f2280b7",
+    "lib/libreactiveTransport.so": "f55f456a6c6fcb1e88193b466bf3d206a6226b170b54e6831aba2d9dfe710829"
+  },
+  "normalSolverCases": 3,
+  "passed": true,
+  "replayVariants": 2,
+  "scope": "40 bar N2O/air, 160^3; four checkpoint replays and bounded continuation with injected failures; no mixed precision enabled",
+  "waleEpochChecks": {
+    "v1": 73,
+    "v2": 73
+  }
+}

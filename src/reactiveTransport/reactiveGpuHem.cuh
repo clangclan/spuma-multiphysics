@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "../reactiveThermo/reactiveGpuHem.h"
 #include "../reactiveThermo/reactiveNvtx.h"
+#include "../reactiveThermo/reactiveParallel.h"
+#include <array>
 #ifdef __CUDACC__
 #include "../reactiveThermo/reactiveDeviceFlash.h"
 #ifndef REACTIVE_HEM_CANDIDATE_PARALLEL
@@ -178,7 +180,8 @@ extern "C" void* reactive_gpu_hem_create_v1(const void* raw,size_t bytes,size_t 
         return d.release();
     }catch(const std::exception& e){if(error&&size)std::snprintf(error,size,"%s",e.what());return nullptr;}
 }
-extern "C" void reactive_gpu_hem_destroy_v1(void* raw){delete static_cast<HemDevice*>(raw);}
+extern "C" void reactive_gpu_hem_destroy_v1(void* raw){
+    delete static_cast<HemDevice*>(raw);}
 static int hemRun(void* raw,const double* q,const double* energy,
     const ReactiveGpuHemCapillaryInputV2* capillary,size_t count,
     ReactiveThermoState* states,int* success,ReactiveGpuHemProfileV1* profile,char* error,size_t size,
@@ -189,33 +192,41 @@ static int hemRun(void* raw,const double* q,const double* energy,
         if(initialize&&(!initializedEnergy||!capillary))throw std::runtime_error("Missing CUDA primitive initialization buffers");
         std::vector<double> normalized(initialize?count*(d.ns+1):0);
         if(capillary){
-            for(size_t c=0;c<count;++c)if(!ReactiveDeviceFlash::finite(capillary[c].color)
+            reactiveParallel::forEach(count,[&](size_t c){if(!ReactiveDeviceFlash::finite(capillary[c].color)
                 ||capillary[c].color<0||capillary[c].color>1
                 ||!ReactiveDeviceFlash::finite(capillary[c].pressureJump)
                 ||(capillary[c].equilibrium!=0&&capillary[c].equilibrium!=1)
                 ||(initialize&&capillary[c].equilibrium!=0))
-                throw std::runtime_error("Invalid CUDA HEM capillary cell input");
+                throw std::runtime_error("Invalid CUDA HEM capillary cell input");});
             if(!d.capillary)closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.capillary),
                 d.capacity*sizeof(ReactiveGpuHemCapillaryInputV2)));
         }
         const auto begin=std::chrono::steady_clock::now();
         REACTIVE_RANGE("hem-run");
 #if REACTIVE_HEM_PHASE_BUCKETS
-        if(d.bucketOrder){REACTIVE_RANGE("hem-bucket-order");size_t offsets[256]{};
-            for(size_t c=0;c<count;++c){const auto bucket=hemBucket(q+c*d.ns,d.ns,states[c]);
-                d.hostBucket[c]=static_cast<uint8_t>(bucket);++offsets[bucket];}
+        if(d.bucketOrder){REACTIVE_RANGE("hem-bucket-order");
+            // Stable counting sort over contiguous chunks: per-chunk bucket
+            // counts, chunk-ordered offsets inside each bucket, then a
+            // per-chunk scatter. The permutation equals the serial one.
+            const size_t chunks=reactiveParallel::chunkCount(count);
+            std::vector<std::array<size_t,256>> offsets(chunks);
+            reactiveParallel::forChunks(count,[&](size_t k,size_t begin,size_t end){
+                auto& local=offsets[k];local.fill(0);
+                for(size_t c=begin;c<end;++c){const auto bucket=hemBucket(q+c*d.ns,d.ns,states[c]);
+                    d.hostBucket[c]=static_cast<uint8_t>(bucket);++local[bucket];}});
             // Heavy-first: condensable-bearing and liquid-active keys are the
             // high bucket ids, and their five-seed searches are the slow
             // threads. Scheduling them in the first blocks lets the cheap gas
             // cells fill the SMs at the end instead of leaving a long tail.
             size_t next=0;
+            auto place=[&](int b){for(size_t k=0;k<chunks;++k){const size_t length=offsets[k][b];offsets[k][b]=next;next+=length;}};
 #if REACTIVE_HEM_HEAVY_FIRST
-            for(int b=255;b>=0;--b){const size_t length=offsets[b];offsets[b]=next;next+=length;}
+            for(int b=255;b>=0;--b)place(b);
 #else
-            for(auto& offset:offsets){const size_t length=offset;offset=next;next+=length;}
+            for(int b=0;b<256;++b)place(b);
 #endif
-            for(size_t c=0;c<count;++c){
-                const size_t target=offsets[d.hostBucket[c]]++;d.hostOrder[target]=static_cast<uint32_t>(c);}}
+            reactiveParallel::forChunks(count,[&](size_t k,size_t begin,size_t end){auto& local=offsets[k];
+                for(size_t c=begin;c<end;++c)d.hostOrder[local[d.hostBucket[c]]++]=static_cast<uint32_t>(c);});}
 #endif
         closureCuda(cudaEventRecord(d.events[0],d.stream));
         closureCuda(cudaMemcpyAsync(d.mass,q,count*d.ns*sizeof(double),cudaMemcpyHostToDevice,d.stream));
@@ -275,10 +286,13 @@ static int hemRun(void* raw,const double* q,const double* energy,
         if(d.bucketOrder){p.transferBytes+=count*sizeof(uint32_t);p.deviceBytes+=d.capacity*sizeof(uint32_t);
             p.hostBytes+=d.capacity*(sizeof(uint32_t)+sizeof(uint8_t));}
 #endif
-        for(size_t c=0;c<count;++c){const auto& out=d.hostOutput[c];
-            const size_t target=c;
-            success[target]=out.success;if(out.success){if(!initialize)states[target]=out.state;++p.succeeded;}else ++p.deviceFailures;
-        }
+        std::vector<uint64_t> succeeded(reactiveParallel::chunkCount(count),0);
+        reactiveParallel::forChunks(count,[&](size_t k,size_t begin,size_t end){uint64_t local=0;
+            for(size_t c=begin;c<end;++c){const auto& out=d.hostOutput[c];
+                success[c]=out.success;if(out.success){if(!initialize)states[c]=out.state;++local;}}
+            succeeded[k]=local;});
+        for(const uint64_t n:succeeded)p.succeeded+=n;
+        p.deviceFailures=count-p.succeeded;
         if(initialize&&!p.deviceFailures){
             std::copy(normalized.begin(),normalized.begin()+count*d.ns,initializedQ);
             std::copy(normalized.begin()+count*d.ns,normalized.end(),initializedEnergy);

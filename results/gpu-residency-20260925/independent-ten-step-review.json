@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "case": "b200v2-stableGasPrune",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "3fb9e39a3c73dfe511d307764a47be39cb8168cdf0edaa70b38012c20a02d988",
+      "meanSeconds2to10": 3.459687856888889,
+      "steps": 10
+    },
+    {
+      "case": "b200-host3",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "384ca3b58764ce6ec2e21600573779b4e1d76cefee459146482a95e126c89fff",
+      "meanSeconds2to10": 2.3253942976666666,
+      "steps": 10
+    },
+    {
+      "case": "b200-res1",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "984b33831816ea560e85c1298c6de24252ae2f1a04f315d1fae32c62a59bb4b5",
+      "meanSeconds2to10": 2.154954574,
+      "steps": 10
+    },
+    {
+      "case": "b200-res1-check",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "7ca556700e4ea142b615b6e870525799102a8c4bacdb76a4ea7a3edf43209326",
+      "meanSeconds2to10": 2.224531179222222,
+      "steps": 10
+    },
+    {
+      "case": "b200-res2",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "acfb8d3bca397d632e8054c211eaf8cf0f79d8900f6de536826dea4a25868a06",
+      "meanSeconds2to10": 2.0936755905555557,
+      "steps": 10
+    },
+    {
+      "case": "b200-res2-check",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "5bb846be0e40da5ad9af8e11225959ff287260de9db3c05c449482a380b793b0",
+      "meanSeconds2to10": 2.1641637374444445,
+      "steps": 10
+    },
+    {
+      "case": "b200-res2-noreuse",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "40e5bf3de6c2aa144b7f5c23b632bf54f3137b8f3f4085f2948ef64e2f104840",
+      "meanSeconds2to10": 2.0713280654444444,
+      "steps": 10
+    },
+    {
+      "case": "b200-res3",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "38f1b2095de97cf4caca895c4deb971aebad742fca7cd781f0f38d4df34f465b",
+      "meanSeconds2to10": 1.8744449047777778,
+      "steps": 10
+    },
+    {
+      "case": "b200-res3-check",
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "5e47fddcb2a03a16947d252a2947d11e6140e29d4c7ca919c8080fcc1948d65e",
+      "meanSeconds2to10": 1.9441636614444444,
+      "steps": 10
+    }
+  ]
+}

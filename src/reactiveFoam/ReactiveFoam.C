@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <filesystem>
 #include <fcntl.h>
+#include <dlfcn.h>
 #include <sys/syscall.h>
 #include <linux/fs.h>
 #include <type_traits>
@@ -71,14 +72,19 @@ class SavedStates {
     States full_;
     std::vector<ReactiveThermoState> thermo_;
 public:
-    SavedStates(const States& states,bool mechanical):mechanical_(mechanical) {
-        if(mechanical_)full_=states;
-        else {thermo_.reserve(states.size());for(size_t c=0;c<states.size();++c)thermo_.push_back(states[c]);}
+    explicit SavedStates(bool mechanical):mechanical_(mechanical) {}
+    SavedStates(const States& states,bool mechanical):mechanical_(mechanical) {save(states);}
+    // Reuses the buffer of the previous step: no per-step allocation and page
+    // faults, and the copy runs on all host threads.
+    void save(const States& states) {
+        if(mechanical_){full_=states;return;}
+        thermo_.resize(states.size());
+        reactiveParallel::forEach(states.size(),[&](size_t c){thermo_[c]=states[c];});
     }
     void restore(States& states)const {
         if(mechanical_){states=full_;return;}
         demand(states.size()==thermo_.size(),"State backup size mismatch");
-        for(size_t c=0;c<states.size();++c)static_cast<ReactiveThermoState&>(states[c])=thermo_[c];
+        reactiveParallel::forEach(states.size(),[&](size_t c){static_cast<ReactiveThermoState&>(states[c])=thermo_[c];});
     }
 };
 
@@ -142,6 +148,14 @@ public:
     std::unique_ptr<void,decltype(&reactive_transport_destroy)> transport{nullptr,&reactive_transport_destroy};
     mutable std::vector<ReactiveTransportState> transportStates;
     mutable std::vector<ReactiveThermoState> walePrStates;
+    // State epoch: bumped by every operation that writes the thermodynamic
+    // states (recovery, source, rollback/RK-seed restore, initialization,
+    // checkpoint load). The WALE PR device copy is reused only while the
+    // epoch of its last upload is current. REACTIVE_WALE_STATES_CHECK=1
+    // verifies each reuse against a host shadow copy.
+    mutable uint64_t stateEpoch=1,waleStatesEpoch=0;
+    mutable std::vector<ReactiveThermoState> waleShadow;
+    void statesChanged() const {++stateEpoch;}
     mutable Array transportGasY,transportGasH;
     mutable Array transportScalarCp,transportScalarH;
     Array fixedScalarCp,fixedScalarH;
@@ -154,6 +168,39 @@ public:
     uint64_t attemptId=1;
     mutable uint64_t workerVersion=0,workerStage=0;
     std::unique_ptr<void,decltype(&reactive_rt_pool_destroy)> pool{nullptr,&reactive_rt_pool_destroy};
+    // closureHemPath direct: capillary UV batches go straight to a solver-owned
+    // CUDA HEM device (same library and model image as the pool) instead of
+    // through the pool's staging, exact-reuse hash, gather/scatter and commit.
+    // Failed batches are repacked and re-run through the pool for diagnostics;
+    // the original failure always rejects the attempt. Count both executions.
+    struct DirectHem {
+        void* library=nullptr;void* handle=nullptr;
+        decltype(&reactive_gpu_hem_run_v2) run=nullptr;decltype(&reactive_gpu_hem_destroy_v1) destroy=nullptr;
+        ~DirectHem(){if(handle&&destroy)destroy(handle);if(library)dlclose(library);}
+    };
+    std::unique_ptr<DirectHem> directHem;
+    mutable ReactiveGpuHemProfileV1 directHemProfile{};
+    mutable std::vector<ReactiveGpuHemCapillaryInputV2> batchCapillary;mutable std::vector<int> batchSuccess;
+    static void addHemProfile(ReactiveGpuHemProfileV1& a,const ReactiveGpuHemProfileV1& b) {
+#define REACTIVE_HEM_SUM(f) a.f+=b.f
+        REACTIVE_HEM_SUM(batches);REACTIVE_HEM_SUM(submitted);REACTIVE_HEM_SUM(succeeded);REACTIVE_HEM_SUM(cpuFallbacks);
+        REACTIVE_HEM_SUM(deviceFailures);REACTIVE_HEM_SUM(phaseEvaluations);REACTIVE_HEM_SUM(residualEvaluations);
+        REACTIVE_HEM_SUM(flashCandidates);REACTIVE_HEM_SUM(stableCandidates);REACTIVE_HEM_SUM(analyticJacobians);
+        REACTIVE_HEM_SUM(finiteDifferenceJacobians);REACTIVE_HEM_SUM(transferBytes);REACTIVE_HEM_SUM(wallSeconds);
+        REACTIVE_HEM_SUM(kernelSeconds);REACTIVE_HEM_SUM(copySeconds);
+#undef REACTIVE_HEM_SUM
+        a.hostBytes=std::max(a.hostBytes,b.hostBytes);
+        a.deviceBytes=std::max(a.deviceBytes,b.deviceBytes);
+    }
+    // Pool counters plus the direct path, for step and run reports.
+    ReactiveGpuHemProfileV1 gpuHemProfile() const {
+        ReactiveGpuHemProfileV1 p{};p.abiVersion=1;p.structBytes=sizeof(p);
+        demand(reactive_rt_pool_gpu_hem_profile_v1(pool.get(),&p)==0,"GPU HEM profile query failed");
+        const auto host=p.hostBytes,device=p.deviceBytes;
+        addHemProfile(p,directHemProfile);
+        p.hostBytes=host+directHemProfile.hostBytes;
+        p.deviceBytes=device+directHemProfile.deviceBytes;return p;
+    }
     std::string diagnosticPath,runtimeManifest,executableHash,runId,requestedTransport;
     mutable std::string recoveryStage="initial";
     double physicalTime=0,attemptDt=0;int retryIndex=0;
@@ -275,6 +322,10 @@ public:
         demand(hemSearch=="reference"||hemSearch=="stableGasPrune","Unknown closureSearch");
         demand(hemSearch=="reference"||fullBackend=="cuda","stableGasPrune closureSearch requires full CUDA closure");
         check(reactive_rt_set_gpu_hem_search_v1(t,hemSearch=="stableGasPrune"),"GPU closure search policy");
+        const word hemPath=dict.getOrDefault<word>("closureHemPath","pool");
+        demand(hemPath=="pool"||hemPath=="direct","Unknown closureHemPath");
+        demand(hemPath!="direct"||(capillary&&fullBackend=="cuda"&&!dict.getOrDefault<bool>("closureCpuFallback",true)),
+            "closureHemPath direct requires capillary strict CUDA HEM without CPU fallback");
         const bool solidClosure=std::find(condensedKinds.begin(),condensedKinds.end(),1)!=condensedKinds.end();
         Info<<"REACTIVE_CLOSURE_ACCELERATION exactBatchReuse="<<reuse<<" scalarBackend="<<scalarBackend
             <<" fullBackend="<<fullBackend<<" deviceFullClosure="<<(fullBackend=="cuda")
@@ -293,6 +344,21 @@ public:
             ReactiveGpuHemProfileV1 hem{};hem.abiVersion=1;hem.structBytes=sizeof(hem);
             demand(reactive_rt_pool_gpu_hem_profile_v1(pool.get(),&hem)==0,"GPU HEM memory query failed");
             closureDeviceBytes=acceleration.deviceBytes+hem.deviceBytes;
+            if(hemPath=="direct") {
+                size_t bytes=0;check(reactive_rt_export_gpu_hem_v1(t,nullptr,0,&bytes),"HEM model size");
+                std::vector<char> image(bytes);check(reactive_rt_export_gpu_hem_v1(t,image.data(),bytes,&bytes),"HEM model export");
+                directHem=std::make_unique<DirectHem>();
+                directHem->library=dlopen(hemLibrary.c_str(),RTLD_NOW|RTLD_LOCAL);
+                demand(directHem->library,"Cannot open CUDA HEM library for the direct path");
+                auto create=reinterpret_cast<decltype(&reactive_gpu_hem_create_v1)>(dlsym(directHem->library,"reactive_gpu_hem_create_v1"));
+                directHem->destroy=reinterpret_cast<decltype(&reactive_gpu_hem_destroy_v1)>(dlsym(directHem->library,"reactive_gpu_hem_destroy_v1"));
+                directHem->run=reinterpret_cast<decltype(&reactive_gpu_hem_run_v2)>(dlsym(directHem->library,"reactive_gpu_hem_run_v2"));
+                demand(create&&directHem->destroy&&directHem->run,"Incomplete CUDA HEM ABI for the direct path");
+                directHem->handle=create(image.data(),bytes,batchCells,error,sizeof(error));demand(directHem->handle,error);
+                closureDeviceBytes+=hem.deviceBytes;
+                directHemProfile.deviceBytes=hem.deviceBytes;
+            }
+            Info<<"REACTIVE_CLOSURE_HEM_PATH path="<<hemPath<<nl;
             if(closureDeviceBytes){const double deviceBudget=dict.getOrDefault<scalar>("maxDeviceMemoryGB",2)*1e9;
                 demand(std::isfinite(deviceBudget)&&double(closureDeviceBytes)<deviceBudget,"Closure CUDA memory exceeds device budget");}
         }
@@ -342,8 +408,20 @@ public:
             {
                 AddElapsed stageTiming(timings.scalarProperties),totalTiming(scalarPropertySeconds);
                 if(capillary) {
-                    walePrStates.resize(nc);
-                    reactiveParallel::forEach(nc,[&](size_t c){walePrStates[c]=states[c];});
+                    // Non-mechanical states are one contiguous ReactiveThermoState
+                    // array: pass it directly instead of copying it first.
+                    const ReactiveThermoState* thermoStates=nullptr;
+                    if(mechanical){walePrStates.resize(nc);
+                        reactiveParallel::forEach(nc,[&](size_t c){walePrStates[c]=states[c];});
+                        thermoStates=walePrStates.data();}
+                    else thermoStates=&states[0];
+                    const bool unchanged=waleStatesEpoch==stateEpoch;
+                    if(unchanged&&waleStatesCheck()){
+                        std::vector<char> same(reactiveParallel::chunkCount(nc),1);
+                        reactiveParallel::forChunks(nc,[&](size_t k,size_t b,size_t e){
+                            same[k]=std::memcmp(&waleShadow[b],thermoStates+b,(e-b)*sizeof(ReactiveThermoState))==0;});
+                        for(char ok:same)demand(ok,"WALE PR state reuse check failed: states changed without an epoch bump");
+                    }
                     ReactiveCapillaryProfileV1 geometry{};
                     geometry.abiVersion=1;geometry.structBytes=sizeof(geometry);
                     checkTransport(reactive_transport_capillary_profile_v1(transport.get(),&geometry));
@@ -361,8 +439,10 @@ public:
                     epoch.geometryVersion=geometry.geometryBuilds;
                     epoch.boundaryVersion=1;epoch.enthalpies=enthalpies;
                     REACTIVE_RANGE("wale-pr-properties");
-                    checkTransport(reactive_transport_wale_pr_properties_v1(transport.get(),&epoch,
-                        enthalpies?q.data():nullptr,nv,walePrStates.data()));
+                    checkTransport(reactive_transport_wale_pr_properties_v2(transport.get(),&epoch,
+                        enthalpies?q.data():nullptr,nv,thermoStates,unchanged));
+                    if(!unchanged&&waleStatesCheck())waleShadow.assign(thermoStates,thermoStates+nc);
+                    waleStatesEpoch=stateEpoch;
                 } else if(turbulentPrandtl>0) {
                     transportScalarCp.resize(nc);
                     reactiveParallel::forEach(nc,[&](size_t c){transportScalarCp[c]=states[c].cp;});
@@ -618,9 +698,12 @@ public:
     double internalEnergy(const double* q) const
     {return q[ns+3]-.5*(q[ns]*q[ns]+q[ns+1]*q[ns+1]+q[ns+2]*q[ns+2])/density(q);}
     #include "reactiveCapillary.H"
+    static bool waleStatesCheck(){static const bool on=[]{const char* v=std::getenv("REACTIVE_WALE_STATES_CHECK");
+        return v&&std::string(v)=="1";}();return on;}
     void recover(Array& q,States& states) const
     {
         AddElapsed timing(timings.recovery);REACTIVE_RANGE("recovery");
+        statesChanged();struct Bump{const Flow& f;~Bump(){f.statesChanged();}} bump{*this};
         if(capillary){recoverCapillary(q,states);return;}
         if(pool){double drift=0;runBatch(q,nullptr,states,0,0,drift);return;}
         for(size_t c=0;c<nc;++c) {
@@ -640,6 +723,7 @@ public:
     void react(Array& q,States& states,double dt,double& drift) const
     {
         if(!chemistry) return;
+        statesChanged();struct Bump{const Flow& f;~Bump(){f.statesChanged();}} bump{*this};
         AddElapsed timing(timings.source,&timings.recovery);
         if(pool){runBatch(q,&q,states,1,dt,drift);recover(q,states);return;}
         for(size_t c=0;c<nc;++c) {
@@ -895,7 +979,7 @@ public:
         }
         recoveryStage="rk2";
         const auto restoreStart=std::chrono::steady_clock::now();
-        {REACTIVE_RANGE("restore-rk2-seed");oldStates.restore(states);}
+        {REACTIVE_RANGE("restore-rk2-seed");oldStates.restore(states);statesChanged();}
         timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-restoreStart).count();
         recover(q,states);
         recoveryStage="source-second";react(q,states,.5*dt,drift);
@@ -1069,7 +1153,7 @@ int main(int argc,char** argv)
             // Equilibrium derives the partition from q/E; frozen transport also
             // requires the conserved liquid inventories, never alpha guesses.
             if(checkpointSchema==3) {
-                checkpoint::load(std::string((runTime.path()/runTime.timeName()).c_str()),q,states,mechanical,nv,history);
+                checkpoint::load(std::string((runTime.path()/runTime.timeName()).c_str()),q,states,mechanical,nv,history);flow.statesChanged();
                 runTime.setTime(history.time,runTime.timeIndex());flow.physicalTime=history.time;
             }
             demand(!flow.capillary||checkpointSchema==3,"Capillary conserved initialization requires an exact schema 3 checkpoint");
@@ -1153,7 +1237,7 @@ int main(int argc,char** argv)
             demand(field.dimensions()==dimless,"Initial interface color must be dimensionless");
             initialColor=host(field.primitiveField());
         }
-        flow.initializeCapillary(q,states,history.loaded,initialColor.empty()?nullptr:&initialColor);
+        flow.initializeCapillary(q,states,history.loaded,initialColor.empty()?nullptr:&initialColor);flow.statesChanged();
         Info<<"REACTIVE_PHYSICS chemistry="<<flow.chemistry<<" combustion="<<flow.chemistry
             <<" phaseChange="<<(physics.phaseChange?"equilibrium":(flow.frozen?"frozen":"none"))
             <<" viscosity="<<(flow.viscosity>0)<<" heatConduction="<<(flow.conductivity>0)
@@ -1307,8 +1391,7 @@ int main(int argc,char** argv)
         const bool profileHemSteps=flow.pool&&dict.getOrDefault<word>("closureBackend","cpu")=="cuda";
         auto hemProfile=[&]() {
             ReactiveGpuHemProfileV1 p{};p.abiVersion=1;p.structBytes=sizeof(p);
-            if(profileHemSteps)demand(reactive_rt_pool_gpu_hem_profile_v1(flow.pool.get(),&p)==0,
-                "GPU HEM step profile query failed");
+            if(profileHemSteps)p=flow.gpuHemProfile();
             return p;
         };
         auto beforeEnd=[&]() {
@@ -1318,6 +1401,8 @@ int main(int argc,char** argv)
         };
         // Time::run uses a half-step stopping tolerance. An adaptive explicit
         // step instead lands on the requested end time using the remainder.
+        // Rollback copies of q and the thermodynamic states, reused every step.
+        Array previous;SavedStates previousStates(mechanical);
         while(beforeEnd()) {
             REACTIVE_RANGE("step");
             flow.timings=StepTimings{};
@@ -1328,7 +1413,9 @@ int main(int argc,char** argv)
             demand(cfl>0&&cfl<=.5&&maxDt>0,"Require 0<maxCo<=0.5 and maxDeltaT>0");
             double dt=flow.stableStep(q,states,.95*cfl,std::min(double(maxDt),double(runTime.endTime().value()-runTime.value())));
             const auto backupStart=std::chrono::steady_clock::now();
-            const Array previous=q;const SavedStates previousStates(states,mechanical);
+            {REACTIVE_RANGE("backup");previous.resize(q.size());
+                reactiveParallel::forEach(q.size(),[&](size_t j){previous[j]=q[j];},65536);
+                previousStates.save(states);}
             flow.timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-backupStart).count();
             Array boundaryIntegral,nextBoundary;double drift=0;int retries=0;
             double massError=0,momentumError=0,elementError=0,speciesError=0,liquidError=0,energyError=0;
@@ -1366,11 +1453,11 @@ int main(int argc,char** argv)
                 }
                 catch(const PersistentIOError&) {
                     if(flow.transport)flow.checkTransport(reactive_transport_end_attempt(flow.transport.get(),flow.attemptId,0));
-                    q=previous;previousStates.restore(states);boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
+                    q=previous;previousStates.restore(states);flow.statesChanged();boundaryIntegral.clear();if(checkpointFailure)writeState();throw;
                 }
                 catch(const std::exception& failure) {
                     if(flow.transport)flow.checkTransport(reactive_transport_end_attempt(flow.transport.get(),flow.attemptId,0));
-                    q=previous;previousStates.restore(states);boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
+                    q=previous;previousStates.restore(states);flow.statesChanged();boundaryIntegral.clear();flow.reportAttempt(attemptProfile,false,retries);
                     Info<<"REACTIVE_RETRY dt="<<dt<<" reason="<<failure.what()<<nl;
                     ++history.retries;
                     if(++retries>12||dt*.5<=1e-15){if(checkpointFailure)writeState();throw;}
@@ -1509,8 +1596,7 @@ int main(int argc,char** argv)
                 <<" deviceBytes="<<double(acceleration.deviceBytes)<<" classifySeconds="<<acceleration.classifySeconds
                 <<" prepareSeconds="<<acceleration.prepareSeconds<<" gpuWallSeconds="<<acceleration.gpuWallSeconds
                 <<" gpuKernelSeconds="<<acceleration.gpuKernelSeconds<<" gpuCopySeconds="<<acceleration.gpuCopySeconds<<nl;
-            ReactiveGpuHemProfileV1 hem{};hem.abiVersion=1;hem.structBytes=sizeof(hem);
-            demand(reactive_rt_pool_gpu_hem_profile_v1(flow.pool.get(),&hem)==0,"GPU HEM profile failed");
+            const ReactiveGpuHemProfileV1 hem=flow.gpuHemProfile();
             Info<<"REACTIVE_GPU_HEM batches="<<double(hem.batches)<<" submitted="<<double(hem.submitted)
                 <<" succeeded="<<double(hem.succeeded)<<" cpuFallbacks="<<double(hem.cpuFallbacks)
                 <<" deviceFailures="<<double(hem.deviceFailures)<<" phaseEvaluations="<<double(hem.phaseEvaluations)

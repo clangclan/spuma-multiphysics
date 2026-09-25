@@ -1,0 +1,43 @@
+{
+  "binaries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/bin/ReactiveFoam": "46cf5523b283cba2ea17adecf7c60a3a40919174995d05389787146cc35e1e8a",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveBackend.so": "db1594408a6d5e13f828ea8bb29650ceece26e3a7fa62bc25996dd997f2280b7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTestDirectHemFailure.so": "f2e1b84e8aaa69d61ce57079402cfbea3c910ba73bb5e806ee740d41cd4c4374",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTransport.so": "f55f456a6c6fcb1e88193b466bf3d206a6226b170b54e6831aba2d9dfe710829"
+  },
+  "cases": [
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "ae0ebcda9e77dc22b8eb667a78a08e2835f754b0d8191297e04682f88acd3b88",
+      "logSha256": "cc38b8031ff9a416fc82ff294a0c3690c23c601a7f48e62eb5046cf933e1c723",
+      "name": "pool-failure",
+      "passed": true,
+      "retries": 1.0,
+      "stepSeconds": [
+        3.207952719,
+        2.172610586,
+        2.173860902,
+        2.175150546
+      ],
+      "steps": 4
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "ae0ebcda9e77dc22b8eb667a78a08e2835f754b0d8191297e04682f88acd3b88",
+      "logSha256": "49af6fd712a07f08940f8daf1db3d080e90def73bbee671c3750da9f3b369252",
+      "name": "direct-failure",
+      "passed": true,
+      "retries": 1.0,
+      "stepSeconds": [
+        2.897092998,
+        1.955436039,
+        1.957263977,
+        1.953356776
+      ],
+      "steps": 4
+    }
+  ],
+  "passed": true
+}

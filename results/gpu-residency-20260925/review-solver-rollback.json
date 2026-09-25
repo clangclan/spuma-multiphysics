@@ -1,0 +1,88 @@
+{
+  "binaries": {
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/bin/ReactiveFoam": "c7579f392be89e0a7e19692c613460d388edad3b4cd0a16eb09710bfd85d4a46",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveBackend.so": "db1594408a6d5e13f828ea8bb29650ceece26e3a7fa62bc25996dd997f2280b7",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTestDirectHemFailure.so": "59a73d6c470cc6f0b990d81e64b6fdf5514d099567df0931a8c7d83f5e8626ff",
+    "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTransport.so": "f55f456a6c6fcb1e88193b466bf3d206a6226b170b54e6831aba2d9dfe710829"
+  },
+  "cases": [
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "29b7c0263fcef24fb0fedacc43ee21f9886c553909de4036548f1686ccf55ef3",
+      "logSha256": "7f6948eceaf2f445eabc445bb09e6ffff737d827c48fd39992264c1b38d76fc0",
+      "name": "pool",
+      "passed": true,
+      "retries": 0.0,
+      "stepSeconds": [
+        2.651889705,
+        2.175988068,
+        2.163177676
+      ],
+      "steps": 3
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "29b7c0263fcef24fb0fedacc43ee21f9886c553909de4036548f1686ccf55ef3",
+      "logSha256": "68362a87994a6da26f5e5a9cd1910a40c45ca0c7f43414c0e2a5d3d2d655b5dd",
+      "name": "direct",
+      "passed": true,
+      "retries": 0.0,
+      "stepSeconds": [
+        2.397071627,
+        1.891633425,
+        1.872994293
+      ],
+      "steps": 3
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "29b7c0263fcef24fb0fedacc43ee21f9886c553909de4036548f1686ccf55ef3",
+      "logSha256": "abf53082a264a5da6aff51e23b850a9adec02e3905511f1ddf74443a8b2f53b8",
+      "name": "direct-check",
+      "passed": true,
+      "retries": 0.0,
+      "stepSeconds": [
+        2.460153513,
+        1.952680299,
+        1.943516415
+      ],
+      "steps": 3
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 1.0,
+      "finalStateSha256": "ae0ebcda9e77dc22b8eb667a78a08e2835f754b0d8191297e04682f88acd3b88",
+      "logSha256": "2a237ace5a2954ce6a1fdc92d7587f3da83781007bb075cd41f1da6f1b3dc11f",
+      "name": "pool-failure",
+      "passed": true,
+      "retries": 1.0,
+      "stepSeconds": [
+        3.136462381,
+        2.170197426,
+        2.173830536,
+        2.172186873
+      ],
+      "steps": 4
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 1.0,
+      "finalStateSha256": "ae0ebcda9e77dc22b8eb667a78a08e2835f754b0d8191297e04682f88acd3b88",
+      "logSha256": "b5370bff4495cbb89c9ce19e8ca4c297603dd7f49a12d6b01124dde44d790cd4",
+      "name": "direct-failure",
+      "passed": true,
+      "retries": 1.0,
+      "stepSeconds": [
+        3.004834279,
+        1.954768527,
+        1.955939477,
+        1.958994598
+      ],
+      "steps": 4
+    }
+  ],
+  "passed": true
+}
