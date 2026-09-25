@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checks": [
+    "1-species-full-dirty-permutation-warp-tail",
+    "1-species-zero-dirty-commit-geometry-cache",
+    "1-species-mismatched-layout-rejected",
+    "1-species-allocation-failure-atomic-retry",
+    "5-species-full-dirty-permutation-warp-tail",
+    "5-species-zero-dirty-commit-geometry-cache",
+    "5-species-mismatched-layout-rejected",
+    "5-species-allocation-failure-atomic-retry",
+    "16-species-full-dirty-permutation-warp-tail",
+    "16-species-zero-dirty-commit-geometry-cache",
+    "16-species-mismatched-layout-rejected",
+    "16-species-allocation-failure-atomic-retry"
+  ]
+}

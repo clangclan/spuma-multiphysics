@@ -2,7 +2,9 @@
 #include "../reactiveThermo/reactiveGpuHem.h"
 #include "../reactiveThermo/reactiveNvtx.h"
 #include "../reactiveThermo/reactiveParallel.h"
+#include "reactiveHemBucket.h"
 #include <array>
+#include <cstddef>
 #ifdef __CUDACC__
 #include "../reactiveThermo/reactiveDeviceFlash.h"
 #ifndef REACTIVE_HEM_CANDIDATE_PARALLEL
@@ -46,6 +48,9 @@ static_assert(REACTIVE_HEM_BLOCK_THREADS>=32&&REACTIVE_HEM_BLOCK_THREADS<=256
 // same zero-filled inactive species and byte-identical active fields.
 struct HemCompactOutput {ReactiveThermoState state{};int success=0;};
 static_assert(sizeof(HemCompactOutput)==184,"Unexpected compact HEM output layout");
+static_assert(sizeof(HemCompactOutput)==sizeof(ReactiveGpuHemOutputV1)
+    &&offsetof(HemCompactOutput,success)==offsetof(ReactiveGpuHemOutputV1,success),
+    "Resident HEM output must alias the compact output");
 __global__ void hemInitializeTPKernel(const HemModel* model,double* q,double* energy,
     const ReactiveThermoState* guesses,const ReactiveGpuHemCapillaryInputV2* capillary,
     size_t count,HemCompactOutput* outputs,HemCounters* counters,const HemPhaseCache* cache){
@@ -109,6 +114,15 @@ __global__ void hemReduceCounters(const HemCounters* input,size_t count,
     HEM_REDUCE(mixedLinearAttempts);HEM_REDUCE(mixedLinearAccepted);
 #undef HEM_REDUCE
 }
+// Counts successful cells named by order[0..count). Every lane of a launched
+// warp reaches the ballot; integer sums are exact in any order.
+__global__ void hemCountSuccess(const HemCompactOutput* outputs,const uint32_t* order,
+    size_t count,unsigned long long* total){
+    const size_t c=blockIdx.x*blockDim.x+threadIdx.x;
+    const bool ok=c<count&&outputs[order[c]].success!=0;
+    const unsigned mask=__ballot_sync(0xffffffffu,ok);
+    if((threadIdx.x&31u)==0&&mask)atomicAdd(total,static_cast<unsigned long long>(__popc(mask)));
+}
 struct HemDevice {
     uint64_t mixedLinearAttempts=0,mixedLinearAccepted=0;
     HemPhaseCache* phaseCache=nullptr;
@@ -116,6 +130,8 @@ struct HemDevice {
     double* mass=nullptr;double* energy=nullptr;ReactiveThermoState* guess=nullptr;
     ReactiveGpuHemCapillaryInputV2* capillary=nullptr;
     HemCompactOutput* output=nullptr;HemCounters* counters=nullptr;
+    HemCounterTotals* totals=nullptr;unsigned long long* succeeded=nullptr;
+    bool hostReady=false;
     std::vector<HemCompactOutput> hostOutput;
 #if REACTIVE_HEM_PHASE_BUCKETS
     bool bucketOrder=false;uint32_t* order=nullptr;
@@ -131,41 +147,60 @@ struct HemDevice {
         if(stream)cudaStreamSynchronize(stream);for(auto e:events)if(e)cudaEventDestroy(e);
         if(phaseCache)cudaFree(phaseCache);if(mass)cudaFree(mass);if(energy)cudaFree(energy);
         if(guess)cudaFree(guess);if(capillary)cudaFree(capillary);if(output)cudaFree(output);if(counters)cudaFree(counters);
+        if(totals)cudaFree(totals);if(succeeded)cudaFree(succeeded);
 #if REACTIVE_HEM_PHASE_BUCKETS
         if(order)cudaFree(order);
 #endif
         if(model)cudaFree(model);if(stream)cudaStreamDestroy(stream);}
 };
+// Host-path staging: allocated by the first host batch only.
+void ensureHostPath(HemDevice& d){
+    if(d.hostReady)return;
+    d.hostOutput.resize(d.capacity);
 #if REACTIVE_HEM_PHASE_BUCKETS
-// Stable buckets only change the order of independent cell evaluations.
-// Other model shapes retain source order; no physical threshold is introduced.
+    if(d.bucketOrder){d.hostOrder.resize(d.capacity);d.hostBucket.resize(d.capacity);
+        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.order),d.capacity*sizeof(uint32_t)));}
+#endif
+    closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.mass),d.capacity*d.ns*sizeof(double)));
+    closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.energy),d.capacity*sizeof(double)));
+    closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.guess),d.capacity*sizeof(ReactiveThermoState)));
+    closureCuda(cudaMalloc(reinterpret_cast<void**>(&d.output),d.capacity*sizeof(HemCompactOutput)));
+    d.hostReady=true;
+}
+size_t hemDeviceBytes(const HemDevice& d){
+    size_t bytes=sizeof(HemModel)+REACTIVE_GPU_HEM_PHASE_CACHE_BYTES_V1
+        +d.capacity*sizeof(HemCounters)+sizeof(HemCounterTotals)+sizeof(unsigned long long);
+    if(d.hostReady)bytes+=d.capacity*(d.ns*sizeof(double)+sizeof(double)+sizeof(ReactiveThermoState)
+        +sizeof(HemCompactOutput));
+    if(d.capillary)bytes+=d.capacity*sizeof(ReactiveGpuHemCapillaryInputV2);
+#if REACTIVE_HEM_PHASE_BUCKETS
+    if(d.order)bytes+=d.capacity*sizeof(uint32_t);
+#endif
+    return bytes;
+}
+#if REACTIVE_HEM_PHASE_BUCKETS
+// Stable buckets only change the order of independent cell evaluations, for
+// any species count: active liquids (the slow searches), then the number of
+// species present, then the dominant species. No physical threshold.
 unsigned hemBucket(const double* q,int ns,const ReactiveThermoState& guess){
-    if(ns!=4)return 0;
-    unsigned present=0,dominant=0;
-    for(int k=0;k<4;++k){if(q[k]>0)present|=1u<<k;if(q[k]>q[dominant])dominant=k;}
-    return (present<<4)|((unsigned(guess.activeLiquids)&3u)<<2)|dominant;
+    return ReactiveHemBucket::key(q,ns,guess.activeLiquids);
 }
 #endif
 }
-extern "C" void* reactive_gpu_hem_create_v1(const void* raw,size_t bytes,size_t capacity,char* error,size_t size){
-    try{if(!raw||bytes!=sizeof(HemModel)||!capacity||capacity>1048576)throw std::runtime_error("Invalid CUDA HEM model/capacity");
+static void* hemCreate(const void* raw,size_t bytes,size_t capacity,bool hostPath,char* error,size_t size){
+    // Order entries are uint32 cell indices; one launch may cover a whole mesh.
+    try{if(!raw||bytes!=sizeof(HemModel)||!capacity||capacity>UINT32_MAX)throw std::runtime_error("Invalid CUDA HEM model/capacity");
         const auto& model=*static_cast<const HemModel*>(raw);
         if(!ReactiveDeviceFlash::validModel(model))throw std::runtime_error("Invalid CUDA HEM model tables or domain");
-        std::unique_ptr<HemDevice> d(new HemDevice);d->capacity=capacity;d->ns=model.ns;d->hostOutput.resize(capacity);
+        std::unique_ptr<HemDevice> d(new HemDevice);d->capacity=capacity;d->ns=model.ns;
 #if REACTIVE_HEM_PHASE_BUCKETS
-        d->bucketOrder=model.ns==4;
-        if(d->bucketOrder){d->hostOrder.resize(capacity);d->hostBucket.resize(capacity);}
+        d->bucketOrder=true;
 #endif
         closureCuda(cudaStreamCreateWithFlags(&d->stream,cudaStreamNonBlocking));for(auto& e:d->events)closureCuda(cudaEventCreate(&e));
         closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->model),sizeof(HemModel)));
-        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->mass),capacity*model.ns*sizeof(double)));
-        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->energy),capacity*sizeof(double)));
-        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->guess),capacity*sizeof(ReactiveThermoState)));
-        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->output),capacity*sizeof(HemCompactOutput)));
         closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->counters),capacity*sizeof(HemCounters)));
-#if REACTIVE_HEM_PHASE_BUCKETS
-        if(d->bucketOrder)closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->order),capacity*sizeof(uint32_t)));
-#endif
+        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->totals),sizeof(HemCounterTotals)));
+        closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->succeeded),sizeof(unsigned long long)));
         closureCuda(cudaMemcpy(d->model,raw,sizeof(HemModel),cudaMemcpyHostToDevice));
         closureCuda(cudaMalloc(reinterpret_cast<void**>(&d->phaseCache),
             REACTIVE_GPU_HEM_PHASE_CACHE_BYTES_V1));
@@ -177,9 +212,16 @@ extern "C" void* reactive_gpu_hem_create_v1(const void* raw,size_t bytes,size_t 
         closureCuda(cudaStreamSynchronize(d->stream));
         for(int i=0;i<2;++i)if(check[i].valid!=0&&check[i].valid!=1)
             throw std::runtime_error("Invalid CUDA HEM phase-cache status");
+        if(hostPath)ensureHostPath(*d);
         return d.release();
     }catch(const std::exception& e){if(error&&size)std::snprintf(error,size,"%s",e.what());return nullptr;}
 }
+extern "C" void* reactive_gpu_hem_create_v1(const void* raw,size_t bytes,size_t capacity,char* error,size_t size){
+    return hemCreate(raw,bytes,capacity,true,error,size);}
+extern "C" void* reactive_gpu_hem_create_resident_v1(const void* raw,size_t bytes,size_t capacity,char* error,size_t size){
+    return hemCreate(raw,bytes,capacity,false,error,size);}
+extern "C" size_t reactive_gpu_hem_device_bytes_v1(void* raw){
+    return raw?hemDeviceBytes(*static_cast<HemDevice*>(raw)):0;}
 extern "C" void reactive_gpu_hem_destroy_v1(void* raw){
     delete static_cast<HemDevice*>(raw);}
 static int hemRun(void* raw,const double* q,const double* energy,
@@ -190,6 +232,7 @@ static int hemRun(void* raw,const double* q,const double* energy,
         auto& d=*static_cast<HemDevice*>(raw);if(!count||count>d.capacity)throw std::runtime_error("CUDA HEM batch exceeds capacity");
         const bool initialize=initializedQ!=nullptr;
         if(initialize&&(!initializedEnergy||!capillary))throw std::runtime_error("Missing CUDA primitive initialization buffers");
+        ensureHostPath(d);
         std::vector<double> normalized(initialize?count*(d.ns+1):0);
         if(capillary){
             reactiveParallel::forEach(count,[&](size_t c){if(!ReactiveDeviceFlash::finite(capillary[c].color)
@@ -277,13 +320,10 @@ static int hemRun(void* raw,const double* q,const double* energy,
         const size_t inputBytes=count*(d.ns*sizeof(double)+sizeof(double)+sizeof(ReactiveThermoState)
             +(capillary?sizeof(ReactiveGpuHemCapillaryInputV2):0));
         p.transferBytes=inputBytes+count*sizeof(HemCompactOutput)+sizeof(totals)+normalized.size()*sizeof(double);
-        p.deviceBytes=sizeof(HemModel)+REACTIVE_GPU_HEM_PHASE_CACHE_BYTES_V1
-            +d.capacity*(d.ns*sizeof(double)+sizeof(double)+sizeof(ReactiveThermoState)
-                +sizeof(HemCompactOutput)+sizeof(HemCounters)
-                +(d.capillary?sizeof(ReactiveGpuHemCapillaryInputV2):0));
+        p.deviceBytes=hemDeviceBytes(d);
         p.hostBytes=d.capacity*sizeof(HemCompactOutput)+normalized.size()*sizeof(double);
 #if REACTIVE_HEM_PHASE_BUCKETS
-        if(d.bucketOrder){p.transferBytes+=count*sizeof(uint32_t);p.deviceBytes+=d.capacity*sizeof(uint32_t);
+        if(d.bucketOrder){p.transferBytes+=count*sizeof(uint32_t);
             p.hostBytes+=d.capacity*(sizeof(uint32_t)+sizeof(uint8_t));}
 #endif
         std::vector<uint64_t> succeeded(reactiveParallel::chunkCount(count),0);
@@ -317,6 +357,50 @@ extern "C" int reactive_gpu_hem_run_v2(void* raw,const double* q,const double* e
     if(!capillary){if(error&&size)std::snprintf(error,size,"Null CUDA HEM capillary input");return 1;}
     return hemRun(raw,q,energy,capillary,count,states,success,profile,error,size);
 }
+extern "C" int reactive_gpu_hem_run_resident_v1(void* raw,const double* q,const double* energy,
+    const ReactiveThermoState* seed,const ReactiveGpuHemCapillaryInputV2* capillary,
+    const uint32_t* order,size_t count,ReactiveGpuHemOutputV1* output,
+    ReactiveGpuHemProfileV1* profile,char* error,size_t size){
+    try{if(!raw||!q||!energy||!seed||!capillary||!order||!output||!profile
+            ||profile->abiVersion!=1||profile->structBytes!=sizeof(*profile))
+            throw std::runtime_error("Invalid resident CUDA HEM batch arguments");
+        auto& d=*static_cast<HemDevice*>(raw);if(!count||count>d.capacity)throw std::runtime_error("Resident CUDA HEM batch exceeds capacity");
+        const auto begin=std::chrono::steady_clock::now();
+        REACTIVE_RANGE("hem-run-resident");
+        auto* outputs=reinterpret_cast<HemCompactOutput*>(output);
+        closureCuda(cudaEventRecord(d.events[0],d.stream));
+        hemKernel<<<(count+REACTIVE_HEM_BLOCK_THREADS-1)/REACTIVE_HEM_BLOCK_THREADS,
+            REACTIVE_HEM_BLOCK_THREADS,0,d.stream>>>(d.model,q,energy,seed,capillary,order,
+                count,outputs,d.counters,d.phaseCache);
+        closureCuda(cudaGetLastError());
+        closureCuda(cudaEventRecord(d.events[1],d.stream));
+        closureCuda(cudaMemsetAsync(d.totals,0,sizeof(HemCounterTotals),d.stream));
+        closureCuda(cudaMemsetAsync(d.succeeded,0,sizeof(unsigned long long),d.stream));
+        hemReduceCounters<<<(count+255)/256,256,0,d.stream>>>(d.counters,count,d.totals);
+        closureCuda(cudaGetLastError());
+        hemCountSuccess<<<(count+255)/256,256,0,d.stream>>>(outputs,order,count,d.succeeded);
+        closureCuda(cudaGetLastError());
+        closureCuda(cudaEventRecord(d.events[2],d.stream));
+        HemCounterTotals totals{};unsigned long long succeeded=0;
+        closureCuda(cudaMemcpyAsync(&totals,d.totals,sizeof(totals),cudaMemcpyDeviceToHost,d.stream));
+        closureCuda(cudaMemcpyAsync(&succeeded,d.succeeded,sizeof(succeeded),cudaMemcpyDeviceToHost,d.stream));
+        closureCuda(cudaEventRecord(d.events[3],d.stream));closureCuda(cudaEventSynchronize(d.events[3]));
+        d.mixedLinearAttempts+=totals.mixedLinearAttempts;d.mixedLinearAccepted+=totals.mixedLinearAccepted;
+        float kernel=0,reduction=0,download=0;
+        closureCuda(cudaEventElapsedTime(&kernel,d.events[0],d.events[1]));
+        closureCuda(cudaEventElapsedTime(&reduction,d.events[1],d.events[2]));
+        closureCuda(cudaEventElapsedTime(&download,d.events[2],d.events[3]));
+        ReactiveGpuHemProfileV1 p{};p.abiVersion=1;p.structBytes=sizeof(p);p.batches=1;p.submitted=count;
+        p.succeeded=succeeded;p.deviceFailures=count-succeeded;
+        p.transferBytes=sizeof(totals)+sizeof(succeeded);p.deviceBytes=hemDeviceBytes(d);
+        p.phaseEvaluations=totals.phases;p.residualEvaluations=totals.residuals;
+        p.flashCandidates=totals.candidates;p.stableCandidates=totals.stable;
+        p.analyticJacobians=totals.analyticJacobians;
+        p.finiteDifferenceJacobians=totals.finiteDifferenceJacobians;
+        p.wallSeconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count();
+        p.kernelSeconds=(kernel+reduction)/1000.;p.copySeconds=download/1000.;*profile=p;return 0;
+    }catch(const std::exception& e){if(error&&size)std::snprintf(error,size,"%s",e.what());return 1;}
+}
 extern "C" int reactive_gpu_hem_initialize_tp_v1(void* raw,double* q,double* energy,
     const ReactiveGpuHemCapillaryInputV2* capillary,size_t count,ReactiveThermoState* states,
     int* success,ReactiveGpuHemProfileV1* profile,char* error,size_t size){
@@ -327,7 +411,12 @@ extern "C" int reactive_gpu_hem_initialize_tp_v1(void* raw,double* q,double* ene
 extern "C" void* reactive_gpu_hem_create_v1(const void*,size_t,size_t,char* error,size_t size){
     if(error&&size)std::snprintf(error,size,"Transport library was built without CUDA HEM");return nullptr;}
 extern "C" void reactive_gpu_hem_destroy_v1(void*){}
+extern "C" void* reactive_gpu_hem_create_resident_v1(const void*,size_t,size_t,char* error,size_t size){
+    if(error&&size)std::snprintf(error,size,"Transport library was built without CUDA HEM");return nullptr;}
+extern "C" size_t reactive_gpu_hem_device_bytes_v1(void*){return 0;}
 extern "C" int reactive_gpu_hem_run_v1(void*,const double*,const double*,size_t,ReactiveThermoState*,int*,ReactiveGpuHemProfileV1*,char*,size_t){return 1;}
 extern "C" int reactive_gpu_hem_run_v2(void*,const double*,const double*,const ReactiveGpuHemCapillaryInputV2*,size_t,ReactiveThermoState*,int*,ReactiveGpuHemProfileV1*,char*,size_t){return 1;}
 extern "C" int reactive_gpu_hem_initialize_tp_v1(void*,double*,double*,const ReactiveGpuHemCapillaryInputV2*,size_t,ReactiveThermoState*,int*,ReactiveGpuHemProfileV1*,char*,size_t){return 1;}
+extern "C" int reactive_gpu_hem_run_resident_v1(void*,const double*,const double*,const ReactiveThermoState*,const ReactiveGpuHemCapillaryInputV2*,const uint32_t*,size_t,ReactiveGpuHemOutputV1*,ReactiveGpuHemProfileV1*,char* error,size_t size){
+    if(error&&size)std::snprintf(error,size,"Transport library was built without CUDA HEM");return 1;}
 #endif

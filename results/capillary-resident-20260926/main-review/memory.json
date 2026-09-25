@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "sampledWholeDevicePeakMiB": 8758.0,
+    "processPeakRssKiB": 11603064
+  },
+  "direct": {
+    "sampledWholeDevicePeakMiB": 8742.0,
+    "processPeakRssKiB": 11603136
+  },
+  "resident": {
+    "sampledWholeDevicePeakMiB": 10526.0,
+    "processPeakRssKiB": 10357472
+  },
+  "resident-split": {
+    "sampledWholeDevicePeakMiB": 10328.0,
+    "processPeakRssKiB": 10357308
+  }
+}

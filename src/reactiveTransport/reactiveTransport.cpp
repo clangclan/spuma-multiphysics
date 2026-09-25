@@ -9,6 +9,8 @@
 #include "../reactiveInterface/reactiveImplicitFit.h"
 #include "reactiveTurbulence.h"
 #include "../reactiveThermo/reactiveDeviceWalePr.h"
+#include "reactiveCapillaryResident.h"
+#include "reactiveHemBucket.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -23,6 +25,7 @@
 #include <vector>
 #ifdef __CUDACC__
 #include <cuda_runtime.h>
+#include <cub/device/device_radix_sort.cuh>
 #endif
 namespace {
 using namespace ReactiveTransport;
@@ -273,6 +276,108 @@ struct StagingSlot {
         std::free(host);
     }
 };
+#ifdef __CUDACC__
+// Device-resident capillary closure. This TU uses separate rounding
+// (--fmad=false), and every expression below is the host closure's own
+// expression, so each value is bitwise the host value. Any input the host
+// would reject only raises a flag: the caller then reruns the host path,
+// which reports it.
+namespace ResidentCapillary {
+constexpr unsigned kBadColor=1u,kBadInput=2u,kNonFinite=4u;
+__device__ inline bool sameBits(double a,double b){return __double_as_longlong(a)==__double_as_longlong(b);}
+// Flow::liquidColor for one state.
+__device__ inline double color(const ReactiveThermoState& s,unsigned* flags){
+    if(!(isfinite(s.liquidMass[0])&&s.liquidMass[0]>=0)){atomicOr(flags,kBadColor);return 0;}
+    double c=0;
+    if(s.liquidMass[0]>0){
+        if(!(isfinite(s.rhoLiquid[0])&&s.rhoLiquid[0]>0)){atomicOr(flags,kBadColor);return 0;}
+        c=s.liquidMass[0]/s.rhoLiquid[0];
+    }
+    const double gasVolume=s.gasMass>0?s.gasMass/s.rhoGas:0;
+    const double sum=c+gasVolume;
+    if(!(isfinite(sum)&&sum>0&&fabs(sum-1)<1e-6)){atomicOr(flags,kBadColor);return 0;}
+    c/=sum;
+    if(!(isfinite(c)&&c>=0&&c<=1))atomicOr(flags,kBadColor);
+    return c;
+}
+// The HEM wrapper's heavy-first bucket (performance only).
+__device__ inline unsigned bucket(const double* q,int ns,const ReactiveThermoState& guess){
+    return ReactiveHemBucket::key(q,ns,guess.activeLiquids);
+}
+__global__ void iota(size_t n,uint32_t* x){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x)x[c]=uint32_t(c);}
+// Color of the incoming states, then the seed's liquid inventory from q.
+__global__ void seed(size_t n,ReactiveThermoState* seed,const double* liquid,double* color,unsigned* flags){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x){
+        color[c]=ResidentCapillary::color(seed[c],flags);seed[c].liquidMass[0]=liquid[c];}
+}
+__global__ void jump(size_t n,double sigma,const double* curvature,double* jump){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x)
+        jump[c]=sigma*curvature[c];
+}
+// One thread per cell (the ballot needs every lane of a launched warp).
+__global__ void select(size_t n,int all,int equilibrium,int ns,const double* q,
+    const ReactiveThermoState* seed,const double* bulk,
+    const double* color,const double* jump,const double* surface,
+    double* colorBefore,double* jumpBefore,double* energyBefore,
+    const double* flashedColor,const double* flashedJump,const double* flashedEnergy,
+    double* energy,ReactiveGpuHemCapillaryInputV2* capillary,uint16_t* keys,
+    unsigned long long* dirtyCount,unsigned* flags){
+    const size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;
+    bool dirty=false;
+    if(c<n){
+        const double cb=color[c],jb=jump[c],eb=surface[c];
+        colorBefore[c]=cb;jumpBefore[c]=jb;energyBefore[c]=eb;
+        dirty=all||!sameBits(cb,flashedColor[c])||!sameBits(jb,flashedJump[c])||!sameBits(eb,flashedEnergy[c]);
+        energy[c]=bulk[c]-eb;
+        capillary[c].color=cb;capillary[c].pressureJump=jb;capillary[c].equilibrium=equilibrium;
+        if(!(isfinite(cb)&&cb>=0&&cb<=1&&isfinite(jb)))atomicOr(flags,kBadInput);
+        keys[c]=dirty?uint16_t(255u-bucket(q+c*ns,ns,seed[c])):uint16_t(256u);
+    }
+    const unsigned mask=__ballot_sync(0xffffffffu,dirty);
+    if((threadIdx.x&31u)==0&&mask)atomicAdd(dirtyCount,static_cast<unsigned long long>(__popc(mask)));
+}
+__global__ void flashed(size_t count,const uint32_t* order,const double* colorBefore,const double* jumpBefore,
+    const double* energyBefore,double* flashedColor,double* flashedJump,double* flashedEnergy){
+    for(size_t j=blockIdx.x*size_t(blockDim.x)+threadIdx.x;j<count;j+=size_t(gridDim.x)*blockDim.x){
+        const uint32_t c=order[j];
+        flashedColor[c]=colorBefore[c];flashedJump[c]=jumpBefore[c];flashedEnergy[c]=energyBefore[c];}
+}
+__global__ void candidate(size_t n,const ReactiveGpuHemOutputV1* output,double* color,unsigned* flags){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x)
+        color[c]=ResidentCapillary::color(output[c].state,flags);
+}
+// Pageable 2D copies are slow: gather the states contiguously first.
+__global__ void states(size_t n,const ReactiveGpuHemOutputV1* output,ReactiveThermoState* states){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x)
+        states[c]=output[c].state;
+}
+__global__ void relax(size_t n,const double* colorBefore,double* color){
+    for(size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;c<n;c+=size_t(gridDim.x)*blockDim.x)
+        color[c]=.5*(colorBefore[c]+color[c]);
+}
+// Max over non-negative doubles: their bit patterns order like the values.
+__global__ void residual(size_t n,const double* candidate,const double* colorBefore,
+    const double* surface,const double* energyBefore,const double* jump,const double* jumpBefore,
+    const double* bulk,const ReactiveGpuHemOutputV1* output,unsigned long long* bits,unsigned* flags){
+    const size_t c=blockIdx.x*size_t(blockDim.x)+threadIdx.x;
+    unsigned long long local=0;
+    if(c<n){
+        const auto& s=output[c].state;
+        const double a=fabs(bulk[c]),b=s.rho*1e5;
+        const double bulkScale=a<b?b:a;
+        const double p=s.p<1.0?1.0:s.p;
+        const double x=fabs(candidate[c]-colorBefore[c]),y=fabs(surface[c]-energyBefore[c])/bulkScale,
+            z=fabs(jump[c]-jumpBefore[c])/p;
+        if(!(isfinite(x)&&isfinite(y)&&isfinite(z)))atomicOr(flags,kNonFinite);
+        else local=__double_as_longlong(fmax(x,fmax(y,z)));
+    }
+    for(unsigned offset=16;offset;offset>>=1){
+        const unsigned long long other=__shfl_down_sync(0xffffffffu,local,offset);if(other>local)local=other;}
+    if((threadIdx.x&31u)==0&&local)atomicMax(bits,local);
+}
+}
+#endif
 class Transport {
 public:
     std::mutex entry;Execution execution;StagingSlot slot;ReactiveTransportProfileV21 cost{};View v{};double *reduceA=nullptr,*reduceB=nullptr,*bridge=nullptr,*boundaryPartial=nullptr;
@@ -855,6 +960,172 @@ public:
         capillaryProfile.colorUploadBytes+=(v.cfg.cells+v.cfg.fixed)*sizeof(double);
         capillaryProfile.geometryDownloadBytes+=v.cfg.cells*sizeof(double)*(1+(curvature?1:0)+(normal?3:0));
     }
+#ifdef __CUDACC__
+    // Device-resident capillary closure buffers (allocated on first use).
+    struct CapillaryResident {
+        size_t cells=0,species=0,sortBytes=0;double sigma=0;int equilibrium=1;bool ready=false;
+        double *q=nullptr,*bulk=nullptr,*energy=nullptr,*color=nullptr,*jump=nullptr;
+        double *colorBefore=nullptr,*jumpBefore=nullptr,*energyBefore=nullptr;
+        double *flashedColor=nullptr,*flashedJump=nullptr,*flashedEnergy=nullptr;
+        ReactiveThermoState* seed=nullptr;ReactiveGpuHemOutputV1* output=nullptr;
+        ReactiveGpuHemCapillaryInputV2* capillary=nullptr;
+        uint16_t *keys=nullptr,*sortedKeys=nullptr;uint32_t *cells32=nullptr,*order=nullptr;
+        void* sortTemp=nullptr;unsigned long long* scalars=nullptr;unsigned* flags=nullptr;
+        std::vector<double> fixedColor;
+    } resident;
+    unsigned residentGrid(size_t n)const{return unsigned(std::min<size_t>(65535,(n+255)/256));}
+    void residentAllocate(size_t species) {
+        const size_t n=v.cfg.cells;
+        if(resident.cells==n&&resident.species==species)return;
+        require(!resident.cells,"Resident capillary species count changed");
+        require(species==v.cfg.species&&n<=size_t(std::numeric_limits<int>::max()),
+            "Resident capillary species/count exceeds the transport or sort layout");
+        // Publish only a complete workspace. A budget/CUDA allocation failure
+        // must not leave a matching cells/species tag with null device buffers
+        // for the next timestep retry.
+        CapillaryResident r;
+        const size_t allocationStart=execution.allocations.size();
+        const uint64_t bytesStart=execution.stats.allocatedBytes;
+        try {
+        const double limit=v.cfg.maxBytes;
+        r.cells=n;r.species=species;
+        r.q=execution.allocate<double>(product(n,species),limit);
+        r.bulk=execution.allocate<double>(n,limit);r.energy=execution.allocate<double>(n,limit);
+        r.color=execution.allocate<double>(n,limit);r.jump=execution.allocate<double>(n,limit);
+        r.colorBefore=execution.allocate<double>(n,limit);r.jumpBefore=execution.allocate<double>(n,limit);
+        r.energyBefore=execution.allocate<double>(n,limit);r.flashedColor=execution.allocate<double>(n,limit);
+        r.flashedJump=execution.allocate<double>(n,limit);r.flashedEnergy=execution.allocate<double>(n,limit);
+        r.seed=execution.allocate<ReactiveThermoState>(n,limit);
+        r.output=execution.allocate<ReactiveGpuHemOutputV1>(n,limit);
+        r.capillary=execution.allocate<ReactiveGpuHemCapillaryInputV2>(n,limit);
+        r.keys=execution.allocate<uint16_t>(n,limit);r.sortedKeys=execution.allocate<uint16_t>(n,limit);
+        r.cells32=execution.allocate<uint32_t>(n,limit);r.order=execution.allocate<uint32_t>(n,limit);
+        r.scalars=execution.allocate<unsigned long long>(2,limit);r.flags=execution.allocate<unsigned>(1,limit);
+        cudaCheck(cub::DeviceRadixSort::SortPairs(nullptr,r.sortBytes,r.keys,r.sortedKeys,r.cells32,r.order,
+            int(n),0,9,execution.stream));
+        r.sortTemp=execution.allocate<char>(std::max<size_t>(r.sortBytes,1),limit);
+        ResidentCapillary::iota<<<residentGrid(n),256,0,execution.stream>>>(n,r.cells32);cudaCheck(cudaGetLastError());
+        execution.finish();
+        resident=std::move(r);
+        } catch(...) {
+            cudaStreamSynchronize(execution.stream);
+            while(execution.allocations.size()>allocationStart) {
+                cudaFree(execution.allocations.back());execution.allocations.pop_back();
+            }
+            execution.stats.allocatedBytes=bytesStart;
+            throw;
+        }
+    }
+    void residentClearFlags() {
+        cudaCheck(cudaMemsetAsync(resident.flags,0,sizeof(unsigned),execution.stream));
+        cudaCheck(cudaMemsetAsync(resident.scalars,0,2*sizeof(unsigned long long),execution.stream));
+    }
+    unsigned residentFlags(unsigned long long* scalars=nullptr) {
+        unsigned flags=0;execution.download(&flags,resident.flags,1);
+        if(scalars)execution.download(scalars,resident.scalars,2);
+        execution.finish();return flags;
+    }
+    // Diffuse geometry of a device color; the jump uses the caller's sigma.
+    void residentGeometry() {
+        REACTIVE_RANGE("tr-capillary-geometry-resident");
+        auto& r=resident;const size_t n=v.cfg.cells;
+        if(walePrInstalled){walePrReady=false;v.scalarCpFields=false;v.scalarHFields=false;}
+        geometryShadowValid=false;colorReady=false;capillaryStatus=0;
+        execution.upload(v.capillaryError,&capillaryStatus,1);
+        execution.copy(v.capillaryColor,r.color,n);
+        execution.upload(v.capillaryColor+n,r.fixedColor.data(),v.cfg.fixed);
+        const uint64_t previousKernels=execution.stats.kernelLaunches;
+        execution.launch(n,v,InterfaceGradient{});
+        execution.launch(n,v,InterfaceCurvature{});
+        ResidentCapillary::jump<<<residentGrid(n),256,0,execution.stream>>>(n,r.sigma,v.interface.curvature,r.jump);
+        cudaCheck(cudaGetLastError());
+        execution.download(&capillaryStatus,v.capillaryError,1);execution.finish();
+        require(!capillaryStatus,"Invalid capillary geometry");
+        colorReady=true;++capillaryProfile.geometryBuilds;
+        capillaryProfile.geometryCells+=n;
+        capillaryProfile.geometryKernels+=execution.stats.kernelLaunches-previousKernels;
+        capillaryProfile.colorUploadBytes+=v.cfg.fixed*sizeof(double);
+    }
+    void residentBegin(size_t species,const double* q,const double* liquid,const double* bulk,
+                       const ReactiveThermoState* states,const double* fixedColor,double sigma,int equilibrium,int* fallback) {
+        REACTIVE_RANGE("tr-capillary-resident-begin");
+        require(execution.cuda&&v.capillary&&!implicitFit,"Resident capillary closure needs CUDA diffuse geometry");
+        require(species>0&&q&&liquid&&bulk&&states&&fallback&&(!v.cfg.fixed||fixedColor)
+            &&std::isfinite(sigma)&&(equilibrium==0||equilibrium==1),"Invalid resident capillary input");
+        for(size_t c=0;c<v.cfg.fixed;++c)require(std::isfinite(fixedColor[c])&&fixedColor[c]>=0&&fixedColor[c]<=1,
+            "Invalid fixed material color");
+        residentAllocate(species);auto& r=resident;const size_t n=v.cfg.cells;
+        r.sigma=sigma;r.equilibrium=equilibrium;r.fixedColor.clear();r.ready=false;
+        if(v.cfg.fixed)r.fixedColor.assign(fixedColor,fixedColor+v.cfg.fixed);
+        residentClearFlags();
+        execution.upload(r.q,q,product(n,species));execution.upload(r.bulk,bulk,n);
+        execution.upload(r.seed,states,n);execution.upload(r.energy,liquid,n);
+        ResidentCapillary::seed<<<residentGrid(n),256,0,execution.stream>>>(n,r.seed,r.energy,r.color,r.flags);
+        cudaCheck(cudaGetLastError());
+        if((*fallback=residentFlags()!=0))return;
+        residentGeometry();r.ready=true;
+    }
+    void residentSelect(int iteration,ReactiveCapillaryResidentViewV1& view,int* fallback) {
+        REACTIVE_RANGE("tr-capillary-resident-select");
+        auto& r=resident;const size_t n=v.cfg.cells;
+        require(r.ready&&fallback&&view.abiVersion==1&&view.structBytes==sizeof(view),"Resident capillary select out of order");
+        residentClearFlags();
+        ResidentCapillary::select<<<unsigned((n+255)/256),256,0,execution.stream>>>(n,iteration==0,r.equilibrium,
+            int(r.species),r.q,r.seed,r.bulk,r.color,r.jump,v.capillarySurfaceEnergy,
+            r.colorBefore,r.jumpBefore,r.energyBefore,r.flashedColor,r.flashedJump,r.flashedEnergy,
+            r.energy,r.capillary,r.keys,r.scalars,r.flags);
+        cudaCheck(cudaGetLastError());
+        size_t bytes=r.sortBytes;
+        cudaCheck(cub::DeviceRadixSort::SortPairs(r.sortTemp,bytes,r.keys,r.sortedKeys,r.cells32,r.order,
+            int(n),0,9,execution.stream));
+        unsigned long long scalars[2]{};
+        if((*fallback=residentFlags(scalars)!=0)){r.ready=false;return;}
+        view.q=r.q;view.energy=r.energy;view.seed=r.seed;view.capillary=r.capillary;
+        view.order=r.order;view.output=r.output;view.count=size_t(scalars[0]);
+    }
+    void residentUpdate(size_t count,double* residual,int* fallback) {
+        REACTIVE_RANGE("tr-capillary-resident-update");
+        auto& r=resident;const size_t n=v.cfg.cells;
+        require(r.ready&&residual&&fallback&&count<=n,"Resident capillary update out of order");
+        residentClearFlags();
+        if(count){ResidentCapillary::flashed<<<residentGrid(count),256,0,execution.stream>>>(count,r.order,
+            r.colorBefore,r.jumpBefore,r.energyBefore,r.flashedColor,r.flashedJump,r.flashedEnergy);
+            cudaCheck(cudaGetLastError());}
+        ResidentCapillary::candidate<<<residentGrid(n),256,0,execution.stream>>>(n,r.output,r.color,r.flags);
+        cudaCheck(cudaGetLastError());
+        if((*fallback=residentFlags()!=0)){r.ready=false;return;}
+        residentGeometry();
+        ResidentCapillary::residual<<<unsigned((n+255)/256),256,0,execution.stream>>>(n,r.color,r.colorBefore,
+            v.capillarySurfaceEnergy,r.energyBefore,r.jump,r.jumpBefore,r.bulk,r.output,r.scalars+1,r.flags);
+        cudaCheck(cudaGetLastError());
+        unsigned long long scalars[2]{};
+        if((*fallback=residentFlags(scalars)!=0)){r.ready=false;return;}
+        std::memcpy(residual,&scalars[1],sizeof(double));
+    }
+    void residentRelax() {
+        REACTIVE_RANGE("tr-capillary-resident-relax");
+        auto& r=resident;require(r.ready,"Resident capillary relaxation out of order");
+        ResidentCapillary::relax<<<residentGrid(v.cfg.cells),256,0,execution.stream>>>(v.cfg.cells,r.colorBefore,r.color);
+        cudaCheck(cudaGetLastError());residentGeometry();
+    }
+    void residentCommit(ReactiveThermoState* states,double* color,double* energy,double* curvature) {
+        REACTIVE_RANGE("tr-capillary-resident-commit");
+        auto& r=resident;const size_t n=v.cfg.cells;
+        require(r.ready&&states&&color&&energy&&curvature,"Resident capillary commit out of order");
+        // The closure is over: the seed buffer becomes the download staging.
+        ResidentCapillary::states<<<residentGrid(n),256,0,execution.stream>>>(n,r.output,r.seed);
+        cudaCheck(cudaGetLastError());
+        execution.download(states,r.seed,n);
+        execution.download(color,r.color,n);execution.download(energy,v.capillarySurfaceEnergy,n);
+        execution.download(curvature,v.interface.curvature,n);execution.finish();
+        capillaryProfile.geometryDownloadBytes+=n*2*sizeof(double);
+        // The published geometry is exactly the build of `color`: a later
+        // identical host request reuses it.
+        keep(colorShadow,color,n);keep(fixedColorShadow,r.fixedColor.data(),v.cfg.fixed);
+        keep(energyShadow,energy,n);keep(curvatureShadow,curvature,n);geometryShadowValid=true;
+        r.ready=false;
+    }
+#endif
     void geometricDiagnostic(const ReactiveGeometricDiagnosticV1& options,const double* q,
         const ReactiveTransportState* states,const double* color,
         const ReactiveGeometricCellV1* cells,const ReactiveGeometricFaceV1* faces,
@@ -1321,6 +1592,42 @@ int reactive_transport_capillary_geometry_v1(void* t,const double* color,const d
     double* surfaceEnergy,double* curvature,double* normalXYZ) {
     return protect(t,[&](Transport& x){x.capillaryGeometry(color,fixedColor,surfaceEnergy,curvature,normalXYZ);});
 }
+#ifdef __CUDACC__
+int reactive_transport_capillary_resident_begin_v1(void* t,size_t species,const double* q,const double* liquid,
+    const double* bulk,const ReactiveThermoState* states,const double* fixedColor,double sigma,int equilibrium,int* fallback) {
+    return protect(t,[&](Transport& x){x.residentBegin(species,q,liquid,bulk,states,fixedColor,sigma,equilibrium,fallback);});
+}
+int reactive_transport_capillary_resident_select_v1(void* t,int iteration,ReactiveCapillaryResidentViewV1* view,int* fallback) {
+    return protect(t,[&](Transport& x){require(view,"Null resident capillary view");x.residentSelect(iteration,*view,fallback);});
+}
+int reactive_transport_capillary_resident_update_v1(void* t,size_t count,double* residual,int* fallback) {
+    return protect(t,[&](Transport& x){x.residentUpdate(count,residual,fallback);});
+}
+int reactive_transport_capillary_resident_relax_v1(void* t) {
+    return protect(t,[&](Transport& x){x.residentRelax();});
+}
+int reactive_transport_capillary_resident_commit_v1(void* t,ReactiveThermoState* states,double* color,
+    double* surfaceEnergy,double* curvature) {
+    return protect(t,[&](Transport& x){x.residentCommit(states,color,surfaceEnergy,curvature);});
+}
+#else
+int reactive_transport_capillary_resident_begin_v1(void* t,size_t,const double*,const double*,const double*,
+    const ReactiveThermoState*,const double*,double,int,int*) {
+    return protect(t,[&](Transport&){throw std::runtime_error("Resident capillary closure needs the CUDA transport build");});
+}
+int reactive_transport_capillary_resident_select_v1(void* t,int,ReactiveCapillaryResidentViewV1*,int*) {
+    return protect(t,[&](Transport&){throw std::runtime_error("Resident capillary closure needs the CUDA transport build");});
+}
+int reactive_transport_capillary_resident_update_v1(void* t,size_t,double*,int*) {
+    return protect(t,[&](Transport&){throw std::runtime_error("Resident capillary closure needs the CUDA transport build");});
+}
+int reactive_transport_capillary_resident_relax_v1(void* t) {
+    return protect(t,[&](Transport&){throw std::runtime_error("Resident capillary closure needs the CUDA transport build");});
+}
+int reactive_transport_capillary_resident_commit_v1(void* t,ReactiveThermoState*,double*,double*,double*) {
+    return protect(t,[&](Transport&){throw std::runtime_error("Resident capillary closure needs the CUDA transport build");});
+}
+#endif
 int reactive_transport_capillary_profile_v1(void* t,ReactiveCapillaryProfileV1* profile) {
     return protect(t,[&](Transport& x){require(profile&&profile->abiVersion==1
         &&profile->structBytes==sizeof(*profile),"Invalid capillary profile ABI");
