@@ -131,7 +131,7 @@ transportBackend         cuda;
 closureBackend           cuda;
 closureScalarBackend     cpu;
 closureCpuFallback       false;
-closureJacobian          finiteDifference;
+closureJacobian          analytic;
 thermoExactReuse          true;
 
 physics
@@ -200,7 +200,8 @@ capillaryCfl             0.25;
 | `closureBackend` | `cpu` | 전체 상태 복원 `cpu` / `cuda` |
 | `closureScalarBackend` | `cpu` | 별도의 온도 후보 평가 가속. 전체 GPU flash와 구분 |
 | `closureCpuFallback` | `true` | GPU 복원 실패 시 CPU 허용 여부. 모세관 모델은 `false` 필수 |
-| `closureJacobian` | `finiteDifference` | `analytic`은 전체 CUDA 복원 전용이며 적용 가능한 상태에 제한 |
+| `closureJacobian` | `finiteDifference` | `analytic`은 전체 CUDA 복원 전용. 곡면(J≠0) 모세관 셀도 포함하며, 해석식이 실패한 상태만 유한차분으로 대체. 모세관 N₂O 케이스 생성기의 기본값 |
+| `closureSearch` | `reference` | `stableGasPrune`은 전체 CUDA 복원·단일 순수 액체상·고체 없음 조건에서 명시적으로 선택. 안정성 검사를 통과한 전 기체 셀의 두 상 seed 탐색 생략(정책 태그 `stable-gas-prune-v1`). 솔버와 생성기 모두 기본값 `reference`. 비트 동일성 검증 범위는 40 bar N₂O/공기 125–200 μs 및 200 μs 이후 10스텝이며, 다른 조건은 재검증 필요 |
 | `thermoWorkers` | 1 | CPU 열역학 작업자, 1–64 및 배치 크기 이하 |
 | `thermoBatchCells` | 64 | 열역학 배치 상한, 셀 수와 메모리 예산에 의해서도 제한 |
 | `thermoExactReuse` | 비반응·비동결·비모세관 HEM에서 활성화 | 완전히 동일한 상태만 재사용. CUDA 모세관 모델에서는 명시적으로 켤 수 있음 |
@@ -208,12 +209,12 @@ capillaryCfl             0.25;
 | `maxDeviceMemoryGB` / `maxHostMemoryGB` | 2 / 2 | 추정 장치/호스트 작업 공간 예산, 1 GB = 10⁹ bytes |
 | `transportBlockThreads` | 256 | CUDA 수송 블록 크기 |
 | `transportBridgeCells` | 0 | 전송 bridge 크기 설정. 0은 기본 처리 경로 |
-| `transportStagingBytes` / `maxPinnedTransportBytes` | 1,048,576 / 1,048,576 | 전송 staging/pinned 메모리 설정 |
+| `transportStagingBytes` / `maxPinnedTransportBytes` | 67,108,864 / 67,108,864 | 전송 staging/pinned 메모리 설정. 작은 메시에서는 메시 크기로 제한 |
 | `transportDetailedGasCounters` | `false` | 추가 기체 수송 진단 카운터 |
 
 전체 CUDA HEM 복원은 현재 **PR EOS·화학종 최대 16개·액체 종 최대 2개**의 비반응 경로다. 모세관 모델에서는 액체가 하나로 더 제한된다. `closureBackend cuda; closureScalarBackend cpu;`는 정상적인 전체 GPU flash 설정이다. 이때 `cpu`라는 후보 평가 설정만 보고 전체 flash가 CPU fallback이라고 판단하면 안 된다. `closureScalarBackend cuda`는 비반응 평형 후보 평가의 별도 옵션이며 모세관 경로와 조합하지 않는다.
 
-`closureLibrary`, `closureScalarLibrary`의 기본값은 `libreactiveTransport.so`다. 곡면 flash에는 `finiteDifference` 경로를 사용하며, `analytic`을 모든 곡면 상태의 대체 GPU 풀이로 취급하지 않는다.
+`closureLibrary`, `closureScalarLibrary`의 기본값은 `libreactiveTransport.so`다. `analytic`은 곡면 flash에서도 기체·액체를 각자의 상 압력에서 평가한 해석 Jacobian을 사용한다. 100 μs 체크포인트의 실제 N₂O 배치에서 HEM 커널은 3.50 s에서 1.45 s로 줄었다([GPU HEM 최적화 기록](reports/gpu-hem-optimization-20260925.ko.md)).
 
 최근 160³ 계측에서는 `thermoWorkers 1`, `thermoBatchCells 1048576`, `thermoExactReuse true`, `maxThermoBatchMemoryMB 2097.152`, `maxDeviceMemoryGB 12`, `maxHostMemoryGB 32`를 사용했다. 이는 해당 하드웨어의 측정 설정이며 전역 기본값이 아니다. 메모리 옵션은 알려진 배열의 예산 검사이며 프로세스 전체 메모리의 엄격한 상한은 아니다. Nsight replay 메모리도 별도로 고려한다.
 
@@ -262,7 +263,7 @@ functions         {};
 | `REACTIVE_STEP_TIMINGS` | 스텝별 연산 시간 |
 | `REACTIVE_GPU_HEM`, `REACTIVE_GPU_HEM_STEP` | 제출 상태 수, 실패·fallback, GPU 커널과 복사 |
 | `REACTIVE_WALE_PR`, `REACTIVE_WALE_SCALARS` | 난류 물성과 혼합, 호스트 엔탈피 처리 수 |
-| `REACTIVE_CAPILLARY_PROFILE`, `REACTIVE_CHECKPOINT` | 계면 비용과 체크포인트 기록 |
+| `REACTIVE_CAPILLARY_STEP`, `REACTIVE_CAPILLARY_PROFILE`, `REACTIVE_CHECKPOINT` | 계면 비용, 외부 반복에서 다시 flash한 셀(`flashedCells`)과 입력이 같아 재사용한 셀(`reusedCells`), 체크포인트 기록 |
 
 로그 시간에는 중첩 구간이 있다. 열역학 복원 시간과 그 안의 GPU HEM 시간을 더하면 이중 집계된다. Nsight Systems/Compute의 상세 계측은 별도 실행으로 분리하고, replay를 포함한 진단 벽시계 시간을 일반 해석과 직접 비교하지 않는다. GPU 성능 카운터는 드라이버에서 해당 사용자에게 허용되어야 한다.
 

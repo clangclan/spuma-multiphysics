@@ -22,6 +22,9 @@ typedef struct {
 // Set on a prototype before creating its pool. Only nonreacting HEM is wired.
 int reactive_rt_set_gpu_hem_v1(void* model,int enabled,int cpuFallback,const char* library);
 int reactive_rt_set_gpu_hem_jacobian_v1(void* model,int analytic);
+// 0: reference candidate search. 1: skip two-phase seeds when the all-gas
+// state is stable (policy tag stable-gas-prune-v1).
+int reactive_rt_set_gpu_hem_search_v1(void* model,int stableGasPrune);
 // Model is an opaque POD image whose exact size is returned on a null query.
 int reactive_rt_export_gpu_hem_v1(void* model,void* output,size_t size,size_t* required);
 int reactive_rt_pool_gpu_hem_profile_v1(void* pool,ReactiveGpuHemProfileV1* out);

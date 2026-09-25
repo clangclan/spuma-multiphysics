@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Compile as C++ for portable operator checks, or via .cu for CUDA execution.
 #include "reactiveTransportKernels.h"
+#include "../reactiveThermo/reactiveNvtx.h"
 #include "reactiveTransportV21.h"
 #include "reactiveCartesianTransport.h"
 #include "reactiveImplicitTransportKernels.h"
@@ -397,6 +398,7 @@ public:
         execution.finish(); // host geometry temporaries are about to be destroyed
     }
     void pack(double* destination,const double* source,size_t cells,size_t variables,size_t offset=0,size_t stride=0) {
+        REACTIVE_RANGE("tr-pack-upload");
         if(!stride)stride=v.cfg.cells+v.cfg.fixed;
         require(!cells||source,"Null packed source");
         for(size_t begin=0;begin<cells;begin+=bridgeCells) {
@@ -410,6 +412,7 @@ public:
         }
     }
     void unpackFields(double* destination,const double* source,size_t variables,size_t stride) {
+        REACTIVE_RANGE("tr-unpack-download");
         require(destination,"Null unpack output");
         for(size_t begin=0;begin<v.cfg.cells;begin+=bridgeCells) {
             const size_t count=std::min(bridgeCells,v.cfg.cells-begin);
@@ -439,6 +442,7 @@ public:
         ++profile.conservedUploads;profile.conservedUploadBytes+=v.cfg.cells*v.cfg.variables*sizeof(double);
     }
     void uploadState(const ReactiveTransportState* states) {
+        REACTIVE_RANGE("tr-validate-upload-state");
         validateStates(states,v.cfg.cells);nonemptyGasCells=0;for(size_t c=0;c<v.cfg.cells;++c)nonemptyGasCells+=states[c].gasMass>0;execution.upload(v.state,states,v.cfg.cells);
         profile.stateUploadBytes+=v.cfg.cells*sizeof(ReactiveTransportState);
     }
@@ -623,6 +627,7 @@ public:
     }
     void prepareWalePr(const ReactiveWalePrEpochV1& epoch,const double* q,size_t stride,
                        const ReactiveThermoState* states) {
+        REACTIVE_RANGE("tr-wale-pr");
         const auto begin=std::chrono::steady_clock::now();
         require(epoch.abiVersion==1&&epoch.structBytes==sizeof(epoch)
             &&(epoch.enthalpies==0||epoch.enthalpies==1)
@@ -743,6 +748,7 @@ public:
     }
     void capillaryGeometry(const double* cellColor,const double* fixedColor,double* energy,
                            double* curvature,double* normal) {
+        REACTIVE_RANGE("tr-capillary-geometry");
         require(v.capillary&&cellColor&&energy&&(!v.cfg.fixed||fixedColor),
             "Missing capillary model, color or surface-energy output");
         for(size_t c=0;c<v.cfg.cells;++c)require(std::isfinite(cellColor[c])&&cellColor[c]>=0&&cellColor[c]<=1,
@@ -1122,6 +1128,7 @@ public:
         prepare(q,state,gasY,gasH,true);gather(materialize);
     }
     void stableStep(double cfl,double maximumStep,double* dt) {
+        REACTIVE_RANGE("tr-stable-step-reduce");
         require(dt&&std::isfinite(cfl)&&cfl>0&&cfl<=.5&&std::isfinite(maximumStep)&&maximumStep>0,"Invalid transport CFL controls");
         execution.launch(v.cfg.cells,v,Step{cfl,maximumStep});
         size_t count=v.cfg.cells;const double* input=v.step;double* output=reduceA;

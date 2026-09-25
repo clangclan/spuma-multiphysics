@@ -95,9 +95,10 @@ def main():
             check('gpu-equilibrium-curved-conserved', rc == 0 and ok == 1
                 and curved_eq.volumeResidual < 1e-8
                 and curved_eq.energyResidual < 1e-8
-                and profile.analyticJacobians == 0,
+                and profile.analyticJacobians > 0,
                 error=message, volumeResidual=curved_eq.volumeResidual,
                 energyResidual=curved_eq.energyResidual,
+                analyticJacobians=profile.analyticJacobians,
                 finiteDifferenceJacobians=profile.finiteDifferenceJacobians)
             if ok == 1 and curved_eq.gasMass > 0 and curved_eq.liquidMass[0] > 0:
                 gas_p = curved_eq.p-color*jump

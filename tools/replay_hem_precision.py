@@ -23,7 +23,10 @@ def main():
     ap.add_argument('capture',type=Path);ap.add_argument('--library',type=Path,required=True)
     ap.add_argument('--output',type=Path,required=True);ap.add_argument('--repeats',type=int,default=7)
     ap.add_argument('--reference',type=Path)
+    ap.add_argument('--require-bitwise',action='store_true',
+        help='Fail unless all state bytes and success flags match --reference')
     a=ap.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    if a.require_bitwise and a.reference is None:ap.error('--require-bitwise needs --reference')
     data=a.capture.read_bytes();magic,version,modelbytes,n,ns,statebytes,capbytes,capillary=struct.unpack_from('=8Q',data)
     assert magic==0x48454d4341503031 and version==1 and 0<n<=1048576 and 1<=ns<=16
     assert statebytes==C.sizeof(State) and capbytes==C.sizeof(Capillary) and capillary==1
@@ -36,7 +39,10 @@ def main():
     assert offset==len(data)
     gpu=gpu_bind(a.library);gpu.reactive_gpu_hem_run_v2.argtypes=[C.c_void_p,C.POINTER(C.c_double),C.POINTER(C.c_double),C.POINTER(Capillary),C.c_size_t,C.POINTER(State),C.POINTER(C.c_int),C.POINTER(HemProfile),C.c_char_p,C.c_size_t]
     gpu.reactive_gpu_hem_run_v2.restype=C.c_int
-    gpu.reactive_gpu_hem_numerical_policy_v1.restype=C.c_char_p
+    # The default separate-rounding build exports no policy symbol.
+    policy_symbol=getattr(gpu,'reactive_gpu_hem_numerical_policy_v1',None)
+    if policy_symbol is not None:policy_symbol.restype=C.c_char_p
+    policy=policy_symbol().decode() if policy_symbol is not None else 'legacy-fp64-separate-rn'
     error=C.create_string_buffer(4096);handle=gpu.reactive_gpu_hem_create_v1(model,modelbytes,n,error,len(error))
     if not handle:raise RuntimeError(error.value.decode())
     rows=[];accepted=True;deterministic=True;reference_bytes=None
@@ -56,8 +62,11 @@ def main():
         unchanged&=energy.tobytes()==data[64+modelbytes+n*ns*8:64+modelbytes+n*(ns+1)*8]
         comparison={}
         compared_count=0
+        bitwise_equal=None
         if a.reference:
             reference=np.load(a.reference/'states.npy');assert reference.shape==array.shape
+            bitwise_equal=(reference.dtype==array.dtype and reference.tobytes()==array.tobytes()
+                and np.array_equal(np.load(a.reference/'success.npy'),np.ctypeslib.as_array(success)))
             mask=(np.ctypeslib.as_array(success)>0)&(np.load(a.reference/'success.npy')>0)
             compared_count=int(mask.sum())
             for name in array.dtype.names:
@@ -65,8 +74,9 @@ def main():
                 x=np.asarray(array[name][mask],dtype=float);y=np.asarray(reference[name][mask],dtype=float)
                 comparison[name]=dict(maxAbs=float(np.max(np.abs(x-y))),maxScaled=float(np.max(np.abs(x-y)/np.maximum(1,np.abs(y)))),
                     relativeL2=float(np.linalg.norm((x-y).ravel())/max(1e-300,np.linalg.norm(y.ravel()))))
-        report=dict(passed=bool(accepted and deterministic and unchanged),capture=str(a.capture.resolve()),captureSha256=common.sha256(a.capture),
-            library=str(a.library.resolve()),librarySha256=common.sha256(a.library),policy=gpu.reactive_gpu_hem_numerical_policy_v1().decode(),
+        report=dict(passed=bool(accepted and deterministic and unchanged and (not a.require_bitwise or bitwise_equal)),
+            bitwiseEqual=bitwise_equal,requireBitwise=a.require_bitwise,capture=str(a.capture.resolve()),captureSha256=common.sha256(a.capture),
+            library=str(a.library.resolve()),librarySha256=common.sha256(a.library),policy=policy or 'legacy-fp64-separate-rn',
             count=n,species=ns,deterministic=deterministic,inputsUnchanged=unchanged,repetitions=rows,comparison=comparison,
             comparedSuccessfulCells=compared_count,
             medianKernelSeconds=float(np.median([r['kernelSeconds'] for r in rows])),

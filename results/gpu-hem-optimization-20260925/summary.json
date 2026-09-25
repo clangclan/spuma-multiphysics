@@ -1,0 +1,360 @@
+{
+ "schema": 1,
+ "date": "2026-09-25",
+ "source": "origin/main 57a8c31 + branch claude/gpu-hem-optimization (uncommitted working tree)",
+ "checkpoint": "/home/jsw/문서/analysis/runs/n160_40bar_100us_gpu_20260924/production/40bar/to-100us/0.0001",
+ "batchBuilder": "tools/hem_checkpoint_batch.py (verification-pass inputs of a converged capillary recovery; committed states as seeds)",
+ "modelImageFrom": "/home/jsw/문서/analysis/runs/precision_revisit_20260924/hem-40bar.bin",
+ "batches": {
+  "ck-cond7-an.bin": {
+   "sha256": "f5b01b6949d1eb2fe2b1ac0616f8974f6a1a0b8b4792971e4020c4f4950130eb",
+   "bytes": 18880552
+  },
+  "ck-condensable-an.bin": {
+   "sha256": "39985576984021a3afeaa5b793f532aeda80a0ce7faadbdd74fe30fccf3b3766",
+   "bytes": 131877592
+  },
+  "ck-condensable-fd.bin": {
+   "sha256": "1728b215f1174e082d2bf511a0ba843534d3c8aaada87922d5e9a6dfc3bd2643",
+   "bytes": 131877592
+  },
+  "ck-curved-an.bin": {
+   "sha256": "17df35f511f3575de6d200622d258049ef32605646a060bbaa0bf6ba9edc3f82",
+   "bytes": 434392
+  },
+  "ck-curved-fd.bin": {
+   "sha256": "c83b9f0bdadb98d70c6888645cfa161653ab9c49809e5d1f0b86123324a7ad3c",
+   "bytes": 434392
+  }
+ },
+ "libraries": {
+  "baseline": "352c142cad9f8b29696c5e0fd26602640a65b1a5c8da6a4cc494ba1a5f62c767",
+  "modified": "33a1b05240c1c34c9d1e2b8228de51a5ccd0994c406fc6d945250341ef430339"
+ },
+ "gpu": "RTX 5080, CUDA 13.2, sm_120, separate-rounding FP64 HEM build",
+ "batchCompositionIndependence": {
+  "test": "every 7th N2O cell (78,471) vs full 549,292-cell batch, modified library, analytic",
+  "bitwiseIdentical": true
+ },
+ "endToEndSolverRun": false,
+ "endToEndBlocker": "SPUMA/OpenFOAM libraries under /home/jsw/cae-gpu contain AVX-512 (kmovd in Foam::readDouble); every SPUMA binary including foamDictionary exits with SIGILL on the current Core Ultra 7 270K Plus (no avx512 in /proc/cpuinfo).",
+ "variants": {
+  "cond-base-an": {
+   "cells": 549292,
+   "medianKernelSeconds": 1.5437001953125,
+   "counters": {
+    "phaseEvaluations": 82416755,
+    "residualEvaluations": 587178820,
+    "flashCandidates": 2746460,
+    "stableCandidates": 552380,
+    "analyticJacobians": 36428895,
+    "finiteDifferenceJacobians": 225839,
+    "succeeded": 549292,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 0.0,
+    "activeLiquids": 0.0,
+    "alphaGas": 0.0,
+    "alphaLiquid": 0.0,
+    "chemicalResidual": 0.0,
+    "cp": 0.0,
+    "cv": 0.0,
+    "e": 0.0,
+    "energyResidual": 0.0,
+    "entropy": 0.0,
+    "gasMass": 0.0,
+    "iterations": 0.0,
+    "liquidMass": 0.0,
+    "p": 0.0,
+    "rho": 0.0,
+    "rhoGas": 0.0,
+    "rhoLiquid": 0.0,
+    "soundEquilibrium": 0.0,
+    "soundFrozen": 0.0,
+    "volumeResidual": 0.0
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "cond-base-fd": {
+   "cells": 549292,
+   "medianKernelSeconds": 3.496201171875,
+   "counters": {
+    "phaseEvaluations": 476598677,
+    "residualEvaluations": 801215699,
+    "flashCandidates": 2746460,
+    "stableCandidates": 552380,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 36544597,
+    "succeeded": 549292,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": null,
+   "deterministic": true,
+   "passed": true
+  },
+  "cond-final-an": {
+   "cells": 549292,
+   "medianKernelSeconds": 1.4518671875,
+   "counters": {
+    "phaseEvaluations": 81470615,
+    "residualEvaluations": 586677202,
+    "flashCandidates": 2746460,
+    "stableCandidates": 552380,
+    "analyticJacobians": 36513275,
+    "finiteDifferenceJacobians": 141638,
+    "succeeded": 549292,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 1.6112390357438615e-14,
+    "activeLiquids": 0.0,
+    "alphaGas": 2.9976021664879227e-14,
+    "alphaLiquid": 2.858824288409778e-14,
+    "chemicalResidual": 1.2612133559741778e-13,
+    "cp": 5.929286410437405e-14,
+    "cv": 9.921693043488101e-14,
+    "e": 3.329868373289805e-15,
+    "energyResidual": 3.355643337657944e-15,
+    "entropy": 5.213748959589003e-15,
+    "gasMass": 2.1458303633044842e-13,
+    "iterations": 1.0,
+    "liquidMass": 5.2326639571075584e-14,
+    "p": 6.577607505744188e-14,
+    "rho": 0.0,
+    "rhoGas": 1.7322080617504794e-13,
+    "rhoLiquid": 3.720884919395561e-14,
+    "soundEquilibrium": 1.2226669286655437e-09,
+    "soundFrozen": 5.095601500160931e-14,
+    "volumeResidual": 7.105427357601002e-15
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "cond-new-an": {
+   "cells": 549292,
+   "medianKernelSeconds": 1.4496043701171875,
+   "counters": {
+    "phaseEvaluations": 81470615,
+    "residualEvaluations": 586677202,
+    "flashCandidates": 2746460,
+    "stableCandidates": 552380,
+    "analyticJacobians": 36513275,
+    "finiteDifferenceJacobians": 141638,
+    "succeeded": 549292,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 1.6112390357438615e-14,
+    "activeLiquids": 0.0,
+    "alphaGas": 2.9976021664879227e-14,
+    "alphaLiquid": 2.858824288409778e-14,
+    "chemicalResidual": 1.2612133559741778e-13,
+    "cp": 5.929286410437405e-14,
+    "cv": 9.921693043488101e-14,
+    "e": 3.329868373289805e-15,
+    "energyResidual": 3.355643337657944e-15,
+    "entropy": 5.213748959589003e-15,
+    "gasMass": 2.1458303633044842e-13,
+    "iterations": 1.0,
+    "liquidMass": 5.2326639571075584e-14,
+    "p": 6.577607505744188e-14,
+    "rho": 0.0,
+    "rhoGas": 1.7322080617504794e-13,
+    "rhoLiquid": 3.720884919395561e-14,
+    "soundEquilibrium": 1.2226669286655437e-09,
+    "soundFrozen": 5.095601500160931e-14,
+    "volumeResidual": 7.105427357601002e-15
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "cond-new-fd": {
+   "cells": 549292,
+   "medianKernelSeconds": 3.487142333984375,
+   "counters": {
+    "phaseEvaluations": 476598677,
+    "residualEvaluations": 801215699,
+    "flashCandidates": 2746460,
+    "stableCandidates": 552380,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 36544597,
+    "succeeded": 549292,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 0.0,
+    "activeLiquids": 0.0,
+    "alphaGas": 0.0,
+    "alphaLiquid": 0.0,
+    "chemicalResidual": 0.0,
+    "cp": 0.0,
+    "cv": 0.0,
+    "e": 0.0,
+    "energyResidual": 0.0,
+    "entropy": 0.0,
+    "gasMass": 0.0,
+    "iterations": 0.0,
+    "liquidMass": 0.0,
+    "p": 0.0,
+    "rho": 0.0,
+    "rhoGas": 0.0,
+    "rhoLiquid": 0.0,
+    "soundEquilibrium": 0.0,
+    "soundFrozen": 0.0,
+    "volumeResidual": 0.0
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "cond7-new-an": {
+   "cells": 78471,
+   "medianKernelSeconds": 0.3236655578613281,
+   "counters": {
+    "phaseEvaluations": 11634500,
+    "residualEvaluations": 83880111,
+    "flashCandidates": 392355,
+    "stableCandidates": 78911,
+    "analyticJacobians": 5220606,
+    "finiteDifferenceJacobians": 20225,
+    "succeeded": 78471,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": null,
+   "deterministic": true,
+   "passed": true
+  },
+  "curved-base-an": {
+   "cells": 1612,
+   "medianKernelSeconds": 0.22902587890625,
+   "counters": {
+    "phaseEvaluations": 1345621,
+    "residualEvaluations": 1500926,
+    "flashCandidates": 8060,
+    "stableCandidates": 4700,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 84201,
+    "succeeded": 1612,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 0.0,
+    "activeLiquids": 0.0,
+    "alphaGas": 0.0,
+    "alphaLiquid": 0.0,
+    "chemicalResidual": 0.0,
+    "cp": 0.0,
+    "cv": 0.0,
+    "e": 0.0,
+    "energyResidual": 0.0,
+    "entropy": 0.0,
+    "gasMass": 0.0,
+    "iterations": 0.0,
+    "liquidMass": 0.0,
+    "p": 0.0,
+    "rho": 0.0,
+    "rhoGas": 0.0,
+    "rhoLiquid": 0.0,
+    "soundEquilibrium": 0.0,
+    "soundFrozen": 0.0,
+    "volumeResidual": 0.0
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "curved-base-fd": {
+   "cells": 1612,
+   "medianKernelSeconds": 0.22867817687988282,
+   "counters": {
+    "phaseEvaluations": 1345621,
+    "residualEvaluations": 1500926,
+    "flashCandidates": 8060,
+    "stableCandidates": 4700,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 84201,
+    "succeeded": 1612,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": null,
+   "deterministic": true,
+   "passed": true
+  },
+  "curved-new-an": {
+   "cells": 1612,
+   "medianKernelSeconds": 0.2008368682861328,
+   "counters": {
+    "phaseEvaluations": 399481,
+    "residualEvaluations": 999308,
+    "flashCandidates": 8060,
+    "stableCandidates": 4700,
+    "analyticJacobians": 84380,
+    "finiteDifferenceJacobians": 0,
+    "succeeded": 1612,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 1.6112390357438615e-14,
+    "activeLiquids": 0.0,
+    "alphaGas": 2.9976021664879227e-14,
+    "alphaLiquid": 2.858824288409778e-14,
+    "chemicalResidual": 1.2612133559741778e-13,
+    "cp": 5.929286410437405e-14,
+    "cv": 9.921693043488101e-14,
+    "e": 3.329868373289805e-15,
+    "energyResidual": 3.355643337657944e-15,
+    "entropy": 5.213748959589003e-15,
+    "gasMass": 2.1458303633044842e-13,
+    "iterations": 1.0,
+    "liquidMass": 5.2326639571075584e-14,
+    "p": 6.577607505744188e-14,
+    "rho": 0.0,
+    "rhoGas": 1.7322080617504794e-13,
+    "rhoLiquid": 3.720884919395561e-14,
+    "soundEquilibrium": 1.2226669286655437e-09,
+    "soundFrozen": 5.095601500160931e-14,
+    "volumeResidual": 7.105427357601002e-15
+   },
+   "deterministic": true,
+   "passed": true
+  },
+  "curved-new-fd": {
+   "cells": 1612,
+   "medianKernelSeconds": 0.2284685516357422,
+   "counters": {
+    "phaseEvaluations": 1345621,
+    "residualEvaluations": 1500926,
+    "flashCandidates": 8060,
+    "stableCandidates": 4700,
+    "analyticJacobians": 0,
+    "finiteDifferenceJacobians": 84201,
+    "succeeded": 1612,
+    "deviceFailures": 0
+   },
+   "maxScaledDifferenceVsFdBaseline": {
+    "T": 0.0,
+    "activeLiquids": 0.0,
+    "alphaGas": 0.0,
+    "alphaLiquid": 0.0,
+    "chemicalResidual": 0.0,
+    "cp": 0.0,
+    "cv": 0.0,
+    "e": 0.0,
+    "energyResidual": 0.0,
+    "entropy": 0.0,
+    "gasMass": 0.0,
+    "iterations": 0.0,
+    "liquidMass": 0.0,
+    "p": 0.0,
+    "rho": 0.0,
+    "rhoGas": 0.0,
+    "rhoLiquid": 0.0,
+    "soundEquilibrium": 0.0,
+    "soundFrozen": 0.0,
+    "volumeResidual": 0.0
+   },
+   "deterministic": true,
+   "passed": true
+  }
+ }
+}

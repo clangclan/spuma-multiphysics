@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+#include "reactiveNvtx.h"
+#include "reactiveParallel.h"
 #include "reactiveThermo.h"
 #include "reactiveIdentityTags.h"
 #include "reactiveRecovery.h"
@@ -59,6 +61,11 @@ public: using std::runtime_error::runtime_error;
 };
 
 void require(bool condition, const std::string& reason)
+{
+    if (!condition) throw std::runtime_error(reason);
+}
+// Literal reasons avoid a std::string construction on every passing check.
+void require(bool condition, const char* reason)
 {
     if (!condition) throw std::runtime_error(reason);
 }
@@ -145,7 +152,7 @@ public:
     bool scalarRecovery=true;
     bool exactBatchReuse=false,cudaScalar=false;
     std::string scalarLibrary,hemLibrary;
-    bool cudaHem=false,hemCpuFallback=true,hemAnalyticJacobian=false;
+    bool cudaHem=false,hemCpuFallback=true,hemAnalyticJacobian=false,hemStableGasPrune=false;
     std::string hemNumericalPolicy;
     ReactiveClosureScalarOutputV1 scalarCandidate{};
     uint64_t gpuApproved=0,gpuRejected=0;
@@ -301,6 +308,11 @@ public:
         if(exactBatchReuse)policy<<":exact-batch-reuse-v1";
         if(cudaScalar)policy<<":cuda-caloric-candidate-v1";
         if(cudaHem)policy<<":cuda-hem-v1:"<<hemCpuFallback<<":analytic-jacobian="<<hemAnalyticJacobian;
+        // The analytic Jacobian now also covers curved (J!=0) capillary cells.
+        // FD-only policies keep their previous identity.
+        if(cudaHem&&hemAnalyticJacobian)policy<<":curved-analytic-v1";
+        if(cudaHem)policy<<":pr-isolated-root-v1";
+        if(cudaHem&&hemStableGasPrune)policy<<":stable-gas-prune-v1";
         if(cudaHem&&!hemNumericalPolicy.empty())policy<<":arithmetic="<<hemNumericalPolicy;
         policyHash=hashText(policy.str());
     }
@@ -1521,6 +1533,7 @@ const char* reactive_rt_runtime_manifest_v1(void* model) {
             <<",\"chemistryBackend\":\"cpu\",\"deviceFullClosure\":"<<(m.cudaHem?"true":"false")
             <<",\"deviceChemistryIntegration\":false,\"closureCpuFallback\":"<<(m.cudaHem&&m.hemCpuFallback?"true":"false")
             <<",\"closureJacobian\":"<<recoveryQuote(m.cudaHem&&m.hemAnalyticJacobian&&!m.hasSolid?"analytic":"finiteDifference")
+            <<",\"closureSearch\":"<<recoveryQuote(m.cudaHem&&m.hemStableGasPrune?"stableGasPrune":"reference")
             <<",\"solidN2O\":"<<(m.hasSolid?"true":"false")
             <<",\"enforceSpeciesTemperatureBounds\":"<<(m.hasSolid||m.enforceSpeciesTemperatureBounds?"true":"false")
             <<",\"exactBatchReuse\":"<<(m.exactBatchReuse?"true":"false")
@@ -1567,6 +1580,12 @@ int reactive_rt_set_gpu_hem_v1(void* model,int enabled,int cpuFallback,const cha
 int reactive_rt_set_gpu_hem_jacobian_v1(void* model,int analytic) {
     return protect(model,[&](Model& m){require(analytic==0||analytic==1,"Invalid CUDA HEM Jacobian selection");
         m.hemAnalyticJacobian=analytic;m.refreshPolicyHash();});
+}
+int reactive_rt_set_gpu_hem_search_v1(void* model,int stableGasPrune) {
+    return protect(model,[&](Model& m){require(stableGasPrune==0||stableGasPrune==1,"Invalid CUDA HEM search selection");
+        require(!stableGasPrune||(m.nl==1&&!m.hasSolid),
+            "stableGasPrune requires exactly one pure-liquid phase and no solids; use reference otherwise");
+        m.hemStableGasPrune=stableGasPrune;m.refreshPolicyHash();});
 }
 int reactive_rt_set_closure_acceleration_v1(void* model,int reuse,int cuda,const char* library) {
     return protect(model,[&](Model& m){require((reuse==0||reuse==1)&&(cuda==0||cuda==1),"Invalid closure acceleration mode");

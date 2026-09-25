@@ -4,8 +4,9 @@
 // interface. The optional Cartesian reconstruction uses sharp phase volumes;
 // neither mode is a swept PLIC transport scheme.
     Array liquidColor(const States& states) const {
+        REACTIVE_RANGE("liquid-color");
         Array color(nc);
-        for(size_t c=0;c<nc;++c) {
+        reactiveParallel::forEach(nc,[&](size_t c) {
             const auto& s=states[c];
             demand(std::isfinite(s.liquidMass[0])&&s.liquidMass[0]>=0,"Invalid capillary liquid inventory");
             if(s.liquidMass[0]>0) {
@@ -20,91 +21,142 @@
             demand(std::isfinite(sum)&&sum>0&&std::abs(sum-1)<1e-6,
                 "Capillary phase volumes do not close");
             color[c]/=sum;
-            demand(std::isfinite(color[c])&&color[c]>=0&&color[c]<=1,
-                "Liquid material volume outside [0,1] at cell "+std::to_string(c));
-        }
+            // Build the message only on failure: this loop visits every
+            // cell several times per step.
+            if(!(std::isfinite(color[c])&&color[c]>=0&&color[c]<=1))
+                demand(false,"Liquid material volume outside [0,1] at cell "+std::to_string(c));
+        });
         return color;
     }
     void interfaceGeometry(const Array& color) const {
+        REACTIVE_RANGE("interface-geometry");
         demand(capillary&&transport&&color.size()==nc,"Capillary geometry needs the CUDA transport mesh");
         surfaceEnergy.resize(nc);interfaceCurvature.resize(nc);interfaceJump.resize(nc);
         checkTransport(reactive_transport_capillary_geometry_v1(transport.get(),color.data(),fixedColor.data(),
             surfaceEnergy.data(),interfaceCurvature.data(),nullptr));
         interfaceColor=color;
-        for(size_t c=0;c<nc;++c)interfaceJump[c]=sigma*interfaceCurvature[c];
+        reactiveParallel::forEach(nc,[&](size_t c){interfaceJump[c]=sigma*interfaceCurvature[c];});
     }
     void refreshInterface(const States& states) const {
         if(capillary)interfaceGeometry(liquidColor(states));
     }
+    static bool sameBits(double a,double b) {return std::memcmp(&a,&b,sizeof(double))==0;}
     void recoverCapillary(Array& q,States& states) const {
         demand(capillary&&pool&&transport,"Capillary recovery requires initialized CUDA closure and transport");
         ++capillaryRecoveries;
-        for(size_t c=0;c<nc;++c) {
+        reactiveParallel::forEach(nc,[&](size_t c) {
             const double ml=q[c*nv+ns+4],total=q[c*nv+liquidSpecies[0]];
-            demand(std::isfinite(ml)&&ml>=0&&ml<=total,"Transported liquid exceeds chemical inventory at cell "+std::to_string(c));
-        }
+            if(!(std::isfinite(ml)&&ml>=0&&ml<=total))
+                demand(false,"Transported liquid exceeds chemical inventory at cell "+std::to_string(c));
+        });
         // Rebuild from the supplied seed, including after global rollback. No
         // geometry from a failed attempt may leak into the next attempt.
         refreshInterface(states);
+        // Every outer iteration seeds a cell with the SAME state: the incoming
+        // state carrying the transported liquid inventory. q is fixed during
+        // the closure, so the device flash of a cell is a deterministic
+        // function of (color, pressure jump, surface energy). A cell whose
+        // three geometry inputs are bitwise unchanged since its last flash
+        // would reproduce that result exactly, and keeps it without a new
+        // flash. Only the interface band is re-flashed after iteration 0.
+        capillarySeeds.resize(nc);
+        reactiveParallel::forEach(nc,[&](size_t c) {
+            capillarySeeds[c]=states[c];capillarySeeds[c].liquidMass[0]=q[c*nv+ns+4];
+        });
+        flashedColor.resize(nc);flashedJump.resize(nc);flashedSurfaceEnergy.resize(nc);
         Array jumpBefore,energyBefore,colorBefore;
         double previousResidual=GREAT;
         for(int iteration=0;iteration<40;++iteration) {
+            REACTIVE_RANGE(iteration==0?"capillary-iteration-0":"capillary-iteration-n");
             ++capillaryIterations;
             jumpBefore=interfaceJump;energyBefore=surfaceEnergy;colorBefore=interfaceColor;
-            for(size_t start=0;start<nc;start+=batchCells) {
-                const size_t count=std::min(batchCells,nc-start);
+            // Per-chunk lists joined in chunk order keep the serial cell order.
+            // Each chunk fills a local list: adjacent vector headers would
+            // otherwise share cache lines across threads.
+            std::vector<std::vector<size_t>> dirtyParts(reactiveParallel::chunkCount(nc));
+            reactiveParallel::forChunks(nc,[&](size_t k,size_t begin,size_t end) {
+                std::vector<size_t> part;
+                for(size_t c=begin;c<end;++c)
+                    if(iteration==0||!sameBits(colorBefore[c],flashedColor[c])||!sameBits(jumpBefore[c],flashedJump[c])
+                       ||!sameBits(energyBefore[c],flashedSurfaceEnergy[c]))part.push_back(c);
+                dirtyParts[k]=std::move(part);});
+            capillaryDirty.clear();
+            for(const auto& part:dirtyParts)capillaryDirty.insert(capillaryDirty.end(),part.begin(),part.end());
+            capillaryFlashedCells+=capillaryDirty.size();capillaryReusedCells+=nc-capillaryDirty.size();
+            for(size_t start=0;start<capillaryDirty.size();start+=batchCells) {
+                const size_t count=std::min(batchCells,capillaryDirty.size()-start);
                 batchQ.resize(count*physicalSpecies);batchEnergy.resize(count);batchStates.resize(count);
+                batchColor.resize(count);batchJump.resize(count);
                 const auto packStart=std::chrono::steady_clock::now();
-                for(size_t c=0;c<count;++c) {
-                    const size_t cell=start+c;const double* local=&q[cell*nv];
+                {REACTIVE_RANGE("capillary-pack");
+                reactiveParallel::forEach(count,[&](size_t c) {
+                    const size_t cell=capillaryDirty[start+c];const double* local=&q[cell*nv];
                     std::copy(local,local+physicalSpecies,batchQ.data()+c*physicalSpecies);
-                    batchEnergy[c]=internalEnergy(local)-energyBefore[cell];batchStates[c]=states[cell];
-                    if(frozen||iteration==0)batchStates[c].liquidMass[0]=local[ns+4];
-                }
+                    batchEnergy[c]=internalEnergy(local)-energyBefore[cell];batchStates[c]=capillarySeeds[cell];
+                    batchColor[c]=colorBefore[cell];batchJump[c]=jumpBefore[cell];
+                });}
                 timings.batchPack+=std::chrono::duration<double>(std::chrono::steady_clock::now()-packStart).count();
                 const ReactiveBatchToken token{attemptId,++workerStage,++workerVersion};
                 const auto callStart=std::chrono::steady_clock::now();
-                const int status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
-                    batchQ.data(),batchEnergy.data(),colorBefore.data()+start,jumpBefore.data()+start,batchStates.data());
+                int status=0;
+                {REACTIVE_RANGE("capillary-pool-batch");
+                status=reactive_rt_pool_capillary_batch_v1(pool.get(),token,!frozen,count,physicalSpecies,
+                    batchQ.data(),batchEnergy.data(),batchColor.data(),batchJump.data(),batchStates.data());}
                 timings.batchCall+=std::chrono::duration<double>(std::chrono::steady_clock::now()-callStart).count();
                 if(status)for(size_t c=0;c<count;++c) {
                     ReactiveRecoveryFailureV1 failure{};failure.abiVersion=1;failure.structBytes=sizeof(failure);
                     const char* details=nullptr;
                     if(reactive_rt_pool_failure_v1(pool.get(),c,&failure,&details)==0) {
-                        std::ostringstream cap;cap<<std::setprecision(17)<<"{\"capillary\":true,\"color\":"<<colorBefore[start+c]
-                            <<",\"pressureJump\":"<<jumpBefore[start+c]<<",\"bulkEnergy\":"<<batchEnergy[c]
-                            <<",\"surfaceEnergy\":"<<energyBefore[start+c]<<",\"outerIteration\":"<<iteration<<'}';
-                        failureRecord(start+c,start,c,failure.worker,&q[(start+c)*nv],batchStates[c],
+                        const size_t cell=capillaryDirty[start+c];
+                        std::ostringstream cap;cap<<std::setprecision(17)<<"{\"capillary\":true,\"color\":"<<batchColor[c]
+                            <<",\"pressureJump\":"<<batchJump[c]<<",\"bulkEnergy\":"<<batchEnergy[c]
+                            <<",\"surfaceEnergy\":"<<energyBefore[cell]<<",\"outerIteration\":"<<iteration<<'}';
+                        failureRecord(cell,start,c,failure.worker,&q[cell*nv],batchStates[c],
                             failure.message,failure.category,cap.str().c_str(),true);
                     }
                 }
                 demand(!status,std::string("Capillary GPU recovery batch ")+std::to_string(start)+": "+reactive_rt_pool_error(pool.get()));
-                for(size_t c=0;c<count;++c)states[start+c]=batchStates[c];
+                reactiveParallel::forEach(count,[&](size_t c) {
+                    const size_t cell=capillaryDirty[start+c];states[cell]=batchStates[c];
+                    flashedColor[cell]=colorBefore[cell];flashedJump[cell]=jumpBefore[cell];
+                    flashedSurfaceEnergy[cell]=energyBefore[cell];
+                });
             }
             const Array candidate=liquidColor(states);
             interfaceGeometry(candidate);
             double residual=0;bool surfaceConsistent=true;
-            for(size_t c=0;c<nc;++c) {
-                const double bulkScale=std::max(std::abs(internalEnergy(&q[c*nv])),states[c].rho*1e5);
-                residual=std::max({residual,std::abs(candidate[c]-colorBefore[c]),
-                    std::abs(surfaceEnergy[c]-energyBefore[c])/bulkScale,
-                    std::abs(interfaceJump[c]-jumpBefore[c])/std::max(states[c].p,1.0)});
-                if(capillaryGeometryMode=="cartesianImplicit") {
-                    const double roundoff=64*std::numeric_limits<double>::epsilon()*bulkScale;
-                    surfaceConsistent=surfaceConsistent&&std::abs(surfaceEnergy[c]-energyBefore[c])
-                        <=roundoff+1e-9*std::max(surfaceEnergy[c],energyBefore[c]);
+            REACTIVE_RANGE("capillary-residual");
+            // max and AND are exact, so per-chunk partials give the serial result.
+            const bool implicitSurface=capillaryGeometryMode=="cartesianImplicit";
+            std::vector<double> partialResidual(reactiveParallel::chunkCount(nc),0);
+            std::vector<char> partialConsistent(partialResidual.size(),1);
+            reactiveParallel::forChunks(nc,[&](size_t k,size_t begin,size_t end) {
+                double local=0;bool consistent=true;
+                for(size_t c=begin;c<end;++c) {
+                    const double bulkScale=std::max(std::abs(internalEnergy(&q[c*nv])),states[c].rho*1e5);
+                    local=std::max({local,std::abs(candidate[c]-colorBefore[c]),
+                        std::abs(surfaceEnergy[c]-energyBefore[c])/bulkScale,
+                        std::abs(interfaceJump[c]-jumpBefore[c])/std::max(states[c].p,1.0)});
+                    if(implicitSurface) {
+                        const double roundoff=64*std::numeric_limits<double>::epsilon()*bulkScale;
+                        consistent=consistent&&std::abs(surfaceEnergy[c]-energyBefore[c])
+                            <=roundoff+1e-9*std::max(surfaceEnergy[c],energyBefore[c]);
+                    }
                 }
+                partialResidual[k]=local;partialConsistent[k]=consistent;});
+            for(size_t k=0;k<partialResidual.size();++k) {
+                residual=std::max(residual,partialResidual[k]);surfaceConsistent=surfaceConsistent&&partialConsistent[k];
             }
             capillaryClosureResidual=residual;
             if(residual<=1e-9&&surfaceConsistent) {
                 // Phase change is an internal source: only the liquid/gas
                 // partition changes. Total species, momentum and H stay fixed.
-                if(!frozen)for(size_t c=0;c<nc;++c)q[c*nv+ns+4]=states[c].liquidMass[0];
+                if(!frozen)reactiveParallel::forEach(nc,[&](size_t c){q[c*nv+ns+4]=states[c].liquidMass[0];});
                 return;
             }
             if(iteration>0&&residual>previousResidual*.9) {
                 Array relaxed(nc);
-                for(size_t c=0;c<nc;++c)relaxed[c]=.5*(colorBefore[c]+candidate[c]);
+                reactiveParallel::forEach(nc,[&](size_t c){relaxed[c]=.5*(colorBefore[c]+candidate[c]);});
                 interfaceGeometry(relaxed);
             }
             previousResidual=residual;

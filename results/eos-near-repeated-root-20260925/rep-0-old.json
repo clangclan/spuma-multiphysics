@@ -1,0 +1,43 @@
+{
+  "capture": "/tmp/claude-1000/-home-jsw----analysis/c01a763b-bfdf-49a0-9678-3b18bb851fea/scratchpad/ck120-0.bin",
+  "captureSha256": "c6e21ba670280aeada4c0d1c53a6b65e36d7dcc262660b352d2890035c0d4412",
+  "comparedSuccessfulCells": 0,
+  "comparison": {},
+  "count": 724022,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/runs/n160_40bar_100to200us_gpu_20260925/runtime/lib/libreactiveTransport.so",
+  "librarySha256": "bce88d4fa86e76c0317a2822e28a415a756c5ae2792750d02f05111558307aaf",
+  "maxKernelSeconds": 1.65486865234375,
+  "medianKernelSeconds": 1.65486865234375,
+  "minKernelSeconds": 1.65486865234375,
+  "passed": true,
+  "policy": "legacy-fp64-separate-rn",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 48143013,
+      "batches": 1,
+      "callSeconds": 1.6862822759976552,
+      "copySeconds": 0.01745760154724121,
+      "cpuFallbacks": 0,
+      "deviceBytes": 362058528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 182368,
+      "flashCandidates": 3620110,
+      "hostBytes": 136840158,
+      "kernelSeconds": 1.65486865234375,
+      "phaseEvaluations": 107442195,
+      "repeat": 1,
+      "residualEvaluations": 773942931,
+      "stableCandidates": 727542,
+      "structBytes": 144,
+      "submitted": 724022,
+      "succeeded": 724022,
+      "transferBytes": 309881480,
+      "wallSeconds": 1.68504654
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

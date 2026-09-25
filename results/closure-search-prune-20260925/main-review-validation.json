@@ -1,0 +1,29 @@
+{
+  "binaries": {
+    "bin/ReactiveFoam": "7c90bc9e66aaaaecf0acf3420c08b8f0892ec9ea19df1db6d4c3000992e4903d",
+    "lib/libreactiveBackend.so": "038e24c006aa83dca75b7efe311ab0ed127b5fd9dfc66825fe5d93d54cee1188",
+    "lib/libreactiveTransport.so": "4adb7195d6fbeb666a768fccab1dccbc37ddb78b24a6e665a831de967908c44d"
+  },
+  "finalStateSha256": [
+    "29b7c0263fcef24fb0fedacc43ee21f9886c553909de4036548f1686ccf55ef3",
+    "29b7c0263fcef24fb0fedacc43ee21f9886c553909de4036548f1686ccf55ef3"
+  ],
+  "passed": true,
+  "scope": "Final rebuilt binaries, all four checkpoint replays plus 3 adaptive steps from 200 to 200.15 us",
+  "solverRuns": [
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "option": "reference",
+      "passed": true,
+      "steps": 3
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "option": "stableGasPrune",
+      "passed": true,
+      "steps": 3
+    }
+  ]
+}

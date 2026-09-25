@@ -1,0 +1,43 @@
+{
+  "capture": "/tmp/claude-1000/-home-jsw----analysis/c01a763b-bfdf-49a0-9678-3b18bb851fea/scratchpad/ck-cond7-an.bin",
+  "captureSha256": "f5b01b6949d1eb2fe2b1ac0616f8974f6a1a0b8b4792971e4020c4f4950130eb",
+  "comparedSuccessfulCells": 0,
+  "comparison": {},
+  "count": 78471,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTransport.so",
+  "librarySha256": "33a1b05240c1c34c9d1e2b8228de51a5ccd0994c406fc6d945250341ef430339",
+  "maxKernelSeconds": 0.3236655578613281,
+  "medianKernelSeconds": 0.3236655578613281,
+  "minKernelSeconds": 0.3236655578613281,
+  "passed": true,
+  "policy": "legacy-fp64-separate-rn",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 5220606,
+      "batches": 1,
+      "callSeconds": 0.32702326199796516,
+      "copySeconds": 0.001950495958328247,
+      "cpuFallbacks": 0,
+      "deviceBytes": 39283028,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 20225,
+      "flashCandidates": 392355,
+      "hostBytes": 14831019,
+      "kernelSeconds": 0.3236655578613281,
+      "phaseEvaluations": 11634500,
+      "repeat": 1,
+      "residualEvaluations": 83880111,
+      "stableCandidates": 78911,
+      "structBytes": 144,
+      "submitted": 78471,
+      "succeeded": 78471,
+      "transferBytes": 33585652,
+      "wallSeconds": 0.326847445
+    }
+  ],
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Allocation-free CPU/CUDA UV flash. Candidate masks, seeds, acceptance and
-// entropy ordering follow Model::equilibriumSearch. No candidate-pruning claim.
+// entropy ordering follow Model::equilibriumSearch. No candidate-pruning claim
+// unless Model::stableGasPrune is set (see search()).
 #ifndef REACTIVE_DEVICE_FLASH_H
 #define REACTIVE_DEVICE_FLASH_H
 #include "reactiveDevicePR.h"
@@ -13,6 +14,7 @@
 #include <cmath>
 #include <cfloat>
 #include <cstdint>
+#include <cstddef>
 #include "reactiveMixedLinear.h"
 #ifndef REACTIVE_HEM_INT_LINEAR
 #define REACTIVE_HEM_INT_LINEAR 0
@@ -37,12 +39,21 @@ constexpr int maxSpecies=16;
 struct Model {
     Table phase[3]; // gas then each pure-liquid phase, exported independently
     int ns=0,nl=0,condensable[2]{},boundaryRecovery=0,scalarRecovery=1,analyticJacobian=0;
+    // Occupies the former padding after analyticJacobian: Model size and all
+    // offsets are unchanged. Legacy images require zero in this padding slot;
+    // replay tools can explicitly select reference for older captures.
+    int stableGasPrune=0;
     double weights[maxSpecies]{},liquidTmin[2]{},liquidTc[2]{};
     double Tmin=0,Tmax=0,pmin=0,pmax=0,vtol=0,etol=0,mutol=0;
     int condensedKind[2]{};
     int enforceSpeciesTemperatureBounds=0;
     ReactiveSolidThermo::Model solid[2]{};
 };
+static_assert(sizeof(Model)==47448 && offsetof(Model,stableGasPrune)==45004
+    && offsetof(Model,weights)==45008,"HEM capture model layout changed");
+REACTIVE_HD inline bool supportsStableGasPrune(const Model& m){
+    return m.nl==1 && m.condensedKind[0]==0 && m.condensedKind[1]==0;
+}
 struct Input { double q[maxSpecies]{},energy=0;ReactiveThermoState guess{}; };
 struct Counters {
     uint64_t phases=0,residuals=0,candidates=0,stable=0,failures=0;
@@ -71,6 +82,8 @@ inline bool validModel(const Model& m){
        ||(m.boundaryRecovery!=0&&m.boundaryRecovery!=1)
        ||(m.scalarRecovery!=0&&m.scalarRecovery!=1)
        ||(m.analyticJacobian!=0&&m.analyticJacobian!=1)
+       ||(m.stableGasPrune!=0&&m.stableGasPrune!=1)
+       ||(m.stableGasPrune&&!supportsStableGasPrune(m))
        ||(m.enforceSpeciesTemperatureBounds!=0&&m.enforceSpeciesTemperatureBounds!=1))return false;
     if(!finite(m.Tmin)||!finite(m.Tmax)||!(m.Tmin>0&&m.Tmax>m.Tmin)
        ||!finite(m.pmin)||!finite(m.pmax)||!(m.pmin>0&&m.pmax>m.pmin)
@@ -316,16 +329,20 @@ struct Flash {
     REACTIVE_HEM_CALL bool jacobian(const int* active,int n,const double* x,double scale,const double* f,double jac[4][4],const Evaluation* point=nullptr){
         // Existing analytic PR expressions assume distinct liquid species.
         // Solid-enabled models use the same bounded FD Jacobian on device.
-        if(m.analyticJacobian&&pressureJump==0&&!hasSolid()&&point&&(
+        // A curved interface holds J fixed, so the gas and liquid states are
+        // evaluated at their own pressures while d(pg)/d(p)=d(pl)/d(p)=1.
+        const double pbar=point?point->state.p:0;
+        if(m.analyticJacobian&&!hasSolid()&&point&&(
             ReactiveDeviceFlashJacobian::buildCached(
                 m.phase,m.ns,m.nl,m.condensable,in.q,active,n,adaptive,x+2,
-                point->state.p,point->state.T,scale,point->Vp,point->VT,point->Ep,point->ET,
+                pbar,point->state.T,scale,point->Vp,point->VT,point->Ep,point->ET,
                 point->state.gasMass,point->gasMolarVolume,point->gasCondensable,point->explicitGas,
-                point->liquidHbar,point->liquidVbar,point->liquidThermoMask,jac)
+                point->liquidHbar,point->liquidVbar,point->liquidThermoMask,jac,
+                gasPressure(pbar),liquidPressure(pbar))
             ||ReactiveDeviceFlashJacobian::build(
                 m.phase,m.ns,m.nl,m.condensable,in.q,active,n,adaptive,x+2,
-                point->state.p,point->state.T,scale,point->Vp,point->VT,point->Ep,point->ET,
-                jac,&count.phases))){
+                pbar,point->state.T,scale,point->Vp,point->VT,point->Ep,point->ET,
+                jac,&count.phases,gasPressure(pbar),liquidPressure(pbar)))){
             ++count.analyticJacobians;return true;
         }
         ++count.finiteDifferenceJacobians;
@@ -482,12 +499,19 @@ struct Flash {
     }
     REACTIVE_HEM_CALL bool search(Evaluation& best){
         bool have=false;Evaluation candidate;double mass[2]{};
-        if(frozen(mass,candidate))consider(candidate,best,have);else ++count.failures;
+    // Opt-in pruning for one pure liquid without solids. The local affinity
+    // test is not a proof of the global UV entropy maximum. Replay parity is
+    // established for the documented 40 bar N2O/air campaign only.
+        bool gasStable=false;
+        if(frozen(mass,candidate)){const uint64_t before=count.stable;consider(candidate,best,have);
+            gasStable=count.stable>before&&candidate.state.gasMass>0;}
+        else ++count.failures;
+    const bool prune=m.stableGasPrune&&supportsStableGasPrune(m)&&gasStable&&!adaptive;
         double other=0;for(int k=0;k<m.ns;++k){bool cond=false;for(int i=0;i<m.nl;++i)cond|=k==m.condensable[i];if(!cond)other+=in.q[k];}
         if(other==0&&m.nl){for(int i=0;i<m.nl;++i)mass[i]=hasSolid()&&i==1?0:in.q[m.condensable[i]];
             if(frozen(mass,candidate))consider(candidate,best,have);else ++count.failures;}
         const double seeds[5]{-1,.5,.95,.1,.9999};
-        for(int mask=1;mask<(1<<m.nl);++mask){int active[2]{},n=0;bool possible=true;
+        for(int mask=1;!prune&&mask<(1<<m.nl);++mask){int active[2]{},n=0;bool possible=true;
             for(int i=0;i<m.nl;++i)if(mask&(1<<i)){if(in.q[m.condensable[i]]<=0)possible=false;else active[n++]=i;}
             if(!possible)continue;
             for(int j=0;j<5;++j){if(activeFlash(active,n,seeds[j],candidate))consider(candidate,best,have);else ++count.failures;}

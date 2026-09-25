@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "expected": "One changed state bit must fail comparison",
+  "observedExitCode": 1,
+  "observedPassed": false,
+  "observedBitwiseEqual": false
+}

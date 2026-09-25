@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "../reactiveThermo/reactiveGpuHem.h"
+#include "../reactiveThermo/reactiveNvtx.h"
 #ifdef __CUDACC__
 #include "../reactiveThermo/reactiveDeviceFlash.h"
 #ifndef REACTIVE_HEM_CANDIDATE_PARALLEL
@@ -7,6 +8,9 @@
 #endif
 #ifndef REACTIVE_HEM_PHASE_BUCKETS
 #define REACTIVE_HEM_PHASE_BUCKETS 1
+#endif
+#ifndef REACTIVE_HEM_HEAVY_FIRST
+#define REACTIVE_HEM_HEAVY_FIRST 1
 #endif
 static_assert(REACTIVE_HEM_PHASE_BUCKETS==0||REACTIVE_HEM_PHASE_BUCKETS==1,
     "Phase bucket selection must be 0 or 1");
@@ -195,11 +199,21 @@ static int hemRun(void* raw,const double* q,const double* energy,
                 d.capacity*sizeof(ReactiveGpuHemCapillaryInputV2)));
         }
         const auto begin=std::chrono::steady_clock::now();
+        REACTIVE_RANGE("hem-run");
 #if REACTIVE_HEM_PHASE_BUCKETS
-        if(d.bucketOrder){size_t offsets[256]{};
+        if(d.bucketOrder){REACTIVE_RANGE("hem-bucket-order");size_t offsets[256]{};
             for(size_t c=0;c<count;++c){const auto bucket=hemBucket(q+c*d.ns,d.ns,states[c]);
                 d.hostBucket[c]=static_cast<uint8_t>(bucket);++offsets[bucket];}
-            size_t next=0;for(auto& offset:offsets){const size_t length=offset;offset=next;next+=length;}
+            // Heavy-first: condensable-bearing and liquid-active keys are the
+            // high bucket ids, and their five-seed searches are the slow
+            // threads. Scheduling them in the first blocks lets the cheap gas
+            // cells fill the SMs at the end instead of leaving a long tail.
+            size_t next=0;
+#if REACTIVE_HEM_HEAVY_FIRST
+            for(int b=255;b>=0;--b){const size_t length=offsets[b];offsets[b]=next;next+=length;}
+#else
+            for(auto& offset:offsets){const size_t length=offset;offset=next;next+=length;}
+#endif
             for(size_t c=0;c<count;++c){
                 const size_t target=offsets[d.hostBucket[c]]++;d.hostOrder[target]=static_cast<uint32_t>(c);}}
 #endif

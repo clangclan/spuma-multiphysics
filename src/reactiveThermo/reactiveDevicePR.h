@@ -269,6 +269,43 @@ REACTIVE_HD inline int uniquePhysical(double* roots, int count, double b) {
     return n;
 }
 
+// Near-repeated band of the unscaled discriminant (|disc| < 1e-14 after
+// Cantera's forcing). Two roots nearly coincide at a spinodal; whether they
+// exist depends on roundoff, so they stay unavailable. The third root is a
+// simple root of the same cubic and is not affected by that roundoff. It is
+// accepted only if, refined on the FP64 polynomial, it lies above the
+// covolume, is separated from the pair and is mechanically stable
+// (dp/dV < 0). q < 0 puts the pair at center-delta and the isolated root at
+// center+2*delta (gas side); q > 0 mirrors this (liquid side).
+REACTIVE_HD inline bool isolatedRoot(double center, double delta, double delta2, double q,
+                                     double bn, double cn, double dn, double b,
+                                     double RTp, double aap, double& root, bool& gasSide) {
+    if (!(delta2 > 0) || !finite(delta) || !finite(q) || q == 0) return false;
+    gasSide = q < 0;
+    const double pair = center + (gasSide ? -1.0 : 1.0)*delta;
+    double x = center + (gasSide ? 2.0 : -2.0)*delta;
+    bool converged = false;
+    for (int n = 0; n < 24; ++n) {
+        const double f = cubicResidual(x, bn, cn, dn), df = (3.0*x + 2.0*bn)*x + cn;
+        if (!finite(f) || !finite(df) || abs(df) <= 1e-300) return false;
+        const double step = f/df;
+        x -= step;
+        if (abs(step) <= 4e-15*max(1.0, abs(x))) { converged = true; break; }
+    }
+    if (!converged || !finite(x) || !(x > b)) return false;
+    const double f = cubicResidual(x, bn, cn, dn);
+    const double scale = abs(x*x*x) + abs(bn*x*x) + abs(cn*x) + abs(dn);
+    if (!(abs(f) <= 64.0*DBL_EPSILON*scale)) return false;
+    if (!(abs(x - pair) > 1e-3*max(abs(x), abs(pair)))) return false;
+    if (gasSide ? !(x > pair) : !(x < pair)) return false;
+    const double vb = x - b, den = x*x + 2.0*b*x - b*b;
+    if (!(vb > 0) || !(den > 0)) return false;
+    // dp/dV divided by p: RT/p = RTp, a*alpha/p = aap.
+    if (!(-RTp/(vb*vb) + 2.0*aap*(x + b)/(den*den) < 0)) return false;
+    root = x;
+    return true;
+}
+
 #include "reactiveMixedCubic.h"
 
 } // namespace detail
@@ -314,19 +351,27 @@ REACTIVE_HD inline Status rootsTP(const Table<NC, NR>& table, double T, double p
     const double delta = delta2 > 0 ? ::sqrt(delta2) : 0;
     const double h = 2.0*delta*delta2;
     double disc = q*q-h*h; // Cantera's unscaled discriminant.
-    // Cantera 3.2 forces near-repeated roots using absolute thresholds. Its
-    // density/actual-phase path exposes no stable requested branch in this
-    // noncritical spinodal band, so fail explicitly rather than selecting a
-    // root whose availability depends on roundoff.
+    // Cantera 3.2 forces near-repeated roots using absolute thresholds. The
+    // near-repeated pair in this noncritical spinodal band depends on
+    // roundoff and stays unavailable; only a separated, stable third root is
+    // returned (isolatedRoot).
     if (detail::abs(detail::abs(h)-detail::abs(q)) < 1e-10) {
         if (disc > 1e-10) return Status::NonFinite;
         disc = 0;
     }
-    if (detail::abs(disc) < 1e-14) return Status::NoPhysicalRoot;
     double raw[3] = {0, 0, 0};
     int rawCount = 0;
-    const bool mixed=detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
-    if (mixed) { /* already refined and checked against the FP64 polynomial */ }
+    int isolatedSide = 0; // +1 gas, -1 liquid: only the isolated root exists
+    if (detail::abs(disc) < 1e-14) {
+        bool gasSide = false;
+        if (!detail::isolatedRoot(r.center, delta, delta2, q, bn, cn, dn, b, RTp, aap,
+                                  raw[0], gasSide))
+            return Status::NoPhysicalRoot;
+        rawCount = 1;
+        isolatedSide = gasSide ? 1 : -1;
+    }
+    const bool mixed=!isolatedSide&&detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
+    if (mixed||isolatedSide) { /* already refined and checked against the FP64 polynomial */ }
     else if (disc > 1e-14 || !(delta2 > 0)) {
         const double sd = .5*::sqrt(detail::max(0.0, disc));
         raw[0] = r.center + detail::cubeRoot(-.5*q + sd)
@@ -341,7 +386,7 @@ REACTIVE_HD inline Status rootsTP(const Table<NC, NR>& table, double T, double p
         raw[2] = r.center + 2.0*delta*::cos(theta + 4.0*Pi/3.0);
         rawCount = 3;
     } else return Status::NoPhysicalRoot;
-    for (int i = 0; !mixed && i < rawCount; ++i) {
+    for (int i = 0; !mixed && !isolatedSide && i < rawCount; ++i) {
         for (int n = 0; n < 12; ++n) {
             const double residual = detail::cubicResidual(raw[i], bn, cn, dn);
             const double deriv = (3.0*raw[i] + 2.0*bn)*raw[i] + cn;
@@ -357,7 +402,11 @@ REACTIVE_HD inline Status rootsTP(const Table<NC, NR>& table, double T, double p
     r.criticalTemperature = r.mixtureA*OmegaB/(b*OmegaA*GasConstant);
     const double criticalPressure = OmegaB*GasConstant*r.criticalTemperature/b;
     const double criticalVolume = OmegaVc*GasConstant*r.criticalTemperature/criticalPressure;
-    if (r.count >= 2) {
+    if (isolatedSide) {
+        r.signedCount = isolatedSide;
+        r.gasAvailable = isolatedSide > 0;
+        r.liquidAvailable = isolatedSide < 0;
+    } else if (r.count >= 2) {
         r.signedCount = r.count;
         r.gasAvailable = r.liquidAvailable = 1;
     } else {
@@ -670,19 +719,27 @@ REACTIVE_HD inline Status rootsFromMixingCached(
     const double delta = delta2 > 0 ? ::sqrt(delta2) : 0;
     const double h = 2.0*delta*delta2;
     double disc = q*q-h*h; // Cantera's unscaled discriminant.
-    // Cantera 3.2 forces near-repeated roots using absolute thresholds. Its
-    // density/actual-phase path exposes no stable requested branch in this
-    // noncritical spinodal band, so fail explicitly rather than selecting a
-    // root whose availability depends on roundoff.
+    // Cantera 3.2 forces near-repeated roots using absolute thresholds. The
+    // near-repeated pair in this noncritical spinodal band depends on
+    // roundoff and stays unavailable; only a separated, stable third root is
+    // returned (isolatedRoot).
     if (detail::abs(detail::abs(h)-detail::abs(q)) < 1e-10) {
         if (disc > 1e-10) return Status::NonFinite;
         disc = 0;
     }
-    if (detail::abs(disc) < 1e-14) return Status::NoPhysicalRoot;
     double raw[3] = {0, 0, 0};
     int rawCount = 0;
-    const bool mixed=detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
-    if (mixed) { /* already refined and checked against the FP64 polynomial */ }
+    int isolatedSide = 0; // +1 gas, -1 liquid: only the isolated root exists
+    if (detail::abs(disc) < 1e-14) {
+        bool gasSide = false;
+        if (!detail::isolatedRoot(r.center, delta, delta2, q, bn, cn, dn, b, RTp, aap,
+                                  raw[0], gasSide))
+            return Status::NoPhysicalRoot;
+        rawCount = 1;
+        isolatedSide = gasSide ? 1 : -1;
+    }
+    const bool mixed=!isolatedSide&&detail::mixedCubicRoots(r.center,delta,delta2,q,h,disc,bn,cn,dn,b,raw,rawCount);
+    if (mixed||isolatedSide) { /* already refined and checked against the FP64 polynomial */ }
     else if (disc > 1e-14 || !(delta2 > 0)) {
         const double sd = .5*::sqrt(detail::max(0.0, disc));
         raw[0] = r.center + detail::cubeRoot(-.5*q + sd)
@@ -697,7 +754,7 @@ REACTIVE_HD inline Status rootsFromMixingCached(
         raw[2] = r.center + 2.0*delta*::cos(theta + 4.0*Pi/3.0);
         rawCount = 3;
     } else return Status::NoPhysicalRoot;
-    for (int i = 0; !mixed && i < rawCount; ++i) {
+    for (int i = 0; !mixed && !isolatedSide && i < rawCount; ++i) {
         for (int n = 0; n < 12; ++n) {
             const double residual = detail::cubicResidual(raw[i], bn, cn, dn);
             const double deriv = (3.0*raw[i] + 2.0*bn)*raw[i] + cn;
@@ -713,7 +770,11 @@ REACTIVE_HD inline Status rootsFromMixingCached(
     r.criticalTemperature = r.mixtureA*OmegaB/(b*OmegaA*GasConstant);
     const double criticalPressure = OmegaB*GasConstant*r.criticalTemperature/b;
     const double criticalVolume = OmegaVc*GasConstant*r.criticalTemperature/criticalPressure;
-    if (r.count >= 2) {
+    if (isolatedSide) {
+        r.signedCount = isolatedSide;
+        r.gasAvailable = isolatedSide > 0;
+        r.liquidAvailable = isolatedSide < 0;
+    } else if (r.count >= 2) {
         r.signedCount = r.count;
         r.gasAvailable = r.liquidAvailable = 1;
     } else {
