@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "0d656e0ff7b64b5729aa7d41c781ba25426068e078dc4dff81548469a97d6f3d",
+      "meanStepSeconds2to10": 7.777002877888889,
+      "option": "reference",
+      "steps": 10
+    },
+    {
+      "cpuFallbacks": 0.0,
+      "deviceFailures": 0.0,
+      "finalStateSha256": "4ddff82afbf2c83be1fb86d208f39582b6cb5330ff0bad9f01980e28a4a630ca",
+      "logSha256": "3fb9e39a3c73dfe511d307764a47be39cb8168cdf0edaa70b38012c20a02d988",
+      "meanStepSeconds2to10": 3.459687856888889,
+      "option": "stableGasPrune",
+      "steps": 10
+    }
+  ],
+  "speedup": 2.24789148604936
+}

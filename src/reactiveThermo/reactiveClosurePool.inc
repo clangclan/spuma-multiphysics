@@ -1,14 +1,26 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Included inside ThermoPool. Exact, batch-local reuse only.
     void classify(const ReactiveThermoState* original) {
-        ProfileTimer timer(acceleration.classifySeconds);jobCount=0;
+        ProfileTimer timer(acceleration.classifySeconds);jobCount=0;REACTIVE_RANGE("pool-classify-exact-reuse");
         const bool reusable=operation==0
             ||(operation==2&&capillaryColor&&hemDevice);
         if(!prototype->exactBatchReuse||!reusable){
             for(size_t c=0;c<count;++c){representative[c]=c;order[jobCount++]=c;}return;
         }
-        std::fill(hashSlots.begin(),hashSlots.end(),SIZE_MAX);acceleration.eligibleCells+=count;
-        for(size_t c=0;c<count;++c){
+        reactiveParallel::forEach(hashSlots.size(),[&](size_t i){hashSlots[i]=SIZE_MAX;});acceleration.eligibleCells+=count;
+        auto same=[&](size_t c,size_t other){
+            return std::memcmp(mass.data()+c*ns,mass.data()+other*ns,ns*sizeof(double))==0
+                &&std::memcmp(energies+c,energies+other,sizeof(double))==0
+                &&std::memcmp(original+c,original+other,sizeof(*original))==0
+                &&(!capillaryColor||(
+                    std::memcmp(capillaryColor+c,capillaryColor+other,sizeof(double))==0
+                    &&std::memcmp(capillaryJump+c,capillaryJump+other,sizeof(double))==0));};
+        // Concurrent insert-only linear probing. A slot changes only from
+        // empty to a key, then only to a smaller index of the SAME key, so it
+        // ends at the lowest equal cell: the representative the serial scan
+        // picked. representative[] holds the slot until the lookup below.
+        const size_t mask=hashSlots.size()-1;size_t* slots=hashSlots.data();
+        reactiveParallel::forEach(count,[&](size_t c){
             uint64_t hash=1469598103934665603ULL;
             auto add=[&](const void* p,size_t n){auto bytes=static_cast<const unsigned char*>(p);
                 // Hash complete words to shorten the dependency chain. This
@@ -28,19 +40,18 @@
             // Mix high floating-point bits into the low power-of-two index.
             hash^=hash>>33;hash*=0xff51afd7ed558ccdULL;
             hash^=hash>>33;hash*=0xc4ceb9fe1a85ec53ULL;hash^=hash>>33;
-            size_t slot=hash&(hashSlots.size()-1),match=SIZE_MAX;
-            while(hashSlots[slot]!=SIZE_MAX){const size_t other=hashSlots[slot];
-                if(std::memcmp(mass.data()+c*ns,mass.data()+other*ns,ns*sizeof(double))==0
-                    &&std::memcmp(energies+c,energies+other,sizeof(double))==0
-                    &&std::memcmp(original+c,original+other,sizeof(*original))==0
-                    &&(!capillaryColor||(
-                        std::memcmp(capillaryColor+c,capillaryColor+other,sizeof(double))==0
-                        &&std::memcmp(capillaryJump+c,capillaryJump+other,sizeof(double))==0))){match=other;break;}
-                slot=(slot+1)&(hashSlots.size()-1);
+            size_t slot=hash&mask;
+            for(;;slot=(slot+1)&mask){
+                size_t other=__atomic_load_n(slots+slot,__ATOMIC_RELAXED);
+                if(other==SIZE_MAX&&__atomic_compare_exchange_n(slots+slot,&other,c,false,__ATOMIC_RELAXED,__ATOMIC_RELAXED))break;
+                if(same(c,other)){
+                    while(c<other&&!__atomic_compare_exchange_n(slots+slot,&other,c,false,__ATOMIC_RELAXED,__ATOMIC_RELAXED)){}
+                    break;
+                }
             }
-            if(match==SIZE_MAX){hashSlots[slot]=c;representative[c]=c;order[jobCount++]=c;}
-            else representative[c]=match;
-        }
+            representative[c]=slot;});
+        reactiveParallel::forEach(count,[&](size_t c){representative[c]=slots[representative[c]];});
+        for(size_t c=0;c<count;++c)if(representative[c]==c)order[jobCount++]=c;
         acceleration.uniqueCells+=jobCount;
     }
     void prepareDevice() {

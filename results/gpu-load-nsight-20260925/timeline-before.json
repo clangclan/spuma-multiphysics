@@ -1,0 +1,347 @@
+{
+ "steps": [
+  {
+   "seconds": 8.082867428,
+   "gpuBusyFraction": 0.5720106164284846,
+   "kernelBusyFraction": 0.5234240893700824
+  },
+  {
+   "seconds": 7.8860770140000005,
+   "gpuBusyFraction": 0.6009078406902811,
+   "kernelBusyFraction": 0.5526377324572245
+  },
+  {
+   "seconds": 10.859603953,
+   "gpuBusyFraction": 0.4473440980007349,
+   "kernelBusyFraction": 0.39845616209646684
+  }
+ ],
+ "phases": {
+  "recovery": {
+   "count": 6,
+   "wallSeconds": 18.333874669,
+   "gpuIdleSeconds": 6.201196769,
+   "gpuIdleShareOfSteps": 0.23114164000063642
+  },
+  "capillary-iteration-0": {
+   "count": 6,
+   "wallSeconds": 14.621982545000002,
+   "gpuIdleSeconds": 3.758020381,
+   "gpuIdleShareOfSteps": 0.14007538002381947
+  },
+  "liquid-color": {
+   "count": 28,
+   "wallSeconds": 2.785161601,
+   "gpuIdleSeconds": 2.785161601,
+   "gpuIdleShareOfSteps": 0.10381331928381164
+  },
+  "capillary-pool-batch": {
+   "count": 30,
+   "wallSeconds": 14.073812791000002,
+   "gpuIdleSeconds": 2.10358403,
+   "gpuIdleShareOfSteps": 0.07840839126473265
+  },
+  "cfl": {
+   "count": 6,
+   "wallSeconds": 1.7785304180000001,
+   "gpuIdleSeconds": 1.325343337,
+   "gpuIdleShareOfSteps": 0.049400469601208384
+  },
+  "capillary-iteration-n": {
+   "count": 6,
+   "wallSeconds": 2.257251519,
+   "gpuIdleSeconds": 1.043332983,
+   "gpuIdleShareOfSteps": 0.038888896085821995
+  },
+  "packTransport": {
+   "count": 13,
+   "wallSeconds": 1.751697765,
+   "gpuIdleSeconds": 0.980308944,
+   "gpuIdleShareOfSteps": 0.036539756028414465
+  },
+  "pool-classify-exact-reuse": {
+   "count": 30,
+   "wallSeconds": 0.9377728340000001,
+   "gpuIdleSeconds": 0.9377728340000001,
+   "gpuIdleShareOfSteps": 0.03495427719410343
+  },
+  "transport-rk0": {
+   "count": 3,
+   "wallSeconds": 1.385036393,
+   "gpuIdleSeconds": 0.675150598,
+   "gpuIdleShareOfSteps": 0.02516537086022764
+  },
+  "capillary-residual": {
+   "count": 12,
+   "wallSeconds": 0.546923224,
+   "gpuIdleSeconds": 0.546923224,
+   "gpuIdleShareOfSteps": 0.0203858602877685
+  },
+  "pool-reuse-and-commit": {
+   "count": 30,
+   "wallSeconds": 0.484224992,
+   "gpuIdleSeconds": 0.484224992,
+   "gpuIdleShareOfSteps": 0.018048864267570065
+  },
+  "transport-rk1": {
+   "count": 3,
+   "wallSeconds": 1.043636529,
+   "gpuIdleSeconds": 0.36037065900000004,
+   "gpuIdleShareOfSteps": 0.01343235317830472
+  },
+  "capillary-pack": {
+   "count": 30,
+   "wallSeconds": 0.34989546600000004,
+   "gpuIdleSeconds": 0.34989546600000004,
+   "gpuIdleShareOfSteps": 0.013041903821585848
+  },
+  "hem-run": {
+   "count": 30,
+   "wallSeconds": 12.179150082000001,
+   "gpuIdleSeconds": 0.20892132100000002,
+   "gpuIdleShareOfSteps": 0.0077872737418114004
+  },
+  "tr-validate-upload-state": {
+   "count": 13,
+   "wallSeconds": 0.347658603,
+   "gpuIdleSeconds": 0.20178827000000002,
+   "gpuIdleShareOfSteps": 0.007521398432937101
+  },
+  "pool-stage-input": {
+   "count": 30,
+   "wallSeconds": 0.17714923000000002,
+   "gpuIdleSeconds": 0.17714923000000002,
+   "gpuIdleShareOfSteps": 0.006603009882180041
+  },
+  "interface-geometry": {
+   "count": 28,
+   "wallSeconds": 0.413229516,
+   "gpuIdleSeconds": 0.161308368,
+   "gpuIdleShareOfSteps": 0.006012562109258587
+  },
+  "hem-gather": {
+   "count": 30,
+   "wallSeconds": 0.15885702000000002,
+   "gpuIdleSeconds": 0.15885702000000002,
+   "gpuIdleShareOfSteps": 0.005921191262946344
+  },
+  "restore-rk2-seed": {
+   "count": 3,
+   "wallSeconds": 0.13269613300000002,
+   "gpuIdleSeconds": 0.13269613300000002,
+   "gpuIdleShareOfSteps": 0.004946077821089468
+  },
+  "hem-scatter": {
+   "count": 30,
+   "wallSeconds": 0.117596585,
+   "gpuIdleSeconds": 0.117596585,
+   "gpuIdleShareOfSteps": 0.004383261574806874
+  },
+  "transport-advance": {
+   "count": 6,
+   "wallSeconds": 0.76761555,
+   "gpuIdleSeconds": 0.094820813,
+   "gpuIdleShareOfSteps": 0.0035343239441421545
+  },
+  "hem-bucket-order": {
+   "count": 30,
+   "wallSeconds": 0.090137564,
+   "gpuIdleSeconds": 0.090137564,
+   "gpuIdleShareOfSteps": 0.003359761856416965
+  },
+  "wale-pr-properties": {
+   "count": 13,
+   "wallSeconds": 0.851457054,
+   "gpuIdleSeconds": 0.080068233,
+   "gpuIdleShareOfSteps": 0.0029844404841482745
+  },
+  "tr-wale-pr": {
+   "count": 13,
+   "wallSeconds": 0.8513790000000001,
+   "gpuIdleSeconds": 0.07999017900000001,
+   "gpuIdleShareOfSteps": 0.0029815311216105788
+  },
+  "tr-capillary-geometry": {
+   "count": 28,
+   "wallSeconds": 0.31868118500000003,
+   "gpuIdleSeconds": 0.06676003700000001,
+   "gpuIdleShareOfSteps": 0.0024883945814819807
+  },
+  "tr-pack-upload": {
+   "count": 6,
+   "wallSeconds": 0.139913286,
+   "gpuIdleSeconds": 0.0650647,
+   "gpuIdleShareOfSteps": 0.0024252030735955198
+  },
+  "download-conserved": {
+   "count": 6,
+   "wallSeconds": 0.159887363,
+   "gpuIdleSeconds": 0.06470403000000001,
+   "gpuIdleShareOfSteps": 0.002411759562866143
+  },
+  "tr-unpack-download": {
+   "count": 6,
+   "wallSeconds": 0.15985616700000002,
+   "gpuIdleSeconds": 0.064672834,
+   "gpuIdleShareOfSteps": 0.0024105967720581645
+  },
+  "tr-stable-step-reduce": {
+   "count": 6,
+   "wallSeconds": 0.039638831,
+   "gpuIdleSeconds": 5.068e-05,
+   "gpuIdleShareOfSteps": 1.8890318678149741e-06
+  }
+ },
+ "kernels": {
+  "hemKernel": {
+   "count": 30,
+   "seconds": 11.707408220000001,
+   "shareOfSteps": 0.43637859544394203
+  },
+  "execute": {
+   "count": 172,
+   "seconds": 0.8436712630000001,
+   "shareOfSteps": 0.031446762071166305
+  },
+  "walePrPropertiesKernel": {
+   "count": 13,
+   "seconds": 0.273911866,
+   "shareOfSteps": 0.010209712783083365
+  },
+  "memSetKernel": {
+   "count": 115,
+   "seconds": 0.085141161,
+   "shareOfSteps": 0.0031735273557964767
+  },
+  "walePrCommitKernel": {
+   "count": 13,
+   "seconds": 0.002544862,
+   "shareOfSteps": 9.485646048128159e-05
+  },
+  "reduceGroups": {
+   "count": 30,
+   "seconds": 0.001695295,
+   "shareOfSteps": 6.318994239043777e-05
+  },
+  "hemReduceCounters": {
+   "count": 30,
+   "seconds": 0.0016146880000000002,
+   "shareOfSteps": 6.0185420058769236e-05
+  }
+ },
+ "copies": {
+  "Host-to-Device Pageable->Device": {
+   "count": 305,
+   "seconds": 0.85424557,
+   "gigabytes": 17.561543784,
+   "gbPerSecond": 20.557957103599612
+  },
+  "Device-to-Host Device->Pageable": {
+   "count": 195,
+   "seconds": 0.234400866,
+   "gigabytes": 3.8009807880000004,
+   "gbPerSecond": 16.21572843506474
+  },
+  "Host-to-Device Pinned->Device": {
+   "count": 30,
+   "seconds": 0.06551806,
+   "gigabytes": 1.7694720000000002,
+   "gbPerSecond": 27.00739307604651
+  },
+  "Device-to-Host Device->Pinned": {
+   "count": 30,
+   "seconds": 0.064161007,
+   "gigabytes": 1.7694720000000002,
+   "gbPerSecond": 27.578619518861355
+  },
+  "Host-to-Device Pageable->Managed": {
+   "count": 138,
+   "seconds": 0.051832784,
+   "gigabytes": 0.8847370800000001,
+   "gbPerSecond": 17.069063471489397
+  },
+  "Unified Device-to-Host Unknown->Unknown": {
+   "count": 5709,
+   "seconds": 0.034117551,
+   "gigabytes": 0.9283829760000001,
+   "gbPerSecond": 27.21130177250999
+  },
+  "Unified Host-to-Device Unknown->Unknown": {
+   "count": 132,
+   "seconds": 0.000598407,
+   "gigabytes": 0.012517376,
+   "gbPerSecond": 20.917830172441164
+  }
+ },
+ "gpuMetrics": {
+  "GPC Clock Frequency [MHz]": 2805284693.950649,
+  "SYS Clock Frequency [MHz]": 2361573650.456519,
+  "Sync Copy Engine Active [Throughput %]": 0.0,
+  "Sync Copy Engine Active [Cycles Active]": 0.0,
+  "Async Copy Engine Active 0 [Throughput %]": 2.740905024601163,
+  "Async Copy Engine Active 0 [Cycles Active]": 32325.571697480245,
+  "GR Active [Throughput %]": 48.82007603995825,
+  "SMs Active [Throughput %]": 37.07289026390338,
+  "SM Issue [Throughput %]": 2.8301215148352465,
+  "Tensor Active [Throughput %]": 0.0,
+  "Vertex/Tess/Geometry Warps in Flight [Throughput %]": 0.0,
+  "Vertex/Tess/Geometry Warps in Flight [Avg]": 0.0,
+  "Vertex/Tess/Geometry Warps in Flight [Avg Warps per Cycle]": 0.0,
+  "Pixel Warps in Flight [Throughput %]": 0.0,
+  "Pixel Warps in Flight [Avg]": 0.0,
+  "Pixel Warps in Flight [Avg Warps per Cycle]": 0.0,
+  "Compute Warps in Flight [Throughput %]": 6.03697629342478,
+  "Compute Warps in Flight [Avg]": 8054371.053432981,
+  "Compute Warps in Flight [Avg Warps per Cycle]": 5.80693678246608,
+  "DRAM Read Bandwidth [Throughput %]": 1.7099671984493812,
+  "DRAM Write Bandwidth [Throughput %]": 4.938236171164455,
+  "PCIe RX Throughput [Throughput %]": 1.3841136126435067,
+  "PCIe TX Throughput [Throughput %]": 1.4254696585656776,
+  "PCIe Read Requests to BAR1 [Requests]": 7.45489786789921e-05,
+  "PCIe Write Requests to BAR1 [Requests]": 1.9439018935440584
+ },
+ "powerByState": {
+  "gpuIdle>=90%": {
+   "samples": 88,
+   "meanW": 119.54499999999999,
+   "maxW": 159.66
+  },
+  "allSteps": {
+   "samples": 268,
+   "meanW": 130.6559328358209,
+   "maxW": 159.98
+  },
+  "mixed/other": {
+   "samples": 76,
+   "meanW": 125.93052631578946,
+   "maxW": 159.98
+  },
+  "hemKernel>=90%": {
+   "samples": 104,
+   "meanW": 143.51067307692307,
+   "maxW": 159.98
+  }
+ },
+ "powerInHostPhases": {
+  "cfl": {
+   "samples": 18,
+   "meanW": 122.78333333333333
+  },
+  "liquid-color": {
+   "samples": 28,
+   "meanW": 127.72428571428573
+  },
+  "packTransport": {
+   "samples": 16,
+   "meanW": 113.26125
+  },
+  "capillary-residual": {
+   "samples": 6,
+   "meanW": 146.51
+  },
+  "pool-classify-exact-reuse": {
+   "samples": 6,
+   "meanW": 141.17666666666665
+  }
+ }
+}

@@ -10,6 +10,7 @@
         for(size_t i=0;i<nl;++i){out.condensedKind[i]=condensedKind[i];out.solid[i]=solid[i];}
         out.ns=ns;out.nl=nl;out.boundaryRecovery=recoveryMode;out.scalarRecovery=scalarRecovery;
         out.analyticJacobian=hemAnalyticJacobian&&!hasSolid;
+        out.stableGasPrune=hemStableGasPrune;
         out.enforceSpeciesTemperatureBounds=enforceSpeciesTemperatureBounds;
         for(size_t k=0;k<ns;++k)out.weights[k]=weights[k];
         out.Tmin=Tmin;out.Tmax=Tmax;out.pmin=pmin;out.pmax=pmax;out.vtol=vtol;out.etol=etol;out.mutol=mutol;

@@ -19,6 +19,13 @@ void capture(Handle& h,const double* q,const double* energy,const ReactiveGpuHem
              size_t count,const ReactiveThermoState* states){
     static bool saved=false;const char* path=std::getenv("REACTIVE_CAPTURE_FILE");
     if(saved||!path||count<1000)return;
+    // Optional: skip batches until one holds this many curved (J!=0) cells
+    // whose seed already carries liquid, e.g. to exercise curved flash paths.
+    if(const char* raw=std::getenv("REACTIVE_CAPTURE_MIN_CURVED")){
+        const size_t minimum=std::strtoull(raw,nullptr,10);size_t curved=0;
+        for(size_t c=0;cap&&c<count;++c)curved+=cap[c].pressureJump!=0&&states[c].liquidMass[0]>0;
+        if(curved<minimum)return;
+    }
     // Model ns is not decoded here: derive it from the caller-specified ABI
     // species count and record it explicitly for the replay loader.
     const char* rawNs=std::getenv("REACTIVE_CAPTURE_SPECIES");const int ns=rawNs?std::atoi(rawNs):0;

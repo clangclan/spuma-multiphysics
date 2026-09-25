@@ -23,6 +23,7 @@ from benchmark_hem_optimization import prepare
 from profile_impinging_gpu import Monitor
 from profile_reactive_kernels import replace
 from summarize_ncu_counters import parse as parse_counters
+from sample_gpu_power import PowerSampler
 from validate_impinging_initial_steps import profiles, run
 
 
@@ -46,8 +47,11 @@ class Campaign:
     def __init__(self, root):
         self.root=root
         self.config=load(root/'campaign.json')
+        self.checkpoints=self.config.get('checkpointsUs',[1,10,50,100])
+        if len(self.checkpoints)<2 or any(not math.isfinite(t) or t<=0 for t in self.checkpoints) or any(a>=b for a,b in zip(self.checkpoints,self.checkpoints[1:])):
+            raise ValueError('At least two increasing positive checkpoint times are required')
         self.state=dict(status='running',pid=os.getpid(),startedUnix=time.time(),
-                        completed=[],errors=[],progressUs={'1atm':1.,'40bar':1.})
+                        completed=[],errors=[],progressUs={},targetUs=self.checkpoints[-1])
 
     def update(self, **values):
         self.state.update(values)
@@ -63,6 +67,15 @@ class Campaign:
         replace(controls,'endTime',format(end if end is not None else start+1e-6,'.17g'))
         replace(controls,'maxAcceptedSteps',0 if end is not None else 1)
         replace(controls,'writeInterval','1e-5')
+        if not math.isclose(start,self.state.get('checkpointStartUs',self.checkpoints[0])*1e-6,rel_tol=1e-10):
+            raise ValueError('Unexpected continuation checkpoint time: '+str(start))
+        prop=target/'constant/reactiveProperties'
+        for key,value in self.config.get('propertyOverrides',{}).items():
+            content=prop.read_text()
+            if re.search(r'\b'+re.escape(key)+r'\s+[^;]+;',content):
+                replace(prop,key,value)
+            else:
+                prop.write_text(content+'\n'+key+' '+str(value)+';\n')
         definition=load(target/'benchmark-definition.json')
         definition['longCampaign']=dict(source=str(source),startTime=start,endTime=end,
             role='production' if end is not None else 'isolated diagnostic replay')
@@ -72,14 +85,20 @@ class Campaign:
     def execute(self, case, phase, end=None, prefix=None, timeout=86400):
         self.update(phase=phase,case=str(case),step=None,gpu=None,phaseStartedUnix=time.time())
         monitor=LiveMonitor(case,self)
+        power=PowerSampler(case,self.config['powerPollSeconds']) if self.config.get('powerPollSeconds') else None
         try:
-            result=run(case,timeout,end,launcher=prefix,monitor=monitor)
+            launcher=list(prefix or [])
+            if self.config.get('stampOutput'):
+                launcher += [sys.executable,str(common.PROJECT_ROOT/'tools/stamp_runtime_output.py'),
+                    '--output',str(case/'solver-stamped.jsonl'),'--','stdbuf','-oL','-eL']
+            result=run(case,timeout,end,launcher=launcher,monitor=monitor)
         except BaseException:
             if monitor.root_pid is not None:
                 try:os.killpg(monitor.root_pid,signal.SIGTERM)
                 except ProcessLookupError:pass
             raise
         finally:
+            if power:power.close()
             monitor.close()
         self.state['completed'].append(dict(case=str(case),phase=phase,passed=result['passed'],
             processElapsedSeconds=result.get('processElapsedSeconds'),error=result.get('error')))
@@ -104,6 +123,9 @@ class Campaign:
             str(case/'gpu-trace.nsys-rep')],case/'nsys-export.log',600)
         self.command([sys.executable,str(common.PROJECT_ROOT/'tools/analyze_gpu_trace.py'),str(case),
             '--output',str(base/'analysis')],base/'trace-analysis.log',600)
+        if self.config.get('nvtxStepTimeline'):
+            self.command([sys.executable,str(common.PROJECT_ROOT/'tools/analyze_nsys_step_timeline.py'),
+                str(case/'gpu-trace.sqlite'),'--output',str(base/'step-timeline.json')],base/'step-timeline.log',600)
         counters=base/'ncu'
         self.prepare(source,counters)
         # First and third invocations expose ambient/active HEM and actual WALE
@@ -167,22 +189,24 @@ class Campaign:
         if rows:
             with (self.root/'timing-summary.csv').open('w') as stream:
                 writer=csv.DictWriter(stream,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
-        lines=['# 160³ N₂O 100 μs GPU campaign','',f"Status: {self.state['status']}",
-            '', 'Validated 1 μs FP64 checkpoints continue to 10, 50 and 100 μs for: '+', '.join(self.config['sources'])+'.',
+        lines=[f'# 160³ N₂O {self.checkpoints[0]}–{self.checkpoints[-1]} μs GPU campaign','',f"Status: {self.state['status']}",
+            '', 'Validated FP64 checkpoints continue through '+str(self.checkpoints)+' μs for: '+', '.join(self.config['sources'])+'.',
             'Adaptive CFL and all requested physics remain enabled. Segment endpoints truncate the final step.',
             'Production: NVML/proc telemetry every 0.5 s plus solver step/operator/conservation logs.',
-            'Diagnostics: independent one-step Nsight Systems and Nsight Compute replays at 1/10/50/100 μs.',
+            'Diagnostics: independent one-step Nsight Systems and Nsight Compute replays at each configured checkpoint.',
+            'Additional power polling (seconds): '+str(self.config.get('powerPollSeconds','disabled'))+'. Polling rate is not sensor update rate.',
+            'Timestamped stdout records are observation times; Nsight NVTX provides exact instrumented ranges.',
             'Replay states never feed production. Profiled wall times must not be compared to unprofiled runs.',
             'Hardware samples are selected launches, not whole-run averages. Counter percentage is not wall-time fraction.',
             'Per-step time shares exclude initialization/checkpoint I/O; nested HEM timers are not added to recovery.',
             '', '## Production progress','']
-        lines.extend(f"- {k}: {v:.6g} / 100 μs" for k,v in self.state['progressUs'].items())
+        lines.extend(f"- {k}: {v:.6g} / {self.checkpoints[-1]} μs" for k,v in self.state['progressUs'].items())
         lines+=['','## Errors','']+[str(e) for e in self.state['errors']]
         (self.root/'REPORT.md').write_text('\n'.join(lines)+'\n')
 
     def work(self):
         sources={k:Path(v) for k,v in self.config['sources'].items()}
-        self.state['progressUs']={k:1. for k in sources}
+        self.state['progressUs']={k:float(self.checkpoints[0]) for k in sources}
         self.update(phase='waiting for exclusive GPU lock')
         with common.RUN_LOCK.open('a+') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX)
@@ -194,17 +218,18 @@ class Campaign:
                 if common.sha256(Path(absolute))!=digest:
                     raise ValueError('Thermodynamic input changed: '+absolute)
             failed=set()
-            for stamp in (1,10,50,100):
+            for index,stamp in enumerate(self.checkpoints):
                 for label in sources:
                     if label in failed:continue
-                    self.update(ambient=label,checkpointUs=stamp)
-                    if stamp>1:
+                    self.update(ambient=label,checkpointUs=stamp,checkpointStartUs=self.state['progressUs'][label])
+                    if index>0:
                         target=self.root/'production'/label/f'to-{stamp:03d}us'
                         try:
                             self.prepare(sources[label],target,stamp*1e-6)
                             self.execute(target,'production',end=stamp*1e-6)
                             sources[label]=target
                             self.state['progressUs'][label]=float(stamp)
+                            self.update(checkpointStartUs=float(stamp))
                         except Exception as exc:
                             self.state['errors'].append(dict(ambient=label,timeUs=stamp,kind='solver',error=str(exc)))
                             failed.add(label);self.update();self.report();continue
@@ -242,7 +267,7 @@ class LiveMonitor(Monitor):
 def watch(root, once=False):
     while True:
         s=load(root/'status.json',{})
-        lines=['ReactiveFoam | 160^3 = 4,096,000 cells | target 100 us',str(root),'',
+        lines=[f"ReactiveFoam | 160^3 = 4,096,000 cells | target {s.get('targetUs','?')} us",str(root),'',
             f"Status: {s.get('status','preparing')}  PID: {s.get('pid','-')}  Phase: {s.get('phase','-')}",
             f"Ambient: {s.get('ambient','-')}  diagnostic checkpoint: {s.get('checkpointUs','-')} us",
             'Validated production: '+str(s.get('progressUs',{})),

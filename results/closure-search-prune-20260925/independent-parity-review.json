@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "totalCells": 3693404,
+  "method": "Independent byte comparison of saved states.npy arrays and success flags; not inferred from replay exit status",
+  "checkpoints": [
+    {
+      "checkpoint": "0.000125",
+      "cells": 766280,
+      "referenceSuccess": 766280,
+      "prunedSuccess": 766280,
+      "differingCells": 0,
+      "statesSha256": "a2b604832cbf8306a16a02d26ef09881b60957843d6baa35cf10acc02996295a",
+      "prunedStatesSha256": "a2b604832cbf8306a16a02d26ef09881b60957843d6baa35cf10acc02996295a"
+    },
+    {
+      "checkpoint": "0.00015",
+      "cells": 918900,
+      "referenceSuccess": 918900,
+      "prunedSuccess": 918900,
+      "differingCells": 0,
+      "statesSha256": "ea763b9f0d2c42238c9498370496ba76c2e64795c98daca8ab19eaad1fe0493a",
+      "prunedStatesSha256": "ea763b9f0d2c42238c9498370496ba76c2e64795c98daca8ab19eaad1fe0493a"
+    },
+    {
+      "checkpoint": "0.000170009360977013",
+      "cells": 980538,
+      "referenceSuccess": 980538,
+      "prunedSuccess": 980538,
+      "differingCells": 0,
+      "statesSha256": "dccc3beacca738da65a6cc3e1795da4b62ff30c0c888af649989024b276a028b",
+      "prunedStatesSha256": "dccc3beacca738da65a6cc3e1795da4b62ff30c0c888af649989024b276a028b"
+    },
+    {
+      "checkpoint": "0.0002",
+      "cells": 1027686,
+      "referenceSuccess": 1027686,
+      "prunedSuccess": 1027686,
+      "differingCells": 0,
+      "statesSha256": "6c3d2fcb972ab9aa8f5589f7555dbcb88eeaf9aa7bb3ba1090ff3120511aae4c",
+      "prunedStatesSha256": "6c3d2fcb972ab9aa8f5589f7555dbcb88eeaf9aa7bb3ba1090ff3120511aae4c"
+    }
+  ]
+}

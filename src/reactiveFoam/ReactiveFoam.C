@@ -21,6 +21,8 @@
 #include <type_traits>
 #include <sstream>
 #include "reactiveTransport.h"
+#include "reactiveNvtx.h"
+#include "reactiveParallel.h"
 #include "reactiveTransportV21.h"
 #include "reactiveCartesianTransport.h"
 #include "reactiveTurbulence.h"
@@ -58,6 +60,9 @@ struct AddElapsed {
         -(nested?*nested-nestedStart:0);}
 };
 void demand(bool ok,const std::string& message) {if(!ok) throw std::runtime_error(message);}
+// Literal messages bind here without building a std::string per call; several
+// checks run once per cell, many times per step.
+void demand(bool ok,const char* message) {if(!ok) throw std::runtime_error(message);}
 
 // HEM never mutates the mechanical subobject. Preserve only the active state
 // for its rollback/RK seed; mechanical-equilibrium cases retain the full copy.
@@ -126,6 +131,13 @@ public:
     mutable Array interfaceColor,interfaceCurvature,surfaceEnergy,interfaceJump;
     Array fixedColor;
     mutable uint64_t capillaryRecoveries=0,capillaryIterations=0;
+    // Outer capillary closure: per-cell seed of the current recovery, the
+    // geometry input of each cell's latest flash, and the flashed/reused
+    // cell counts. See recoverCapillary.
+    mutable std::vector<ReactiveThermoState> capillarySeeds;
+    mutable Array flashedColor,flashedJump,flashedSurfaceEnergy,batchColor,batchJump;
+    mutable std::vector<size_t> capillaryDirty;
+    mutable uint64_t capillaryFlashedCells=0,capillaryReusedCells=0;
     mutable double capillaryClosureResidual=0;
     std::unique_ptr<void,decltype(&reactive_transport_destroy)> transport{nullptr,&reactive_transport_destroy};
     mutable std::vector<ReactiveTransportState> transportStates;
@@ -226,7 +238,8 @@ public:
             <<";transportGasProperties="<<dict.getOrDefault<word>("transportGasProperties","auto");
         if(capillary)numerical<<";capillaryFlux="<<(capillaryGeometryMode=="cartesianImplicit"?
             "shared-implicit-face-v1":"contact-conservative-stress-v1")<<";capillaryCfl="<<capillaryCfl
-            <<";capillaryGeometryTolerance="<<capillaryGeometryTolerance;
+            <<";capillaryGeometryTolerance="<<capillaryGeometryTolerance
+            <<";capillaryClosure=fixed-seed-input-reuse-v1";
         if(capillaryGeometryMode=="cartesianImplicit")
             numerical<<";capillaryGeometry=cartesian-implicit-v1;primitiveInitialization=curved-TP-v1;implicitReconstruction=quadratic-nullspace-GN-v1;implicitMomentum=metric-reference-v1"
                 <<";implicitQuadrature="<<dict.getOrDefault<scalar>("capillaryQuadratureTolerance",1e-8)
@@ -258,11 +271,15 @@ public:
         demand(hemJacobian=="finiteDifference"||hemJacobian=="analytic","Unknown closureJacobian");
         demand(hemJacobian!="analytic"||fullBackend=="cuda","Analytic closureJacobian requires full CUDA closure");
         check(reactive_rt_set_gpu_hem_jacobian_v1(t,hemJacobian=="analytic"),"GPU closure Jacobian policy");
+        const word hemSearch=dict.getOrDefault<word>("closureSearch","reference");
+        demand(hemSearch=="reference"||hemSearch=="stableGasPrune","Unknown closureSearch");
+        demand(hemSearch=="reference"||fullBackend=="cuda","stableGasPrune closureSearch requires full CUDA closure");
+        check(reactive_rt_set_gpu_hem_search_v1(t,hemSearch=="stableGasPrune"),"GPU closure search policy");
         const bool solidClosure=std::find(condensedKinds.begin(),condensedKinds.end(),1)!=condensedKinds.end();
         Info<<"REACTIVE_CLOSURE_ACCELERATION exactBatchReuse="<<reuse<<" scalarBackend="<<scalarBackend
             <<" fullBackend="<<fullBackend<<" deviceFullClosure="<<(fullBackend=="cuda")
             <<" closureJacobian="<<(solidClosure?word("finiteDifference"):hemJacobian)
-            <<" requestedClosureJacobian="<<hemJacobian<<nl;
+            <<" requestedClosureJacobian="<<hemJacobian<<" closureSearch="<<hemSearch<<nl;
         if(workers>1||reuse||scalarBackend=="cuda"||fullBackend=="cuda") {
             demand(!mechanical,"Parallel mechanical-environment recovery is not implemented");
             demand(size_t(workers)<=batchCells,"Worker count exceeds batch capacity");
@@ -300,6 +317,8 @@ public:
     }
     void check(int status,const std::string& location) const
     {if(status) throw std::runtime_error(location+": "+reactive_rt_error(thermo));}
+    void check(int status,const char* location) const
+    {if(status) throw std::runtime_error(std::string(location)+": "+reactive_rt_error(thermo));}
     void checkTransport(int status) const
     {if(status) throw std::runtime_error(std::string("GPU transport: ")+reactive_transport_error(transport.get()));}
     static ReactiveTransportState compact(const ReactiveThermoState& s,double K=0)
@@ -316,14 +335,15 @@ public:
     void packTransport(const Array& q,const States& states,bool includeGas,int rkStage=-1,
                        bool cflWithinAttempt=false) const
     {
+        REACTIVE_RANGE("packTransport");
         transportStates.resize(nc);
-        for(size_t c=0;c<nc;++c) transportStates[c]=compact(states[c],(mechanical?states.mechanical(c).dilatationK:0));
+        reactiveParallel::forEach(nc,[&](size_t c){transportStates[c]=compact(states[c],(mechanical?states.mechanical(c).dilatationK:0));});
         if(turbulentPrandtl>0||turbulentSchmidt>0) {
             {
                 AddElapsed stageTiming(timings.scalarProperties),totalTiming(scalarPropertySeconds);
                 if(capillary) {
                     walePrStates.resize(nc);
-                    for(size_t c=0;c<nc;++c)walePrStates[c]=states[c];
+                    reactiveParallel::forEach(nc,[&](size_t c){walePrStates[c]=states[c];});
                     ReactiveCapillaryProfileV1 geometry{};
                     geometry.abiVersion=1;geometry.structBytes=sizeof(geometry);
                     checkTransport(reactive_transport_capillary_profile_v1(transport.get(),&geometry));
@@ -340,11 +360,12 @@ public:
                     epoch.thermoVersion=std::max<uint64_t>(1,workerVersion);
                     epoch.geometryVersion=geometry.geometryBuilds;
                     epoch.boundaryVersion=1;epoch.enthalpies=enthalpies;
+                    REACTIVE_RANGE("wale-pr-properties");
                     checkTransport(reactive_transport_wale_pr_properties_v1(transport.get(),&epoch,
                         enthalpies?q.data():nullptr,nv,walePrStates.data()));
                 } else if(turbulentPrandtl>0) {
                     transportScalarCp.resize(nc);
-                    for(size_t c=0;c<nc;++c)transportScalarCp[c]=states[c].cp;
+                    reactiveParallel::forEach(nc,[&](size_t c){transportScalarCp[c]=states[c].cp;});
                 }
                 if(!capillary&&includeGas&&turbulentSchmidt>0) {
                     transportScalarH.resize(nc*ns);
@@ -364,7 +385,7 @@ public:
             if(deviceGasProperties) {
                 if(!liquidSpecies.empty()) {
                     transportPartition.resize(nc);
-                    for(size_t c=0;c<nc;++c) for(size_t i=0;i<2;++i) transportPartition[c].liquidMass[i]=states[c].liquidMass[i];
+                    reactiveParallel::forEach(nc,[&](size_t c){for(size_t i=0;i<2;++i) transportPartition[c].liquidMass[i]=states[c].liquidMass[i];});
                 }
             } else {
                 transportGasY.resize(nc*ns);transportGasH.resize(nc*ns);
@@ -430,8 +451,11 @@ public:
         ReactiveTransportOptionsV21 options{};options.abiVersion=1;options.structBytes=sizeof(options);
         const label bridgeCells=dict.getOrDefault<label>("transportBridgeCells",0);
         demand(bridgeCells>=0,"Invalid transport bridge override");options.bridgeCellsOverride=bridgeCells;
-        const double slotBudget=dict.getOrDefault<scalar>("transportStagingBytes",1048576);
-        const double pinnedBudget=dict.getOrDefault<scalar>("maxPinnedTransportBytes",1048576);
+        // A full-mesh conserved transfer is tiled through one pinned slot with
+        // an event wait per tile. 64 MiB keeps a 4M-cell, 9-variable field at
+        // five tiles instead of ~280; small meshes cap the slot at their size.
+        const double slotBudget=dict.getOrDefault<scalar>("transportStagingBytes",67108864);
+        const double pinnedBudget=dict.getOrDefault<scalar>("maxPinnedTransportBytes",67108864);
         demand(std::isfinite(slotBudget)&&std::isfinite(pinnedBudget)&&slotBudget>=8*nv&&pinnedBudget>=slotBudget
             &&slotBudget<double(SIZE_MAX)&&pinnedBudget<double(SIZE_MAX),"Invalid transport byte budgets");
         options.slotBytes=size_t(slotBudget);options.pinnedBudgetBytes=size_t(pinnedBudget);options.slots=1;
@@ -518,10 +542,12 @@ public:
     void transportStage(double dt,int stage,uint64_t input,uint64_t output,Array& q,Array& boundary) const
     {
         const ReactiveTransportToken before{attemptId,uint64_t(stage),input},after{attemptId,uint64_t(stage+1),output};
+        {REACTIVE_RANGE("transport-advance");
         checkTransport(reactive_transport_advance_resident_v2(transport.get(),before,after,transportStates.data(),
             deviceGasProperties&&!liquidSpecies.empty()?transportPartition.data():nullptr,
-            transportGasY.data(),transportGasH.data(),dt,boundary.data()));
+            transportGasY.data(),transportGasH.data(),dt,boundary.data()));}
         // Explicit host consumer: current same-EOS full-composition flash.
+        REACTIVE_RANGE("download-conserved");
         checkTransport(reactive_transport_download_conserved(transport.get(),after,q.data()));
     }
     void failureRecord(size_t cell,size_t offset,size_t localCell,size_t worker,const double* input,
@@ -594,7 +620,7 @@ public:
     #include "reactiveCapillary.H"
     void recover(Array& q,States& states) const
     {
-        AddElapsed timing(timings.recovery);
+        AddElapsed timing(timings.recovery);REACTIVE_RANGE("recovery");
         if(capillary){recoverCapillary(q,states);return;}
         if(pool){double drift=0;runBatch(q,nullptr,states,0,0,drift);return;}
         for(size_t c=0;c<nc;++c) {
@@ -659,14 +685,14 @@ public:
     double stableStep(const Array& q,const States& states,double cfl,double maximum,
                       bool withinAttempt=false) const
     {
-        AddElapsed timing(timings.cfl);
+        AddElapsed timing(timings.cfl);REACTIVE_RANGE("cfl");
         if(transport) {
             refreshInterface(states);
             packTransport(q,states,false,-1,withinAttempt);double dt=0;transportPrimitive.resize(nc);
-            for(size_t c=0;c<nc;++c) {
+            reactiveParallel::forEach(nc,[&](size_t c) {
                 auto& p=transportPrimitive[c];p.rho=states[c].rho;
                 for(int d=0;d<3;++d) p.u[d]=q[c*nv+ns+d]/p.rho;
-            }
+            });
             checkTransport(reactive_transport_stable_step_primitives(transport.get(),transportPrimitive.data(),
                 transportStates.data(),cfl,maximum,&dt));
             return dt;
@@ -836,7 +862,7 @@ public:
         Array rhs,boundaryA,boundaryB;
         Array initial;
         if(transport) {
-            AddElapsed timing(timings.transport);
+            AddElapsed timing(timings.transport);REACTIVE_RANGE("transport-rk0");
             refreshInterface(states);
             packTransport(q,states,true,0);boundaryA.resize(nv);
             // CPU chemistry (or rollback) may have changed q. A fresh content
@@ -853,7 +879,7 @@ public:
         recoveryStage="rk1";recover(q,states);
         demand(dt<=stableStep(q,states,cfl,dt,true)*(1+1e-10),"RK stage wave/diffusion CFL requires a smaller step");
         if(transport) {
-            AddElapsed timing(timings.transport);
+            AddElapsed timing(timings.transport);REACTIVE_RANGE("transport-rk1");
             packTransport(q,states,true,1);boundaryB.resize(nv);
             if(capillary) {
                 const ReactiveTransportToken before{attemptId,1,transportVersion};
@@ -868,7 +894,8 @@ public:
             for(size_t j=0;j<q.size();++j) q[j]=.5*initial[j]+.5*(q[j]+dt*rhs[j]);
         }
         recoveryStage="rk2";
-        const auto restoreStart=std::chrono::steady_clock::now();oldStates.restore(states);
+        const auto restoreStart=std::chrono::steady_clock::now();
+        {REACTIVE_RANGE("restore-rk2-seed");oldStates.restore(states);}
         timings.backup+=std::chrono::duration<double>(std::chrono::steady_clock::now()-restoreStart).count();
         recover(q,states);
         recoveryStage="source-second";react(q,states,.5*dt,drift);
@@ -931,7 +958,9 @@ int main(int argc,char** argv)
         const double hemKnown=dict.getOrDefault<word>("closureBackend","cpu")=="cuda"?128000+2048*batchCapacity:0;
         const double scalarKnown=8.0*(nc+mesh.nBoundaryFaces())*
             ((physics.turbulentPrandtl>0?1:0)+(physics.turbulentSchmidt>0?physicalSpecies:0));
-        const double memoryEstimate=8.0*nc*(7.0*nv+160+(physics.surfaceTension?12:0))
+        // Capillary closure adds per-cell seeds (22 doubles), the last flashed
+        // geometry (3) and the dirty-cell index (1) to the 12 geometry arrays.
+        const double memoryEstimate=8.0*nc*(7.0*nv+160+(physics.surfaceTension?38:0))
             +8.0*mesh.nFaces()*32+batchKnown+hemKnown+scalarKnown;
         const double memoryLimit=dict.getOrDefault<scalar>("maxHostMemoryGB",2)*1e9;
         demand(std::isfinite(memoryLimit)&&memoryLimit>0&&memoryEstimate<=memoryLimit,
@@ -1290,6 +1319,7 @@ int main(int argc,char** argv)
         // Time::run uses a half-step stopping tolerance. An adaptive explicit
         // step instead lands on the requested end time using the remainder.
         while(beforeEnd()) {
+            REACTIVE_RANGE("step");
             flow.timings=StepTimings{};
             const auto hemBefore=hemProfile();
             const auto start=std::chrono::steady_clock::now();
@@ -1372,7 +1402,8 @@ int main(int argc,char** argv)
                 Info<<"REACTIVE_CAPILLARY_STEP time="<<runTime.value()<<" area="<<area
                     <<" surfaceEnergy="<<flow.sigma*area<<" liquidMass="<<liquidMass
                     <<" closureResidual="<<flow.capillaryClosureResidual
-                    <<" recoveryCalls="<<double(flow.capillaryRecoveries)<<" outerIterations="<<double(flow.capillaryIterations)<<nl;
+                    <<" recoveryCalls="<<double(flow.capillaryRecoveries)<<" outerIterations="<<double(flow.capillaryIterations)
+                    <<" flashedCells="<<double(flow.capillaryFlashedCells)<<" reusedCells="<<double(flow.capillaryReusedCells)<<nl;
             }
             if(profileHemSteps) {
                 const auto& t=flow.timings;
@@ -1564,7 +1595,9 @@ int main(int argc,char** argv)
                 <<" geometryKernels="<<double(capillaryProfile.geometryKernels)
                 <<" faceFluxBuilds="<<double(capillaryProfile.faceFluxBuilds)
                 <<" workspaceBytes="<<double(capillaryProfile.capillaryWorkspaceBytes)
-                <<" closureIterations="<<double(flow.capillaryIterations)<<nl;
+                <<" closureIterations="<<double(flow.capillaryIterations)
+                <<" closureFlashedCells="<<double(flow.capillaryFlashedCells)
+                <<" closureReusedCells="<<double(flow.capillaryReusedCells)<<nl;
             if(flow.wale) {
                 ReactiveWaleProfileV1 p{1,sizeof(ReactiveWaleProfileV1),0,0,0,0};
                 flow.checkTransport(reactive_transport_wale_profile_v1(flow.transport.get(),&p));

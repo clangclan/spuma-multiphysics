@@ -106,7 +106,7 @@ public:
             model->chemicalLinearSolver=prototype.chemicalLinearSolver;model->recoveryMode=prototype.recoveryMode;
             model->exactBatchReuse=prototype.exactBatchReuse;model->cudaScalar=prototype.cudaScalar;model->scalarLibrary=prototype.scalarLibrary;
             model->cudaHem=prototype.cudaHem;model->hemCpuFallback=prototype.hemCpuFallback;model->hemLibrary=prototype.hemLibrary;
-            model->hemAnalyticJacobian=prototype.hemAnalyticJacobian;
+            model->hemAnalyticJacobian=prototype.hemAnalyticJacobian;model->hemStableGasPrune=prototype.hemStableGasPrune;
             model->hemNumericalPolicy=prototype.hemNumericalPolicy;
             model->recoveryTrace.enabled=prototype.recoveryTrace.enabled;model->refreshPolicyHash();
             require(model->policyHash==prototype.policyHash,"Worker numerical policy hash mismatch");models.push_back(std::move(model));
@@ -173,10 +173,11 @@ public:
         // observe the cell-indexed staging array, and caller output is still
         // untouched until the all-cell failure scan has passed.
         const bool directHemSeeds=(operation==0||operation==2)&&hemDevice&&!prototype->hemCpuFallback&&!device;
-        for(size_t c=0;c<count;++c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);
+        {REACTIVE_RANGE("pool-stage-input");
+        reactiveParallel::forEach(count,[&](size_t c) {std::copy(q+c*stride,q+c*stride+ns,mass.begin()+c*ns);
             if(!directHemSeeds)states[c]=output[c];
             if(operation!=0)drifts[c]=0;
-            failures[c][0]=0;}
+            failures[c][0]=0;});}
         // Scheduling only: each cell retains its own source interval and norm.
         classify(output);prepareDevice();prepareFullDevice(output,directHemSeeds);
         std::sort(order.begin(),order.begin()+jobCount,[&](size_t a,size_t b){
@@ -184,10 +185,22 @@ public:
             if(states[a].iterations!=states[b].iterations)return states[a].iterations>states[b].iterations;
             return a<b;});
         dispatch();
+        REACTIVE_RANGE("pool-reuse-and-commit");
         // Reuse successes only. Failed duplicates execute independently to
         // retain each original cell's failure provenance and bounded details.
         jobCount=0;
-        for(size_t c=0;c<count;++c)if(representative[c]!=c){const size_t r=representative[c];
+        if(hemDevice&&!prototype->hemCpuFallback){
+            // Strict CUDA HEM queues no retries: each duplicate copies its
+            // representative, which is never itself written here.
+            std::vector<uint64_t> reused(reactiveParallel::chunkCount(count),0);
+            reactiveParallel::forChunks(count,[&](size_t k,size_t begin,size_t end){uint64_t local=0;
+                for(size_t c=begin;c<end;++c)if(representative[c]!=c){const size_t r=representative[c];
+                    if(failures[r][0]){failures[c]=failures[r];workerIds[c]=workerIds[r];}
+                    else {states[c]=states[r];workerIds[c]=workerIds[r];++local;}}
+                reused[k]=local;});
+            for(const uint64_t n:reused)acceleration.reusedCells+=n;
+        }
+        else for(size_t c=0;c<count;++c)if(representative[c]!=c){const size_t r=representative[c];
             if(failures[r][0]){
                 if(hemDevice&&!prototype->hemCpuFallback){failures[c]=failures[r];workerIds[c]=workerIds[r];}
                 else {order[jobCount++]=c;++acceleration.failedRepresentativeRetries;}
@@ -195,15 +208,20 @@ public:
             else {states[c]=states[r];workerIds[c]=workerIds[r];++acceleration.reusedCells;}}
         dispatch();
         ++profile.batches;profile.cells+=count;
+        std::vector<size_t> firstFailure(reactiveParallel::chunkCount(count),count),failureCount(firstFailure.size(),0);
+        reactiveParallel::forChunks(count,[&](size_t k,size_t begin,size_t end){
+            size_t n=0,firstLocal=count;
+            for(size_t c=begin;c<end;++c)if(failures[c][0]){++n;if(firstLocal==count)firstLocal=c;}
+            failureCount[k]=n;firstFailure[k]=firstLocal;});
         size_t first=count;
-        for(size_t c=0;c<count;++c)if(failures[c][0]) {++profile.failures;if(first==count)first=c;}
+        for(size_t k=0;k<firstFailure.size();++k){profile.failures+=failureCount[k];if(first==count)first=firstFailure[k];}
         if(first<count)throw std::runtime_error("Batch cell "+std::to_string(first)+": "+failures[first].data());
         double maximum=0;if(operation!=0)for(size_t c=0;c<count;++c)maximum=std::max(maximum,drifts[c]);
-        for(size_t c=0;c<count;++c) {
+        reactiveParallel::forEach(count,[&](size_t c) {
             // Both equilibrium and frozen recovery consume immutable mass.
             // Only reacting operations commit staged chemical mass changes.
             if(operation%2!=0)std::copy(mass.begin()+c*ns,mass.begin()+(c+1)*ns,q+c*stride);
-            output[c]=states[c];}
+            output[c]=states[c];});
         *drift=maximum;outcome.success=true;
     }
 };

@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "liquid-reference-image",
+      "passed": true
+    },
+    {
+      "name": "liquid-reference-device",
+      "passed": true
+    },
+    {
+      "name": "liquid-reject-invalid-flag",
+      "passed": true
+    },
+    {
+      "name": "liquid-host-pruning-scope",
+      "passed": true
+    },
+    {
+      "name": "liquid-policy-transition",
+      "passed": true
+    },
+    {
+      "name": "liquid-exported-flag",
+      "passed": true
+    },
+    {
+      "name": "liquid-pruned-device",
+      "passed": true
+    },
+    {
+      "name": "liquid-restore-reference",
+      "passed": true
+    },
+    {
+      "name": "solid-reference-image",
+      "passed": true
+    },
+    {
+      "name": "solid-reference-device",
+      "passed": true
+    },
+    {
+      "name": "solid-reject-invalid-flag",
+      "passed": true
+    },
+    {
+      "name": "solid-host-pruning-scope",
+      "passed": true
+    },
+    {
+      "name": "solid-policy-transition",
+      "passed": true
+    },
+    {
+      "name": "solid-reject-raw-pruned-image",
+      "passed": true
+    },
+    {
+      "name": "solid-restore-reference",
+      "passed": true
+    },
+    {
+      "name": "gas-only-reference-image",
+      "passed": true
+    },
+    {
+      "name": "gas-only-reference-device",
+      "passed": true
+    },
+    {
+      "name": "gas-only-reject-invalid-flag",
+      "passed": true
+    },
+    {
+      "name": "gas-only-host-pruning-scope",
+      "passed": true
+    },
+    {
+      "name": "gas-only-policy-transition",
+      "passed": true
+    },
+    {
+      "name": "gas-only-reject-raw-pruned-image",
+      "passed": true
+    },
+    {
+      "name": "gas-only-restore-reference",
+      "passed": true
+    }
+  ]
+}

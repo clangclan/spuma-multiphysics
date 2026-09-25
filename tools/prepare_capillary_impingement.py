@@ -13,7 +13,7 @@ import benchmark as common
 from prepare_impinging_n2o import uniform
 
 
-def prepare(source, output, sigma, steps):
+def prepare(source, output, sigma, steps, jacobian="analytic",search="reference"):
     if sigma <= 0 or steps < 1:
         raise ValueError("positive sigma and step count required")
     output.mkdir(parents=True, exist_ok=False)
@@ -40,7 +40,11 @@ def prepare(source, output, sigma, steps):
             "physics { chemistry false; phaseChange true; viscosity true; heatConduction true; "
             "speciesDiffusion false; turbulence WALE; turbulentHeatFlux true; turbulentSpeciesMixing true; surfaceTension true; }",text)
         text=text.replace("thermoExactReuse true;","thermoExactReuse false;")
-        text=text.replace("closureJacobian analytic;","closureJacobian finiteDifference;")
+        # The analytic Jacobian also covers curved (J!=0) capillary cells.
+        text=re.sub(r"closureJacobian \w+;",f"closureJacobian {jacobian};",text)
+        # stableGasPrune skips the two-phase seed search of cells whose all-gas
+        # state is stable; bitwise identical to reference on 125-200 us 40 bar.
+        text=re.sub(r"closureSearch \w+;\n?","",text)+f"\nclosureSearch {search};\n"
         text+=f"\nsurfaceTensionCoefficient {sigma:.17g}; capillaryCfl .25; capillaryGeometryTolerance 1e-10;\n"
         text+="turbulentPrandtl .85; turbulentSchmidt .7;\n"
         prop.write_text(text)
@@ -52,7 +56,7 @@ def prepare(source, output, sigma, steps):
             turbulentHeatFlux=True,turbulentSpeciesMixing=True,
             physicalModelHash=None,numericalPolicyHash=None,sourceBenchmark=str(original.resolve()),
             sourceDefinitionSha256=common.sha256(original/"benchmark-definition.json"),
-            maxAcceptedSteps=steps,boundaryModel="stationary fixedState reservoir ghost; HLLC with capillary stress; not a resolved nozzle")
+            maxAcceptedSteps=steps,closureJacobian=jacobian,closureSearch=search,boundaryModel="stationary fixedState reservoir ghost; HLLC with capillary stress; not a resolved nozzle")
         definition["inputHashes"]={str(p.relative_to(case)):common.sha256(p)
             for folder in ("0","constant","system") for p in sorted((case/folder).rglob("*")) if p.is_file()}
         common.atomic_json(case/"benchmark-definition.json",definition)
@@ -67,5 +71,8 @@ if __name__=="__main__":
     ap.add_argument("--output",type=Path,required=True)
     ap.add_argument("--sigma",type=float,required=True)
     ap.add_argument("--steps",type=int,default=2)
+    ap.add_argument("--closure-jacobian",choices=("analytic","finiteDifference"),default="analytic")
+    ap.add_argument("--closure-search",choices=("stableGasPrune","reference"),default="reference",
+        help="Opt-in pruning; parity validated only for the 40 bar N2O/air campaign")
     a=ap.parse_args()
-    print(json.dumps(prepare(a.source.resolve(),a.output.resolve(),a.sigma,a.steps)))
+    print(json.dumps(prepare(a.source.resolve(),a.output.resolve(),a.sigma,a.steps,a.closure_jacobian,a.closure_search)))

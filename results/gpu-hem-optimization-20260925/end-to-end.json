@@ -1,0 +1,251 @@
+{
+ "e2e-baseline": {
+  "steps": [
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010005134964929935,
+     "dt": 5.134964929936022e-08,
+     "seconds": 20.029927271,
+     "massResidual": -2.1372546478295643e-11,
+     "energyResidual": -1.799769000615873e-11,
+     "speciesResidual": 1.6622979140324645e-11,
+     "globalElementResidual": 1.7119425983367905e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.60458818,
+     "backupSeconds": 0.298357749,
+     "transportSeconds": 0.841243877,
+     "recoverySeconds": 18.233877554
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 6974554.0,
+     "phaseEvaluations": 1937355696.0,
+     "analyticJacobians": 0.0,
+     "finiteDifferenceJacobians": 146312597.0,
+     "kernelSeconds": 15.18712399291992,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 4.0,
+     "closureResidual": 1.6221135545890775e-11
+    }
+   },
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010010269931265462,
+     "dt": 5.13496633552684e-08,
+     "seconds": 20.015244956,
+     "massResidual": -2.137106349439063e-11,
+     "energyResidual": -1.8032185671791286e-11,
+     "speciesResidual": 1.661581882397524e-11,
+     "globalElementResidual": 1.711205209340104e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.601386572,
+     "backupSeconds": 0.296303061,
+     "transportSeconds": 0.831944969,
+     "recoverySeconds": 18.237019452
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 6982609.0,
+     "phaseEvaluations": 1938615153.0,
+     "analyticJacobians": 0.0,
+     "finiteDifferenceJacobians": 146405353.0,
+     "kernelSeconds": 15.233580230712898,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 8.0,
+     "closureResidual": 3.76429443171844e-11
+    }
+   }
+  ],
+  "transportStaging": {
+   "layoutTiles": 2272.0,
+   "pinnedBytes": 1048536.0,
+   "eventWaits": 2272.0
+  },
+  "completed": true,
+  "overrides": []
+ },
+ "e2e-new-fd": {
+  "steps": [
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010005134964929935,
+     "dt": 5.134964929936022e-08,
+     "seconds": 12.203646467,
+     "massResidual": -2.1372687334905164e-11,
+     "energyResidual": -1.7998539957730017e-11,
+     "speciesResidual": 1.662311958547377e-11,
+     "globalElementResidual": 1.7119570892634285e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.603425938,
+     "backupSeconds": 0.29719585899999995,
+     "transportSeconds": 0.824859169,
+     "recoverySeconds": 10.426469246
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 3498029.0,
+     "phaseEvaluations": 976322919.0,
+     "analyticJacobians": 0.0,
+     "finiteDifferenceJacobians": 73314286.0,
+     "kernelSeconds": 8.016715713500977,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 4.0,
+     "flashedCells": 8194912.0,
+     "reusedCells": 8189088.0,
+     "closureResidual": 4.976907774789652e-12
+    }
+   },
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010010269931265462,
+     "dt": 5.13496633552684e-08,
+     "seconds": 12.011938849,
+     "massResidual": -2.137106308426962e-11,
+     "energyResidual": -1.803252507715647e-11,
+     "speciesResidual": 1.6615818825046748e-11,
+     "globalElementResidual": 1.7112051824791154e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.613601711,
+     "backupSeconds": 0.296150244,
+     "transportSeconds": 0.806671691,
+     "recoverySeconds": 10.242459027999999
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 3502393.0,
+     "phaseEvaluations": 976969669.0,
+     "analyticJacobians": 0.0,
+     "finiteDifferenceJacobians": 73360502.0,
+     "kernelSeconds": 8.107731063842776,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 8.0,
+     "flashedCells": 16389824.0,
+     "reusedCells": 16378176.0,
+     "closureResidual": 4.984068713298484e-12
+    }
+   }
+  ],
+  "transportStaging": {
+   "layoutTiles": 42.0,
+   "pinnedBytes": 67108824.0,
+   "eventWaits": 42.0
+  },
+  "completed": true,
+  "overrides": []
+ },
+ "e2e-new-analytic": {
+  "steps": [
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010005134964929935,
+     "dt": 5.134964929936022e-08,
+     "seconds": 8.06576666,
+     "massResidual": -2.1372687060598234e-11,
+     "energyResidual": -1.799866363934614e-11,
+     "speciesResidual": 1.662311958547377e-11,
+     "globalElementResidual": 1.711957071282535e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.609654828,
+     "backupSeconds": 0.299578246,
+     "transportSeconds": 0.812300244,
+     "recoverySeconds": 6.294588665
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 3498029.0,
+     "phaseEvaluations": 183523036.0,
+     "analyticJacobians": 73240749.0,
+     "finiteDifferenceJacobians": 280521.0,
+     "kernelSeconds": 3.8689594573974606,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 4.0,
+     "flashedCells": 8194912.0,
+     "reusedCells": 8189088.0,
+     "closureResidual": 4.97418772837932e-12
+    }
+   },
+   {
+    "REACTIVE_STEP": {
+     "time": 0.00010010269931265462,
+     "dt": 5.13496633552684e-08,
+     "seconds": 7.861403687,
+     "massResidual": -2.137106336152321e-11,
+     "energyResidual": -1.802993926848444e-11,
+     "speciesResidual": 1.6615818827189772e-11,
+     "globalElementResidual": 1.7112052006807113e-11,
+     "retries": 0.0
+    },
+    "REACTIVE_STEP_TIMINGS": {
+     "cflSeconds": 0.612666668,
+     "backupSeconds": 0.29957040999999995,
+     "transportSeconds": 0.806457839,
+     "recoverySeconds": 6.089605551
+    },
+    "REACTIVE_GPU_HEM_STEP": {
+     "submitted": 3502393.0,
+     "phaseEvaluations": 183706358.0,
+     "analyticJacobians": 73307876.0,
+     "finiteDifferenceJacobians": 280117.0,
+     "kernelSeconds": 3.9496152801513658,
+     "cpuFallbacks": 0.0,
+     "deviceFailures": 0.0
+    },
+    "REACTIVE_CAPILLARY_STEP": {
+     "outerIterations": 8.0,
+     "flashedCells": 16389824.0,
+     "reusedCells": 16378176.0,
+     "closureResidual": 4.975908574067489e-12
+    }
+   }
+  ],
+  "transportStaging": {
+   "layoutTiles": 42.0,
+   "pinnedBytes": 67108824.0,
+   "eventWaits": 42.0
+  },
+  "completed": true,
+  "overrides": [
+   "closureJacobian analytic;"
+  ]
+ },
+ "_scope": {
+  "start": "runs/n160_40bar_100us_gpu_20260924 production 40bar to-100us/0.0001 (copied)",
+  "steps": 2,
+  "environment": "REACTIVE_SPUMA_ENV=/home/jsw/cae-gpu-pr1-compatible/env.sh (x86-64-v3 SPUMA build)",
+  "baselineBinaries": "origin/main 57a8c31 build",
+  "modifiedBinaries": {
+   "ReactiveFoam": "717ade32af8249d2...",
+   "libreactiveTransport.so": "33a1b05240c1c34c...",
+   "libreactiveBackend.so": "a1d0c8454cc5fbde..."
+  },
+  "fieldComparisonAfterTwoSteps": {
+   "qBitwiseIdenticalCells": "4092895/4096000 for both modified runs",
+   "maxStateRelativeDifference": {
+    "e2e-new-fd": 2.9e-10,
+    "e2e-new-analytic": 2.4e-09
+   },
+   "activeLiquidMaskChanges": 0,
+   "liquidCells": "772 in all runs"
+  }
+ }
+}

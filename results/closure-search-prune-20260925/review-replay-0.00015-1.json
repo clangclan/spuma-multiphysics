@@ -1,0 +1,146 @@
+{
+  "bitwiseEqual": true,
+  "capture": "/tmp/claude-1000/-home-jsw----analysis/c01a763b-bfdf-49a0-9678-3b18bb851fea/scratchpad/par-0.00015-1.bin",
+  "captureSha256": "cc4e89ab083945854027ee3d7a566118188329fcf824ef31734b27f393b6f0d8",
+  "comparedSuccessfulCells": 918900,
+  "comparison": {
+    "T": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "activeLiquids": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaGas": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "alphaLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "chemicalResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cp": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "cv": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "e": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "energyResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "entropy": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "gasMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "iterations": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "liquidMass": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "p": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rho": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoGas": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "rhoLiquid": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundEquilibrium": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "soundFrozen": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    },
+    "volumeResidual": {
+      "maxAbs": 0.0,
+      "maxScaled": 0.0,
+      "relativeL2": 0.0
+    }
+  },
+  "count": 918900,
+  "deterministic": true,
+  "inputsUnchanged": true,
+  "library": "/home/jsw/\ubb38\uc11c/analysis/spuma-multiphysics-gpu-opt/lib/libreactiveTransport.so",
+  "librarySha256": "4adb7195d6fbeb666a768fccab1dccbc37ddb78b24a6e665a831de967908c44d",
+  "maxKernelSeconds": 0.19935066223144532,
+  "medianKernelSeconds": 0.19935066223144532,
+  "minKernelSeconds": 0.19935066223144532,
+  "passed": true,
+  "policy": "legacy-fp64-separate-rn",
+  "repetitions": [
+    {
+      "abiVersion": 1,
+      "analyticJacobians": 29680,
+      "batches": 1,
+      "callSeconds": 0.23914974099898245,
+      "copySeconds": 0.022068288803100584,
+      "cpuFallbacks": 0,
+      "deviceBytes": 459497528,
+      "deviceFailures": 0,
+      "finiteDifferenceJacobians": 0,
+      "flashCandidates": 5340,
+      "hostBytes": 173672100,
+      "kernelSeconds": 0.19935066223144532,
+      "phaseEvaluations": 4957206,
+      "repeat": 1,
+      "residualEvaluations": 29748,
+      "stableCandidates": 923172,
+      "structBytes": 144,
+      "submitted": 918900,
+      "succeeded": 918900,
+      "transferBytes": 393289264,
+      "wallSeconds": 0.237593809
+    }
+  ],
+  "requireBitwise": true,
+  "scope": "Actual solver batch, one warmup then identical-input repetitions; HEM+reduction event timing. No whole-solver speed claim.",
+  "species": 4
+}

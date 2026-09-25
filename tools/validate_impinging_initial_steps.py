@@ -30,6 +30,30 @@ def profiles(text):
     return result
 
 
+def recovered_device_failures(p,steps):
+    """Device failures are accepted only inside attempts that were rolled back.
+
+    The cumulative REACTIVE_GPU_HEM counter keeps the failures of rejected
+    attempts after the solver restored their seed state. Every failure must be
+    reported in the REACTIVE_GPU_HEM_STEP record of an accepted step that
+    needed a retry; anything else (a failure without rollback, or one in an
+    attempt that never led to an accepted step) remains a final failure.
+    """
+    total=p['REACTIVE_GPU_HEM'][-1]['deviceFailures']
+    records=p.get('REACTIVE_GPU_HEM_STEP',[])
+    if sum(h['deviceFailures'] for h in records)!=total:
+        raise ValueError('GPU closure failure outside accepted-step records')
+    retries={step['time']:step['retries'] for step in steps}
+    failed=[h for h in records if h['deviceFailures']]
+    for h in failed:
+        if not retries.get(h['time'],0)>0:raise ValueError('GPU closure failure without rollback retry')
+    if len(p.get('REACTIVE_RETRY',[]))!=sum(step['retries'] for step in steps):
+        raise ValueError('Retry records do not match accepted steps')
+    return dict(recoveredDeviceFailures=int(total),stepsWithRecoveredFailures=len(failed),
+        retries=int(sum(step['retries'] for step in steps)),
+        recoveredAtUs=[h['time']*1e6 for h in failed])
+
+
 def resource_usage(text):
     elapsed=re.search(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)',text)
     value=0.
@@ -104,7 +128,9 @@ def run(case,timeout,end_time=None,launcher=None,monitor=None):
         back=p['REACTIVE_BACKENDS'][0]
         if back['transport']!='cuda' or back['thermodynamics']!='cuda':raise ValueError('GPU paths missing')
         hem=p['REACTIVE_GPU_HEM'][-1]
-        if hem['cpuFallbacks']!=0 or hem['deviceFailures']!=0:raise ValueError('GPU closure failure/fallback')
+        if hem['cpuFallbacks']!=0:raise ValueError('GPU closure CPU fallback')
+        # Failures of rolled-back attempts are recovered; they are reported, not fatal.
+        row['recovery']=recovered_device_failures(p,steps)
         if p['REACTIVE_WALE_PR'][-1]['failures']!=0 or p['REACTIVE_WALE_SCALARS'][-1]['hostEnthalpyCells']!=0:
             raise ValueError('GPU WALE property path failed')
         physics=p['REACTIVE_PHYSICS'][0]

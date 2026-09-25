@@ -439,12 +439,20 @@ REACTIVE_JAC_CALL bool build(
     const int* active, int n, bool adaptive, const double* partition,
     double p, double T, double scale, double Vp, double VT,
     double Ep, double ET, double jacobian[4][4],
-    uint64_t* phaseRequests = nullptr)
+    uint64_t* phaseRequests = nullptr,
+    double gasPressure = 0, double liquidPressure = 0)
 {
     using namespace ReactiveDevicePR;
     if (!phase || !condensable || !conservedMass || !active || !partition
         || ns < 1 || ns > MaxSpecies || nl < 0 || nl > 2 || n < 1 || n > 2
         || !(p > 0) || !(T > 0) || !(scale > 0)) return false;
+    // A curved interface evaluates the gas at pg=p-cJ and each liquid at
+    // pl=p+(1-c)J with J fixed during the local solve.  Zero selects the
+    // flat case pg=pl=p.  Because dpg/dp=dpl/dp=1, only the phase-state
+    // pressures change; the ln(p) column still scales by the mean p.
+    const double pg = gasPressure == 0 ? p : gasPressure;
+    const double pl = liquidPressure == 0 ? p : liquidPressure;
+    if (!(pg > 0) || !(pl > 0) || !finite(pg) || !finite(pl)) return false;
     double gasMass[MaxSpecies] = {}, Y[MaxSpecies] = {};
     double dLiquid[2] = {}, totalGasMass = 0;
     for (int k = 0; k < ns; ++k) gasMass[k] = conservedMass[k];
@@ -470,7 +478,7 @@ REACTIVE_JAC_CALL bool build(
 
     State gas{};
     if (phaseRequests) ++*phaseRequests;
-    if (evaluateTPTrusted(phase[0], T, p, Y, RootChoice::Gas, gas, false)
+    if (evaluateTPTrusted(phase[0], T, pg, Y, RootChoice::Gas, gas, false)
         != Status::Success) return false;
     PhasePartials gasPartial{};
     double x[MaxSpecies] = {}, W = 0;
@@ -484,7 +492,7 @@ REACTIVE_JAC_CALL bool build(
         const int i = active[j];
         species[j] = condensable[i];
         if (phaseRequests) ++*phaseRequests;
-        if (evaluateTPTrusted(phase[i+1], T, p, pure, RootChoice::Liquid,
+        if (evaluateTPTrusted(phase[i+1], T, pl, pure, RootChoice::Liquid,
                               liquidState[j], false) != Status::Success)
             return false;
     }
@@ -540,9 +548,14 @@ REACTIVE_JAC_CALL bool buildCached(
     double Ep, double ET, double gasMass, double gasMolarVolume,
     const double* gasCondensable, bool explicitGas,
     const double* liquidHbar, const double* liquidVbar,
-    unsigned liquidThermoMask, double jacobian[4][4])
+    unsigned liquidThermoMask, double jacobian[4][4],
+    double gasPressure = 0, double liquidPressure = 0)
 {
     using namespace ReactiveDevicePR;
+    // See build(): phase-state pressures for a fixed curvature jump.
+    const double pg = gasPressure == 0 ? p : gasPressure;
+    const double pl = liquidPressure == 0 ? p : liquidPressure;
+    if (!(pg > 0) || !(pl > 0) || !finite(pg) || !finite(pl)) return false;
     if (!phase || !condensable || !conservedMass || !active || !partition
         || !gasCondensable || !liquidHbar || !liquidVbar
         || ns < 1 || ns > MaxSpecies || nl < 0 || nl > 2 || n < 1 || n > 2
@@ -599,7 +612,7 @@ REACTIVE_JAC_CALL bool buildCached(
     for (int k = 0; k < ns; ++k) Y[k] /= gasMass;
 
     ActiveGasDerivatives gas{};
-    if (!activeGasDerivatives(phase[0], T, p, gasMolarVolume, Y, gasMass,
+    if (!activeGasDerivatives(phase[0], T, pg, gasMolarVolume, Y, gasMass,
                               species, n, gas)) return false;
 
     for (int i = 0; i < 4; ++i)
@@ -612,7 +625,7 @@ REACTIVE_JAC_CALL bool buildCached(
         const int i = active[j], k = species[j];
         const double Wk = phase[0].species[k].molecularWeight;
         const double Wl = phase[i+1].species[0].molecularWeight;
-        const double liquidUbar = liquidHbar[i]-p*liquidVbar[i];
+        const double liquidUbar = liquidHbar[i]-pl*liquidVbar[i];
         jacobian[0][2+j] = dLiquid[j]
             *(liquidVbar[i]/Wl-gas.vbar[j]/Wk);
         jacobian[1][2+j] = dLiquid[j]
